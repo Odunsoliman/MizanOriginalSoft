@@ -171,5 +171,34 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             }
         }
 
+        public void CopyBackupToGoogleDrive(string sourceFolder, string googleDriveFolder, string dbName)
+        {
+            try
+            {
+                string? latestBackup = Directory.GetFiles(sourceFolder, "*.bak")
+                    .OrderByDescending(File.GetLastWriteTime)
+                    .FirstOrDefault();
+
+                if (string.IsNullOrWhiteSpace(latestBackup) || !File.Exists(latestBackup))
+                {
+                    Console.WriteLine("❌ لا توجد نسخ احتياطية صالحة في المجلد.");
+                    return;
+                }
+
+                if (!Directory.Exists(googleDriveFolder))
+                    Directory.CreateDirectory(googleDriveFolder);
+
+                string destPath = Path.Combine(googleDriveFolder, dbName + ".bak");
+
+                File.Copy(latestBackup, destPath, overwrite: true);
+                Console.WriteLine("✅ تم نسخ النسخة إلى مجلد Google Drive.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("❌ خطأ أثناء النسخ إلى Google Drive: " + ex.Message);
+            }
+        }
+
+
     }
 }

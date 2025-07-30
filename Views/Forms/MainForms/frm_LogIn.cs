@@ -851,47 +851,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 // 2. تنظيف النسخ القديمة
                 string? backupFolder = appSettings.GetString("BackupsPath", null);
 
-                if (string.IsNullOrWhiteSpace(backupFolder))
-                {
-                    MessageBox.Show("❌ لم يتم تحديد مسار النسخ الاحتياطي في ملف الإعدادات.", "تحذير", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    helper.CleanOldBackups(backupFolder, settingsPath);
-                }
-
-                // 3. تحديث بيانات القاعدة
-                DBServiecs.A_UpdateAllDataBase ();
-
-                // 4. إنهاء التطبيق
-                Application.Exit();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("❌ حدث خطأ أثناء إنهاء التطبيق: " + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        private void btnEnd_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string settingsPath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
-
-                if (!File.Exists(settingsPath))
-                {
-                    MessageBox.Show("❌ ملف إعدادات الاتصال غير موجود!", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                var appSettings = new AppSettings(settingsPath);
-                var helper = new DatabaseBackupRestoreHelper(settingsPath);
-
-                // 1. النسخ الاحتياطي
-                helper.BackupDatabase(settingsPath);
-
-                // 2. تنظيف النسخ القديمة
-                string? backupFolder = appSettings.GetString("BackupsPath", null);
-
                 if (!string.IsNullOrWhiteSpace(backupFolder))
                 {
                     helper.CleanOldBackups(backupFolder, settingsPath);
@@ -922,6 +881,79 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 DBServiecs.A_UpdateAllDataBase();
 
                 // 7. إنهاء البرنامج
+                Application.Exit();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("❌ حدث خطأ أثناء إنهاء التطبيق: " + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnEnd_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string settingsPath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
+
+                if (!File.Exists(settingsPath))
+                {
+                    MessageBox.Show("❌ ملف إعدادات الاتصال غير موجود!", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                var appSettings = new AppSettings(settingsPath);
+                var helper = new DatabaseBackupRestoreHelper(settingsPath);
+
+                // 1. النسخ الاحتياطي
+                helper.BackupDatabase(settingsPath);
+
+                // 2. تنظيف النسخ القديمة
+                string? backupFolder = appSettings.GetString("BackupsPath", null);
+                string? dbName = appSettings.GetString("DBName", null);
+
+                if (!string.IsNullOrWhiteSpace(backupFolder))
+                {
+                    helper.CleanOldBackups(backupFolder, settingsPath);
+
+                    // 3. نسخ النسخة الأخيرة إلى مجلد مشترك باسم ثابت
+                    helper.CopyLatestBackupToSharedFolder(
+                        sourceBackupFolder: backupFolder,
+                        sharedFolderPath: @"D:\BackupToPush", // أو من ملف الإعدادات إن أردت
+                        outputFileName: "MizanOriginalDB.bak"
+                    );
+                }
+
+                // 4. نسخ النسخة إلى Google Drive
+                string? googleDrivePath = appSettings.GetString("GoogleDrivePath", @"D:\ClintGoogleDrive");
+                if (!string.IsNullOrWhiteSpace(backupFolder) &&
+                    !string.IsNullOrWhiteSpace(dbName) &&
+                    !string.IsNullOrWhiteSpace(googleDrivePath))
+                {
+                    helper.CopyBackupToGoogleDrive(
+                        sourceFolder: backupFolder,
+                        googleDriveFolder: googleDrivePath,
+                        dbName: dbName
+                    );
+                }
+
+                // 5. تنفيذ Git Push لمجلد المشروع (من ملف الإعدادات)
+                string? projectPath = appSettings.GetString("ProjectPath", null);
+                if (!string.IsNullOrWhiteSpace(projectPath))
+                {
+                    ExecuteGitPush(projectPath);
+                }
+
+                // 6. تنفيذ Git Push لمجلد نسخ القواعد (من ملف الإعدادات)
+                string? backupPushPath = appSettings.GetString("BackupGitPath", null);
+                if (!string.IsNullOrWhiteSpace(backupPushPath))
+                {
+                    ExecuteGitPush(backupPushPath);
+                }
+
+                // 7. تحديث بيانات القاعدة
+                DBServiecs.A_UpdateAllDataBase();
+
+                // 8. إنهاء البرنامج
                 Application.Exit();
             }
             catch (Exception ex)
