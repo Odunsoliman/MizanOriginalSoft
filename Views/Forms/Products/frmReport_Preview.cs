@@ -42,6 +42,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             LoadParametersToFields();
 
             this.Text = $"معاينة تقرير - {currentReportName} - كود: {currentReportId}";
+            lblReportName.Text = $"معاينة تقرير - {currentReportName} ";
         }
 
         private void LoadDefaultSettings()
@@ -161,8 +162,8 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
 
 
-   
-   
+
+
         #region ==== دوال تحميل بيانات القاموس ========
         private void LoadParametersToFields()
         {
@@ -628,7 +629,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             dtpEnd.ValueChanged += (s, e) => CalculateDaysBetweenDates();
 
             // معالجات أحداث أزرار الراديو لتحديد الفترات الزمنية
-        //    rdoAllPeriod.CheckedChanged += (s, e) => SetPeriodForAll();
+            //    rdoAllPeriod.CheckedChanged += (s, e) => SetPeriodForAll();
             rdoToDay.CheckedChanged += (s, e) => SetPeriodForToday();
             rdoPreviousDay.CheckedChanged += (s, e) => SetPeriodForPreviousDay();
             rdoPreviousMonth.CheckedChanged += (s, e) => SetPeriodForPreviousMonth();
@@ -896,6 +897,9 @@ namespace MizanOriginalSoft.Views.Forms.Products
             lblAllPeriod.Text = "كل الفترة";
         }
 
-  
+        private void frmReport_Preview_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
