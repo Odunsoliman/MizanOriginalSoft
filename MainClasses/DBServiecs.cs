@@ -514,22 +514,22 @@ namespace MizanOriginalSoft.MainClasses
             }) ?? new DataTable();
         }
 
-        public static DataTable GenralData_GetDefRepData()//@@@
-        {
-            return dbHelper.ExecuteSelectQuery("GenralData_GetDefRepData", command => { }) ?? new DataTable();
-        }
+        //public static DataTable GenralData_GetDefRepData()//@@@
+        //{
+        //    return dbHelper.ExecuteSelectQuery("GenralData_GetDefRepData", command => { }) ?? new DataTable();
+        //}
 
 
-        // جلب تاريخ بداية الحسابات (بدون معاملات)
-        public static DataTable GenralData_GetStartAccountsDate()
-        {
-            return dbHelper.ExecuteSelectQuery("GenralData_GetStartAccountsDate", command => { }) ?? new DataTable();
-        }
+        //// جلب تاريخ بداية الحسابات (بدون معاملات)
+        //public static DataTable GenralData_GetStartAccountsDate()
+        //{
+        //    return dbHelper.ExecuteSelectQuery("GenralData_GetStartAccountsDate", command => { }) ?? new DataTable();
+        //}
 
         // جلب الفروع الرئيسية (المخازن) المعروضة في الشاشة (بدون معاملات)
-        public static DataTable GenralData_GetWarehouse()//@@@
+        public static DataTable Warehouse_GetAll()//@@@
         {
-            return dbHelper.ExecuteSelectQuery("GenralData_GetWarehouse", command => { }) ?? new DataTable();
+            return dbHelper.ExecuteSelectQuery("Warehouse_GetAll", command => { }) ?? new DataTable();
         }
         
         // جلب حركة المنتج حسب المعرف

@@ -1715,6 +1715,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 parameters["FilteredData"] = GetFilteredData();
             }
             catch (Exception ex)
+
             {
                 MessageBox.Show($"خطأ في تجهيز معطيات التقرير: {ex.Message}");
             }
@@ -1723,9 +1724,10 @@ namespace MizanOriginalSoft.Views.Forms.Products
         // جلب كود الصنف الحالى ###
         private object GetCurrentEntityID()
         {
-            return string.IsNullOrEmpty(lblID_Product.Text)
-                ? DBNull.Value
-                : Convert.ToInt32(lblID_Product.Text);
+            if (int.TryParse(lblID_Product.Text, out int id))
+                return id;
+            else
+                return DBNull.Value;
         }
 
 

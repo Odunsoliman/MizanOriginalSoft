@@ -16,28 +16,23 @@ namespace MizanOriginalSoft.Views.Forms.Products
 {
     public partial class frmReport_Preview : Form
     {
-
-        #region  المتغيرات العامة لتخزين البيانات
-//        public int ReportID { get; private set; }
+        #region المتغيرات العامة لتخزين البيانات
         public int UserID { get; private set; }
-        public int? EntityID { get; private set; } // Nullable لأنه قد يكون null
+        public int? EntityID { get; private set; }
         public DataTable FilteredData { get; private set; }
-
-        // باقي المتغيرات العامة التي تحتاجها
-        //public DateTime StartDate { get; private set; }
-        //public DateTime EndDate { get; private set; }
 
         private Dictionary<string, object> reportParameters;
         private int currentReportId;
-        private string  currentReportName;
-        #endregion 
+        private string currentReportName;
+        #endregion
+
         public frmReport_Preview(Dictionary<string, object> parameters)
         {
             InitializeComponent();
             this.reportParameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
 
-            currentReportName = "تقرير افتراضي";  // تهيئة افتراضية مناسبة للسياق
-            FilteredData = new DataTable();       // تجنب null
+            currentReportName = "تقرير افتراضي";
+            FilteredData = new DataTable();
 
             LoadPrinters();
             LoadWarehouses();
@@ -49,6 +44,125 @@ namespace MizanOriginalSoft.Views.Forms.Products
             this.Text = $"معاينة تقرير - {currentReportName} - كود: {currentReportId}";
         }
 
+        private void LoadDefaultSettings()
+        {
+            try
+            {
+                string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "default_report_settings.txt");
+                if (!File.Exists(filePath)) return;
+
+                var lines = File.ReadAllLines(filePath);
+                var settings = lines.Select(l => l.Split('='))
+                                    .Where(parts => parts.Length == 2)
+                                    .ToDictionary(p => p[0].Trim(), p => p[1].Trim());
+
+                if (settings.TryGetValue("StartDate", out string startStr) && DateTime.TryParse(startStr, out var startDate))
+                    dtpStart.Value = startDate;
+
+                if (settings.TryGetValue("EndDate", out string endStr) && DateTime.TryParse(endStr, out var endDate))
+                    dtpEnd.Value = endDate;
+
+                if (settings.TryGetValue("PrinterName", out string printer))
+                {
+                    if (cbxPrinters.Items.Contains(printer))
+                        cbxPrinters.SelectedItem = printer;
+                }
+
+                if (settings.TryGetValue("WarehouseID", out string warehouseId))
+                {
+                    foreach (var item in cbxWarehouse.Items)
+                    {
+                        var propInfo = item.GetType().GetProperty(cbxWarehouse.ValueMember);
+                        if (propInfo?.GetValue(item)?.ToString() == warehouseId)
+                        {
+                            cbxWarehouse.SelectedItem = item;
+                            break;
+                        }
+                    }
+                }
+
+                if (settings.TryGetValue("PeriodType", out string radioName))
+                {
+                    SetSelectedRadioButton(radioName);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ أثناء تحميل الإعدادات الافتراضية: " + ex.Message,
+                              "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SaveAndClose()
+        {
+            try
+            {
+                string selectedRadio = GetSelectedRadioName();
+                string selectedPrinter = cbxPrinters.SelectedItem?.ToString() ?? "";
+                string warehouseId = "";
+
+                if (cbxWarehouse.SelectedItem != null)
+                {
+                    var propInfo = cbxWarehouse.SelectedItem.GetType().GetProperty(cbxWarehouse.ValueMember);
+                    warehouseId = propInfo?.GetValue(cbxWarehouse.SelectedItem)?.ToString() ?? "";
+                }
+
+                var lines = new List<string>
+            {
+                $"StartDate={dtpStart.Value:yyyy-MM-dd}",
+                $"EndDate={dtpEnd.Value:yyyy-MM-dd}",
+                $"PrinterName={selectedPrinter}",
+                $"WarehouseID={warehouseId}",
+                $"PeriodType={selectedRadio}"
+            };
+
+                string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "default_report_settings.txt");
+                File.WriteAllLines(filePath, lines);
+
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ أثناء حفظ الإعدادات: " + ex.Message, "خطأ",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string GetSelectedRadioName()
+        {
+            if (rdoAllPeriod.Checked) return "rdoAllPeriod";
+            if (rdoToDay.Checked) return "rdoToDay";
+            if (rdoPreviousDay.Checked) return "rdoPreviousDay";
+            if (rdoPreviousMonth.Checked) return "rdoPreviousMonth";
+            if (rdoThisMonth.Checked) return "rdoThisMonth";
+            if (rdoThisYear.Checked) return "rdoThisYear";
+            if (rdoPreviousYear.Checked) return "rdoPreviousYear";
+
+            return string.Empty;
+        }
+
+        private void btnSaveAndClose_Click(object sender, EventArgs e)
+        {
+            SaveAndClose();
+        }
+
+        // بقية الدوال الأخرى كما هي دون تغيير (InitializeReport، LoadParametersToFields، SetupEventHandlers، وغيرها)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+   
         #region ==== دوال تحميل بيانات القاموس ========
         private void LoadParametersToFields()
         {
@@ -110,11 +224,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 // يمكنك تسجيل الخطأ في ملف log هنا إذا لزم الأمر
             }
         }
-
-
-        /*
-
-*/
 
         #endregion
 
@@ -304,7 +413,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 this.Close();
             }
         }
-        private void MessgSetting(string messg) { CustomMessageBox.ShowInformation("جاري اعداد التقرير ...."+ messg, "توقف"); }
+        private void MessgSetting(string messg) { CustomMessageBox.ShowInformation("جاري اعداد التقرير ...." + messg, "توقف"); }
         #region ############# تقارير الأصناف Product Reports ############
 
         /// <summary>
@@ -419,7 +528,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         //    try
         //    {
         //        // إنشاء DataTable يحتوي على البيانات (مثال)
-  
+
         //        var parameters = new Dictionary<string, object>
         //{
         //    { "ReportName", "repItemMovement.rdlc" },                       // اسم ملف التقرير
@@ -486,13 +595,13 @@ namespace MizanOriginalSoft.Views.Forms.Products
         private void FinancialPosition() { CustomMessageBox.ShowInformation("جاري اعداد التقرير ....", "توقف"); }
         private void InternalAudit() { CustomMessageBox.ShowInformation("جاري اعداد التقرير ....", "توقف"); }
         private void ItemCard() { CustomMessageBox.ShowInformation("جاري اعداد التقرير ....", "توقف"); }
-        private void ItemMovement(){ CustomMessageBox.ShowInformation("جاري اعداد التقرير ....", "توقف"); }
+        private void ItemMovement() { CustomMessageBox.ShowInformation("جاري اعداد التقرير ....", "توقف"); }
         private void InventoryCount() { CustomMessageBox.ShowInformation("جاري اعداد التقرير ....", "توقف"); }
         private void MinimumStock() { CustomMessageBox.ShowInformation("جاري اعداد التقرير ....", "توقف"); }
         private void InactiveItems() { CustomMessageBox.ShowInformation("جاري اعداد التقرير ....", "توقف"); }
         private void ItemAnalysis() { CustomMessageBox.ShowInformation("جاري اعداد التقرير ....", "توقف"); }
         private void TopSellingItems() { CustomMessageBox.ShowInformation("جاري اعداد التقرير ....", "توقف"); }
-#endregion 
+        #endregion
         private void btnPrint_Click(object sender, EventArgs e)
         {
             InitializeReport();
@@ -504,12 +613,12 @@ namespace MizanOriginalSoft.Views.Forms.Products
             // هنا يجب تنفيذ كود الطباعة المباشرة
             MessageBox.Show("جاري طباعة التقرير...");
         }
-        /// معاينة التقرير قبل الطباعة
-        private void PreviewReport()
-        {
-            // هنا يجب تنفيذ كود معاينة التقرير
-            MessageBox.Show("جاري تحضير التقرير للمعاينة...");
-        }
+        ///// معاينة التقرير قبل الطباعة
+        //private void PreviewReport()
+        //{
+        //    // هنا يجب تنفيذ كود معاينة التقرير
+        //    MessageBox.Show("جاري تحضير التقرير للمعاينة...");
+        //}
         #region ======== مهام رئسية ============
         /// إعداد معالجات الأحداث للعناصر المختلفة
         private void SetupEventHandlers()
@@ -519,7 +628,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             dtpEnd.ValueChanged += (s, e) => CalculateDaysBetweenDates();
 
             // معالجات أحداث أزرار الراديو لتحديد الفترات الزمنية
-            rdoAllPeriod.CheckedChanged += (s, e) => SetPeriodForAll();
+        //    rdoAllPeriod.CheckedChanged += (s, e) => SetPeriodForAll();
             rdoToDay.CheckedChanged += (s, e) => SetPeriodForToday();
             rdoPreviousDay.CheckedChanged += (s, e) => SetPeriodForPreviousDay();
             rdoPreviousMonth.CheckedChanged += (s, e) => SetPeriodForPreviousMonth();
@@ -539,65 +648,30 @@ namespace MizanOriginalSoft.Views.Forms.Products
             // تحديد الطابعة الافتراضية للنظام
             cbxPrinters.SelectedItem = new System.Drawing.Printing.PrinterSettings().PrinterName;
         }
-        private void LoadWar55ehouses()
-        {
-            try
-            {
-                // مسح العناصر الحالية
-                cbxWarehouse.Items.Clear();
-
-                // جلب البيانات من قاعدة البيانات
-                DataTable dt = DBServiecs.GenralData_GetWarehouse();
-
-                // التحقق من وجود بيانات
-                if (dt != null && dt.Rows.Count > 0)
-                {
-                    // تعيين مصدر البيانات لـ ComboBox
-                    cbxWarehouse.DataSource = dt;
-                    cbxWarehouse.DisplayMember = "WarehouseName"; // ما سيتم عرضه للمستخدم
-                    cbxWarehouse.ValueMember = "WarehouseId";     // القيمة المخفية المرتبطة بكل عنصر
-
-                    // اختيار العنصر الأول تلقائياً (اختياري)
-                    if (cbxWarehouse.Items.Count > 0)
-                        cbxWarehouse.SelectedIndex = 0;
-                }
-                else
-                {
-                    MessageBox.Show("لا توجد فروع مسجلة في النظام", "تحذير",
-                                  MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"حدث خطأ أثناء تحميل الفروع: {ex.Message}", "خطأ",
-                              MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            //اريد بعد التعبئة جعل العميل لا يستطيع تغيير الاختيار فيه مع امكانية الاطلاع على اسماء الفروع كلها
-        }
         private void LoadWarehouses()
         {
             try
             {
                 cbxWarehouse.Items.Clear();
-                DataTable dt = DBServiecs.GenralData_GetWarehouse();
+                DataTable dt = DBServiecs.Warehouse_GetAll();
 
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     cbxWarehouse.DataSource = dt;
                     cbxWarehouse.DisplayMember = "WarehouseName";
                     cbxWarehouse.ValueMember = "WarehouseId";
-                   
+
                     if (cbxWarehouse.Items.Count > 0)
                         cbxWarehouse.SelectedIndex = 0;
 
                     // جعل ComboBox للعرض فقط مع السماح بفتح القائمة
                     cbxWarehouse.DropDownStyle = ComboBoxStyle.DropDownList;
                     cbxWarehouse.Enabled = true;  // أو true حسب ما تريد
-                //    cbxWarehouse.SelectedValue = 1;
-                    // أو استخدام هذا الحدث لمنع التغيير:
+                                                  //    cbxWarehouse.SelectedValue = 1;
+                                                  // أو استخدام هذا الحدث لمنع التغيير:
                     cbxWarehouse.SelectedIndexChanged += (s, e) =>
                     {
-                        cbxWarehouse.SelectedValue  = 1; // إعادة تعيين للقيمة الافتراضية
+                        cbxWarehouse.SelectedValue = 1; // إعادة تعيين للقيمة الافتراضية
                     };
                 }
                 else
@@ -622,23 +696,23 @@ namespace MizanOriginalSoft.Views.Forms.Products
             {
                 case "rdoAllPeriod":
                     rdoAllPeriod.Checked = true;
-                   
+
                     break;
                 case "rdoToDay":
                     rdoToDay.Checked = true;
-                   
+
                     break;
                 case "rdoPreviousDay":
                     rdoPreviousDay.Checked = true;
-                   
+
                     break;
                 case "rdoPreviousMonth":
                     rdoPreviousMonth.Checked = true;
-                   
+
                     break;
                 case "rdoThisMonth":
                     rdoThisMonth.Checked = true;
-                   
+
                     break;
                 case "rdoThisYear":
                     rdoThisYear.Checked = true;
@@ -660,53 +734,53 @@ namespace MizanOriginalSoft.Views.Forms.Products
             lblAmountOfDay.Text = $"{span.Days + 1} يوم";
         }
         /// تحديد الفترة الكاملة من تاريخ بداية الحسابات إلى نهاية السنة الحالية
-        private void SetPeriodForAll()
-        {
-            if (!rdoAllPeriod.Checked) return;
+        //private void SetPeriodForAll()
+        //{
+        //    if (!rdoAllPeriod.Checked) return;
 
-            try
-            {
-                // جلب تاريخ بداية الحسابات من قاعدة البيانات
-                DataTable dtStartDate = DBServiecs.GenralData_GetStartAccountsDate();
+        //    try
+        //    {
+        //        // جلب تاريخ بداية الحسابات من قاعدة البيانات
+        //        DataTable dtStartDate = DBServiecs.GenralData_GetStartAccountsDate();//هذه الدالة تم الغائها واستبدال القيمة من ملف التكست
 
-                // التحقق من وجود بيانات وعدم كون الجدول فارغاً
-                if (dtStartDate != null && dtStartDate.Rows.Count > 0)
-                {
-                    // التحقق من عدم وجود قيمة DBNull
-                    if (dtStartDate.Rows[0][0] != DBNull.Value)
-                    {
-                        try
-                        {
-                            DateTime startDate = Convert.ToDateTime(dtStartDate.Rows[0][0]);
-                            dtpStart.Value = startDate;
-                        }
-                        catch (InvalidCastException ex)
-                        {
-                            HandleDateError("نوع البيانات غير صالح لتاريخ بداية الحسابات", ex);
-                        }
-                        catch (FormatException ex)
-                        {
-                            HandleDateError("تنسيق تاريخ بداية الحسابات غير صحيح", ex);
-                        }
-                    }
-                    else
-                    {
-                        HandleNullDate();
-                    }
-                }
-                else
-                {
-                    HandleEmptyData();
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleGeneralError("حدث خطأ غير متوقع أثناء جلب تاريخ بداية الحسابات", ex);
-            }
+        //        // التحقق من وجود بيانات وعدم كون الجدول فارغاً
+        //        if (dtStartDate != null && dtStartDate.Rows.Count > 0)
+        //        {
+        //            // التحقق من عدم وجود قيمة DBNull
+        //            if (dtStartDate.Rows[0][0] != DBNull.Value)
+        //            {
+        //                try
+        //                {
+        //                    DateTime startDate = Convert.ToDateTime(dtStartDate.Rows[0][0]);
+        //                    dtpStart.Value = startDate;
+        //                }
+        //                catch (InvalidCastException ex)
+        //                {
+        //                    HandleDateError("نوع البيانات غير صالح لتاريخ بداية الحسابات", ex);
+        //                }
+        //                catch (FormatException ex)
+        //                {
+        //                    HandleDateError("تنسيق تاريخ بداية الحسابات غير صحيح", ex);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                HandleNullDate();
+        //            }
+        //        }
+        //        else
+        //        {
+        //            HandleEmptyData();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleGeneralError("حدث خطأ غير متوقع أثناء جلب تاريخ بداية الحسابات", ex);
+        //    }
 
-            // تحديد نهاية السنة الحالية (لا تحتاج لمعالجة أخطاء)
-            dtpEnd.Value = new DateTime(DateTime.Now.Year, 12, 31);
-        }
+        //    // تحديد نهاية السنة الحالية (لا تحتاج لمعالجة أخطاء)
+        //    dtpEnd.Value = new DateTime(DateTime.Now.Year, 12, 31);
+        //}
 
         // ===== دوال مساعدة لمعالجة الأخطاء =====
         private void HandleDateError(string message, Exception ex)
@@ -743,7 +817,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                           "خطأ",
                           MessageBoxButtons.OK,
                           MessageBoxIcon.Error);
-           // LogError(ex); // يمكنك استبدالها بأسلوب تسجيل الأخطاء الخاص بك
+            // LogError(ex); // يمكنك استبدالها بأسلوب تسجيل الأخطاء الخاص بك
         }
 
         /// تحديد فترة اليوم الحالي فقط
@@ -815,146 +889,13 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
         #endregion
 
-        #region  حفظ و تحميل الإعدادات الافتراضية من قاعدة البيانات
-        private void LoadDefaultSettings()
-        {
-            try
-            {
-                DataTable? dt = DBServiecs.GenralData_GetDefRepData();
-
-                if (dt != null && dt.Rows.Count > 0)
-                {
-                    DataRow row = dt.Rows[0];
-
-                    // تعيين تواريخ البداية والنهاية من الإعدادات المحفوظة
-                    dtpStart.Value = row["DefStartPeriod"] != DBNull.Value
-                        ? Convert.ToDateTime(row["DefStartPeriod"])
-                        : DateTime.Today;
-
-                    dtpEnd.Value = row["DefEndPeriod"] != DBNull.Value
-                        ? Convert.ToDateTime(row["DefEndPeriod"])
-                        : DateTime.Today;
-
-                    // تعيين الطابعة الافتراضية
-                    if (row["DefaultPrinter"] != DBNull.Value)
-                    {
-                        string? printer = row["DefaultPrinter"]?.ToString();
-                        if (!string.IsNullOrEmpty(printer) && cbxPrinters.Items.Contains(printer))
-                            cbxPrinters.SelectedItem = printer;
-                    }
-
-                    // تعيين المخزن الافتراضي
-                    string? warehouse = row["DefaultWarehouse"]?.ToString(); // تأكد من وجود هذا العمود في قاعدة البيانات
-                    if (!string.IsNullOrEmpty(warehouse))
-                    {
-                        for (int i = 0; i < cbxWarehouse.Items.Count; i++)
-                        {
-                            var item = cbxWarehouse.Items[i];
-                            if (item != null)
-                            {
-                                var propInfo = item.GetType().GetProperty(cbxWarehouse.ValueMember);
-                                string? value = propInfo?.GetValue(item)?.ToString()?.Trim();
-
-                                if (!string.IsNullOrEmpty(value) && value == warehouse)
-                                {
-                                    cbxWarehouse.SelectedIndex = i;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    // تحديد زر الراديو المناسب من القيمة المحفوظة
-                    if (dt.Columns.Contains("DefEndRdoChecked") && row["DefEndRdoChecked"] != DBNull.Value)
-                    {
-                        string? savedRadio = row["DefEndRdoChecked"]?.ToString();
-                        if (!string.IsNullOrEmpty(savedRadio))
-                            SetSelectedRadioButton(savedRadio);
-                    }
-                }
-                else
-                {
-                    // إذا لم توجد إعدادات، نستخدم التاريخ الحالي
-                    dtpStart.Value = DateTime.Today;
-                    dtpEnd.Value = DateTime.Today;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("حدث خطأ أثناء تحميل الإعدادات الافتراضية: " + ex.Message,
-                              "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        private void SaveAndClose()
-        {
-            try
-            {
-                // الحصول على اسم زر الراديو المحدد
-                string selectedRadioName = GetSelectedRadioName();
-
-                // الحصول على قيمة الطابعة المحددة
-                string selectedPrinter = cbxPrinters.SelectedItem?.ToString() ?? string.Empty;
-
-                // الحصول على قيمة الفرع المحدد بشكل صحيح
-                string selectedWarehouse = string.Empty;
-
-                if (cbxWarehouse.SelectedItem != null)
-                {
-                    if (cbxWarehouse.SelectedItem is DataRowView rowView)
-                    {
-                        // إذا كان العنصر المحدد من نوع DataRowView (في حالة الربط ببيانات)
-                        selectedWarehouse = rowView["WarehouseName"]?.ToString() ?? string.Empty;
-                    }
-                    else
-                    {
-                        // إذا كان العنصر المحدد نصياً عادياً
-                        selectedWarehouse = cbxWarehouse.SelectedItem?.ToString() ?? string.Empty;
-                    }
-                }
-
-                // حفظ الإعدادات الحالية في قاعدة البيانات
-                DBServiecs.GenralData_SaveDefRepData(
-                    dtpStart.Value,
-                    dtpEnd.Value,
-                    selectedPrinter,
-                    selectedWarehouse,
-                    selectedRadioName
-                );
-
-                this.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("حدث خطأ أثناء حفظ الإعدادات: " + ex.Message, "خطأ",
-                              MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // يمكنك تسجيل الخطأ هنا إذا كنت تستخدم نظام تسجيل الأخطاء
-            }
-        }
-        // دالة مساعدة للحصول على اسم زر الراديو المحدد
-        private string GetSelectedRadioName()
-        {
-            if (rdoAllPeriod.Checked) return "rdoAllPeriod";
-            if (rdoToDay.Checked) return "rdoToDay";
-            if (rdoPreviousDay.Checked) return "rdoPreviousDay";
-            if (rdoPreviousMonth.Checked) return "rdoPreviousMonth";
-            if (rdoThisMonth.Checked) return "rdoThisMonth";
-            if (rdoThisYear.Checked) return "rdoThisYear";
-            if (rdoPreviousYear.Checked) return "rdoPreviousYear";
-
-            return string.Empty; // في حالة عدم تحديد أي زر
-        }
-        private void btnSaveAndClose_Click(object sender, EventArgs e)
-        {
-            SaveAndClose();
-        }
-
-
-        #endregion
 
         private void btnAllPeriod_Click(object sender, EventArgs e)
         {
             rdoAllPeriod.Checked = true;
             lblAllPeriod.Text = "كل الفترة";
         }
+
+  
     }
 }
