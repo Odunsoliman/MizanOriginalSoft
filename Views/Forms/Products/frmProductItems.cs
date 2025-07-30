@@ -1685,12 +1685,16 @@ namespace MizanOriginalSoft.Views.Forms.Products
             { "ReportID", Convert.ToInt32(clickedItem.Tag) }, // كود التقرير
             { "ReportName", clickedItem.Text?.Trim() ?? string.Empty }, // اسم التقرير
             { "UserID", ID_user }, // كود المستخدم
-            { "EntityID", DBNull.Value }, // بدلاً من null استخدم DBNull.Value إن كان يقبل قيمة فارغة
-            { "FilteredData", new DataTable() } // البيانات المفلترة
+            { "EntityID", DBNull.Value }, // سيتم تغييره لاحقًا
+            { "FilteredData", new DataTable() } // سيتم تغييره لاحقًا
         };
 
                 // تعبئة المعطيات الأساسية
-                FillCommonParameters(reportParameters);
+                bool success = FillCommonParameters(reportParameters);
+
+                // ✅ إيقاف تام إذا لم تنجح التعبئة (مثلاً لم يتم اختيار صنف)
+                if (!success)
+                    return;
 
                 using frmReport_Preview previewForm = new(reportParameters);
                 previewForm.ShowDialog();
