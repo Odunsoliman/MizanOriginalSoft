@@ -28,9 +28,9 @@ namespace MizanOriginalSoft.Views.Forms.Products
         int ID_user;
         public bool newR = false;
         // متغيرات الشجرة وتحديدات الأصناف
-        private TreeNode? lastSelectedNode = null;                 
+        private TreeNode? lastSelectedNode = null;
         private readonly List<int> lastSelectedProductIds = new();
-       //ربط بيانات المنتجات بعنصر DataGridView  ###
+        //ربط بيانات المنتجات بعنصر DataGridView  ###
         private DataTable? _tblProd = new();
         private DataTable? tblModify;
         private DataTable? dtProducts;
@@ -174,7 +174,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
         #endregion
-    
+
         #region ********  Format  ********************
 
         // النظام العام للالوان على مجمل الشاشة  ###
@@ -347,7 +347,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
             ClearSearch(); if (tlpAdvanceSearch.Visible == true) tlpAdvanceSearch.Visible = false;
         }
-        
+
         //تحميل شجرة التصنيفات  ###
         private void LoadTreeAndSelectSpecificNode(int selectedID = 0)
         {
@@ -608,7 +608,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             if (child.Parent.Equals(parent)) return true;
             return ContainsNode(parent, child.Parent);
         }
-  
+
         private void ExpandAndSearch(TreeNodeCollection nodes, string searchText)
         {
             foreach (TreeNode node in nodes)
@@ -706,7 +706,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
         #region ========= DGV =================
 
- 
+
 
         private void BindProductDataToDGV()
         {
@@ -721,7 +721,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             UpdateCount();
             ApplyDGVStyles();
         }
-        
+
         //تحميل الاصناف على الشاشة
         private void LoadProducts()
         {
@@ -876,11 +876,11 @@ namespace MizanOriginalSoft.Views.Forms.Products
             PicBarcod.Image = barcodeImage;
         }
 
-        
+
 
         #endregion
 
-      
+
         private void btnNew_Click(object sender, EventArgs e)
         {
             tblRow = (_tblProd != null && _tblProd.Rows.Count > 0)
@@ -1728,7 +1728,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
 
-  
+
         // جلب كود الصنف الحالى ###
         private int? GetCurrentEntityID()
         {
@@ -1967,7 +1967,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
         #endregion
 
-      
+
 
         #region @@@@@@@@@@@@@ New Item @@@@@@@@@@@@@@@@
         private void FillUnits()
@@ -1997,7 +1997,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             if (unitId == 1)
             {
                 txtMinLenth.ReadOnly = false;
-                lblMinLenth.ForeColor = Color.DarkBlue ; // اللون الطبيعي
+                lblMinLenth.ForeColor = Color.DarkBlue; // اللون الطبيعي
             }
             else
             {
@@ -2193,7 +2193,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 // تحديد نوع الحساب (مثلاً 14 يمثل الموردين)
                 int typeId = 14;
 
-              //  فتح نموذج البحث العام
+                //  فتح نموذج البحث العام
                 frmSearch searchForm = new frmSearch(14, SearchEntityType.Supplier);
 
                 if (searchForm.ShowDialog() == DialogResult.OK)
@@ -2335,5 +2335,12 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
 
+        private void txtSeaarchProd_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.H)
+            {
+                ShowHelpForActiveControl();
+            }
+        }
     }
 }

@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             tableLayoutPanel1 = new TableLayoutPanel();
-            lblReportName = new Label();
             lblTitel = new Label();
             tlpButtons = new TableLayoutPanel();
             btnPrintPreview = new Button();
@@ -60,6 +59,7 @@
             label1 = new Label();
             tableLayoutPanel5 = new TableLayoutPanel();
             btnHelp = new Button();
+            lblReportName = new Label();
             tableLayoutPanel1.SuspendLayout();
             tlpButtons.SuspendLayout();
             tlpDateRight.SuspendLayout();
@@ -94,20 +94,6 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 15F));
             tableLayoutPanel1.Size = new Size(691, 485);
             tableLayoutPanel1.TabIndex = 0;
-            // 
-            // lblReportName
-            // 
-            lblReportName.AutoSize = true;
-            lblReportName.BackColor = Color.LightGray;
-            lblReportName.Dock = DockStyle.Fill;
-            lblReportName.Font = new Font("Times New Roman", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblReportName.ForeColor = Color.Purple;
-            lblReportName.Location = new Point(35, 0);
-            lblReportName.Name = "lblReportName";
-            lblReportName.Size = new Size(647, 42);
-            lblReportName.TabIndex = 30;
-            lblReportName.Text = "برجاء تحديد عوامل فترة التقرير";
-            lblReportName.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblTitel
             // 
@@ -531,6 +517,20 @@
             btnHelp.Text = "?";
             btnHelp.UseVisualStyleBackColor = false;
             btnHelp.Click += btnHelp_Click;
+            // 
+            // lblReportName
+            // 
+            lblReportName.AutoSize = true;
+            lblReportName.BackColor = Color.LightGray;
+            lblReportName.Dock = DockStyle.Fill;
+            lblReportName.Font = new Font("Times New Roman", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblReportName.ForeColor = Color.Purple;
+            lblReportName.Location = new Point(35, 0);
+            lblReportName.Name = "lblReportName";
+            lblReportName.Size = new Size(647, 42);
+            lblReportName.TabIndex = 30;
+            lblReportName.Text = "برجاء تحديد عوامل فترة التقرير";
+            lblReportName.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // frmReport_Preview
             // 

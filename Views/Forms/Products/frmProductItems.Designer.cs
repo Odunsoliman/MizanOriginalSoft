@@ -648,7 +648,7 @@
             txtSeaarchProd.TabIndex = 1;
             txtSeaarchProd.TextAlign = HorizontalAlignment.Center;
             txtSeaarchProd.TextChanged += txtSeaarchProd_TextChanged;
-            txtSeaarchProd.KeyDown += txtSearchTree_KeyDown;
+            txtSeaarchProd.KeyDown += txtSeaarchProd_KeyDown;
             // 
             // tableLayoutPanel15
             // 
