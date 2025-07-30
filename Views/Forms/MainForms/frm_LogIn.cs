@@ -27,7 +27,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
          */
 
-
         public frm_LogIn()
         {
             InitializeComponent();
@@ -35,7 +34,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             InitializePanelsMovement();
             InitializeInnerPanels();
         }
-
 
         private void frm_LogIn_Load(object sender, EventArgs e)
         {
@@ -373,8 +371,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             InputLanguage.CurrentInputLanguage = InputLanguage.FromCulture(new CultureInfo("en-US"));
         }
         #endregion
-
-
 
         #region **********  وظائف حركة البنلز وتغيير الالوان وتمييز الزر ***************
 
@@ -824,8 +820,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
 
         #endregion
-
-
 
         #region **************** End *************************
 
