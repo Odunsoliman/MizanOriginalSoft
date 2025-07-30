@@ -660,6 +660,10 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 treeViewCategories.SelectedNode = node;
                 node.EnsureVisible();
             }
+            if (e.Control && e.KeyCode == Keys.H)
+            {
+                ShowHelpForActiveControl();
+            }
         }
         private void SearchNodes(TreeNodeCollection nodes, string searchText)
         {

@@ -59,17 +59,17 @@ namespace MizanOriginalSoft.Views.Forms.Products
         private DataTable? tblSupplier;
         private DataTable? tblCategory;
 
-        // فتح المساعدة الخاصة بالأداة النشطة عند الضغط على Ctrl + H
-        private void ShowHelpForActiveControl()
-        {
-            if (this.ActiveControl == null)
-                return;
+        //// فتح المساعدة الخاصة بالأداة النشطة عند الضغط على Ctrl + H
+        //private void ShowHelpForActiveControl()
+        //{
+        //    if (this.ActiveControl == null)
+        //        return;
 
-            // استخدام الرمز & بدلاً من _
-            string controlKey = $"{this.Name}&{this.ActiveControl.Name}";
-            frmHelp helpForm = new frmHelp(controlKey);
-            helpForm.ShowDialog();
-        }
+        //    // استخدام الرمز & بدلاً من _
+        //    string controlKey = $"{this.Name}&{this.ActiveControl.Name}";
+        //    frmHelp helpForm = new frmHelp(controlKey);
+        //    helpForm.ShowDialog();
+        //}
 
 
         #region **********  _KeyDown ***************
