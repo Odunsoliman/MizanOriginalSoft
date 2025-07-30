@@ -1722,13 +1722,20 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
         // جلب كود الصنف الحالى ###
+        // جلب كود الصنف الحالي ###
         private object GetCurrentEntityID()
         {
             if (int.TryParse(lblID_Product.Text, out int id))
+            {
                 return id;
+            }
             else
+            {
+                MessageBox.Show("⚠️ يجب اختيار صنف قبل عرض التقرير.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return DBNull.Value;
+            }
         }
+
 
 
         // جلب البيانات المفلتر عليها  ###
