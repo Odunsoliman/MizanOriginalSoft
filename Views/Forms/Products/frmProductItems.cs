@@ -898,6 +898,14 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
 
         #region ========== Search Prod ===========================
+
+        private void txtSeaarchProd_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.H)
+            {
+                ShowHelpForActiveControl();
+            }
+        }
         private void txtSeaarchProd_TextChanged(object sender, EventArgs e)
         {
             txtFromCode.Text = "";
@@ -2335,12 +2343,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
 
-        private void txtSeaarchProd_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Control && e.KeyCode == Keys.H)
-            {
-                ShowHelpForActiveControl();
-            }
-        }
+
     }
 }
