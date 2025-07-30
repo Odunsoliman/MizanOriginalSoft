@@ -1,0 +1,33 @@
+# ملفات ومجلدات Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# ملفات الناتج (Build)
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+
+# ملفات التتبع المؤقتة
+*.log
+*.tmp
+*.bak
+
+# ملفات قواعد بيانات محلية
+*.mdf
+*.ldf
+
+# مجلدات Recycle أو النسخ الاحتياطي
+*.db
+*.DS_Store
+Thumbs.db
+
+# مجلدات النظام
+$RECYCLE.BIN/
+
+# قواعد بيانات المشروع
+DataBaseApp/
