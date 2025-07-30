@@ -58,34 +58,40 @@ namespace MizanOriginalSoft.Views.Forms.Products
                                     .Where(parts => parts.Length == 2)
                                     .ToDictionary(p => p[0].Trim(), p => p[1].Trim());
 
-                if (settings.TryGetValue("StartDate", out string startStr) && DateTime.TryParse(startStr, out var startDate))
+                if (settings.TryGetValue("StartDate", out string? startStr) && DateTime.TryParse(startStr, out var startDate))
                     dtpStart.Value = startDate;
 
-                if (settings.TryGetValue("EndDate", out string endStr) && DateTime.TryParse(endStr, out var endDate))
+                if (settings.TryGetValue("EndDate", out string? endStr) && DateTime.TryParse(endStr, out var endDate))
                     dtpEnd.Value = endDate;
 
-                if (settings.TryGetValue("PrinterName", out string printer))
+                if (settings.TryGetValue("PrinterName", out string? printer))
                 {
-                    if (cbxPrinters.Items.Contains(printer))
+                    if (!string.IsNullOrEmpty(printer) && cbxPrinters.Items.Contains(printer))
                         cbxPrinters.SelectedItem = printer;
                 }
 
-                if (settings.TryGetValue("WarehouseID", out string warehouseId))
+                if (settings.TryGetValue("WarehouseID", out string? warehouseId))
                 {
-                    foreach (var item in cbxWarehouse.Items)
+                    if (!string.IsNullOrEmpty(warehouseId))
                     {
-                        var propInfo = item.GetType().GetProperty(cbxWarehouse.ValueMember);
-                        if (propInfo?.GetValue(item)?.ToString() == warehouseId)
+                        foreach (var item in cbxWarehouse.Items)
                         {
-                            cbxWarehouse.SelectedItem = item;
-                            break;
+                            var propInfo = item.GetType().GetProperty(cbxWarehouse.ValueMember);
+                            string? value = propInfo?.GetValue(item)?.ToString();
+
+                            if (value == warehouseId)
+                            {
+                                cbxWarehouse.SelectedItem = item;
+                                break;
+                            }
                         }
                     }
                 }
 
-                if (settings.TryGetValue("PeriodType", out string radioName))
+                if (settings.TryGetValue("PeriodType", out string? radioName))
                 {
-                    SetSelectedRadioButton(radioName);
+                    if (!string.IsNullOrEmpty(radioName))
+                        SetSelectedRadioButton(radioName);
                 }
             }
             catch (Exception ex)
@@ -148,24 +154,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
             SaveAndClose();
         }
 
-        // بقية الدوال الأخرى كما هي دون تغيير (InitializeReport، LoadParametersToFields، SetupEventHandlers، وغيرها)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        #region ==== دوال تحميل بيانات القاموس ========
         private void LoadParametersToFields()
         {
             try
@@ -227,14 +215,12 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
 
-        #endregion
 
 
 
         #region ====== اختيار وظيفة فتح التقرير ==========
         private void btnPrintPreview_Click(object sender, EventArgs e)
         {
-            // FilteredData   EntityID    ReportID
             InitializeReport();
         }
         private void InitializeReport()
@@ -418,9 +404,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         private void MessgSetting(string messg) { CustomMessageBox.ShowInformation("جاري اعداد التقرير ...." + messg, "توقف"); }
         #region ############# تقارير الأصناف Product Reports ############
 
-        /// <summary>
-        /// تقرير كارت الصنف (مخزوني)
-        /// </summary>
+        // تقرير كارت الصنف (مخزوني)
         private void rpt_GetProductCard()
         {
             const string reportFileName = "rptProductCard.rdlc";
@@ -453,9 +437,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
 
-        /// <summary>
-        /// تقرير الحركات التفصيلية - المشتريات
-        /// </summary>
+        // تقرير الحركات التفصيلية - المشتريات
         private void DisplayPurchaseMovementsReport()
         {
             const string reportFileName = "rptGetDetailedMovements.rdlc";
@@ -490,11 +472,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
 
-
-        /// <summary>
-        /// تقرير الحركات التفصيلية - المبيعات
-        /// </summary>
-        // تقرير تفصيلي لحركات المبيعات للصنف
+        // تقرير الحركات التفصيلية - المبيعات
         private void rpt_GetDetailedMovementsSales()
         {
             string reportName = "rptGetDetailedMovements.rdlc";
@@ -525,34 +503,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
         #endregion
-        //private void rep_Products_Filtered()
-        //{
-        //    try
-        //    {
-        //        // إنشاء DataTable يحتوي على البيانات (مثال)
-
-        //        var parameters = new Dictionary<string, object>
-        //{
-        //    { "ReportName", "repItemMovement.rdlc" },                       // اسم ملف التقرير
-        //    { "DataSetName", "dsItemMovement" },                            // اسم مجموعة البيانات
-        //    { "ID", EntityID },                                             // المعرف الرئيسي
-        //    { "StartDate", dtpStart.Value },                                // تاريخ البداية
-        //    { "EndDate",  dtpEnd.Value},                                    // تاريخ النهاية
-        //    { "DataTable", FilteredData },                                  // جدول البيانات
-        //    { "StoredProcedure", "rep_Products_Filtered" },                 // اسم الإجراء المخزن (اختياري)
-        //    { "PrinterName", cbxPrinters .SelectedItem?.ToString() },       // اسم الطابعة (اختياري)
-        //    { "WarehouseID", cbxWarehouse .SelectedValue}                   //  رقم الفرع
-        //};
-
-        //        // فتح نموذج العرض مع المعلمات
-        //        frmMainViewer reportViewer = new frmMainViewer(parameters);
-        //        reportViewer.Show();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"حدث خطأ أثناء تحضير التقرير: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //    }
-        //}
 
         private void CustomerAccount()
         {
@@ -562,32 +512,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
         private void TrialBalance() { CustomMessageBox.ShowInformation("جاري اعداد التقرير ....", "توقف"); }
         private void GeneralLedger() { CustomMessageBox.ShowInformation("جاري اعداد التقرير ....", "توقف"); }
         private void BankStatement() { CustomMessageBox.ShowInformation("جاري اعداد التقرير ....", "توقف"); }
-        //private void DebitNote() 
-        //{
-        //    string reportName = "rptBar.rdlc";
-        //    string reportPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Views", "Reports", reportName);
-
-        //    // التحقق من وجود ملف التقرير
-        //    if (!System.IO.File.Exists(reportPath))
-        //    {
-        //        MessageBox.Show("ملف التقرير غير موجود في المسار:\n" + reportPath, "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        //        return;
-        //    }
-
-        //    var parameters = new Dictionary<string, object>
-        //    {
-        //        { "ReportName", reportName },
-        //        { "DataSetName", "dsBar" },
-        //        { "ID", EntityID }, // رقم الصنف
-        //        { "WarehouseID", cbxWarehouse.SelectedValue }, // رقم اكبر من 1 لمخزن معين أو 1 لكل المخازن
-        //        { "StartDate", dtpStart.Value },
-        //        { "EndDate", dtpEnd.Value },
-        //        { "WayMove", "" }
-        //    };
-
-        //    frmMainViewer viewer = new frmMainViewer(parameters);
-        //    viewer.ShowDialog();
-        //}
         private void CreditNote() { CustomMessageBox.ShowInformation("جاري اعداد التقرير ....", "توقف"); }
         private void TradingAccount() { CustomMessageBox.ShowInformation("جاري اعداد التقرير ....", "توقف"); }
         private void IncomeStatement() { CustomMessageBox.ShowInformation("جاري اعداد التقرير ....", "توقف"); }
@@ -615,12 +539,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
             // هنا يجب تنفيذ كود الطباعة المباشرة
             MessageBox.Show("جاري طباعة التقرير...");
         }
-        ///// معاينة التقرير قبل الطباعة
-        //private void PreviewReport()
-        //{
-        //    // هنا يجب تنفيذ كود معاينة التقرير
-        //    MessageBox.Show("جاري تحضير التقرير للمعاينة...");
-        //}
         #region ======== مهام رئسية ============
         /// إعداد معالجات الأحداث للعناصر المختلفة
         private void SetupEventHandlers()
@@ -735,56 +653,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             TimeSpan span = dtpEnd.Value.Date - dtpStart.Value.Date;
             lblAmountOfDay.Text = $"{span.Days + 1} يوم";
         }
-        /// تحديد الفترة الكاملة من تاريخ بداية الحسابات إلى نهاية السنة الحالية
-        //private void SetPeriodForAll()
-        //{
-        //    if (!rdoAllPeriod.Checked) return;
-
-        //    try
-        //    {
-        //        // جلب تاريخ بداية الحسابات من قاعدة البيانات
-        //        DataTable dtStartDate = DBServiecs.GenralData_GetStartAccountsDate();//هذه الدالة تم الغائها واستبدال القيمة من ملف التكست
-
-        //        // التحقق من وجود بيانات وعدم كون الجدول فارغاً
-        //        if (dtStartDate != null && dtStartDate.Rows.Count > 0)
-        //        {
-        //            // التحقق من عدم وجود قيمة DBNull
-        //            if (dtStartDate.Rows[0][0] != DBNull.Value)
-        //            {
-        //                try
-        //                {
-        //                    DateTime startDate = Convert.ToDateTime(dtStartDate.Rows[0][0]);
-        //                    dtpStart.Value = startDate;
-        //                }
-        //                catch (InvalidCastException ex)
-        //                {
-        //                    HandleDateError("نوع البيانات غير صالح لتاريخ بداية الحسابات", ex);
-        //                }
-        //                catch (FormatException ex)
-        //                {
-        //                    HandleDateError("تنسيق تاريخ بداية الحسابات غير صحيح", ex);
-        //                }
-        //            }
-        //            else
-        //            {
-        //                HandleNullDate();
-        //            }
-        //        }
-        //        else
-        //        {
-        //            HandleEmptyData();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        HandleGeneralError("حدث خطأ غير متوقع أثناء جلب تاريخ بداية الحسابات", ex);
-        //    }
-
-        //    // تحديد نهاية السنة الحالية (لا تحتاج لمعالجة أخطاء)
-        //    dtpEnd.Value = new DateTime(DateTime.Now.Year, 12, 31);
-        //}
-
-        // ===== دوال مساعدة لمعالجة الأخطاء =====
+        /*
         private void HandleDateError(string message, Exception ex)
         {
             dtpStart.Value = DateTime.Today;
@@ -821,7 +690,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                           MessageBoxIcon.Error);
             // LogError(ex); // يمكنك استبدالها بأسلوب تسجيل الأخطاء الخاص بك
         }
-
+        */
         /// تحديد فترة اليوم الحالي فقط
         private void SetPeriodForToday()
         {
