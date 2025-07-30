@@ -1700,41 +1700,43 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 MessageBox.Show($"حدث خطأ أثناء تحضير التقرير: {ex.Message}");
             }
         }
-
-        // دالة مبسطة لتعبئة المعطيات المشتركة   ###
-        private void FillCommonParameters(Dictionary<string, object> parameters)
+        // دالة مبسطة لتعبئة المعطيات المشتركة ###
+        private bool FillCommonParameters(Dictionary<string, object> parameters)
         {
             try
             {
-                // 1. كود المستخدم (موجود مسبقاً في القاموس)
+                // 1. كود الكيان الرئيسي
+                int? entityId = GetCurrentEntityID();
+                if (entityId == null)
+                    return false; // توقف تام
 
-                // 2. كود الكيان الرئيسي
-                parameters["EntityID"] = GetCurrentEntityID();
+                parameters["EntityID"] = entityId.Value;
 
-                // 3. البيانات المفلترة
+                // 2. البيانات المفلترة
                 parameters["FilteredData"] = GetFilteredData();
+
+                return true;
             }
             catch (Exception ex)
-
             {
                 MessageBox.Show($"خطأ في تجهيز معطيات التقرير: {ex.Message}");
+                return false;
             }
         }
 
+  
         // جلب كود الصنف الحالى ###
-        // جلب كود الصنف الحالي ###
-        private object GetCurrentEntityID()
+        private int? GetCurrentEntityID()
         {
             if (int.TryParse(lblID_Product.Text, out int id))
-            {
                 return id;
-            }
             else
             {
                 MessageBox.Show("⚠️ يجب اختيار صنف قبل عرض التقرير.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return DBNull.Value;
+                return null;
             }
         }
+
 
 
 
