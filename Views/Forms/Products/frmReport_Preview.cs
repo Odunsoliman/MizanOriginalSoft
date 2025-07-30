@@ -1,6 +1,7 @@
 ﻿using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
 using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
+using MizanOriginalSoft.Views.Forms.MainForms;
 using MizanOriginalSoft.Views.Reports;
 using System;
 using System.Collections.Generic;
@@ -900,6 +901,12 @@ namespace MizanOriginalSoft.Views.Forms.Products
         private void frmReport_Preview_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnHelp_Click(object sender, EventArgs e)
+        {
+            frmHelp helpForm = new frmHelp(this.Name);
+            helpForm.ShowDialog();
         }
     }
 }

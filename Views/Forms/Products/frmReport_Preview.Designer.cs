@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             tableLayoutPanel1 = new TableLayoutPanel();
+            lblReportName = new Label();
             lblTitel = new Label();
             tlpButtons = new TableLayoutPanel();
             btnPrintPreview = new Button();
@@ -57,7 +58,8 @@
             lbl = new Label();
             dtpStart = new DateTimePicker();
             label1 = new Label();
-            lblReportName = new Label();
+            tableLayoutPanel5 = new TableLayoutPanel();
+            btnHelp = new Button();
             tableLayoutPanel1.SuspendLayout();
             tlpButtons.SuspendLayout();
             tlpDateRight.SuspendLayout();
@@ -65,18 +67,19 @@
             tableLayoutPanel3.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
             tlpDate2.SuspendLayout();
+            tableLayoutPanel5.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel1
             // 
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(lblReportName, 0, 0);
             tableLayoutPanel1.Controls.Add(lblTitel, 0, 2);
             tableLayoutPanel1.Controls.Add(tlpButtons, 0, 7);
             tableLayoutPanel1.Controls.Add(tlpDateRight, 0, 5);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel4, 0, 4);
+            tableLayoutPanel1.Controls.Add(tableLayoutPanel5, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(10, 9);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -92,12 +95,26 @@
             tableLayoutPanel1.Size = new Size(691, 485);
             tableLayoutPanel1.TabIndex = 0;
             // 
+            // lblReportName
+            // 
+            lblReportName.AutoSize = true;
+            lblReportName.BackColor = Color.LightGray;
+            lblReportName.Dock = DockStyle.Fill;
+            lblReportName.Font = new Font("Times New Roman", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblReportName.ForeColor = Color.Purple;
+            lblReportName.Location = new Point(35, 0);
+            lblReportName.Name = "lblReportName";
+            lblReportName.Size = new Size(647, 42);
+            lblReportName.TabIndex = 30;
+            lblReportName.Text = "برجاء تحديد عوامل فترة التقرير";
+            lblReportName.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // lblTitel
             // 
             lblTitel.AutoSize = true;
-            lblTitel.BackColor = Color.LightGray;
+            lblTitel.BackColor = Color.Transparent;
             lblTitel.Dock = DockStyle.Fill;
-            lblTitel.Font = new Font("Times New Roman", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitel.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTitel.ForeColor = Color.Purple;
             lblTitel.Location = new Point(3, 96);
             lblTitel.Name = "lblTitel";
@@ -485,19 +502,35 @@
             label1.Text = "من";
             label1.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // lblReportName
+            // tableLayoutPanel5
             // 
-            lblReportName.AutoSize = true;
-            lblReportName.BackColor = Color.LightGray;
-            lblReportName.Dock = DockStyle.Fill;
-            lblReportName.Font = new Font("Times New Roman", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblReportName.ForeColor = Color.Purple;
-            lblReportName.Location = new Point(3, 0);
-            lblReportName.Name = "lblReportName";
-            lblReportName.Size = new Size(685, 48);
-            lblReportName.TabIndex = 30;
-            lblReportName.Text = "برجاء تحديد عوامل فترة التقرير";
-            lblReportName.TextAlign = ContentAlignment.MiddleCenter;
+            tableLayoutPanel5.ColumnCount = 2;
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 95.32847F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 4.67153263F));
+            tableLayoutPanel5.Controls.Add(btnHelp, 1, 0);
+            tableLayoutPanel5.Controls.Add(lblReportName, 0, 0);
+            tableLayoutPanel5.Dock = DockStyle.Fill;
+            tableLayoutPanel5.Location = new Point(3, 3);
+            tableLayoutPanel5.Name = "tableLayoutPanel5";
+            tableLayoutPanel5.RowCount = 1;
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel5.Size = new Size(685, 42);
+            tableLayoutPanel5.TabIndex = 30;
+            // 
+            // btnHelp
+            // 
+            btnHelp.BackColor = Color.FromArgb(255, 255, 192);
+            btnHelp.Dock = DockStyle.Fill;
+            btnHelp.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            btnHelp.Location = new Point(4, 4);
+            btnHelp.Margin = new Padding(4);
+            btnHelp.Name = "btnHelp";
+            btnHelp.Size = new Size(24, 34);
+            btnHelp.TabIndex = 39;
+            btnHelp.TabStop = false;
+            btnHelp.Text = "?";
+            btnHelp.UseVisualStyleBackColor = false;
+            btnHelp.Click += btnHelp_Click;
             // 
             // frmReport_Preview
             // 
@@ -526,6 +559,8 @@
             tableLayoutPanel4.ResumeLayout(false);
             tlpDate2.ResumeLayout(false);
             tlpDate2.PerformLayout();
+            tableLayoutPanel5.ResumeLayout(false);
+            tableLayoutPanel5.PerformLayout();
             ResumeLayout(false);
 
         }
@@ -562,5 +597,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.Button btnAllPeriod;
         private Label lblReportName;
+        private TableLayoutPanel tableLayoutPanel5;
+        private Button btnHelp;
     }
 }
