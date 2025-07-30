@@ -128,5 +128,48 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
                 Console.WriteLine("❌ خطأ في تنظيف النسخ القديمة: " + ex.Message);
             }
         }
+
+
+        public void CopyLatestBackupToSharedFolder(string sourceBackupFolder, string sharedFolderPath, string outputFileName)
+        {
+            try
+            {
+                if (!Directory.Exists(sourceBackupFolder))
+                {
+                    Console.WriteLine("❌ مجلد النسخ الاحتياطية غير موجود: " + sourceBackupFolder);
+                    return;
+                }
+
+                if (!Directory.Exists(sharedFolderPath))
+                {
+                    Console.WriteLine("📁 إنشاء مجلد المشاركة: " + sharedFolderPath);
+                    Directory.CreateDirectory(sharedFolderPath);
+                }
+
+                // استخراج أحدث ملف .bak
+                var latestFile = new DirectoryInfo(sourceBackupFolder)
+                                    .GetFiles("*.bak")
+                                    .OrderByDescending(f => f.CreationTime)
+                                    .FirstOrDefault();
+
+                if (latestFile == null)
+                {
+                    Console.WriteLine("⚠️ لا توجد ملفات نسخ احتياطية في المجلد.");
+                    return;
+                }
+
+                string destFilePath = Path.Combine(sharedFolderPath, outputFileName);
+
+                // نسخ مع الاستبدال
+                File.Copy(latestFile.FullName, destFilePath, true);
+
+                Console.WriteLine($"✅ تم نسخ {latestFile.Name} إلى {destFilePath}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("❌ خطأ أثناء نسخ النسخة إلى مجلد المشاركة: " + ex.Message);
+            }
+        }
+
     }
 }

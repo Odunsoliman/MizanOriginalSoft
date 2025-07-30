@@ -830,7 +830,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         #region **************** End *************************
 
         /*هل سيحتاج هذا الزر اى تعديل */
-        private void btnEnd_Click(object sender, EventArgs e)
+        private void btnEnd_Click_(object sender, EventArgs e)
         {
             try
             {
@@ -871,6 +871,83 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 MessageBox.Show("❌ حدث خطأ أثناء إنهاء التطبيق: " + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private void btnEnd_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string settingsPath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
+
+                if (!File.Exists(settingsPath))
+                {
+                    MessageBox.Show("❌ ملف إعدادات الاتصال غير موجود!", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                var appSettings = new AppSettings(settingsPath);
+                var helper = new DatabaseBackupRestoreHelper(settingsPath);
+
+                // 1. النسخ الاحتياطي
+                helper.BackupDatabase(settingsPath);
+
+                // 2. تنظيف النسخ القديمة
+                string? backupFolder = appSettings.GetString("BackupsPath", null);
+
+                if (!string.IsNullOrWhiteSpace(backupFolder))
+                {
+                    helper.CleanOldBackups(backupFolder, settingsPath);
+
+                    // 3. نسخ النسخة الأخيرة إلى مجلد مشترك باسم ثابت
+                    helper.CopyLatestBackupToSharedFolder(
+                        sourceBackupFolder: backupFolder,
+                        sharedFolderPath: @"D:\BackupToPush", // يمكنك أيضًا قراءته من الإعدادات لو أردت
+                        outputFileName: "MizanOriginalDB.bak"
+                    );
+                }
+
+                // 4. تنفيذ Git Push لمجلد المشروع (من ملف الإعدادات)
+                string? projectPath = appSettings.GetString("ProjectPath", null);
+                if (!string.IsNullOrWhiteSpace(projectPath))
+                {
+                    ExecuteGitPush(projectPath);
+                }
+
+                // 5. تنفيذ Git Push لمجلد نسخ القواعد (من ملف الإعدادات)
+                string? backupPushPath = appSettings.GetString("BackupGitPath", null);
+                if (!string.IsNullOrWhiteSpace(backupPushPath))
+                {
+                    ExecuteGitPush(backupPushPath);
+                }
+
+                // 6. تحديث بيانات القاعدة
+                DBServiecs.A_UpdateAllDataBase();
+
+                // 7. إنهاء البرنامج
+                Application.Exit();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("❌ حدث خطأ أثناء إنهاء التطبيق: " + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ExecuteGitPush(string workingDirectory)
+        {
+            try
+            {
+                var gitProcess = new System.Diagnostics.Process();
+                gitProcess.StartInfo.FileName = "cmd.exe";
+                gitProcess.StartInfo.Arguments = "/C git add . && git commit -m \"Auto Backup - " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "\" && git push";
+                gitProcess.StartInfo.WorkingDirectory = workingDirectory;
+                gitProcess.StartInfo.CreateNoWindow = true;
+                gitProcess.StartInfo.UseShellExecute = false;
+                gitProcess.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("❌ خطأ أثناء تنفيذ Git Push:\n" + ex.Message);
+            }
+        }
+
 
         private void btnUserUpdatePass_Click(object sender, EventArgs e)
         {
