@@ -1,31 +1,31 @@
 ﻿using MizanOriginalSoft.MainClasses;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MizanOriginalSoft.Views.Forms.Accounts
 {
     public partial class frm_AddAccount : Form
     {
-        public string CreatedAccountName { get; private set; }
+        // اسم الحساب الذي تم إنشاؤه (يعاد إلى النموذج الرئيسي)
+        public string CreatedAccountName { get; private set; } = string.Empty;
+
+        // رقم الحساب الذي تم إنشاؤه
         public int CreatedAccountID { get; private set; }
 
-        public frm_AddAccount(string NameAcc ,int typ)
+        private readonly int TypeAcc;
+
+        public frm_AddAccount(string nameAcc, int type)
         {
             InitializeComponent();
-            TypeAcc =typ;
-            txtAccName.Text  = NameAcc;
+            TypeAcc = type;
+            txtAccName.Text = nameAcc;
         }
-        int TypeAcc;
+
         private void frm_AddAccount_Load(object sender, EventArgs e)
         {
-            // توليد رقم جديد إذا كان lblAccID فارغًا
+            // توليد رقم جديد إذا لم يتم تعيين رقم للحساب مسبقًا
             if (string.IsNullOrWhiteSpace(lblAccID.Text))
             {
                 DataTable tblNewID = DBServiecs.MainAcc_GetNewID();
@@ -47,7 +47,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 return;
             }
 
-            // توليد رقم الحساب إذا لم يكن موجودًا
+            // محاولة قراءة رقم الحساب، أو توليد رقم جديد إن لم يكن موجودًا
             int accID;
             if (!int.TryParse(lblAccID.Text, out accID))
             {
@@ -64,33 +64,28 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 }
             }
 
-            // جمع البيانات
+            // جمع البيانات من الحقول
             string firstPhon = txtFirstPhon.Text;
             string antherPhon = txtAntherPhon.Text;
             string accNote = txtAccNote.Text;
             string clientEmail = txtClientEmail.Text;
             string clientAddress = txtClientAddress.Text;
 
-            // تحديد القيمة النهائية لـ TypeAcc حسب القيم الأصلية
-            int ParentAccID;
-            if (TypeAcc == 1 || TypeAcc == 2)
-                ParentAccID = 7; // عملاء
-            else if (TypeAcc == 3 || TypeAcc == 4)
-                ParentAccID = 14; // موردين
-            else
-                ParentAccID = TypeAcc; // قيم أخرى غير معروفة
+            // تحديد الحساب الأب بناءً على نوع الحساب
+            int parentAccID = TypeAcc switch
+            {
+                1 or 2 => 7,   // عملاء
+                3 or 4 => 14,  // موردين
+                _ => TypeAcc   // أنواع أخرى
+            };
 
-            // تنفيذ الإدخال أو التحديث
+            // تنفيذ الحفظ
             bool result = DBServiecs.MainAcc_UpdateOrInsert(
                 accID,
-                ParentAccID, // هنا التمرير يكون حسب القيمة المحوّلة
+                parentAccID,
                 accName,
                 false,
-                0,
-                0,
-                0,
-                0,
-                0,
+                0, 0, 0, 0, 0,
                 false,
                 null,
                 firstPhon,
@@ -101,7 +96,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 out string resultMessage
             );
 
-
             if (result)
             {
                 MessageBox.Show(resultMessage, "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -110,15 +104,13 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 CreatedAccountID = accID;
                 CreatedAccountName = accName;
 
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                DialogResult = DialogResult.OK;
+                Close();
             }
             else
             {
                 MessageBox.Show(resultMessage, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
     }
 }

@@ -630,7 +630,7 @@ namespace MizanOriginalSoft.MainClasses
             {
                 cmd.Parameters.Add("@InvType_ID", SqlDbType.Int).Value = InvType_ID;
                 cmd.Parameters.Add("@Inv_Counter", SqlDbType.Int).Value = Inv_Counter;
-            }, out message, expectMessageOutput: true);// هنا ارجاع رساسة
+            }, out message, expectMessageOutput: true);
         }
 
 
