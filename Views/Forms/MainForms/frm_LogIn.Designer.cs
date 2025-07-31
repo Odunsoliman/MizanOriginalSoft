@@ -306,7 +306,7 @@
             pnlReports.Controls.Add(btnRep01);
             pnlReports.Controls.Add(btn_MainReports);
             pnlReports.Dock = DockStyle.Top;
-            pnlReports.Location = new Point(0, 443);
+            pnlReports.Location = new Point(0, 481);
             pnlReports.Margin = new Padding(3, 2, 3, 2);
             pnlReports.MaximumSize = new Size(0, 338);
             pnlReports.MinimumSize = new Size(0, 34);
@@ -534,7 +534,7 @@
             pnlBills.Controls.Add(btnCashOut);
             pnlBills.Controls.Add(btn_MainBill);
             pnlBills.Dock = DockStyle.Top;
-            pnlBills.Location = new Point(0, 409);
+            pnlBills.Location = new Point(0, 447);
             pnlBills.Margin = new Padding(3, 2, 3, 2);
             pnlBills.MaximumSize = new Size(0, 338);
             pnlBills.MinimumSize = new Size(0, 34);
@@ -711,7 +711,7 @@
             pnlMovement.MinimumSize = new Size(0, 34);
             pnlMovement.Name = "pnlMovement";
             pnlMovement.Padding = new Padding(3, 2, 3, 2);
-            pnlMovement.Size = new Size(134, 34);
+            pnlMovement.Size = new Size(134, 72);
             pnlMovement.TabIndex = 1;
             // 
             // btnIncreaseStock

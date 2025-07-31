@@ -50,16 +50,16 @@ namespace MizanOriginalSoft.Views.Forms.Movments
       
         private KeyboardLanguageManager langManager;
         #endregion
-        public frm_NewInvoice(int type_ID, int us)
+        public frm_NewInvoice(int type_ID)
         {
             InitializeComponent();
-            US = us;
             Type_ID = type_ID;
 
             langManager = new KeyboardLanguageManager(this); // ✅ تهيئة المتغير هنا
 
             ConnectEventsFoter();
             ConnectEvents();
+            US=CurrentSession.UserID;
         }
 
         private void frm_NewInvoice_Load(object sender, EventArgs e)

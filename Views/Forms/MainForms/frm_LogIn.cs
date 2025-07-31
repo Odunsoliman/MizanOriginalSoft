@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
+using MizanOriginalSoft.Views.Forms.Movments;
 using MizanOriginalSoft.Views.Forms.Products;
 using System;
 using System.Data;
@@ -688,36 +689,65 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         private void btnSales_Click(object sender, EventArgs e)
         {
             HighlightTransparentButton((Button)sender);
+            
+            CloseAllFormsExceptMain();
+            int id_Type = 1;
+            frm_NewInvoice frm = new frm_NewInvoice(id_Type);
+            OpenFormInPanel(frm);
         }
 
         private void btnBackSales_Click(object sender, EventArgs e)
         {
             HighlightTransparentButton((Button)sender);
+            CloseAllFormsExceptMain();
+            int id_Type = 2;
+            frm_NewInvoice frm = new frm_NewInvoice(id_Type);
+            OpenFormInPanel(frm);
         }
 
         private void btnPrococh_Click(object sender, EventArgs e)
         {
             HighlightTransparentButton((Button)sender);
+            CloseAllFormsExceptMain();
+            int id_Type = 3;
+            frm_NewInvoice frm = new frm_NewInvoice(id_Type);
+            OpenFormInPanel(frm);
         }
 
         private void btnBackPrococh_Click(object sender, EventArgs e)
         {
             HighlightTransparentButton((Button)sender);
+            CloseAllFormsExceptMain();
+            int id_Type = 4;
+            frm_NewInvoice frm = new frm_NewInvoice(id_Type);
+            OpenFormInPanel(frm);
         }
 
         private void btnGardStock_Click(object sender, EventArgs e)
         {
             HighlightTransparentButton((Button)sender);
+            CloseAllFormsExceptMain();
+            int id_Type = 5;
+            frm_NewInvoice frm = new frm_NewInvoice(id_Type);
+            OpenFormInPanel(frm);
         }
 
         private void btnDecreaseStock_Click(object sender, EventArgs e)
         {
             HighlightTransparentButton((Button)sender);
+            CloseAllFormsExceptMain();
+            int id_Type = 6;
+            frm_NewInvoice frm = new frm_NewInvoice(id_Type);
+            OpenFormInPanel(frm);
         }
 
         private void btnIncreaseStock_Click(object sender, EventArgs e)
         {
             HighlightTransparentButton((Button)sender);
+            CloseAllFormsExceptMain();
+            int id_Type = 7;
+            frm_NewInvoice frm = new frm_NewInvoice(id_Type);
+            OpenFormInPanel(frm);
         }
 
         #endregion
