@@ -197,6 +197,72 @@ namespace MizanOriginalSoft.MainClasses
 
         #region 🟢 دوال جلب بيانات (SELECT)
 
+        /// <summary>
+        /// تنفيذ إجراء مخزن لجلب البيانات مع إمكانية الحصول على رسالة من SQL.
+        /// - يمكن استخدامها في الحالات التي تتطلب فقط جلب بيانات.
+        /// - ويمكن أيضًا استخدامها في الحالات التي تعيد رسالة باستخدام بارامتر OUTPUT باسم @Message.
+        /// تُعيد الرسالة الخارجة من الإجراء في حال كان هناك بارامتر @Message OUTPUT، 
+        /// أو رسالة الخطأ في حال حدوث استثناء، أو تكون null إن لم يتم طلب رسالة.
+        /// <param name="expectMessageOutput">هل الإجراء يحتوي على بارامتر @Message OUTPUT؟</param>
+        /// <returns>جدول يحتوي على البيانات المطلوبة، أو جدول فارغ في حال حدوث خطأ</returns>
+        public static DataTable ExecuteSelectQueryFlexible(
+            string procedureName,
+            Action<SqlCommand>? setParams,
+            out string? message,
+            bool expectMessageOutput = false)
+        {
+            var dt = new DataTable();
+            message = null;
+
+            try
+            {
+                EnsureConnectionOpen();
+
+                using (var cmd = CreateCommand(procedureName))
+                {
+                    // تمرير البارامترات
+                    setParams?.Invoke(cmd);
+
+                    // إضافة بارامتر @Message في حال توقع وجوده
+                    if (expectMessageOutput)
+                    {
+                        var msgParam = new SqlParameter("@Message", SqlDbType.NVarChar, 500)
+                        {
+                            Direction = ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(msgParam);
+                    }
+
+                    // تعبئة الجدول من نتائج الإجراء
+                    using var adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(dt);
+
+                    // قراءة الرسالة إن وُجدت
+                    if (expectMessageOutput)
+                    {
+                        message = cmd.Parameters["@Message"].Value?.ToString();
+                    }
+                }
+
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                message = "خطأ أثناء جلب البيانات: " + ex.Message;
+                MessageBox.Show(message);
+                return new DataTable(); // لا نعيد null إطلاقًا
+            }
+            finally
+            {
+                EnsureConnectionClosed();
+            }
+        }
+        /*يمكن استخدام الدالة السابقة  ExecuteSelectQueryFlexible
+         * بديلا عن الدالتين
+        ExecuteSelectQuery
+        ExecuteSelectQueryWithMessage
+         */
+
         public static DataTable? ExecuteSelectQuery(string procedureName, Action<SqlCommand>? setParams = null)
         {
             var dt = new DataTable();

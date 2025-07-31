@@ -9,11 +9,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Folder Include="Views\Forms\Movments\" />
-		<Folder Include="Views\Forms\Accounts\" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
 		<PackageReference Include="ReportViewerCore.WinForms" Version="15.1.26" />
 		<PackageReference Include="ZXing.Net" Version="0.16.10" />

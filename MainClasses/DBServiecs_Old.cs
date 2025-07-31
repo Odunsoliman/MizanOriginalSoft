@@ -38,16 +38,7 @@ namespace MizanOriginalSoft.MainClasses
             return dbHelper.ExecuteSelectQuery("UsersGet", command => { });
         }
 
-        //تحديث بيانات قاعدة البيانات
-        public static string UpdateAllBalances()//@@@ 
-        {
-            string result = dbHelper.ExecuteNonQueryNoParamsWithMessage("UpdateAllBalances", expectMessageOutput: true);
-
-            if (!string.IsNullOrEmpty(result))
-                return result;
-
-            return "تم التحديث بنجاح";
-        }
+ 
 
         /// التحقق من اسم المستخدم وكلمة المرور
         public static DataTable UsersVarify(string username, string password)//@@@
@@ -119,17 +110,7 @@ namespace MizanOriginalSoft.MainClasses
                 command => command.Parameters.Add("@AccID", SqlDbType.Int).Value = AccID);
         }
         
-        // جلب رقم جديد للحساب 
-        public static DataTable MainAcc_GetNewID()//@@@
-        {
-            return dbHelper.ExecuteSelectQuery("MainAcc_GetNewID");
-        }
-
-        //جلب رقم جديد للتصنيف الفرعى
-        public static DataTable MainAcc_GetNewIDForCategory()//@@@
-        {
-            return dbHelper.ExecuteSelectQuery("MainAcc_GetNewIDForCategory");
-        }
+   
 
         // دالة حذف حساب او تصنيف
         public static bool MainAcc_DeleteCatogryOrAcc(
@@ -193,55 +174,6 @@ namespace MizanOriginalSoft.MainClasses
         }
 
 
-
-
-        //دالة ادراج او تعديل حساب 
-        public static bool MainAcc_UpdateOrInsert(
-           int accID,
-           int? parentAccID,
-           string accName,
-           bool isHidden,
-           float? fixedAssetsValue,
-           float? depreciationRateAnnually,
-           int? fixedAssetsAge,
-           float? annuallyInstallment,
-           float? monthlyInstallment,
-           bool? isEndedFixedAssets,
-           DateTime? fixedAssetsEndDate,
-           string firstPhon,
-           string antherPhon,
-           string accNote,
-           string clientEmail,
-           string clientAddress,
-           out string resultMessage)
-        {
-            resultMessage = dbHelper.ExecuteNonQueryWithParamsAndMessage(
-                "MainAcc_UpdateOrInsert",
-                cmd =>
-                {
-                    cmd.Parameters.AddWithValue("@AccID", accID);
-                    cmd.Parameters.AddWithValue("@ParentAccID", parentAccID ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@AccName", accName);
-                    cmd.Parameters.AddWithValue("@IsHidden", isHidden);
-                    cmd.Parameters.AddWithValue("@FixedAssetsValue", fixedAssetsValue ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@DepreciationRateAnnually", depreciationRateAnnually ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@FixedAssetsAge", fixedAssetsAge ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@AnnuallyInstallment", annuallyInstallment ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@MonthlyInstallment", monthlyInstallment ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@IsEndedFixedAssets", isEndedFixedAssets ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@FixedAssetsEndDate", fixedAssetsEndDate ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@FirstPhon", string.IsNullOrWhiteSpace(firstPhon) ? (object)DBNull.Value : firstPhon);
-                    cmd.Parameters.AddWithValue("@AntherPhon", string.IsNullOrWhiteSpace(antherPhon) ? (object)DBNull.Value : antherPhon);
-                    cmd.Parameters.AddWithValue("@AccNote", string.IsNullOrWhiteSpace(accNote) ? (object)DBNull.Value : accNote);
-                    cmd.Parameters.AddWithValue("@ClientEmail", string.IsNullOrWhiteSpace(clientEmail) ? (object)DBNull.Value : clientEmail);
-                    cmd.Parameters.AddWithValue("@ClientAddress", string.IsNullOrWhiteSpace(clientAddress) ? (object)DBNull.Value : clientAddress);
-                },
-                expectMessageOutput: true
-            );
-
-            // اعتبر أن النجاح إذا الرسالة تبدأ بـ "تم"
-            return resultMessage.StartsWith("تم");
-        }
 
 
 
@@ -668,162 +600,13 @@ namespace MizanOriginalSoft.MainClasses
 
         #region @@@@@@@@@@@@@@  Faturalar  @@@@@@@@@@@
 
-        //احضار حسابات التى تعرض فى الفاتورة
-        public static DataTable NewInvoice_GetAcc(string accountIDsCsv)
-        {
-            return dbHelper.ExecuteSelectQuery("NewInvoice_GetAcc", cmd =>
-            {
-                cmd.Parameters.AddWithValue("@IDs", accountIDsCsv);
-            });
-        }
-
-        // جلب الفواتير حسب النوع
-        public static DataTable NewInvoice_GetInvoicesByType(int InvType_ID)
-        {
-            return dbHelper.ExecuteSelectQuery("NewInvoice_GetInvoicesByType", cmd =>
-                cmd.Parameters.Add("@InvType_ID", SqlDbType.Int).Value = InvType_ID
-            );
-        }
-        
-
-        // جلب فاتورة بمسلسلها حسب النوع@
-        public static DataTable NewInvoice_GetInvoiceByTypeAndCounter(int InvType_ID,int Inv_Counter, out string message)
-        {
-            return dbHelper.ExecuteSelectQueryWithMessage("NewInvoice_GetInvoiceByTypeAndCounter", cmd =>
-            {
-                cmd.Parameters.Add("@InvType_ID", SqlDbType.Int).Value = InvType_ID;
-                cmd.Parameters.Add("@Inv_Counter", SqlDbType.Int).Value = Inv_Counter;
-            }, out message, expectMessageOutput: true);
-        }
-
-        // جلب تفاصيل الفواتير حسب الكود
-        public static DataTable NewInvoice_GetInvoiceDetails(int Inv_ID)
-        {
-            return dbHelper.ExecuteSelectQuery("NewInvoice_GetInvoiceDetails", cmd =>
-                cmd.Parameters.Add("@Inv_ID", SqlDbType.Int).Value = Inv_ID
-            );
-        }
-
-        //جلب كود جديد للفاتورة
-        public static int NewInvoice_GetNewID()
-        {
-            DataTable dt = dbHelper.ExecuteSelectQuery("NewInvoice_GetNewID");
-
-            if (dt != null && dt.Rows.Count > 0)
-                return Convert.ToInt32(dt.Rows[0]["NewInvID"]);
-            else
-                return 1; // احتياطي في حال فشل التنفيذ
-        }
-        //جلب عداد جديد للفاتورة
-        public static string NewInvoice_GetNewCounter(int invTypeID)
-        {
-            DataTable dt = dbHelper.ExecuteSelectQuery("NewInvoice_GetNewCounter", cmd =>
-            {
-                cmd.Parameters.AddWithValue("@InvType_ID", invTypeID);
-            });
-
-            if (dt != null && dt.Rows.Count > 0)
-                return dt.Rows[0]["New_Counter"].ToString();
-            else
-                return "0000-XX-0000001"; // قيمة افتراضية احتياطية
-        }
 
 
 
-        // حفظ الفاتورة الدائم او المؤقت
-        public static bool NewInvoice_InsertOrUpdate(
-            int invID,
-            string  invCounter,
-            int? invType_ID,
-            DateTime? invDate,
-            int? seller_ID,
-            int? user_ID,
-            int? acc_ID,
-            float? totalValue,
-            float? taxVal,
-            float? totalValueAfterTax,
-            float? discount,
-            float? valueAdded,
-            float? netTotal,
-            float? payment_Cash,
-            float? payment_Electronic,
-            float? payment_BankCheck,
-            string payment_Note,
-            float? remainingOnAcc,
-            bool? isReturnable,
-            string noteInvoice,
-            string saved,
-            int Warehouse_Id,
-            out string resultMessage)
-        {
-            resultMessage = dbHelper.ExecuteNonQueryWithParamsAndMessage(
-                "NewInvoice_InsertOrUpdate",
-                cmd =>
-                {
-                    cmd.Parameters.AddWithValue("@Inv_ID", invID);//7
-                    cmd.Parameters.AddWithValue("@Inv_Counter", invCounter ?? (object)DBNull.Value);//=1
-                    cmd.Parameters.AddWithValue("@InvType_ID", invType_ID ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Inv_Date", invDate ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Seller_ID", seller_ID ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@User_ID", user_ID ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Acc_ID", acc_ID ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@TotalValue", totalValue ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@TaxVal", taxVal ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@TotalValueAfterTax", totalValueAfterTax ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Discount", discount ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@ValueAdded", valueAdded ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@NetTotal", netTotal ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Payment_Cash", payment_Cash ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Payment_Electronic", payment_Electronic ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Payment_BankCheck", payment_BankCheck ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Payment_Note", payment_Note ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@RemainingOnAcc", remainingOnAcc ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@IsReturnable", isReturnable ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@NoteInvoice", noteInvoice ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Saved", saved ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Warehouse_Id", Warehouse_Id);
-                },
-                expectMessageOutput: false // إذا لم يكن الإجراء يرجع OUTPUT message
-            );
-
-            // في حال أردت لاحقًا أن ترجع SP رسالة، غير expectMessageOutput إلى true
-            return true; // أو يمكنك تعديل المنطق لاحقاً حسب رسالة الإجراء
-        }
 
 
-        public static bool NewInvoice_InsertDetails(
-        int accID,
-        int? parentAccID,
-        string accName,
-        out string resultMessage)
-        {
-            resultMessage = dbHelper.ExecuteNonQueryWithParamsAndMessage(
-                "NewInvoice_InsertDetails",
-                cmd =>
-                {
-                    cmd.Parameters.AddWithValue("@AccID", accID);
-                    cmd.Parameters.AddWithValue("@ParentAccID", parentAccID ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@AccName", accName);
-                },
-                expectMessageOutput: true
-            );
 
-            // اعتبر أن النجاح إذا الرسالة تبدأ بـ "تم"
-            return resultMessage.StartsWith("تم");
-        }
 
-        public static bool NewInvoice_DeleteEmptyInvoicesOnExit()
-        {
-            try
-            {
-                dbHelper.ExecuteNonQueryNoParamsWithMessage("NewInvoice_DeleteEmptyInvoicesOnExit");
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
 
 
 
@@ -834,86 +617,8 @@ namespace MizanOriginalSoft.MainClasses
 
 
 
-        // جلب بيانات المنتج حسب المعرف
-        public static DataTable Item_GetProductByCode(string ProductCode, out string message)//@@@
-        {
-            return dbHelper.ExecuteSelectQueryWithMessage("Item_GetProductByCode", cmd =>
-            {
-                cmd.Parameters.Add("@ProductCode", SqlDbType.NVarChar).Value = ProductCode;
-            }, out message, expectMessageOutput: true);
-        }
 
-        //ادراج تفاصيل فاتورة
-        public static string InvoiceDetails_Insert(
-            int TypeInvID,
-            int Inv_ID_fk,
-            int PieceID_fk,
-            float PriceMove,
-            float Amount,
-            float TotalRow,
-            float GemDisVal,
-            float ComitionVal,
-            float NetRow,
-            int OldInvID
-
-            )
-        {
-            // تنفيذ الإجراء المخزن مع تمكين انتظار الرسائل المرجعية
-            string result = dbHelper.ExecuteNonQueryWithLogging("NewInvoice_InsertDetails", cmd =>
-            {
-                cmd.Parameters.Add("@TypeInvID", SqlDbType.Int ).Value = TypeInvID;
-                cmd.Parameters.Add("@Inv_ID_fk", SqlDbType.Int).Value = Inv_ID_fk;
-                cmd.Parameters.Add("@PieceID_fk", SqlDbType.Int ).Value = PieceID_fk;
-                cmd.Parameters.Add("@PriceMove", SqlDbType.Real).Value = PriceMove;
-                cmd.Parameters.Add("@Amount", SqlDbType.Real).Value = Amount;
-                cmd.Parameters.Add("@TotalRow", SqlDbType.Real).Value = TotalRow;
-                cmd.Parameters.Add("@GemDisVal", SqlDbType.Real).Value = GemDisVal;
-                cmd.Parameters.Add("@ComitionVal", SqlDbType.Real).Value = ComitionVal;
-                cmd.Parameters.Add("@NetRow", SqlDbType.Real).Value = NetRow;
-                cmd.Parameters.Add("@OldInvID", SqlDbType.Int).Value = OldInvID;
-
-                //@
-
-            }, expectMessageOutput: false );
-
-            // إذا كانت هناك رسالة مرجعة من الإجراء المخزن، يتم إرجاعها مباشرة
-            if (!string.IsNullOrEmpty(result))
-            {
-                return result;
-            }
-
-            // إذا لم يتم إرجاع أي رسالة، يتم إرجاع رسالة نجاح افتراضية
-            return "تم إدخال القطعة بنجاح";
-        }
-
-
-        //ادراج تفاصيل فاتورة
-        public static string NewInvoice_UpdateInvoiceDetail(
-            int serInvDetail,
-            float PriceMove,
-            float Amount,
-            float GemDisVal
-            )
-        {
-            // تنفيذ الإجراء المخزن مع تمكين انتظار الرسائل المرجعية
-            string result = dbHelper.ExecuteNonQueryWithLogging("NewInvoice_UpdateInvoiceDetail", cmd =>
-            {
-                cmd.Parameters.Add("@serInvDetail", SqlDbType.Int).Value = serInvDetail;
-                cmd.Parameters.Add("@PriceMove", SqlDbType.Real).Value = PriceMove;
-                cmd.Parameters.Add("@Amount", SqlDbType.Real).Value = Amount;
-                cmd.Parameters.Add("@GemDisVal", SqlDbType.Real).Value = GemDisVal;
-            }, expectMessageOutput: false);
-
-            // إذا كانت هناك رسالة مرجعة من الإجراء المخزن، يتم إرجاعها مباشرة
-            if (!string.IsNullOrEmpty(result))
-            {
-                return result;
-            }
-
-            // إذا لم يتم إرجاع أي رسالة، يتم إرجاع رسالة نجاح افتراضية
-            return "تم إدخال القطعة بنجاح";
-        }
-
+ 
 
 
 
@@ -928,36 +633,11 @@ namespace MizanOriginalSoft.MainClasses
         }
 
 
-        // جلب القطع التابعة لمنتج[]
-        public static DataTable Product_GetOrCreatePieces(int ID_Prod)
-        {
-            return dbHelper.ExecuteSelectQuery("Product_GetOrCreatePieces", cmd =>
-            {
-                cmd.Parameters.Add("@ID_Prod", SqlDbType.Int).Value = ID_Prod;
-            });
-        }
 
-        //  تُرجع القطعة الوحيدة الموجودة أو تنشئها إن لم تكن موجودة.
-        public static DataTable Product_GetOrCreate_DefaultPiece(int ID_Prod)
-        {
-            return dbHelper.ExecuteSelectQuery("Product_GetOrCreate_DefaultPiece", cmd =>
-            {
-                cmd.Parameters.Add("@ID_Prod", SqlDbType.Int).Value = ID_Prod;
-            });
-        }
+
+
         //
 
-
-        //  الحصول على معرف القطعة (Piece_ID) الجديدة بالتحديد.
-        public static int Product_CreateNewPiece(int prodID)
-        {
-            int pieceID = dbHelper.ExecuteScalarQuery<int>("Product_CreateNewPiece", cmd =>
-            {
-                cmd.Parameters.Add("@ID_Prod", SqlDbType.Int).Value = prodID;
-            });
-
-            return pieceID;
-        }
 
 
         // جلب معرف القطعة لمنتج
