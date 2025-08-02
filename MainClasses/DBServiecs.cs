@@ -548,7 +548,7 @@ namespace MizanOriginalSoft.MainClasses
         //تحديث بيانات قاعدة البيانات
         public static string UpdateAllBalances()//@@@ 
         {
-            string result = dbHelper.ExecuteNonQueryNoParamsWithMessage("UpdateAllBalances", expectMessageOutput: true);
+            string result = dbHelper.ExecuteNonQueryNoParamsWithMessage("A_UpdateAllDataBase", expectMessageOutput: true);
 
             if (!string.IsNullOrEmpty(result))
                 return result;

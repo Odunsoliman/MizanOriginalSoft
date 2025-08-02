@@ -888,7 +888,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             else if (Type_ID == 3 || Type_ID == 4)
                 accountIDs = "14,39";    // شراء أو مردود مشتريات
             else if (Type_ID >= 5)
-                accountIDs = "31,33";    // جرد أو تسويات
+                accountIDs = "31";    // جرد أو تسويات
 
             if (string.IsNullOrEmpty(accountIDs))
                 return;
@@ -904,8 +904,12 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
             string? defaultAccID = null;
 
-            if (Type_ID >= 5)
-                defaultAccID = "000";
+            if (Type_ID == 5)
+                defaultAccID = "50";
+            else if (Type_ID == 6)
+                defaultAccID = "51";
+            else if (Type_ID == 7)
+                defaultAccID = "52";
             else if (Type_ID == 1 || Type_ID == 2)
                 defaultAccID = "40";
             else if (Type_ID == 3 || Type_ID == 4)
