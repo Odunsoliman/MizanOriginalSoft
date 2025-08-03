@@ -1,4 +1,5 @@
-﻿using MizanOriginalSoft.MainClasses.OriginalClasses;
+﻿using MizanOriginalSoft.MainClasses;
+using MizanOriginalSoft.MainClasses.OriginalClasses;
 using System.Data;
 
 
@@ -28,7 +29,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
 
 
-#nullable enable
 
         private void AttachTextBoxHandlers(Control parent)
         {
@@ -139,6 +139,32 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         #endregion
 
+        private void LoadWarehouses()
+        {
+            try
+            {
+                cbxWarehouseId .Items.Clear();
+                DataTable dt = DBServiecs.Warehouse_GetAll();
+
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    cbxWarehouseId.DataSource = dt;
+                    cbxWarehouseId.DisplayMember = "WarehouseName";
+                    cbxWarehouseId.ValueMember = "WarehouseId";
+
+                }
+                else
+                {
+                    MessageBox.Show("لا توجد فروع مسجلة في النظام", "تحذير",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"حدث خطأ أثناء تحميل الفروع: {ex.Message}", "خطأ",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
 
 
@@ -147,7 +173,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
 
 
-        
+
 
         private void LoadSettings()
         {
@@ -230,7 +256,9 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                         break;
                     case "LogoImagName":
                         lblLogoImageName.Text = value;
-                        
+                        break;
+                    case "DefaltWarehouseId":
+                        cbxWarehouseId .SelectedValue  = value;
                         break;
                 }
             }
