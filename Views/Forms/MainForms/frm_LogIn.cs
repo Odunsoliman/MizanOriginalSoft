@@ -31,6 +31,9 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         public frm_LogIn()
         {
             InitializeComponent();
+            SetupAutoComplete(); // تهيئة خاصية الإكمال التلقائي لأسماء المستخدمين
+            InitializePanelsMovement();
+            InitializeInnerPanels();
 
         }
 
@@ -38,9 +41,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             DBServiecs.A_UpdateAllDataBase();
             LoadAppInfo();         // جلب اسم مالك البرنامج من ملف الإعدادات
-            SetupAutoComplete(); // تهيئة خاصية الإكمال التلقائي لأسماء المستخدمين
-            InitializePanelsMovement();
-            InitializeInnerPanels();
+
 
             txtUserName.Focus();     // وضع التركيز على مربع اسم المستخدم
         }
@@ -52,6 +53,32 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             try
             {
                 string filePath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
+                /*
+                 هذا الملف به حقول تعريفية كثية وما يهم شاشة الدخول منها الحقول التالية
+                لا يستخدم كل الحقول فى وقت واحد
+
+                عند الفتح يتم استخدام 
+                serverName=DESKTOP-EE70K28\SQLEXPRESS
+                DBName=MizanOriginalDB
+                ExpiryDate=25-7-2025
+                EndDate=31-12-2025
+
+                وعند التحقق من كلمة المرور واسم المستخدم يتم عرض قيم
+                CompanyName=Sondos 4 kids
+                DefaultWarehouseId=0
+
+                وعند الغلق يتم استخدام
+                BackupsPath=D:\MizanOriginalSoft\DataBaseApp\BakUpDB
+                BackupDB=Original_BackupDatabase
+                GoogleDrivePath=D:\ClintGoogleDrive
+                BackupGitPath=D:\BackupToPush
+
+
+                فارى ان تخزن هذه القيم عند الفتح فى قاموس لها ثم يوخذ من هذا القاموس الحقل فى وقته ويتم تقسيم هذه الدالة الى اكثر من 
+                دالة يتم استدعاء كل واحدة فى وقتها ف
+                فما الرأى السديد فى هذا السيناريو
+
+                 */
 
                 if (!File.Exists(filePath))
                 {
