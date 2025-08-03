@@ -18,6 +18,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         private void frmGenralData_Load(object sender, EventArgs e)
         {
             tabControl.ItemSize = new Size(150, 40); // العرض = 150، الارتفاع = 40
+            LoadWarehouses();
             LoadSettings();
             tlpPading();
             UpdateLabelCount();
