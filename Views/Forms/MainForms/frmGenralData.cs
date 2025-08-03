@@ -1,6 +1,7 @@
 ﻿using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
 using System.Data;
+using System.Text;
 
 
 namespace MizanOriginalSoft.Views.Forms.MainForms
@@ -29,7 +30,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             txtNameCo.SelectAll();                   // تحديد كامل النص
             LoadBackupFiles();                       // تحميل النسخ الاحتياطية (تأكد من جاهزيتها)
             AttachTextBoxHandlers(this);             // ربط أحداث مربعات النص العامة
-            
+
         }
 
         #region تحميل بيانات الفروع
@@ -724,6 +725,70 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             catch (Exception ex)
             {
                 MessageBox.Show("حدث خطأ أثناء تحميل الفروع:\n" + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
+        private void btnSetAsDefaultWarehouse_Click(object sender, EventArgs e)
+        {
+            if (cbxWarehouseId.SelectedValue == null)
+            {
+                MessageBox.Show("❌ يرجى اختيار فرع من القائمة أولًا.", "تحذير", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // الحصول على رقم الفرع المختار
+            int selectedWarehouseId = Convert.ToInt32(cbxWarehouseId.SelectedValue);
+
+            DialogResult confirm = MessageBox.Show(
+                $"هل تريد تعيين الفرع رقم {selectedWarehouseId} كفرع افتراضي لهذه النسخة؟\n" +
+                "سيتم تفعيل التخصيص عند إعادة تشغيل البرنامج.",
+                "تأكيد التخصيص",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (confirm == DialogResult.Yes)
+            {
+                UpdateDefaultWarehouseId(selectedWarehouseId);
+            }
+        }
+
+        private void UpdateDefaultWarehouseId(int newId)
+        {
+            try
+            {
+                string filePath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
+                if (!File.Exists(filePath))
+                {
+                    MessageBox.Show("⚠️ ملف الإعدادات غير موجود!", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                var lines = File.ReadAllLines(filePath).ToList();
+                bool found = false;
+
+                for (int i = 0; i < lines.Count; i++)
+                {
+                    if (lines[i].StartsWith("DefaultWarehouseId=", StringComparison.OrdinalIgnoreCase))
+                    {
+                        lines[i] = $"DefaultWarehouseId={newId}";
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                    lines.Add($"DefaultWarehouseId={newId}");
+
+                File.WriteAllLines(filePath, lines, Encoding.UTF8);
+
+                MessageBox.Show("✅ تم حفظ التخصيص بنجاح.\nيجب إعادة تشغيل البرنامج لتفعيل التغييرات.",
+                                "تم", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ أثناء حفظ التخصيص:\n" + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

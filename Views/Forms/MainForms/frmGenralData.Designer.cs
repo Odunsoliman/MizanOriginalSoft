@@ -59,8 +59,8 @@
             cbxWarehouseId = new ComboBox();
             btnAddWarehouse = new Button();
             btnDeleteWarehous = new Button();
+            btnSetAsDefaultWarehouse = new Button();
             btnRenamWarehous = new Button();
-            button1 = new Button();
             tabPage2 = new TabPage();
             tableLayoutPanel18 = new TableLayoutPanel();
             tableLayoutPanel22 = new TableLayoutPanel();
@@ -361,7 +361,7 @@
             tableLayoutPanel8.Controls.Add(cbxWarehouseId, 1, 6);
             tableLayoutPanel8.Controls.Add(btnAddWarehouse, 0, 7);
             tableLayoutPanel8.Controls.Add(btnDeleteWarehous, 3, 6);
-            tableLayoutPanel8.Controls.Add(button1, 2, 6);
+            tableLayoutPanel8.Controls.Add(btnSetAsDefaultWarehouse, 2, 6);
             tableLayoutPanel8.Controls.Add(btnRenamWarehous, 3, 7);
             tableLayoutPanel8.Dock = DockStyle.Top;
             tableLayoutPanel8.Location = new Point(46, 44);
@@ -589,6 +589,18 @@
             btnDeleteWarehous.UseVisualStyleBackColor = true;
             btnDeleteWarehous.Click += btnDeleteWarehous_Click;
             // 
+            // btnSetAsDefaultWarehouse
+            // 
+            btnSetAsDefaultWarehouse.Dock = DockStyle.Fill;
+            btnSetAsDefaultWarehouse.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            btnSetAsDefaultWarehouse.Location = new Point(95, 235);
+            btnSetAsDefaultWarehouse.Name = "btnSetAsDefaultWarehouse";
+            btnSetAsDefaultWarehouse.Size = new Size(202, 27);
+            btnSetAsDefaultWarehouse.TabIndex = 39;
+            btnSetAsDefaultWarehouse.Text = "تخصيص الفرع للنسخة الحالية";
+            btnSetAsDefaultWarehouse.UseVisualStyleBackColor = true;
+            btnSetAsDefaultWarehouse.Click += btnSetAsDefaultWarehouse_Click;
+            // 
             // btnRenamWarehous
             // 
             btnRenamWarehous.Dock = DockStyle.Fill;
@@ -600,18 +612,6 @@
             btnRenamWarehous.Text = "تعديل اسم";
             btnRenamWarehous.UseVisualStyleBackColor = true;
             btnRenamWarehous.Click += btnRenamWarehous_Click;
-            // 
-            // button1
-            // 
-            button1.Dock = DockStyle.Fill;
-            button1.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            button1.Location = new Point(95, 235);
-            button1.Name = "button1";
-            button1.Size = new Size(202, 27);
-            button1.TabIndex = 39;
-            button1.Text = "تخصيص الفرع للنسخة الحالية";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += btnRenamWarehous_Click;
             // 
             // tabPage2
             // 
@@ -1601,6 +1601,6 @@
         private TextBox txtWarehouseName;
         private Button btnDeleteWarehous;
         private Button btnRenamWarehous;
-        private Button button1;
+        private Button btnSetAsDefaultWarehouse;
     }
 }
