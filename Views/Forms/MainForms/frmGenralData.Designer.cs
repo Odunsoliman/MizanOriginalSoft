@@ -60,6 +60,7 @@
             btnAddWarehouse = new Button();
             btnDeleteWarehous = new Button();
             btnRenamWarehous = new Button();
+            button1 = new Button();
             tabPage2 = new TabPage();
             tableLayoutPanel18 = new TableLayoutPanel();
             tableLayoutPanel22 = new TableLayoutPanel();
@@ -120,7 +121,6 @@
             lblLogoPath = new Label();
             tableLayoutPanel17 = new TableLayoutPanel();
             btnSave = new Button();
-            button1 = new Button();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel7.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
@@ -325,8 +325,8 @@
             // tableLayoutPanel5
             // 
             tableLayoutPanel5.ColumnCount = 2;
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 79.6526F));
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20.3473949F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 94.6650162F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5.33498764F));
             tableLayoutPanel5.Controls.Add(tableLayoutPanel8, 0, 1);
             tableLayoutPanel5.Dock = DockStyle.Top;
             tableLayoutPanel5.Location = new Point(3, 3);
@@ -342,7 +342,7 @@
             tableLayoutPanel8.ColumnCount = 4;
             tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30.4081631F));
             tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 69.591835F));
-            tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 87F));
+            tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 208F));
             tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 91F));
             tableLayoutPanel8.Controls.Add(txtWarehouseName, 1, 7);
             tableLayoutPanel8.Controls.Add(label25, 0, 6);
@@ -361,10 +361,10 @@
             tableLayoutPanel8.Controls.Add(cbxWarehouseId, 1, 6);
             tableLayoutPanel8.Controls.Add(btnAddWarehouse, 0, 7);
             tableLayoutPanel8.Controls.Add(btnDeleteWarehous, 3, 6);
-            tableLayoutPanel8.Controls.Add(btnRenamWarehous, 2, 7);
             tableLayoutPanel8.Controls.Add(button1, 2, 6);
+            tableLayoutPanel8.Controls.Add(btnRenamWarehous, 3, 7);
             tableLayoutPanel8.Dock = DockStyle.Top;
-            tableLayoutPanel8.Location = new Point(167, 44);
+            tableLayoutPanel8.Location = new Point(46, 44);
             tableLayoutPanel8.Name = "tableLayoutPanel8";
             tableLayoutPanel8.RowCount = 9;
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
@@ -376,14 +376,14 @@
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel8.Size = new Size(636, 336);
+            tableLayoutPanel8.Size = new Size(757, 336);
             tableLayoutPanel8.TabIndex = 1;
             // 
             // txtWarehouseName
             // 
             txtWarehouseName.Dock = DockStyle.Fill;
             txtWarehouseName.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtWarehouseName.Location = new Point(183, 269);
+            txtWarehouseName.Location = new Point(304, 269);
             txtWarehouseName.Margin = new Padding(4);
             txtWarehouseName.Name = "txtWarehouseName";
             txtWarehouseName.Size = new Size(310, 29);
@@ -396,7 +396,7 @@
             label25.Dock = DockStyle.Fill;
             label25.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label25.ForeColor = Color.DarkBlue;
-            label25.Location = new Point(501, 232);
+            label25.Location = new Point(622, 232);
             label25.Margin = new Padding(4, 0, 4, 0);
             label25.Name = "label25";
             label25.Size = new Size(131, 33);
@@ -408,7 +408,7 @@
             // 
             txtCompanyEmail.Dock = DockStyle.Fill;
             txtCompanyEmail.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtCompanyEmail.Location = new Point(183, 203);
+            txtCompanyEmail.Location = new Point(304, 203);
             txtCompanyEmail.Margin = new Padding(4);
             txtCompanyEmail.Name = "txtCompanyEmail";
             txtCompanyEmail.Size = new Size(310, 29);
@@ -421,7 +421,7 @@
             label13.Dock = DockStyle.Fill;
             label13.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label13.ForeColor = Color.DarkBlue;
-            label13.Location = new Point(501, 199);
+            label13.Location = new Point(622, 199);
             label13.Margin = new Padding(4, 0, 4, 0);
             label13.Name = "label13";
             label13.Size = new Size(131, 33);
@@ -433,7 +433,7 @@
             // 
             txtNameCo.Dock = DockStyle.Fill;
             txtNameCo.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtNameCo.Location = new Point(183, 4);
+            txtNameCo.Location = new Point(304, 4);
             txtNameCo.Margin = new Padding(4);
             txtNameCo.Name = "txtNameCo";
             txtNameCo.Size = new Size(310, 29);
@@ -446,7 +446,7 @@
             label7.Dock = DockStyle.Fill;
             label7.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label7.ForeColor = Color.DarkBlue;
-            label7.Location = new Point(501, 99);
+            label7.Location = new Point(622, 99);
             label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
             label7.Size = new Size(131, 33);
@@ -458,7 +458,7 @@
             // 
             txtPhon.Dock = DockStyle.Fill;
             txtPhon.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtPhon.Location = new Point(183, 37);
+            txtPhon.Location = new Point(304, 37);
             txtPhon.Margin = new Padding(4);
             txtPhon.Name = "txtPhon";
             txtPhon.Size = new Size(310, 29);
@@ -471,7 +471,7 @@
             label1.Dock = DockStyle.Fill;
             label1.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.DarkBlue;
-            label1.Location = new Point(501, 0);
+            label1.Location = new Point(622, 0);
             label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
             label1.Size = new Size(131, 33);
@@ -483,7 +483,7 @@
             // 
             txtAnthrPhon.Dock = DockStyle.Fill;
             txtAnthrPhon.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtAnthrPhon.Location = new Point(183, 70);
+            txtAnthrPhon.Location = new Point(304, 70);
             txtAnthrPhon.Margin = new Padding(4);
             txtAnthrPhon.Name = "txtAnthrPhon";
             txtAnthrPhon.Size = new Size(310, 29);
@@ -496,7 +496,7 @@
             label2.Dock = DockStyle.Fill;
             label2.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label2.ForeColor = Color.DarkBlue;
-            label2.Location = new Point(501, 66);
+            label2.Location = new Point(622, 66);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(131, 33);
@@ -508,7 +508,7 @@
             // 
             txtSalesTax.Dock = DockStyle.Left;
             txtSalesTax.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtSalesTax.Location = new Point(369, 103);
+            txtSalesTax.Location = new Point(490, 103);
             txtSalesTax.Margin = new Padding(4);
             txtSalesTax.Name = "txtSalesTax";
             txtSalesTax.Size = new Size(124, 29);
@@ -522,7 +522,7 @@
             label6.Dock = DockStyle.Fill;
             label6.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label6.ForeColor = Color.DarkBlue;
-            label6.Location = new Point(501, 33);
+            label6.Location = new Point(622, 33);
             label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
             label6.Size = new Size(131, 33);
@@ -534,7 +534,7 @@
             // 
             txtAdreass.Dock = DockStyle.Fill;
             txtAdreass.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtAdreass.Location = new Point(183, 136);
+            txtAdreass.Location = new Point(304, 136);
             txtAdreass.Margin = new Padding(4);
             txtAdreass.Multiline = true;
             txtAdreass.Name = "txtAdreass";
@@ -548,7 +548,7 @@
             lblFirstPhon.Dock = DockStyle.Fill;
             lblFirstPhon.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblFirstPhon.ForeColor = Color.DarkBlue;
-            lblFirstPhon.Location = new Point(501, 132);
+            lblFirstPhon.Location = new Point(622, 132);
             lblFirstPhon.Margin = new Padding(4, 0, 4, 0);
             lblFirstPhon.Name = "lblFirstPhon";
             lblFirstPhon.Size = new Size(131, 67);
@@ -560,7 +560,7 @@
             // 
             cbxWarehouseId.Dock = DockStyle.Fill;
             cbxWarehouseId.FormattingEnabled = true;
-            cbxWarehouseId.Location = new Point(182, 235);
+            cbxWarehouseId.Location = new Point(303, 235);
             cbxWarehouseId.Name = "cbxWarehouseId";
             cbxWarehouseId.Size = new Size(312, 27);
             cbxWarehouseId.TabIndex = 37;
@@ -569,7 +569,7 @@
             // 
             btnAddWarehouse.Dock = DockStyle.Fill;
             btnAddWarehouse.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnAddWarehouse.Location = new Point(500, 268);
+            btnAddWarehouse.Location = new Point(621, 268);
             btnAddWarehouse.Name = "btnAddWarehouse";
             btnAddWarehouse.Size = new Size(133, 27);
             btnAddWarehouse.TabIndex = 39;
@@ -579,10 +579,11 @@
             // 
             // btnDeleteWarehous
             // 
+            btnDeleteWarehous.Dock = DockStyle.Fill;
             btnDeleteWarehous.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnDeleteWarehous.Location = new Point(8, 235);
+            btnDeleteWarehous.Location = new Point(3, 235);
             btnDeleteWarehous.Name = "btnDeleteWarehous";
-            btnDeleteWarehous.Size = new Size(81, 27);
+            btnDeleteWarehous.Size = new Size(86, 27);
             btnDeleteWarehous.TabIndex = 39;
             btnDeleteWarehous.Text = "حذف الفرع";
             btnDeleteWarehous.UseVisualStyleBackColor = true;
@@ -590,14 +591,27 @@
             // 
             // btnRenamWarehous
             // 
+            btnRenamWarehous.Dock = DockStyle.Fill;
             btnRenamWarehous.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnRenamWarehous.Location = new Point(95, 268);
+            btnRenamWarehous.Location = new Point(3, 268);
             btnRenamWarehous.Name = "btnRenamWarehous";
-            btnRenamWarehous.Size = new Size(81, 27);
+            btnRenamWarehous.Size = new Size(86, 27);
             btnRenamWarehous.TabIndex = 39;
             btnRenamWarehous.Text = "تعديل اسم";
             btnRenamWarehous.UseVisualStyleBackColor = true;
             btnRenamWarehous.Click += btnRenamWarehous_Click;
+            // 
+            // button1
+            // 
+            button1.Dock = DockStyle.Fill;
+            button1.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            button1.Location = new Point(95, 235);
+            button1.Name = "button1";
+            button1.Size = new Size(202, 27);
+            button1.TabIndex = 39;
+            button1.Text = "تخصيص الفرع للنسخة الحالية";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += btnRenamWarehous_Click;
             // 
             // tabPage2
             // 
@@ -1441,17 +1455,6 @@
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Visible = false;
             btnSave.Click += btnSave_Click;
-            // 
-            // button1
-            // 
-            button1.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            button1.Location = new Point(95, 235);
-            button1.Name = "button1";
-            button1.Size = new Size(81, 27);
-            button1.TabIndex = 39;
-            button1.Text = "تخصيص الفرع ";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += btnRenamWarehous_Click;
             // 
             // frmGenralData
             // 
