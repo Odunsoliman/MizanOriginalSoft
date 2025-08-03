@@ -120,6 +120,7 @@
             lblLogoPath = new Label();
             tableLayoutPanel17 = new TableLayoutPanel();
             btnSave = new Button();
+            button1 = new Button();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel7.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
@@ -359,8 +360,9 @@
             tableLayoutPanel8.Controls.Add(lblFirstPhon, 0, 4);
             tableLayoutPanel8.Controls.Add(cbxWarehouseId, 1, 6);
             tableLayoutPanel8.Controls.Add(btnAddWarehouse, 0, 7);
-            tableLayoutPanel8.Controls.Add(btnDeleteWarehous, 2, 6);
-            tableLayoutPanel8.Controls.Add(btnRenamWarehous, 3, 6);
+            tableLayoutPanel8.Controls.Add(btnDeleteWarehous, 3, 6);
+            tableLayoutPanel8.Controls.Add(btnRenamWarehous, 2, 7);
+            tableLayoutPanel8.Controls.Add(button1, 2, 6);
             tableLayoutPanel8.Dock = DockStyle.Top;
             tableLayoutPanel8.Location = new Point(167, 44);
             tableLayoutPanel8.Name = "tableLayoutPanel8";
@@ -577,9 +579,8 @@
             // 
             // btnDeleteWarehous
             // 
-            btnDeleteWarehous.Dock = DockStyle.Fill;
             btnDeleteWarehous.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnDeleteWarehous.Location = new Point(95, 235);
+            btnDeleteWarehous.Location = new Point(8, 235);
             btnDeleteWarehous.Name = "btnDeleteWarehous";
             btnDeleteWarehous.Size = new Size(81, 27);
             btnDeleteWarehous.TabIndex = 39;
@@ -589,11 +590,10 @@
             // 
             // btnRenamWarehous
             // 
-            btnRenamWarehous.Dock = DockStyle.Fill;
             btnRenamWarehous.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnRenamWarehous.Location = new Point(3, 235);
+            btnRenamWarehous.Location = new Point(95, 268);
             btnRenamWarehous.Name = "btnRenamWarehous";
-            btnRenamWarehous.Size = new Size(86, 27);
+            btnRenamWarehous.Size = new Size(81, 27);
             btnRenamWarehous.TabIndex = 39;
             btnRenamWarehous.Text = "تعديل اسم";
             btnRenamWarehous.UseVisualStyleBackColor = true;
@@ -1442,6 +1442,17 @@
             btnSave.Visible = false;
             btnSave.Click += btnSave_Click;
             // 
+            // button1
+            // 
+            button1.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            button1.Location = new Point(95, 235);
+            button1.Name = "button1";
+            button1.Size = new Size(81, 27);
+            button1.TabIndex = 39;
+            button1.Text = "تخصيص الفرع ";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += btnRenamWarehous_Click;
+            // 
             // frmGenralData
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1587,5 +1598,6 @@
         private TextBox txtWarehouseName;
         private Button btnDeleteWarehous;
         private Button btnRenamWarehous;
+        private Button button1;
     }
 }
