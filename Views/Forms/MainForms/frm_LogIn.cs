@@ -31,19 +31,18 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         public frm_LogIn()
         {
             InitializeComponent();
-            SetupAutoComplete(); // تهيئة خاصية الإكمال التلقائي لأسماء المستخدمين
-            InitializePanelsMovement();
-            InitializeInnerPanels();
+
         }
 
         private void frm_LogIn_Load(object sender, EventArgs e)
         {
             DBServiecs.A_UpdateAllDataBase();
             LoadAppInfo();         // جلب اسم مالك البرنامج من ملف الإعدادات
+            SetupAutoComplete(); // تهيئة خاصية الإكمال التلقائي لأسماء المستخدمين
+            InitializePanelsMovement();
+            InitializeInnerPanels();
 
-             
             txtUserName.Focus();     // وضع التركيز على مربع اسم المستخدم
-
         }
 
         #region **********  وظائف الدخول والتحقق من المستخدمين والصلاحيات ***************
@@ -56,13 +55,15 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
                 if (!File.Exists(filePath))
                 {
-                    MessageBox.Show("ملف إعدادات الاتصال غير موجود!", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("⚠️ ملف إعدادات الاتصال غير موجود!", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Application.Exit();
                     return;
                 }
 
                 string? ownerName = null;
                 DateTime expiryDate = DateTime.MinValue;
                 DateTime endDate = DateTime.MinValue;
+                int? defaultWarehouseId = null;
 
                 foreach (string line in File.ReadAllLines(filePath))
                 {
@@ -90,6 +91,50 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                             out endDate
                         );
                     }
+                    else if (line.StartsWith("DefaultWarehouseId=", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (int.TryParse(line.Substring("DefaultWarehouseId=".Length).Trim(), out int parsedId))
+                        {
+                            defaultWarehouseId = parsedId;
+                            CurrentSession.WarehouseId = parsedId;
+
+                            // جلب كل الفروع
+                            DataTable dt = DBServiecs.Warehouse_GetAll();
+
+                            if (dt != null)
+                            {
+                                var foundRow = dt.AsEnumerable()
+                                                 .FirstOrDefault(row => row.Field<int>("WarehouseId") == parsedId);
+
+                                if (foundRow != null)
+                                {
+                                    string? warehouseName = foundRow.Field<string>("WarehouseName");
+                                    lblWarehouse.Text = $"🔹 الفرع: {warehouseName} (رقم {parsedId})";
+                                }
+                                else
+                                {
+                                    lblWarehouse.Text = $"❌ لم يتم العثور على الفرع برقم {parsedId}";
+                                }
+                            }
+                            else
+                            {
+                                lblWarehouse.Text = "⚠️ تعذر تحميل الفروع من قاعدة البيانات.";
+                            }
+                        }
+                    }
+
+                }
+
+                // التحقق من رقم الفرع
+                if (defaultWarehouseId.HasValue)
+                {
+                    CurrentSession.WarehouseId = defaultWarehouseId.Value;
+                }
+                else
+                {
+                    MessageBox.Show("⚠️ لم يتم العثور على DefaultWarehouseId في ملف الإعدادات أو الرقم غير صحيح.", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Application.Exit();
+                    return;
                 }
 
                 // عرض اسم المالك
@@ -99,7 +144,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     lblCo.Text = ownerName;
                 }
 
-                // عرض تنبيه انتهاء الصلاحية إذا كنا وصلنا إلى ExpiryDate أو تجاوزناها
+                // عرض تنبيه انتهاء الصلاحية
                 if (expiryDate != DateTime.MinValue && DateTime.Now >= expiryDate && endDate > DateTime.Now)
                 {
                     lblExpiryDate.Visible = true;
@@ -116,7 +161,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show("حدث خطأ أثناء تحميل معلومات التطبيق: " + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("حدث خطأ أثناء تحميل معلومات التطبيق:\n" + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
             }
         }
 

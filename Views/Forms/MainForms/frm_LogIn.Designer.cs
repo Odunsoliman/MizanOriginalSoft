@@ -96,6 +96,7 @@
             btn_MoreSetting = new Button();
             btn_MainSetting = new Button();
             tlpTop = new TableLayoutPanel();
+            lblWarehouse = new Label();
             tlpUsers = new TableLayoutPanel();
             lblPassword = new Label();
             lblUserName = new Label();
@@ -1256,15 +1257,17 @@
             // tlpTop
             // 
             tlpTop.BackColor = Color.LightSkyBlue;
-            tlpTop.ColumnCount = 5;
+            tlpTop.ColumnCount = 6;
             tlpTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 3F));
             tlpTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
-            tlpTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+            tlpTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tlpTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15F));
             tlpTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 32F));
             tlpTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15F));
-            tlpTop.Controls.Add(tlpUsers, 3, 0);
+            tlpTop.Controls.Add(lblWarehouse, 3, 0);
+            tlpTop.Controls.Add(tlpUsers, 4, 0);
             tlpTop.Controls.Add(lblUser, 1, 0);
-            tlpTop.Controls.Add(lblCo, 4, 0);
+            tlpTop.Controls.Add(lblCo, 5, 0);
             tlpTop.Controls.Add(lblTime, 2, 0);
             tlpTop.Controls.Add(lblUserID, 0, 0);
             tlpTop.Dock = DockStyle.Fill;
@@ -1277,6 +1280,19 @@
             tlpTop.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tlpTop.Size = new Size(976, 34);
             tlpTop.TabIndex = 0;
+            // 
+            // lblWarehouse
+            // 
+            lblWarehouse.AutoSize = true;
+            lblWarehouse.Dock = DockStyle.Fill;
+            lblWarehouse.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            lblWarehouse.ForeColor = Color.DarkMagenta;
+            lblWarehouse.Location = new Point(463, 3);
+            lblWarehouse.Name = "lblWarehouse";
+            lblWarehouse.Size = new Size(140, 31);
+            lblWarehouse.TabIndex = 5;
+            lblWarehouse.Text = "الفرع";
+            lblWarehouse.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // tlpUsers
             // 
@@ -1386,9 +1402,9 @@
             lblTime.Dock = DockStyle.Fill;
             lblTime.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
             lblTime.ForeColor = Color.DarkMagenta;
-            lblTime.Location = new Point(463, 3);
+            lblTime.Location = new Point(609, 3);
             lblTime.Name = "lblTime";
-            lblTime.Size = new Size(384, 31);
+            lblTime.Size = new Size(238, 31);
             lblTime.TabIndex = 4;
             lblTime.Text = "التاريخ والوقت";
             lblTime.TextAlign = ContentAlignment.MiddleLeft;
@@ -1523,6 +1539,7 @@
         private Button button3;
         private Label lblErrors;
         private TableLayoutPanel tlpUsers;
+        private Label lblWarehouse;
         //     private Button btnEnd;
     }
 }

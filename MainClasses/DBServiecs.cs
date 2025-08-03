@@ -514,24 +514,42 @@ namespace MizanOriginalSoft.MainClasses
             }) ?? new DataTable();
         }
 
-        //public static DataTable GenralData_GetDefRepData()//@@@
-        //{
-        //    return dbHelper.ExecuteSelectQuery("GenralData_GetDefRepData", command => { }) ?? new DataTable();
-        //}
-
-
-        //// جلب تاريخ بداية الحسابات (بدون معاملات)
-        //public static DataTable GenralData_GetStartAccountsDate()
-        //{
-        //    return dbHelper.ExecuteSelectQuery("GenralData_GetStartAccountsDate", command => { }) ?? new DataTable();
-        //}
-
+        //عمليات الالفروع والمخازن
         // جلب الفروع الرئيسية (المخازن) المعروضة في الشاشة (بدون معاملات)
         public static DataTable Warehouse_GetAll()//@@@
         {
             return dbHelper.ExecuteSelectQuery("Warehouse_GetAll", command => { }) ?? new DataTable();
         }
-        
+        // اضافة فرع
+        public static string Warehouse_Add(string warehouseName, int userId)
+        {
+            return dbHelper.ExecuteStoredProcedureWithOutputMessage("Warehouse_Add", cmd =>
+            {
+                cmd.Parameters.Add("@WarehouseName", SqlDbType.NVarChar).Value = warehouseName;
+                cmd.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+            });
+        }//Microsoft.Data.SqlClient.SqlException: 'Cannot insert explicit value for identity column in table 'Warehouse' when IDENTITY_INSERT is set to OFF.'
+//ما هذه الرسالة
+
+        public static string Warehouse_UpdateName(int warehouseId, string newName, int userId)
+        {
+            return dbHelper.ExecuteStoredProcedureWithOutputMessage("Warehouse_UpdateName", cmd =>
+            {
+                cmd.Parameters.Add("@WarehouseId", SqlDbType.Int).Value = warehouseId;
+                cmd.Parameters.Add("@NewName", SqlDbType.NVarChar).Value = newName;
+                cmd.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+            });
+        }
+
+        public static string Warehouse_Delete(int warehouseId, int userId)
+        {
+            return dbHelper.ExecuteStoredProcedureWithOutputMessage("Warehouse_Delete", cmd =>
+            {
+                cmd.Parameters.Add("@WarehouseId", SqlDbType.Int).Value = warehouseId;
+                cmd.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+            });
+        }
+
         // جلب حركة المنتج حسب المعرف
         public static DataTable DailyFee_GetJournalEntry(int Bill_No, int InvTypeID)
         {
