@@ -120,3 +120,7 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
     }
 
 }
+/*
+ هل الكلاس يقرئ القيمة RestoreDB=Original_RestoreDatabase
+الموجودة الان فى الملف
+ */
