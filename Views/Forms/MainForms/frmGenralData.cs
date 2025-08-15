@@ -20,7 +20,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         private void frmGenralData_Load(object sender, EventArgs e)
         {
-            tabControl.ItemSize = new Size(150, 40); // ضبط حجم عناصر التبويب
+            tabMang.ItemSize = new Size(150, 40); // ضبط حجم عناصر التبويب
             LoadWarehouses();                        // تحميل الفروع إلى ComboBox
             LoadSettings();    //هل من الضرورى اعادة التحميل هنا                      // إعادة تحميل الإعدادات بعد تحميل الفروع
             tlpPading();                             // ضبط الحشوات (تصميم)
@@ -30,9 +30,447 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             txtNameCo.SelectAll();                   // تحديد كامل النص
             LoadBackupFiles();                       // تحميل النسخ الاحتياطية (تأكد من جاهزيتها)
             AttachTextBoxHandlers(this);             // ربط أحداث مربعات النص العامة
+            ApplyPermissionsToControls();
+            LoadAllUsers();
+            DGV_Users.SelectionChanged += DGV_Users_SelectionChanged;
+            DGV_Users.RowPrePaint += DGV_Users_RowPrePaint;
+
+            LoadUsers();
+            cbxUsers.SelectedIndexChanged += CbxUsers_SelectedIndexChanged;
+            DGVStyl();
+ 
 
         }
 
+        #region *********  ApplyPermissions  ******************************
+        private void ApplyPermissionsToControls()
+        {
+            var allControls = GetAllControls(this); // تأكد أنك أضفت هذه الدالة أدناه
+
+            foreach (Control ctrl in allControls)
+            {
+                string controlName = ctrl.Name;
+
+                if (string.IsNullOrWhiteSpace(controlName)) continue;
+
+                if (UserPermissionsManager.Permissions.TryGetValue(controlName, out var permission))
+                {
+                    ctrl.Visible = permission.CanView;
+                    ctrl.Enabled = permission.CanView;
+                }
+            }
+        }
+
+        private List<Control> GetAllControls(Control parent)
+        {
+            List<Control> controls = new List<Control>();
+
+            foreach (Control child in parent.Controls)
+            {
+                controls.Add(child);
+                controls.AddRange(GetAllControls(child));
+            }
+
+            return controls;
+        }
+
+        #endregion
+
+ 
+        #region ====== إدارة المستخدمين والصلاحيات ======
+        private void StyleDGV_Users()
+        {/*اريد المستخدم الغير مفعل IsActive=0 يظهر بلون بخلفية مميز*/
+            DGV_Users.RowHeadersVisible = false;
+            DGV_Users.ReadOnly = true;
+            DGV_Users.AllowUserToAddRows = false;
+            DGV_Users.AllowUserToDeleteRows = false;
+            DGV_Users.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            foreach (DataGridViewColumn col in DGV_Users.Columns)
+                col.Visible = false;
+
+            if (DGV_Users.Columns.Contains("UserName"))
+            {
+                var col = DGV_Users.Columns["UserName"];
+                col.Visible = true;
+                col.HeaderText = "اسم المستخدم";
+                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            }
+
+            if (DGV_Users.Columns.Contains("FullName"))
+            {
+                var col = DGV_Users.Columns["FullName"];
+                col.Visible = true;
+                col.HeaderText = "المسمى الوظيفى";
+                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            }
+
+
+            DGV_Users.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
+
+            DGV_Users.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            DGV_Users.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
+            DGV_Users.ColumnHeadersHeight = 40;
+            DGV_Users.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+
+            DGV_Users.DefaultCellStyle.Font = new Font("Times New Roman", 14F, FontStyle.Bold );
+            DGV_Users.DefaultCellStyle.ForeColor = Color.Black;
+            DGV_Users.DefaultCellStyle.BackColor = Color.White;
+        }
+
+        private void DGV_Users_RowPrePaint(object? sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            if (DGV_Users.Rows[e.RowIndex].Cells["IsActive"].Value != null)
+            {
+                bool isActive = Convert.ToBoolean(DGV_Users.Rows[e.RowIndex].Cells["IsActive"].Value);
+                if (!isActive)
+                {
+                    DGV_Users.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGray;
+                    DGV_Users.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.DarkRed;
+                }
+            }
+        }
+
+        private void StyleDGV_Permissions()
+        {
+            DGV_Permissions.RowHeadersVisible = false;
+            DGV_Permissions.ReadOnly = true;
+            DGV_Permissions.AllowUserToAddRows = false;
+            DGV_Permissions.AllowUserToDeleteRows = false;
+            DGV_Permissions.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            foreach (DataGridViewColumn col in DGV_Permissions.Columns)
+                col.Visible = false;
+
+            if (DGV_Permissions.Columns.Contains("PermissionNameAr"))
+            {
+                var col = DGV_Permissions.Columns["PermissionNameAr"];
+                col.Visible = true;
+                col.HeaderText = "الصلاحية";
+                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            }
+
+            if (DGV_Permissions.Columns.Contains("WarehouseName"))
+            {
+                var col = DGV_Permissions.Columns["WarehouseName"];
+                col.Visible = true;
+                col.HeaderText = "اسم الفرع";
+                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            }
+
+            DGV_Permissions.AlternatingRowsDefaultCellStyle.BackColor = Color.Honeydew;
+
+
+            DGV_Permissions.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            DGV_Permissions.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 13F, FontStyle.Bold);
+            DGV_Permissions.ColumnHeadersHeight = 40;
+            DGV_Permissions.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+
+            DGV_Permissions.DefaultCellStyle.Font = new Font("Times New Roman", 10F, FontStyle.Regular);
+            DGV_Permissions.DefaultCellStyle.ForeColor = Color.Black;
+            DGV_Permissions.DefaultCellStyle.BackColor = Color.White;
+        }
+
+
+        //Times New Roman
+        private void LoadAllUsers()
+        {
+            try
+            {
+                DGV_Users.DataSource = DBServiecs.User_GetAll();
+                StyleDGV_Users();
+                DGV_Users.ClearSelection();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ أثناء تحميل المستخدمين: " + ex.Message);
+            }
+        }
+
+        private void LoadPermissionsForUser(int userId)
+        {
+            try
+            {
+                DataTable dt = DBServiecs.Permission_GetFullForUser(userId);
+                DGV_Permissions.DataSource = dt;
+                StyleDGV_Permissions();
+
+                // تعبئة بيانات المستخدم في الحقول
+                DataRow? selectedUser = DBServiecs.User_GetOne(userId).AsEnumerable().FirstOrDefault();
+                if (selectedUser != null)
+                {
+                    lblID_User.Text = selectedUser["IDUser"].ToString();
+                    txtUserName.Text = selectedUser["UserName"].ToString();
+                    txtFullName.Text = selectedUser["FullName"].ToString();
+
+                    // ✅ تعيين الحالة بناءً على بيانات المستخدم
+                    chkIsAdmin.Checked = Convert.ToBoolean(selectedUser["IsAdmin"]);
+                    chkIsActive.Checked = Convert.ToBoolean(selectedUser["IsActive"]);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ أثناء تحميل الصلاحيات: " + ex.Message);
+            }
+        }
+
+        private void btnNewUser_Click(object? sender, EventArgs? e)
+        {
+            DGV_Users.ClearSelection();
+            DGV_Permissions.DataSource = null;
+            lblID_User.Text = "0";
+            txtUserName.Clear();
+            txtFullName.Clear();
+
+        }
+
+        private void btnSave_UserData_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtUserName.Text) || string.IsNullOrWhiteSpace(txtFullName.Text))
+            {
+                MessageBox.Show("يرجى إدخال اسم المستخدم والاسم الكامل.");
+                return;
+            }
+
+            string username = txtUserName.Text.Trim();
+            string fullName = txtFullName.Text.Trim();
+            int userId = Convert.ToInt32(lblID_User.Text);
+
+            // ✅ الربط الفعلي مع CheckBox
+            bool isAdmin = chkIsAdmin.Checked;
+            bool isActive = chkIsActive.Checked;
+
+            string result;
+
+            if (userId == 0)
+            {
+                result = DBServiecs.User_Add(username, fullName, CurrentSession.UserID); // لا تحتاج isAdmin و isActive عند الإضافة إذا كانت افتراضية
+            }
+            else
+            {
+                result = DBServiecs.User_Update(userId, username, fullName, isAdmin, isActive, CurrentSession.UserID);
+
+            }
+
+            MessageBox.Show(result);
+            LoadAllUsers();
+        }
+
+
+        private void btnDeleteUser_Click(object sender, EventArgs e)
+        {
+            if (lblID_User.Text == "0")
+            {
+                MessageBox.Show("لا يوجد مستخدم محدد للحذف.");
+                return;
+            }
+
+            int userId = Convert.ToInt32(lblID_User.Text);
+            var confirm = MessageBox.Show("هل أنت متأكد من حذف المستخدم؟", "تأكيد", MessageBoxButtons.YesNo);
+            if (confirm == DialogResult.Yes)
+            {
+                string result = DBServiecs.User_DeleteIfAllowed(userId);
+                MessageBox.Show(result);
+                LoadAllUsers();
+                btnNewUser_Click(null, null); // تفريغ البيانات بعد الحذف
+            }
+        }
+
+        private void btnResetPassword_Click(object sender, EventArgs e)
+        {
+            if (lblID_User.Text == "0")
+            {
+                MessageBox.Show("لا يوجد مستخدم محدد.");
+                return;
+            }
+
+            int userId = Convert.ToInt32(lblID_User.Text);
+            var confirm = MessageBox.Show("هل تريد إعادة تعيين كلمة المرور إلى '00'؟", "تأكيد", MessageBoxButtons.YesNo);
+            if (confirm == DialogResult.Yes)
+            {
+                string result = DBServiecs.User_ChangePassword(userId, "00");
+                MessageBox.Show(result);
+            }
+        }
+
+        private void DGV_Users_SelectionChanged(object? sender, EventArgs? e)
+        {
+            if (DGV_Users.CurrentRow != null && DGV_Users.CurrentRow.Index >= 0)
+            {
+                int userId = Convert.ToInt32(DGV_Users.CurrentRow.Cells["IDUser"].Value);
+                LoadPermissionsForUser(userId);
+            }
+        }
+
+        #endregion
+
+        #region ************  
+        private void LoadUsers()
+        {
+            var usersTable = DBServiecs.User_GetAll();
+            cbxUsers.DisplayMember = "FullName";
+            cbxUsers.ValueMember = "IDUser";
+            cbxUsers.DataSource = usersTable;
+        }
+        private void DGVStyl()
+        {
+            // تفعيل التنسيق المخصص للرأس
+            DGV.EnableHeadersVisualStyles = false;
+
+            // تنسيق رأس الجدول
+            DGV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 14, FontStyle.Bold);
+            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
+            DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+
+            // تنسيق الخلايا
+            DGV.DefaultCellStyle.Font = new Font("Times New Roman", 12);
+            DGV.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            // تلوين الصفوف بشكل تبادلي
+            DGV.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(240, 248, 255); // لون أزرق فاتح جدًا
+            DGV.RowsDefaultCellStyle.BackColor = Color.White;
+
+            // خصائص أخرى
+            DGV.RowHeadersVisible = false;
+            DGV.AllowUserToAddRows = false;
+            DGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            // إعادة تسمية الأعمدة للعربية
+            if (DGV.Columns.Contains("PermissionNameAr"))
+                DGV.Columns["PermissionNameAr"].HeaderText = "اسم الصلاحية";
+
+            if (DGV.Columns.Contains("IsAllowed"))
+                DGV.Columns["IsAllowed"].HeaderText = "السماح";
+
+            if (DGV.Columns.Contains("CanAdd"))
+                DGV.Columns["CanAdd"].HeaderText = "إضافة";
+
+            if (DGV.Columns.Contains("CanEdit"))
+                DGV.Columns["CanEdit"].HeaderText = "تعديل";
+
+            if (DGV.Columns.Contains("CanDelete"))
+                DGV.Columns["CanDelete"].HeaderText = "حذف";
+
+            // إخفاء الأعمدة التقنية
+            if (DGV.Columns.Contains("PermissionName"))
+                DGV.Columns["PermissionName"].Visible = false;
+
+            if (DGV.Columns.Contains("PermissionID"))
+                DGV.Columns["PermissionID"].Visible = false;
+
+            if (DGV.Columns.Contains("WarehouseID"))
+                DGV.Columns["WarehouseID"].Visible = false;
+        }
+
+
+        private void CbxUsers_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (cbxUsers.SelectedValue is int selectedUserId)
+                LoadPermissions(selectedUserId);
+        }
+
+        private void LoadPermissions(int userId)
+        {
+            int warehouseId = CurrentSession.WarehouseId;
+            var permissions = DBServiecs.Permission_GetByUser(userId, warehouseId);
+            DGV.DataSource = permissions;
+
+            // مثال: جعل بعض الأعمدة غير قابلة للتعديل
+            if (DGV.Columns.Contains("PermissionID"))
+                DGV.Columns["PermissionID"].ReadOnly = true;
+        }
+
+        private void BtnSave_Click(object sender, EventArgs e)
+        {
+            if (cbxUsers.SelectedValue == null || cbxWarehouses.SelectedValue == null)
+            {
+                MessageBox.Show("❌ يرجى اختيار المستخدم والفرع أولاً");
+                return;
+            }
+
+            int userId = Convert.ToInt32(cbxUsers.SelectedValue);
+
+            int warehouseId = Convert.ToInt32(cbxWarehouses.SelectedValue);
+            // ✅ تابع التنفيذ هنا بعد التأكد من صحة رقم الفرع
+
+            if (warehouseId < 1)
+            {
+                MessageBox.Show("⚠️ قم باختيار الفرع بشكل صحيح.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+
+
+            // ✅ استخدام الدالة التي تُعيد المستخدم
+            DataTable dt = DBServiecs.User_GetOne(userId);
+
+            bool isAdmin = false;
+            if (dt.Rows.Count > 0 && dt.Columns.Contains("IsAdmin"))
+            {
+                isAdmin = Convert.ToBoolean(dt.Rows[0]["IsAdmin"]);
+            }
+
+            // ✅ إذا كان أدمن: استدعاء واحد فقط ثم الخروج
+            if (isAdmin)
+            {
+                if (DGV.Rows.Count > 0 && !DGV.Rows[0].IsNewRow)
+                {
+                    int permissionId = Convert.ToInt32(DGV.Rows[0].Cells["PermissionID"].Value);
+
+                    DBServiecs.Permission_SetForUser(
+                        userId,
+                        permissionId,
+                        true, true, true, true,
+                        warehouseId
+                    );
+                }
+
+                MessageBox.Show("✅ المستخدم أدمن وتم منحه جميع الصلاحيات تلقائيًا", "تم", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // المستخدم ليس أدمن → نحفظ كل صف من الـ DGV كالمعتاد
+            foreach (DataGridViewRow row in DGV.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                int permissionId = Convert.ToInt32(row.Cells["PermissionID"].Value);
+                bool isAllowed = ConvertToBool(row.Cells["IsAllowed"].Value);
+                bool canAdd = ConvertToBool(row.Cells["CanAdd"].Value);
+                bool canEdit = ConvertToBool(row.Cells["CanEdit"].Value);
+                bool canDelete = ConvertToBool(row.Cells["CanDelete"].Value);
+
+                DBServiecs.Permission_SetForUser(
+                    userId,
+                    permissionId,
+                    isAllowed,
+                    canAdd,
+                    canEdit,
+                    canDelete,
+                    warehouseId
+                );
+            }
+
+            MessageBox.Show("✅ تم حفظ الصلاحيات بنجاح", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private bool ConvertToBool(object value)
+        {
+            return value != null && value != DBNull.Value && Convert.ToBoolean(value);
+        }
+
+
+        private void LoadWarehouses_()
+        {
+            var table = DBServiecs.Warehouse_GetAll();
+            cbxWarehouses.DisplayMember = "WarehouseName";
+            cbxWarehouses.ValueMember = "WarehouseId";
+            cbxWarehouses.DataSource = table;
+        }
+
+        #endregion 
         #region تحميل بيانات الفروع
         #endregion
 
@@ -76,7 +514,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     case "EmailCo": txtCompanyEmail.Text = value; break;
                     case "CompanyLoGoFolder": lblLogoPath.Text = value; break;
                     case "LogoImagName": lblLogoImageName.Text = value; break;
-                    case "DefaltWarehouseId":
+                    case "DefaultWarehouseId":
                         if (int.TryParse(value, out int defWarehouseId))
                             cbxWarehouseId.SelectedValue = defWarehouseId;
                         break;
@@ -128,7 +566,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             $"EmailCo={txtCompanyEmail.Text}",
             $"CompanyLoGoFolder={lblLogoPath.Text}",
             $"LogoImagName={lblLogoImageName.Text}",
-            $"DefaltWarehouseId={(cbxWarehouseId.SelectedValue ?? "")}"
+            $"DefaultWarehouseId={(cbxWarehouseId.SelectedValue ?? "")}"
         };
 
                 File.WriteAllLines(configFilePath, settings);
@@ -170,7 +608,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         $"EmailCo={txtCompanyEmail.Text}",
         $"CompanyLoGoFolder={lblLogoPath.Text}",
         $"LogoImagName={lblLogoImageName.Text}",
-        $"DefaltWarehouseId={(cbxWarehouseId.SelectedValue ?? "")}"
+        $"DefaultWarehouseId={(cbxWarehouseId.SelectedValue ?? "")}"
     };
 
             File.WriteAllLines(configFilePath, settings);
@@ -271,7 +709,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         /// </summary>
         private void TextBoxesInTabs()
         {
-            foreach (TabPage tab in tabControl.TabPages)
+            foreach (TabPage tab in tabMang.TabPages)
             {
                 foreach (TextBox tb in GetAllTextBoxes(tab))
                 {
@@ -440,7 +878,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         /// </summary>
         private void tabControl_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            TabPage? selectedTab = tabControl.SelectedTab;
+            TabPage? selectedTab = tabMang.SelectedTab;
 
             if (selectedTab != null)
             {
@@ -472,7 +910,10 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     return;
                 }
 
-                string? backupPath = new AppSettings(settingsPath).GetString("BackupsPath", null);
+                // تحميل الإعدادات لمرة واحدة
+                AppSettings.Load(settingsPath);
+
+                string? backupPath = AppSettings.GetString("BackupsPath", null);
 
                 if (string.IsNullOrWhiteSpace(backupPath))
                 {
@@ -562,10 +1003,12 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 }
 
                 string settingsPath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
-                var helper = new DatabaseBackupRestoreHelper(settingsPath);
-                var appSettings = new AppSettings(settingsPath);
 
-                string? dbName = appSettings.GetString("DBName", "");
+                AppSettings.Load(settingsPath); // تحميل الإعدادات
+
+                var helper = new DatabaseBackupRestoreHelper(settingsPath);
+
+                string? dbName = AppSettings.GetString("DBName", null);
                 if (string.IsNullOrWhiteSpace(dbName))
                 {
                     MessageBox.Show("❌ لم يتم العثور على اسم قاعدة البيانات في الإعدادات.");
@@ -586,17 +1029,17 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 if (confirmResult == DialogResult.No)
                     return;
 
-                // الخطوة 1: إنشاء نسخة احتياطية حالية
-                helper.BackupDatabase(settingsPath);
+                // 🟢 الخطوة 1: عمل نسخة احتياطية
+                helper.BackupDatabase();
                 MessageBox.Show("✅ تم إنشاء نسخة احتياطية من الوضع الحالي بنجاح.");
 
-                // الخطوة 2: إظهار نافذة تحميل مؤقتة
+                // 🟢 الخطوة 2: نافذة تحميل مؤقتة
                 frmLoading loadingForm = new frmLoading("جارٍ استرجاع النسخة الاحتياطية، الرجاء الانتظار...");
                 loadingForm.Show();
                 loadingForm.Refresh();
 
-                // الخطوة 3: تنفيذ الاسترجاع في مهمة منفصلة
-                await Task.Run(() => helper.RestoreDatabase(dbName, selectedBackupFile));
+                // 🟢 الخطوة 3: استرجاع النسخة المحددة
+                await Task.Run(() => helper.RestoreDatabase(selectedBackupFile));
 
                 loadingForm.Close();
 
@@ -715,6 +1158,12 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     cbxWarehouseId.DisplayMember = "WarehouseName";
                     cbxWarehouseId.ValueMember = "WarehouseId";
                     cbxWarehouseId.SelectedIndex = 0; // جعل "اختر الفرع..." هو الظاهر
+
+                    //
+                    cbxWarehouses.DataSource = dt;
+                    cbxWarehouses.DisplayMember = "WarehouseName";
+                    cbxWarehouses.ValueMember = "WarehouseId";
+
                 }
                 else
                 {
@@ -740,6 +1189,13 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
             // الحصول على رقم الفرع المختار
             int selectedWarehouseId = Convert.ToInt32(cbxWarehouseId.SelectedValue);
+
+            // ✅ التحقق من أن رقم الفرع ليس أقل من صفر
+            if (selectedWarehouseId <= 0)
+            {
+                MessageBox.Show("❌ رقم الفرع غير صحيح .", "تحذير", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             DialogResult confirm = MessageBox.Show(
                 $"هل تريد تعيين الفرع رقم {selectedWarehouseId} كفرع افتراضي لهذه النسخة؟\n" +

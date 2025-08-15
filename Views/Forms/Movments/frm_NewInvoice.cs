@@ -4,7 +4,6 @@ using MizanOriginalSoft.MainClasses.OriginalClasses;
 using MizanOriginalSoft.Views.Forms.Accounts;
 using MizanOriginalSoft.Views.Forms.MainForms;
 using MizanOriginalSoft.Views.Forms.Products;
-using Signee.DB.MainClasses;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -77,7 +76,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         private void frm_NewInvoice_Load(object sender, EventArgs e)
         {
-            DBServiecs.UpdateAllBalances();     // تحديث أرصدة الأصناف والحسابات
+            DBServiecs.A_UpdateAllDataBase();     // تحديث أرصدة الأصناف والحسابات
             LoadAcc();                          // تحميل بيانات الحسابات حسب نوع الفاتورة
             SetDefaultAccount();                // وضع الحساب الافتراضي حسب نوع الفاتورة
             InitializeAutoComplete();           // التعبئة التلقائية
@@ -830,7 +829,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     return;
             }
 
-            DBServiecs.UpdateAllBalances();
+            DBServiecs.A_UpdateAllDataBase();
             PrepareSaleProduct(txtSeaarchProd.Text);
             GetInvoices();
             NavigateToInvoice(currentIndexBeforeInsert);

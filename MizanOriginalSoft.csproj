@@ -12,6 +12,7 @@
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
 		<PackageReference Include="ReportViewerCore.WinForms" Version="15.1.26" />
 		<PackageReference Include="ZXing.Net" Version="0.16.10" />
+		<PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.9" />
 	</ItemGroup>
 
 </Project>

@@ -78,106 +78,6 @@ namespace MizanOriginalSoft.MainClasses
         }
         #endregion
         
-        #region @@@@@@@@  frm_MainAccounts  @@@@@@@@@@@
-        //احضار الحسابات النهائية للتعامل معها
-        public static DataTable MainAcc_LoadFinalAccounts(int AccID, string FilterType)//لماذا لا يجلب 106 و  والكل للمديونيات
-        {
-            string query = "MainAcc_LoadFinalAccounts";
-            return dbHelper.ExecuteSelectQuery(query, cmd =>
-            {
-                cmd.Parameters.Add(new SqlParameter("@AccID", SqlDbType.Int) { Value = AccID });
-                cmd.Parameters.Add(new SqlParameter("@FilterType", SqlDbType.NVarChar) { Value = FilterType });
-            });
-        }
-        //احضار الحسابات الفرعية للحساب الممرر
-        public static DataTable MainAcc_LoadFollowers(int AccID)//@@@
-        {
-            return dbHelper.ExecuteSelectQuery("MainAcc_LoadFollowers",
-                command => command.Parameters.Add("@AccID", SqlDbType.Int).Value = AccID);
-        }
-
-        //احضار الحسابات الفرعية للحساب الممرر والحساب الاصلى لتعبئة كمبوبكس
-        public static DataTable MainAcc_LoadFollowersAndParent(int AccID)//@@@
-        {
-            return dbHelper.ExecuteSelectQuery("MainAcc_LoadFollowersAndParent",
-                command => command.Parameters.Add("@AccID", SqlDbType.Int).Value = AccID);
-        }
-
-        //احضار الحساب الرئيسى الممرر فقط
-        public static DataTable MainAcc_LoadTopByID(int AccID)//@@@
-        {
-            return dbHelper.ExecuteSelectQuery("MainAcc_LoadTopByID",
-                command => command.Parameters.Add("@AccID", SqlDbType.Int).Value = AccID);
-        }
-        
-   
-
-        // دالة حذف حساب او تصنيف
-        public static bool MainAcc_DeleteCatogryOrAcc(
-           int accID,
-           out string resultMessage)
-        {
-            resultMessage = dbHelper.ExecuteNonQueryWithParamsAndMessage(
-                "MainAcc_DeleteCatogryOrAcc",
-                cmd =>
-                {
-                    cmd.Parameters.AddWithValue("@AccID", accID);
-                },
-                expectMessageOutput: true
-            );
-
-            // اعتبر أن النجاح إذا الرسالة تبدأ بـ "تم"
-            return resultMessage.StartsWith("تم");
-        }
-
-
-        //دالة ادراج او تعديل تصنيف فرعى
-        public static bool MainAcc_InsertSubCat(
-           int accID,
-           int? parentAccID,
-           string accName,
-           out string resultMessage)
-        {
-            resultMessage = dbHelper.ExecuteNonQueryWithParamsAndMessage(
-                "MainAcc_InsertSubCat",
-                cmd =>
-                {
-                    cmd.Parameters.AddWithValue("@AccID", accID);
-                    cmd.Parameters.AddWithValue("@ParentAccID", parentAccID ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@AccName", accName);
-                },
-                expectMessageOutput: true
-            );
-
-            // اعتبر أن النجاح إذا الرسالة تبدأ بـ "تم"
-            return resultMessage.StartsWith("تم");
-        }
-
-        //دالة تعديل تصنيف فرعى
-        public static bool MainAcc_UpdateSubCat(
-           int accID,
-           string accName,
-           out string resultMessage)
-        {
-            resultMessage = dbHelper.ExecuteNonQueryWithParamsAndMessage(
-                "MainAcc_UpdateSubCat",
-                cmd =>
-                {
-                    cmd.Parameters.AddWithValue("@AccID", accID);
-                    cmd.Parameters.AddWithValue("@AccName", accName);
-                },
-                expectMessageOutput: true
-            );
-
-            // اعتبر أن النجاح إذا الرسالة تبدأ بـ "تم"
-            return resultMessage.StartsWith("تم");
-        }
-
-
-
-
-
-        #endregion 
         
         #region @@@@@@ frmAccounts_Mangment @@@@@@
         // جلب قائمة الموردين بدون شروط
@@ -531,31 +431,6 @@ namespace MizanOriginalSoft.MainClasses
 
 
 
-        #region @@@@@@@ Reports Table @@@@@
-
-        // تمت المراجعة لاستدعاء قائمة التقارير للحسابات    ### 
-        public static DataTable RepMenu_Accounts(bool ForAccounts, bool IsForGroupAccounts, int TopAcc)//@@@
-        {
-            return dbHelper.ExecuteSelectQuery("RepMenu_Accounts", cmd =>
-            {
-                cmd.Parameters.Add("@ForAccounts", SqlDbType.Bit).Value = ForAccounts;
-                cmd.Parameters.Add("@IsForGroupAccounts", SqlDbType.Bit).Value = IsForGroupAccounts;
-                cmd.Parameters.Add("@TopAcc", SqlDbType.Int ).Value = TopAcc;
-
-            });
-        }
-
-        // تمت المراجعة لاستدعاء قائمة التقارير للاصناف    ### 
-        public static DataTable RepMenu_Products(bool ForItems, bool ForItemsGroup)//@@@
-        {
-            return dbHelper.ExecuteSelectQuery("RepMenu_Products", cmd =>
-            {
-                cmd.Parameters.Add("@ForItems", SqlDbType.Bit).Value = ForItems;
-                cmd.Parameters.Add("@ForItemsGroup", SqlDbType.Bit).Value = ForItemsGroup;
-            });
-        }
-
-        #endregion
 
 
         #region @@@@@ BarCode @@@@
@@ -763,27 +638,6 @@ namespace MizanOriginalSoft.MainClasses
 
         #endregion
         
-        #region ############# frmReport_Preview ##################
-
-        // جلب القيم الافتراضية لتقارير الشاشة (بدون معاملات)
-        public static DataTable GenralData_GetDefRepData()//@@@
-        {
-            return dbHelper.ExecuteSelectQuery("GenralData_GetDefRepData", cmd => { }); // لا توجد معاملات مطلوبة
-        }
-
-        // جلب تاريخ بداية الحسابات (بدون معاملات)
-        public static DataTable GenralData_GetStartAccountsDate()
-        {
-            return dbHelper.ExecuteSelectQuery("GenralData_GetStartAccountsDate", cmd => { }); // لا توجد معاملات مطلوبة
-        }
-
-        // جلب الفروع الرئيسية (المخازن) المعروضة في الشاشة (بدون معاملات)
-        public static DataTable GenralData_GetWarehouse()//@@@
-        {
-            return dbHelper.ExecuteSelectQuery("GenralData_GetWarehouse", cmd => { }); // لا توجد معاملات مطلوبة
-        }
-
-        #endregion
 
         #region ############### Main Services ########################
 
@@ -1363,99 +1217,7 @@ namespace MizanOriginalSoft.MainClasses
 
         #endregion
      
-        #region @@@@@@@ CashTransaction Table @@@@@
-   
-        // جلب الحسابات الرئيسية على شكل شجرة  ###
-        public static DataTable MainAcc_GetTopAccountTree()//@@
-        {
-            return dbHelper.ExecuteSelectQuery("MainAcc_GetTopAccountTree");
-        }
-
-        // جلب السندات حسب النوع
-        public static DataTable CashTransactions_GetBillByType(int OperationType_ID)
-        {
-            return dbHelper.ExecuteSelectQuery("CashTransactions_GetBillByType", cmd =>
-                cmd.Parameters.Add("@OperationType_ID", SqlDbType.Int).Value = OperationType_ID
-            );
-        }
-
-        //دالة ادراج او تعديل سند تحصيل او دفع او تسوية 
-        public static bool CashTransactions_InsertOrUpdate(
-            int TransactionID,
-            string VoucherNumber,
-            DateTime? TransactionDate,
-            int? OperationType_ID,
-            int? AccountID,
-            int? AccBox, // ✅ جديد
-            float? Amount,
-            int? PaymentMethodID,
-            string DescriptionNote,
-            int? CreatedByUsID,
-            string SaveTransaction,
-            out string resultMessage)
-        {
-            resultMessage = null;
-
-            SqlParameter outputMessage = new SqlParameter("@ResultMessage", SqlDbType.NVarChar, 100)
-            {
-                Direction = ParameterDirection.Output
-            };
-
-            resultMessage = dbHelper.ExecuteNonQueryWithParamsAndMessage(
-                "CashTransactions_InsertOrUpdate",
-                cmd =>
-                {
-                    cmd.Parameters.AddWithValue("@TransactionID", TransactionID);
-                    cmd.Parameters.AddWithValue("@VoucherNumber", VoucherNumber);
-                    cmd.Parameters.AddWithValue("@TransactionDate", TransactionDate ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@OperationType_ID", OperationType_ID ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@AccountID", AccountID ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@AccBox", (OperationType_ID == 8 || OperationType_ID == 9 && AccBox.HasValue)
-                        ? (object)AccBox.Value
-                        : DBNull.Value); cmd.Parameters.AddWithValue("@Amount", Amount ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@PaymentMethodID", PaymentMethodID ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@DescriptionNote", string.IsNullOrWhiteSpace(DescriptionNote) ? (object)DBNull.Value : DescriptionNote);
-                    cmd.Parameters.AddWithValue("@CreatedByUsID", CreatedByUsID ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@SaveTransaction", SaveTransaction ?? "");
-                    cmd.Parameters.Add(outputMessage);
-                },
-                expectMessageOutput: false
-            );
-
-            if (outputMessage.Value != DBNull.Value)
-                resultMessage = outputMessage.Value.ToString();
-
-            return !string.IsNullOrEmpty(resultMessage);
-        }
-
-
-
-        //جلب كود جديد للسند
-        public static string CashTransactions_GetNewVoucherNumber(int operationTypeID)
-        {
-            DataTable dt = dbHelper.ExecuteSelectQuery("CashTransactions_GetNewVoucherNumber", cmd =>
-            {
-                cmd.Parameters.AddWithValue("@OperationType_ID", operationTypeID);
-            });
-
-            if (dt != null && dt.Rows.Count > 0)
-                return dt.Rows[0]["NewVoucherNumber"].ToString();
-            else
-                return ""; // أو قيمة افتراضية
-        }
-
-        public static int CashTransactions_GetNextTransactionID()
-        {
-            DataTable dt = dbHelper.ExecuteSelectQuery("CashTransactions_GetNextTransactionID");
-
-            if (dt != null && dt.Rows.Count > 0)
-                return Convert.ToInt32(dt.Rows[0]["NextTransactionID"]);
-            else
-                return 1; // في حال لا توجد سجلات
-        }
-
-        #endregion
-
+  
         #region @@@@ Cheque Batches @@@@
 
         //// جلب الحافظات حسب النوع

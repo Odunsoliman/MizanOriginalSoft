@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Signee.DB.MainClasses
+namespace MizanOriginalSoft .MainClasses.OriginalClasses 
 {
     public class KeyboardLanguageManager
     {

@@ -1,4 +1,5 @@
 ﻿using MizanOriginalSoft.MainClasses;
+using MizanOriginalSoft.MainClasses.OriginalClasses;
 using System;
 using System.Data;
 using System.Drawing;
@@ -81,21 +82,25 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             // تنفيذ الحفظ
             bool result = DBServiecs.MainAcc_UpdateOrInsert(
-                accID,
-                parentAccID,
-                accName,
-                false,
-                0, 0, 0, 0, 0,
-                false,
-                null,
-                firstPhon,
-                antherPhon,
-                accNote,
-                clientEmail,
-                clientAddress,
-                out string resultMessage
-            );
-
+  accID,
+  parentAccID,
+  accName,
+  false,
+  0,
+  0,
+  0,
+  0,
+  0,
+  false ,
+  null,
+  firstPhon,
+  antherPhon,
+  accNote,
+  clientEmail,
+  clientAddress,
+  CurrentSession.UserID, // ⬅️ 
+  out string resultMessage
+);
             if (result)
             {
                 MessageBox.Show(resultMessage, "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);

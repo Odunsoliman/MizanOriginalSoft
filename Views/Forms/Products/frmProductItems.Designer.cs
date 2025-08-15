@@ -65,6 +65,7 @@
             txtSeaarchProd = new TextBox();
             tableLayoutPanel15 = new TableLayoutPanel();
             tableLayoutPanel4 = new TableLayoutPanel();
+            lblNoteProduct = new Label();
             pnlMenuContainer = new Panel();
             DGV = new DataGridView();
             tableLayoutPanel16 = new TableLayoutPanel();
@@ -669,18 +670,30 @@
             // 
             tableLayoutPanel4.ColumnCount = 1;
             tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel4.Controls.Add(lblNoteProduct, 0, 2);
             tableLayoutPanel4.Controls.Add(pnlMenuContainer, 0, 0);
             tableLayoutPanel4.Controls.Add(DGV, 0, 1);
             tableLayoutPanel4.Dock = DockStyle.Fill;
             tableLayoutPanel4.Location = new Point(96, 3);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
-            tableLayoutPanel4.RowCount = 2;
+            tableLayoutPanel4.RowCount = 3;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 8F));
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 92F));
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 84F));
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 8F));
             tableLayoutPanel4.Size = new Size(831, 486);
             tableLayoutPanel4.TabIndex = 31;
+            // 
+            // lblNoteProduct
+            // 
+            lblNoteProduct.AutoSize = true;
+            lblNoteProduct.Dock = DockStyle.Fill;
+            lblNoteProduct.ForeColor = Color.Red;
+            lblNoteProduct.Location = new Point(3, 446);
+            lblNoteProduct.Name = "lblNoteProduct";
+            lblNoteProduct.Size = new Size(825, 40);
+            lblNoteProduct.TabIndex = 47;
+            lblNoteProduct.Text = "label2";
+            lblNoteProduct.TextAlign = ContentAlignment.MiddleRight;
             // 
             // pnlMenuContainer
             // 
@@ -705,7 +718,7 @@
             DGV.RowHeadersVisible = false;
             DGV.RowHeadersWidth = 51;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DGV.Size = new Size(823, 440);
+            DGV.Size = new Size(823, 400);
             DGV.TabIndex = 29;
             DGV.RowPrePaint += DGV_RowPrePaint;
             DGV.SelectionChanged += DGV_SelectionChanged;
@@ -1603,6 +1616,7 @@
             tableLayoutPanel5.PerformLayout();
             tableLayoutPanel15.ResumeLayout(false);
             tableLayoutPanel4.ResumeLayout(false);
+            tableLayoutPanel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)DGV).EndInit();
             tableLayoutPanel16.ResumeLayout(false);
             tableLayoutPanel16.PerformLayout();
@@ -1725,5 +1739,6 @@
         private PictureBox picProd;
         private Label lblRegist_Year;
         private Label label6;
+        private Label lblNoteProduct;
     }
 }

@@ -13,18 +13,17 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
 
         public DatabaseBackupRestoreHelper(string settingsFilePath)
         {
-            var appSettings = new AppSettings(settingsFilePath);
-            serverName = appSettings.GetString("serverName", ".") ?? ".";
+            AppSettings.Load(settingsFilePath); // تحميل الإعدادات مرة واحدة فقط
+
+            serverName = AppSettings.GetString("serverName", ".") ?? ".";
             masterConnectionString = $"Data Source={serverName};Initial Catalog=master;Integrated Security=True;TrustServerCertificate=True;";
         }
 
-        public void BackupDatabase(string settingsFilePath)
+        public void BackupDatabase()
         {
-            var appSettings = new AppSettings(settingsFilePath);
-
-            string? backupFolder = appSettings.GetString("BackupsPath", null);
-            string? backupProc = appSettings.GetString("BackupDB", null);
-            string? dbName = appSettings.GetString("DBName", null);
+            string? backupFolder = AppSettings.GetString("BackupsPath");
+            string? backupProc = AppSettings.GetString("BackupDB");
+            string? dbName = AppSettings.GetString("DBName");
 
             if (string.IsNullOrWhiteSpace(backupFolder) || string.IsNullOrWhiteSpace(backupProc) || string.IsNullOrWhiteSpace(dbName))
             {
@@ -56,12 +55,10 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             }
         }
 
-        public void RestoreDatabase(string settingsFilePath, string backupFilePath)
+        public void RestoreDatabase(string backupFilePath)
         {
-            var appSettings = new AppSettings(settingsFilePath);
-
-            string? restoreProc = appSettings.GetString("RestoreDB", null);
-            string? dbName = appSettings.GetString("DBName", null);
+            string? restoreProc = AppSettings.GetString("RestoreDB");
+            string? dbName = AppSettings.GetString("DBName");
 
             if (string.IsNullOrWhiteSpace(restoreProc) || string.IsNullOrWhiteSpace(dbName))
             {
@@ -90,10 +87,9 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             }
         }
 
-        public void CleanOldBackups(string rootBackupFolder, string settingsFilePath)
+        public void CleanOldBackups(string rootBackupFolder)
         {
-            var appSettings = new AppSettings(settingsFilePath);
-            int maxFilesToKeep = appSettings.GetInt("maxBackups", 20);
+            int maxFilesToKeep = AppSettings.GetInt("maxBackups", 20);
 
             try
             {
@@ -129,7 +125,6 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             }
         }
 
-
         public void CopyLatestBackupToSharedFolder(string sourceBackupFolder, string sharedFolderPath, string outputFileName)
         {
             try
@@ -146,11 +141,10 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
                     Directory.CreateDirectory(sharedFolderPath);
                 }
 
-                // استخراج أحدث ملف .bak
                 var latestFile = new DirectoryInfo(sourceBackupFolder)
-                                    .GetFiles("*.bak")
-                                    .OrderByDescending(f => f.CreationTime)
-                                    .FirstOrDefault();
+                    .GetFiles("*.bak")
+                    .OrderByDescending(f => f.CreationTime)
+                    .FirstOrDefault();
 
                 if (latestFile == null)
                 {
@@ -159,8 +153,6 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
                 }
 
                 string destFilePath = Path.Combine(sharedFolderPath, outputFileName);
-
-                // نسخ مع الاستبدال
                 File.Copy(latestFile.FullName, destFilePath, true);
 
                 Console.WriteLine($"✅ تم نسخ {latestFile.Name} إلى {destFilePath}");
@@ -198,7 +190,5 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
                 Console.WriteLine("❌ خطأ أثناء النسخ إلى Google Drive: " + ex.Message);
             }
         }
-
-
     }
 }

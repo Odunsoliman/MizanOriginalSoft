@@ -16,11 +16,21 @@ using System.IO;
 using FormatException = System.FormatException;
 using System.Xml.Linq;
 using MizanOriginalSoft.MainClasses;
+using ZXing.QrCode;
+
+using System.Drawing;
+using ZXing.Rendering;
+
+using System.Drawing;
+using MizanOriginalSoft.MainClasses.OriginalClasses;
+using System.Data.SqlTypes;
+
 
 namespace MizanOriginalSoft.Views.Forms.Products
 {
     public partial class frmPrintBarCode : Form
     {
+/*
         private string rollPrinterName = string.Empty;
         private string sheetPrinterName = string.Empty;
         private DataTable tblCode = new();
@@ -28,6 +38,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         private string companyName = string.Empty;
 
         #region 
+        //Non-nullable field 'BarcodeGeneratorImage' must contain a non-null value when exiting constructor.Consider adding the 'required' modifier or declaring the field as nullable.
         public frmPrintBarCode()
         {
             InitializeComponent();
@@ -448,6 +459,8 @@ namespace MizanOriginalSoft.Views.Forms.Products
         int sheetMarginLeft;
         private int rollLabelWidth = 100;
         private int rollLabelHeight = 50;
+        private Image? BarcodeGeneratorImage;
+
         private void btnPrintBarCode_Click(object sender, EventArgs e)
         {
             tblCode = DBServiecs.sp_GetBarcodesToPrint();
@@ -472,11 +485,46 @@ namespace MizanOriginalSoft.Views.Forms.Products
             currentPrintIndex = 0;
             printDoc = new PrintDocument();
 
+            // حدث الطباعة
+            printDoc.PrintPage += (s, ev) =>
+            {
+                if (currentPrintIndex < tblCode.Rows.Count)
+                {
+                    string? codeValue = tblCode.Rows[currentPrintIndex]["Barcode"]?.ToString();
+                    if (string.IsNullOrEmpty(codeValue))
+                    {
+                        currentPrintIndex++;
+                        ev.HasMorePages = (currentPrintIndex < tblCode.Rows.Count);
+                        return;
+                    }
+
+                    // التخلص من الصورة القديمة إذا وجدت
+                    BarcodeGeneratorImage?.Dispose();
+                    BarcodeGeneratorImage = null;
+
+                    // إنشاء صورة الباركود
+                    BarcodeGeneratorImage = BarcodeGenerator.Generate(codeValue, 250, 80);
+
+                    // تحديد مكان وحجم الرسم على الورقة
+                    Rectangle targetRect = new Rectangle(50, 50, 250, 80);
+                    var img = BarcodeGeneratorImage;
+                    if (img != null)
+                    {
+                        ev.Graphics.DrawImage(img, targetRect);
+                    }
+
+
+                    currentPrintIndex++;
+                    ev.HasMorePages = (currentPrintIndex < tblCode.Rows.Count);
+                }
+            };
+
+            // اختيار الطابعة
             if (rdoRoll.Checked)
             {
                 if (!string.IsNullOrEmpty(rollPrinterName) && IsPrinterInstalled(rollPrinterName))
                 {
-                    PrepareRollPrinting();
+                    printDoc.PrinterSettings.PrinterName = rollPrinterName;
                 }
                 else
                 {
@@ -488,7 +536,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             {
                 if (!string.IsNullOrEmpty(sheetPrinterName) && IsPrinterInstalled(sheetPrinterName))
                 {
-                    PrepareSheetPrinting();
+                    printDoc.PrinterSettings.PrinterName = sheetPrinterName;
                 }
                 else
                 {
@@ -497,6 +545,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 }
             }
 
+            // الطباعة أو المعاينة
             try
             {
                 if (directPrint)
@@ -505,8 +554,10 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 }
                 else
                 {
-                    PrintPreviewDialog preview = new PrintPreviewDialog();
-                    preview.Document = printDoc;
+                    using PrintPreviewDialog preview = new PrintPreviewDialog
+                    {
+                        Document = printDoc
+                    };
                     preview.ShowDialog();
                 }
             }
@@ -515,6 +566,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 MessageBox.Show("حدث خطأ أثناء الطباعة: " + ex.Message);
             }
         }
+
 
 
         // استدعاء الإعدادات من الملف
@@ -561,11 +613,11 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 lbl_CO.Text = companyName;
             }
         }
-
+ 
         // دالة توليد الباركود
         private Image GenerateBarcode(string code)
         {
-            var writer = new ZXing.BarcodeWriter<Bitmap>
+            var writer = new ZXing.BarcodeWriterPixelData
             {
                 Format = ZXing.BarcodeFormat.CODE_128,
                 Options = new ZXing.Common.EncodingOptions
@@ -575,9 +627,25 @@ namespace MizanOriginalSoft.Views.Forms.Products
                     Margin = 0
                 }
             };
-            return writer.Write(code);
-        }
 
+            var pixelData = writer.Write(code);
+
+            // إنشاء Bitmap من الـ PixelData
+            var bitmap = new Bitmap(pixelData.Width, pixelData.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            var bitmapData = bitmap.LockBits(new Rectangle(0, 0, pixelData.Width, pixelData.Height),
+                                             System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                                             bitmap.PixelFormat);
+            try
+            {
+                System.Runtime.InteropServices.Marshal.Copy(pixelData.Pixels, 0, bitmapData.Scan0, pixelData.Pixels.Length);
+            }
+            finally
+            {
+                bitmap.UnlockBits(bitmapData);
+            }
+
+            return bitmap;
+        }
 
         //اعداد الشيت للطباعة
         private void PrepareSheetPrinting()
@@ -882,6 +950,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
         #endregion
 
-
+*/
     }
 }

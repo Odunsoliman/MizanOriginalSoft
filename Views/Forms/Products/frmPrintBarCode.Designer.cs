@@ -120,7 +120,6 @@
             txtAmount.Size = new Size(55, 29);
             txtAmount.TabIndex = 1;
             txtAmount.TextAlign = HorizontalAlignment.Center;
-            txtAmount.KeyDown += txtAmount_KeyDown;
             // 
             // btnPlus
             // 
@@ -133,7 +132,6 @@
             btnPlus.TabStop = false;
             btnPlus.Text = "+";
             btnPlus.UseVisualStyleBackColor = true;
-            btnPlus.Click += btnPlus_Click;
             // 
             // label1
             // 
@@ -158,7 +156,6 @@
             btnMinus.TabStop = false;
             btnMinus.Text = "-";
             btnMinus.UseVisualStyleBackColor = true;
-            btnMinus.Click += btnMinus_Click;
             // 
             // txtCodeProduct
             // 
@@ -169,7 +166,6 @@
             txtCodeProduct.Size = new Size(86, 29);
             txtCodeProduct.TabIndex = 0;
             txtCodeProduct.TextAlign = HorizontalAlignment.Center;
-            txtCodeProduct.KeyDown += txtCodeProduct_KeyDown;
             // 
             // tableLayoutPanel2
             // 
@@ -204,7 +200,6 @@
             btnClose.TabStop = false;
             btnClose.Text = "خروج";
             btnClose.UseVisualStyleBackColor = true;
-            btnClose.Click += btnClose_Click;
             // 
             // btnPrintBarCode
             // 
@@ -217,7 +212,6 @@
             btnPrintBarCode.TabStop = false;
             btnPrintBarCode.Text = "طباعة باركود";
             btnPrintBarCode.UseVisualStyleBackColor = true;
-            btnPrintBarCode.Click += btnPrintBarCode_Click;
             // 
             // tableLayoutPanel4
             // 
@@ -330,7 +324,6 @@
             btnDeleteAll.TabStop = false;
             btnDeleteAll.Text = "حذف الكل";
             btnDeleteAll.UseVisualStyleBackColor = true;
-            btnDeleteAll.Click += btnDeleteAll_Click;
             // 
             // btnDeleteSelected
             // 
@@ -343,7 +336,6 @@
             btnDeleteSelected.TabStop = false;
             btnDeleteSelected.Text = "حذف المحدد";
             btnDeleteSelected.UseVisualStyleBackColor = true;
-            btnDeleteSelected.Click += btnDeleteSelected_Click;
             // 
             // DGV
             // 
@@ -374,7 +366,6 @@
             RightToLeftLayout = true;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "تجهيز البار كود";
-            Load += frmPrintBarCode_Load;
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel3.PerformLayout();

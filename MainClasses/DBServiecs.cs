@@ -6,7 +6,9 @@ using System.Linq;
 using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using ZXing;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace MizanOriginalSoft.MainClasses
 {
@@ -17,7 +19,6 @@ namespace MizanOriginalSoft.MainClasses
         public static string A_UpdateAllDataBase()//@@@ 
         {
             string result = dbHelper.ExecuteNonQueryNoParamsWithMessage("A_UpdateAllDataBase", expectMessageOutput: true);
-            /*'dbHelper' does not contain a definition for 'ExecuteNonQueryNoParamsWithMessage'*/
             if (!string.IsNullOrEmpty(result))
                 return result;
 
@@ -25,43 +26,186 @@ namespace MizanOriginalSoft.MainClasses
         }
 
 
-        // جلب المستخدمين المفعّلين فقط لتسجيل الدخول
-        public static DataTable LogIn_GetUsers()
+        #endregion
+    
+        #region ********** Users ****************************
+
+        // احضار كل المستخدمين المتاحين فقط 
+
+        public static DataTable User_GetActiv()
         {
-            return dbHelper.ExecuteSelectQuery("LogIn_GetUsers", command => { }) ?? new DataTable();
-        }
-        
-        // التحقق من اسم المستخدم وكلمة المرور
-        public static DataTable LogIn_UsersVarify(string username, string password)
-        {
-            return dbHelper.ExecuteSelectQuery("LogIn_UsersVarify", command => Prm_UsersVarify(username, password, command)) ?? new DataTable();
-        }
-        private static void Prm_UsersVarify(string username, string password, SqlCommand command)//@@@
-        {
-            command.Parameters.Add("@username", SqlDbType.NVarChar).Value = username;
-            command.Parameters.Add("@password", SqlDbType.NVarChar).Value = password;
+            return dbHelper.ExecuteSelectQuery("User_GetActiv", command =>
+            {
+
+            }) ?? new DataTable();
         }
 
-        // جلب صلاحيات المستخدم عند الدخول
-        public static DataTable LogIn_GetPermissions(int Us_ID)
+        //احضار كل المستخدمين
+        public static DataTable User_GetAll()
         {
-            return dbHelper.ExecuteSelectQuery("LogIn_GetPermissions", command => Prm_GetPermissions(Us_ID, command)) ?? new DataTable();
+            return dbHelper.ExecuteSelectQuery("User_GetAll", command =>
+            {
+               
+            }) ?? new DataTable();
         }
-        private static void Prm_GetPermissions(int Us_ID, SqlCommand command)//@@@
+     
+        // اختبار وجود مستخدم وكلمة مروره صحيحة
+        public static DataTable User_Varify(string username, string password)
         {
-            command.Parameters.Add("@Us_ID", SqlDbType.Int).Value = Us_ID;
+            return dbHelper.ExecuteSelectQuery("User_Varify", command => Prm_User_Varify(username, password, command)) ?? new DataTable();
         }
-
-        // تحديث كلمة مرور المستخدم مع رسالة راجعة من الإجراء المخزن
-        public static string LogIn_UsersUpdatPass(int IDUser, string pass_Word)//@@@
+        private static void Prm_User_Varify(string username, string password, SqlCommand command)
         {
-            return dbHelper.ExecuteNonQueryWithLogging("LogIn_UsersUpdatPass", command =>
+            command.Parameters.Add("@Username", SqlDbType.NVarChar).Value = username;
+            command.Parameters.Add("@Password", SqlDbType.NVarChar).Value = password;
+        }
+        // جلب بيانات مستخدم واحد
+        public static DataTable User_GetOne(int IDUser)
+        {
+            return dbHelper.ExecuteSelectQuery("User_GetOne", command =>
             {
                 command.Parameters.Add("@IDUser", SqlDbType.Int).Value = IDUser;
-                command.Parameters.Add("@pass_Word", SqlDbType.NVarChar).Value = pass_Word;
+            }) ?? new DataTable();
+        }
+
+        // تنفيذ الإجراء: User_ChangePassword
+        public static string User_ChangePassword(int userId, string newPassword)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("User_ChangePassword", command =>
+            {
+                command.Parameters.Add("@IDUser", SqlDbType.Int).Value = userId;
+                command.Parameters.Add("@pass_Word", SqlDbType.NVarChar).Value = newPassword;
             }, expectMessageOutput: true);
         }
 
+
+        // إضافة مستخدم جديد بكلمة مرور افتراضية "00"
+        public static string User_Add(string username, string fullName, int createdByUserId)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("User_Add", command =>
+            {
+                command.Parameters.Add("@UserName", SqlDbType.NVarChar).Value = username;
+                command.Parameters.Add("@FullName", SqlDbType.NVarChar).Value = fullName;
+                command.Parameters.Add("@CreatedByUserID", SqlDbType.Int).Value = createdByUserId;
+
+                var paramNewId = new SqlParameter("@NewUserID", SqlDbType.Int)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                command.Parameters.Add(paramNewId);
+            }, expectMessageOutput: true);
+        }
+
+
+        // تحديث بيانات المستخدم
+        public static string User_Update(int userId, string username, string fullName, bool isAdmin, bool isActive, int modifiedBy)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("User_Update", command =>
+            {
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+                command.Parameters.Add("@UserName", SqlDbType.NVarChar).Value = username;
+                command.Parameters.Add("@FullName", SqlDbType.NVarChar).Value = fullName;
+                command.Parameters.Add("@IsAdmin", SqlDbType.Bit).Value = isAdmin;
+                command.Parameters.Add("@IsActive", SqlDbType.Bit).Value = isActive;
+                command.Parameters.Add("@ModifiedBy", SqlDbType.Int).Value = modifiedBy;
+            }, expectMessageOutput: true);
+        }
+
+
+        // إعادة تعيين كلمة المرور إلى "00"
+        public static string User_ResetPassword(int userId)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("User_ResetPassword", command =>
+            {
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+            }, expectMessageOutput: true);
+        }
+
+        // حذف المستخدم في حال لا توجد له معاملات
+        public static string User_DeleteIfAllowed(int userId)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("User_DeleteIfAllowed", command =>
+            {
+                command.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+            }, expectMessageOutput: true);
+        }
+
+
+
+
+
+
+        #endregion
+
+        #region ******** Permissions *******************
+
+        // تنفيذ الإجراء: Permission_SetForUser
+        public static string Permission_SetForUser(int userId, int permissionId, bool isAllowed, bool canAdd, bool canEdit, bool canDelete, int? warehouseId)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("Permission_SetForUser", command =>
+            {
+                command.Parameters.Add("@Us_ID", SqlDbType.Int).Value = userId;
+                command.Parameters.Add("@PermissionID", SqlDbType.Int).Value = permissionId;
+                command.Parameters.Add("@IsAllowed", SqlDbType.Bit).Value = isAllowed;
+                command.Parameters.Add("@CanAdd", SqlDbType.Bit).Value = canAdd;
+                command.Parameters.Add("@CanEdit", SqlDbType.Bit).Value = canEdit;
+                command.Parameters.Add("@CanDelete", SqlDbType.Bit).Value = canDelete;
+                command.Parameters.Add("@WarehouseID", SqlDbType.Int).Value = (object?)warehouseId ?? DBNull.Value;
+            }, expectMessageOutput: false );
+        }
+
+        // تنفيذ الإجراء: Permission_DeleteForUser
+        public static string Permission_DeleteForUser(int userId, int permissionId)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("Permission_DeleteForUser", command =>
+            {
+                command.Parameters.Add("@Us_ID", SqlDbType.Int).Value = userId;
+                command.Parameters.Add("@PermissionID", SqlDbType.Int).Value = permissionId;
+            }, expectMessageOutput: true);
+        }
+
+        // تنفيذ الإجراء: Permission_GrantAllToUser
+        public static string Permission_GrantAllToUser(int userId)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("Permission_GrantAllToUser", command =>
+            {
+                command.Parameters.Add("@Us_ID", SqlDbType.Int).Value = userId;
+            }, expectMessageOutput: true);
+        }
+
+        // تنفيذ الإجراء: Permission_RevokeAllFromUser
+        public static string Permission_RevokeAllFromUser(int userId)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("Permission_RevokeAllFromUser", command =>
+            {
+                command.Parameters.Add("@Us_ID", SqlDbType.Int).Value = userId;
+            }, expectMessageOutput: true);
+        }
+
+        // تنفيذ الإجراء: Permission_GetByUser
+        public static DataTable Permission_GetByUser(int userId, int warehouseId)
+        {
+            return dbHelper.ExecuteSelectQuery("Permission_GetByUser", command =>
+            {
+                command.Parameters.Add("@Us_ID", SqlDbType.Int).Value = userId;
+                command.Parameters.Add("@WarehouseID", SqlDbType.Int).Value = warehouseId;
+            }) ?? new DataTable();
+        }
+
+        // تنفيذ الإجراء: Permission_GetAllDefinedPermissions
+        public static DataTable Permission_GetAllDefinedPermissions()
+        {
+            return dbHelper.ExecuteSelectQuery("Permission_GetAllDefinedPermissions", command => { }) ?? new DataTable();
+        }
+
+
+        public static DataTable Permission_GetFullForUser(int userId)
+        {
+            return dbHelper.ExecuteSelectQuery("Permission_GetFullForUser", command =>
+            {
+                command.Parameters.Add("@Us_ID", SqlDbType.Int).Value = userId;
+            }) ?? new DataTable();
+        }
 
         #endregion
 
@@ -418,15 +562,7 @@ namespace MizanOriginalSoft.MainClasses
             return dbHelper.ExecuteSelectQuery("sp_GetBarcodesToPrint", command => { }) ?? new DataTable();
         }
 
-        // تمت المراجعة لاستدعاء قائمة التقارير للاصناف    ### 
-        public static DataTable RepMenu_Products(bool ForItems, bool ForItemsGroup)
-        {
-            return dbHelper.ExecuteSelectQuery("RepMenu_Products", cmd =>
-            {
-                cmd.Parameters.Add("@ForItems", SqlDbType.Bit).Value = ForItems;
-                cmd.Parameters.Add("@ForItemsGroup", SqlDbType.Bit).Value = ForItemsGroup;
-            }) ?? new DataTable();
-        }
+
 
 
         /// حفظ بيانات التقرير الافتراضي (الطابعة، المخزن، والفترة) وإرجاع رسالة من الإجراء المخزن
@@ -452,7 +588,6 @@ namespace MizanOriginalSoft.MainClasses
 
 
         #endregion
-
 
         #region MainViewer for reports @#@
         // دالة استدعاء تقرير كارت صنف رقم 0    @@@ 
@@ -562,17 +697,6 @@ namespace MizanOriginalSoft.MainClasses
         #endregion
 
         #region ********* Invoice    *********************
-
-        //تحديث بيانات قاعدة البيانات
-        public static string UpdateAllBalances()//@@@ 
-        {
-            string result = dbHelper.ExecuteNonQueryNoParamsWithMessage("A_UpdateAllDataBase", expectMessageOutput: true);
-
-            if (!string.IsNullOrEmpty(result))
-                return result;
-
-            return "تم التحديث بنجاح";
-        }
 
         //ادراج تفاصيل فاتورة
         public static string InvoiceDetails_Insert(
@@ -845,23 +969,24 @@ namespace MizanOriginalSoft.MainClasses
 
         //دالة ادراج او تعديل حساب 
         public static bool MainAcc_UpdateOrInsert(
-           int accID,
-           int? parentAccID,
-           string accName,
-           bool isHidden,
-           float? fixedAssetsValue,
-           float? depreciationRateAnnually,
-           int? fixedAssetsAge,
-           float? annuallyInstallment,
-           float? monthlyInstallment,
-           bool? isEndedFixedAssets,
-           DateTime? fixedAssetsEndDate,
-           string firstPhon,
-           string antherPhon,
-           string accNote,
-           string clientEmail,
-           string clientAddress,
-           out string resultMessage)
+          int accID,
+          int? parentAccID,
+          string accName,
+          bool isHidden,
+          float? fixedAssetsValue,
+          float? depreciationRateAnnually,
+          int? fixedAssetsAge,
+          float? annuallyInstallment,
+          float? monthlyInstallment,
+          bool? isEndedFixedAssets,
+          DateTime? fixedAssetsEndDate,
+          string firstPhon,
+          string antherPhon,
+          string accNote,
+          string clientEmail,
+          string clientAddress,
+          int usID, // ⬅️ المستخدم الذي قام بالتعديل
+          out string resultMessage)
         {
             resultMessage = dbHelper.ExecuteNonQueryWithLogging(
                 "MainAcc_UpdateOrInsert",
@@ -883,71 +1008,503 @@ namespace MizanOriginalSoft.MainClasses
                     cmd.Parameters.AddWithValue("@AccNote", string.IsNullOrWhiteSpace(accNote) ? (object)DBNull.Value : accNote);
                     cmd.Parameters.AddWithValue("@ClientEmail", string.IsNullOrWhiteSpace(clientEmail) ? (object)DBNull.Value : clientEmail);
                     cmd.Parameters.AddWithValue("@ClientAddress", string.IsNullOrWhiteSpace(clientAddress) ? (object)DBNull.Value : clientAddress);
+
+                    cmd.Parameters.AddWithValue("@Us_ID", usID); // ⬅️ تمرير معرف المستخدم
                 },
                 expectMessageOutput: true
             );
 
-            // اعتبر أن النجاح إذا الرسالة تبدأ بـ "تم"
             return resultMessage.StartsWith("تم");
+        }
+        public static bool MainAcc_UpdateAccount(
+    int accID,
+    string accName,
+    bool isHidden,
+    float? fixedAssetsValue,
+    float? depreciationRateAnnually,
+    int? fixedAssetsAge,
+    bool? isEndedFixedAssets,
+    string firstPhon,
+    string antherPhon,
+    string accNote,
+    string clientEmail,
+    string clientAddress,
+    int usID,
+    out string Message)
+        {
+            Message = dbHelper.ExecuteNonQueryWithLogging(
+                procedureName: "MainAcc_UpdateAccount",
+                setParams: cmd =>
+                {
+                    cmd.Parameters.AddWithValue("@AccID", accID);
+                    cmd.Parameters.AddWithValue("@AccName", accName);
+                    cmd.Parameters.AddWithValue("@IsHidden", isHidden);
+
+                    cmd.Parameters.AddWithValue("@FixedAssetsValue", fixedAssetsValue.HasValue ? fixedAssetsValue.Value : (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DepreciationRateAnnually", depreciationRateAnnually.HasValue ? depreciationRateAnnually.Value : (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@FixedAssetsAge", fixedAssetsAge.HasValue ? fixedAssetsAge.Value : (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@IsEndedFixedAssets", isEndedFixedAssets.HasValue ? isEndedFixedAssets.Value : (object)DBNull.Value);
+
+                    cmd.Parameters.AddWithValue("@FirstPhon", string.IsNullOrWhiteSpace(firstPhon) ? (object)DBNull.Value : firstPhon);
+                    cmd.Parameters.AddWithValue("@AntherPhon", string.IsNullOrWhiteSpace(antherPhon) ? (object)DBNull.Value : antherPhon);
+                    cmd.Parameters.AddWithValue("@AccNote", string.IsNullOrWhiteSpace(accNote) ? (object)DBNull.Value : accNote);
+                    cmd.Parameters.AddWithValue("@ClientEmail", string.IsNullOrWhiteSpace(clientEmail) ? (object)DBNull.Value : clientEmail);
+                    cmd.Parameters.AddWithValue("@ClientAddress", string.IsNullOrWhiteSpace(clientAddress) ? (object)DBNull.Value : clientAddress);
+
+                    cmd.Parameters.AddWithValue("@UserID", usID);
+                },
+                expectMessageOutput: true
+            );
+
+            return Message.Trim().Contains("تم");
+
+
+        }
+
+        /*كيف يكون ضبط هذه على الدالة الجديدة بدون رسائل*/
+        #endregion
+
+        #region @@@@@@@ Reports Table @@@@@
+
+        // تمت المراجعة لاستدعاء قائمة التقارير للحسابات    ### 
+        public static DataTable RepMenu_Accounts(bool ForAccounts, bool IsForGroupAccounts, int TopAcc)//@@@
+        {
+            return dbHelper.ExecuteSelectQuery("RepMenu_Accounts", cmd =>
+            {
+                cmd.Parameters.Add("@ForAccounts", SqlDbType.Bit).Value = ForAccounts;
+                cmd.Parameters.Add("@IsForGroupAccounts", SqlDbType.Bit).Value = IsForGroupAccounts;
+                cmd.Parameters.Add("@TopAcc", SqlDbType.Int).Value = TopAcc;
+
+            }) ?? new DataTable();
+        }
+
+        // تمت المراجعة لاستدعاء قائمة التقارير للاصناف    ### 
+        public static DataTable RepMenu_Products(bool ForItems, bool ForItemsGroup)
+        {
+            return dbHelper.ExecuteSelectQuery("RepMenu_Products", cmd =>
+            {
+                cmd.Parameters.Add("@ForItems", SqlDbType.Bit).Value = ForItems;
+                cmd.Parameters.Add("@ForItemsGroup", SqlDbType.Bit).Value = ForItemsGroup;
+            }) ?? new DataTable();
+        }
+        #endregion
+
+        #region @@@@@@@@  frm_MainAccounts  @@@@@@@@@@@
+        //احضار الحسابات النهائية للتعامل معها
+        public static DataTable MainAcc_LoadFinalAccounts(int AccID, string FilterType)//لماذا لا يجلب 106 و  والكل للمديونيات
+        {
+            string query = "MainAcc_LoadFinalAccounts";
+            return dbHelper.ExecuteSelectQuery(query, cmd =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@AccID", SqlDbType.Int) { Value = AccID });
+                cmd.Parameters.Add(new SqlParameter("@FilterType", SqlDbType.NVarChar) { Value = FilterType });
+            }) ?? new DataTable();
+        }
+
+        public static DataTable MainAcc_GetAccountsByID(int AccID)//لماذا لا يجلب 106 و  والكل للمديونيات
+        {
+            string query = "MainAcc_GetAccountsByID";
+            return dbHelper.ExecuteSelectQuery(query, cmd =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@AccID", SqlDbType.Int) { Value = AccID });
+            }) ?? new DataTable();
+        }
+
+        //احضار الحسابات الفرعية للحساب الممرر
+        public static DataTable MainAcc_LoadFollowers(int AccID)//@@@
+        {
+            string query = "MainAcc_LoadFollowers";
+            return dbHelper.ExecuteSelectQuery(query, cmd =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@AccID", SqlDbType.Int) { Value = AccID });
+            }) ?? new DataTable();
+
+
+        }
+
+        //احضار الحسابات الفرعية للحساب الممرر والحساب الاصلى لتعبئة كمبوبكس
+        public static DataTable MainAcc_LoadFollowersAndParent(int AccID)//@@@
+        {
+            string query = "MainAcc_LoadFollowersAndParent";
+            return dbHelper.ExecuteSelectQuery(query, cmd =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@AccID", SqlDbType.Int) { Value = AccID });
+            }) ?? new DataTable();
+
+        }
+
+        //احضار الحساب الرئيسى الممرر فقط
+        public static DataTable MainAcc_LoadTopByID(int AccID)//@@@
+        {
+            string query = "MainAcc_LoadTopByID";
+            return dbHelper.ExecuteSelectQuery(query, cmd =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@AccID", SqlDbType.Int) { Value = AccID });
+            }) ?? new DataTable();
+        }
+
+        //ادراج تصنيف فرعى
+        public static bool MainAcc_InsertSubCat(
+           int accID,
+           int? parentAccID,
+           string accName,
+           out string resultMessage)
+        {
+            resultMessage = dbHelper.ExecuteNonQueryWithLogging(
+                "MainAcc_InsertSubCat",
+                cmd =>
+                {
+                    cmd.Parameters.AddWithValue("@AccID", accID);
+                    cmd.Parameters.AddWithValue("@ParentAccID", parentAccID ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@AccName", accName);
+                },
+                expectMessageOutput: true
+            );
+
+            return resultMessage.StartsWith("تم");
+        }
+
+        public static bool MainAcc_UpdateSubCat(
+           int accID,
+           string accName,
+           out string resultMessage)
+        {
+            resultMessage = dbHelper.ExecuteNonQueryWithLogging (
+                "MainAcc_UpdateSubCat",
+                cmd =>
+                {
+                    cmd.Parameters.AddWithValue("@AccID", accID);
+                    cmd.Parameters.AddWithValue("@AccName", accName);
+                },
+                expectMessageOutput: true
+            );
+
+            return resultMessage.StartsWith("تم");
+        }
+
+        public static bool MainAcc_DeleteCatogryOrAcc(
+           int accID,
+           out string resultMessage)
+        {
+            resultMessage = dbHelper.ExecuteNonQueryWithLogging(
+                "MainAcc_DeleteCatogryOrAcc",
+                cmd =>
+                {
+                    cmd.Parameters.AddWithValue("@AccID", accID);
+                },
+                expectMessageOutput: true
+            );
+
+            return resultMessage.StartsWith("تم");
+        }
+
+        #endregion
+
+        #region ############# frmReport_Preview ##################
+
+        // جلب القيم الافتراضية لتقارير الشاشة (بدون معاملات)
+        public static DataTable GenralData_GetDefRepData()//@@@
+        {
+            return dbHelper.ExecuteSelectQuery("GenralData_GetDefRepData", command => { }) ?? new DataTable();
+        }
+
+        // جلب تاريخ بداية الحسابات (بدون معاملات)
+        public static DataTable GenralData_GetStartAccountsDate()
+        {
+            return dbHelper.ExecuteSelectQuery("GenralData_GetStartAccountsDate", command => { }) ?? new DataTable();
+        }
+
+        #endregion
+
+        #region *****************  Programer ****************
+        /*وازر فى الفورم 
+                private void btnDelete_Click(object sender, EventArgs e)
+        {
+            // تحقق أن هناك تقرير محدد
+            if (selectedReportID <= 0)
+            {
+                MessageBox.Show("الرجاء اختيار تقرير لحذفه.", "تنبيه",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // رسالة تأكيد قبل الحذف
+            DialogResult confirm = MessageBox.Show(
+                "هل أنت متأكد أنك تريد حذف هذا التقرير؟",
+                "تأكيد الحذف",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (confirm != DialogResult.Yes)
+                return;
+
+            // تنفيذ الحذف
+            string msg;
+            bool success = DBServiecs.ReportsMaster_Delete(selectedReportID, out msg);
+
+            // عرض النتيجة
+            MessageBox.Show(msg, "نتيجة العملية",
+                            MessageBoxButtons.OK,
+                            success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
+
+            if (success)
+            {
+                // إعادة تحميل التقارير للقائمة الحالية
+                if (cbxID_TopAcc.SelectedValue != null && int.TryParse(cbxID_TopAcc.SelectedValue.ToString(), out int idTopAcc))
+                {
+                    LoadReports(idTopAcc);
+                }
+
+                // مسح الحقول بعد الحذف
+                btnNew_Click(null, null);
+            }
+        }
+
+        وهذه الدالة فى كلاس DBServiecs
+*/
+        //
+        public static string ReportsMaster_Delete(int ReportID)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("ReportsMaster_Delete", command =>
+            {
+                command.Parameters.Add("@ReportID", SqlDbType.Int).Value = ReportID;
+            }, expectMessageOutput: true);
+        }
+
+        /*
+         الدالة فى كلاس dbHelper
+               public static string ExecuteNonQueryWithLogging(
+            string procedureName,
+            Action<SqlCommand> setParams,
+            string? logProcedureName = null,
+            Action<SqlCommand>? logParams = null,
+            bool expectMessageOutput = false)
+        {
+            try
+            {
+                EnsureConnectionOpen();
+                string result = "تم التنفيذ.";
+
+                using (SqlCommand cmd = CreateCommand(procedureName))
+                {
+                    if (expectMessageOutput)
+                    {
+                        var msgParam = new SqlParameter("@Message", SqlDbType.NVarChar, 500)
+                        {
+                            Direction = ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(msgParam);
+                    }
+
+                    setParams?.Invoke(cmd);
+                    cmd.ExecuteNonQuery();
+
+                    if (expectMessageOutput)
+                        result = cmd.Parameters["@Message"].Value?.ToString() ?? result;
+                }
+
+                if (!string.IsNullOrEmpty(logProcedureName) && logParams != null)
+                {
+                    using (SqlCommand logCmd = CreateCommand(logProcedureName))
+                    {
+                        logParams(logCmd);
+                        logCmd.ExecuteNonQuery();
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("خطأ أثناء التنفيذ: " + ex.Message);
+                return "فشل في التنفيذ.";
+            }
+            finally
+            {
+                EnsureConnectionClosed();
+            }
+        }
+
+        وهذا هو الاجراء
+        USE [MizanOriginalDB]
+GO
+
+-- إنشاء الإجراء
+alter PROCEDURE [dbo].[ReportsMaster_Delete]
+    @ReportID INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- التحقق إذا كان السجل موجود
+    IF EXISTS (SELECT 1 FROM [dbo].[ReportsMaster] WHERE ReportID = @ReportID)
+    BEGIN
+        DELETE FROM [dbo].[ReportsMaster]
+        WHERE ReportID = @ReportID;
+
+        PRINT 'تم حذف التقرير بنجاح.';
+    END
+    ELSE
+    BEGIN
+        PRINT 'لم يتم العثور على التقرير المطلوب.';
+    END
+END
+GO
+
+
+
+        فكيف يكون التنسيق السليم دون التغيير فى الدى بى هلبر 
+         */
+
+        //
+        public static DataTable Reports_GetByTopAcc(int ID_TopAcc)//@@@
+        {
+            string query = "Reports_GetByTopAcc";
+            return dbHelper.ExecuteSelectQuery(query, cmd =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@ID_TopAcc", SqlDbType.Int) { Value = ID_TopAcc });
+            }) ?? new DataTable();
         }
 
 
 
+        public static bool ReportsMaster_Save(
+            int ReportID,
+            string ReportDisplayName,
+            int ID_TopAcc,
+            string ReportCodeName,
+            bool IsGrouped,
+            int ParentID,
+            string Notes,
+            bool IsActivRep,
+            out string resultMessage)
+        {
+            resultMessage = dbHelper.ExecuteNonQueryWithLogging(
+                "ReportsMaster_Save",
+                cmd =>
+                {
+                    cmd.Parameters.AddWithValue("@ReportID", ReportID);
+                    cmd.Parameters.AddWithValue("@ReportDisplayName", ReportDisplayName);
+                    cmd.Parameters.AddWithValue("@ID_TopAcc", ID_TopAcc);
+                    cmd.Parameters.AddWithValue("@ReportCodeName", ReportCodeName);
+                    cmd.Parameters.AddWithValue("@IsGrouped", IsGrouped);
+                    cmd.Parameters.AddWithValue("@ParentID", ParentID);
+                    cmd.Parameters.AddWithValue("@Notes", Notes);
+                    cmd.Parameters.AddWithValue("@IsActivRep", IsActivRep);
+                },
+                expectMessageOutput: true // مهم
+            );
 
-        /*وهذه بدون رسالة بالدالة الجديدة*/
+            return resultMessage.StartsWith("تم");
+        }
 
-
-
-
-
-
-        //public static bool NewInvoice_InsertDetails(
-        //int accID,
-        //int? parentAccID,
-        //string accName,
-        //out string resultMessage)
-        //{
-        //    resultMessage = dbHelper.ExecuteNonQueryWithLogging(
-        //        "NewInvoice_InsertDetails",
-        //        cmd =>
-        //        {
-        //            cmd.Parameters.AddWithValue("@AccID", accID);
-        //            cmd.Parameters.AddWithValue("@ParentAccID", parentAccID ?? (object)DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@AccName", accName);
-        //        },
-        //        expectMessageOutput: true
-        //    );
-
-        //    // اعتبر أن النجاح إذا الرسالة تبدأ بـ "تم"
-        //    return resultMessage.StartsWith("تم");
-        //}
-
-        ////تنظيف الفواتير الفارغة
-        //public static bool NewInvoice_DeleteEmptyInvoicesOnExit()
-        //{
-        //    try
-        //    {
-        //        dbHelper.ExecuteNonQueryNoParamsWithMessage("NewInvoice_DeleteEmptyInvoicesOnExit");
-        //        return true;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return false;
-        //    }
-        //}
-
-
-
-
-
-
-
-
-
-
-
-        /*كيف يكون ضبط هذه على الدالة الجديدة بدون رسائل*/
         #endregion
+
+        #region @@@@@@@ CashTransaction Table @@@@@
+
+        // جلب الحسابات الرئيسية على شكل شجرة
+        public static DataTable? MainAcc_GetTopAccountTree()
+        {
+            // ترجع DataTable أو null إذا حدث خطأ
+            return dbHelper.ExecuteSelectQuery("MainAcc_GetTopAccountTree");
+        }
+
+        // جلب السندات حسب النوع (تحصيل، دفع، تسوية...)
+        public static DataTable? CashTransactions_GetBillByType(int operationTypeID)
+        {
+            return dbHelper.ExecuteSelectQuery(
+                "CashTransactions_GetBillByType",
+                cmd => cmd.Parameters.Add("@OperationType_ID", SqlDbType.Int).Value = operationTypeID
+            );
+        }
+
+        // إدراج أو تعديل سند تحصيل / دفع / تسوية
+        public static bool CashTransactions_InsertOrUpdate(
+            int transactionID,
+            string voucherNumber,
+            DateTime? transactionDate,
+            int? operationTypeID,
+            int? accountID,
+            int? accBox,             // رقم الصندوق أو الحساب النقدي (اختياري)
+            float? amount,
+            int? paymentMethodID,
+            string? descriptionNote, // يمكن أن يكون null
+            int? createdByUsID,
+            string? saveTransaction, // يمكن أن يكون null
+            out string resultMessage // رسالة ناتجة من الإجراء المخزن
+        )
+        {
+            resultMessage = string.Empty; // تهيئة لمنع التحذير
+
+            SqlParameter outputMessage = new SqlParameter("@ResultMessage", SqlDbType.NVarChar, 100)
+            {
+                Direction = ParameterDirection.Output
+            };
+
+            resultMessage = dbHelper.ExecuteStoredProcedureWithOutputMessage(
+                "CashTransactions_InsertOrUpdate",
+                cmd =>
+                {
+                    cmd.Parameters.AddWithValue("@TransactionID", transactionID);
+                    cmd.Parameters.AddWithValue("@VoucherNumber", voucherNumber);
+                    cmd.Parameters.AddWithValue("@TransactionDate", transactionDate ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@OperationType_ID", operationTypeID ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@AccountID", accountID ?? (object)DBNull.Value);
+
+                    // تصحيح شرط التحقق من النوع 8 أو 9 مع التأكد من وجود accBox
+                    cmd.Parameters.AddWithValue("@AccBox",
+                        ((operationTypeID == 8 || operationTypeID == 9) && accBox.HasValue)
+                        ? (object)accBox.Value
+                        : DBNull.Value
+                    );
+
+                    cmd.Parameters.AddWithValue("@Amount", amount ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@PaymentMethodID", paymentMethodID ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DescriptionNote",
+                        string.IsNullOrWhiteSpace(descriptionNote) ? (object)DBNull.Value : descriptionNote
+                    );
+                    cmd.Parameters.AddWithValue("@CreatedByUsID", createdByUsID ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@SaveTransaction", saveTransaction ?? string.Empty);
+
+                    cmd.Parameters.Add(outputMessage);
+                },
+                outputMessageSize: 100
+            );
+
+            if (outputMessage.Value != DBNull.Value && outputMessage.Value != null)
+                resultMessage = outputMessage.Value.ToString() ?? string.Empty;
+
+            return !string.IsNullOrEmpty(resultMessage);
+        }
+
+        // جلب رقم جديد للسند
+        public static string CashTransactions_GetNewVoucherNumber(int operationTypeID)
+        {
+            DataTable? dt = dbHelper.ExecuteSelectQuery(
+                "CashTransactions_GetNewVoucherNumber",
+                cmd => cmd.Parameters.AddWithValue("@OperationType_ID", operationTypeID)
+            );
+
+            if (dt != null && dt.Rows.Count > 0)
+                return dt.Rows[0]["NewVoucherNumber"]?.ToString() ?? string.Empty;
+            else
+                return string.Empty;
+        }
+
+        // جلب رقم المعاملة التالي
+        public static int CashTransactions_GetNextTransactionID()
+        {
+            DataTable? dt = dbHelper.ExecuteSelectQuery("CashTransactions_GetNextTransactionID");
+
+            if (dt != null && dt.Rows.Count > 0 && int.TryParse(dt.Rows[0]["NextTransactionID"]?.ToString(), out int nextID))
+                return nextID;
+            else
+                return 1; // في حال عدم وجود بيانات
+        }
+
+        #endregion
+
 
     }
 }

@@ -1,20 +1,21 @@
 ﻿using System;
+using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
-using System.Windows.Forms;
 using ZXing;
 using ZXing.Common;
 
 namespace MizanOriginalSoft.MainClasses.OriginalClasses
 {
-    public static class BarcodeGenerator
+    public class BarcodeGenerator
     {
-        private static Image? _barcodeImage; // الآن يمكن أن تكون null بشكل صريح
-
-        // توليد الباركود فقط
-        public static Image Generate(string code, int width = 300, int height = 100, int margin = 2)
+        public Image? BarcodeImage { get; private set; }
+        public Image Generate(string code, int width, int height, int margin)
         {
+            if (string.IsNullOrWhiteSpace(code))
+                throw new ArgumentException("قيمة الباركود فارغة أو غير صالحة.", nameof(code));
+
             var writer = new BarcodeWriterPixelData
             {
                 Format = BarcodeFormat.CODE_128,
@@ -27,7 +28,7 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             };
 
             var pixelData = writer.Write(code);
-            using Bitmap bitmap = new Bitmap(pixelData.Width, pixelData.Height, PixelFormat.Format32bppRgb);
+            using var bitmap = new Bitmap(pixelData.Width, pixelData.Height, PixelFormat.Format32bppRgb);
             var bitmapData = bitmap.LockBits(new Rectangle(0, 0, pixelData.Width, pixelData.Height),
                                              ImageLockMode.WriteOnly, PixelFormat.Format32bppRgb);
 
@@ -40,48 +41,43 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
                 bitmap.UnlockBits(bitmapData);
             }
 
-            _barcodeImage = (Image)bitmap.Clone();
-            return _barcodeImage;
+            BarcodeImage = (Image)bitmap.Clone();
+            return BarcodeImage;
         }
 
-        // حفظ الباركود كـ PNG
-        public static void SaveAsPng(string filePath)
+        public void PrintBarcodes(DataTable data, PrinterSettings settings, Rectangle drawArea)
         {
-            if (_barcodeImage != null)
+            if (data == null || data.Rows.Count == 0)
+                throw new InvalidOperationException("لا توجد بيانات للطباعة.");
+
+            int index = 0;
+            PrintDocument pd = new PrintDocument
             {
-                _barcodeImage.Save(filePath, ImageFormat.Png);
-            }
-            else
-            {
-                throw new InvalidOperationException("لم يتم إنشاء باركود لحفظه.");
-            }
-        }
-
-        // طباعة الباركود مباشرة
-        public static void Print()
-        {
-            if (_barcodeImage == null)
-                throw new InvalidOperationException("لم يتم إنشاء باركود للطباعة.");
-
-            Image imageToPrint = _barcodeImage;
-
-            using PrintDocument pd = new PrintDocument();
-
-            pd.PrintPage += delegate (object sender, PrintPageEventArgs e)
-            {
-                e.Graphics!.DrawImage(imageToPrint, new Point(100, 100));
+                PrinterSettings = settings
             };
 
-            using PrintDialog printDialog = new PrintDialog
+            pd.PrintPage += (s, ev) =>
             {
-                Document = pd
+                if (ev.Graphics == null)
+                    return; // تأمين إضافي
+
+                string? codeValue = data.Rows[index]["Barcode"]?.ToString();
+
+                if (!string.IsNullOrWhiteSpace(codeValue))
+                {
+                    Image? img = Generate(codeValue, drawArea.Width, drawArea.Height, 2);
+                    if (img != null)
+                    {
+                        ev.Graphics.DrawImage(img, drawArea);
+                    }
+                }
+
+                index++;
+                ev.HasMorePages = (index < data.Rows.Count);
             };
 
-            if (printDialog.ShowDialog() == DialogResult.OK)
-            {
-                pd.Print();
-            }
-        }
 
+            pd.Print();
+        }
     }
 }

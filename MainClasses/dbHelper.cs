@@ -284,6 +284,7 @@ namespace MizanOriginalSoft.MainClasses
             catch (Exception ex)
             {
                 MessageBox.Show("خطأ أثناء جلب البيانات: " + ex.Message);
+                
                 return null;
             }
             finally
