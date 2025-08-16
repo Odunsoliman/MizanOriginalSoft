@@ -40,7 +40,7 @@
             lblMessage.ForeColor = Color.FromArgb(128, 128, 255);
             lblMessage.Location = new Point(0, 0);
             lblMessage.Name = "lblMessage";
-            lblMessage.Size = new Size(474, 162);
+            lblMessage.Size = new Size(415, 122);
             lblMessage.TabIndex = 0;
             lblMessage.Text = "label1";
             lblMessage.TextAlign = ContentAlignment.MiddleCenter;
@@ -48,18 +48,20 @@
             // progressBar1
             // 
             progressBar1.Dock = DockStyle.Bottom;
-            progressBar1.Location = new Point(0, 133);
+            progressBar1.Location = new Point(0, 100);
+            progressBar1.Margin = new Padding(3, 2, 3, 2);
             progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(474, 29);
+            progressBar1.Size = new Size(415, 22);
             progressBar1.TabIndex = 1;
             // 
             // frmLoading
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(474, 162);
+            ClientSize = new Size(415, 122);
             Controls.Add(progressBar1);
             Controls.Add(lblMessage);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "frmLoading";
             Text = "frmLoading";
             ResumeLayout(false);

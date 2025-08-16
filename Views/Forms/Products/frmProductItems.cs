@@ -375,13 +375,91 @@ namespace MizanOriginalSoft.Views.Forms.Products
             ClearSearch(); if (tlpAdvanceSearch.Visible == true) tlpAdvanceSearch.Visible = false;
         }
 
-        //تحميل شجرة التصنيفات  ###
+
         private void LoadTreeAndSelectSpecificNode(int selectedID = 0)
+        {
+            // تحميل البيانات
+            DataTable dt = DBServiecs.Categories_GetAll() ?? new DataTable();
+
+            // تأكد أننا على الـ UI thread
+            if (treeViewCategories.InvokeRequired)
+            {
+                treeViewCategories.Invoke(new Action(() => BuildTree(dt, selectedID)));
+            }
+            else
+            {
+                BuildTree(dt, selectedID);
+            }
+        }
+
+        // دالة خاصة لبناء الشجرة
+        private void BuildTree(DataTable dt, int selectedID)
+        {
+            treeViewCategories.BeginUpdate();
+            treeViewCategories.Nodes.Clear();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                if (row["ParentID"] == DBNull.Value || Convert.ToInt32(row["ParentID"]) == 0)
+                {
+                    TreeNode parentNode = new TreeNode(row["CategoryName"].ToString())
+                    {
+                        Tag = Convert.ToInt32(row["CategoryID"])
+                    };
+                    treeViewCategories.Nodes.Add(parentNode);
+                    AddChildNodes(dt, parentNode);
+                }
+            }
+
+            treeViewCategories.CollapseAll(); // إغلاق الشجرة بعد التحميل
+
+            if (selectedID > 0)
+                SelectNodeById(treeViewCategories.Nodes, selectedID);
+
+            treeViewCategories.EndUpdate();
+        }
+
+        // دالة إضافة الفروع
+        private void AddChildNodes(DataTable dt, TreeNode parentNode)
+        {
+            foreach (DataRow row in dt.Rows)
+            {
+                if (row["ParentID"] != DBNull.Value && Convert.ToInt32(row["ParentID"]) == (int)parentNode.Tag)
+                {
+                    TreeNode childNode = new TreeNode(row["CategoryName"].ToString())
+                    {
+                        Tag = Convert.ToInt32(row["CategoryID"])
+                    };
+                    parentNode.Nodes.Add(childNode);
+                    AddChildNodes(dt, childNode);
+                }
+            }
+        }
+
+        // دالة البحث عن نود وتحديده
+        private void SelectNodeById(TreeNodeCollection nodes, int categoryId)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if ((int)node.Tag == categoryId)
+                {
+                    treeViewCategories.SelectedNode = node;
+                    node.EnsureVisible();
+                    node.Expand();
+                    return;
+                }
+                SelectNodeById(node.Nodes, categoryId);
+            }
+        }
+
+        //تحميل شجرة التصنيفات  ###
+        private void LoadTreeAndSelectSpecificNode_(int selectedID = 0)
         {
             tblTree = DBServiecs.Categories_GetAll();
 
             treeViewCategories.Nodes.Clear();
-
+            /*System.InvalidOperationException: 'Cross-thread operation not valid: Control 'treeViewCategories' accessed from a thread other than the thread it was created on.'
+*/
             DataTable dt = tblTree ?? new DataTable();
 
             foreach (DataRow row in dt.Rows)
@@ -400,7 +478,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
         //تحميل الفروع داخل الشجرة  ###
-        private void AddChildNodes(DataTable dt, TreeNode parentNode)
+        private void AddChildNodes_(DataTable dt, TreeNode parentNode)
         {
             int parentId = Convert.ToInt32(parentNode.Tag);
             foreach (DataRow row in dt.Select($"ParentID = {parentId}"))
@@ -412,7 +490,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
         // وظيفة اختيار عقدة بواسطة رقم المعرف
-        private void SelectNodeById(TreeNodeCollection nodes, int id)
+        private void SelectNodeById_(TreeNodeCollection nodes, int id)
         {
             foreach (TreeNode node in nodes)
             {
@@ -538,11 +616,9 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
 
-        private void btnIncludeToCategory_Click(object sender, EventArgs e)
-        {
-        }
 
-        private void toolStripChangeCat_Click(object sender, EventArgs e)
+
+        private async void toolStripChangeCat_Click(object sender, EventArgs e)
         {
             if (DGV.SelectedRows.Count == 0)
             {
@@ -566,29 +642,53 @@ namespace MizanOriginalSoft.Views.Forms.Products
             {
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
-                    // إعادة تحميل البيانات
-                    LoadProducts();
-                    LoadTreeAndSelectSpecificNode();
-                    txtSeaarchProd_TextChanged(this, EventArgs.Empty);
-
-                    // البحث عن المنتج بعد التحديث وتحديده
-                    foreach (DataGridViewRow row in DGV.Rows)
-                    {
-                        if (Convert.ToInt32(row.Cells["ID_Product"].Value) == currentProductId)
-                        {
-                            DGV.ClearSelection();
-                            row.Selected = true;
-                            DGV.CurrentCell = row.Cells["ProductCode"]; // أي عمود ظاهر
-
-                            // نخلي الصف يظهر في النص أو قريب من النص
-                            DGV.FirstDisplayedScrollingRowIndex = Math.Max(0, row.Index - 2);
-
-                            break;
-                        }
-                    }
+                    // 👇 هنا نستعمل شاشة التحميل ونمرر currentProductId
+                    await wateToLaof(currentProductId);
                 }
             }
         }
+
+        private async Task wateToLaof(int currentProductId)
+        {
+            frmLoading loadingForm = new frmLoading("⏳ يرجى الانتظار...");
+
+            // فتح شاشة التحميل في Thread منفصل
+            Task loadingTask = Task.Run(() =>
+            {
+                loadingForm.ShowDialog();
+            });
+
+            // العملية الثقيلة (تحديث الجريد + تحميل)
+            await Task.Run(() =>
+            {
+                LoadProducts();
+                LoadTreeAndSelectSpecificNode();
+                txtSeaarchProd_TextChanged(this, EventArgs.Empty);
+            });
+
+            // إغلاق شاشة الانتظار
+            if (loadingForm.InvokeRequired)
+                loadingForm.Invoke(new Action(() => loadingForm.Close()));
+            else
+                loadingForm.Close();
+
+            await loadingTask; // التأكد من الإغلاق
+
+            // 👇 بعد التحديث نعيد تحديد الصف الحالي
+            foreach (DataGridViewRow row in DGV.Rows)
+            {
+                if (Convert.ToInt32(row.Cells["ID_Product"].Value) == currentProductId)
+                {
+                    DGV.ClearSelection();
+                    row.Selected = true;
+                    DGV.CurrentCell = row.Cells["ProductCode"]; // أي عمود ظاهر
+                    DGV.FirstDisplayedScrollingRowIndex = Math.Max(0, row.Index - 2);
+                    break;
+                }
+            }
+        }
+
+
         // بدء عملية السحب
         private void treeViewCategories_ItemDrag(object? sender, ItemDragEventArgs e)
         {
@@ -741,13 +841,36 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
         #region ========= DGV =================
 
-
-
         private void BindProductDataToDGV()
         {
+            if (DGV.InvokeRequired)
+            {
+                DGV.Invoke(new Action(BindProductDataToDGV));
+                return;
+            }
+
             if (_tblProd != null && _tblProd.Rows.Count > 0)
             {
                 DGV.DataSource = _tblProd;
+            }
+            else
+            {
+                DGV.DataSource = null;
+            }
+
+            UpdateCount();
+            ApplyDGVStyles();
+        }
+
+
+        private void BindProductDataToDGV_()
+        {
+            if (_tblProd != null && _tblProd.Rows.Count > 0)
+            {
+                DGV.DataSource = _tblProd;/*ظهرت مشكلة فى هذه الدالة
+                                           System.InvalidOperationException: 'Cross-thread operation not valid: Control '' accessed from a thread other than the thread it was created on.'
+
+                                           */
             }
             else
             {
