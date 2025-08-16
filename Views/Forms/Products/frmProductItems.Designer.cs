@@ -67,6 +67,8 @@
             lblNoteProduct = new Label();
             pnlMenuContainer = new Panel();
             DGV = new DataGridView();
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            toolStripChangeCat = new ToolStripMenuItem();
             tableLayoutPanel16 = new TableLayoutPanel();
             lblRegist_Year = new Label();
             lblID_Product = new Label();
@@ -125,8 +127,6 @@
             tableLayoutPanel3 = new TableLayoutPanel();
             btnHelp = new Button();
             tmr_MainReports = new System.Windows.Forms.Timer(components);
-            contextMenuStrip1 = new ContextMenuStrip(components);
-            toolStripChangeCat = new ToolStripMenuItem();
             tableL_ayoutPanel1.SuspendLayout();
             panelDetails.SuspendLayout();
             panelList.SuspendLayout();
@@ -140,6 +140,7 @@
             tableLayoutPanel15.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
+            contextMenuStrip1.SuspendLayout();
             tableLayoutPanel16.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)PicBarcod).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picProd).BeginInit();
@@ -156,7 +157,6 @@
             tableLayoutPanel11.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
-            contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // tableL_ayoutPanel1
@@ -718,6 +718,20 @@
             DGV.TabIndex = 29;
             DGV.RowPrePaint += DGV_RowPrePaint;
             DGV.SelectionChanged += DGV_SelectionChanged;
+            // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { toolStripChangeCat });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.RightToLeft = RightToLeft.Yes;
+            contextMenuStrip1.Size = new Size(148, 26);
+            // 
+            // toolStripChangeCat
+            // 
+            toolStripChangeCat.Name = "toolStripChangeCat";
+            toolStripChangeCat.Size = new Size(147, 22);
+            toolStripChangeCat.Text = "تغيير التصنيف ";
+            toolStripChangeCat.Click += toolStripChangeCat_Click;
             // 
             // tableLayoutPanel16
             // 
@@ -1583,20 +1597,6 @@
             // 
             tmr_MainReports.Interval = 10;
             // 
-            // contextMenuStrip1
-            // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { toolStripChangeCat });
-            contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.RightToLeft = RightToLeft.Yes;
-            contextMenuStrip1.Size = new Size(148, 26);
-            // 
-            // toolStripChangeCat
-            // 
-            toolStripChangeCat.Name = "toolStripChangeCat";
-            toolStripChangeCat.Size = new Size(147, 22);
-            toolStripChangeCat.Text = "تغيير التصنيف ";
-            toolStripChangeCat.Click += toolStripChangeCat_Click;
-            // 
             // frmProductItems
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1627,6 +1627,7 @@
             tableLayoutPanel4.ResumeLayout(false);
             tableLayoutPanel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)DGV).EndInit();
+            contextMenuStrip1.ResumeLayout(false);
             tableLayoutPanel16.ResumeLayout(false);
             tableLayoutPanel16.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)PicBarcod).EndInit();
@@ -1646,7 +1647,6 @@
             tableLayoutPanel11.PerformLayout();
             tableLayoutPanel6.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
-            contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
 
         }

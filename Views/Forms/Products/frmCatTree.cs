@@ -20,7 +20,85 @@ namespace MizanOriginalSoft.Views.Forms.Products
         private void frmCatTree_Load(object sender, EventArgs e)
         {
             LoadTreeAndSelectSpecificNode();
+            /*
+             اريد بعد التحميل اغلاق الشجرة ولا تكون ممتدة
+             */
         }
+
+        #region ********** Search Tree Node ***********
+        private List<TreeNode> matchedNodes = new List<TreeNode>();
+        private int currentMatchIndex = -1;
+        private void txtSearchTree_TextChanged(object sender, EventArgs e)
+        {
+            string searchText = txtSearchTree.Text.Trim().ToLower();
+
+            matchedNodes.Clear();
+            currentMatchIndex = -1;
+
+            // إعادة تعيين الألوان وإغلاق كل الفروع
+            ResetNodeColorsAndCollapse(treeViewCategories.Nodes);
+
+            if (string.IsNullOrEmpty(searchText))
+                return;
+
+            // البحث وتلوين النتائج وفتح الفروع التي تحتوي نتائج
+            SearchAndHighlightNodes(treeViewCategories.Nodes, searchText);
+
+            // اختيار أول نتيجة
+            if (matchedNodes.Count > 0)
+            {
+                currentMatchIndex = 0;
+                var node = matchedNodes[0];
+                treeViewCategories.SelectedNode = node;
+                node.EnsureVisible();
+            }
+        }
+        private void ResetNodeColorsAndCollapse(TreeNodeCollection nodes)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                node.BackColor = treeViewCategories.BackColor;
+                node.ForeColor = treeViewCategories.ForeColor;
+                node.Collapse(); // إغلاق الفروع
+
+                if (node.Nodes.Count > 0)
+                    ResetNodeColorsAndCollapse(node.Nodes);
+            }
+        }
+
+        private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Text.ToLower().Contains(searchText))
+                {
+                    node.BackColor = Color.Yellow;
+                    node.ForeColor = Color.Black;
+                    matchedNodes.Add(node);
+
+                    // فتح العقدة الأصلية
+                    ExpandParentNodes(node);
+                }
+
+                if (node.Nodes.Count > 0)
+                {
+                    SearchAndHighlightNodes(node.Nodes, searchText);
+                }
+            }
+        }
+
+        private void ExpandParentNodes(TreeNode node)
+        {
+            TreeNode? parent = node.Parent;
+            while (parent != null)
+            {
+                parent.Expand();
+                parent = parent.Parent;
+            }
+        }
+
+        #endregion 
+
 
         private void treeViewCategories_AfterSelect(object sender, TreeViewEventArgs e)
         {
