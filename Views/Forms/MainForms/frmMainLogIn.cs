@@ -538,11 +538,35 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
 
             CloseAllFormsExceptMain();
-            int idUser = Convert.ToInt32(lblUserID.Text);
-            frmProductItems frm = new frmProductItems(idUser);
+            frmProductsSetting frm = new frmProductsSetting();
             OpenFormInPanel(frm);
         }
+        /*
+         * المفتاح السابق هو من يفتح الشاشة المعنية ولاحظت ان فى بداية فتح الشاشة يكون بها فراغ فى الاعلا بسيط ثن يزداد كلما نقرت على عقدة كلى الشجرة
+         * 
+         * فهل نظام هذا الفتح له تأثير
+         *        private void CloseAllFormsExceptMain()
+        {
+            foreach (Form openForm in Application.OpenForms.Cast<Form>().ToList())
+            {
+                if (openForm != this)
+                    openForm.Close();
+            }
+        }
 
+                 private void OpenFormInPanel(Form frm)
+        {
+            if (panelContainer.Controls.Count > 0)
+                panelContainer.Controls.RemoveAt(0);
+
+            frm.TopLevel = false;
+            frm.FormBorderStyle = FormBorderStyle.None;
+            frm.Dock = DockStyle.Fill;
+            panelContainer.Controls.Add(frm);
+            panelContainer.Tag = frm;
+            frm.Show();
+        }
+         */
         //الاعدادات - الاعدادات العامة
         private void btnGenralData_Click(object? sender, EventArgs e)
         {

@@ -314,7 +314,7 @@
             pnlSetting.MinimumSize = new Size(0, 34);
             pnlSetting.Name = "pnlSetting";
             pnlSetting.Padding = new Padding(3, 2, 3, 2);
-            pnlSetting.Size = new Size(134, 34);
+            pnlSetting.Size = new Size(134, 183);
             pnlSetting.TabIndex = 1;
             // 
             // pnlAccounts
@@ -334,7 +334,7 @@
             pnlAccounts.Controls.Add(btnCustomers);
             pnlAccounts.Controls.Add(btn_Accounts);
             pnlAccounts.Dock = DockStyle.Top;
-            pnlAccounts.Location = new Point(3, 65);
+            pnlAccounts.Location = new Point(3, 154);
             pnlAccounts.Margin = new Padding(3, 2, 3, 2);
             pnlAccounts.MaximumSize = new Size(0, 308);
             pnlAccounts.MinimumSize = new Size(0, 34);
@@ -372,7 +372,7 @@
             pnlMoreSetting.MinimumSize = new Size(0, 34);
             pnlMoreSetting.Name = "pnlMoreSetting";
             pnlMoreSetting.Padding = new Padding(3, 2, 3, 2);
-            pnlMoreSetting.Size = new Size(128, 34);
+            pnlMoreSetting.Size = new Size(128, 123);
             pnlMoreSetting.TabIndex = 5;
             // 
             // btnGenralData
@@ -720,7 +720,7 @@
             pnlMovement.Controls.Add(btnSales);
             pnlMovement.Controls.Add(btn_MainMove);
             pnlMovement.Dock = DockStyle.Top;
-            pnlMovement.Location = new Point(0, 34);
+            pnlMovement.Location = new Point(0, 183);
             pnlMovement.Margin = new Padding(3, 2, 3, 2);
             pnlMovement.MaximumSize = new Size(0, 338);
             pnlMovement.MinimumSize = new Size(0, 34);
@@ -813,7 +813,7 @@
             pnlReports.Controls.Add(DGV);
             pnlReports.Controls.Add(btn_MainReports);
             pnlReports.Dock = DockStyle.Top;
-            pnlReports.Location = new Point(0, 343);
+            pnlReports.Location = new Point(0, 492);
             pnlReports.Margin = new Padding(3, 2, 3, 2);
             pnlReports.MaximumSize = new Size(0, 400);
             pnlReports.MinimumSize = new Size(0, 34);
@@ -904,7 +904,7 @@
             pnlBills.Controls.Add(btnCashOut);
             pnlBills.Controls.Add(btn_MainBill);
             pnlBills.Dock = DockStyle.Top;
-            pnlBills.Location = new Point(0, 68);
+            pnlBills.Location = new Point(0, 217);
             pnlBills.Margin = new Padding(3, 2, 3, 2);
             pnlBills.MaximumSize = new Size(0, 338);
             pnlBills.MinimumSize = new Size(0, 34);

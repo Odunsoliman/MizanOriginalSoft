@@ -40,7 +40,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
         private int currentMatchIndex = -1;
 
         #endregion
-        //Non-nullable field 'menuStrip1' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the field as nullable.
         public frmProductItems(int idUser)
         {
             InitializeComponent();
@@ -2144,40 +2143,32 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
         // الحدث الذي يتم تنفيذه عند تحديد عقدة في شجرة التصنيفات
-        // الحدث الذي يتم تنفيذه عند تحديد عقدة في شجرة التصنيفات
         private void treeViewCategories_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            // 🔍 نخزن ارتفاع الفورم قبل أي تغييرات
-            int beforeH = this.Height;
+            // نحتفظ بالأطوال قبل التنفيذ
+            Dictionary<string, int> beforeHeights = GetPanelsHeights(this);
 
             try
             {
-                // إعادة تعيين البحث وعرض الفلاتر
+                // الكود الأصلي عندك كما هو ...
                 ClearSearch();
                 tlpAdvanceSearch.Visible = false;
 
-                // الحصول على العقدة المحددة
                 TreeNode selectedNode = e?.Node ?? treeViewCategories.SelectedNode;
-
-                // التأكد من صحة العقدة
                 if (selectedNode == null)
                 {
                     SetCategoryDisplay(string.Empty);
                     return;
                 }
 
-                // تحديث اسم التصنيف الظاهر
                 SetCategoryDisplay(selectedNode.Text);
 
-                // إذا كان خيار التصفية غير مفعل أو لا يوجد معرف في العقدة، الخروج
                 if (!chkTreeEnable.Checked || selectedNode.Tag == null)
                     return;
 
-                // تحويل القيمة المرتبطة بالعقدة إلى رقم
                 if (!int.TryParse(selectedNode.Tag.ToString(), out int selectedCategoryId))
                     return;
 
-                // في حالة اختيار "الكل"
                 if (selectedCategoryId == 1)
                 {
                     LoadAllProducts();
@@ -2185,17 +2176,13 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 }
                 else
                 {
-                    // اختيار نوع التصفية بناءً على الاختيار
                     if (rdoByNode.Checked)
                         FilterProductsByCategory(selectedCategoryId);
                     else if (rdoByNodeAndHisChild.Checked)
                         FilterProductsByCategoryAndHisChild(selectedNode);
                 }
 
-                // تحديث عدد النتائج
                 UpdateCount();
-
-                // حفظ العقدة المحددة
                 lastSelectedNode = selectedNode;
             }
             catch (Exception ex)
@@ -2203,12 +2190,37 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 MessageBox.Show("حدث خطأ أثناء تصفية التصنيفات: " + ex.Message);
             }
 
-            // 🔍 بعد التنفيذ نقارن
-            int afterH = this.Height;
-            if (beforeH != afterH)
+            // نحتفظ بالأطوال بعد التنفيذ ونقارن
+            Dictionary<string, int> afterHeights = GetPanelsHeights(this);
+
+            foreach (var kvp in afterHeights)
             {
-                MessageBox.Show($"⚠ حجم الفورم اتغير: قبل = {beforeH}, بعد = {afterH}");
+                if (beforeHeights.ContainsKey(kvp.Key) && beforeHeights[kvp.Key] != kvp.Value)
+                {
+                    MessageBox.Show($"⚠ الكنترول {kvp.Key} تغيّر ارتفاعه: قبل = {beforeHeights[kvp.Key]}, بعد = {kvp.Value}");
+                }
             }
+        }
+
+        private Dictionary<string, int> GetPanelsHeights(Control parent)
+        {
+            Dictionary<string, int> result = new Dictionary<string, int>();
+            foreach (Control ctrl in parent.Controls)
+            {
+                if (ctrl is Panel || ctrl is TableLayoutPanel || ctrl is FlowLayoutPanel)
+                {
+                    result[ctrl.Name] = ctrl.Height;
+                }
+
+                if (ctrl.HasChildren)
+                {
+                    foreach (var kvp in GetPanelsHeights(ctrl))
+                    {
+                        result[kvp.Key] = kvp.Value;
+                    }
+                }
+            }
+            return result;
         }
 
 
