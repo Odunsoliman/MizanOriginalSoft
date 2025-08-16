@@ -159,7 +159,7 @@
             // 
             // tableL_ayoutPanel1
             // 
-            tableL_ayoutPanel1.BackColor = Color.FromArgb(235, 255, 235);
+            tableL_ayoutPanel1.BackColor = Color.FromArgb(192, 192, 255);
             tableL_ayoutPanel1.ColumnCount = 1;
             tableL_ayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableL_ayoutPanel1.Controls.Add(panelDetails, 0, 1);
