@@ -66,7 +66,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             LoadProducts();
             ApplyColorTheme();
             isFormLoaded = true;
-      //      SetupMenuStrip();//خاصة بقوائم التقارير
+            SetupMenuStrip();//خاصة بقوائم التقارير
        //     LoadReports(200);//خاصة بقوائم التقارير
             DGV.ClearSelection();
 
