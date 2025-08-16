@@ -2143,7 +2143,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
         // الحدث الذي يتم تنفيذه عند تحديد عقدة في شجرة التصنيفات
-        private void treeViewCategories_AfterSelect(object sender, TreeViewEventArgs e)
+        private void treeViewCategories_AfterSelect_(object sender, TreeViewEventArgs e)
         {
             // نحتفظ بالأطوال قبل التنفيذ
             Dictionary<string, int> beforeHeights = GetPanelsHeights(this);
@@ -2224,7 +2224,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
 
-        private void treeViewCategories_AfterSelect_(object sender, TreeViewEventArgs e)
+        private void treeViewCategories_AfterSelect(object sender, TreeViewEventArgs e)
         {
             Console.WriteLine("Before: " + this.Height);
 
