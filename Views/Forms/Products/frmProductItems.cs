@@ -2143,96 +2143,16 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
         // الحدث الذي يتم تنفيذه عند تحديد عقدة في شجرة التصنيفات
-        private void treeViewCategories_AfterSelect_(object sender, TreeViewEventArgs e)
-        {
-            // نحتفظ بالأطوال قبل التنفيذ
-            Dictionary<string, int> beforeHeights = GetPanelsHeights(this);
-
-            try
-            {
-                // الكود الأصلي عندك كما هو ...
-                ClearSearch();
-                tlpAdvanceSearch.Visible = false;
-
-                TreeNode selectedNode = e?.Node ?? treeViewCategories.SelectedNode;
-                if (selectedNode == null)
-                {
-                    SetCategoryDisplay(string.Empty);
-                    return;
-                }
-
-                SetCategoryDisplay(selectedNode.Text);
-
-                if (!chkTreeEnable.Checked || selectedNode.Tag == null)
-                    return;
-
-                if (!int.TryParse(selectedNode.Tag.ToString(), out int selectedCategoryId))
-                    return;
-
-                if (selectedCategoryId == 1)
-                {
-                    LoadAllProducts();
-                    SetCategoryDisplay("الكل");
-                }
-                else
-                {
-                    if (rdoByNode.Checked)
-                        FilterProductsByCategory(selectedCategoryId);
-                    else if (rdoByNodeAndHisChild.Checked)
-                        FilterProductsByCategoryAndHisChild(selectedNode);
-                }
-
-                UpdateCount();
-                lastSelectedNode = selectedNode;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("حدث خطأ أثناء تصفية التصنيفات: " + ex.Message);
-            }
-
-            // نحتفظ بالأطوال بعد التنفيذ ونقارن
-            Dictionary<string, int> afterHeights = GetPanelsHeights(this);
-
-            foreach (var kvp in afterHeights)
-            {
-                if (beforeHeights.ContainsKey(kvp.Key) && beforeHeights[kvp.Key] != kvp.Value)
-                {
-                    MessageBox.Show($"⚠ الكنترول {kvp.Key} تغيّر ارتفاعه: قبل = {beforeHeights[kvp.Key]}, بعد = {kvp.Value}");
-                }
-            }
-        }
-
-        private Dictionary<string, int> GetPanelsHeights(Control parent)
-        {
-            Dictionary<string, int> result = new Dictionary<string, int>();
-            foreach (Control ctrl in parent.Controls)
-            {
-                if (ctrl is Panel || ctrl is TableLayoutPanel || ctrl is FlowLayoutPanel)
-                {
-                    result[ctrl.Name] = ctrl.Height;
-                }
-
-                if (ctrl.HasChildren)
-                {
-                    foreach (var kvp in GetPanelsHeights(ctrl))
-                    {
-                        result[kvp.Key] = kvp.Value;
-                    }
-                }
-            }
-            return result;
-        }
-
+  
 
         private void treeViewCategories_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            Console.WriteLine("Before: " + this.Height);
 
             try
             {
                 // إعادة تعيين البحث وعرض الفلاتر
                 ClearSearch();
-        //        tlpAdvanceSearch.Visible = false;
+                tlpAdvanceSearch.Visible = false;
 
                 // الحصول على العقدة المحددة
                 TreeNode selectedNode = e?.Node ?? treeViewCategories.SelectedNode;
@@ -2280,7 +2200,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
             {
                 MessageBox.Show("حدث خطأ أثناء تصفية التصنيفات: " + ex.Message);
             }
-            Console.WriteLine("Before: " + this.Height);
 
         }
 
