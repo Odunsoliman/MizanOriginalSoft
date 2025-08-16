@@ -40,10 +40,10 @@ namespace MizanOriginalSoft.Views.Forms.Products
         private int currentMatchIndex = -1;
 
         #endregion
-        public frmProductItems(int idUser)
+        public frmProductItems()
         {
             InitializeComponent();
-            ID_user = idUser;
+            ID_user = CurrentSession .UserID ;
             SetupAutoCompleteSuppliers();
             SetupAutoCompleteCategories();
             FillUnits();
@@ -2294,7 +2294,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         // دالة مساعدة لتحميل كل المنتجات من جديد
         private void LoadAllProducts()
         {
-            frmProductItems_Load(this, EventArgs.Empty);
+      //      frmProductItems_Load(this, EventArgs.Empty);
 
         }
 

@@ -538,7 +538,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
 
             CloseAllFormsExceptMain();
-            frmProductsSetting frm = new frmProductsSetting();
+            frmProductItems frm = new frmProductItems();
             OpenFormInPanel(frm);
         }
         /*
