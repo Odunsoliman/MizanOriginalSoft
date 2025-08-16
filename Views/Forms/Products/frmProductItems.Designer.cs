@@ -704,6 +704,7 @@
             DGV.AllowUserToAddRows = false;
             DGV.AllowUserToDeleteRows = false;
             DGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            DGV.ContextMenuStrip = contextMenuStrip1;
             DGV.Dock = DockStyle.Fill;
             DGV.Location = new Point(4, 42);
             DGV.Margin = new Padding(4);
@@ -1587,12 +1588,12 @@
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { toolStripChangeCat });
             contextMenuStrip1.Name = "contextMenuStrip1";
             contextMenuStrip1.RightToLeft = RightToLeft.Yes;
-            contextMenuStrip1.Size = new Size(181, 48);
+            contextMenuStrip1.Size = new Size(148, 26);
             // 
             // toolStripChangeCat
             // 
             toolStripChangeCat.Name = "toolStripChangeCat";
-            toolStripChangeCat.Size = new Size(180, 22);
+            toolStripChangeCat.Size = new Size(147, 22);
             toolStripChangeCat.Text = "تغيير التصنيف ";
             toolStripChangeCat.Click += toolStripChangeCat_Click;
             // 
