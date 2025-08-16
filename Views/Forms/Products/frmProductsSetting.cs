@@ -55,7 +55,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
         private void frmProductsSetting_Load(object sender, EventArgs e)
         {
-            LoadTreeAndSelectSpecificNode();
+    //        LoadTreeAndSelectSpecificNode();
 
             treeViewCategories.AllowDrop = true; // مهم جداً لتفعيل الإفلات
             treeViewCategories.ItemDrag += treeViewCategories_ItemDrag;

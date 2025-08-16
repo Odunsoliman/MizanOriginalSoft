@@ -811,7 +811,7 @@
             tabPage2.Location = new Point(4, 28);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(942, 549);
+            tabPage2.Size = new Size(942, 563);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "اضافة صنف جديد";
             tabPage2.UseVisualStyleBackColor = true;
@@ -828,7 +828,7 @@
             tlpNewProduct.Name = "tlpNewProduct";
             tlpNewProduct.RowCount = 1;
             tlpNewProduct.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tlpNewProduct.Size = new Size(936, 543);
+            tlpNewProduct.Size = new Size(936, 557);
             tlpNewProduct.TabIndex = 13;
             // 
             // tableLayoutPanel12
@@ -849,7 +849,7 @@
             tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 11F));
             tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 11F));
-            tableLayoutPanel12.Size = new Size(462, 537);
+            tableLayoutPanel12.Size = new Size(462, 551);
             tableLayoutPanel12.TabIndex = 13;
             // 
             // tableLayoutPanel10
@@ -859,12 +859,12 @@
             tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel10.Controls.Add(btnLoadPicProduct, 0, 0);
             tableLayoutPanel10.Dock = DockStyle.Fill;
-            tableLayoutPanel10.Location = new Point(23, 354);
+            tableLayoutPanel10.Location = new Point(23, 364);
             tableLayoutPanel10.Name = "tableLayoutPanel10";
             tableLayoutPanel10.Padding = new Padding(9, 0, 9, 0);
             tableLayoutPanel10.RowCount = 1;
             tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel10.Size = new Size(416, 45);
+            tableLayoutPanel10.Size = new Size(416, 47);
             tableLayoutPanel10.TabIndex = 42;
             // 
             // btnLoadPicProduct
@@ -873,7 +873,7 @@
             btnLoadPicProduct.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
             btnLoadPicProduct.Location = new Point(12, 3);
             btnLoadPicProduct.Name = "btnLoadPicProduct";
-            btnLoadPicProduct.Size = new Size(392, 39);
+            btnLoadPicProduct.Size = new Size(392, 41);
             btnLoadPicProduct.TabIndex = 4;
             btnLoadPicProduct.Text = "صورة المنتج";
             btnLoadPicProduct.UseVisualStyleBackColor = true;
@@ -885,12 +885,12 @@
             tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel14.Controls.Add(PicProduct, 0, 0);
             tableLayoutPanel14.Dock = DockStyle.Fill;
-            tableLayoutPanel14.Location = new Point(23, 44);
+            tableLayoutPanel14.Location = new Point(23, 45);
             tableLayoutPanel14.Name = "tableLayoutPanel14";
             tableLayoutPanel14.Padding = new Padding(50, 9, 50, 9);
             tableLayoutPanel14.RowCount = 1;
             tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel14.Size = new Size(416, 304);
+            tableLayoutPanel14.Size = new Size(416, 313);
             tableLayoutPanel14.TabIndex = 4;
             // 
             // PicProduct
@@ -900,7 +900,7 @@
             PicProduct.Dock = DockStyle.Fill;
             PicProduct.Location = new Point(53, 12);
             PicProduct.Name = "PicProduct";
-            PicProduct.Size = new Size(310, 280);
+            PicProduct.Size = new Size(310, 289);
             PicProduct.SizeMode = PictureBoxSizeMode.Zoom;
             PicProduct.TabIndex = 4;
             PicProduct.TabStop = false;
@@ -911,7 +911,7 @@
             lblPathProductPic.Dock = DockStyle.Top;
             lblPathProductPic.Font = new Font("Times New Roman", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblPathProductPic.ForeColor = Color.DarkBlue;
-            lblPathProductPic.Location = new Point(24, 402);
+            lblPathProductPic.Location = new Point(24, 414);
             lblPathProductPic.Margin = new Padding(4, 0, 4, 0);
             lblPathProductPic.Name = "lblPathProductPic";
             lblPathProductPic.Size = new Size(414, 22);
@@ -925,7 +925,7 @@
             btnSave.Dock = DockStyle.Top;
             btnSave.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSave.ForeColor = Color.FromArgb(0, 0, 192);
-            btnSave.Location = new Point(24, 462);
+            btnSave.Location = new Point(24, 476);
             btnSave.Margin = new Padding(4);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(414, 31);
@@ -947,7 +947,7 @@
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 8F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 92F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
-            tableLayoutPanel2.Size = new Size(462, 537);
+            tableLayoutPanel2.Size = new Size(462, 551);
             tableLayoutPanel2.TabIndex = 12;
             // 
             // tableLayoutPanel7
@@ -964,7 +964,7 @@
             tableLayoutPanel7.Name = "tableLayoutPanel7";
             tableLayoutPanel7.RowCount = 1;
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel7.Size = new Size(456, 36);
+            tableLayoutPanel7.Size = new Size(456, 38);
             tableLayoutPanel7.TabIndex = 44;
             // 
             // lblID_NweProduct
@@ -1026,7 +1026,7 @@
             tableLayoutPanel13.Controls.Add(txtU_Price, 1, 6);
             tableLayoutPanel13.Controls.Add(tableLayoutPanel17, 1, 4);
             tableLayoutPanel13.Dock = DockStyle.Top;
-            tableLayoutPanel13.Location = new Point(3, 45);
+            tableLayoutPanel13.Location = new Point(3, 47);
             tableLayoutPanel13.Name = "tableLayoutPanel13";
             tableLayoutPanel13.Padding = new Padding(0, 0, 5, 0);
             tableLayoutPanel13.RowCount = 13;
