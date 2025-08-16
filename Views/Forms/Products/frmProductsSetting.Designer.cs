@@ -278,6 +278,7 @@
             treeViewCategories.RightToLeftLayout = true;
             treeViewCategories.Size = new Size(144, 384);
             treeViewCategories.TabIndex = 4;
+            treeViewCategories.AfterSelect += treeViewCategories_AfterSelect;
             // 
             // txtSearchTree
             // 
