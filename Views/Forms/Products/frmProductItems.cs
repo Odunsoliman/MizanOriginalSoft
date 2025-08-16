@@ -540,47 +540,31 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
         private void btnIncludeToCategory_Click(object sender, EventArgs e)
         {
-            if (treeViewCategories.SelectedNode == null)
-            {
-                MessageBox.Show("الرجاء تحديد تصنيف من الشجرة أولاً.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             if (DGV.SelectedRows.Count == 0)
             {
                 MessageBox.Show("الرجاء تحديد صنف واحد على الأقل من الجدول.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var confirm = MessageBox.Show("هل تريد تضمين الأصناف المحددة إلى التصنيف المحدد؟", "تأكيد", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (confirm != DialogResult.Yes)
-                return;
+            DataTable dtProducts = new DataTable();
+            dtProducts.Columns.Add("ID_Product", typeof(int));
 
-            int selectedCategoryId = Convert.ToInt32(treeViewCategories.SelectedNode.Tag);
-
-            // إنشاء أو تهيئة DataTable
-            if (dtProducts == null)
-                dtProducts = new DataTable();
-            else
-                dtProducts.Clear();
-
-            if (!dtProducts.Columns.Contains("ID_Product"))
-                dtProducts.Columns.Add("ID_Product", typeof(int));
-
-            // إضافة المنتجات المحددة
             foreach (DataGridViewRow row in DGV.SelectedRows)
             {
                 int productId = Convert.ToInt32(row.Cells["ID_Product"].Value);
                 dtProducts.Rows.Add(productId);
             }
 
-            // استدعاء التحديث
-            DBServiecs.Product_UpdateCategory(dtProducts, selectedCategoryId, ID_user);
-
-            // تحديث العرض
-            LoadProducts();
-            LoadTreeAndSelectSpecificNode();
-            txtSeaarchProd_TextChanged(this, EventArgs.Empty);
+            using (frmCatTree frm = new frmCatTree(dtProducts))
+            {
+                if (frm.ShowDialog() == DialogResult.OK) // هنا نتحقق إذا تم الحفظ
+                {
+                    // إعادة تحميل البيانات أو التحديث
+                    LoadProducts();
+                    LoadTreeAndSelectSpecificNode();
+                    txtSeaarchProd_TextChanged(this, EventArgs.Empty);
+                }
+            }
         }
 
         // بدء عملية السحب
