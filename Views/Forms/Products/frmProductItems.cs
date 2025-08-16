@@ -2125,7 +2125,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             {
                 // إعادة تعيين البحث وعرض الفلاتر
                 ClearSearch();
-                tlpAdvanceSearch.Visible = false;
+        //        tlpAdvanceSearch.Visible = false;
 
                 // الحصول على العقدة المحددة
                 TreeNode selectedNode = e?.Node ?? treeViewCategories.SelectedNode;
