@@ -1494,7 +1494,6 @@
             // 
             // lblTitle
             // 
-            lblTitle.AutoSize = true;
             lblTitle.BackColor = Color.Transparent;
             lblTitle.Dock = DockStyle.Fill;
             lblTitle.Font = new Font("Times New Roman", 26F, FontStyle.Bold, GraphicsUnit.Point, 0);
