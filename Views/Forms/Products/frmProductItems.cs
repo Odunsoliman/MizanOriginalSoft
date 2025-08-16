@@ -550,6 +550,9 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 return;
             }
 
+            // حفظ المنتج الحالي (أول صف محدد فقط)
+            int currentProductId = Convert.ToInt32(DGV.SelectedRows[0].Cells["ID_Product"].Value);
+
             DataTable dtProducts = new DataTable();
             dtProducts.Columns.Add("ID_Product", typeof(int));
 
@@ -561,15 +564,30 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
             using (frmCatTree frm = new frmCatTree(dtProducts))
             {
-                if (frm.ShowDialog() == DialogResult.OK) // هنا نتحقق إذا تم الحفظ
+                if (frm.ShowDialog() == DialogResult.OK)
                 {
-                    // إعادة تحميل البيانات أو التحديث
+                    // إعادة تحميل البيانات
                     LoadProducts();
                     LoadTreeAndSelectSpecificNode();
                     txtSeaarchProd_TextChanged(this, EventArgs.Empty);
+
+                    // البحث عن المنتج بعد التحديث وتحديده
+                    foreach (DataGridViewRow row in DGV.Rows)
+                    {
+                        if (Convert.ToInt32(row.Cells["ID_Product"].Value) == currentProductId)
+                        {
+                            DGV.ClearSelection();
+                            row.Selected = true;
+                            DGV.CurrentCell = row.Cells["ProductCode"]; // أي عمود ظاهر
+
+                            // نخلي الصف يظهر في النص أو قريب من النص
+                            DGV.FirstDisplayedScrollingRowIndex = Math.Max(0, row.Index - 2);
+
+                            break;
+                        }
+                    }
                 }
             }
-
         }
         // بدء عملية السحب
         private void treeViewCategories_ItemDrag(object? sender, ItemDragEventArgs e)
