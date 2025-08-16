@@ -1,4 +1,5 @@
-﻿using MizanOriginalSoft.MainClasses;
+﻿using Microsoft.Data.SqlClient;
+using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
 using MizanOriginalSoft.Views.Reports;
 using System;
@@ -66,14 +67,309 @@ namespace MizanOriginalSoft.Views.Forms.Products
             LoadProducts();
             ApplyColorTheme();
             isFormLoaded = true;
-   //         SetupMenuStrip();//خاصة بقوائم التقارير
+            SetupMenuStrip();// عند تعليق هذه الدالة يبدو فتح الشاشة طبيعى بدون تغيير وعند تفعيلها يتم ظهور فراغ اعلى الشاشة فهل تكون السبب
             LoadReports(200);//خاصة بقوائم التقارير
             DGV.ClearSelection();
 
-            // 🔍 هنا نستدعي الدالة اللي تبحث عن الـControls عندها AutoSize = true
-            CheckAutoSizeControls(this);
+            
+        }
+        // الحدث الذي يتم تنفيذه عند تحديد عقدة في شجرة التصنيفات
+        private void treeViewCategories_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            // نحتفظ بالأطوال قبل التنفيذ
+            Dictionary<string, int> beforeHeights = GetPanelsHeights(this);
+
+            try
+            {
+                // الكود الأصلي عندك كما هو ...
+                ClearSearch();
+                tlpAdvanceSearch.Visible = false;
+
+                TreeNode selectedNode = e?.Node ?? treeViewCategories.SelectedNode;
+                if (selectedNode == null)
+                {
+                    SetCategoryDisplay(string.Empty);
+                    return;
+                }
+
+                SetCategoryDisplay(selectedNode.Text);
+
+                if (!int.TryParse(selectedNode.Tag.ToString(), out int selectedCategoryId))
+                    return;
+
+                if (selectedCategoryId == 1)
+                {
+                    LoadAllProducts();
+                    SetCategoryDisplay("الكل");
+                }
+                else
+                {
+                    if (rdoByNode.Checked)
+                        FilterProductsByCategory(selectedCategoryId);
+                    else if (rdoByNodeAndHisChild.Checked)
+                        FilterProductsByCategoryAndHisChild(selectedNode);
+                }
+
+                UpdateCount();
+                lastSelectedNode = selectedNode;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ أثناء تصفية التصنيفات: " + ex.Message);
+            }
+
+            // نحتفظ بالأطوال بعد التنفيذ ونقارن
+            Dictionary<string, int> afterHeights = GetPanelsHeights(this);
+
+            foreach (var kvp in afterHeights)
+            {
+                if (beforeHeights.ContainsKey(kvp.Key) && beforeHeights[kvp.Key] != kvp.Value)
+                {
+                    MessageBox.Show($"⚠ الكنترول {kvp.Key} تغيّر ارتفاعه: قبل = {beforeHeights[kvp.Key]}, بعد = {kvp.Value}");
+                }
+            }
+        }
+
+        private Dictionary<string, int> GetPanelsHeights(Control parent)
+        {
+            Dictionary<string, int> result = new Dictionary<string, int>();
+            foreach (Control ctrl in parent.Controls)
+            {
+                if (ctrl is Panel || ctrl is TableLayoutPanel || ctrl is FlowLayoutPanel)
+                {
+                    result[ctrl.Name] = ctrl.Height;
+                }
+
+                if (ctrl.HasChildren)
+                {
+                    foreach (var kvp in GetPanelsHeights(ctrl))
+                    {
+                        result[kvp.Key] = kvp.Value;
+                    }
+                }
+            }
+            return result;
+        }
+
+        private void ClearSearch()
+        {
+            txtSeaarchProd.Text = string.Empty;
+            txtSeaarchProdPrice.Text = string.Empty;
+            txtFromCode.Text = string.Empty;
+            txtToCode.Text = string.Empty;
+            txtCategories.Text = string.Empty;
+            txtSuppliers.Text = string.Empty;
+
+            // إعادة تحميل البيانات الأصلية بدون تصفية
+            if (_tblProd != null)
+            {
+                DGV.DataSource = _tblProd;
+                tblModify = _tblProd.Copy();
+            }
+            else
+            {
+                // إذا كانت _tblProd غير مهيأة، عيّن DataSource إلى null و tblModify إلى جدول فارغ
+                DGV.DataSource = null;
+                tblModify = new DataTable();
+            }
+
+            UpdateCount();
+        }
+
+        // دالة مساعدة لتحديث اسم التصنيف الظاهر في الواجهة
+        private void SetCategoryDisplay(string categoryName)
+        {
+            lblSelectedTreeNod.Text = categoryName;
+            txtCategory.Text = categoryName;
+        }
+        private void LoadAllProducts()
+        {
+         //   frmProductItems_Load(this, EventArgs.Empty);
 
         }
+
+        // فلترة الأصناف حسب التصنيف فقط ###
+        private void FilterProductsByCategory(int categoryId)
+        {
+            DataTable allProducts = _tblProd ?? new DataTable();
+            if (allProducts.Rows.Count == 0)
+            {
+                DGV.DataSource = null;
+                return;
+            }
+
+            var filtered = allProducts.AsEnumerable()
+                .Where(r => (r.Field<int?>("Category_id") ?? 0) == categoryId);
+
+            DGV.DataSource = filtered.Any() ? filtered.CopyToDataTable() : null;
+            ApplyDGVStyles();
+        }
+
+        // فلترة الأصناف حسب التصنيف وجميع أبنائه ###
+        private void FilterProductsByCategoryAndHisChild(TreeNode parentNode)
+        {
+            DataTable allProducts = _tblProd ?? new DataTable();
+            if (allProducts.Rows.Count == 0 || parentNode == null)
+            {
+                DGV.DataSource = null;
+                return;
+            }
+
+            List<int> categoryIds = new List<int>();
+
+            void CollectCategoryIds(TreeNode node)
+            {
+                if (node?.Tag != null && int.TryParse(node.Tag.ToString(), out int id))
+                {
+                    categoryIds.Add(id);
+                    foreach (TreeNode child in node.Nodes)
+                        CollectCategoryIds(child);
+                }
+            }
+
+            CollectCategoryIds(parentNode);
+
+            var filtered = allProducts.AsEnumerable()
+                .Where(r => categoryIds.Contains(r.Field<int?>("Category_id") ?? 0));
+
+            DGV.DataSource = filtered.Any() ? filtered.CopyToDataTable() : null;
+            ApplyDGVStyles();
+        }
+
+
+        #region ######### إعداد قوائم التقارير بناءً على ReportsMaster ########
+
+        /// <summary>
+        /// إنشاء شريط القوائم داخل Panel
+        /// </summary>
+        /// 
+        private MenuStrip? menuStrip1;
+
+        private void SetupMenuStrip()
+        {
+            menuStrip1 = new MenuStrip();
+            this.Controls.Add(menuStrip1);
+            MenuStrip mainMenu = new MenuStrip
+            {
+                Dock = DockStyle.Fill,
+                BackColor = Color.LightSteelBlue,
+                Font = new Font("Times New Roman", 14, FontStyle.Regular)
+            };
+
+            tsmiCategoryReports = new ToolStripMenuItem("تقارير الصنف المحدد ▼");
+            tsmiGroupedReports = new ToolStripMenuItem("تقارير مجمعة للأصناف المحددة ▼");
+
+            mainMenu.Items.Add(tsmiCategoryReports);
+            mainMenu.Items.Add(tsmiGroupedReports);
+
+            pnlMenuContainer.Controls.Add(mainMenu);
+            mainMenu.Location = new Point(10, 5);
+
+        }
+
+
+        /// <summary>
+        /// تحميل القوائم بناءً على الحساب الممرر
+        /// </summary>
+        private void LoadReports(int topAcc)
+        {
+            try
+            {
+                DataTable dt = DBServiecs.Reports_GetByTopAcc(topAcc);
+
+                // تقارير فردية
+                DataRow[] singleReports = dt.Select("IsGrouped = 0");
+                LoadMenuItems(tsmiCategoryReports, singleReports);
+
+                // تقارير مجمعة
+                DataRow[] groupedReports = dt.Select("IsGrouped = 1");
+                LoadMenuItems(tsmiGroupedReports, groupedReports);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("خطأ أثناء تحميل التقارير: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// تعبئة القائمة بعناصر من DataRow[]
+        /// </summary>
+        /// 
+        private void LoadMenuItems(ToolStripMenuItem parentMenu, DataRow[] rows)
+        {
+            parentMenu.DropDownItems.Clear();
+
+            if (rows.Length == 0)
+            {
+                ToolStripMenuItem emptyItem = new("لا توجد تقارير متاحة") { Enabled = false };
+                parentMenu.DropDownItems.Add(emptyItem);
+                return;
+            }
+
+            foreach (DataRow row in rows)
+            {
+                string displayName = row["ReportDisplayName"]?.ToString() ?? "تقرير بدون اسم";
+                string codeName = row["ReportCodeName"]?.ToString() ?? "";
+                int reportId = Convert.ToInt32(row["ReportID"]);
+
+                // تجهيز القاموس من البداية
+                Dictionary<string, object> tagData = new()
+        {
+            { "ReportCodeName", codeName },
+            { "ReportDisplayName", displayName },
+            { "ReportID", reportId },
+            { "IsGrouped", Convert.ToBoolean(row["IsGrouped"]) }
+        };
+
+                ToolStripMenuItem menuItem = new(displayName)
+                {
+                    Tag = tagData
+                };
+                menuItem.Click += ReportMenuItem_Click;
+
+                parentMenu.DropDownItems.Add(menuItem);
+            }
+        }
+
+        /// <summary>
+        /// حدث النقر على أي تقرير
+        /// </summary>
+        private void ReportMenuItem_Click(object? sender, EventArgs e)
+        {
+            if (sender is not ToolStripMenuItem clickedItem || clickedItem.Tag is not Dictionary<string, object> tagData)
+            {
+                MessageBox.Show("بيانات التقرير غير صحيحة.");
+                return;
+            }
+
+            try
+            {
+                // نسخة من البيانات الأساسية
+                Dictionary<string, object> reportParameters = new(tagData)
+        {
+            { "UserID", ID_user }
+        };
+
+                bool isGrouped = Convert.ToBoolean(tagData["IsGrouped"]);
+
+                if (isGrouped)
+                {
+                    reportParameters["FilteredData"] = GetFilteredData();
+                }
+                else
+                {
+                    reportParameters["EntityID"] = GetCurrentEntityID() ?? (object)DBNull.Value;
+                }
+
+                using frmSettingReports previewForm = new frmSettingReports(reportParameters);
+                previewForm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"حدث خطأ أثناء فتح التقرير: {ex.Message}");
+            }
+        }
+        #endregion
 
 
         #region ========= SetupAutoComplete and Fill =================
@@ -559,201 +855,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
         #endregion
 
         #endregion
-        #region ######### إعداد قوائم التقارير بناءً على ReportsMaster ########
-
-        /// <summary>
-        /// إنشاء شريط القوائم داخل Panel
-        /// </summary>
-        /// 
-        private MenuStrip? menuStrip1;
-
-        private void SetupMenuStrip()
-        {
-            menuStrip1 = new MenuStrip();
-            this.Controls.Add(menuStrip1);
-            MenuStrip mainMenu = new MenuStrip
-            {
-                Dock = DockStyle.Fill,
-                BackColor = Color.LightSteelBlue,
-                Font = new Font("Times New Roman", 14, FontStyle.Regular)
-            };
-
-            tsmiCategoryReports = new ToolStripMenuItem("تقارير الصنف المحدد ▼");
-            tsmiGroupedReports = new ToolStripMenuItem("تقارير مجمعة للأصناف المحددة ▼");
-
-            mainMenu.Items.Add(tsmiCategoryReports);
-            mainMenu.Items.Add(tsmiGroupedReports);
-
-            pnlMenuContainer.Controls.Add(mainMenu);
-            mainMenu.Location = new Point(10, 5);
-
-        }
-
-
-        /// <summary>
-        /// تحميل القوائم بناءً على الحساب الممرر
-        /// </summary>
-        private void LoadReports(int topAcc)
-        {
-            try
-            {
-                DataTable dt = DBServiecs.Reports_GetByTopAcc(topAcc);
-
-                // تقارير فردية
-                DataRow[] singleReports = dt.Select("IsGrouped = 0");
-                LoadMenuItems(tsmiCategoryReports, singleReports);
-
-                // تقارير مجمعة
-                DataRow[] groupedReports = dt.Select("IsGrouped = 1");
-                LoadMenuItems(tsmiGroupedReports, groupedReports);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("خطأ أثناء تحميل التقارير: " + ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// تعبئة القائمة بعناصر من DataRow[]
-        /// </summary>
-        /// 
-        private void LoadMenuItems(ToolStripMenuItem parentMenu, DataRow[] rows)
-        {
-            parentMenu.DropDownItems.Clear();
-
-            if (rows.Length == 0)
-            {
-                ToolStripMenuItem emptyItem = new("لا توجد تقارير متاحة") { Enabled = false };
-                parentMenu.DropDownItems.Add(emptyItem);
-                return;
-            }
-
-            foreach (DataRow row in rows)
-            {
-                string displayName = row["ReportDisplayName"]?.ToString() ?? "تقرير بدون اسم";
-                string codeName = row["ReportCodeName"]?.ToString() ?? "";
-                int reportId = Convert.ToInt32(row["ReportID"]);
-
-                // تجهيز القاموس من البداية
-                Dictionary<string, object> tagData = new()
-        {
-            { "ReportCodeName", codeName },
-            { "ReportDisplayName", displayName },
-            { "ReportID", reportId },
-            { "IsGrouped", Convert.ToBoolean(row["IsGrouped"]) }
-        };
-
-                ToolStripMenuItem menuItem = new(displayName)
-                {
-                    Tag = tagData
-                };
-                menuItem.Click += ReportMenuItem_Click;
-
-                parentMenu.DropDownItems.Add(menuItem);
-            }
-        }
-
-        private void LoadMenuItems_(ToolStripMenuItem parentMenu, DataRow[] rows)
-        {
-            parentMenu.DropDownItems.Clear();
-
-            if (rows.Length == 0)
-            {
-                ToolStripMenuItem emptyItem = new("لا توجد تقارير متاحة") { Enabled = false };
-                parentMenu.DropDownItems.Add(emptyItem);
-                return;
-            }
-
-            foreach (DataRow row in rows)
-            {
-                string displayName = row["ReportDisplayName"]?.ToString() ?? "تقرير بدون اسم";
-                string codeName = row["ReportCodeName"]?.ToString() ?? "";
-
-                ToolStripMenuItem menuItem = new(displayName)
-                {
-                    Tag = codeName
-                };
-                menuItem.Click += ReportMenuItem_Click;
-
-                parentMenu.DropDownItems.Add(menuItem);
-            }
-        }
-
-        /// <summary>
-        /// حدث النقر على أي تقرير
-        /// </summary>
-        private void ReportMenuItem_Click(object? sender, EventArgs e)
-        {
-            if (sender is not ToolStripMenuItem clickedItem || clickedItem.Tag is not Dictionary<string, object> tagData)
-            {
-                MessageBox.Show("بيانات التقرير غير صحيحة.");
-                return;
-            }
-
-            try
-            {
-                // نسخة من البيانات الأساسية
-                Dictionary<string, object> reportParameters = new(tagData)
-        {
-            { "UserID", ID_user }
-        };
-
-                bool isGrouped = Convert.ToBoolean(tagData["IsGrouped"]);
-
-                if (isGrouped)
-                {
-                    reportParameters["FilteredData"] = GetFilteredData();
-                }
-                else
-                {
-                    reportParameters["EntityID"] = GetCurrentEntityID() ?? (object)DBNull.Value;
-                }
-
-                using frmSettingReports previewForm = new frmSettingReports(reportParameters);
-                previewForm.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"حدث خطأ أثناء فتح التقرير: {ex.Message}");
-            }
-        }
-
-        private void ReportMenuItem_Click_(object? sender, EventArgs e)
-        {
-            /*هنا فى شاشة الاصناف توجد تقارير خاصة بصنف واخرى لمجموعة اصناف محددة فكيف يتم التعديل*/
-            if (sender is not ToolStripMenuItem clickedItem || clickedItem.Tag is null)
-            {
-                MessageBox.Show("بيانات التقرير غير صحيحة.");
-                return;
-            }
-
-            string reportCodeName = clickedItem.Tag.ToString() ?? "";
-            if (string.IsNullOrEmpty(reportCodeName))
-            {
-                MessageBox.Show("لا يوجد اسم كود للتقرير.");
-                return;
-            }
-
-            try
-            {
-                // تجهيز البيانات لتمريرها لشاشة المعاينة
-                Dictionary<string, object> reportParameters = new()
-        {
-            { "ReportCodeName", reportCodeName },
-            { "UserID", ID_user },
-            { "EntityID", GetCurrentEntityID() ?? (object)DBNull.Value },
-            { "FilteredData", GetFilteredData() }
-        };
-
-                using frmSettingReports previewForm = new frmSettingReports(reportParameters);
-                previewForm.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"حدث خطأ أثناء فتح التقرير: {ex.Message}");
-            }
-        }
-
         /// <summary>
         /// جلب كود الصنف الحالي
         /// </summary>
@@ -813,27 +914,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
             return result;
         }
-        // 🔍 دالة فحص AutoSize
-        private void CheckAutoSizeControls(Control parent)
-        {
-            foreach (Control ctrl in parent.Controls)
-            {
-                if (ctrl is Panel || ctrl is TableLayoutPanel || ctrl is FlowLayoutPanel)
-                {
-                    if (ctrl.AutoSize)
-                    {
-                        MessageBox.Show($"⚠ {ctrl.Name} عنده AutoSize = true");
-                    }
-                }
-
-                // لو فيه عناصر داخلية (Nested) نفحصها برضه
-                if (ctrl.HasChildren)
-                {
-                    CheckAutoSizeControls(ctrl);
-                }
-            }
-        }
-
+        
         private bool ContainsNode(TreeNode parent, TreeNode child)
         {
             if (child.Parent == null) return false;
@@ -856,7 +937,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             PicBarcod.Image = barcodeImage;
         }
 
-        #endregion
+
 
 
     }
