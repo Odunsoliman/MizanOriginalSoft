@@ -43,7 +43,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         public frmProductItems()
         {
             InitializeComponent();
-            ID_user = CurrentSession .UserID ;
+            ID_user = CurrentSession.UserID;
             SetupAutoCompleteSuppliers();
             SetupAutoCompleteCategories();
             FillUnits();
@@ -540,6 +540,10 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
         private void btnIncludeToCategory_Click(object sender, EventArgs e)
         {
+        }
+
+        private void toolStripChangeCat_Click(object sender, EventArgs e)
+        {
             if (DGV.SelectedRows.Count == 0)
             {
                 MessageBox.Show("الرجاء تحديد صنف واحد على الأقل من الجدول.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -565,8 +569,8 @@ namespace MizanOriginalSoft.Views.Forms.Products
                     txtSeaarchProd_TextChanged(this, EventArgs.Empty);
                 }
             }
-        }
 
+        }
         // بدء عملية السحب
         private void treeViewCategories_ItemDrag(object? sender, ItemDragEventArgs e)
         {
@@ -1218,7 +1222,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 lblID_Product.Text = idValue?.ToString() ?? string.Empty;
                 lblProductCode.Text = codeValue?.ToString()?.Trim() ?? string.Empty;
                 lblRegist_Year.Text = registYear?.ToString() ?? string.Empty;
-                lblNoteProduct.Text= noteProd?.ToString() ?? string.Empty;
+                lblNoteProduct.Text = noteProd?.ToString() ?? string.Empty;
 
                 // تحميل الصورة إن وجدت
                 if (imagePath != null)
@@ -1643,7 +1647,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             mainMenu.Location = new Point(10, 5);
 
         }
- 
+
 
         /// <summary>
         /// تحميل القوائم بناءً على الحساب الممرر
@@ -2127,7 +2131,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
         // الحدث الذي يتم تنفيذه عند تحديد عقدة في شجرة التصنيفات
-  
+
 
         private void treeViewCategories_AfterSelect(object sender, TreeViewEventArgs e)
         {
@@ -2198,7 +2202,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         private void LoadAllProducts()
         {
             LoadProducts();
-      //      frmProductItems_Load(this, EventArgs.Empty);
+            //      frmProductItems_Load(this, EventArgs.Empty);
 
         }
 
@@ -2650,7 +2654,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 viewer.ShowDialog();
             }
         }
-
 
     }
 }

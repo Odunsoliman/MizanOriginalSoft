@@ -41,7 +41,6 @@
             AddRootCategory = new ToolStripMenuItem();
             EditCategory = new ToolStripMenuItem();
             DeleteCategory = new ToolStripMenuItem();
-            IncludeToCategory = new ToolStripMenuItem();
             txtSearchTree = new TextBox();
             rdoByNode = new RadioButton();
             tabControl1 = new TabControl();
@@ -126,6 +125,8 @@
             tableLayoutPanel3 = new TableLayoutPanel();
             btnHelp = new Button();
             tmr_MainReports = new System.Windows.Forms.Timer(components);
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            toolStripChangeCat = new ToolStripMenuItem();
             tableL_ayoutPanel1.SuspendLayout();
             panelDetails.SuspendLayout();
             panelList.SuspendLayout();
@@ -155,6 +156,7 @@
             tableLayoutPanel11.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
+            contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // tableL_ayoutPanel1
@@ -300,38 +302,31 @@
             // contextMenuStripTV
             // 
             contextMenuStripTV.ImageScalingSize = new Size(20, 20);
-            contextMenuStripTV.Items.AddRange(new ToolStripItem[] { AddRootCategory, EditCategory, DeleteCategory, IncludeToCategory });
+            contextMenuStripTV.Items.AddRange(new ToolStripItem[] { AddRootCategory, EditCategory, DeleteCategory });
             contextMenuStripTV.Name = "contextMenuStripTV";
             contextMenuStripTV.RightToLeft = RightToLeft.Yes;
-            contextMenuStripTV.Size = new Size(226, 92);
+            contextMenuStripTV.Size = new Size(150, 70);
             // 
             // AddRootCategory
             // 
             AddRootCategory.Name = "AddRootCategory";
-            AddRootCategory.Size = new Size(225, 22);
+            AddRootCategory.Size = new Size(149, 22);
             AddRootCategory.Text = "إضافة تصنيف ";
             AddRootCategory.Click += AddRootCategory_Click;
             // 
             // EditCategory
             // 
             EditCategory.Name = "EditCategory";
-            EditCategory.Size = new Size(225, 22);
+            EditCategory.Size = new Size(149, 22);
             EditCategory.Text = "تعديل التصنيف";
             EditCategory.Click += btnEditCategory_Click;
             // 
             // DeleteCategory
             // 
             DeleteCategory.Name = "DeleteCategory";
-            DeleteCategory.Size = new Size(225, 22);
+            DeleteCategory.Size = new Size(149, 22);
             DeleteCategory.Text = "حذف التصنيف";
             DeleteCategory.Click += btnDeleteCategory_Click;
-            // 
-            // IncludeToCategory
-            // 
-            IncludeToCategory.Name = "IncludeToCategory";
-            IncludeToCategory.Size = new Size(225, 22);
-            IncludeToCategory.Text = "نقل الاصناف المحددة للتصنيف";
-            IncludeToCategory.Click += btnIncludeToCategory_Click;
             // 
             // txtSearchTree
             // 
@@ -1587,6 +1582,20 @@
             // 
             tmr_MainReports.Interval = 10;
             // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { toolStripChangeCat });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.RightToLeft = RightToLeft.Yes;
+            contextMenuStrip1.Size = new Size(181, 48);
+            // 
+            // toolStripChangeCat
+            // 
+            toolStripChangeCat.Name = "toolStripChangeCat";
+            toolStripChangeCat.Size = new Size(180, 22);
+            toolStripChangeCat.Text = "تغيير التصنيف ";
+            toolStripChangeCat.Click += toolStripChangeCat_Click;
+            // 
             // frmProductItems
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1636,6 +1645,7 @@
             tableLayoutPanel11.PerformLayout();
             tableLayoutPanel6.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
+            contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
 
         }
@@ -1661,7 +1671,6 @@
         private System.Windows.Forms.TextBox txtSeaarchProd;
         private System.Windows.Forms.DataGridView DGV;
         private System.Windows.Forms.CheckBox chkTreeEnable;
-        private System.Windows.Forms.ToolStripMenuItem IncludeToCategory;
         private System.Windows.Forms.RadioButton rdoByNodeAndHisChild;
         private System.Windows.Forms.RadioButton rdoByNode;
         private System.Windows.Forms.Timer tmr_MainReports;
@@ -1740,5 +1749,7 @@
         private Label label6;
         private Label lblNoteProduct;
         private TableLayoutPanel tableL_ayoutPanel1;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem toolStripChangeCat;
     }
 }
