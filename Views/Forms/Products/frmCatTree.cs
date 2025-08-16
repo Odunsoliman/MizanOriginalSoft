@@ -131,8 +131,8 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
             if (selectedID > 0)
                 SelectNodeById(treeViewCategories.Nodes, selectedID);
+            treeViewCategories.CollapseAll();
 
-            treeViewCategories.ExpandAll();
         }
 
         // تحميل الفروع
