@@ -2294,6 +2294,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         // دالة مساعدة لتحميل كل المنتجات من جديد
         private void LoadAllProducts()
         {
+            LoadProducts();
       //      frmProductItems_Load(this, EventArgs.Empty);
 
         }
