@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            tableLayoutPanel1 = new TableLayoutPanel();
+            tableL_ayoutPanel1 = new TableLayoutPanel();
             panelDetails = new TableLayoutPanel();
             panelList = new TableLayoutPanel();
             lblSelectedTreeNod = new Label();
@@ -126,7 +126,7 @@
             tableLayoutPanel3 = new TableLayoutPanel();
             btnHelp = new Button();
             tmr_MainReports = new System.Windows.Forms.Timer(components);
-            tableLayoutPanel1.SuspendLayout();
+            tableL_ayoutPanel1.SuspendLayout();
             panelDetails.SuspendLayout();
             panelList.SuspendLayout();
             contextMenuStripTV.SuspendLayout();
@@ -157,22 +157,22 @@
             tableLayoutPanel3.SuspendLayout();
             SuspendLayout();
             // 
-            // tableLayoutPanel1
+            // tableL_ayoutPanel1
             // 
-            tableLayoutPanel1.BackColor = Color.FromArgb(235, 255, 235);
-            tableLayoutPanel1.ColumnCount = 1;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(panelDetails, 0, 1);
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel11, 0, 0);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(0, 0);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 13F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 87F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
-            tableLayoutPanel1.Size = new Size(1122, 706);
-            tableLayoutPanel1.TabIndex = 0;
+            tableL_ayoutPanel1.BackColor = Color.FromArgb(235, 255, 235);
+            tableL_ayoutPanel1.ColumnCount = 1;
+            tableL_ayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableL_ayoutPanel1.Controls.Add(panelDetails, 0, 1);
+            tableL_ayoutPanel1.Controls.Add(tableLayoutPanel11, 0, 0);
+            tableL_ayoutPanel1.Dock = DockStyle.Fill;
+            tableL_ayoutPanel1.Location = new Point(0, 0);
+            tableL_ayoutPanel1.Name = "tableL_ayoutPanel1";
+            tableL_ayoutPanel1.RowCount = 3;
+            tableL_ayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 13F));
+            tableL_ayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 87F));
+            tableL_ayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
+            tableL_ayoutPanel1.Size = new Size(1122, 706);
+            tableL_ayoutPanel1.TabIndex = 0;
             // 
             // panelDetails
             // 
@@ -1593,14 +1593,14 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1122, 706);
             ControlBox = false;
-            Controls.Add(tableLayoutPanel1);
+            Controls.Add(tableL_ayoutPanel1);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "frmProductItems";
             RightToLeft = RightToLeft.Yes;
             Text = "اعداد الاصناف";
             Load += frmProductItems_Load;
-            tableLayoutPanel1.ResumeLayout(false);
+            tableL_ayoutPanel1.ResumeLayout(false);
             panelDetails.ResumeLayout(false);
             panelList.ResumeLayout(false);
             panelList.PerformLayout();
@@ -1739,5 +1739,6 @@
         private Label lblRegist_Year;
         private Label label6;
         private Label lblNoteProduct;
+        private TableLayoutPanel tableL_ayoutPanel1;
     }
 }

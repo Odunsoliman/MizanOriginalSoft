@@ -52,13 +52,13 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
         private void frmProductItems_Load(object sender, EventArgs e)
         {
-           
             LoadTreeAndSelectSpecificNode();
 
             treeViewCategories.AllowDrop = true; // مهم جداً لتفعيل الإفلات
             treeViewCategories.ItemDrag += treeViewCategories_ItemDrag;
             treeViewCategories.DragEnter += treeViewCategories_DragEnter;
             treeViewCategories.DragDrop += treeViewCategories_DragDrop;
+
             isFormLoaded = false;
             LoadProducts();
             ApplyColorTheme();
@@ -66,7 +66,32 @@ namespace MizanOriginalSoft.Views.Forms.Products
             SetupMenuStrip();//خاصة بقوائم التقارير
             LoadReports(200);//خاصة بقوائم التقارير
             DGV.ClearSelection();
+
+            // 🔍 هنا نستدعي الدالة اللي تبحث عن الـControls عندها AutoSize = true
+            CheckAutoSizeControls(this);
         }
+
+        // 🔍 دالة فحص AutoSize
+        private void CheckAutoSizeControls(Control parent)
+        {
+            foreach (Control ctrl in parent.Controls)
+            {
+                if (ctrl is Panel || ctrl is TableLayoutPanel || ctrl is FlowLayoutPanel)
+                {
+                    if (ctrl.AutoSize)
+                    {
+                        MessageBox.Show($"⚠ {ctrl.Name} عنده AutoSize = true");
+                    }
+                }
+
+                // لو فيه عناصر داخلية (Nested) نفحصها برضه
+                if (ctrl.HasChildren)
+                {
+                    CheckAutoSizeControls(ctrl);
+                }
+            }
+        }
+
 
         #region *******  Help **************
 
@@ -2119,8 +2144,78 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
         // الحدث الذي يتم تنفيذه عند تحديد عقدة في شجرة التصنيفات
+        // الحدث الذي يتم تنفيذه عند تحديد عقدة في شجرة التصنيفات
         private void treeViewCategories_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            // 🔍 نخزن ارتفاع الفورم قبل أي تغييرات
+            int beforeH = this.Height;
+
+            try
+            {
+                // إعادة تعيين البحث وعرض الفلاتر
+                ClearSearch();
+                tlpAdvanceSearch.Visible = false;
+
+                // الحصول على العقدة المحددة
+                TreeNode selectedNode = e?.Node ?? treeViewCategories.SelectedNode;
+
+                // التأكد من صحة العقدة
+                if (selectedNode == null)
+                {
+                    SetCategoryDisplay(string.Empty);
+                    return;
+                }
+
+                // تحديث اسم التصنيف الظاهر
+                SetCategoryDisplay(selectedNode.Text);
+
+                // إذا كان خيار التصفية غير مفعل أو لا يوجد معرف في العقدة، الخروج
+                if (!chkTreeEnable.Checked || selectedNode.Tag == null)
+                    return;
+
+                // تحويل القيمة المرتبطة بالعقدة إلى رقم
+                if (!int.TryParse(selectedNode.Tag.ToString(), out int selectedCategoryId))
+                    return;
+
+                // في حالة اختيار "الكل"
+                if (selectedCategoryId == 1)
+                {
+                    LoadAllProducts();
+                    SetCategoryDisplay("الكل");
+                }
+                else
+                {
+                    // اختيار نوع التصفية بناءً على الاختيار
+                    if (rdoByNode.Checked)
+                        FilterProductsByCategory(selectedCategoryId);
+                    else if (rdoByNodeAndHisChild.Checked)
+                        FilterProductsByCategoryAndHisChild(selectedNode);
+                }
+
+                // تحديث عدد النتائج
+                UpdateCount();
+
+                // حفظ العقدة المحددة
+                lastSelectedNode = selectedNode;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ أثناء تصفية التصنيفات: " + ex.Message);
+            }
+
+            // 🔍 بعد التنفيذ نقارن
+            int afterH = this.Height;
+            if (beforeH != afterH)
+            {
+                MessageBox.Show($"⚠ حجم الفورم اتغير: قبل = {beforeH}, بعد = {afterH}");
+            }
+        }
+
+
+        private void treeViewCategories_AfterSelect_(object sender, TreeViewEventArgs e)
+        {
+            Console.WriteLine("Before: " + this.Height);
+
             try
             {
                 // إعادة تعيين البحث وعرض الفلاتر
@@ -2173,6 +2268,8 @@ namespace MizanOriginalSoft.Views.Forms.Products
             {
                 MessageBox.Show("حدث خطأ أثناء تصفية التصنيفات: " + ex.Message);
             }
+            Console.WriteLine("Before: " + this.Height);
+
         }
 
         // دالة مساعدة لتحديث اسم التصنيف الظاهر في الواجهة
