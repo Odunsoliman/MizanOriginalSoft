@@ -1,4 +1,9 @@
-﻿using System;
+﻿
+
+
+
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,8 +22,38 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
         private static bool isEditMode = false;
 
         public static event Action<string, string>? SettingChanged;
-
         public static void Load(string filePath)
+        {
+            settings.Clear();
+            isLoaded = false;
+            settingsFilePath = filePath;
+
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException($"❌ ملف الإعدادات غير موجود: {filePath}");
+
+            foreach (var rawLine in File.ReadAllLines(filePath))
+            {
+                string line = rawLine.Trim();
+
+                // تجاهل السطور الفارغة أو التعليقات
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#") || line.StartsWith("//") || line.StartsWith(";"))
+                    continue;
+
+                int equalIndex = line.IndexOf('=');
+                if (equalIndex <= 0)
+                    continue;
+
+                string key = line.Substring(0, equalIndex).Trim();
+                string value = line.Substring(equalIndex + 1).Trim();
+
+                if (!string.IsNullOrEmpty(key))
+                    settings[key] = value;
+            }
+
+            isLoaded = true;
+        }
+
+        public static void Load_(string filePath)
         {
             settings.Clear();
             isLoaded = false;
@@ -120,7 +155,3 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
     }
 
 }
-/*
- هل الكلاس يقرئ القيمة RestoreDB=Original_RestoreDatabase
-الموجودة الان فى الملف
- */
