@@ -1570,12 +1570,12 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void cbxChangeCat_SelectedValueChanged(object sender, EventArgs e)
         {
-            if (cbxChangeCat.SelectedValue != null)
-                lblSubAccTop.Text = cbxChangeCat.SelectedValue.ToString();
-            else
-                lblSubAccTop.Text = "0";
+            //if (cbxChangeCat.SelectedValue != null)
+            //    lblSubAccTop.Text = cbxChangeCat.SelectedValue.ToString();
+            //else
+            //    lblSubAccTop.Text = "0";
 
-            lstSubAccTop.ClearSelected();
+            //lstSubAccTop.ClearSelected();
         }
         private void btnChangeCat_Click(object sender, EventArgs e)
         {
