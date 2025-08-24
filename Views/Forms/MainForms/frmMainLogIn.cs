@@ -1111,7 +1111,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         //    }
         //}
 
-        private void btnEnd_Click__(object? sender, EventArgs e)
+        private void btnEnd_Click(object? sender, EventArgs e)
         {
             try
             {
@@ -1215,7 +1215,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             return settings;
         }
 
-        private void btnEnd_Click(object? sender, EventArgs e)
+        private void btnEnd_Click__(object? sender, EventArgs e)
         {
             try
             {
