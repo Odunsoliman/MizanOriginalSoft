@@ -1159,8 +1159,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 string? projectPath = AppSettings.GetString("ProjectPath", null);
                 if (!string.IsNullOrWhiteSpace(projectPath))
                 {
-                    ExecuteGitPush(projectPath);/*System.ComponentModel.Win32Exception: 'An error occurred trying to start process 'cmd.exe' with working directory 'D:\MizanOriginalSoft                               # 📌 مسار مشروع البرنامج الذي سيتم رفعه على Git عند الإغلاق للمزامنة مع المستودع'. The directory name is invalid.'
-*/
+                    ExecuteGitPush(projectPath);
                 }
 
                 // 5. Git Push لمجلد نسخ القواعد
@@ -1196,8 +1195,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 gitProcess.Start();
             }
             catch (Exception ex)
-            {/*System.ComponentModel.Win32Exception: 'An error occurred trying to start process 'cmd.exe' with working directory 'D:\MizanOriginalSoft                               # 📌 مسار مشروع البرنامج الذي سيتم رفعه على Git عند الإغلاق للمزامنة مع المستودع'. The directory name is invalid.'
-*/
+            {
                 MessageBox.Show("❌ خطأ أثناء تنفيذ Git Push:\n" + ex.Message);
             }
         }
