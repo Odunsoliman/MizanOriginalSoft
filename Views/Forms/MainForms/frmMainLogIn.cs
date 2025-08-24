@@ -1111,8 +1111,111 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         //    }
         //}
 
-
         private void btnEnd_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                string settingsPath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
+
+                if (!File.Exists(settingsPath))
+                    return;
+
+                // ✅ تحميل الإعدادات بشكل آمن
+                var settings = LoadSettings(settingsPath);
+                if (settings.Count == 0)
+                    return;
+
+                var helper = new DatabaseBackupRestoreHelper(settingsPath);
+
+                // 1. النسخ الاحتياطي
+                helper.BackupDatabase();
+
+                // 2. تنظيف النسخ القديمة + نسخ آخر نسخة إلى مجلد مشترك
+                string backupFolder = settings.ContainsKey("BackupsPath") ? settings["BackupsPath"] : "";
+                if (!string.IsNullOrWhiteSpace(backupFolder))
+                {
+                    helper.CleanOldBackups(backupFolder);
+                    helper.CopyLatestBackupToSharedFolder(
+                        sourceBackupFolder: backupFolder,
+                        sharedFolderPath: @"D:\BackupToPush",
+                        outputFileName: "MizanOriginalDB.bak"
+                    );
+                }
+
+                // 3. نسخ النسخة إلى Google Drive
+                string dbName = settings.ContainsKey("DBName") ? settings["DBName"] : "";
+                string googleDrivePath = settings.ContainsKey("GoogleDrivePath") ? settings["GoogleDrivePath"] : "";
+                if (!string.IsNullOrWhiteSpace(backupFolder) &&
+                    !string.IsNullOrWhiteSpace(dbName) &&
+                    !string.IsNullOrWhiteSpace(googleDrivePath))
+                {
+                    helper.CopyBackupToGoogleDrive(
+                        sourceFolder: backupFolder,
+                        googleDriveFolder: googleDrivePath,
+                        dbName: dbName
+                    );
+                }
+
+                // 4. Git Push لمجلد المشروع
+                string projectPath = settings.ContainsKey("ProjectPath") ? settings["ProjectPath"] : "";
+                if (!string.IsNullOrWhiteSpace(projectPath))
+                {
+                    ExecuteGitPush(projectPath);
+                }
+
+                // 5. Git Push لمجلد نسخ القواعد
+                string backupPushPath = settings.ContainsKey("BackupGitPath") ? settings["BackupGitPath"] : "";
+                if (!string.IsNullOrWhiteSpace(backupPushPath))
+                {
+                    ExecuteGitPush(backupPushPath);
+                }
+
+                // 6. تحديث بيانات القاعدة
+                DBServiecs.A_UpdateAllDataBase();
+
+                // 7. إنهاء البرنامج
+                Application.Exit();
+            }
+            catch (Exception ex)
+            {
+                // سجل الخطأ بدل ما تسكت عليه
+                File.AppendAllText("error_log.txt", $"{DateTime.Now}: {ex}\n");
+            }
+        }
+
+        /// <summary>
+        /// تحميل الإعدادات بشكل آمن (يتجاهل التعليقات والسطور الخاطئة)
+        /// </summary>
+        private Dictionary<string, string> LoadSettings(string filePath)
+        {
+            var settings = new Dictionary<string, string>();
+
+            if (!File.Exists(filePath))
+                return settings;
+
+            foreach (var rawLine in File.ReadAllLines(filePath))
+            {
+                string line = rawLine.Trim();
+
+                // تجاهل السطور الفارغة أو التعليقات
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#") || line.StartsWith("//") || line.StartsWith(";"))
+                    continue;
+
+                int equalIndex = line.IndexOf('=');
+                if (equalIndex <= 0)
+                    continue;
+
+                string key = line.Substring(0, equalIndex).Trim();
+                string value = line.Substring(equalIndex + 1).Trim();
+
+                if (!string.IsNullOrEmpty(key))
+                    settings[key] = value;
+            }
+
+            return settings;
+        }
+
+        private void btnEnd_Click__(object? sender, EventArgs e)
         {
             try
             {
