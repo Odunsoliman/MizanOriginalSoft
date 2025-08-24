@@ -145,9 +145,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             string accountIDs = "";
 
             if (currentInvoiceType == InvoiceType.Sale || currentInvoiceType == InvoiceType.SaleReturn)
-                accountIDs = "47"; // البائعين
+                accountIDs = "79"; // البائعين
             else
-                accountIDs = "26"; // منفذو الشراء أو التسوية
+                accountIDs = "80"; // منفذو الشراء أو التسوية
 
             if (string.IsNullOrEmpty(accountIDs))
                 return;
@@ -168,6 +168,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 ctrl.Leave += InputFields_Leave;
             }
         }
+        #endregion
 
         #region Footer Leave Handlers
 
@@ -249,8 +250,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
             CalculateRemainingOnAccount();
         }
-
-        #endregion
 
         #endregion
 
@@ -365,14 +364,15 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // حسابات افتراضية لكل نوع
         private readonly Dictionary<InvoiceType, string> defaultAccounts = new()
         {
-            [InvoiceType.Inventory] = "50",
-            [InvoiceType.DeductStock] = "51",
-            [InvoiceType.AddStock] = "52",
-            [InvoiceType.Sale] = "40",
-            [InvoiceType.SaleReturn] = "40",
-            [InvoiceType.Purchase] = "41",
-            [InvoiceType.PurchaseReturn] = "41",
+            [InvoiceType.Inventory] = "83", // جرد حـ اضافة وخصم صنف
+            [InvoiceType.DeductStock] = "83", // صرف حـ اضافة وخصم صنف
+            [InvoiceType.AddStock] = "83", // إضافة حـ اضافة وخصم صنف
+            [InvoiceType.Sale] = "81", // مبيعات حـ عميل نقدى
+            [InvoiceType.SaleReturn] = "81", // مرتجع حـ عميل نقدى
+            [InvoiceType.Purchase] = "82", // مشتريات حـ مورد عام نقدى
+            [InvoiceType.PurchaseReturn] = "82", // مرتجع حـ مورد عام نقدى
         };
+
 
         /// <summary>
         /// تحميل الحسابات من قاعدة البيانات
@@ -381,9 +381,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
             string accountIDs = currentInvoiceType switch
             {
-                InvoiceType.Sale or InvoiceType.SaleReturn => "7,22,39",
-                InvoiceType.Purchase or InvoiceType.PurchaseReturn => "14,39",
-                InvoiceType.Inventory or InvoiceType.DeductStock or InvoiceType.AddStock => "31",
+                InvoiceType.Sale or InvoiceType.SaleReturn => "13,62,29",
+                InvoiceType.Purchase or InvoiceType.PurchaseReturn => "23,29",
+                InvoiceType.Inventory or InvoiceType.DeductStock or InvoiceType.AddStock => "15",
                 _ => string.Empty
             };
 
@@ -392,12 +392,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             DataTable result = DBServiecs.NewInvoice_GetAcc(accountIDs);
 
             // تصفية الحسابات
-            DataRow[] filteredRows = result.Select("AccID > 200 OR AccID IN (40, 41, 50, 51, 52)");
+            DataRow[] filteredRows = result.Select("AccID > 200 OR AccID IN (81, 82, 83)");
             tblAcc = filteredRows.Length > 0 ? filteredRows.CopyToDataTable() : result.Clone();
-        }//Ambiguity between 'frm_NewInvoice.tblAcc' and 'frm_NewInvoice.tblAcc'
-        /*لما هذا الخطأ مع ان tblAcc معرف اعلى فى المتغيرات
-         private DataTable? tblAcc = null;
-         */
+        }
 
         /// <summary>
         /// تعيين الحساب الافتراضي
@@ -2070,6 +2067,302 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #endregion
 
+
+        #region إدخال البيانات العامة وحفظ المسودة
+
+        /// <summary>
+        /// عند مغادرة أي حقل إدخال يتم الحفظ كمسودة إذا لم تكن الفاتورة محفوظة نهائيًا.
+        /// </summary>
+        private void InputFields_Leave(object? sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(lblSave.Text)) // لم يتم الحفظ النهائي بعد
+            {
+                SaveDraftInvoice();
+            }
+        }
+
+        /// <summary>
+        /// تحميل بيانات الحساب المحدد في الحقول المخصصة له.
+        /// </summary>
+        private void LoadAccountData(DataRow accountData)
+        {
+            lblAccID.Text = accountData["AccID"].ToString();
+            txtAccName.Text = accountData["AccName"].ToString();
+            lblBalance.Text = accountData["Balance"].ToString();
+            lblB_Status.Text = accountData["BalanceState"].ToString();
+            lblFirstPhon.Text = accountData["FirstPhon"].ToString();
+            lblAntherPhon.Text = accountData["AntherPhon"].ToString();
+            lblClientAddress.Text = accountData["ClientAddress"].ToString();
+            lblClientEmail.Text = accountData["ClientEmail"].ToString();
+        }
+
+        #endregion
+
+
+        #region التحكم في تفعيل وتعطيل عناصر النموذج
+
+        /// <summary>
+        /// تعطيل أو تمكين عناصر النموذج بناءً على حالة الحفظ النهائي.
+        /// </summary>
+        private void ToggleControlsBasedOnSaveStatus()
+        {
+            bool isFinalSaved = !string.IsNullOrWhiteSpace(lblSave.Text);
+            ToggleControlsRecursive(this.Controls, isFinalSaved);
+            DGVStyl(); // إعادة تهيئة شكل الجدول
+        }
+
+        /// <summary>
+        /// تطبيق التمكين/التعطيل بشكل متكرر على جميع عناصر التحكم.
+        /// </summary>
+        private void ToggleControlsRecursive(Control.ControlCollection controls, bool isFinalSaved)
+        {
+            foreach (Control ctrl in controls)
+            {
+                if (ctrl is TextBox tb)
+                {
+                    // استثناء لبعض TextBox التي يجب أن تُغلق تمامًا
+                    if (tb.Name == "txtAccName" || tb.Name == "txtSeaarchProd")
+                        tb.Enabled = !isFinalSaved;
+                    else
+                        tb.ReadOnly = isFinalSaved;
+                }
+                else if (ctrl is ComboBox || ctrl is DateTimePicker)
+                {
+                    ctrl.Enabled = !isFinalSaved;
+                }
+                else if (ctrl is DataGridView dgv)
+                {
+                    dgv.ReadOnly = isFinalSaved;
+                }
+
+                // تكرار داخل العناصر الفرعية
+                if (ctrl.HasChildren)
+                    ToggleControlsRecursive(ctrl.Controls, isFinalSaved);
+            }
+        }
+
+        #endregion
+
+
+        #region تحديث بيانات الحساب عند تغيير رقم الحساب
+
+        /// <summary>
+        /// تحميل بيانات الحساب عند تغيير قيمة lblAccID.
+        /// </summary>
+        private void lblAccID_TextChanged(object sender, EventArgs e)
+        {
+            string accountID = lblAccID.Text.Trim();
+
+            if (!string.IsNullOrEmpty(accountID) && tblAcc != null)
+            {
+                DataRow[] accountData = tblAcc.Select($"AccID = '{accountID}'");
+                if (accountData.Length > 0)
+                {
+                    LoadAccountData(accountData[0]);
+                }
+                else
+                {
+                    CustomMessageBox.ShowWarning("لا يوجد حساب مرتبط برقم الحساب المحدد.", "خطأ");
+                }
+            }
+        }
+
+        #endregion
+
+
+        #region أزرار الحسابات الإضافية (خصم - إضافة - ضريبة)
+
+        /// <summary>إدخال نسبة إضافة وحساب قيمتها.</summary>
+        private void btnAdditionalRate_Click(object sender, EventArgs e)
+        {
+            if (decimal.TryParse(lblTotalValueAfterTax.Text, out decimal baseVal) && baseVal > 0)
+            {
+                if (CustomMessageBox.ShowDecimalInputBox(out decimal rate, "أدخل نسبة الاضافة %", "نسبة الاضافة") == DialogResult.OK)
+                {
+                    txtValueAdded.Text = (baseVal * (rate / 100)).ToString("N2");
+                    lblAdditionalRate.Text = rate.ToString("N2");
+                    CalculateInvoiceFooter();
+                }
+            }
+            else
+            {
+                CustomMessageBox.ShowInformation("لا يمكن حساب نسبة الإضافة قبل إدخال قيمة للفاتورة.", "تنبيه");
+            }
+        }
+
+        /// <summary>إدخال نسبة خصم وحساب قيمتها.</summary>
+        private void btnDiscountRate_Click(object sender, EventArgs e)
+        {
+            if (decimal.TryParse(lblTotalValueAfterTax.Text, out decimal baseVal) && baseVal > 0)
+            {
+                if (CustomMessageBox.ShowDecimalInputBox(out decimal rate, "أدخل نسبة الخصم %", "نسبة الخصم") == DialogResult.OK)
+                {
+                    txtDiscount.Text = (baseVal * (rate / 100)).ToString("N2");
+                    lblDiscountRate.Text = rate.ToString("N2");
+                    CalculateInvoiceFooter();
+                }
+            }
+            else
+            {
+                CustomMessageBox.ShowInformation("لا يمكن حساب نسبة الخصم قبل إدخال قيمة للفاتورة.", "تنبيه");
+            }
+        }
+
+        /// <summary>إدخال نسبة ضريبة وحساب قيمتها.</summary>
+        private void btnTaxRate_Click(object sender, EventArgs e)
+        {
+            if (decimal.TryParse(lblTotalInv.Text, out decimal baseVal) && baseVal > 0)
+            {
+                if (CustomMessageBox.ShowDecimalInputBox(out decimal rate, "أدخل نسبة الإضافة %", "نسبة الإضافة") == DialogResult.OK)
+                {
+                    txtTaxVal.Text = (baseVal * (rate / 100)).ToString("N2");
+                    lblTaxRate.Text = rate.ToString("N2");
+                    CalculateInvoiceFooter();
+                }
+            }
+            else
+            {
+                CustomMessageBox.ShowInformation("لا يمكن حساب نسبة الإضافة قبل إدخال قيمة للفاتورة.", "تنبيه");
+            }
+        }
+
+        #endregion
+
+
+        #region أزرار الدفع
+
+        /// <summary>دفع كامل القيمة نقدًا.</summary>
+        private void btnAllCash_Click(object sender, EventArgs e)
+        {
+            if (!IsValidNetTotal()) return;
+            SetFullPayment(txtPayment_Cash, txtPayment_Electronic);
+        }
+
+        /// <summary>دفع كامل القيمة إلكترونيًا (بطاقة).</summary>
+        private void btnAllVisa_Click(object sender, EventArgs e)
+        {
+            if (!IsValidNetTotal()) return;
+            SetFullPayment(txtPayment_Electronic, txtPayment_Cash);
+        }
+
+        /// <summary>التأكد من أن صافي الفاتورة صالح.</summary>
+        private bool IsValidNetTotal()
+        {
+            if (string.IsNullOrWhiteSpace(lblNetTotal.Text))
+            {
+                MessageBox.Show("قيمة الفاتورة غير صالحة.", "تحذير", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (!decimal.TryParse(lblNetTotal.Text, out decimal netTotal) || netTotal <= 0)
+            {
+                MessageBox.Show("قيمة الفاتورة يجب أن تكون أكبر من صفر.", "تحذير", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>تعيين كامل المبلغ لطريقة دفع واحدة وتصفير الأخرى.</summary>
+        private void SetFullPayment(TextBox primaryMethod, TextBox secondaryMethod)
+        {
+            primaryMethod.Text = lblNetTotal.Text;
+            secondaryMethod.Text = "0.00";
+            CalculateInvoiceFooter();
+        }
+
+        #endregion
+
+
+        #region أزرار الحفظ وفتح القيد
+
+        /// <summary>حفظ الفاتورة نهائيًا.</summary>
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(lblSave.Text))
+            {
+                CustomMessageBox.ShowInformation("تم حفظ الفاتورة من قبل ولا يمكن تعديلها.", "تنبيه");
+                return;
+            }
+
+            int actualRowCount = DGV.Rows.Cast<DataGridViewRow>()
+                                  .Count(r => !r.IsNewRow && r.Cells["ProductCode"].Value != null);
+
+            if (actualRowCount == 0)
+            {
+                CustomMessageBox.ShowInformation("لا توجد بيانات لحفظ الفاتورة.", "تنبيه");
+                return;
+            }
+
+            int invID = Convert.ToInt32(lblInv_ID.Text);
+            string saveText = GetSaveTextByInvoiceType(currentInvoiceType);
+
+            SaveDraftInvoice(saveText);
+
+            lblSave.Text = saveText;
+            MessageBox.Show("تم الحفظ النهائي للفاتورة.");
+            ToggleControlsBasedOnSaveStatus();
+        }
+
+        /// <summary>الحصول على نص الحفظ المناسب حسب نوع الفاتورة.</summary>
+        private string GetSaveTextByInvoiceType(InvoiceType invoiceType)
+        {
+            return invoiceType switch
+            {
+                InvoiceType.Sale => "تم حفظ فاتورة بيع",
+                InvoiceType.SaleReturn => "تم حفظ فاتورة بيع مرتجع",
+                InvoiceType.Purchase => "تم حفظ فاتورة شراء",
+                InvoiceType.PurchaseReturn => "تم حفظ فاتورة شراء مرتجع",
+                InvoiceType.Inventory => "تم حفظ إذن جرد",
+                InvoiceType.DeductStock => "تم حفظ إذن خصم",
+                InvoiceType.AddStock => "تم حفظ إذن إضافة",
+                _ => "تم حفظ الفاتورة"
+            };
+        }
+
+        /// <summary>فتح قيد اليومية المرتبط بالفاتورة.</summary>
+        private void btnJournal_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(lblSave.Text))
+            {
+                if (int.TryParse(lblInv_ID.Text, out int billNo) &&
+                    int.TryParse(lblTypeInvID.Text, out int invTypeId))
+                {
+                    frm_Journal journalForm = new frm_Journal(billNo, invTypeId);
+                    journalForm.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("تأكد من رقم السند ونوع العملية", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            else
+            {
+                MessageBox.Show("يجب حفظ السند أولًا قبل عرض القيد المحاسبي", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /*
         private void InputFields_Leave(object? sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(lblSave.Text)) // لم يتم الحفظ نهائياً
@@ -2324,32 +2617,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 default: return "تم حفظ الفاتورة";
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+*/
 
         /*
         #region =========== Variabls ====================
@@ -2679,7 +2947,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         */
 
-
         /*
         #region التنقل بين الفواتير
 
@@ -2869,14 +3136,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #endregion
         */
 
-
-
-
-
-
-
-
-
         /*
         #region  احداث ووظائف رأس الفاتورة
 
@@ -2978,9 +3237,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #endregion
         */
-
-
-
 
         /*
         #region  احداث ووظائف اضافة صنف
@@ -3347,8 +3603,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #endregion
         */
 
-
-
         /*
         #region  احداث ووظائف تذييل الفاتورة
 
@@ -3628,7 +3882,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
         #endregion
         */
-
 
         /*
         #region 
@@ -4008,18 +4261,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         */
 
-
-
-
-
-
-
-
-
-
-
-
-
         /*
         #region 
         private void cbxPiece_ID_SelectedIndexChanged(object sender, EventArgs e)
@@ -4195,9 +4436,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #endregion 
 
         */
-
-
-
 
         /*
 
