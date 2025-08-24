@@ -1,4 +1,8 @@
-﻿using Microsoft.Reporting.WinForms;
+﻿using System.Drawing;
+using ZXing;
+using ZXing.Common;
+
+using Microsoft.Reporting.WinForms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,36 +13,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Printing;
-using ZXing;
-using ZXing.Common;
 using System.Drawing.Imaging;
 using System.IO;
 using FormatException = System.FormatException;
+
 using System.Xml.Linq;
 using MizanOriginalSoft.MainClasses;
-using ZXing.QrCode;
+using ZXing.Windows.Compatibility;
 
-using System.Drawing;
-using ZXing.Rendering;
-
-using System.Drawing;
-using MizanOriginalSoft.MainClasses.OriginalClasses;
-using System.Data.SqlTypes;
-
-
-namespace MizanOriginalSoft.Views.Forms.Products
+namespace Signee.Views.Forms.Products
 {
     public partial class frmPrintBarCode : Form
     {
-/*
-        private string rollPrinterName = string.Empty;
-        private string sheetPrinterName = string.Empty;
-        private DataTable tblCode = new();
-        private PrintDocument printDoc = new();
-        private string companyName = string.Empty;
 
-        #region 
-        //Non-nullable field 'BarcodeGeneratorImage' must contain a non-null value when exiting constructor.Consider adding the 'required' modifier or declaring the field as nullable.
+        #region ---  تحميل الشاشة
         public frmPrintBarCode()
         {
             InitializeComponent();
@@ -51,6 +39,13 @@ namespace MizanOriginalSoft.Views.Forms.Products
             lbl_CO .Text = companyName;
 
         }
+
+
+        #endregion
+ 
+        
+        
+      #region @@@@@@@ barcode document Zxing @@@@@@@    
         private void BarcodesGet()
         {
             DataTable dt = new DataTable();
@@ -58,399 +53,18 @@ namespace MizanOriginalSoft.Views.Forms.Products
             DGV.DataSource = dt;
             ApplyDGVStyles();
         }
-        private void ApplyDGVStyles()
-        {
-            // 1. ضبط نمط التحكم في حجم الأعمدة لملء المساحة المتاحة
-            DGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-            // 2. إخفاء جميع الأعمدة أولاً كخطوة تحضيرية
-            foreach (DataGridViewColumn column in DGV.Columns)
-            {
-                column.Visible = false;
-            }
-
-            // 3. تعريف الأعمدة المراد إظهارها مع خصائص كل منها
-            var visibleColumns = new[]
-            {
-        new {
-            Name = "ProductCode",
-            Header = "كود الصنف",
-            FillWeight = 1,
-            Alignment = DataGridViewContentAlignment.MiddleCenter
-        },
-        new {
-            Name = "ProdName",
-            Header = "اسم الصنف",
-            FillWeight = 3,
-            Alignment = DataGridViewContentAlignment.MiddleLeft
-        },
-        new {
-            Name = "U_Price",
-            Header = "سعر بيع",
-            FillWeight = 1,
-            Alignment = DataGridViewContentAlignment.MiddleCenter
-        },
-        new {
-            Name = "Amount",
-            Header = "عدد التكت",
-            FillWeight = 1,
-            Alignment = DataGridViewContentAlignment.MiddleLeft
-        },
-        new {
-            Name = "ProductStock",
-            Header = "الرصيد",
-            FillWeight = 1,
-            Alignment = DataGridViewContentAlignment.MiddleCenter
-        }
-    };
-
-            // 4. تطبيق الإعدادات على الأعمدة المرئية
-            foreach (var col in visibleColumns)
-            {
-                if (DGV.Columns.Contains(col.Name))
-                {
-                    var column = DGV.Columns[col.Name];
-                    column.Visible = true;
-                    column.HeaderText = col.Header;
-                    column.FillWeight = col.FillWeight;
-                    column.DefaultCellStyle.Alignment = col.Alignment;
-                }
-            }
-
-            // 5. تنسيقات الخلايا العامة
-            DGV.DefaultCellStyle.Font = new Font("Times New Roman", 14);
-            DGV.DefaultCellStyle.ForeColor = Color.Blue;
-            DGV.DefaultCellStyle.BackColor = Color.LightYellow;
-
-            // 6. تنسيقات رؤوس الأعمدة
-            DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Bold);
-            DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.Blue;
-            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGray;
-            DGV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            // 7. معالجة تنسيق الخلايا
-            DGV.CellFormatting += (sender, e) =>
-            {
-                if (e is null || e.Value is null || e.ColumnIndex < 0 || e.ColumnIndex >= DGV.Columns.Count)
-                    return;
-
-                var column = DGV.Columns[e.ColumnIndex];
-
-                if (!column.Visible)
-                    return;
-
-                string valueStr = e.Value.ToString()?.Trim() ?? string.Empty;
-
-                if (column.Name == "U_Price" && decimal.TryParse(valueStr, out decimal price))
-                {
-                    e.Value = price.ToString("N2");
-                }
-                else
-                {
-                    e.Value = valueStr;
-                }
-            };
-
-            // 8. تلوين الصفوف بالتناوب
-            DGV.AlternatingRowsDefaultCellStyle.BackColor = Color.LightCyan;
-
-            // 9. تطبيق مظهر خاص حسب الثيم
-            ApplyColorTheme();
-        }
-        private void ApplyColorTheme()
-        {
-            // الألوان الأساسية للنموذج
-            this.BackColor = Color.FromArgb(245, 245, 240); // لون خلفية النموذج الرئيسي - بيج فاتح
-            // أزرار التعديل (لون أزرق فاتح مع نص أزرق داكن)
-            btnMinus.BackColor = Color.FromArgb(173, 216, 230); // أزرق فاتح (لون السماء)
-            btnMinus.ForeColor = Color.DarkBlue; // نص أزرق داكن
-            btnMinus.FlatStyle = FlatStyle.Flat; // نمط مسطح
-
-            btnPlus.BackColor = Color.FromArgb(173, 216, 230); // نفس لون زر تعديل العنصر
-            btnPlus.ForeColor = Color.DarkBlue;
-            btnPlus.FlatStyle = FlatStyle.Flat;
-
-            // زر الحذف (لون أحمر فاتح مع نص داكن)
-            btnDeleteSelected.BackColor = Color.FromArgb(255, 200, 200); // أحمر فاتح (لون وردي خفيف)
-            btnDeleteSelected.ForeColor = Color.DarkRed; // نص أحمر داكن
-            btnDeleteSelected.FlatStyle = FlatStyle.Flat;
-
-            // زر البحث المتقدم (لون أخضر فاتح مع نص داكن)
-            btnPrintBarCode.BackColor = Color.FromArgb(200, 255, 200); // أخضر فاتح
-            btnPrintBarCode.ForeColor = Color.DarkGreen; // نص أخضر داكن
-            btnPrintBarCode.FlatStyle = FlatStyle.Flat;
-
-            // أزرار المساعدة والإضافة الجديدة (لون رمادي مع نص أسود)
-            btnClose.BackColor = Color.FromArgb(200, 200, 200); // رمادي فاتح
-            btnClose.ForeColor = Color.Black;
-            btnClose.FlatStyle = FlatStyle.Flat;
-
-            // إعدادات الشبكة (DataGridView)
-            DGV.BackgroundColor = Color.White; // خلفية بيضاء
-            DGV.DefaultCellStyle.BackColor = Color.White; // خلفية الخلايا بيضاء
-            DGV.DefaultCellStyle.ForeColor = Color.DarkSlateBlue; // نص الخلايا أزرق داكن
-            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(230, 230, 230); // رؤوس الأعمدة رمادي فاتح
-            DGV.EnableHeadersVisualStyles = false; // تعطيل الأنماط المرئية الافتراضية للرؤوس
-        }
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void btnPlus_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // التحقق من أن الحقل ليس فارغاً
-                if (string.IsNullOrEmpty(txtAmount.Text))
-                {
-                    txtAmount.Text = "0";
-                }
-
-                // تحويل النص إلى رقم وإضافة 1
-                int currentAmount = int.Parse(txtAmount.Text);
-                currentAmount++;
-
-                // تحديث النص بالقيمة الجديدة
-                txtAmount.Text = currentAmount.ToString();
-            }
-            catch (FormatException)
-            {
-                MessageBox.Show("الرجاء إدخال قيمة رقمية صحيحة");
-                txtAmount.Text = "0";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("حدث خطأ: " + ex.Message);
-            }
-        }
-
-        private void btnMinus_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // التحقق من أن الحقل ليس فارغاً
-                if (string.IsNullOrEmpty(txtAmount.Text))
-                {
-                    txtAmount.Text = "0";
-                }
-
-                // تحويل النص إلى رقم وطرح 1
-                int currentAmount = int.Parse(txtAmount.Text);
-
-                // التأكد من عدم النزول تحت الصفر
-                if (currentAmount > 0)
-                {
-                    currentAmount--;
-                }
-                else
-                {
-                    MessageBox.Show("لا يمكن أن تكون الكمية أقل من الصفر");
-                }
-
-                // تحديث النص بالقيمة الجديدة
-                txtAmount.Text = currentAmount.ToString();
-            }
-            catch (FormatException)
-            {
-                MessageBox.Show("الرجاء إدخال قيمة رقمية صحيحة");
-                txtAmount.Text = "0";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("حدث خطأ: " + ex.Message);
-            }
-        }
-
-        private void txtAmount_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                // التحقق من أن الحقول ليست فارغة
-                if (string.IsNullOrEmpty(txtCodeProduct.Text) || string.IsNullOrEmpty(txtAmount.Text))
-                {
-                    MessageBox.Show("الرجاء إدخال كود المنتج والكمية");
-                    return;
-                }
-
-                try
-                {
-                    // الحصول على كمية المنتج من الحقل
-                    int amount;
-                    if (!int.TryParse(txtAmount.Text, out amount))
-                    {
-                        MessageBox.Show("الرجاء إدخال قيمة رقمية صحيحة للكمية");
-                        return;
-                    }
-                    // استدعاء الإجراء المخزن لتحديث الباركود
-                    DBServiecs.sp_InsertBarcodesToPrint(productId, amount);
-
-                    // تحديث عرض البيانات
-                    BarcodesGet();
-                    
-                    // تفريغ حقل الكمية للاستعداد للإدخال التالي
-                    txtAmount.Clear();
-                    txtCodeProduct.Clear();
-                    txtCodeProduct .Focus();
-                    lblNameProd.Text = "";
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("حدث خطأ: " + ex.Message);
-                }
-            }
-        }
-        private  int productId;
-        private void txtCodeProduct_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                // التحقق من أن الحقول ليست فارغة
-                if (string.IsNullOrEmpty(txtCodeProduct.Text) )
-                {
-                    MessageBox.Show("الرجاء إدخال كود المنتج ");
-                    txtCodeProduct .Focus ();
-                    txtCodeProduct.SelectAll ();
-                    lblNameProd .Text ="";
-                    return;
-                }
-
-                try
-                {
-                    // الحصول على كود المنتج من الحقل
-                    string productCode = txtCodeProduct.Text.Trim();
-                    // استدعاء الدالة للحصول على معرف المنتج
-                    DataTable productData = DBServiecs.Product_GetIDByCode(productCode);
-
-                    if (productData == null || productData.Rows.Count == 0)
-                    {
-                        MessageBox.Show("لم يتم العثور على المنتج");
-                        txtCodeProduct.Focus();
-                        txtCodeProduct.SelectAll();
-                        lblNameProd.Text = "";
-                        return;
-                    }
-
-                    // الحصول على معرف المنتج
-                    productId = Convert.ToInt32(productData.Rows[0]["ID_Product"]);
-                    lblNameProd .Text = productData.Rows[0]["ProdName"].ToString ();
-                    txtAmount.Focus();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("حدث خطأ: " + ex.Message);
-                }
-            }
-        }
-        private void btnDeleteSelected_Click(object sender, EventArgs e)
-        {
-            // 1. التحقق من وجود صفوف محددة للحذف
-            if (DGV.SelectedRows.Count == 0)
-            {
-                MessageBox.Show("الرجاء تحديد عنصر واحد على الأقل للحذف", "لا توجد عناصر محددة",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // 2. طلب تأكيد من المستخدم قبل الحذف
-            var confirmResult = MessageBox.Show("هل أنت متأكد من حذف العناصر المحددة؟",
-                                               "تأكيد الحذف",
-                                               MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            // إذا لم يؤكد المستخدم، نخرج من الدالة دون تنفيذ الحذف
-            if (confirmResult != DialogResult.Yes)
-            {
-                return;
-            }
-
-            try
-            {
-                // 3. إنشاء جدول بيانات لتخزين الأرقام التعريفية للعناصر المحددة
-                DataTable productIds = new DataTable();
-                productIds.Columns.Add("ID_Product", typeof(int)); // إنشاء عمود للأرقام التعريفية
-
-                // 4. ملء الجدول بالأرقام التعريفية للعناصر المحددة
-                foreach (DataGridViewRow row in DGV.SelectedRows)
-                {
-                    // نضيف كل رقم تعريفي إلى الجدول
-                    // ملاحظة: "ProductID" يجب أن يستبدل باسم العمود الحقيقي في قاعدة البيانات
-                    productIds.Rows.Add(row.Cells["ID_Product"].Value);
-                }
-
-                // 5. استدعاء الدالة المسؤولة عن الحذف في قاعدة البيانات
-                DBServiecs.sp_DeleteBarcodesByProductIDs(productIds);
-
-                    // إذا نجح الحذف، نعرض رسالة نجاح
-                MessageBox.Show("تم حذف العناصر المحددة بنجاح", "تمت العملية",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // 7. تحديث البيانات المعروضة بعد الحذف
-                BarcodesGet();
-            }
-            catch (Exception ex)
-            {
-                // 8. معالجة أي أخطاء غير متوقعة
-                MessageBox.Show($"حدث خطأ: {ex.Message}", "خطأ",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void btnDeleteAll_Click(object sender, EventArgs e)
-        {
-            // 1. التأكد من وجود بيانات في DataGridView
-            if (DGV.Rows.Count == 0)
-            {
-                MessageBox.Show("لا توجد بيانات لحذفها", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            // 2. تأكيد نية الحذف من المستخدم
-            var confirmResult = MessageBox.Show("هل أنت متأكد أنك تريد حذف كل العناصر؟",
-                                                "تأكيد الحذف الكلي",
-                                                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-            if (confirmResult != DialogResult.Yes)
-            {
-                return;
-            }
-
-            try
-            {
-                // 3. إنشاء DataTable لتجميع كل المعرفات
-                DataTable productIds = new DataTable();
-                productIds.Columns.Add("ID_Product", typeof(int));
-
-                // 4. تعبئة الجدول بكل المعرفات في DGV
-                foreach (DataGridViewRow row in DGV.Rows)
-                {
-                    if (row.IsNewRow) continue; // نتجاهل الصف الجديد (المخصص للإضافة)
-                    productIds.Rows.Add(row.Cells["ID_Product"].Value);
-                }
-
-                // 5. تنفيذ الحذف في قاعدة البيانات
-                DBServiecs.sp_DeleteBarcodesByProductIDs(productIds);
-
-                // 6. إعلام المستخدم
-                MessageBox.Show("تم حذف جميع العناصر بنجاح", "تمت العملية", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // 7. تحديث البيانات
-                BarcodesGet();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"حدث خطأ: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        #endregion 
 
 
-        #region @@@@@@@ barcode document Zxing @@@@@@@
 
       
+
+        private string rollPrinterName;
+        private string sheetPrinterName;
+        
         private bool directPrint;
         private int currentPrintIndex;
+        private DataTable tblCode;
+        private PrintDocument printDoc;
         int sheetRows;
         int sheetCols;
         int sheetMarginTop;
@@ -459,8 +73,9 @@ namespace MizanOriginalSoft.Views.Forms.Products
         int sheetMarginLeft;
         private int rollLabelWidth = 100;
         private int rollLabelHeight = 50;
-        private Image? BarcodeGeneratorImage;
-
+        private string companyName;
+  
+        //زر الطباعة المباشرة او المعاينه على رول او شيت مقسم الى تكتس A4 
         private void btnPrintBarCode_Click(object sender, EventArgs e)
         {
             tblCode = DBServiecs.sp_GetBarcodesToPrint();
@@ -485,46 +100,11 @@ namespace MizanOriginalSoft.Views.Forms.Products
             currentPrintIndex = 0;
             printDoc = new PrintDocument();
 
-            // حدث الطباعة
-            printDoc.PrintPage += (s, ev) =>
-            {
-                if (currentPrintIndex < tblCode.Rows.Count)
-                {
-                    string? codeValue = tblCode.Rows[currentPrintIndex]["Barcode"]?.ToString();
-                    if (string.IsNullOrEmpty(codeValue))
-                    {
-                        currentPrintIndex++;
-                        ev.HasMorePages = (currentPrintIndex < tblCode.Rows.Count);
-                        return;
-                    }
-
-                    // التخلص من الصورة القديمة إذا وجدت
-                    BarcodeGeneratorImage?.Dispose();
-                    BarcodeGeneratorImage = null;
-
-                    // إنشاء صورة الباركود
-                    BarcodeGeneratorImage = BarcodeGenerator.Generate(codeValue, 250, 80);
-
-                    // تحديد مكان وحجم الرسم على الورقة
-                    Rectangle targetRect = new Rectangle(50, 50, 250, 80);
-                    var img = BarcodeGeneratorImage;
-                    if (img != null)
-                    {
-                        ev.Graphics.DrawImage(img, targetRect);
-                    }
-
-
-                    currentPrintIndex++;
-                    ev.HasMorePages = (currentPrintIndex < tblCode.Rows.Count);
-                }
-            };
-
-            // اختيار الطابعة
             if (rdoRoll.Checked)
             {
                 if (!string.IsNullOrEmpty(rollPrinterName) && IsPrinterInstalled(rollPrinterName))
                 {
-                    printDoc.PrinterSettings.PrinterName = rollPrinterName;
+                    PrepareRollPrinting();
                 }
                 else
                 {
@@ -536,7 +116,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             {
                 if (!string.IsNullOrEmpty(sheetPrinterName) && IsPrinterInstalled(sheetPrinterName))
                 {
-                    printDoc.PrinterSettings.PrinterName = sheetPrinterName;
+                    PrepareSheetPrinting();
                 }
                 else
                 {
@@ -545,7 +125,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 }
             }
 
-            // الطباعة أو المعاينة
             try
             {
                 if (directPrint)
@@ -554,10 +133,8 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 }
                 else
                 {
-                    using PrintPreviewDialog preview = new PrintPreviewDialog
-                    {
-                        Document = printDoc
-                    };
+                    PrintPreviewDialog preview = new PrintPreviewDialog();
+                    preview.Document = printDoc;
                     preview.ShowDialog();
                 }
             }
@@ -566,7 +143,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 MessageBox.Show("حدث خطأ أثناء الطباعة: " + ex.Message);
             }
         }
-
 
 
         // استدعاء الإعدادات من الملف
@@ -613,14 +189,13 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 lbl_CO.Text = companyName;
             }
         }
- 
-        // دالة توليد الباركود
+
         private Image GenerateBarcode(string code)
         {
-            var writer = new ZXing.BarcodeWriterPixelData
+            var writer = new BarcodeWriter
             {
-                Format = ZXing.BarcodeFormat.CODE_128,
-                Options = new ZXing.Common.EncodingOptions
+                Format = BarcodeFormat.CODE_128,
+                Options = new EncodingOptions
                 {
                     Height = 40,
                     Width = 130,
@@ -628,23 +203,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 }
             };
 
-            var pixelData = writer.Write(code);
-
-            // إنشاء Bitmap من الـ PixelData
-            var bitmap = new Bitmap(pixelData.Width, pixelData.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-            var bitmapData = bitmap.LockBits(new Rectangle(0, 0, pixelData.Width, pixelData.Height),
-                                             System.Drawing.Imaging.ImageLockMode.WriteOnly,
-                                             bitmap.PixelFormat);
-            try
-            {
-                System.Runtime.InteropServices.Marshal.Copy(pixelData.Pixels, 0, bitmapData.Scan0, pixelData.Pixels.Length);
-            }
-            finally
-            {
-                bitmap.UnlockBits(bitmapData);
-            }
-
-            return bitmap;
+            return writer.Write(code);
         }
 
         //اعداد الشيت للطباعة
@@ -667,7 +226,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             // تعيين اسم الطابعة
             printDoc.PrinterSettings.PrinterName = sheetPrinterName;
         }
-        // // // //////////////////////////////////////////////////////////////////
+
         //طباعة التكت فى الشيت
         private void PrintLabels_A4Sheet(object sender, PrintPageEventArgs e)
         {
@@ -681,7 +240,8 @@ namespace MizanOriginalSoft.Views.Forms.Products
             int labelWidth = printableWidth / labelsPerRow;
             int labelHeight = printableHeight / labelsPerColumn;
 
-            Graphics g = e.Graphics ?? throw new InvalidOperationException("Graphics object is null.");
+            Graphics g = e.Graphics;
+
             using (Font fontBig = new Font("Times New Roman", 8, FontStyle.Bold))
             using (Font fontSmall = new Font("Times New Roman", 7, FontStyle.Regular))
             using (Font fontSmaller = new Font("Times New Roman", 6.5f, FontStyle.Regular))
@@ -697,10 +257,10 @@ namespace MizanOriginalSoft.Views.Forms.Products
                         }
 
                         DataRow dataRow = tblCode.Rows[currentPrintIndex];
-                        string productCode = dataRow["ProductCode"]?.ToString() ?? string.Empty;
-                        string prodName = dataRow["ProdName"]?.ToString() ?? string.Empty;
+                        string productCode = dataRow["ProductCode"].ToString();
+                        string prodName = dataRow["ProdName"].ToString();
                         string price = Convert.ToDecimal(dataRow["U_Price"]).ToString("0.00");
-                        string suplierID = dataRow["SuplierID"]?.ToString() ?? string.Empty;
+                        string suplierID = dataRow["SuplierID"].ToString();
                         string fixedText = lbl_CO.Text;
 
                         int x = e.MarginBounds.Left + col * labelWidth;
@@ -838,13 +398,13 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
             DataRow row = tblCode.Rows[currentPrintIndex];
 
-            string productCode = row["ProductCode"]?.ToString() ?? string.Empty;
-            string prodName = row["ProdName"]?.ToString() ?? string.Empty;
+            string productCode = row["ProductCode"].ToString();
+            string prodName = row["ProdName"].ToString();
             string price = Convert.ToDecimal(row["U_Price"]).ToString("0.00");
-            string suplierID = row["SuplierID"]?.ToString() ?? string.Empty;
+            string suplierID = row["SuplierID"].ToString();
             string fixedText = lbl_CO.Text;
 
-            Graphics g = e.Graphics ?? throw new InvalidOperationException("Graphics object is null.");
+            Graphics g = e.Graphics;
             int labelWidth = e.PageBounds.Width;
             int labelHeight = e.PageBounds.Height;
 
@@ -950,6 +510,406 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
         #endregion
 
-*/
+
+        #region --- تنسيق الجريد ------
+        private void ApplyDGVStyles()
+        {
+            // 1. ضبط نمط التحكم في حجم الأعمدة لملء المساحة المتاحة
+            DGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            // 2. إخفاء جميع الأعمدة أولاً كخطوة تحضيرية
+            foreach (DataGridViewColumn column in DGV.Columns)
+            {
+                column.Visible = false;
+            }
+
+            // 3. تعريف الأعمدة المراد إظهارها مع خصائص كل منها
+            var visibleColumns = new[]
+            {
+        // العمود الأول: كود المنتج
+        new {
+            Name = "ProductCode",         // اسم العمود في مصدر البيانات
+            Header = "كود الصنف",         // النص المعروض في رأس العمود
+            FillWeight = 1,                // نسبة العرض النسبي (1 = أصغر عرض)
+            Alignment = DataGridViewContentAlignment.MiddleCenter // محاذاة النص في المنتصف
+        },
+        
+        // العمود الثاني: اسم المنتج (سيكون الأوسع)
+        new {
+            Name = "ProdName",
+            Header = "اسم الصنف",
+            FillWeight = 3,                // عرض أكبر (4 أضعاف العمود الأول)
+            Alignment = DataGridViewContentAlignment.MiddleLeft   // محاذاة لليسار
+        },
+              
+       
+        // العمود الرابع: سعر البيع
+        new {
+            Name = "U_Price",
+            Header = "سعر بيع",
+            FillWeight = 1,
+            Alignment = DataGridViewContentAlignment.MiddleCenter
+        },
+        
+        // العمود السادس: التصنيف
+        new {
+            Name = "Amount",
+            Header = "عدد التكت",
+            FillWeight = 1,
+            Alignment = DataGridViewContentAlignment.MiddleLeft
+        },
+        
+        // العمود السابع: الرصيد المتاح
+        new {
+            Name = "ProductStock",
+            Header = "الرصيد",
+            FillWeight = 1,
+            Alignment = DataGridViewContentAlignment.MiddleCenter
+        }
+    };
+
+            // 4. تطبيق الإعدادات على الأعمدة المرئية
+            foreach (var col in visibleColumns)
+            {
+                // التحقق من وجود العمود في DataGridView قبل تعديله
+                if (DGV.Columns.Contains(col.Name))
+                {
+                    DGV.Columns[col.Name].Visible = true;           // جعل العمود مرئياً
+                    DGV.Columns[col.Name].HeaderText = col.Header;  // تعيين نص الرأس
+                    DGV.Columns[col.Name].FillWeight = col.FillWeight; // تحديد العرض النسبي
+                    DGV.Columns[col.Name].DefaultCellStyle.Alignment = col.Alignment; // ضبط المحاذاة
+                }
+            }
+
+            // 5. تنسيقات الخلايا العامة
+            DGV.DefaultCellStyle.Font = new Font("Times New Roman", 14);  // خط الخلايا الأساسي
+            DGV.DefaultCellStyle.ForeColor = Color.Blue;                 // لون النص الأزرق
+            DGV.DefaultCellStyle.BackColor = Color.LightYellow;          // خلفية صفراء فاتحة
+
+            // 6. تنسيقات رؤوس الأعمدة
+            DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Bold); // خط عريض
+            DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.Blue;      // لون نص أزرق
+            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGray; // خلفية رمادية فاتحة
+            DGV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter; // محاذاة المنتصف
+
+            // 8. معالجة النصوص في الخلايا لإزالة المسافات الزائدة
+            DGV.CellFormatting += (sender, e) =>
+            {
+                // التحقق من أن العمود مرئي وأن الخلية تحتوي على قيمة
+                if (DGV.Columns[e.ColumnIndex].Visible && e.Value != null)
+                {
+                    // إزالة المسافات من بداية ونهاية النص
+                    e.Value = e.Value.ToString().Trim();
+
+                    // (إضافة اختيارية) معالجة خاصة لعمود السعر
+                    if (DGV.Columns[e.ColumnIndex].Name == "U_Price")
+                    {
+                        // تنسيق الأرقام إذا لزم الأمر
+                        if (decimal.TryParse(e.Value.ToString(), out decimal price))
+                        {
+                            e.Value = price.ToString("N2"); // عرض برقمين عشريين
+                        }
+                    }
+                }
+            };
+
+            // (إضافة اختيارية) جعل الصفوف متناوبة الألوان
+            DGV.AlternatingRowsDefaultCellStyle.BackColor = Color.LightCyan;
+            ApplyColorTheme();
+        }
+        private void ApplyColorTheme()
+        {
+            // الألوان الأساسية للنموذج
+            this.BackColor = Color.FromArgb(245, 245, 240); // لون خلفية النموذج الرئيسي - بيج فاتح
+            // أزرار التعديل (لون أزرق فاتح مع نص أزرق داكن)
+            btnMinus.BackColor = Color.FromArgb(173, 216, 230); // أزرق فاتح (لون السماء)
+            btnMinus.ForeColor = Color.DarkBlue; // نص أزرق داكن
+            btnMinus.FlatStyle = FlatStyle.Flat; // نمط مسطح
+
+            btnPlus.BackColor = Color.FromArgb(173, 216, 230); // نفس لون زر تعديل العنصر
+            btnPlus.ForeColor = Color.DarkBlue;
+            btnPlus.FlatStyle = FlatStyle.Flat;
+
+            // زر الحذف (لون أحمر فاتح مع نص داكن)
+            btnDeleteSelected.BackColor = Color.FromArgb(255, 200, 200); // أحمر فاتح (لون وردي خفيف)
+            btnDeleteSelected.ForeColor = Color.DarkRed; // نص أحمر داكن
+            btnDeleteSelected.FlatStyle = FlatStyle.Flat;
+
+            // زر البحث المتقدم (لون أخضر فاتح مع نص داكن)
+            btnPrintBarCode.BackColor = Color.FromArgb(200, 255, 200); // أخضر فاتح
+            btnPrintBarCode.ForeColor = Color.DarkGreen; // نص أخضر داكن
+            btnPrintBarCode.FlatStyle = FlatStyle.Flat;
+
+            // أزرار المساعدة والإضافة الجديدة (لون رمادي مع نص أسود)
+            btnClose.BackColor = Color.FromArgb(200, 200, 200); // رمادي فاتح
+            btnClose.ForeColor = Color.Black;
+            btnClose.FlatStyle = FlatStyle.Flat;
+
+            // إعدادات الشبكة (DataGridView)
+            DGV.BackgroundColor = Color.White; // خلفية بيضاء
+            DGV.DefaultCellStyle.BackColor = Color.White; // خلفية الخلايا بيضاء
+            DGV.DefaultCellStyle.ForeColor = Color.DarkSlateBlue; // نص الخلايا أزرق داكن
+            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(230, 230, 230); // رؤوس الأعمدة رمادي فاتح
+            DGV.EnableHeadersVisualStyles = false; // تعطيل الأنماط المرئية الافتراضية للرؤوس
+        }
+
+        #endregion
+
+        #region ----  ازرار الشاشة -----
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btnPlus_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // التحقق من أن الحقل ليس فارغاً
+                if (string.IsNullOrEmpty(txtAmount.Text))
+                {
+                    txtAmount.Text = "0";
+                }
+
+                // تحويل النص إلى رقم وإضافة 1
+                int currentAmount = int.Parse(txtAmount.Text);
+                currentAmount++;
+
+                // تحديث النص بالقيمة الجديدة
+                txtAmount.Text = currentAmount.ToString();
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("الرجاء إدخال قيمة رقمية صحيحة");
+                txtAmount.Text = "0";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ: " + ex.Message);
+            }
+        }
+
+        private void btnMinus_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // التحقق من أن الحقل ليس فارغاً
+                if (string.IsNullOrEmpty(txtAmount.Text))
+                {
+                    txtAmount.Text = "0";
+                }
+
+                // تحويل النص إلى رقم وطرح 1
+                int currentAmount = int.Parse(txtAmount.Text);
+
+                // التأكد من عدم النزول تحت الصفر
+                if (currentAmount > 0)
+                {
+                    currentAmount--;
+                }
+                else
+                {
+                    MessageBox.Show("لا يمكن أن تكون الكمية أقل من الصفر");
+                }
+
+                // تحديث النص بالقيمة الجديدة
+                txtAmount.Text = currentAmount.ToString();
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("الرجاء إدخال قيمة رقمية صحيحة");
+                txtAmount.Text = "0";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ: " + ex.Message);
+            }
+        }
+
+        private void txtAmount_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                // التحقق من أن الحقول ليست فارغة
+                if (string.IsNullOrEmpty(txtCodeProduct.Text) || string.IsNullOrEmpty(txtAmount.Text))
+                {
+                    MessageBox.Show("الرجاء إدخال كود المنتج والكمية");
+                    return;
+                }
+
+                try
+                {
+                    // الحصول على كمية المنتج من الحقل
+                    int amount;
+                    if (!int.TryParse(txtAmount.Text, out amount))
+                    {
+                        MessageBox.Show("الرجاء إدخال قيمة رقمية صحيحة للكمية");
+                        return;
+                    }
+                    // استدعاء الإجراء المخزن لتحديث الباركود
+                    DBServiecs.sp_InsertBarcodesToPrint(productId, amount);
+
+                    // تحديث عرض البيانات
+                    BarcodesGet();
+
+                    // تفريغ حقل الكمية للاستعداد للإدخال التالي
+                    txtAmount.Clear();
+                    txtCodeProduct.Clear();
+                    txtCodeProduct.Focus();
+                    lblNameProd.Text = "";
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("حدث خطأ: " + ex.Message);
+                }
+            }
+        }
+        private int productId;
+        private void txtCodeProduct_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                // التحقق من أن الحقول ليست فارغة
+                if (string.IsNullOrEmpty(txtCodeProduct.Text))
+                {
+                    MessageBox.Show("الرجاء إدخال كود المنتج ");
+                    txtCodeProduct.Focus();
+                    txtCodeProduct.SelectAll();
+                    lblNameProd.Text = "";
+                    return;
+                }
+
+                try
+                {
+                    // الحصول على كود المنتج من الحقل
+                    string productCode = txtCodeProduct.Text.Trim();
+                    // استدعاء الدالة للحصول على معرف المنتج
+                    DataTable productData = DBServiecs.Product_GetIDByCode(productCode);
+
+                    if (productData == null || productData.Rows.Count == 0)
+                    {
+                        MessageBox.Show("لم يتم العثور على المنتج");
+                        txtCodeProduct.Focus();
+                        txtCodeProduct.SelectAll();
+                        lblNameProd.Text = "";
+                        return;
+                    }
+
+                    // الحصول على معرف المنتج
+                    productId = Convert.ToInt32(productData.Rows[0]["ID_Product"]);
+                    lblNameProd.Text = productData.Rows[0]["ProdName"].ToString();
+                    txtAmount.Focus();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("حدث خطأ: " + ex.Message);
+                }
+            }
+        }
+        bool check;
+        private void btnDeleteSelected_Click(object sender, EventArgs e)
+        {
+            // 1. التحقق من وجود صفوف محددة للحذف
+            if (DGV.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("الرجاء تحديد عنصر واحد على الأقل للحذف", "لا توجد عناصر محددة",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // 2. طلب تأكيد من المستخدم قبل الحذف
+            var confirmResult = MessageBox.Show("هل أنت متأكد من حذف العناصر المحددة؟",
+                                               "تأكيد الحذف",
+                                               MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            // إذا لم يؤكد المستخدم، نخرج من الدالة دون تنفيذ الحذف
+            if (confirmResult != DialogResult.Yes)
+            {
+                return;
+            }
+
+            try
+            {
+                // 3. إنشاء جدول بيانات لتخزين الأرقام التعريفية للعناصر المحددة
+                DataTable productIds = new DataTable();
+                productIds.Columns.Add("ID_Product", typeof(int)); // إنشاء عمود للأرقام التعريفية
+
+                // 4. ملء الجدول بالأرقام التعريفية للعناصر المحددة
+                foreach (DataGridViewRow row in DGV.SelectedRows)
+                {
+                    // نضيف كل رقم تعريفي إلى الجدول
+                    // ملاحظة: "ProductID" يجب أن يستبدل باسم العمود الحقيقي في قاعدة البيانات
+                    productIds.Rows.Add(row.Cells["ID_Product"].Value);
+                }
+
+                // 5. استدعاء الدالة المسؤولة عن الحذف في قاعدة البيانات
+                DBServiecs.sp_DeleteBarcodesByProductIDs(productIds);
+
+                // إذا نجح الحذف، نعرض رسالة نجاح
+                MessageBox.Show("تم حذف العناصر المحددة بنجاح", "تمت العملية",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // 7. تحديث البيانات المعروضة بعد الحذف
+                BarcodesGet();
+            }
+            catch (Exception ex)
+            {
+                // 8. معالجة أي أخطاء غير متوقعة
+                MessageBox.Show($"حدث خطأ: {ex.Message}", "خطأ",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnDeleteAll_Click(object sender, EventArgs e)
+        {
+            // 1. التأكد من وجود بيانات في DataGridView
+            if (DGV.Rows.Count == 0)
+            {
+                MessageBox.Show("لا توجد بيانات لحذفها", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // 2. تأكيد نية الحذف من المستخدم
+            var confirmResult = MessageBox.Show("هل أنت متأكد أنك تريد حذف كل العناصر؟",
+                                                "تأكيد الحذف الكلي",
+                                                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (confirmResult != DialogResult.Yes)
+            {
+                return;
+            }
+
+            try
+            {
+                // 3. إنشاء DataTable لتجميع كل المعرفات
+                DataTable productIds = new DataTable();
+                productIds.Columns.Add("ID_Product", typeof(int));
+
+                // 4. تعبئة الجدول بكل المعرفات في DGV
+                foreach (DataGridViewRow row in DGV.Rows)
+                {
+                    if (row.IsNewRow) continue; // نتجاهل الصف الجديد (المخصص للإضافة)
+                    productIds.Rows.Add(row.Cells["ID_Product"].Value);
+                }
+
+                // 5. تنفيذ الحذف في قاعدة البيانات
+                DBServiecs.sp_DeleteBarcodesByProductIDs(productIds);
+
+                // 6. إعلام المستخدم
+                MessageBox.Show("تم حذف جميع العناصر بنجاح", "تمت العملية", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // 7. تحديث البيانات
+                BarcodesGet();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"حدث خطأ: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        #endregion
+
+
     }
 }

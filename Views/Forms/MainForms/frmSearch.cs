@@ -51,7 +51,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             Product = 0,
             Customer = 7,
             Supplier = 14,
-            Catigory = 20,
             AllAccounts = 200,
             Pice = 201
         }
@@ -119,17 +118,12 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     lblNameTable.Text = "الموردين والعملاء";
                     break;
 
-                case SearchEntityType.Catigory:
-                    LoadAndDisplayCategories();
-                    lblNameTable.Text = "التصنيفات";
-                    break;
-
                 case SearchEntityType.Pice:
                     if (ProductID.HasValue)
                     {
                         dt = DBServiecs.Product_GetPiecesByProductID(ProductID.Value);
                         DGV.DataSource = dt;
-                        btnDelete.Visible  = true ;
+                        btnDelete.Visible = true;
                         StylPice();
                     }
                     else
@@ -314,98 +308,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         // تنسيق جدول الاصناف
 
 
-        private void LoadAndDisplayCategories()
-        {
-            // 1. جلب البيانات من القاعدة
-            DataTable dt = DBServiecs.Categories_GetAll();
 
-            // 2. ترتيب البيانات هرميًا
-            var orderedRows = GetOrderedRowsHierarchically(dt);
-
-            // 3. إنشاء نسخة من الجدول مرتبة
-            DataTable newTable = dt.Clone(); // نسخ البنية فقط
-
-            foreach (var row in orderedRows)
-                newTable.ImportRow(row); // نسخ الصفوف المرتبة
-
-            // 4. عرضها في DataGridView
-            DGV.DataSource = newTable;
-
-            // 5. تنسيق الـ DataGridView
-            StylizeCategoryGrid();
-        }
-
-        private List<DataRow> GetOrderedRowsHierarchically(DataTable table)
-        {
-            List<DataRow> orderedList = new List<DataRow>();
-
-            // بناء علاقة الأبناء لكل أب
-            var childrenLookup = table.AsEnumerable()
-                .GroupBy(r => r.Field<int?>("ParentID") ?? -1) // التعامل مع null
-                .ToDictionary(g => g.Key, g => g.ToList());
-
-            // إضافة عمود العمق إذا لم يكن موجودًا
-            if (!table.Columns.Contains("Depth"))
-                table.Columns.Add("Depth", typeof(int));
-
-            void AddChildren(int parentId, int depth)
-            {
-                if (!childrenLookup.ContainsKey(parentId)) return;
-
-                foreach (var child in childrenLookup[parentId].OrderBy(r => r["CategoryName"].ToString()))
-                {
-                    child["Depth"] = depth;
-
-                    string originalName = child["CategoryName"]?.ToString() ?? "";
-                    string prefix = "  ";
-
-                    // بادئة الاسم حسب المستوى
-                    if (depth == 1)
-                        prefix = "●  "; // ابن
-                    else if (depth >= 2)
-                        prefix = new string('-', depth) + "     "; // حفيد
-
-                    // الإزاحة مع الاسم
-                    child["CategoryName"] = prefix + originalName;
-
-                    orderedList.Add(child);
-                    AddChildren(child.Field<int>("CategoryID"), depth + 1);
-                }
-            }
-
-            AddChildren(-1, 0); // الجذور
-
-            return orderedList;
-        }
-
-        private void StylizeCategoryGrid()
-        {
-            DGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-            // إخفاء جميع الأعمدة ما عدا CategoryName
-            foreach (DataGridViewColumn col in DGV.Columns)
-            {
-                col.Visible = col.Name == "CategoryName";
-            }
-
-            // ضبط رأس العمود
-            if (DGV.Columns.Contains("CategoryName"))
-            {
-                DGV.Columns["CategoryName"].HeaderText = "التصنيف";
-                DGV.Columns["CategoryName"].Visible = true;
-            }
-
-            // تنسيق مرئي
-            DGV.DefaultCellStyle.Font = new Font("Courier New", 13); // خط موحّد لإظهار الإزاحة
-            DGV.DefaultCellStyle.ForeColor = Color.Navy;
-            DGV.DefaultCellStyle.BackColor = Color.White;
-            DGV.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-
-            DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Bold);
-            DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
-            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGray;
-            DGV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-        }
 
         private void DGV_RowPrePaint_(object sender, DataGridViewRowPrePaintEventArgs e)
         { // هذا الحدث يخص هالة واحد فقط وهى عرض الكاتيجورى فكيف نتجاوزها فى الحالات الاخرى
@@ -469,11 +372,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 SelectedClientEmail = row.Cells["ClientEmail"]?.Value?.ToString() ?? string.Empty;
                 SelectedFirstPhon = row.Cells["FirstPhon"]?.Value?.ToString() ?? string.Empty;
             }
-            else if (EntityType == SearchEntityType.Catigory)
-            {
-                SelectedID = row.Cells["ProductCode"]?.Value?.ToString() ?? string.Empty;
-                SelectedID = row.Cells["Inv_Counter"]?.Value?.ToString() ?? string.Empty;
-            }
 
             this.DialogResult = DialogResult.OK;
             this.Close();
@@ -520,9 +418,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             // تحديد طريقة التعامل حسب نوع البيانات
             switch (EntityType)
             {
-                case SearchEntityType.Catigory:
-                    HandleCategoryRowStyling(e.RowIndex);
-                    break;
 
                 case SearchEntityType.Pice:
                     // مثلًا: يمكنك تخصيص تنسيق معين للقطع إن أردت
@@ -539,34 +434,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-        private void HandleCategoryRowStyling(int rowIndex)
-        {
-            if (DGV.Rows[rowIndex].DataBoundItem is DataRowView rowView &&
-                rowView.Row.Table.Columns.Contains("Depth"))
-            {
-                int depth = rowView.Row.Field<int>("Depth");
-
-                var style = new DataGridViewCellStyle(DGV.DefaultCellStyle);
-
-                switch (depth)
-                {
-                    case 0:
-                        style.ForeColor = Color.DarkBlue;
-                        style.Font = new Font("Times New Roman", 16, FontStyle.Bold);
-                        break;
-                    case 1:
-                        style.ForeColor = Color.DarkGreen;
-                        style.Font = new Font("Times New Roman", 14, FontStyle.Regular);
-                        break;
-                    default:
-                        style.ForeColor = Color.Red;
-                        style.Font = new Font("Times New Roman", 12, FontStyle.Regular);
-                        break;
-                }
-
-                DGV.Rows[rowIndex].DefaultCellStyle = style;
-            }
-        }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
@@ -635,7 +502,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 }
                 else
                 {
-                    CustomMessageBox.ShowWarning (resultMessage, "خطأ");
+                    CustomMessageBox.ShowWarning(resultMessage, "خطأ");
                 }
 
             }
@@ -647,5 +514,10 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         }
         #endregion
+
+        private void DGV_SelectionChanged(object sender, EventArgs e)
+        {
+            /*اريد تعبءة lblID بقيمة الحقل رقم 0*/
+        }
     }
 }

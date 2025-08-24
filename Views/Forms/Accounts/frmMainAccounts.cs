@@ -14,6 +14,8 @@ using WinTextBox = System.Windows.Forms.TextBox;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Security.Cryptography.Xml;
 using MizanOriginalSoft.Views.Reports;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace MizanOriginalSoft.Views.Forms.Accounts
 {
@@ -29,14 +31,13 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         private DataRow? tblRow;
         private DataTable? tblAccTopSub;
         private DataTable? tblAccTop;
-        private DataTable? tblAccDGV;
+
         private string previousAccID = string.Empty;
         public bool newR = false;
         private bool hasDetails;
         private bool hasFixedAssets;
         #endregion
-
-        // ================== المُنشئ ==================
+        // ===== (2) مُنشئ الفورم =====
         public frmMainAccounts(int TopID)
         {
             InitializeComponent();
@@ -49,30 +50,125 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             DGV.ClearSelection();
 
+            // (جيد للأداء) إعدادات قبل التحميل
+            DGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            DGV.EnableHeadersVisualStyles = false;
+            DGV.RowHeadersVisible = false;
+
             #region ربط الأحداث للحقول الرقمية والإهلاك
             txtFixedAssetsValue.KeyPress += InputValidationHelper.AllowOnlyNumbersAndDecimal;
             txtDepreciationRateAnnually.KeyPress += InputValidationHelper.AllowOnlyNumbersAndDecimal;
             txtFixedAssetsAge.KeyPress += InputValidationHelper.AllowOnlyNumbers;
             #endregion
+
         }
 
-        // ================== عند تحميل الفورم ==================
+  
         private void frmMainAccounts_Load(object sender, EventArgs e)
         {
+            this.Visible = false ;
             TypAcc();
             AccTop_LoadFollowers();
             AccountDGV(AccTopID);
             DGVStyl();
             FillcbxChangeCat();
             SetupMenuStrip();
-            LoadReports(AccTopID);  
+            LoadReports(AccTopID);
             tabControlAccount.DrawMode = TabDrawMode.OwnerDrawFixed;
             connectRDO();
             ConnectEvents();
             txtSearch.Focus();
             txtSearch.SelectAll();
             ConnectKeyDown();
+            this.Visible = true ;
         }
+        private void DGVStyl()
+        {
+            
+            if (DGV.DataSource == null) return;
+
+            // مهم: لا تعيد إنشاء DataTable جديد — استخدم الـ DefaultView للحفاظ على الربط
+            if (DGV.DataSource is DataTable dt)
+            {
+                dt.DefaultView.Sort = "SortTree ASC"; // أو حسب ما تريده
+                DGV.DataSource = dt.DefaultView;
+            }
+
+            // باقي تنسيق الأعمدة…
+            DGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            string[] visibleColumns = { "AccName", "ParentAccName", "Balance", "BalanceState" };
+            foreach (DataGridViewColumn col in DGV.Columns)
+                col.Visible = visibleColumns.Contains(col.Name);
+
+            DGV.Columns["AccName"].FillWeight = 3;
+            DGV.Columns["ParentAccName"].FillWeight = 2;
+            DGV.Columns["Balance"].FillWeight = 2;
+            DGV.Columns["BalanceState"].FillWeight = 1;
+
+            DGV.Columns["AccName"].HeaderText = "الاسم";
+            DGV.Columns["ParentAccName"].HeaderText = "تصنيف";
+            DGV.Columns["Balance"].HeaderText = "الرصيد";
+            DGV.Columns["BalanceState"].HeaderText = "---";
+
+            DGV.DefaultCellStyle.Font = new Font("Arial", 12);
+            DGV.DefaultCellStyle.ForeColor = Color.Black;
+            DGV.DefaultCellStyle.BackColor = Color.White;
+
+            DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Bold);
+            DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.Blue;
+            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGray;
+            DGV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            DGV.Columns["BalanceState"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            foreach (DataGridViewRow row in DGV.Rows)
+            {
+                if (row.Cells["AccID"].Value != null &&
+                    int.TryParse(row.Cells["AccID"].Value.ToString(), out int accId) &&
+                    accId < 70)
+                {
+                    row.DefaultCellStyle.BackColor = Color.LightGray;
+                }
+            }
+        }
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         #region ================== التنقل بالإنتر ==================
         // ================== دوال المساعدة ==================
@@ -142,8 +238,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         }
 
-        #endregion 
-  
+        #endregion
+
         #region ********************* languageManager ****************************
 
         public void SwitchToArabic()
@@ -257,7 +353,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         #region ************ Phone handlers ***  مع حماية من null **********
 
 
-       private void ConnectEvents()
+        private void ConnectEvents()
         {
             // أحداث الهاتف
             txtFirstPhon.KeyPress += PhoneTextBox_KeyPress;
@@ -268,7 +364,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             txtAntherPhon.Leave += PhoneTextBox_Leave;
 
         }
- 
+
         private void PhoneTextBox_KeyPress(object? sender, KeyPressEventArgs e)
         {
             var txt = sender as System.Windows.Forms.TextBox;
@@ -803,24 +899,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
 
 
-        private void AccTop_LoadFollowers() // تحميل الحسابات الفرعية في القائمة الجانبية
-        {
-            tblAccTopSub = DBServiecs.MainAcc_LoadFollowers(AccTopID);
-            lstSubAccTop.DataSource = tblAccTopSub;
-            lstSubAccTop.DisplayMember = "AccName";
-            lstSubAccTop.ValueMember = "AccID";
-
-            if (lstSubAccTop.SelectedItem != null)
-            {
-                lblSubAccTop.Text = "0";
-                tlpTopLst.Visible = true;
-                lstSubAccTop.SelectedIndex = -1;
-            }
-            else
-            {
-                tlpTopLst.Visible = false;
-            }
-        }
 
         private void FillcbxChangeCat() // تعبئة الكمبوبوكس بالحسابات الرئيسية والفرعية
         {
@@ -836,54 +914,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         #region تنسيق DataGridView
 
-        private void DGVStyl() // تنسيق الأعمدة والمظهر العام للجدول
-        {
-            if (DGV.DataSource == null) return;
-
-            if (DGV.DataSource is DataTable dt)
-            {
-                dt.DefaultView.Sort = "AccID ASC";
-                DGV.DataSource = dt.DefaultView.ToTable();
-            }
-
-            DGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-            string[] visibleColumns = { "AccName", "Balance", "BalanceState" };
-            foreach (DataGridViewColumn col in DGV.Columns)
-            {
-                col.Visible = visibleColumns.Contains(col.Name);
-            }
-
-            DGV.Columns["AccName"].FillWeight = 4;
-            DGV.Columns["Balance"].FillWeight = 3;
-            DGV.Columns["BalanceState"].FillWeight = 2;
-
-            DGV.Columns["AccName"].HeaderText = "الاسم";
-            DGV.Columns["Balance"].HeaderText = "الرصيد";
-            DGV.Columns["BalanceState"].HeaderText = "---";
-
-            DGV.DefaultCellStyle.Font = new Font("Arial", 12);
-            DGV.DefaultCellStyle.ForeColor = Color.Black;
-            DGV.DefaultCellStyle.BackColor = Color.White;
-
-            DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Bold);
-            DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.Blue;
-            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGray;
-            DGV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            DGV.Columns["BalanceState"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            foreach (DataGridViewRow row in DGV.Rows)
-            {
-                if (row.Cells["AccID"].Value != null &&
-                    int.TryParse(row.Cells["AccID"].Value.ToString(), out int accId) &&
-                    accId < 70)
-                {
-                    row.DefaultCellStyle.BackColor = Color.LightGray;
-                }
-            }
-        }
-
+  
         private void DGV_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e) // إعادة تلوين الصف حسب رقم الحساب
         {
             try
@@ -947,7 +978,205 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         #endregion
 
+        #region ===== أدوات التقارير (Report Tools) =====
 
+        // تعريف كلاس ليمثل بيانات التقرير بشكل منظم
+        public class ReportInfo
+        {
+            public int ReportID { get; set; }
+            public string ReportCodeName { get; set; } = "";
+            public string ReportDisplayName { get; set; } = "";
+            public bool IsGrouped { get; set; }
+        }
+
+        // إنشاء شريط القوائم
+        private void SetupMenuStrip()
+        {
+            MenuStrip mainMenu = new MenuStrip
+            {
+                Dock = DockStyle.Fill,
+                BackColor = Color.LightSteelBlue,
+                Font = new Font("Times New Roman", 14, FontStyle.Regular)
+            };
+
+            // القوائم الرئيسية للتقارير
+            tsmiCategoryReports = new ToolStripMenuItem("تقارير الحساب المحدد ▼");
+            tsmiGroupedReports = new ToolStripMenuItem("تقارير مجمعة للحسابات المحددة ▼");
+
+            mainMenu.Items.Add(tsmiCategoryReports);
+            mainMenu.Items.Add(tsmiGroupedReports);
+
+            pnlMenuContainer.Controls.Add(mainMenu);
+            mainMenu.Location = new Point(10, 5);
+
+            DGV.Dock = DockStyle.Fill;
+        }
+
+        // تحميل التقارير من ReportsMaster
+        private void LoadReports(int topAcc)
+        {
+            try
+            {
+                // تأكد أن القوائم تم إنشاؤها
+                if (tsmiCategoryReports == null || tsmiGroupedReports == null)
+                {
+                    SetupMenuStrip(); // إنشاء القوائم إذا لم تكن موجودة
+                }
+
+                // جلب البيانات من قاعدة البيانات
+                DataTable dt = DBServiecs.Reports_GetByTopAcc(topAcc, false);
+
+                // تقسيم البيانات (فردية / مجمعة)
+                DataRow[] individualReports = dt.Select("IsGrouped = 0");
+                DataRow[] groupedReports = dt.Select("IsGrouped = 1");
+
+                if (tsmiCategoryReports != null)
+                    LoadMenuItemsFromDataRows(tsmiCategoryReports, individualReports);
+
+                if (tsmiGroupedReports != null)
+                    LoadMenuItemsFromDataRows(tsmiGroupedReports, groupedReports);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ أثناء تحميل التقارير: " + ex.Message);
+            }
+        }
+
+        // تعبئة عناصر القائمة من DataRow[]
+        private void LoadMenuItemsFromDataRows(ToolStripMenuItem parentMenu, DataRow[] rows)
+        {
+            parentMenu.DropDownItems.Clear();
+
+            if (rows.Length == 0)
+            {
+                // لا توجد تقارير
+                ToolStripMenuItem emptyItem = new ToolStripMenuItem("لا توجد تقارير متاحة")
+                {
+                    Enabled = false
+                };
+                parentMenu.DropDownItems.Add(emptyItem);
+                return;
+            }
+
+            foreach (DataRow row in rows)
+            {
+                // تكوين عنصر القائمة
+                ToolStripMenuItem menuItem = new ToolStripMenuItem(row["ReportDisplayName"].ToString())
+                {
+                    // تخزين بيانات التقرير داخل ReportInfo في خاصية Tag
+                    Tag = new ReportInfo
+                    {
+                        ReportID = Convert.ToInt32(row["ReportID"]),
+                        ReportCodeName = row["ReportCodeName"].ToString() ?? "",
+                        ReportDisplayName = row["ReportDisplayName"].ToString() ?? "",
+                        IsGrouped = Convert.ToBoolean(row["IsGrouped"])
+                    }
+                };
+
+                // ربط حدث الضغط
+                menuItem.Click += MenuItem_Click;
+                parentMenu.DropDownItems.Add(menuItem);
+            }
+        }
+
+        // حدث النقر على عنصر تقرير
+        private void MenuItem_Click(object? sender, EventArgs e)
+        {
+            if (sender is not ToolStripMenuItem clickedItem) return;
+
+            // الآن Tag يحتوي على ReportInfo وليس DataRow
+            if (clickedItem.Tag is ReportInfo report)
+            {
+                try
+                {
+                    // تجهيز الديكشنري (parameters) لتمريرها إلى شاشة التقرير
+                    Dictionary<string, object> reportParams = new Dictionary<string, object>
+                    {
+                        ["ReportCodeName"] = report.ReportCodeName,
+                        ["ReportDisplayName"] = report.ReportDisplayName,
+                        ["ReportID"] = report.ReportID
+                    };
+
+                    // حسب نوع التقرير (فردي أو مجمع)
+                    if (report.IsGrouped == false)
+                    {
+                        // تقرير حساب فردي → يمرر الـ AccountID الحالي
+                        reportParams["AccountID"] = GetCurrentEntityID() ?? DBNull.Value;
+                    }
+                    else
+                    {
+                        // تقرير مجمع → يمرر قائمة الحسابات المختارة
+                        reportParams["AccountsList"] = GetFilteredData() ?? new DataTable();
+                    }
+
+                    // فتح شاشة إعدادات التقرير
+                    using frmSettingReports previewForm = new frmSettingReports(reportParams);
+                    previewForm.ShowDialog();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"حدث خطأ أثناء تحضير التقرير: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        // إرجاع معرف الحساب الحالي من الواجهة
+        private object? GetCurrentEntityID()
+        {
+            return string.IsNullOrEmpty(lblAccID.Text) ? null : (object)Convert.ToInt32(lblAccID.Text);
+        }
+
+        // تجهيز البيانات المصفاة للحسابات (تستخدم مع التقارير المجمعة)
+        private DataTable? GetFilteredData()
+        {
+            DataTable result = new DataTable();
+            result.Columns.Add("ID", typeof(int));
+            result.Columns.Add("Name", typeof(string));
+
+            DataGridView? sourceGrid = DGV;
+            string idColumn = "AccID";
+            string nameColumn = "AccName";
+
+            if (sourceGrid != null)
+            {
+                if (sourceGrid.SelectedRows.Count > 1)
+                {
+                    // لو المستخدم اختار أكثر من صف
+                    foreach (DataGridViewRow row in sourceGrid.SelectedRows)
+                    {
+                        if (!row.IsNewRow && row.Cells[idColumn].Value != null)
+                        {
+                            result.Rows.Add(
+                                Convert.ToInt32(row.Cells[idColumn].Value),
+                                row.Cells[nameColumn].Value?.ToString() ?? ""
+                            );
+                        }
+                    }
+                }
+                else
+                {
+                    // لو مفيش اختيار → نأخذ كل الصفوف
+                    foreach (DataGridViewRow row in sourceGrid.Rows)
+                    {
+                        if (!row.IsNewRow && row.Cells[idColumn].Value != null)
+                        {
+                            result.Rows.Add(
+                                Convert.ToInt32(row.Cells[idColumn].Value),
+                                row.Cells[nameColumn].Value?.ToString() ?? ""
+                            );
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        #endregion
+
+
+
+        /*
         #region ===== أدوات التقارير (Report Tools) =====
 
         // إنشاء شريط القوائم
@@ -983,24 +1212,24 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     SetupMenuStrip(); // إنشاء القوائم إذا لم تكن موجودة
                 }
 
-                DataTable dtReports = DBServiecs.Reports_GetByTopAcc(topAcc);
+                // جلب البيانات (المفعلة فقط false أو الجميع true حسب ما تحتاج)
+                DataTable dt = DBServiecs.Reports_GetByTopAcc(topAcc, false);
 
                 // تقسيم البيانات
-                DataRow[] individualReports = dtReports.Select("IsGrouped = 0");
-                DataRow[] groupedReports = dtReports.Select("IsGrouped = 1");
+                DataRow[] individualReports = dt.Select("IsGrouped = 0");
+                DataRow[] groupedReports = dt.Select("IsGrouped = 1");
+
                 if (tsmiCategoryReports != null)
                     LoadMenuItemsFromDataRows(tsmiCategoryReports, individualReports);
 
                 if (tsmiGroupedReports != null)
                     LoadMenuItemsFromDataRows(tsmiGroupedReports, groupedReports);
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show("حدث خطأ أثناء تحميل التقارير: " + ex.Message);
             }
         }
-
 
         // تعبئة عناصر القائمة من DataRow[]
         private void LoadMenuItemsFromDataRows(ToolStripMenuItem parentMenu, DataRow[] rows)
@@ -1033,7 +1262,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         {
             if (sender is not ToolStripMenuItem clickedItem) return;
 
-            if (clickedItem.Tag is DataRow reportRow)
+            if (clickedItem.Tag is DataRow reportRow)//لماذا يخرج من الشرط
             {
                 try
                 {
@@ -1065,13 +1294,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     MessageBox.Show($"حدث خطأ أثناء تحضير التقرير: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-        }
-
-        // تعبئة المعطيات المشتركة
-        private void FillCommonParameters(Dictionary<string, object> parameters)
-        {
-            parameters["EntityID"] = GetCurrentEntityID() ?? DBNull.Value;
-            parameters["FilteredData"] = GetFilteredData() ?? new DataTable();
         }
 
         private object? GetCurrentEntityID()
@@ -1124,8 +1346,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         #endregion
+        */
 
- 
         #region ======= عرض بيانات الحساب =======
 
         // ✅ دالة مركزية لملء الحقول من DataRow
@@ -1308,9 +1530,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         #endregion
 
 
-
         private void lstSubAccTop_SelectedIndexChanged(object sender, EventArgs e)
         {
+            AccountDGV(AccTopID);
             if (lstSubAccTop.SelectedValue == null || lstSubAccTop.SelectedValue is DataRowView)
                 return;
 
@@ -1355,7 +1577,56 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             lstSubAccTop.ClearSelected();
         }
-     
+        private void btnChangeCat_Click(object sender, EventArgs e)
+        {
+            if (cbxChangeCat.SelectedValue == null)
+            {
+                MessageBox.Show("يرجى تحديد التصنيف الذي تريد نقل الأصناف إليه", "تنبيه",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int newP = Convert.ToInt32(cbxChangeCat.SelectedValue);
+
+            // جمع الأكواد المحددة من الـ DGV
+            List<string> selectedAccIDs = new List<string>();
+            foreach (DataGridViewRow row in DGV.SelectedRows)
+            {
+                object? accIdVal = row.Cells["AccID"].Value;
+                if (accIdVal != null && !string.IsNullOrWhiteSpace(accIdVal.ToString()))
+                {
+                    selectedAccIDs.Add(accIdVal.ToString()!);
+                }
+            }
+
+            if (selectedAccIDs.Count == 0)
+            {
+                MessageBox.Show("يرجى تحديد الحسابات التي تريد نقلها", "تنبيه",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // تحويل القائمة إلى نص مفصول بفواصل
+            string accIDs = string.Join(",", selectedAccIDs);
+
+            // استدعاء الإجراء
+            string resultMessage;
+            bool success = DBServiecs.MainAcc_ChangAccCat(newP, accIDs, out resultMessage);
+
+
+            // عرض النتيجة
+            if (success)
+            {
+                MessageBox.Show(resultMessage, "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                RefrechCat(newP); // 👈 كده هيتنفذ بس لو success = true
+            }
+            else
+            {
+                MessageBox.Show(resultMessage, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
 
         #region تبويب مخصص لتنسيق الـ Tabs
         private void tabControlAccount_DrawItem(object sender, DrawItemEventArgs e)
@@ -1389,56 +1660,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
         #endregion
 
-  
-        private void UpdateBalanceSummary()
-        {
-            decimal totalBalance = 0;
-            int recordCount = 0;
 
-            // التحقق من أن مصدر البيانات الحالي هو DataView
-            if (DGV.DataSource is DataView dv)
-            {
-                foreach (DataRowView rowView in dv)
-                {
-                    if (rowView["Balance"] != DBNull.Value)
-                    {
-                        totalBalance += Convert.ToDecimal(rowView["Balance"]);
-                    }
-                    recordCount++;
-                }
-            }
-            else if (DGV.DataSource is DataTable dt)
-            {
-                foreach (DataRow row in dt.Rows)
-                {
-                    if (row["Balance"] != DBNull.Value)
-                    {
-                        totalBalance += Convert.ToDecimal(row["Balance"]);
-                    }
-                    recordCount++;
-                }
-            }
-
-            // عرض القيم المطلقة للإجمالي في lblTotal
-            lblTotal.Text = Math.Abs(totalBalance).ToString("N0");
-
-            // تحديث lblTotalStat بناءً على إشارة القيمة الإجمالية
-            if (totalBalance > 0)
-            {
-                lblTotalStat.Text = "الرصيد مدين";
-            }
-            else if (totalBalance < 0)
-            {
-                lblTotalStat.Text = "الرصيد دائن";
-            }
-            else
-            {
-                lblTotalStat.Text = "----";
-            }
-
-            // عرض عدد السجلات في lblCount
-            lblCount.Text = recordCount.ToString();
-        }
 
         #region ***************   البحث و تحديث  و تحميل البيانات  ********************         
 
@@ -1480,8 +1702,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         }
 
-
-        
         private void RefreshAccountData(int accIDToSelect)
         {
             string balanceType = rdoMadeen.Checked ? "POS" :
@@ -1525,6 +1745,50 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
             UpdateBalanceSummary();
         }
+
+        private void UpdateBalanceSummary()
+        {
+            decimal totalMadeen = 0;  // الموجب
+            decimal totalDaeen = 0;   // السالب
+            int recordCount = 0;
+
+            // التحقق من أن مصدر البيانات الحالي هو DataView
+            if (DGV.DataSource is DataView dv)
+            {
+                foreach (DataRowView rowView in dv)
+                {
+                    if (rowView["Balance"] != DBNull.Value)
+                    {
+                        decimal balance = Convert.ToDecimal(rowView["Balance"]);
+                        if (balance > 0)
+                            totalMadeen += balance;
+                        else if (balance < 0)
+                            totalDaeen += Math.Abs(balance); // ناخذ القيمة المطلقة
+                    }
+                    recordCount++;
+                }
+            }
+            else if (DGV.DataSource is DataTable dt)
+            {
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (row["Balance"] != DBNull.Value)
+                    {
+                        decimal balance = Convert.ToDecimal(row["Balance"]);
+                        if (balance > 0)
+                            totalMadeen += balance;
+                        else if (balance < 0)
+                            totalDaeen += Math.Abs(balance);
+                    }
+                    recordCount++;
+                }
+            }
+
+            // عرض النتيجة بالصيغة المطلوبة
+            lblCountAndTotals.Text =
+                $"عدد: {recordCount:N0}   اجمالى مدين: {totalMadeen:N2}   اجمالى دائن: {totalDaeen:N2}";
+        }
+
 
         private void LoadSelectedAccountDetails()
         {
@@ -1585,6 +1849,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 }
 
                 LoadAccountsByBalanceType(topID, balanceType);
+                UpdateBalanceSummary();
             }
         }
 
@@ -1596,6 +1861,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             tblAccDGV = DBServiecs.MainAcc_LoadFinalAccounts(topID, "All");
             DGV.DataSource = tblAccDGV;
             DGVStyl();
+            UpdateBalanceSummary();
         }
 
         // التصفية على الحسابات
@@ -1640,7 +1906,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             UpdateBalanceSummary();
         }
 
-      
+
         //  ******  التحكم فى 
         private void tabControlAccount_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1662,8 +1928,179 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-       #endregion
-  
-    
+        #endregion
+
+        /*اين الخلل فى الصعود والنزول فى اليست والجريد هذه صورة كاملة عن التصفية والبحث يمكن يكون هناك تعارض*/
+
+        #region ****  ترتيب الحسابات الفرعية والنهائية
+        private DataTable? tblAccDGV;
+        private void RefrechCat(int parentId)
+        {
+            AccountDGV(AccTopID);
+            lblSubAccTop.Text = parentId.ToString();
+
+            if (tblAccDGV != null)
+            {
+                DataView dv = tblAccDGV.DefaultView;
+                dv.RowFilter = $"ParentAccID = {parentId}";
+                DGV.DataSource = dv;
+            }
+            else
+            {
+                DGV.DataSource = null;
+            }
+
+            if (lstSubAccTop.Items.Count > 0)
+                lstSubAccTop.SelectedValue = parentId;
+        }
+
+        private const string AccIdColumnName = "AccID";
+
+        //هذه الدالة المسؤولة عن تحميل اللست
+        private void AccTop_LoadFollowers()
+        {
+            int? selectedAccId = lstSubAccTop.SelectedValue as int?;
+
+            tblAccTopSub = DBServiecs.MainAcc_LoadFollowers(AccTopID);
+            lstSubAccTop.DataSource = tblAccTopSub;
+            lstSubAccTop.DisplayMember = "AccName";
+            lstSubAccTop.ValueMember = "AccID";
+
+            if (tblAccTopSub != null && tblAccTopSub.Rows.Count > 0)
+            {
+                tlpTopLst.Visible = true;
+
+                if (selectedAccId.HasValue)
+                    lstSubAccTop.SelectedValue = selectedAccId.Value;
+                else
+                    lstSubAccTop.SelectedIndex = 0;
+            }
+            else
+            {
+                tlpTopLst.Visible = false;
+            }
+        }
+        private void SelectRowByAccId(int accId)
+        {
+            var row = DGV.Rows
+                         .Cast<DataGridViewRow>()
+                         .FirstOrDefault(r => r.Cells[AccIdColumnName].Value != null &&
+                                              Convert.ToInt32(r.Cells[AccIdColumnName].Value) == accId);
+
+            if (row != null)
+            {
+                DGV.ClearSelection();
+                row.Selected = true;
+
+                // نختار أول خلية مرئية بدل العمود [0]
+                var firstVisibleCell = row.Cells.Cast<DataGridViewCell>()
+                                               .FirstOrDefault(c => c.Visible);
+
+                if (firstVisibleCell != null)
+                    DGV.CurrentCell = firstVisibleCell;
+            }
+        }
+
+
+        /*
+        يوجد تعارض ما فى ترتيب اللست وترتيب الجريد فما هو السبب 
+        الللست بها التصنيفات ابناء الحساب الرئيسى وليست فينل اكونت
+        اما الجريد فهم ابناء الحساب التصنيف واحفاد الحساب الرئيسى 
+        ويوجد زرين للترتيب فى اللست للترتيب
+        وزرين للترتيب للجريد
+        وعند كتابة زرين الجريد توقفت كل الازرار لماذا
+         */
+
+        private void ReloadGrid(int? accIdToSelect = null)
+        {
+            // 1) تحديد الـ TopID
+            if (!int.TryParse(lblAccTopID.Text, out int topID))
+                return;
+
+            if (int.TryParse(lblSubAccTop.Text, out int subTopID) && subTopID > 0)
+                topID = subTopID;
+
+            // 2) تحديد نوع الرصيد
+            string balanceType = rdoMadeen.Checked ? "POS" :
+                                 rdoDaeen.Checked ? "NEG" :
+                                 rdoEqual.Checked ? "ZERO" : "All";
+
+            // 3) تحميل البيانات
+            tblAccDGV = DBServiecs.MainAcc_LoadFinalAccounts(topID, balanceType);
+
+            // 4) تحويل إلى DataView علشان نستفيد من البحث والتصفية
+            DataView dv = new DataView(tblAccDGV);
+
+            // 5) تطبيق البحث
+            string searchText = txtSearch.Text.Trim();
+            if (!string.IsNullOrEmpty(searchText))
+                dv.RowFilter = $"AccName LIKE '%{searchText}%'";
+
+            // 6) ربط بالـ DGV
+            DGV.DataSource = dv;
+            DGVStyl();
+            UpdateBalanceSummary();
+
+            // 7) إعادة التحديد لو طلب
+            if (accIdToSelect.HasValue)
+                SelectRowByAccId(accIdToSelect.Value);
+        }
+
+        private void btnList_UP_Click(object sender, EventArgs e)
+        {
+            if (lstSubAccTop.SelectedItem is DataRowView rowView && lstSubAccTop.SelectedIndex > 0)
+            {
+                int currentAccID = Convert.ToInt32(rowView.Row["AccID"]);
+                DBServiecs.MainAcc_MoveSortTree(currentAccID, "UP");
+
+                // إعادة تحميل
+                AccTop_LoadFollowers();
+
+                lstSubAccTop.SelectedValue = currentAccID;
+            }
+        }
+
+        private void btnList_DOWN_Click(object sender, EventArgs e)
+        {
+            if (lstSubAccTop.SelectedItem is DataRowView rowView)
+            {
+                int currentAccID = Convert.ToInt32(rowView.Row["AccID"]);
+                DBServiecs.MainAcc_MoveSortTree(currentAccID, "DOWN");
+
+                // إعادة تحميل
+                AccTop_LoadFollowers();
+
+                lstSubAccTop.SelectedValue = currentAccID;
+            }
+        }
+        private void btnDGV_UP_Click(object sender, EventArgs e)
+        {
+            if (DGV.CurrentRow != null && DGV.CurrentRow.Index > 0)
+            {
+                int currentAccID = Convert.ToInt32(DGV.CurrentRow.Cells["AccID"].Value);
+
+                DBServiecs.MainAcc_MoveSortTree(currentAccID, "UP");
+                
+                // إعادة تحميل الجريد مع تحديد الحساب
+                ReloadGrid(currentAccID);
+            }
+        }
+
+        private void btnDGV_DOWN_Click(object sender, EventArgs e)
+        {
+            if (DGV.CurrentRow != null)
+            {
+                int currentAccID = Convert.ToInt32(DGV.CurrentRow.Cells["AccID"].Value);
+
+                DBServiecs.MainAcc_MoveSortTree(currentAccID, "DOWN");
+                AccountDGV(AccTopID);
+                // إعادة تحميل الجريد مع تحديد الحساب
+                ReloadGrid(currentAccID);
+            }
+        }
+        // 
+
+        #endregion
+
     }
 }

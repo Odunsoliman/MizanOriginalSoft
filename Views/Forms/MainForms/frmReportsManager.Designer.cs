@@ -46,6 +46,9 @@
             btnSave = new Button();
             tableLayoutPanel2 = new TableLayoutPanel();
             DGV = new DataGridView();
+            tableLayoutPanel4 = new TableLayoutPanel();
+            btnUP = new Button();
+            btnDown = new Button();
             tableLayoutPanel5 = new TableLayoutPanel();
             txtNotes = new TextBox();
             label4 = new Label();
@@ -53,6 +56,7 @@
             tableLayoutPanel3.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
+            tableLayoutPanel4.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
             SuspendLayout();
             // 
@@ -160,6 +164,7 @@
             cbxID_TopAcc.Name = "cbxID_TopAcc";
             cbxID_TopAcc.Size = new Size(371, 30);
             cbxID_TopAcc.TabIndex = 0;
+            cbxID_TopAcc.SelectedIndexChanged += cbxID_TopAcc_SelectedIndexChanged;
             cbxID_TopAcc.SelectionChangeCommitted += cbxID_TopAcc_SelectionChangeCommitted;
             // 
             // txtReportDisplayName
@@ -210,7 +215,6 @@
             rdoIsGrouped.Name = "rdoIsGrouped";
             rdoIsGrouped.Size = new Size(63, 22);
             rdoIsGrouped.TabIndex = 6;
-            rdoIsGrouped.TabStop = true;
             rdoIsGrouped.Text = "مجمع";
             rdoIsGrouped.UseVisualStyleBackColor = true;
             rdoIsGrouped.CheckedChanged += rdoIsGrouped_CheckedChanged;
@@ -229,6 +233,7 @@
             // rdoIndividual
             // 
             rdoIndividual.AutoSize = true;
+            rdoIndividual.Checked = true;
             rdoIndividual.Location = new Point(336, 59);
             rdoIndividual.Name = "rdoIndividual";
             rdoIndividual.Size = new Size(61, 22);
@@ -261,10 +266,11 @@
             // 
             // tableLayoutPanel2
             // 
-            tableLayoutPanel2.ColumnCount = 1;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel2.Controls.Add(DGV, 0, 0);
+            tableLayoutPanel2.ColumnCount = 2;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 90F));
+            tableLayoutPanel2.Controls.Add(DGV, 1, 0);
+            tableLayoutPanel2.Controls.Add(tableLayoutPanel4, 0, 0);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(3, 205);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -283,9 +289,49 @@
             DGV.Name = "DGV";
             DGV.ReadOnly = true;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DGV.Size = new Size(1072, 236);
+            DGV.Size = new Size(965, 236);
             DGV.TabIndex = 0;
             DGV.SelectionChanged += DGV_SelectionChanged;
+            // 
+            // tableLayoutPanel4
+            // 
+            tableLayoutPanel4.ColumnCount = 2;
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 37F));
+            tableLayoutPanel4.Controls.Add(btnUP, 1, 1);
+            tableLayoutPanel4.Controls.Add(btnDown, 1, 2);
+            tableLayoutPanel4.Dock = DockStyle.Fill;
+            tableLayoutPanel4.Location = new Point(974, 3);
+            tableLayoutPanel4.Name = "tableLayoutPanel4";
+            tableLayoutPanel4.RowCount = 4;
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 40F));
+            tableLayoutPanel4.Size = new Size(101, 236);
+            tableLayoutPanel4.TabIndex = 0;
+            // 
+            // btnUP
+            // 
+            btnUP.Dock = DockStyle.Fill;
+            btnUP.Location = new Point(3, 50);
+            btnUP.Name = "btnUP";
+            btnUP.Size = new Size(31, 41);
+            btnUP.TabIndex = 5;
+            btnUP.Text = "▲";
+            btnUP.UseVisualStyleBackColor = true;
+            btnUP.Click += btnUP_Click;
+            // 
+            // btnDown
+            // 
+            btnDown.Dock = DockStyle.Fill;
+            btnDown.Location = new Point(3, 97);
+            btnDown.Name = "btnDown";
+            btnDown.Size = new Size(31, 41);
+            btnDown.TabIndex = 5;
+            btnDown.Text = "▼";
+            btnDown.UseVisualStyleBackColor = true;
+            btnDown.Click += btnDown_Click;
             // 
             // tableLayoutPanel5
             // 
@@ -339,6 +385,7 @@
             tableLayoutPanel3.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)DGV).EndInit();
+            tableLayoutPanel4.ResumeLayout(false);
             tableLayoutPanel5.ResumeLayout(false);
             tableLayoutPanel5.PerformLayout();
             ResumeLayout(false);
@@ -368,5 +415,8 @@
         private RadioButton rdoIsGrouped;
         private RadioButton rdoIndividual;
         private Button btnDelete;
+        private TableLayoutPanel tableLayoutPanel4;
+        private Button btnUP;
+        private Button btnDown;
     }
 }

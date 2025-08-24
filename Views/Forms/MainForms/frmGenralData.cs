@@ -224,7 +224,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             txtFullName.Clear();
 
         }
-
         private void btnSave_UserData_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtUserName.Text) || string.IsNullOrWhiteSpace(txtFullName.Text))
@@ -381,7 +380,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             if (DGV.Columns.Contains("PermissionID"))
                 DGV.Columns["PermissionID"].ReadOnly = true;
         }
-
         private void BtnSave_Click(object sender, EventArgs e)
         {
             if (cbxUsers.SelectedValue == null || cbxWarehouses.SelectedValue == null)
@@ -534,85 +532,129 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         #region حفظ الإعدادات إلى الملف
         private void btnSave_Click(object sender, EventArgs e)
         {
+           
             if (string.IsNullOrWhiteSpace(txtServerName.Text) || string.IsNullOrWhiteSpace(txtDBName.Text))
             {
                 MessageBox.Show("يرجى تحديد السيرفر وقاعدة البيانات.");
                 return;
             }
-
-            try
-            {
-                List<string> settings = new List<string>
-        {
-            $"serverName={txtServerName.Text}",
-            $"DBName={txtDBName.Text}",
-            $"maxBackups={txtMaxBackups.Text}",
-            $"BackupsPath={txtBackupsPath.Text}",
-            $"RollPrinter={lblRollPrinter.Text}",
-            $"SheetPrinter={lblSheetPrinter.Text}",
-            $"SheetRows={txtSheetRows.Text}",
-            $"SheetCols={txtSheetCols.Text}",
-            $"SheetMarginTop={txtMarginTop.Text}",
-            $"SheetMarginBottom={txtMarginBottom.Text}",
-            $"SheetMarginRight={txtMarginRight.Text}",
-            $"SheetMarginLeft={txtMarginLeft.Text}",
-            $"RollLabelWidth={txtRollLabelWidth.Text}",
-            $"RollLabelHeight={txtRollLabelHeight.Text}",
-            $"CompanyName={txtNameCo.Text}",
-            $"CompanyPhon={txtPhon.Text}",
-            $"CompanyAnthrPhon={txtAnthrPhon.Text}",
-            $"SalesTax={txtSalesTax.Text}",
-            $"CompanyAdreass={txtAdreass.Text}",
-            $"EmailCo={txtCompanyEmail.Text}",
-            $"CompanyLoGoFolder={lblLogoPath.Text}",
-            $"LogoImagName={lblLogoImageName.Text}",
-            $"DefaultWarehouseId={(cbxWarehouseId.SelectedValue ?? "")}"
-        };
-
-                File.WriteAllLines(configFilePath, settings);
-                LoadSettings(); // إعادة تحميل الإعدادات بعد الحفظ
-
-                MessageBox.Show("✅ تم حفظ الإعدادات بنجاح", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                CustomMessageBox.ShowWarning($"حدث خطأ أثناء حفظ الإعدادات:\n{ex.Message}", "خطأ");
-            }
+             SaveData();
+          
         }
         #endregion
 
         #region حفظ الإعدادات بصمت (بدون رسالة)
+
         private void SaveData()
         {
-            List<string> settings = new List<string>
-    {
-        $"serverName={txtServerName.Text}",
-        $"DBName={txtDBName.Text}",
-        $"maxBackups={txtMaxBackups.Text}",
-        $"BackupsPath={txtBackupsPath.Text}",
-        $"RollPrinter={lblRollPrinter.Text}",
-        $"SheetPrinter={lblSheetPrinter.Text}",
-        $"SheetRows={txtSheetRows.Text}",
-        $"SheetCols={txtSheetCols.Text}",
-        $"SheetMarginTop={txtMarginTop.Text}",
-        $"SheetMarginBottom={txtMarginBottom.Text}",
-        $"SheetMarginRight={txtMarginRight.Text}",
-        $"SheetMarginLeft={txtMarginLeft.Text}",
-        $"RollLabelWidth={txtRollLabelWidth.Text}",
-        $"RollLabelHeight={txtRollLabelHeight.Text}",
-        $"CompanyName={txtNameCo.Text}",
-        $"CompanyPhon={txtPhon.Text}",
-        $"CompanyAnthrPhon={txtAnthrPhon.Text}",
-        $"SalesTax={txtSalesTax.Text}",
-        $"CompanyAdreass={txtAdreass.Text}",
-        $"EmailCo={txtCompanyEmail.Text}",
-        $"CompanyLoGoFolder={lblLogoPath.Text}",
-        $"LogoImagName={lblLogoImageName.Text}",
-        $"DefaultWarehouseId={(cbxWarehouseId.SelectedValue ?? "")}"
-    };
+            // اقرأ كل الأسطر من الملف (مع التعليقات)
+            List<string> lines = File.Exists(configFilePath)
+                ? File.ReadAllLines(configFilePath).ToList()
+                : new List<string>();
 
-            File.WriteAllLines(configFilePath, settings);
+            // إعدادات جديدة عايزين نحفظها
+            Dictionary<string, string> newSettings = new Dictionary<string, string>
+            {
+                ["serverName"] = txtServerName.Text,
+                ["DBName"] = txtDBName.Text,
+                ["maxBackups"] = txtMaxBackups.Text,
+                ["BackupsPath"] = txtBackupsPath.Text,
+                ["RollPrinter"] = lblRollPrinter.Text,
+                ["SheetPrinter"] = lblSheetPrinter.Text,
+                ["SheetRows"] = txtSheetRows.Text,
+                ["SheetCols"] = txtSheetCols.Text,
+                ["SheetMarginTop"] = txtMarginTop.Text,
+                ["SheetMarginBottom"] = txtMarginBottom.Text,
+                ["SheetMarginRight"] = txtMarginRight.Text,
+                ["SheetMarginLeft"] = txtMarginLeft.Text,
+                ["RollLabelWidth"] = txtRollLabelWidth.Text,
+                ["RollLabelHeight"] = txtRollLabelHeight.Text,
+                ["CompanyName"] = txtNameCo.Text,
+                ["CompanyPhon"] = txtPhon.Text,
+                ["CompanyAnthrPhon"] = txtAnthrPhon.Text,
+                ["SalesTax"] = txtSalesTax.Text,
+                ["CompanyAdreass"] = txtAdreass.Text,
+                ["EmailCo"] = txtCompanyEmail.Text,
+                ["CompanyLoGoFolder"] = lblLogoPath.Text,
+                ["LogoImagName"] = lblLogoImageName.Text,
+                ["DefaultWarehouseId"] = cbxWarehouseId.SelectedValue?.ToString() ?? ""
+
+            };
+
+            // نحدث أو نضيف الإعدادات
+            foreach (var setting in newSettings)
+            {
+                string key = setting.Key;
+                string newValue = setting.Value;
+
+                bool found = false;
+
+                for (int i = 0; i < lines.Count; i++)
+                {
+                    // تخطي التعليقات والأسطر الفارغة
+                    if (string.IsNullOrWhiteSpace(lines[i]) || lines[i].TrimStart().StartsWith("#"))
+                        continue;
+
+                    // لو السطر فيه نفس المفتاح نعدله
+                    if (lines[i].StartsWith(key + "=", StringComparison.OrdinalIgnoreCase))
+                    {
+                        lines[i] = $"{key}={newValue}";
+                        found = true;
+                        break;
+                    }
+                }
+
+                // لو المفتاح مش موجود نضيفه في الآخر
+                if (!found)
+                {
+                    lines.Add($"{key}={newValue}");
+                }
+            }
+
+            // نكتب الملف من جديد مع الحفاظ على التعليقات
+            File.WriteAllLines(configFilePath, lines);
         }
+
+
+
+
+
+        //    private void SaveData()
+        //    {
+        //        List<string> settings = new List<string>
+        //{
+        //    $"serverName={txtServerName.Text}",
+        //    $"DBName={txtDBName.Text}",
+        //    $"maxBackups={txtMaxBackups.Text}",
+        //    $"BackupsPath={txtBackupsPath.Text}",
+        //    $"RollPrinter={lblRollPrinter.Text}",
+        //    $"SheetPrinter={lblSheetPrinter.Text}",
+        //    $"SheetRows={txtSheetRows.Text}",
+        //    $"SheetCols={txtSheetCols.Text}",
+        //    $"SheetMarginTop={txtMarginTop.Text}",
+        //    $"SheetMarginBottom={txtMarginBottom.Text}",
+        //    $"SheetMarginRight={txtMarginRight.Text}",
+        //    $"SheetMarginLeft={txtMarginLeft.Text}",
+        //    $"RollLabelWidth={txtRollLabelWidth.Text}",
+        //    $"RollLabelHeight={txtRollLabelHeight.Text}",
+        //    $"CompanyName={txtNameCo.Text}",
+        //    $"CompanyPhon={txtPhon.Text}",
+        //    $"CompanyAnthrPhon={txtAnthrPhon.Text}",
+        //    $"SalesTax={txtSalesTax.Text}",
+        //    $"CompanyAdreass={txtAdreass.Text}",
+        //    $"EmailCo={txtCompanyEmail.Text}",
+        //    $"CompanyLoGoFolder={lblLogoPath.Text}",
+        //    $"LogoImagName={lblLogoImageName.Text}",
+        //    $"DefaultWarehouseId={(cbxWarehouseId.SelectedValue ?? "")}"
+        //};
+
+        //        File.WriteAllLines(configFilePath, settings);
+        //    }
+
+        /*هذه الدالة تسبب خطأ كبير فى الحفظ فهى تغير الملف باكمله وما اريده الحفاظ على الملف بما فيه من تعليقات وتحفظ 
+         فقط القيمة ولا تغير كل الملف
+        وما هو الاجراء الذى اقوم به عندما اضيف قيمة جديدة فى الملف واريد حفظها من خلال الدالة
+         */
         #endregion
 
         #region === مرفقات خاصة بمربعات النصوص ===
@@ -640,6 +682,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         /// <summary>
         /// تنفيذ الحفظ عند تغيير قيمة مربع النص.
         /// </summary>
+        /// 
         private void TextBox_Leave(object? sender, EventArgs e)
         {
             if (sender is TextBox txt)
@@ -797,7 +840,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         #endregion
 
         #region === إعدادات الطابعات ===
-
         private void btnLoadRollPrinter_Click(object sender, EventArgs e)
         {
             using (PrintDialog printDialog = new PrintDialog())
@@ -809,7 +851,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 }
             }
         }
-
         private void btnLoadSheetPrinter_Click(object sender, EventArgs e)
         {
             using (PrintDialog printDialog = new PrintDialog())
@@ -825,7 +866,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         #endregion
 
         #region === تغيير اللوجو ===
-
         private void btnChangLogo_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
@@ -954,9 +994,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         #region ✅ اختيار مجلد النسخ الاحتياطية
 
-        /// <summary>
-        /// اختيار مجلد النسخ الاحتياطية من المستخدم.
-        /// </summary>
+        // اختيار مجلد النسخ الاحتياطية من المستخدم.
         private void btnGetFolderBak_Click(object sender, EventArgs e)
         {
             try
@@ -970,7 +1008,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     {
                         folderDialog.SelectedPath = txtBackupsPath.Text;
                     }
-
+                    
                     if (folderDialog.ShowDialog() == DialogResult.OK)
                     {
                         txtBackupsPath.Text = folderDialog.SelectedPath;
@@ -985,13 +1023,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-        #endregion
-
-        #region ✅ استرجاع النسخة الاحتياطية
-
-        /// <summary>
-        /// تنفيذ عملية استرجاع نسخة احتياطية مع إنشاء نسخة احتياطية مؤقتة أولاً.
-        /// </summary>
+        // تنفيذ عملية استرجاع نسخة احتياطية مع إنشاء نسخة احتياطية مؤقتة أولاً.
         private async void btnRestoreBackup_Click(object sender, EventArgs e)
         {
             try
@@ -1053,25 +1085,12 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-        #endregion
-
-        #region ✅ حفظ عدد النسخ الاحتياطية القصوى
-
-        /// <summary>
-        /// عند مغادرة الحقل يتم حفظ القيمة تلقائيًا.
-        /// </summary>
+        // عند مغادرة الحقل يتم حفظ القيمة تلقائيًا.
         private void txtMaxBackups_Leave(object sender, EventArgs e)
         {
             SaveData();
         }
-
-        #endregion
-
-        #region ✅ إدارة الفروع (المخازن)
-
-        /// <summary>
-        /// إضافة فرع جديد.
-        /// </summary>
+        // إضافة فرع جديد.
         private void btnAddWarehouse_Click(object sender, EventArgs e)
         {
             string name = txtWarehouseName.Text.Trim();

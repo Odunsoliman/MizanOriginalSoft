@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
@@ -11,8 +12,15 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
 		<PackageReference Include="ReportViewerCore.WinForms" Version="15.1.26" />
-		<PackageReference Include="ZXing.Net" Version="0.16.10" />
+		<PackageReference Include="ZXing.Net" Version="0.16.8" />
 		<PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.9" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Views\Reports\ReptMovements\" />
+		<Folder Include="Views\Reports\ReptGenral\" />
+		<Folder Include="Views\Reports\ReptAccounts\" />
+		<Folder Include="Views\Reports\ReptProducts\" />
 	</ItemGroup>
 
 </Project>

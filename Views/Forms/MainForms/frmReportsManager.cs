@@ -1,6 +1,7 @@
 ﻿using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
 using System;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
@@ -28,8 +29,26 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         private void frmReportsManager_Load(object sender, EventArgs e)
         {
             FillTopAccCombo();
+            UpdateUpDownButtons();
+            txtNotes .Text =string.Empty;
+            txtReportCodeName .Text =string.Empty;
+            txtReportDisplayName .Text =string.Empty;   
+            
         }
+        private void UpdateUpDownButtons()
+        {
+            bool enableButtons = cbxID_TopAcc.SelectedIndex != -1 && DGV.Rows.Count > 0;
 
+            btnUP.Enabled = enableButtons;
+            btnDown.Enabled = enableButtons;
+
+            if (DGV.SelectedRows.Count > 0)
+            {
+                int index = DGV.SelectedRows[0].Index;
+                if (index == 0) btnUP.Enabled = false;
+                if (index == DGV.Rows.Count - 1) btnDown.Enabled = false;
+            }
+        }
         private void FillTopAccCombo()
         {
             var items = new List<ComboItem>
@@ -51,23 +70,62 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             cbxID_TopAcc.DisplayMember = "Text";
             cbxID_TopAcc.ValueMember = "Value";
             cbxID_TopAcc.SelectedIndex = -1;
-            cbxID_TopAcc.DropDownStyle = ComboBoxStyle.DropDownList; // للقراءة فقط
+            cbxID_TopAcc.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            cbxID_TopAcc.SelectedIndexChanged += cbxID_TopAcc_SelectedIndexChanged;
+
+            UpdateUpDownButtons();
         }
 
+        private void cbxID_TopAcc_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            UpdateUpDownButtons();
+
+            if (cbxID_TopAcc.SelectedIndex != -1)
+            {
+                var selectedItem = cbxID_TopAcc.SelectedItem as ComboItem;
+                if (selectedItem != null)
+                {
+                    int topAcc = selectedItem.Value;
+                    LoadReports(topAcc); // تحميل التقارير للمجموعة المختارة
+                }
+            }
+            else
+            {
+                DGV.DataSource = null; // نظف الجدول إذا لم يكن هناك اختيار
+            }
+        }
 
         private void LoadReports(int topAcc)
         {
-            DataTable dt = DBServiecs.Reports_GetByTopAcc(topAcc);
-            DGV.DataSource = dt;
+            DataTable dt = DBServiecs.Reports_GetByTopAcc(topAcc, true);
 
+            DGV.DataSource = dt;
             // لا يظهر رأس السطر
             DGV.RowHeadersVisible = false;
 
             // غير قابلة للكتابة
             DGV.ReadOnly = true;
+            DGVStyl();
+        }
+        private void DGVStyl()
+        {
 
             // تلوين الأسطر المتعاقبة
             DGV.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(240, 248, 255);
+
+            // تمييز السجلات غير المفعلة
+            foreach (DataGridViewRow row in DGV.Rows)
+            {
+                if (row.Cells["IsActivRep"].Value != DBNull.Value &&
+                    Convert.ToBoolean(row.Cells["IsActivRep"].Value) == false)
+                {
+                    row.DefaultCellStyle.BackColor = Color.LightSalmon; // اللون المميز للسجلات غير المفعلة
+                    row.DefaultCellStyle.ForeColor = Color.White;        // يمكن تغيير النص للتمييز أكثر
+                }
+            }
+
+
 
             // إخفاء الأعمدة غير المطلوبة
             foreach (DataGridViewColumn col in DGV.Columns)
@@ -84,8 +142,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             DGV.ClearSelection();
 
             // التحكم في الخط
-            DGV.DefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Regular);
-            DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Bold);
+            DGV.DefaultCellStyle.Font = new Font("Times New Roman", 14, FontStyle.Regular);
+            DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 14, FontStyle.Bold);
             DGV.DefaultCellStyle.ForeColor = Color.Black;
 
             // تسمية الأعمدة بالعربي
@@ -125,9 +183,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             if (DGV.Columns.Contains("Notes"))
                 DGV.Columns["Notes"].Width = unitWidth * 2;
         }
-
-
-
         private void cbxID_TopAcc_SelectionChangeCommitted(object sender, EventArgs e)
         {
             if (cbxID_TopAcc.SelectedValue is int topAcc)
@@ -268,7 +323,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 idTopAcc, // القيمة المحولة بأمان
                 txtReportCodeName.Text.Trim(),
                 chkIsGrouped.Checked,
-                0, // ParentID
                 txtNotes.Text.Trim(),
                 chkIsActivRep.Checked,
                 out msg
@@ -281,11 +335,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 LoadReports(idTopAcc);
             }
-        }
-
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
 
         private void txtReportDisplayName_Enter(object sender, EventArgs e)
@@ -301,6 +350,123 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         private void txtNotes_Enter(object sender, EventArgs e)
         {
             _languageManager.SetArabicLanguage(); // البحث غالباً عربى
+        }
+        private void btnUP_Click(object sender, EventArgs e)
+        {
+            if (DGV.SelectedRows.Count == 0) return;
+
+            int rowIndex = DGV.SelectedRows[0].Index;
+            if (rowIndex == 0) return; // الصف الأول لا يمكن رفعه
+
+            DataTable dt = (DataTable)DGV.DataSource;
+
+            // تبديل الصف الحالي مع الصف السابق
+            DataRow currentRow = dt.Rows[rowIndex];
+            DataRow previousRow = dt.Rows[rowIndex - 1];
+
+            // تحويل ItemArray إلى object?[] لضمان التوافق
+            object?[] temp = currentRow.ItemArray;
+            currentRow.ItemArray = previousRow.ItemArray;
+            previousRow.ItemArray = temp;
+
+            DGV.ClearSelection();
+            DGV.Rows[rowIndex - 1].Selected = true;
+
+            SaveSortRep();
+        }
+
+        private void btnDown_Click(object sender, EventArgs e)
+        {
+            if (DGV.SelectedRows.Count == 0) return;
+
+            int rowIndex = DGV.SelectedRows[0].Index;
+            DataTable dt = (DataTable)DGV.DataSource;
+
+            if (rowIndex == dt.Rows.Count - 1) return; // الصف الأخير لا يمكن إنزاله
+
+            // تبديل الصف الحالي مع الصف التالي
+            DataRow currentRow = dt.Rows[rowIndex];
+            DataRow nextRow = dt.Rows[rowIndex + 1];
+
+            // استخدام object?[] لتوافق Nullability
+            object?[] temp = currentRow.ItemArray;
+            currentRow.ItemArray = nextRow.ItemArray;
+            nextRow.ItemArray = temp;
+
+            DGV.ClearSelection();
+            DGV.Rows[rowIndex + 1].Selected = true;
+
+            SaveSortRep();
+        }
+
+        // الدالة المدمجة لحفظ الترتيب في قاعدة البيانات بعد كل حركة
+        private void SaveSortRep()
+        {
+            DataTable dtOrder = new DataTable();
+            dtOrder.Columns.Add("ReportID", typeof(int));
+            dtOrder.Columns.Add("NewSortRep", typeof(int));
+
+            for (int i = 0; i < DGV.Rows.Count; i++)
+            {
+                var row = DGV.Rows[i];
+                int reportID = Convert.ToInt32(row.Cells["ReportID"].Value);
+                dtOrder.Rows.Add(reportID, i + 1); // الترتيب يبدأ من 1
+            }
+
+            // topAcc يأخذ القيمة الحالية من ComboBox
+            int topAcc = Convert.ToInt32(cbxID_TopAcc.SelectedValue);
+
+            string msg;
+            bool success = DBServiecs.ReportsMaster_UpdateSortRep(topAcc, dtOrder, out msg);
+
+            if (!success)
+                MessageBox.Show("حدث خطأ أثناء تحديث ترتيب التقارير: " + msg);
+
+            DGVStyl_color();
+            RefreshSelectedReportData();
+        }
+        private void DGVStyl_color()
+        {
+            foreach (DataGridViewRow row in DGV.Rows)
+            {
+                // أولاً أعد اللون الافتراضي
+                row.DefaultCellStyle.BackColor = DGV.DefaultCellStyle.BackColor;
+                row.DefaultCellStyle.ForeColor = DGV.DefaultCellStyle.ForeColor;
+
+                // بعد ذلك طبق اللون المميز للسجلات غير المفعلة
+                if (row.Cells["IsActivRep"].Value != DBNull.Value &&
+                    Convert.ToBoolean(row.Cells["IsActivRep"].Value) == false)
+                {
+                    row.DefaultCellStyle.BackColor = Color.LightSalmon;
+                    row.DefaultCellStyle.ForeColor = Color.White;
+                }
+            }
+        }
+
+        private void RefreshSelectedReportData()
+        {
+            if (DGV.DataSource == null || selectedReportID == 0) return;
+
+            DataTable dt = (DataTable)DGV.DataSource;
+            DataRow[] rows = dt.Select("ReportID = " + selectedReportID);
+
+            if (rows.Length > 0)
+            {
+                DataRow row = rows[0];
+                txtReportDisplayName.Text = row["ReportDisplayName"].ToString();
+                txtReportCodeName.Text = row["ReportCodeName"].ToString();
+                bool isGrouped = Convert.ToBoolean(row["IsGrouped"]);
+                chkIsGrouped.Checked = isGrouped;
+                rdoIsGrouped.Checked = isGrouped;
+                rdoIndividual.Checked = !isGrouped;
+                txtNotes.Text = row["Notes"].ToString();
+                chkIsActivRep.Checked = Convert.ToBoolean(row["IsActivRep"]);
+            }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
 

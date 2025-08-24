@@ -261,12 +261,30 @@ namespace MizanOriginalSoft.MainClasses
             return result ?? new DataTable(); // تأمين ضد null
         }
 
-        //جلب جميع الاصناف
+        //جلب جميع الاصناف 
         public static DataTable Product_GetAll()
         {
             DataTable? result = dbHelper.ExecuteSelectQuery("Product_GetAll");
             return result ?? new DataTable(); // إذا كانت null نُرجع DataTable فارغ
         }
+
+
+        // جلب الأصناف المحددة
+        public static DataTable Products_GetByIDs(List<int> ids)
+        {
+            // نحول القائمة إلى نص مفصول بفواصل: "101,102,103"
+            string idList = string.Join(",", ids);
+
+            // استدعاء الإجراء مع تمرير الباراميتر بالطريقة الصحيحة
+            DataTable? result = dbHelper.ExecuteSelectQuery("Products_GetByIDs", cmd =>
+            {
+                cmd.Parameters.AddWithValue("@IDs", idList);
+            });
+
+            return result ?? new DataTable();
+        }
+
+
 
         // جلب قائمة وحدات القياس
         public static DataTable ProductGetUnits()//@@@
@@ -361,6 +379,7 @@ namespace MizanOriginalSoft.MainClasses
 
         //جلب الاصناف التى تم تحديدها فى الداتا تيبل
         public static DataTable Product_GetSelected(DataTable ProductIDs)
+        
         {
             DataTable? result = dbHelper.ExecuteSelectQuery("Product_GetSelected", cmd =>
             {
@@ -1122,6 +1141,8 @@ namespace MizanOriginalSoft.MainClasses
 
         }
 
+        //
+
         //احضار الحسابات الفرعية للحساب الممرر والحساب الاصلى لتعبئة كمبوبكس
         public static DataTable MainAcc_LoadFollowersAndParent(int AccID)//@@@
         {
@@ -1198,6 +1219,126 @@ namespace MizanOriginalSoft.MainClasses
             return resultMessage.StartsWith("تم");
         }
 
+        /*
+             @AccID INT,
+    @Direction NVARCHAR(10)  -- 'UP' or 'DOWN'
+         */
+
+        public static void MainAcc_MoveSortTree(int AccID, string Direction)
+        {
+            dbHelper.ExecuteNonQueryWithLogging(
+                "MainAcc_MoveSortTree",
+                cmd =>
+                {
+                    cmd.Parameters.AddWithValue("@AccID", AccID);
+                    cmd.Parameters.AddWithValue("@Direction", Direction);
+                }
+            );
+        }
+
+
+        //وهذا كود الكلاس DBServiecs
+        public static bool MainAcc_ChangAccCat(int newParentID, string accIDs, out string resultMessage)
+        {
+            resultMessage = dbHelper.ExecuteNonQueryWithLogging(
+                "MainAcc_ChangAccCat",
+                cmd =>
+                {
+                    cmd.Parameters.AddWithValue("@NewParentID", newParentID);
+                    cmd.Parameters.AddWithValue("@AccIDs", accIDs);
+                    // 👈 لا تضيف @Message هنا، الـ dbHelper بيعملها
+                },
+                expectMessageOutput: true
+            );
+
+            return resultMessage.StartsWith("تم");
+        }
+
+        /*
+         
+         وهذا كود الكلاس dbHelper
+               public static string ExecuteNonQueryWithLogging(
+            string procedureName,
+            Action<SqlCommand> setParams,
+            string? logProcedureName = null,
+            Action<SqlCommand>? logParams = null,
+            bool expectMessageOutput = false)
+        {
+            try
+            {
+                EnsureConnectionOpen();
+                string result = "تم التنفيذ.";
+
+                using (SqlCommand cmd = CreateCommand(procedureName))
+                {
+                    if (expectMessageOutput)
+                    {
+                        var msgParam = new SqlParameter("@Message", SqlDbType.NVarChar, 500)
+                        {
+                            Direction = ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(msgParam);
+                    }
+
+                    setParams?.Invoke(cmd);
+                    cmd.ExecuteNonQuery();
+
+                    if (expectMessageOutput)
+                        result = cmd.Parameters["@Message"].Value?.ToString() ?? result;
+                }
+
+                if (!string.IsNullOrEmpty(logProcedureName) && logParams != null)
+                {
+                    using (SqlCommand logCmd = CreateCommand(logProcedureName))
+                    {
+                        logParams(logCmd);
+                        logCmd.ExecuteNonQuery();
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("خطأ أثناء التنفيذ: " + ex.Message);
+                return "فشل في التنفيذ.";
+            }
+            finally
+            {
+                EnsureConnectionClosed();
+            }
+        }
+
+
+
+
+        وهذا الاجراء
+
+        ALTER PROCEDURE dbo.MainAcc_ChangAccCat
+    @NewParentID INT,             
+    @AccIDs NVARCHAR(MAX),        
+    @Message NVARCHAR(500) OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    ;WITH CTE AS
+    (
+        SELECT TRY_CAST(value AS INT) AS AccID
+        FROM STRING_SPLIT(@AccIDs, ',')
+        WHERE TRY_CAST(value AS INT) IS NOT NULL
+    )
+    UPDATE M
+    SET M.ParentAccID = @NewParentID
+    FROM dbo.MainAccounts M
+    INNER JOIN CTE C ON M.AccID = C.AccID;
+
+    SET @Message = N'تم نقل ' + CAST(@@ROWCOUNT AS NVARCHAR) + N' حساب/حسابات.';
+END
+
+
+        فلماذ يرجع خطأ ويفشل فى التنفيذ 
+         */
         #endregion
 
         #region ############# frmReport_Preview ##################
@@ -1272,98 +1413,16 @@ namespace MizanOriginalSoft.MainClasses
             }, expectMessageOutput: true);
         }
 
-        /*
-         الدالة فى كلاس dbHelper
-               public static string ExecuteNonQueryWithLogging(
-            string procedureName,
-            Action<SqlCommand> setParams,
-            string? logProcedureName = null,
-            Action<SqlCommand>? logParams = null,
-            bool expectMessageOutput = false)
-        {
-            try
-            {
-                EnsureConnectionOpen();
-                string result = "تم التنفيذ.";
-
-                using (SqlCommand cmd = CreateCommand(procedureName))
-                {
-                    if (expectMessageOutput)
-                    {
-                        var msgParam = new SqlParameter("@Message", SqlDbType.NVarChar, 500)
-                        {
-                            Direction = ParameterDirection.Output
-                        };
-                        cmd.Parameters.Add(msgParam);
-                    }
-
-                    setParams?.Invoke(cmd);
-                    cmd.ExecuteNonQuery();
-
-                    if (expectMessageOutput)
-                        result = cmd.Parameters["@Message"].Value?.ToString() ?? result;
-                }
-
-                if (!string.IsNullOrEmpty(logProcedureName) && logParams != null)
-                {
-                    using (SqlCommand logCmd = CreateCommand(logProcedureName))
-                    {
-                        logParams(logCmd);
-                        logCmd.ExecuteNonQuery();
-                    }
-                }
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("خطأ أثناء التنفيذ: " + ex.Message);
-                return "فشل في التنفيذ.";
-            }
-            finally
-            {
-                EnsureConnectionClosed();
-            }
-        }
-
-        وهذا هو الاجراء
-        USE [MizanOriginalDB]
-GO
-
--- إنشاء الإجراء
-alter PROCEDURE [dbo].[ReportsMaster_Delete]
-    @ReportID INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    -- التحقق إذا كان السجل موجود
-    IF EXISTS (SELECT 1 FROM [dbo].[ReportsMaster] WHERE ReportID = @ReportID)
-    BEGIN
-        DELETE FROM [dbo].[ReportsMaster]
-        WHERE ReportID = @ReportID;
-
-        PRINT 'تم حذف التقرير بنجاح.';
-    END
-    ELSE
-    BEGIN
-        PRINT 'لم يتم العثور على التقرير المطلوب.';
-    END
-END
-GO
-
-
-
-        فكيف يكون التنسيق السليم دون التغيير فى الدى بى هلبر 
-         */
-
-        //
-        public static DataTable Reports_GetByTopAcc(int ID_TopAcc)//@@@
+        // استدعاء التقارير حسب الحساب الأعلى
+        // ShowAll = true → يرجع كل التقارير
+        // ShowAll = false → يرجع فقط المفعلة
+        public static DataTable Reports_GetByTopAcc(int ID_TopAcc, bool ShowAll)
         {
             string query = "Reports_GetByTopAcc";
             return dbHelper.ExecuteSelectQuery(query, cmd =>
             {
                 cmd.Parameters.Add(new SqlParameter("@ID_TopAcc", SqlDbType.Int) { Value = ID_TopAcc });
+                cmd.Parameters.Add(new SqlParameter("@ShowAll", SqlDbType.Bit) { Value = ShowAll });
             }) ?? new DataTable();
         }
 
@@ -1375,7 +1434,6 @@ GO
             int ID_TopAcc,
             string ReportCodeName,
             bool IsGrouped,
-            int ParentID,
             string Notes,
             bool IsActivRep,
             out string resultMessage)
@@ -1389,11 +1447,33 @@ GO
                     cmd.Parameters.AddWithValue("@ID_TopAcc", ID_TopAcc);
                     cmd.Parameters.AddWithValue("@ReportCodeName", ReportCodeName);
                     cmd.Parameters.AddWithValue("@IsGrouped", IsGrouped);
-                    cmd.Parameters.AddWithValue("@ParentID", ParentID);
                     cmd.Parameters.AddWithValue("@Notes", Notes);
                     cmd.Parameters.AddWithValue("@IsActivRep", IsActivRep);
                 },
                 expectMessageOutput: true // مهم
+            );
+
+            return resultMessage.StartsWith("تم");
+        }
+
+
+        public static bool ReportsMaster_UpdateSortRep(
+    int ID_TopAcc,
+    DataTable newOrderTable, // يحتوي على أعمدة: ReportID, NewSortRep
+    out string resultMessage)
+        {
+            resultMessage = dbHelper.ExecuteNonQueryWithLogging(
+                "ReportsMaster_UpdateSortRep",
+                cmd =>
+                {
+                    SqlParameter tvpParam = new SqlParameter("@NewOrder", SqlDbType.Structured);
+                    tvpParam.TypeName = "dbo.ReportSortTableType"; // اسم نوع الجدول في SQL
+                    tvpParam.Value = newOrderTable;
+                    cmd.Parameters.Add(tvpParam);
+
+                    cmd.Parameters.AddWithValue("@ID_TopAcc", ID_TopAcc);
+                },
+                expectMessageOutput: true
             );
 
             return resultMessage.StartsWith("تم");
@@ -1505,6 +1585,233 @@ GO
 
         #endregion
 
+
+        #region @@@@ Cheque Batches @@@@
+
+        //// جلب الحافظات حسب النوع
+        //public static DataTable ChequeBatches_GetByMovType(int MovTypeID)
+        //{
+        //    return dbHelper.ExecuteSelectQuery("ChequeBatches_GetByMovType", cmd =>
+        //        cmd.Parameters.Add("@MovTypeID", SqlDbType.Int).Value = MovTypeID
+        //    );
+        //}
+
+
+
+        //// جلب الحافظات حسب كودها
+        //public static DataTable ChequeBatches_GetByBatchID(int BatchID)
+        //{
+        //    return dbHelper.ExecuteSelectQuery("ChequeBatches_GetByBatchID", cmd =>
+        //        cmd.Parameters.Add("@BatchID", SqlDbType.Int).Value = BatchID
+        //    );
+        //}
+        //هذه الدالة تقوم بعمل الدالتين ChequeBatches_GetByBatchID   -  ChequeBatches_GetByMovType  السابقتين ويمكن الاستغنا عنهما
+        public static DataTable ChequeBatches_Search(string searchBy, int value)
+        {
+            DataTable? result = dbHelper.ExecuteSelectQuery("ChequeBatches_Search", cmd =>
+            {
+                cmd.Parameters.Add("@SearchBy", SqlDbType.NVarChar, 20).Value = searchBy;
+                cmd.Parameters.Add("@Value", SqlDbType.Int).Value = value;
+            });
+
+            // إذا كانت النتيجة null، نرجع جدول فارغ
+            return result ?? new DataTable();
+        }
+
+
+
+        //دالة ادراج او تعديل حافظة الشيكات 
+
+        public static bool ChequeBatches_InsertOrUpdate(
+            int BatchID,
+            DateTime? BatchDate,
+            int? AccID,
+            int? MovTypeID,
+            string NoteBatch,
+            float? TotalBatch,
+            string SaveStatus,
+            string BatchCode,
+            int Us_ID,
+            out string? resultMessage)
+        {
+            resultMessage = null;
+
+            SqlParameter outputMessage = new SqlParameter("@ResultMessage", SqlDbType.NVarChar, 100)
+            {
+                Direction = ParameterDirection.Output
+            };
+
+            resultMessage = dbHelper.ExecuteNonQueryWithLogging(
+                "ChequeBatches_InsertOrUpdate",
+                cmd =>
+                {
+                    cmd.Parameters.AddWithValue("@BatchID", BatchID);
+                    cmd.Parameters.AddWithValue("@BatchDate", BatchDate ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@AccID", AccID ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@MovTypeID", MovTypeID ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@NoteBatch", string.IsNullOrWhiteSpace(NoteBatch) ? (object)DBNull.Value : NoteBatch);
+                    cmd.Parameters.AddWithValue("@TotalBatch", TotalBatch ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@SaveStatus", SaveStatus ?? "");
+                    cmd.Parameters.AddWithValue("@BatchCode", BatchCode ?? "");
+                    cmd.Parameters.AddWithValue("@Us_ID", Us_ID);
+                    cmd.Parameters.Add(outputMessage);
+                },
+                expectMessageOutput: false
+            );
+
+            if (outputMessage.Value != DBNull.Value)
+                resultMessage = outputMessage.Value.ToString();
+
+            return !string.IsNullOrEmpty(resultMessage);
+        }
+
+
+            // جلب كود جديد للحافظة
+            public static string ChequeBatches_GetNewBatchCode(int MovTypeID)
+            {
+                DataTable? dt = dbHelper.ExecuteSelectQuery("ChequeBatches_GetNewBatchCode", cmd =>
+                {
+                    cmd.Parameters.AddWithValue("@MovTypeID", MovTypeID);
+                });
+
+                if (dt != null && dt.Rows.Count > 0 && dt.Rows[0]["NewBatchCode"] != DBNull.Value)
+                {
+                    return dt.Rows[0]["NewBatchCode"].ToString() ?? string.Empty;
+                }
+                else
+                {
+                    return string.Empty; // قيمة افتراضية لو مفيش نتيجة
+                }
+            }
+
+            // جلب معرف جديد للحافظة
+            public static int ChequeBatches_GetNextBatchID()
+            {
+                DataTable? dt = dbHelper.ExecuteSelectQuery("ChequeBatches_GetNextBatchID");
+
+                if (dt != null && dt.Rows.Count > 0 && dt.Rows[0]["NextBatchID"] != DBNull.Value)
+                {
+                    return Convert.ToInt32(dt.Rows[0]["NextBatchID"]);
+                }
+                else
+                {
+                    return 1; // قيمة افتراضية في حال لا توجد سجلات
+                }
+            }
+
+        // احضار شيكات الحافظة
+        // احضار شيكات الحافظة بطريقة آمنة من null
+        public static DataTable Cheques_GetByBatchID(int BatchID)
+        {
+            // ExecuteSelectQuery قد ترجع null، لذلك نجعل المتغير nullable
+            DataTable? result = dbHelper.ExecuteSelectQuery("Cheques_GetByBatchID", cmd =>
+            {
+                cmd.Parameters.Add("@BatchID", SqlDbType.Int).Value = BatchID;
+            });
+
+            // إذا كانت النتيجة null، نعيد جدول جديد فارغ
+            return result ?? new DataTable();
+        }
+
+
+
+
+        //[Cheques_Insert]
+        public static bool Cheques_Insert(
+    int? Batch_ID,
+    string ChequeNumber,
+    DateTime? DueDate,
+    float? Amount,
+    string BankName,
+    string Branch,
+    string Notes,
+    int? StatusCode,
+    out string resultMessage)
+        {
+            resultMessage = dbHelper.ExecuteNonQueryWithLogging(
+                "Cheques_Insert",
+                cmd =>
+                {
+                    cmd.Parameters.AddWithValue("@Batch_ID", Batch_ID ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ChequeNumber", ChequeNumber ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DueDate", DueDate ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Amount", Amount ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@BankName", BankName ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Branch", Branch ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Notes", Notes ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@StatusCode", StatusCode ?? (object)DBNull.Value);
+                },
+                expectMessageOutput: false
+            );
+
+            // نحكم بنجاح العملية بناءً على النتيجة
+            return resultMessage.StartsWith("تم") || string.IsNullOrEmpty(resultMessage);
+        }
+
+        public static bool Cheques_Delete(int chequeID, out string resultMessage)
+        {
+            resultMessage = dbHelper.ExecuteNonQueryWithLogging(
+                "Cheques_Delete",
+                cmd => cmd.Parameters.AddWithValue("@ChequeID", chequeID),
+                expectMessageOutput: false
+            );
+            return true;
+        }
+
+        public static bool Cheques_UpdateStatus(
+           int chequeID,
+            string status,
+            DateTime? statusDate,
+            string rejectReason,
+            int? statusCode,
+           out string resultMessage)
+        {
+            resultMessage = dbHelper.ExecuteNonQueryWithLogging(
+                "Cheques_UpdateStatus",
+                cmd =>
+                {
+                    cmd.Parameters.AddWithValue("@ChequeID", chequeID);
+                    cmd.Parameters.AddWithValue("@Status", status ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@StatusDate", statusDate ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@RejectReason", rejectReason ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@StatusCode", statusCode ?? (object)DBNull.Value);
+                },
+                expectMessageOutput: false
+            );
+
+            // اعتبر أن النجاح إذا الرسالة تبدأ بـ "تم"
+            return resultMessage.StartsWith("تم");
+        }
+
+
+
+        public static bool Cheques_UpdateDueDate(
+                    int chequeID,
+                    string status,
+                    DateTime? newDueDate,
+                    string rejectReason,
+                    int? statusCode,
+                   out string resultMessage)
+        {
+            resultMessage = dbHelper.ExecuteNonQueryWithLogging(
+                "Cheques_UpdateDueDate",
+                cmd =>
+                {
+                    cmd.Parameters.AddWithValue("@ChequeID", chequeID);
+                    cmd.Parameters.AddWithValue("@Status", status ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@newDueDate", newDueDate ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@RejectReason", rejectReason ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@StatusCode", statusCode ?? (object)DBNull.Value);
+                },
+                expectMessageOutput: false
+            );
+
+            // اعتبر أن النجاح إذا الرسالة تبدأ بـ "تم"
+            return resultMessage.StartsWith("تم");
+        }
+
+
+        #endregion
 
     }
 }

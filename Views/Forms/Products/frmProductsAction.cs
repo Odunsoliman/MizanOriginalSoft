@@ -1,4 +1,5 @@
 ﻿using MizanOriginalSoft.MainClasses;
+using MizanOriginalSoft.Views.Forms.MainForms;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -432,6 +433,23 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 e.SuppressKeyPress = true;
                 txtCategoriesSelected.Focus();
             }
+            if (e.Control && e.KeyCode == Keys.F)
+            {
+                using (var frm = new frmOriginalSearch(frmOriginalSearch.SearchInWate.Supplier))
+                {
+                    if (frm.ShowDialog() == DialogResult.OK && frm.Tag is SearchResult result)
+                    {
+                        // يمكنك الآن الوصول للكود والاسم بشكل منفصل
+                        string code = result.Code;
+                        string name = result.Name;
+
+                        txtSupplierSelected.Text = name;  // عرض الاسم في TextBox
+                                                          // إذا حبيت تخزن الكود في متغير آخر، ممكن:
+                        lblSupplier_ID.Text = code;
+                    }
+                }
+
+            }
         }
         private void txtCategoriesSelected_KeyDown(object sender, KeyEventArgs e)
         {
@@ -440,6 +458,29 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 e.SuppressKeyPress = true;
                 cbxUnit_idSelected.Focus();
             }
+            if (e.Control && e.KeyCode == Keys.F)
+            {
+                e.SuppressKeyPress = true;
+
+                // فتح frmCatTree في وضع SelectCategory فقط
+                using (var frm = new frmCatTree(frmCatTree.FrmCatTreeMode.SelectCategory))
+                {
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        // تعطيل أي حدث Leave مؤقتًا
+                        //                       txtCategory.Leave -= txtCategory_Leave;
+
+                        // تعيين الاسم والرقم مباشرة
+                        txtCategoriesSelected.Text = frm.SelectedCategoryName ?? string.Empty;
+                        //      lblCategoryID.Text = frm.SelectedCategoryID.ToString();
+
+                        // إعادة تفعيل الحدث
+                     //   lblCatID .Leave += txtCategory_Leave;
+                    }
+                }
+
+            }
+
         }
 
         private void cbxUnit_idSelected_KeyDown(object sender, KeyEventArgs e)

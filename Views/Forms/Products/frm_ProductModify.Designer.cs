@@ -302,7 +302,6 @@
             lblCategory_id.TabIndex = 58;
             lblCategory_id.Text = "0";
             lblCategory_id.TextAlign = ContentAlignment.MiddleLeft;
-            lblCategory_id.Visible = false;
             // 
             // lblSuppliers
             // 

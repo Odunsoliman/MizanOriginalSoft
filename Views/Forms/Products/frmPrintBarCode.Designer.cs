@@ -1,4 +1,4 @@
-﻿namespace MizanOriginalSoft.Views.Forms.Products
+﻿namespace Signee.Views.Forms.Products
 {
     partial class frmPrintBarCode
     {
@@ -28,355 +28,382 @@
         /// </summary>
         private void InitializeComponent()
         {
-            tableLayoutPanel1 = new TableLayoutPanel();
-            tableLayoutPanel3 = new TableLayoutPanel();
-            lblNameProd = new Label();
-            txtAmount = new TextBox();
-            btnPlus = new Button();
-            label1 = new Label();
-            btnMinus = new Button();
-            txtCodeProduct = new TextBox();
-            tableLayoutPanel2 = new TableLayoutPanel();
-            btnClose = new Button();
-            btnPrintBarCode = new Button();
-            tableLayoutPanel4 = new TableLayoutPanel();
-            rdoSheet = new RadioButton();
-            rdoRoll = new RadioButton();
-            tableLayoutPanel5 = new TableLayoutPanel();
-            lblCountTects = new Label();
-            lbl_CO = new Label();
-            tableLayoutPanel6 = new TableLayoutPanel();
-            btnDeleteAll = new Button();
-            btnDeleteSelected = new Button();
-            DGV = new DataGridView();
-            tableLayoutPanel1.SuspendLayout();
-            tableLayoutPanel3.SuspendLayout();
-            tableLayoutPanel2.SuspendLayout();
-            tableLayoutPanel4.SuspendLayout();
-            tableLayoutPanel5.SuspendLayout();
-            tableLayoutPanel6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
-            SuspendLayout();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblNameProd = new System.Windows.Forms.Label();
+            this.txtAmount = new System.Windows.Forms.TextBox();
+            this.btnPlus = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnMinus = new System.Windows.Forms.Button();
+            this.txtCodeProduct = new System.Windows.Forms.TextBox();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnClose = new System.Windows.Forms.Button();
+            this.btnPrintBarCode = new System.Windows.Forms.Button();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.rdoSheet = new System.Windows.Forms.RadioButton();
+            this.rdoRoll = new System.Windows.Forms.RadioButton();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblCountTects = new System.Windows.Forms.Label();
+            this.lbl_CO = new System.Windows.Forms.Label();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnDeleteAll = new System.Windows.Forms.Button();
+            this.btnDeleteSelected = new System.Windows.Forms.Button();
+            this.DGV = new System.Windows.Forms.DataGridView();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
+            this.tableLayoutPanel5.SuspendLayout();
+            this.tableLayoutPanel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DGV)).BeginInit();
+            this.SuspendLayout();
             // 
             // tableLayoutPanel1
             // 
-            tableLayoutPanel1.ColumnCount = 1;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel3, 0, 0);
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 2);
-            tableLayoutPanel1.Controls.Add(DGV, 0, 1);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(0, 0);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 70F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-            tableLayoutPanel1.Size = new Size(800, 422);
-            tableLayoutPanel1.TabIndex = 0;
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.DGV, 0, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(686, 366);
+            this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel3
             // 
-            tableLayoutPanel3.ColumnCount = 7;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 6F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 6F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 24F));
-            tableLayoutPanel3.Controls.Add(lblNameProd, 2, 0);
-            tableLayoutPanel3.Controls.Add(txtAmount, 4, 0);
-            tableLayoutPanel3.Controls.Add(btnPlus, 3, 0);
-            tableLayoutPanel3.Controls.Add(label1, 0, 0);
-            tableLayoutPanel3.Controls.Add(btnMinus, 5, 0);
-            tableLayoutPanel3.Controls.Add(txtCodeProduct, 1, 0);
-            tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(3, 3);
-            tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 1;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new Size(794, 36);
-            tableLayoutPanel3.TabIndex = 1;
+            this.tableLayoutPanel3.ColumnCount = 7;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 8F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 6F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 8F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 6F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 21F));
+            this.tableLayoutPanel3.Controls.Add(this.lblNameProd, 2, 0);
+            this.tableLayoutPanel3.Controls.Add(this.txtAmount, 4, 0);
+            this.tableLayoutPanel3.Controls.Add(this.btnPlus, 3, 0);
+            this.tableLayoutPanel3.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.btnMinus, 5, 0);
+            this.tableLayoutPanel3.Controls.Add(this.txtCodeProduct, 1, 0);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 2);
+            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 1;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(680, 32);
+            this.tableLayoutPanel3.TabIndex = 1;
             // 
             // lblNameProd
             // 
-            lblNameProd.AutoSize = true;
-            lblNameProd.Dock = DockStyle.Fill;
-            lblNameProd.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblNameProd.Location = new Point(182, 0);
-            lblNameProd.Name = "lblNameProd";
-            lblNameProd.Size = new Size(456, 36);
-            lblNameProd.TabIndex = 3;
-            lblNameProd.Text = "اسم الصنف";
-            lblNameProd.TextAlign = ContentAlignment.MiddleCenter;
+            this.lblNameProd.AutoSize = true;
+            this.lblNameProd.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblNameProd.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNameProd.Location = new System.Drawing.Point(157, 0);
+            this.lblNameProd.Name = "lblNameProd";
+            this.lblNameProd.Size = new System.Drawing.Size(389, 32);
+            this.lblNameProd.TabIndex = 3;
+            this.lblNameProd.Text = "اسم الصنف";
+            this.lblNameProd.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // txtAmount
             // 
-            txtAmount.Dock = DockStyle.Fill;
-            txtAmount.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtAmount.Location = new Point(75, 3);
-            txtAmount.Name = "txtAmount";
-            txtAmount.Size = new Size(55, 29);
-            txtAmount.TabIndex = 1;
-            txtAmount.TextAlign = HorizontalAlignment.Center;
+            this.txtAmount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtAmount.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtAmount.Location = new System.Drawing.Point(66, 2);
+            this.txtAmount.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtAmount.Name = "txtAmount";
+            this.txtAmount.Size = new System.Drawing.Size(46, 29);
+            this.txtAmount.TabIndex = 1;
+            this.txtAmount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtAmount.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAmount_KeyDown);
             // 
             // btnPlus
             // 
-            btnPlus.Dock = DockStyle.Fill;
-            btnPlus.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnPlus.Location = new Point(136, 3);
-            btnPlus.Name = "btnPlus";
-            btnPlus.Size = new Size(40, 30);
-            btnPlus.TabIndex = 2;
-            btnPlus.TabStop = false;
-            btnPlus.Text = "+";
-            btnPlus.UseVisualStyleBackColor = true;
+            this.btnPlus.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnPlus.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPlus.Location = new System.Drawing.Point(118, 2);
+            this.btnPlus.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnPlus.Name = "btnPlus";
+            this.btnPlus.Size = new System.Drawing.Size(33, 28);
+            this.btnPlus.TabIndex = 2;
+            this.btnPlus.TabStop = false;
+            this.btnPlus.Text = "+";
+            this.btnPlus.UseVisualStyleBackColor = true;
+            this.btnPlus.Click += new System.EventHandler(this.btnPlus_Click);
             // 
             // label1
             // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Fill;
-            label1.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(736, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(55, 36);
-            label1.TabIndex = 0;
-            label1.Text = "كود";
-            label1.TextAlign = ContentAlignment.MiddleCenter;
+            this.label1.AutoSize = true;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(631, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(46, 32);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "كود";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnMinus
             // 
-            btnMinus.Dock = DockStyle.Fill;
-            btnMinus.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnMinus.Location = new Point(29, 3);
-            btnMinus.Name = "btnMinus";
-            btnMinus.Size = new Size(40, 30);
-            btnMinus.TabIndex = 2;
-            btnMinus.TabStop = false;
-            btnMinus.Text = "-";
-            btnMinus.UseVisualStyleBackColor = true;
+            this.btnMinus.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnMinus.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMinus.Location = new System.Drawing.Point(27, 2);
+            this.btnMinus.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnMinus.Name = "btnMinus";
+            this.btnMinus.Size = new System.Drawing.Size(33, 28);
+            this.btnMinus.TabIndex = 2;
+            this.btnMinus.TabStop = false;
+            this.btnMinus.Text = "-";
+            this.btnMinus.UseVisualStyleBackColor = true;
+            this.btnMinus.Click += new System.EventHandler(this.btnMinus_Click);
             // 
             // txtCodeProduct
             // 
-            txtCodeProduct.Dock = DockStyle.Fill;
-            txtCodeProduct.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtCodeProduct.Location = new Point(644, 3);
-            txtCodeProduct.Name = "txtCodeProduct";
-            txtCodeProduct.Size = new Size(86, 29);
-            txtCodeProduct.TabIndex = 0;
-            txtCodeProduct.TextAlign = HorizontalAlignment.Center;
+            this.txtCodeProduct.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCodeProduct.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCodeProduct.Location = new System.Drawing.Point(552, 2);
+            this.txtCodeProduct.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtCodeProduct.Name = "txtCodeProduct";
+            this.txtCodeProduct.Size = new System.Drawing.Size(73, 29);
+            this.txtCodeProduct.TabIndex = 0;
+            this.txtCodeProduct.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtCodeProduct.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCodeProduct_KeyDown);
             // 
             // tableLayoutPanel2
             // 
-            tableLayoutPanel2.ColumnCount = 6;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 1F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 22F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tableLayoutPanel2.Controls.Add(btnClose, 5, 0);
-            tableLayoutPanel2.Controls.Add(btnPrintBarCode, 0, 0);
-            tableLayoutPanel2.Controls.Add(tableLayoutPanel4, 2, 0);
-            tableLayoutPanel2.Controls.Add(tableLayoutPanel5, 3, 0);
-            tableLayoutPanel2.Controls.Add(tableLayoutPanel6, 4, 0);
-            tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(3, 340);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(794, 79);
-            tableLayoutPanel2.TabIndex = 0;
+            this.tableLayoutPanel2.ColumnCount = 6;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 1F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel2.Controls.Add(this.btnClose, 5, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btnPrintBarCode, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel4, 2, 0);
+            this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel5, 3, 0);
+            this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel6, 4, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 294);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(680, 70);
+            this.tableLayoutPanel2.TabIndex = 0;
             // 
             // btnClose
             // 
-            btnClose.Dock = DockStyle.Fill;
-            btnClose.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnClose.Location = new Point(3, 3);
-            btnClose.Name = "btnClose";
-            btnClose.Size = new Size(156, 73);
-            btnClose.TabIndex = 6;
-            btnClose.TabStop = false;
-            btnClose.Text = "خروج";
-            btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnClose.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClose.Location = new System.Drawing.Point(3, 2);
+            this.btnClose.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(132, 66);
+            this.btnClose.TabIndex = 6;
+            this.btnClose.TabStop = false;
+            this.btnClose.Text = "خروج";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // btnPrintBarCode
             // 
-            btnPrintBarCode.Dock = DockStyle.Fill;
-            btnPrintBarCode.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnPrintBarCode.Location = new Point(599, 3);
-            btnPrintBarCode.Name = "btnPrintBarCode";
-            btnPrintBarCode.Size = new Size(192, 73);
-            btnPrintBarCode.TabIndex = 3;
-            btnPrintBarCode.TabStop = false;
-            btnPrintBarCode.Text = "طباعة باركود";
-            btnPrintBarCode.UseVisualStyleBackColor = true;
+            this.btnPrintBarCode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnPrintBarCode.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPrintBarCode.Location = new System.Drawing.Point(513, 2);
+            this.btnPrintBarCode.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnPrintBarCode.Name = "btnPrintBarCode";
+            this.btnPrintBarCode.Size = new System.Drawing.Size(164, 66);
+            this.btnPrintBarCode.TabIndex = 3;
+            this.btnPrintBarCode.TabStop = false;
+            this.btnPrintBarCode.Text = "طباعة باركود";
+            this.btnPrintBarCode.UseVisualStyleBackColor = true;
+            this.btnPrintBarCode.Click += new System.EventHandler(this.btnPrintBarCode_Click);
             // 
             // tableLayoutPanel4
             // 
-            tableLayoutPanel4.ColumnCount = 1;
-            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel4.Controls.Add(rdoSheet, 0, 1);
-            tableLayoutPanel4.Controls.Add(rdoRoll, 0, 0);
-            tableLayoutPanel4.Dock = DockStyle.Fill;
-            tableLayoutPanel4.Location = new Point(497, 3);
-            tableLayoutPanel4.Name = "tableLayoutPanel4";
-            tableLayoutPanel4.RowCount = 2;
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel4.Size = new Size(89, 73);
-            tableLayoutPanel4.TabIndex = 10;
+            this.tableLayoutPanel4.ColumnCount = 1;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.Controls.Add(this.rdoSheet, 0, 1);
+            this.tableLayoutPanel4.Controls.Add(this.rdoRoll, 0, 0);
+            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(426, 2);
+            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 2;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(75, 66);
+            this.tableLayoutPanel4.TabIndex = 10;
             // 
             // rdoSheet
             // 
-            rdoSheet.AutoSize = true;
-            rdoSheet.Dock = DockStyle.Fill;
-            rdoSheet.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold);
-            rdoSheet.ForeColor = Color.FromArgb(192, 0, 192);
-            rdoSheet.Location = new Point(3, 39);
-            rdoSheet.Name = "rdoSheet";
-            rdoSheet.Size = new Size(83, 31);
-            rdoSheet.TabIndex = 10;
-            rdoSheet.Text = "شيت";
-            rdoSheet.UseVisualStyleBackColor = true;
+            this.rdoSheet.AutoSize = true;
+            this.rdoSheet.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rdoSheet.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold);
+            this.rdoSheet.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.rdoSheet.Location = new System.Drawing.Point(3, 35);
+            this.rdoSheet.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.rdoSheet.Name = "rdoSheet";
+            this.rdoSheet.Size = new System.Drawing.Size(69, 29);
+            this.rdoSheet.TabIndex = 10;
+            this.rdoSheet.Text = "شيت";
+            this.rdoSheet.UseVisualStyleBackColor = true;
             // 
             // rdoRoll
             // 
-            rdoRoll.AutoSize = true;
-            rdoRoll.Checked = true;
-            rdoRoll.Dock = DockStyle.Fill;
-            rdoRoll.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold);
-            rdoRoll.ForeColor = Color.Blue;
-            rdoRoll.Location = new Point(3, 3);
-            rdoRoll.Name = "rdoRoll";
-            rdoRoll.Size = new Size(83, 30);
-            rdoRoll.TabIndex = 9;
-            rdoRoll.TabStop = true;
-            rdoRoll.Text = "رول";
-            rdoRoll.UseVisualStyleBackColor = true;
+            this.rdoRoll.AutoSize = true;
+            this.rdoRoll.Checked = true;
+            this.rdoRoll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rdoRoll.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold);
+            this.rdoRoll.ForeColor = System.Drawing.Color.Blue;
+            this.rdoRoll.Location = new System.Drawing.Point(3, 2);
+            this.rdoRoll.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.rdoRoll.Name = "rdoRoll";
+            this.rdoRoll.Size = new System.Drawing.Size(69, 29);
+            this.rdoRoll.TabIndex = 9;
+            this.rdoRoll.TabStop = true;
+            this.rdoRoll.Text = "رول";
+            this.rdoRoll.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel5
             // 
-            tableLayoutPanel5.ColumnCount = 1;
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel5.Controls.Add(lblCountTects, 0, 1);
-            tableLayoutPanel5.Controls.Add(lbl_CO, 0, 0);
-            tableLayoutPanel5.Dock = DockStyle.Fill;
-            tableLayoutPanel5.Location = new Point(323, 3);
-            tableLayoutPanel5.Name = "tableLayoutPanel5";
-            tableLayoutPanel5.RowCount = 2;
-            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel5.Size = new Size(168, 73);
-            tableLayoutPanel5.TabIndex = 12;
+            this.tableLayoutPanel5.ColumnCount = 1;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel5.Controls.Add(this.lblCountTects, 0, 1);
+            this.tableLayoutPanel5.Controls.Add(this.lbl_CO, 0, 0);
+            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(277, 2);
+            this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 2;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(143, 66);
+            this.tableLayoutPanel5.TabIndex = 12;
             // 
             // lblCountTects
             // 
-            lblCountTects.AutoSize = true;
-            lblCountTects.Dock = DockStyle.Fill;
-            lblCountTects.Font = new Font("Times New Roman", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblCountTects.ForeColor = Color.FromArgb(192, 0, 192);
-            lblCountTects.Location = new Point(3, 36);
-            lblCountTects.Name = "lblCountTects";
-            lblCountTects.Size = new Size(162, 37);
-            lblCountTects.TabIndex = 13;
-            lblCountTects.Text = "0";
-            lblCountTects.TextAlign = ContentAlignment.MiddleCenter;
+            this.lblCountTects.AutoSize = true;
+            this.lblCountTects.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCountTects.Font = new System.Drawing.Font("Times New Roman", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCountTects.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.lblCountTects.Location = new System.Drawing.Point(3, 33);
+            this.lblCountTects.Name = "lblCountTects";
+            this.lblCountTects.Size = new System.Drawing.Size(137, 33);
+            this.lblCountTects.TabIndex = 13;
+            this.lblCountTects.Text = "0";
+            this.lblCountTects.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lbl_CO
             // 
-            lbl_CO.AutoSize = true;
-            lbl_CO.Dock = DockStyle.Fill;
-            lbl_CO.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lbl_CO.ForeColor = Color.Blue;
-            lbl_CO.Location = new Point(3, 0);
-            lbl_CO.Name = "lbl_CO";
-            lbl_CO.Size = new Size(162, 36);
-            lbl_CO.TabIndex = 12;
-            lbl_CO.Text = "0";
-            lbl_CO.TextAlign = ContentAlignment.MiddleCenter;
+            this.lbl_CO.AutoSize = true;
+            this.lbl_CO.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbl_CO.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_CO.ForeColor = System.Drawing.Color.Blue;
+            this.lbl_CO.Location = new System.Drawing.Point(3, 0);
+            this.lbl_CO.Name = "lbl_CO";
+            this.lbl_CO.Size = new System.Drawing.Size(137, 33);
+            this.lbl_CO.TabIndex = 12;
+            this.lbl_CO.Text = "0";
+            this.lbl_CO.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel6
             // 
-            tableLayoutPanel6.ColumnCount = 1;
-            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel6.Controls.Add(btnDeleteAll, 0, 1);
-            tableLayoutPanel6.Controls.Add(btnDeleteSelected, 0, 0);
-            tableLayoutPanel6.Dock = DockStyle.Fill;
-            tableLayoutPanel6.Location = new Point(165, 3);
-            tableLayoutPanel6.Name = "tableLayoutPanel6";
-            tableLayoutPanel6.RowCount = 2;
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel6.Size = new Size(152, 73);
-            tableLayoutPanel6.TabIndex = 13;
+            this.tableLayoutPanel6.ColumnCount = 1;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.Controls.Add(this.btnDeleteAll, 0, 1);
+            this.tableLayoutPanel6.Controls.Add(this.btnDeleteSelected, 0, 0);
+            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(141, 2);
+            this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.RowCount = 2;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(130, 66);
+            this.tableLayoutPanel6.TabIndex = 13;
             // 
             // btnDeleteAll
             // 
-            btnDeleteAll.Dock = DockStyle.Fill;
-            btnDeleteAll.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnDeleteAll.ForeColor = Color.Red;
-            btnDeleteAll.Location = new Point(3, 39);
-            btnDeleteAll.Name = "btnDeleteAll";
-            btnDeleteAll.Size = new Size(146, 31);
-            btnDeleteAll.TabIndex = 5;
-            btnDeleteAll.TabStop = false;
-            btnDeleteAll.Text = "حذف الكل";
-            btnDeleteAll.UseVisualStyleBackColor = true;
+            this.btnDeleteAll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnDeleteAll.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDeleteAll.ForeColor = System.Drawing.Color.Red;
+            this.btnDeleteAll.Location = new System.Drawing.Point(3, 35);
+            this.btnDeleteAll.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnDeleteAll.Name = "btnDeleteAll";
+            this.btnDeleteAll.Size = new System.Drawing.Size(124, 29);
+            this.btnDeleteAll.TabIndex = 5;
+            this.btnDeleteAll.TabStop = false;
+            this.btnDeleteAll.Text = "حذف الكل";
+            this.btnDeleteAll.UseVisualStyleBackColor = true;
+            this.btnDeleteAll.Click += new System.EventHandler(this.btnDeleteAll_Click);
             // 
             // btnDeleteSelected
             // 
-            btnDeleteSelected.Dock = DockStyle.Fill;
-            btnDeleteSelected.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnDeleteSelected.Location = new Point(3, 3);
-            btnDeleteSelected.Name = "btnDeleteSelected";
-            btnDeleteSelected.Size = new Size(146, 30);
-            btnDeleteSelected.TabIndex = 4;
-            btnDeleteSelected.TabStop = false;
-            btnDeleteSelected.Text = "حذف المحدد";
-            btnDeleteSelected.UseVisualStyleBackColor = true;
+            this.btnDeleteSelected.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnDeleteSelected.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDeleteSelected.Location = new System.Drawing.Point(3, 2);
+            this.btnDeleteSelected.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnDeleteSelected.Name = "btnDeleteSelected";
+            this.btnDeleteSelected.Size = new System.Drawing.Size(124, 29);
+            this.btnDeleteSelected.TabIndex = 4;
+            this.btnDeleteSelected.TabStop = false;
+            this.btnDeleteSelected.Text = "حذف المحدد";
+            this.btnDeleteSelected.UseVisualStyleBackColor = true;
+            this.btnDeleteSelected.Click += new System.EventHandler(this.btnDeleteSelected_Click);
             // 
             // DGV
             // 
-            DGV.AllowUserToAddRows = false;
-            DGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            DGV.Dock = DockStyle.Fill;
-            DGV.Location = new Point(3, 45);
-            DGV.Name = "DGV";
-            DGV.ReadOnly = true;
-            DGV.RowHeadersVisible = false;
-            DGV.RowHeadersWidth = 51;
-            DGV.RowTemplate.Height = 26;
-            DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DGV.Size = new Size(794, 289);
-            DGV.TabIndex = 2;
+            this.DGV.AllowUserToAddRows = false;
+            this.DGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DGV.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DGV.Location = new System.Drawing.Point(3, 38);
+            this.DGV.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.DGV.Name = "DGV";
+            this.DGV.ReadOnly = true;
+            this.DGV.RowHeadersVisible = false;
+            this.DGV.RowHeadersWidth = 51;
+            this.DGV.RowTemplate.Height = 26;
+            this.DGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.DGV.Size = new System.Drawing.Size(680, 252);
+            this.DGV.TabIndex = 2;
             // 
             // frmPrintBarCode
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 422);
-            ControlBox = false;
-            Controls.Add(tableLayoutPanel1);
-            MaximizeBox = false;
-            MinimizeBox = false;
-            Name = "frmPrintBarCode";
-            RightToLeft = RightToLeft.Yes;
-            RightToLeftLayout = true;
-            StartPosition = FormStartPosition.CenterScreen;
-            Text = "تجهيز البار كود";
-            tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel3.ResumeLayout(false);
-            tableLayoutPanel3.PerformLayout();
-            tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel4.ResumeLayout(false);
-            tableLayoutPanel4.PerformLayout();
-            tableLayoutPanel5.ResumeLayout(false);
-            tableLayoutPanel5.PerformLayout();
-            tableLayoutPanel6.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)DGV).EndInit();
-            ResumeLayout(false);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(686, 366);
+            this.ControlBox = false;
+            this.Controls.Add(this.tableLayoutPanel1);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "frmPrintBarCode";
+            this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.RightToLeftLayout = true;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "تجهيز البار كود";
+            this.Load += new System.EventHandler(this.frmPrintBarCode_Load);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel4.PerformLayout();
+            this.tableLayoutPanel5.ResumeLayout(false);
+            this.tableLayoutPanel5.PerformLayout();
+            this.tableLayoutPanel6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.DGV)).EndInit();
+            this.ResumeLayout(false);
 
         }
 

@@ -328,7 +328,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         #region اختصارات وتحسينات واجهة الدخول
 
         private void txtUserName_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
-        
+
         {
             if (e.KeyCode == Keys.Enter)
             {
@@ -598,7 +598,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
-            int TopID = 7;
+            int TopID = 13;
             frmMainAccounts frm = new frmMainAccounts(TopID);
             OpenFormInPanel(frm);
         }
@@ -610,7 +610,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
-            int TopID = 14;
+            int TopID = 23;
             frmMainAccounts frm = new frmMainAccounts(TopID);
             OpenFormInPanel(frm);
 
@@ -623,7 +623,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
-            int TopID = 39;
+            int TopID = 29;
             frmMainAccounts frm = new frmMainAccounts(TopID);
             OpenFormInPanel(frm);
 
@@ -636,7 +636,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
-            int TopID = 3;
+            int TopID = 11;
             frmMainAccounts frm = new frmMainAccounts(TopID);
             OpenFormInPanel(frm);
 
@@ -649,7 +649,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
-            int TopID = 22;
+            int TopID = 62;
             frmMainAccounts frm = new frmMainAccounts(TopID);
             OpenFormInPanel(frm);
         }
@@ -661,7 +661,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
-            int TopID = 19;
+            int TopID = 6;
             frmMainAccounts frm = new frmMainAccounts(TopID);
             OpenFormInPanel(frm);
         }
@@ -673,7 +673,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
-            int TopID = 38;
+            int TopID = 10;
             frmMainAccounts frm = new frmMainAccounts(TopID);
             OpenFormInPanel(frm);
         }
@@ -685,7 +685,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
-            int TopID = 6;
+            int TopID = 63;
             frmMainAccounts frm = new frmMainAccounts(TopID);
             OpenFormInPanel(frm);
         }
@@ -697,7 +697,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
-            int TopID = 13;
+            int TopID = 64;
             frmMainAccounts frm = new frmMainAccounts(TopID);
             OpenFormInPanel(frm);
         }
@@ -843,6 +843,12 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 HighlightTransparentButton(btn);
             }
 
+            CloseAllFormsExceptMain();
+
+            // استخدم الـ Enum مباشرة
+            frmBatcheCheques frm = new frmBatcheCheques(frmBatcheCheques.TransactionType.BatchIn);
+
+            OpenFormInPanel(frm);
         }
 
         private void btnChequeBatch_Out_Click(object? sender, EventArgs e)
@@ -851,9 +857,12 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
+
             CloseAllFormsExceptMain();
-            int typMov = 11;
-            frmCashTransaction frm = new frmCashTransaction(typMov);
+
+            // استخدم الـ Enum مباشرة
+            frmBatcheCheques frm = new frmBatcheCheques(frmBatcheCheques.TransactionType.BatchOut);
+
             OpenFormInPanel(frm);
         }
 
@@ -892,7 +901,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         private void LoadReports(int topAcc)
         {
-            DataTable dt = DBServiecs.Reports_GetByTopAcc(topAcc);
+            DataTable dt = DBServiecs.Reports_GetByTopAcc(topAcc, false);
+
             DGV.DataSource = dt;
 
             DGV.RowHeadersVisible = false;
@@ -931,7 +941,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         /*هل سيحتاج هذا الزر اى تعديل */
 
         private void btnEnd_Click_(object? sender, EventArgs e)
-        {  
+        {
             /* ك لماذا لا يتم اخذ باك اب عند الاغلاق ام انه يأخذها فى اماكن مختلفة*/
             try
             {
@@ -1149,7 +1159,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 string? projectPath = AppSettings.GetString("ProjectPath", null);
                 if (!string.IsNullOrWhiteSpace(projectPath))
                 {
-                    ExecuteGitPush(projectPath);
+                    ExecuteGitPush(projectPath);/*System.ComponentModel.Win32Exception: 'An error occurred trying to start process 'cmd.exe' with working directory 'D:\MizanOriginalSoft                               # 📌 مسار مشروع البرنامج الذي سيتم رفعه على Git عند الإغلاق للمزامنة مع المستودع'. The directory name is invalid.'
+*/
                 }
 
                 // 5. Git Push لمجلد نسخ القواعد
@@ -1171,7 +1182,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-
+        //
         private void ExecuteGitPush(string workingDirectory)
         {
             try
@@ -1185,7 +1196,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 gitProcess.Start();
             }
             catch (Exception ex)
-            {
+            {/*System.ComponentModel.Win32Exception: 'An error occurred trying to start process 'cmd.exe' with working directory 'D:\MizanOriginalSoft                               # 📌 مسار مشروع البرنامج الذي سيتم رفعه على Git عند الإغلاق للمزامنة مع المستودع'. The directory name is invalid.'
+*/
                 MessageBox.Show("❌ خطأ أثناء تنفيذ Git Push:\n" + ex.Message);
             }
         }

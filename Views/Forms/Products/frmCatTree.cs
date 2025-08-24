@@ -3,37 +3,68 @@ using MizanOriginalSoft.MainClasses.OriginalClasses;
 using System;
 using System.Data;
 using System.Windows.Forms;
+using ZXing.QrCode.Internal;
 
 namespace MizanOriginalSoft.Views.Forms.Products
 {
     public partial class frmCatTree : Form
     {
         private DataTable? tblTree;
-        private readonly DataTable _dtProducts;
+        private DataTable? _dtProducts; // أضف ? لجعلها nullable
+        public int? SelectedCategoryID { get; private set; } = null;
+        public string? SelectedCategoryName { get; private set; } = null;
 
-        public frmCatTree(DataTable dtProducts)
+        public enum FrmCatTreeMode
+        {
+            EditProducts,//اريد هنا ان يتغير الكابشن لزر الحفظ الى كلمة   - تغيير التصنيف
+            SelectCategory//اريد هنا ان يتغير الكابشن لزر الحفظ الى كلمة   - اختيار التصنيف
+        }
+
+        public FrmCatTreeMode Mode { get; set; } = FrmCatTreeMode.EditProducts;
+        private void SetSaveButtonText()
+        {
+            switch (Mode)
+            {
+                case FrmCatTreeMode.EditProducts:
+                    btnSave.Text = "✔️ تغيير التصنيف";
+                    break;
+
+                case FrmCatTreeMode.SelectCategory:
+                    btnSave.Text = "✔️ اختيار التصنيف";
+                    break;
+            }
+        }
+
+        public frmCatTree(DataTable dtProducts, FrmCatTreeMode mode = FrmCatTreeMode.EditProducts)
         {
             InitializeComponent();
             _dtProducts = dtProducts;
+            Mode = mode;
+
+            SetSaveButtonText();
+        }
+
+        public frmCatTree(FrmCatTreeMode mode)
+        {
+            InitializeComponent();
+            Mode = mode;
+            // تغيير Caption لزر الحفظ حسب الوضع
+            SetSaveButtonText();
         }
 
         private void frmCatTree_Load(object sender, EventArgs e)
         {
             LoadTreeAndSelectSpecificNode();
-            /*
-             اريد بعد التحميل اغلاق الشجرة ولا تكون ممتدة
-             */
         }
 
         #region ********** Search Tree Node ***********
         private List<TreeNode> matchedNodes = new List<TreeNode>();
-        private int currentMatchIndex = -1;
         private void txtSearchTree_TextChanged(object sender, EventArgs e)
         {
             string searchText = txtSearchTree.Text.Trim().ToLower();
 
             matchedNodes.Clear();
-            currentMatchIndex = -1;
+  //          currentMatchIndex = -1;// وهو مستخدم هنا فلماذ التحذير اعلا
 
             // إعادة تعيين الألوان وإغلاق كل الفروع
             ResetNodeColorsAndCollapse(treeViewCategories.Nodes);
@@ -47,7 +78,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             // اختيار أول نتيجة
             if (matchedNodes.Count > 0)
             {
-                currentMatchIndex = 0;
+  //              currentMatchIndex = 0;
                 var node = matchedNodes[0];
                 treeViewCategories.SelectedNode = node;
                 node.EnsureVisible();
@@ -175,18 +206,39 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
 
             int selectedCategoryId = Convert.ToInt32(treeViewCategories.SelectedNode.Tag);
-            int ID_user = CurrentSession.UserID;
+            string selectedCategoryName = treeViewCategories.SelectedNode.Text;
 
-            try
+            if (Mode == FrmCatTreeMode.SelectCategory)
             {
-                DBServiecs.Product_UpdateCategory(_dtProducts, selectedCategoryId, ID_user);
-                MessageBox.Show("✔️ تم تحديث الأصناف بنجاح.");
+                // الوضع الجديد: اختيار تصنيف فقط
+                SelectedCategoryID = selectedCategoryId;
+                SelectedCategoryName = selectedCategoryName;
+
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("حدث خطأ أثناء تحديث الأصناف:\n" + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // الوضع الأصلي: تعديل المنتجات
+                if (_dtProducts == null)
+                {
+                    MessageBox.Show("لا توجد منتجات للتحديث.", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                try
+                {
+                    int ID_user = CurrentSession.UserID;
+                    DBServiecs.Product_UpdateCategory(_dtProducts, selectedCategoryId, ID_user);
+
+                    MessageBox.Show("✔️ تم تحديث الأصناف بنجاح.");
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("حدث خطأ أثناء تحديث الأصناف:\n" + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }

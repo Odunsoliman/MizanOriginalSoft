@@ -119,6 +119,7 @@
             DGV.TabIndex = 2;
             DGV.CellDoubleClick += DGV_CellDoubleClick;
             DGV.RowPrePaint += DGV_RowPrePaint;
+            DGV.SelectionChanged += DGV_SelectionChanged;
             // 
             // tableLayoutPanel2
             // 

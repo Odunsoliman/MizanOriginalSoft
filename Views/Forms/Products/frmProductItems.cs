@@ -4,10 +4,9 @@ using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
 using MizanOriginalSoft.Views.Forms.MainForms;
 using MizanOriginalSoft.Views.Reports;
+using Signee.Views.Forms.Products;
 using System.Data;
 using System.Text;
-using System.Windows.Forms;
-using static MizanOriginalSoft.Views.Forms.MainForms.frmSearch;
 
 namespace MizanOriginalSoft.Views.Forms.Products
 {
@@ -33,9 +32,8 @@ namespace MizanOriginalSoft.Views.Forms.Products
         private TreeNode? lastSelectedNode = null;
         private readonly List<int> lastSelectedProductIds = new();
         //ربط بيانات المنتجات بعنصر DataGridView  ###
-        private DataTable? _tblProd = new();
+        private DataTable _tblProd = new();
         private DataTable? tblModify;
-        private DataTable? dtProducts;
         private List<TreeNode> matchedNodes = new List<TreeNode>();
         private int currentMatchIndex = -1;
 
@@ -68,6 +66,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
             // 🔍 هنا نستدعي الدالة اللي تبحث عن الـControls عندها AutoSize = true
             CheckAutoSizeControls(this);
+
         }
 
         // 🔍 دالة فحص AutoSize
@@ -128,6 +127,10 @@ namespace MizanOriginalSoft.Views.Forms.Products
         #endregion
 
         #region ========= SetupAutoComplete and Fill =================
+
+
+
+        /*كيف يكون التعديل النهائى*/
         //تعبئة مربع الموردين تعبئة تلقائية  ###
         private void SetupAutoCompleteSuppliers()
         {
@@ -153,12 +156,49 @@ namespace MizanOriginalSoft.Views.Forms.Products
             txtSuppliers.AutoCompleteCustomSource = autoCompleteCollection;
             txtSuppliers.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             txtSuppliers.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            /*اريد عند الكتابة وظهور القائمة المنسدلة ان  اتحكم في عرضها يكون اكبر من التكست نفسه*/
 
             // إعداد خصائص مربع النص لاستخدام الإكمال التلقائي
             txtNewItemSuppliers.AutoCompleteCustomSource = autoCompleteCollection;
             txtNewItemSuppliers.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             txtNewItemSuppliers.AutoCompleteSource = AutoCompleteSource.CustomSource;
         }
+
+        private void txtSuppliers_TextChanged(object sender, EventArgs e)
+        {
+            txtSeaarchProd_TextChanged(this, EventArgs.Empty);
+        }
+
+        private void txtSuppliers_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.F)
+            {
+                using (var frm = new frmOriginalSearch(frmOriginalSearch.SearchInWate.Supplier))
+                {
+                    if (frm.ShowDialog() == DialogResult.OK && frm.Tag is SearchResult result)
+                    {
+                        // يمكنك الآن الوصول للكود والاسم بشكل منفصل
+                        string code = result.Code;
+                        string name = result.Name;
+
+                        txtSuppliers.Text = name;  // عرض الاسم في TextBox
+                                                   // إذا حبيت تخزن الكود في متغير آخر، ممكن:
+                                                   // txtSupplierCode.Text = code;
+                    }
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
 
         //تعبئة مربع التصنيفات تعبئة تلقائية  ###
         private void SetupAutoCompleteCategories()
@@ -181,11 +221,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
                 }
             }
-
-            // إعداد خصائص مربع النص لاستخدام الإكمال التلقائي
-            txtCategories.AutoCompleteCustomSource = autoCompleteCollection;
-            txtCategories.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            txtCategories.AutoCompleteSource = AutoCompleteSource.CustomSource;
 
             // إعداد خصائص مربع النص لاستخدام الإكمال التلقائي
             txtCategory.AutoCompleteCustomSource = autoCompleteCollection;
@@ -339,43 +374,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
         #region ========== Tree  =====================
 
-        //حدث تشيك بوكس يسمح او لا يسمح بتعديل ضم الاصناف الى تصنيف اخر  ###
-        private void chkTreeEnable_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkTreeEnable.Checked)
-            {
-                // تفعيل الفلترة حسب العقدة المحددة
-                TreeNode selectedNode = treeViewCategories.SelectedNode;
-                if (selectedNode != null && selectedNode.Tag != null)
-                {
-                    int selectedCategoryId = Convert.ToInt32(selectedNode.Tag);
-
-                    if (rdoByNode.Checked)
-                    {
-                        FilterProductsByCategory(selectedCategoryId);
-                    }
-                    else if (rdoByNodeAndHisChild.Checked)
-                    {
-                        FilterProductsByCategoryAndHisChild(selectedNode);
-                    }
-                }
-            }
-            else
-            {
-                // عرض كل المنتجات بدون فلترة
-                LoadProducts();
-                chkTreeEnable.ForeColor = Color.Red;
-                chkTreeEnable.Text = "معطلة";
-            }
-        }
-        private void lblAllTree_Click(object sender, EventArgs e)
-        {
-            frmProductItems_Load(this, EventArgs.Empty);
-
-            ClearSearch(); if (tlpAdvanceSearch.Visible == true) tlpAdvanceSearch.Visible = false;
-        }
-
-
         private void LoadTreeAndSelectSpecificNode(int selectedID = 0)
         {
             // تحميل البيانات
@@ -449,60 +447,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
                     return;
                 }
                 SelectNodeById(node.Nodes, categoryId);
-            }
-        }
-
-        //تحميل شجرة التصنيفات  ###
-        private void LoadTreeAndSelectSpecificNode_(int selectedID = 0)
-        {
-            tblTree = DBServiecs.Categories_GetAll();
-
-            treeViewCategories.Nodes.Clear();
-            /*System.InvalidOperationException: 'Cross-thread operation not valid: Control 'treeViewCategories' accessed from a thread other than the thread it was created on.'
-*/
-            DataTable dt = tblTree ?? new DataTable();
-
-            foreach (DataRow row in dt.Rows)
-            {// هنا تدخل شرط الاف 
-                if (row["ParentID"] == DBNull.Value || Convert.ToInt32(row["ParentID"]) == 0)
-                {
-                    TreeNode parentNode = new TreeNode(row["CategoryName"].ToString());//'new' expression can be simplified
-                    parentNode.Tag = Convert.ToInt32(row["CategoryID"]);
-                    treeViewCategories.Nodes.Add(parentNode);
-                    AddChildNodes(dt, parentNode);
-                }
-            }
-
-            if (selectedID > 0)
-                SelectNodeById(treeViewCategories.Nodes, selectedID);
-        }
-
-        //تحميل الفروع داخل الشجرة  ###
-        private void AddChildNodes_(DataTable dt, TreeNode parentNode)
-        {
-            int parentId = Convert.ToInt32(parentNode.Tag);
-            foreach (DataRow row in dt.Select($"ParentID = {parentId}"))
-            {
-                TreeNode childNode = new TreeNode(row["CategoryName"].ToString());//'new' expression can be simplified
-                childNode.Tag = Convert.ToInt32(row["CategoryID"]);
-                parentNode.Nodes.Add(childNode);
-                AddChildNodes(dt, childNode);
-            }
-        }
-        // وظيفة اختيار عقدة بواسطة رقم المعرف
-        private void SelectNodeById_(TreeNodeCollection nodes, int id)
-        {
-            foreach (TreeNode node in nodes)
-            {
-                if (Convert.ToInt32(node.Tag) == id)
-                {
-                    treeViewCategories.SelectedNode = node;
-                    //treeViewCategories.Focus();
-                    return;
-                }
-
-                if (node.Nodes.Count > 0)
-                    SelectNodeById(node.Nodes, id);
             }
         }
 
@@ -616,8 +560,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
 
-
-
         private async void toolStripChangeCat_Click(object sender, EventArgs e)
         {
             if (DGV.SelectedRows.Count == 0)
@@ -626,7 +568,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 return;
             }
 
-            // حفظ المنتج الحالي (أول صف محدد فقط)
             int currentProductId = Convert.ToInt32(DGV.SelectedRows[0].Cells["ID_Product"].Value);
 
             DataTable dtProducts = new DataTable();
@@ -642,62 +583,81 @@ namespace MizanOriginalSoft.Views.Forms.Products
             {
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
-                    // 👇 هنا نستعمل شاشة التحميل ونمرر currentProductId
-                    await wateToLaof(currentProductId);
+                    // ✅ افتح شاشة الانتظار في الـ UI
+                    using (frmLoading loading = new frmLoading("⏳ يرجى الانتظار..."))
+                    {
+                        loading.Show();
+                        loading.Refresh();
+
+                        // ✅ نفذ العملية الثقيلة في الخلفية
+                        await Task.Run(() =>
+                        {
+                            LoadProducts();
+                            // أي عملية ثانية ثقيلة هنا
+                        });
+
+                        loading.Close();
+                    }
+
+                    // بعد التحديث رجّع المؤشر
+                    foreach (DataGridViewRow row in DGV.Rows)
+                    {
+                        if (Convert.ToInt32(row.Cells["ID_Product"].Value) == currentProductId)
+                        {
+                            DGV.ClearSelection();
+                            row.Selected = true;
+                            DGV.CurrentCell = row.Cells["ProductCode"];
+                            DGV.FirstDisplayedScrollingRowIndex = Math.Max(0, row.Index - 6);
+                            break;
+                        }
+                    }
                 }
             }
         }
-
-        private async Task wateToLaof(int currentProductId)
-        {
-            frmLoading loadingForm = new frmLoading("⏳ يرجى الانتظار...");
-
-            // فتح شاشة التحميل في Thread منفصل
-            Task loadingTask = Task.Run(() =>
-            {
-                loadingForm.ShowDialog();
-            });
-
-            // العملية الثقيلة (تحديث الجريد + تحميل)
-            await Task.Run(() =>
-            {
-                LoadProducts();
-                LoadTreeAndSelectSpecificNode();
-                txtSeaarchProd_TextChanged(this, EventArgs.Empty);
-            });
-
-            // إغلاق شاشة الانتظار
-            if (loadingForm.InvokeRequired)
-                loadingForm.Invoke(new Action(() => loadingForm.Close()));
-            else
-                loadingForm.Close();
-
-            await loadingTask; // التأكد من الإغلاق
-
-            // 👇 بعد التحديث نعيد تحديد الصف الحالي
-            foreach (DataGridViewRow row in DGV.Rows)
-            {
-                if (Convert.ToInt32(row.Cells["ID_Product"].Value) == currentProductId)
-                {
-                    DGV.ClearSelection();
-                    row.Selected = true;
-                    DGV.CurrentCell = row.Cells["ProductCode"]; // أي عمود ظاهر
-                    DGV.FirstDisplayedScrollingRowIndex = Math.Max(0, row.Index - 2);
-                    break;
-                }
-            }
-        }
-
-
+    
         // بدء عملية السحب
         private void treeViewCategories_ItemDrag(object? sender, ItemDragEventArgs e)
         {
-            if (e.Item != null)
+            if (e.Item is TreeNode draggedNode)
             {
+                // 👈 منع سحب العقدة الأساسية رقم 1
+                if (draggedNode.Tag is int categoryId && categoryId == 1)
+                {
+                    return; // تجاهل السحب
+                }
+
                 DoDragDrop(e.Item, DragDropEffects.Move);
             }
         }
 
+        // عند إسقاط العنصر داخل TreeView
+        private void treeViewCategories_DragDrop(object? sender, DragEventArgs e)
+        {
+            if (e.Data?.GetData(typeof(TreeNode)) is TreeNode draggedNode)
+            {
+                // 👈 منع إسقاط العقدة الأساسية رقم 1
+                if (draggedNode.Tag is int categoryId && categoryId == 1)
+                {
+                    return;
+                }
+
+                Point targetPoint = treeViewCategories.PointToClient(new Point(e.X, e.Y));
+                TreeNode? targetNode = treeViewCategories.GetNodeAt(targetPoint);
+
+                if (targetNode != null && !draggedNode.Equals(targetNode) && !ContainsNode(draggedNode, targetNode))
+                {
+                    draggedNode.Remove();
+                    targetNode.Nodes.Add(draggedNode);
+                    targetNode.Expand();
+
+                    if (draggedNode.Tag is int CategoryID && targetNode.Tag is int NewParentID)
+                    {
+                        // تحديث قاعدة البيانات
+                        // UpdateCategoryParent(CategoryID, NewParentID);
+                    }
+                }
+            }
+        }
         // عند دخول العنصر إلى منطقة TreeView
         private void treeViewCategories_DragEnter(object? sender, DragEventArgs e)
         {
@@ -707,36 +667,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 e!.Effect = DragDropEffects.None;
         }
 
-        // عند إسقاط العنصر داخل TreeView
-        private void treeViewCategories_DragDrop(object? sender, DragEventArgs e)
-        {
-            if (e.Data?.GetData(typeof(TreeNode)) is TreeNode draggedNode)
-            {
-                Point targetPoint = treeViewCategories.PointToClient(new Point(e.X, e.Y));
-                TreeNode? targetNode = treeViewCategories.GetNodeAt(targetPoint);
 
-                if (targetNode != null && !draggedNode.Equals(targetNode) && !ContainsNode(draggedNode, targetNode))
-                {
-                    // إزالة العنصر من موقعه القديم
-                    draggedNode.Remove();
-
-                    // إضافته إلى العقدة الجديدة
-                    targetNode.Nodes.Add(draggedNode);
-                    targetNode.Expand();
-
-                    // تحديث البيانات حسب الحاجة
-                    if (draggedNode.Tag is int CategoryID && targetNode.Tag is int NewParentID)
-                    {
-                        // تنفيذ منطق التحديث في قاعدة البيانات هنا
-                        // مثل: UpdateCategoryParent(CategoryID, NewParentID);
-                    }
-                }
-            }
-        }
-
-        // عند إفلات العنصر داخل الشجرة
-
-        //-----------------------------------------------------------
         private bool ContainsNode(TreeNode parent, TreeNode child)
         {
             if (child.Parent == null) return false;
@@ -858,24 +789,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 DGV.DataSource = null;
             }
 
-            UpdateCount();
-            ApplyDGVStyles();
-        }
-
-
-        private void BindProductDataToDGV_()
-        {
-            if (_tblProd != null && _tblProd.Rows.Count > 0)
-            {
-                DGV.DataSource = _tblProd;/*ظهرت مشكلة فى هذه الدالة
-                                           System.InvalidOperationException: 'Cross-thread operation not valid: Control '' accessed from a thread other than the thread it was created on.'
-
-                                           */
-            }
-            else
-            {
-                DGV.DataSource = null;
-            }
             UpdateCount();
             ApplyDGVStyles();
         }
@@ -1036,12 +949,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             PicBarcod.SizeMode = PictureBoxSizeMode.Zoom;
             PicBarcod.Image = barcodeImage;
         }
-
-
-
-
         #endregion
-
 
         private void btnNew_Click(object sender, EventArgs e)
         {
@@ -1058,193 +966,13 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
 
-
-        #region ========== Search Prod ===========================
-
-        private void txtSeaarchProd_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Control && e.KeyCode == Keys.H)
-            {
-                ShowHelpForActiveControl();
-            }
-        }
-        private void txtSeaarchProd_TextChanged(object sender, EventArgs e)
-        {
-            txtFromCode.Text = "";
-            txtToCode.Text = "";//مسح الرينج
-            FilterProductsBySearchText();
-            UpdateCount();
-        }
-        private void txtSeaarchProdPrice_TextChanged(object sender, EventArgs e)
-        {
-            txtSeaarchProd_TextChanged(this, EventArgs.Empty);
-        }
-        private void txtSuppliers_TextChanged(object sender, EventArgs e)
-        {
-            txtSeaarchProd_TextChanged(this, EventArgs.Empty);
-        }
-        private void txtSeaarchProdSupplier_TextChanged(object sender, EventArgs e)
-        {
-            txtSeaarchProd_TextChanged(this, EventArgs.Empty);
-        }
-        private void txtCategories_TextChanged(object sender, EventArgs e)
-        {
-            txtSeaarchProd_TextChanged(this, EventArgs.Empty);
-        }
-        private void txtCategory_id_TextChanged(object sender, EventArgs e)
-        {
-            txtSeaarchProd_TextChanged(this, EventArgs.Empty);
-        }
-        private void FilterProductsBySearchText()
-        {
-            DataView dv = new DataView(_tblProd);  // عرفه خارج try
-
-            try
-            {
-                List<string> conditions = new List<string>();
-
-                // 1. الكلمات الجزئية في اسم المنتج
-                string searchText = txtSeaarchProd.Text.Trim();
-                if (!string.IsNullOrEmpty(searchText))
-                {
-                    string[] words = searchText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (string word in words)
-                    {
-                        string escaped = word.Replace("'", "''");
-                        conditions.Add($"ProdName LIKE '%{escaped}%'");
-                    }
-                }
-
-                // 2. السعر
-                string priceText = txtSeaarchProdPrice.Text.Trim();
-                if (decimal.TryParse(priceText, out decimal price))
-                {
-                    conditions.Add($"U_Price = {price}");
-                }
-
-                // 3. اسم المورد
-                string supplierText = txtSuppliers.Text.Trim();
-                if (!string.IsNullOrEmpty(supplierText))
-                {
-                    string escaped = supplierText.Replace("'", "''");
-                    conditions.Add($"SuplierName LIKE '%{escaped}%'");
-                }
-
-                // 4. رقم الفئة (الإضافة الجديدة)
-                string categoryIdText = txtCategories.Text.Trim();
-                if (!string.IsNullOrEmpty(categoryIdText))
-                {
-                    string escaped = categoryIdText.Replace("'", "''");
-                    conditions.Add($"CategoryName LIKE '%{escaped}%'");
-                }
-
-                string rowFilter = string.Join(" AND ", conditions);
-                dv.RowFilter = rowFilter;
-
-                DGV.DataSource = dv;
-
-                // نسخ البيانات المفلترة
-                tblModify = dv.ToTable();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("حدث خطأ أثناء التصفية: " + ex.Message);
-            }
-        }
-        private void txtFromCode_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                string code = txtFromCode.Text;
-                // 1. مسح كل حقول البحث الأخرى
-                ClearAllSearchFieldsExceptRange();
-                txtFromCode.Text = code;
-                // 2. تطبيق تصفية نطاق الأكواد
-                FilterByCodeRange();
-                txtToCode.Focus();
-                txtToCode.SelectAll();
-            }
-        }
-        private void txtToCode_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                string code = txtToCode.Text;
-                // 1. مسح كل حقول البحث الأخرى
-                ClearAllSearchFieldsExceptRange();
-                txtToCode.Text = code;
-                // 2. تطبيق تصفية نطاق الأكواد
-                FilterByCodeRange();
-                txtFromCode.Focus();
-                txtFromCode.SelectAll();
-            }
-        }
-        private void ClearAllSearchFieldsExceptRange()
-        {
-            txtSeaarchProd.Text = "";
-            txtSeaarchProdPrice.Text = "";
-        }
-        private void FilterByCodeRange()
-        {
-            DataView dv = new DataView(_tblProd);
-
-            try
-            {
-                string fromCode = txtFromCode.Text.Trim();
-                string toCode = txtToCode.Text.Trim();
-
-                string filter = "";
-
-                if (!string.IsNullOrEmpty(fromCode) && !string.IsNullOrEmpty(toCode))
-                {
-                    filter = $"ProductCode >= {fromCode} AND ProductCode <= {toCode}";
-                }
-                else if (!string.IsNullOrEmpty(fromCode))
-                {
-                    filter = $"ProductCode >= {fromCode}";
-                }
-                else if (!string.IsNullOrEmpty(toCode))
-                {
-                    filter = $"ProductCode <= {toCode}";
-                }
-
-                dv.RowFilter = filter;
-                DGV.DataSource = dv;
-                tblModify = dv.ToTable();
-
-                UpdateCount();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("حدث خطأ أثناء التصفية حسب النطاق: " + ex.Message);
-            }
-        }      //اظهار واخفاء البحث المتقدم
-        private void btnAdvanceSearch_Click(object sender, EventArgs e)
-        {
-            tlpAdvanceSearch.Visible = !tlpAdvanceSearch.Visible;
-            ClearSearch();
-        }
-        //تعبئة كمبوبكس الموردين
-
-        //تحديث عدد الاصناف فى DGV  ###
-        private void UpdateCount()
-
-        {
-            lblCount.Text = DGV?.RowCount.ToString() ?? "0";
-        }
-
-
-        // أضف هذا الحدث للتعامل مع ضغط المفاتيح
-
-        #endregion ---------------------------------------------
-
-
-
-
         #region تعديل صنف أو مجموعة أصناف
-
         private void btnModifyItem_Click(object sender, EventArgs e)
         {
+            // ✅ احفظ العقدة المحددة وحالة التوسيع
+            TreeNode selectedNode = treeViewCategories.SelectedNode;
+            bool nodeExpanded = selectedNode != null && selectedNode.IsExpanded;
+
             try
             {
                 if (DGV.Columns["ID_Product"] == null)
@@ -1253,6 +981,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                     return;
                 }
 
+                // اجمع المنتجات المحددة
                 List<int> selectedProductIds = new List<int>();
                 foreach (DataGridViewRow row in DGV.SelectedRows)
                 {
@@ -1266,10 +995,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
                     return;
                 }
 
-                int? currentProductId = null;
-                if (DGV.CurrentRow != null && DGV.CurrentRow.Cells["ID_Product"].Value != null)
-                    currentProductId = Convert.ToInt32(DGV.CurrentRow.Cells["ID_Product"].Value);
-
                 if (selectedProductIds.Count == 1) // تعديل فردي
                 {
                     int productId = selectedProductIds[0];
@@ -1281,17 +1006,19 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
                         if (frm.ShowDialog() == DialogResult.OK)
                         {
-                            RefreshData();
+                            // ✅ 1- إعادة تحميل المنتجات
+                            LoadProducts();
 
-                            if (frm.CategoryID > 0)
+                            // ✅ 2- إعادة الفلترة حسب العقدة السابقة
+                            if (selectedNode != null)
                             {
-                                ApplyCategorySelectionAndFilter(frm.CategoryID, productId);
-                                LoadTreeAndSelectSpecificNode(frm.CategoryID);
+                                treeViewCategories.SelectedNode = selectedNode;
+                                if (nodeExpanded) selectedNode.Expand();
+                                ApplyCategoryFilter(selectedNode);
                             }
-                            else if (currentProductId.HasValue)
-                            {
-                                SelectProductAfterRefresh(currentProductId.Value);
-                            }
+
+                            // ✅ 3- إعادة تحديد الصنف المعدل إن كان مازال ضمن نفس التصنيف
+                            ReselectAndCenterRow(productId);
                         }
                     }
                 }
@@ -1315,28 +1042,54 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
                         if (frm.ShowDialog() == DialogResult.OK)
                         {
-                            RefreshData();
+                            // ✅ 1- إعادة تحميل المنتجات
+                            LoadProducts();
 
-                            int catID = frm.CategoryID.HasValue ? frm.CategoryID.Value : 0;
+                            // ✅ 2- إعادة الفلترة حسب العقدة السابقة
+                            if (selectedNode != null)
+                            {
+                                treeViewCategories.SelectedNode = selectedNode;
+                                if (nodeExpanded) selectedNode.Expand();
+                                ApplyCategoryFilter(selectedNode);
+                            }
 
-                            if (catID > 0)
-                            {
-                                ApplyCategorySelectionAndFilter(catID, selectedProductIds[0]);
-                                LoadTreeAndSelectSpecificNode(catID);
-                            }
-                            else
-                            {
-                                SelectProductAfterRefresh(selectedProductIds[0]);
-                            }
+                            // ✅ 3- إعادة تحديد أول صنف من الأصناف المعدلة
+                            ReselectAndCenterRow(selectedProductIds[0]);
                         }
                     }
                 }
-                LoadAllProducts();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"حدث خطأ أثناء تنفيذ التعديل: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        // ✅ نفس الدالة كما هي
+        private bool ReselectAndCenterRow(int productId)
+        {
+            foreach (DataGridViewRow row in DGV.Rows)
+            {
+                if (row.Cells["ID_Product"].Value != null &&
+                    Convert.ToInt32(row.Cells["ID_Product"].Value) == productId)
+                {
+                    row.Selected = true;
+
+                    var firstVisibleCell = row.Cells.Cast<DataGridViewCell>()
+                                                    .FirstOrDefault(c => c.Visible);
+
+                    if (firstVisibleCell != null)
+                        DGV.CurrentCell = firstVisibleCell;
+
+                    int rowIndex = row.Index;
+                    int halfVisible = DGV.DisplayedRowCount(false) / 2;
+                    int firstRow = Math.Max(0, rowIndex - halfVisible);
+                    DGV.FirstDisplayedScrollingRowIndex = firstRow;
+
+                    return true;
+                }
+            }
+            return false;
         }
 
         #endregion
@@ -1390,8 +1143,11 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
         private void SelectProductAfterRefresh(int productId)
         {
-            if (DGV.DataSource is DataTable dataTable)
+            if (DGV.DataSource is DataTable)
             {
+                // تأكد أن الجدول يحتوي على صفوف بعد التحديث
+                DGV.SuspendLayout();
+
                 foreach (DataGridViewRow row in DGV.Rows)
                 {
                     if (row.Cells["ID_Product"].Value != null &&
@@ -1399,6 +1155,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                     {
                         row.Selected = true;
 
+                        // تحديد خلية مناسبة
                         if (DGV.Columns.Contains("ProductCode") && DGV.Columns["ProductCode"].Visible)
                         {
                             DGV.CurrentCell = row.Cells["ProductCode"];
@@ -1415,58 +1172,25 @@ namespace MizanOriginalSoft.Views.Forms.Products
                             }
                         }
 
-                        DGV.FirstDisplayedScrollingRowIndex = row.Index;
+                        // إظهار الصف المحدد في منتصف الشاشة
+                        int visibleRows = DGV.DisplayedRowCount(false);
+                        int firstDisplayed = Math.Max(row.Index - visibleRows / 2, 0);
+                        DGV.FirstDisplayedScrollingRowIndex = firstDisplayed;
+
                         break;
                     }
                 }
+
+                DGV.ResumeLayout();
             }
         }
         #endregion
-
-        #region تطبيق التصنيف وتحديث الفلترة بعد التعديل
-        private void ApplyCategorySelectionAndFilter(int categoryId, int? productIdToSelect = null)
-        {
-            TreeNode[] nodes = treeViewCategories.Nodes.Find(categoryId.ToString(), true);
-            if (nodes.Length > 0)
-            {
-                TreeNode selectedNode = nodes[0];
-                treeViewCategories.SelectedNode = selectedNode;
-                selectedNode.EnsureVisible();
-
-                if (selectedNode.Tag != null)
-                {
-                    int selectedCategoryId = Convert.ToInt32(selectedNode.Tag);
-
-                    if (selectedCategoryId == 0)
-                    {
-                        frmProductItems_Load(this, EventArgs.Empty);
-                        lblSelectedTreeNod.Text = "الكل";
-                    }
-                    else
-                    {
-                        if (rdoByNode.Checked)
-                            FilterProductsByCategory(selectedCategoryId);
-                        else if (rdoByNodeAndHisChild.Checked)
-                            FilterProductsByCategoryAndHisChild(selectedNode);
-                    }
-
-                    UpdateCount();
-
-                    if (productIdToSelect.HasValue)
-                        SelectProductAfterRefresh(productIdToSelect.Value);
-                }
-            }
-        }
-        #endregion
-
-
 
         private void RefreshData()
         {
             try
             {
-                frmProductItems_Load(this, EventArgs.Empty); // أو دالة تحميل البيانات الخاصة بك
-                DGV.Refresh();
+                LoadProducts(); // تحميل فعلي من SQL
                 LoadTreeAndSelectSpecificNode();
             }
             catch (Exception ex)
@@ -1474,7 +1198,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 MessageBox.Show($"حدث خطأ أثناء تحديث البيانات: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private TreeNode? FindNodeById(TreeNodeCollection nodes, string id)
         {
             foreach (TreeNode node in nodes)
@@ -1486,8 +1209,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
             return null;
         }
-
-
         private void btnNewItem_Click(object sender, EventArgs e)
         {
             try
@@ -1581,8 +1302,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
             return null;
         }
-
-
         private void RestoreProductSelection(List<int> productIds)
         {
             if (DGV.Columns["ID_Product"] == null || productIds == null || productIds.Count == 0)
@@ -1606,54 +1325,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
                     }
                 }
             }
-        }
-        /// /////////// //////////////////////////////////////////
-
-
-        // زر فك ارتباط الشجرة بالاصناف للتحكم فى ربط الاصناف بتصنيف اخر  ###
-        private void btnMdifyTree_Click(object sender, EventArgs e)
-        {
-            chkTreeEnable.Checked = !chkTreeEnable.Checked;
-
-            chkTreeEnable_CheckedChanged(this, EventArgs.Empty);
-            if (chkTreeEnable.Checked)
-            {
-                btnMdifyTree.Text = "تعديل التصنيف";
-                // لون الزر فى هذه الحالة (لون أخضر فاتح مع نص داكن)
-                btnMdifyTree.BackColor = Color.LightCyan;
-                btnMdifyTree.ForeColor = Color.DarkRed; // 
-            }
-            else
-            {
-                btnMdifyTree.Text = "ضم الاصناف للتصنيف";
-                // لون الزر فى هذه الحالة 
-                btnMdifyTree.BackColor = Color.FromArgb(255, 200, 200); // أحمر فاتح (لون وردي خفيف)
-                btnMdifyTree.ForeColor = Color.DarkRed; // نص أحمر داكن
-
-                // كود يتم تنفيذه عند الإلغاء
-
-            }
-        }
-
-        private void txtFromCode_TextChanged(object sender, EventArgs e)
-        {
-            string code = txtFromCode.Text;
-            // 1. مسح كل حقول البحث الأخرى
-            ClearAllSearchFieldsExceptRange();
-            txtFromCode.Text = code;
-            // 2. تطبيق تصفية نطاق الأكواد
-            FilterByCodeRange();
-
-        }
-
-        private void txtToCode_TextChanged(object sender, EventArgs e)
-        {
-            string code = txtFromCode.Text;
-            // 1. مسح كل حقول البحث الأخرى
-            ClearAllSearchFieldsExceptRange();
-            txtFromCode.Text = code;
-            // 2. تطبيق تصفية نطاق الأكواد
-            FilterByCodeRange();
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
@@ -1758,18 +1429,14 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
 
-        // اعداد قوائم التقارير الخاصة بالاصناف  ###
         #region ######### إعداد قوائم التقارير بناءً على ReportsMaster ########
 
-        /// <summary>
-        /// إنشاء شريط القوائم داخل Panel
-        /// </summary>
-        /// 
+        // إنشاء شريط القوائم داخل Panel
         private MenuStrip? menuStrip1;
 
+        //القوائم (تقارير الصنف المحدد ▼ و تقارير مجمعة للأصناف المحددة ▼) تصطف من اليمين للشمال بدل العكس.
         private void SetupMenuStrip()
         {
-            menuStrip1 = new MenuStrip();
             this.Controls.Add(menuStrip1);
             MenuStrip mainMenu = new MenuStrip
             {
@@ -1790,14 +1457,13 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
 
-        /// <summary>
-        /// تحميل القوائم بناءً على الحساب الممرر
-        /// </summary>
+        // تحميل القوائم بناءً على الحساب الممرر
         private void LoadReports(int topAcc)
         {
             try
             {
-                DataTable dt = DBServiecs.Reports_GetByTopAcc(topAcc);
+                DataTable dt = DBServiecs.Reports_GetByTopAcc(topAcc, false);
+
 
                 // تقارير فردية
                 DataRow[] singleReports = dt.Select("IsGrouped = 0");
@@ -1813,10 +1479,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
 
-        /// <summary>
-        /// تعبئة القائمة بعناصر من DataRow[]
-        /// </summary>
-        /// 
+        // تعبئة القائمة بعناصر من DataRow[]
         private void LoadMenuItems(ToolStripMenuItem parentMenu, DataRow[] rows)
         {
             parentMenu.DropDownItems.Clear();
@@ -1853,35 +1516,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
 
-        private void LoadMenuItems_(ToolStripMenuItem parentMenu, DataRow[] rows)
-        {
-            parentMenu.DropDownItems.Clear();
-
-            if (rows.Length == 0)
-            {
-                ToolStripMenuItem emptyItem = new("لا توجد تقارير متاحة") { Enabled = false };
-                parentMenu.DropDownItems.Add(emptyItem);
-                return;
-            }
-
-            foreach (DataRow row in rows)
-            {
-                string displayName = row["ReportDisplayName"]?.ToString() ?? "تقرير بدون اسم";
-                string codeName = row["ReportCodeName"]?.ToString() ?? "";
-
-                ToolStripMenuItem menuItem = new(displayName)
-                {
-                    Tag = codeName
-                };
-                menuItem.Click += ReportMenuItem_Click;
-
-                parentMenu.DropDownItems.Add(menuItem);
-            }
-        }
-
-        /// <summary>
-        /// حدث النقر على أي تقرير
-        /// </summary>
+        // حدث النقر على أي تقرير
         private void ReportMenuItem_Click(object? sender, EventArgs e)
         {
             if (sender is not ToolStripMenuItem clickedItem || clickedItem.Tag is not Dictionary<string, object> tagData)
@@ -1918,45 +1553,8 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
 
-        private void ReportMenuItem_Click_(object? sender, EventArgs e)
-        {
-            /*هنا فى شاشة الاصناف توجد تقارير خاصة بصنف واخرى لمجموعة اصناف محددة فكيف يتم التعديل*/
-            if (sender is not ToolStripMenuItem clickedItem || clickedItem.Tag is null)
-            {
-                MessageBox.Show("بيانات التقرير غير صحيحة.");
-                return;
-            }
 
-            string reportCodeName = clickedItem.Tag.ToString() ?? "";
-            if (string.IsNullOrEmpty(reportCodeName))
-            {
-                MessageBox.Show("لا يوجد اسم كود للتقرير.");
-                return;
-            }
-
-            try
-            {
-                // تجهيز البيانات لتمريرها لشاشة المعاينة
-                Dictionary<string, object> reportParameters = new()
-        {
-            { "ReportCodeName", reportCodeName },
-            { "UserID", ID_user },
-            { "EntityID", GetCurrentEntityID() ?? (object)DBNull.Value },
-            { "FilteredData", GetFilteredData() }
-        };
-
-                using frmSettingReports previewForm = new frmSettingReports(reportParameters);
-                previewForm.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"حدث خطأ أثناء فتح التقرير: {ex.Message}");
-            }
-        }
-
-        /// <summary>
-        /// جلب كود الصنف الحالي
-        /// </summary>
+        // جلب كود الصنف الحالي
         private int? GetCurrentEntityID()
         {
             if (int.TryParse(lblID_Product.Text, out int id))
@@ -1968,9 +1566,406 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
 
-        /// <summary>
-        /// جلب البيانات المفلترة
-        /// </summary>
+
+        #endregion
+
+
+        #region  طريقة العرض والبحث والفلترة
+
+        // 🟢 أحداث الراديو كلها تستدعي نفس الفلترة
+        private void rdoPlusStok_CheckedChanged(object sender, EventArgs e) => ApplyAllFilters();
+        private void rdoMinusStok_CheckedChanged(object sender, EventArgs e) => ApplyAllFilters();
+        private void rdoZeroStok_CheckedChanged(object sender, EventArgs e) => ApplyAllFilters();
+        private void rdoAllStok_CheckedChanged(object sender, EventArgs e) => ApplyAllFilters();
+
+        // 🔹 الشرط الخاص بالمخزون
+        private string GetStockCondition()
+        {
+            if (rdoMinusStok.Checked) return "[ProductStock] < 0";
+            if (rdoPlusStok.Checked) return "[ProductStock] > 0";
+            if (rdoZeroStok.Checked) return "[ProductStock] = 0";
+            return "1=1"; // الكل
+        }
+
+        // 🔹 جمع كل شروط الفلترة (بحث + راديو + شجرة + أكواد)
+
+        private void ApplyAllFilters()
+        {
+            try
+            {
+                DataTable baseTable = _tblProd ?? new DataTable();//العدد هنا 4494
+                DataView dv = new DataView(baseTable);
+
+                List<string> conditions = new List<string>();
+
+                // 1️⃣ شرط المخزون
+                conditions.Add(GetStockCondition());
+
+                // 2️⃣ التصنيف من الشجرة
+                if (lastSelectedNode != null)
+                {
+                    if (rdoByNode.Checked && lastSelectedNode.Tag != null)
+                    {
+                        if (int.TryParse(lastSelectedNode.Tag.ToString(), out int catId))
+                            conditions.Add($"Category_id = {catId}");
+                    }
+                    else if (rdoByNodeAndHisChild.Checked)
+                    {
+                        List<int> ids = CollectCategoryIds(lastSelectedNode);
+                        if (ids.Any())
+                            conditions.Add($"Category_id IN ({string.Join(",", ids)})");
+                    }
+                }
+
+                // 3️⃣ البحث بالنص
+                string searchText = txtSeaarchProd.Text.Trim();
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    string[] words = searchText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string word in words)
+                    {
+                        string escaped = word.Replace("'", "''");
+                        conditions.Add($"(ProdName LIKE '%{escaped}%' OR NoteProduct LIKE '%{escaped}%')");
+                    }
+                }
+
+                // 4️⃣ البحث بالسعر
+                if (decimal.TryParse(txtSeaarchProdPrice.Text.Trim(), out decimal price))
+                    conditions.Add($"U_Price = {price}");
+
+                // 5️⃣ المورد
+                if (!string.IsNullOrEmpty(txtSuppliers.Text.Trim()))
+                {
+                    string escaped = txtSuppliers.Text.Trim().Replace("'", "''");
+                    conditions.Add($"SuplierName LIKE '%{escaped}%'");
+                }
+
+                // 6️⃣ نطاق الأكواد
+                string fromCode = txtFromCode.Text.Trim();
+                string toCode = txtToCode.Text.Trim();
+                if (!string.IsNullOrEmpty(fromCode) && !string.IsNullOrEmpty(toCode))
+                    conditions.Add($"ProductCode >= {fromCode} AND ProductCode <= {toCode}");
+                else if (!string.IsNullOrEmpty(fromCode))
+                    conditions.Add($"ProductCode >= {fromCode}");
+                else if (!string.IsNullOrEmpty(toCode))
+                    conditions.Add($"ProductCode <= {toCode}");
+
+                // تطبيق الشروط
+                dv.RowFilter = string.Join(" AND ", conditions);
+
+                DGV.DataSource = dv;
+                ApplyDGVStyles();
+
+                tblModify = dv.ToTable();
+                UpdateCount();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("خطأ أثناء تطبيق الفلاتر: " + ex.Message);
+            }
+        }
+
+        // 🔹 دالة مساعدة لجمع أبناء العقدة
+        private List<int> CollectCategoryIds(TreeNode parentNode)
+        {
+            List<int> ids = new List<int>();
+
+            void Collect(TreeNode node)
+            {
+                if (node?.Tag != null && int.TryParse(node.Tag.ToString(), out int id))
+                    ids.Add(id);
+
+                foreach (TreeNode child in node.Nodes)
+                    Collect(child);
+            }
+
+            Collect(parentNode);
+            return ids;
+        }
+
+        // 🔹 حدث اختيار العقدة من الشجرة
+        private void treeViewCategories_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            try
+            {
+                // 📌 إلغاء البحث بالرينج
+                txtFromCode.Text = string.Empty;
+                txtToCode.Text = string.Empty;
+
+                TreeNode selectedNode = e?.Node ?? treeViewCategories.SelectedNode;
+
+                // لو مفيش عقدة مختارة
+                if (selectedNode == null)
+                {
+                    lastSelectedNode = null;
+                    SetCategoryDisplay(string.Empty); // تنظيف النص
+                    ApplyAllFilters(); // فلترة عامة بدون عقدة
+                    return;
+                }
+
+                // تخزين العقدة المختارة
+                lastSelectedNode = selectedNode;
+
+                // تحديث عرض اسم التصنيف
+                SetCategoryDisplay(selectedNode.Text);
+
+                // تطبيق كل الفلاتر (بحث + سعر + مورد + أكواد + شجرة)
+                ApplyAllFilters();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ أثناء اختيار التصنيف: " + ex.Message);
+            }
+        }
+
+        private void treeViewCategories_AfterSelect_(object sender, TreeViewEventArgs e)
+        {/*اريد عند الضغط هنا الغاء البحث بالرينج
+          وتفريغ txtFromCode;txtToCode ;
+          */
+            try
+            {
+                TreeNode selectedNode = e?.Node ?? treeViewCategories.SelectedNode;
+
+                // لو مفيش عقدة مختارة
+                if (selectedNode == null)
+                {
+                    lastSelectedNode = null;
+                    SetCategoryDisplay(string.Empty); // تنظيف النص
+                    ApplyAllFilters(); // فلترة عامة بدون عقدة
+                    return;
+                }
+
+                // تخزين العقدة المختارة
+                lastSelectedNode = selectedNode;
+
+                // تحديث عرض اسم التصنيف
+                SetCategoryDisplay(selectedNode.Text);
+
+                // تطبيق كل الفلاتر (بحث + سعر + مورد + أكواد + شجرة)
+                ApplyAllFilters();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ أثناء اختيار التصنيف: " + ex.Message);
+            }
+        }
+
+        #endregion
+
+
+
+
+
+
+
+
+        #region *********  فلترة مستقلة بالرينج ولكن ملتزمة بالارصدة وتلغى كل الفلترة الاخرى ******
+
+        private void txtFromCode_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string code = txtFromCode.Text;
+                ClearAllSearchFieldsExceptRange();
+                txtFromCode.Text = code;
+
+                ApplyAllFilters(); // ✅ هي اللي هتطبق نطاق الأكواد كجزء من الفلترة
+                txtToCode.Focus();
+                txtToCode.SelectAll();
+            }
+        }
+
+        private void txtToCode_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string code = txtToCode.Text;
+                ClearAllSearchFieldsExceptRange();
+                txtToCode.Text = code;
+
+                ApplyAllFilters(); // ✅
+                txtFromCode.Focus();
+                txtFromCode.SelectAll();
+            }
+        }
+
+        private void ClearAllSearchFieldsExceptRange()
+        {
+            txtSeaarchProd.Text = string.Empty;
+            txtSeaarchProdPrice.Text = string.Empty;
+            txtSuppliers.Text = string.Empty;
+
+            // إلغاء اختيار العقدة
+            treeViewCategories.SelectedNode = null;
+            lblSelectedTreeNod.Text = string.Empty;
+
+            LoadProducts();
+            // إغلاق كل التفرعات
+            foreach (TreeNode node in treeViewCategories.Nodes)
+                node.Collapse(true);
+
+            ApplyAllFilters(); // ✅ دالة جديدة بدل FilterProductsBySearchText
+        }
+
+        #endregion
+
+
+        #region   ********  فلترة بالبحث العادى مع السعر والمورد والتصنيف وتلغى الفلترة بالرينج ****
+
+        private void txtSeaarchProd_TextChanged(object sender, EventArgs e)
+        {
+            txtFromCode.Text = "";
+            txtToCode.Text = "";
+            ApplyAllFilters();
+        }
+
+
+
+        #endregion 
+
+
+
+
+
+
+
+
+
+
+
+
+
+        #region  طريقة العرض والبحث والفلترة
+
+
+        // 🔹 فلترة حسب العقدة والراديو
+        private void ApplyCategoryFilter(TreeNode? selectedNode)
+        {
+            try
+            {
+                if (selectedNode == null)
+                {
+                    LoadProducts(); // في حالة لم يتم اختيار عقدة
+                    return;
+                }
+
+                string category = selectedNode.Text;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("خطأ أثناء تصفية التصنيفات: " + ex.Message);
+            }
+        }
+
+
+        // 🔹 إعادة تنفيذ فلترة الشجرة عند تغيير اختيار العرض
+        private void rdoByNode_CheckedChanged(object sender, EventArgs e)
+        {
+            TriggerTreeViewSelection();
+            UpdateRadioButtonColors();
+        }
+
+        private void rdoByNodeAndHisChild_CheckedChanged(object sender, EventArgs e)
+        {
+            TriggerTreeViewSelection();
+            UpdateRadioButtonColors();
+        }
+
+        // 🔹 إعادة محاكاة اختيار العقدة (لما المستخدم يغير الراديو مثلًا)
+        private void TriggerTreeViewSelection()
+        {
+            if (treeViewCategories.SelectedNode != null)
+            {
+                var args = new TreeViewEventArgs(treeViewCategories.SelectedNode);
+                treeViewCategories_AfterSelect(treeViewCategories, args);
+            }
+        }
+
+
+
+
+        // دالة مساعدة لتحديث اسم التصنيف الظاهر في الواجهة
+        private void SetCategoryDisplay(string categoryName)
+        {
+            lblSelectedTreeNod.Text = categoryName;
+            txtCategory.Text = categoryName;
+        }
+
+        // دالة مساعدة لتحميل كل المنتجات من جديد
+        private void LoadAllProducts_()
+        {
+
+        }
+
+        // جدول وسيط يحفظ نتيجة فلترة الشجرة
+        private DataTable? tblFilteredByTree;
+
+
+        // 🔎 البحث داخل نتيجة الشجرة فقط
+        private void FilterProductsBySearchText()
+        {
+            try
+            {
+                DataTable baseTable = tblFilteredByTree ?? _tblProd ?? new DataTable();
+                DataView dv = new DataView(baseTable);
+
+                List<string> conditions = new List<string>();
+
+                // 1. الكلمات الجزئية
+                string searchText = txtSeaarchProd.Text.Trim();
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    string[] words = searchText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string word in words)
+                    {
+                        string escaped = word.Replace("'", "''");
+                        conditions.Add($"(ProdName LIKE '%{escaped}%' OR NoteProduct LIKE '%{escaped}%')");
+                    }
+                }
+
+                // 2. السعر
+                string priceText = txtSeaarchProdPrice.Text.Trim();
+                if (decimal.TryParse(priceText, out decimal price))
+                {
+                    conditions.Add($"U_Price = {price}");
+                }
+
+                // 3. المورد
+                string supplierText = txtSuppliers.Text.Trim();
+                if (!string.IsNullOrEmpty(supplierText))
+                {
+                    string escaped = supplierText.Replace("'", "''");
+                    conditions.Add($"SuplierName LIKE '%{escaped}%'");
+                }
+
+                string rowFilter = string.Join(" AND ", conditions);
+                dv.RowFilter = rowFilter;
+
+                DGV.DataSource = dv;
+                ApplyDGVStyles();
+
+                // حفظ البيانات المفلترة للعمليات الأخرى
+                tblModify = dv.ToTable();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ أثناء التصفية: " + ex.Message);
+            }
+        }
+
+        #endregion
+
+
+
+
+
+
+
+
+        #region  طريقة العرض والبحث والبحث المتداخل
+
+        // جلب البيانات المفلترة
         private DataTable GetFilteredData()
         {
             DataTable result = new DataTable();
@@ -2014,398 +2009,107 @@ namespace MizanOriginalSoft.Views.Forms.Products
             return result;
         }
 
+
+
         #endregion
 
+        #region ========== Search Prod ===========================
 
-
-        //     #region ######### New Report Tools  خاصة بقوائم التقارير ########
-        //     /*عند تحميل التقارير فى اى شاشة فى البرنامج بالدالة الجديدة 
-        //       private void LoadReports(int topAcc)
-        //      {
-        //          DataTable dt = DBServiecs.Reports_GetByTopAcc(topAcc);
-        //          DGV.DataSource = dt;
-        //      }
-        //       اريد انشاء قائمتين منسدلتين باسماء التقارير الواردة الخاصة بالحساب الممرر 
-        //      وتوزيع التقارير الفردية فى لست والمجمعة فى ليست
-
-        //      وهذا هو الجدول القادم فى التيبل الرئيسى
-        //      SELECT [ReportID]
-        //    ,[ReportDisplayName]
-        //    ,[ID_TopAcc]
-        //    ,[ReportCodeName]
-        //    ,[IsGrouped]
-        //    ,[ParentID]
-        //    ,[Notes]
-        //    ,[IsActivRep]
-        //FROM [dbo].[ReportsMaster]
-
-        //      واريد عند النقر على تقرير فتح الشاشة الوسيطة frmReport_Preview وتمرير ReportCodeName
-        //      لاستكمال بيانات الفترة المراد عرض التقرير فيها
-
-        //      فكيف يكون ضبط الكود الجديد وتعديل النظام الحالى بذلك
-        //      اريد كود كامل استبدل به الحالى
-        //       */
-
-
-
-        //     // إنشاء شريط القوائم داخل الـ Panel ###
-        //     private void SetupMenuStrip()
-        //     {
-
-        //         MenuStrip mainMenu = new MenuStrip();
-        //         mainMenu.Dock = DockStyle.Fill;
-        //         mainMenu.BackColor = Color.LightSteelBlue;
-        //         // تعيين الخط المطلوب لشريط القوائم
-        //         mainMenu.Font = new Font("Times New Roman", 14, FontStyle.Regular);
-
-        //         // القائمة الأولى: تقارير الصنف
-        //         tsmiCategoryReports = new ToolStripMenuItem("تقارير الصنف المحدد ▼");
-        //         // القائمة الثانية: التقارير المجمعة
-        //         tsmiGroupedReports = new ToolStripMenuItem("تقارير مجمعة للاصناف المحددة ▼");
-        //         // إضافة القوائم إلى شريط القوائم
-        //         mainMenu.Items.Add(tsmiCategoryReports);
-        //         mainMenu.Items.Add(tsmiGroupedReports);
-
-        //         // إضافة شريط القوائم إلى الـ Panel
-        //         pnlMenuContainer.Controls.Add(mainMenu);
-        //         mainMenu.Location = new Point(10, 5);
-
-        //         // تكوين الـ DataGridView
-        //         DGV.Dock = DockStyle.Fill;
-        //     }
-
-        //     // تحميل تقارير الفردية والمجمعة ###
-        //     private void LoadReports()
-        //     {
-        //         try
-        //         {
-        //             // تحميل تقارير الصنف الفردية (ForItems = true)
-        //             DataTable dtCategoryReports = DBServiecs.RepMenu_Products(true, false);
-
-        //             LoadMenuItemsFromDataTable(tsmiCategoryReports, dtCategoryReports);
-
-        //             // تحميل التقارير المجمعة للأصناف (ForItemsGroup = true)
-        //             DataTable dtGroupedReports = DBServiecs.RepMenu_Products(false, true);
-
-        //             LoadMenuItemsFromDataTable(tsmiGroupedReports, dtGroupedReports);
-        //         }
-        //         catch (Exception ex)
-        //         {
-        //             MessageBox.Show("حدث خطأ أثناء تحميل التقارير: " + ex.Message);
-        //         }
-        //     }
-
-        //     // تحميل تقارير الصنف الفردية  ###
-        //     private void LoadMenuItemsFromDataTable(ToolStripMenuItem parentMenu, DataTable? data)
-        //     {
-        //         // مسح العناصر القديمة إن وجدت
-        //         parentMenu.DropDownItems.Clear();
-
-        //         if (data == null || data.Rows.Count == 0)
-        //         {
-        //             ToolStripMenuItem emptyItem = new("لا توجد تقارير متاحة")
-        //             {
-        //                 Enabled = false
-        //             };
-        //             parentMenu.DropDownItems.Add(emptyItem);
-        //             return;
-        //         }
-
-        //         // إضافة العناصر الجديدة
-        //         foreach (DataRow row in data.Rows)
-        //         {
-        //             string reportName = row["ReportName"]?.ToString() ?? "تقرير غير معروف";
-        //             object? reportID = row["ReportID"];
-
-        //             ToolStripMenuItem menuItem = new(reportName)
-        //             {
-        //                 Tag = reportID
-        //             };
-
-        //             menuItem.Click += MenuItem_Click!;
-        //             parentMenu.DropDownItems.Add(menuItem);
-        //         }
-        //     }
-
-        //     // حدث النقر واستدعاء تقرير ما من القائمة  ###    
-        //     private void MenuItem_Click(object sender, EventArgs e)
-        //     {
-        //         if (sender is not ToolStripMenuItem clickedItem || clickedItem.Tag is null)
-        //         {
-        //             MessageBox.Show("عنصر القائمة لا يحتوي على بيانات التقرير المطلوبة");
-        //             return;
-        //         }
-
-        //         try
-        //         {
-        //             // إنشاء القاموس بما يتوافق مع نوع الدالة المطلوبة
-        //             Dictionary<string, object> reportParameters = new()
-        //     {
-        //         { "ReportID", Convert.ToInt32(clickedItem.Tag) }, // كود التقرير
-        //         { "ReportName", clickedItem.Text?.Trim() ?? string.Empty }, // اسم التقرير
-        //         { "UserID", ID_user }, // كود المستخدم
-        //         { "EntityID", DBNull.Value }, // سيتم تغييره لاحقًا
-        //         { "FilteredData", new DataTable() } // سيتم تغييره لاحقًا
-        //     };
-
-        //             // تعبئة المعطيات الأساسية
-        //             bool success = FillCommonParameters(reportParameters);
-
-        //             // ✅ إيقاف تام إذا لم تنجح التعبئة (مثلاً لم يتم اختيار صنف)
-        //             if (!success)
-        //                 return;
-
-        //             using frmReport_Preview previewForm = new(reportParameters);
-        //             previewForm.ShowDialog();
-        //         }
-        //         catch (Exception ex)
-        //         {
-        //             MessageBox.Show($"حدث خطأ أثناء تحضير التقرير: {ex.Message}");
-        //         }
-        //     }
-        //     // دالة مبسطة لتعبئة المعطيات المشتركة ###
-        //     private bool FillCommonParameters(Dictionary<string, object> parameters)
-        //     {
-        //         try
-        //         {
-        //             // 1. كود الكيان الرئيسي
-        //             int? entityId = GetCurrentEntityID();
-        //             if (entityId == null)
-        //                 return false; // توقف تام
-
-        //             parameters["EntityID"] = entityId.Value;
-
-        //             // 2. البيانات المفلترة
-        //             parameters["FilteredData"] = GetFilteredData();
-
-        //             return true;
-        //         }
-        //         catch (Exception ex)
-        //         {
-        //             MessageBox.Show($"خطأ في تجهيز معطيات التقرير: {ex.Message}");
-        //             return false;
-        //         }
-        //     }
-
-        //     // جلب كود الصنف الحالى ###
-        //     private int? GetCurrentEntityID()
-        //     {
-        //         if (int.TryParse(lblID_Product.Text, out int id))
-        //             return id;
-        //         else
-        //         {
-        //             MessageBox.Show("⚠️ يجب اختيار صنف قبل عرض التقرير.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        //             return null;
-        //         }
-        //     }
-
-        //     // جلب البيانات المفلتر عليها  ###
-        //     private DataTable GetFilteredData()
-        //     {
-        //         DataTable result = new DataTable();
-        //         result.Columns.Add("ID", typeof(int));
-        //         result.Columns.Add("Name", typeof(string));
-
-        //         // تحديد مصدر البيانات حسب الشاشة
-        //         DataGridView? sourceGrid = DGV; // تأمين أنها غير null
-        //         string idColumn = "ID_Product"; // يجب التعديل حسب اسم العمود الحقيقي
-        //         string nameColumn = "ProdName"; // نفس الأمر
-
-        //         if (sourceGrid != null)
-        //         {
-        //             if (sourceGrid.SelectedRows.Count > 1)
-        //             {
-        //                 foreach (DataGridViewRow row in sourceGrid.SelectedRows)
-        //                 {
-        //                     if (!row.IsNewRow && row.Cells[idColumn].Value != null)
-        //                     {
-        //                         result.Rows.Add(
-        //                             Convert.ToInt32(row.Cells[idColumn].Value),
-        //                             row.Cells[nameColumn].Value?.ToString() ?? ""
-        //                         );
-        //                     }
-        //                 }
-        //             }
-        //             else
-        //             {
-        //                 foreach (DataGridViewRow row in sourceGrid.Rows)
-        //                 {
-        //                     if (!row.IsNewRow && row.Cells[idColumn].Value != null)
-        //                     {
-        //                         result.Rows.Add(
-        //                             Convert.ToInt32(row.Cells[idColumn].Value),
-        //                             row.Cells[nameColumn].Value?.ToString() ?? ""
-        //                         );
-        //                     }
-        //                 }
-        //             }
-        //         }
-
-        //         return result;
-        //     }
-        //     #endregion
-
-        // اعداد شجرة التصنيفات للاصناف  ###
-        #region ####### Tree Methods ########3
-
-        // عند تغيير اختيار عرض الأصناف حسب الفرع المحدد ###
-        private void rdoByNode_CheckedChanged(object sender, EventArgs e)
+        private void txtSeaarchProd_KeyDown(object sender, KeyEventArgs e)
         {
-            TriggerTreeViewSelection();
-            UpdateRadioButtonColors();
-        }
-
-        // عند تغيير اختيار عرض الأصناف حسب الفرع وأبنائه ###
-        private void rdoByNodeAndHisChild_CheckedChanged(object sender, EventArgs e)
-        {
-            TriggerTreeViewSelection();
-            UpdateRadioButtonColors();
-        }
-
-        // محاكي يدوي لاختيار العقدة الحالية في الشجرة
-        private void TriggerTreeViewSelection()
-        {
-            if (treeViewCategories.SelectedNode != null)
+            if (e.Control && e.KeyCode == Keys.H)
             {
-                var args = new TreeViewEventArgs(treeViewCategories.SelectedNode);
-                treeViewCategories_AfterSelect(treeViewCategories, args);
+                ShowHelpForActiveControl();
             }
         }
-        // الحدث الذي يتم تنفيذه عند تحديد عقدة في شجرة التصنيفات
-
-
-        private void treeViewCategories_AfterSelect(object sender, TreeViewEventArgs e)
+        private void txtSeaarchProd_TextChanged_(object sender, EventArgs e)
         {
+            txtFromCode.Text = "";
+            txtToCode.Text = "";//مسح الرينج
+            FilterProductsBySearchText();
+            UpdateCount();
+        }
+        private void txtSeaarchProdPrice_TextChanged(object sender, EventArgs e)
+        {
+            txtSeaarchProd_TextChanged(this, EventArgs.Empty);
+        }
 
+        private void txtSeaarchProdSupplier_TextChanged(object sender, EventArgs e)
+        {
+            txtSeaarchProd_TextChanged(this, EventArgs.Empty);
+        }
+        private void txtCategories_TextChanged(object sender, EventArgs e)
+        {
+            txtSeaarchProd_TextChanged(this, EventArgs.Empty);
+        }
+        private void txtCategory_id_TextChanged(object sender, EventArgs e)
+        {
+            txtSeaarchProd_TextChanged(this, EventArgs.Empty);
+        }
+
+        private void btnAdvanceSearch_Click(object sender, EventArgs e)
+        {
+            if (tlpAdvanceSearch.Visible) 
+            {
+                tlpAdvanceSearch .Visible = false;
+                txtFromCode.Text =string.Empty ;
+                txtToCode.Text =string.Empty ;
+                LoadProducts();
+            }
+            else
+            {
+                tlpAdvanceSearch .Visible=true;
+            }
+        }
+
+        //ضبط اجماليات الاصناف المفلترة
+        private void UpdateCount()
+        {
             try
             {
-                // إعادة تعيين البحث وعرض الفلاتر
-                ClearSearch();
-                tlpAdvanceSearch.Visible = false;
-
-                // الحصول على العقدة المحددة
-                TreeNode selectedNode = e?.Node ?? treeViewCategories.SelectedNode;
-
-                // التأكد من صحة العقدة
-                if (selectedNode == null)
+                if (DGV?.Rows == null || DGV.Rows.Count == 0)
                 {
-                    SetCategoryDisplay(string.Empty);
+                    lblCountAndTotalStoc.Text = "عدد الأصناف : 0 وقيمتها : 0.00";
                     return;
                 }
 
-                // تحديث اسم التصنيف الظاهر
-                SetCategoryDisplay(selectedNode.Text);
+                int count = 0;
+                decimal totalValue = 0;
 
-                // إذا كان خيار التصفية غير مفعل أو لا يوجد معرف في العقدة، الخروج
-                if (!chkTreeEnable.Checked || selectedNode.Tag == null)
-                    return;
-
-                // تحويل القيمة المرتبطة بالعقدة إلى رقم
-                if (!int.TryParse(selectedNode.Tag.ToString(), out int selectedCategoryId))
-                    return;
-
-                // في حالة اختيار "الكل" (وليس رقم 0 كما سابقًا بل 1)
-                if (selectedCategoryId == 1)
+                foreach (DataGridViewRow row in DGV.Rows)
                 {
-                    LoadAllProducts();
-                    SetCategoryDisplay("الكل");
-                }
-                else
-                {
-                    // اختيار نوع التصفية بناءً على الاختيار
-                    if (rdoByNode.Checked)
-                        FilterProductsByCategory(selectedCategoryId);
-                    else if (rdoByNodeAndHisChild.Checked)
-                        FilterProductsByCategoryAndHisChild(selectedNode);
+                    if (row.IsNewRow) continue;
+
+                    count++;
+
+                    decimal price = 0;
+                    decimal stock = 0;
+
+                    if (row.Cells["U_Price"].Value != null)
+                        decimal.TryParse(row.Cells["U_Price"].Value.ToString(), out price);
+
+                    if (row.Cells["ProductStock"].Value != null)
+                        decimal.TryParse(row.Cells["ProductStock"].Value.ToString(), out stock);
+
+                    totalValue += price * stock;
                 }
 
-                // تحديث عدد النتائج
-                UpdateCount();
-
-                // حفظ العقدة المحددة
-                lastSelectedNode = selectedNode;
+                lblCountAndTotalStoc.Text = $"عدد الأصناف : {count} وقيمتها : {totalValue:N2}";
             }
             catch (Exception ex)
             {
-                MessageBox.Show("حدث خطأ أثناء تصفية التصنيفات: " + ex.Message);
+                lblCountAndTotalStoc.Text = "خطأ في الحساب";
+                MessageBox.Show("حدث خطأ أثناء حساب المخزون: " + ex.Message);
             }
-
         }
 
-        // دالة مساعدة لتحديث اسم التصنيف الظاهر في الواجهة
-        private void SetCategoryDisplay(string categoryName)
-        {
-            lblSelectedTreeNod.Text = categoryName;
-            txtCategory.Text = categoryName;
-        }
-
-        // دالة مساعدة لتحميل كل المنتجات من جديد
-        private void LoadAllProducts()
-        {
-            LoadProducts();
-            //      frmProductItems_Load(this, EventArgs.Empty);
-
-        }
-
-        // فلترة الأصناف حسب التصنيف فقط ###
-        private void FilterProductsByCategory(int categoryId)
-        {
-            DataTable allProducts = _tblProd ?? new DataTable();
-            if (allProducts.Rows.Count == 0)
-            {
-                DGV.DataSource = null;
-                return;
-            }
-
-            var filtered = allProducts.AsEnumerable()
-                .Where(r => (r.Field<int?>("Category_id") ?? 0) == categoryId);
-
-            DGV.DataSource = filtered.Any() ? filtered.CopyToDataTable() : null;
-            ApplyDGVStyles();
-        }
-
-        // فلترة الأصناف حسب التصنيف وجميع أبنائه ###
-        private void FilterProductsByCategoryAndHisChild(TreeNode parentNode)
-        {
-            DataTable allProducts = _tblProd ?? new DataTable();
-            if (allProducts.Rows.Count == 0 || parentNode == null)
-            {
-                DGV.DataSource = null;
-                return;
-            }
-
-            List<int> categoryIds = new List<int>();
-
-            void CollectCategoryIds(TreeNode node)
-            {
-                if (node?.Tag != null && int.TryParse(node.Tag.ToString(), out int id))
-                {
-                    categoryIds.Add(id);
-                    foreach (TreeNode child in node.Nodes)
-                        CollectCategoryIds(child);
-                }
-            }
-
-            CollectCategoryIds(parentNode);
-
-            var filtered = allProducts.AsEnumerable()
-                .Where(r => categoryIds.Contains(r.Field<int?>("Category_id") ?? 0));
-
-            DGV.DataSource = filtered.Any() ? filtered.CopyToDataTable() : null;
-            ApplyDGVStyles();
-        }
-
-        #endregion
-
-        // وظيفة الغاء عوامل البحث المتقدم واعادة تحميل البيانات ###
-        #region ############ Search Methods ##########
+        // وظيفة الغاء عوامل البحث المتقدم عند اختيار الرينج من كود الى كود ###
         private void ClearSearch()
         {
             txtSeaarchProd.Text = string.Empty;
             txtSeaarchProdPrice.Text = string.Empty;
             txtFromCode.Text = string.Empty;
             txtToCode.Text = string.Empty;
-            txtCategories.Text = string.Empty;
             txtSuppliers.Text = string.Empty;
 
             // إعادة تحميل البيانات الأصلية بدون تصفية
@@ -2424,13 +2128,10 @@ namespace MizanOriginalSoft.Views.Forms.Products
             UpdateCount();
         }
 
+        #endregion ---------------------------------------------
 
 
-        #endregion
-
-
-
-        #region @@@@@@@@@@@@@ New Item @@@@@@@@@@@@@@@@
+        #region @@@@@@@@@@@@@  Tab page New Item @@@@@@@@@@@@@@@@
         private void FillUnits()
         {
             DataTable dt = DBServiecs.ProductGetUnits();
@@ -2469,8 +2170,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
 
-        private int ID_Product;
-
         private int UnitID;
         private float B_Price;
         private float U_Price;
@@ -2501,7 +2200,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 {
                     MessageBox.Show("تم إضافة الصنف بنجاح", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ResetFormForNewEntry(); // تفريغ النموذج لإدخال صنف جديد
-                    LoadAllProducts();
+                    LoadProducts();
                 }
                 else
                 {
@@ -2519,7 +2218,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
         {
             try
             {
-                ID_Product = int.TryParse(lblID_NweProduct.Text, out int id) ? id : 0;
                 ProdName = txtProdName.Text.Trim();
                 Note_Prod = txtNoteProduct.Text.Trim();
                 UnitID = cbxUnit_ID.SelectedValue == null ? 0 : Convert.ToInt32(cbxUnit_ID.SelectedValue);
@@ -2572,7 +2270,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
             return true;
         }
-
         private void ResetFormForNewEntry()
         {
             txtProdName.Clear();
@@ -2590,9 +2287,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
             PicProduct.Image = null;
 
         }
-
-
-
         private void btnLoadPicProduct_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog ofd = new OpenFileDialog())
@@ -2648,26 +2342,17 @@ namespace MizanOriginalSoft.Views.Forms.Products
             // عند الضغط على Ctrl + F يتم فتح شاشة البحث عن الموردين
             if (e.Control && e.KeyCode == Keys.F)
             {
-
-                e.SuppressKeyPress = true;
-
-                // تحديد نوع الحساب (مثلاً 14 يمثل الموردين)
-                int typeId = 14;
-
-                //  فتح نموذج البحث العام
-                frmSearch searchForm = new frmSearch(14, SearchEntityType.Supplier);
-
-                if (searchForm.ShowDialog() == DialogResult.OK)
+                using (var frm = new frmOriginalSearch(frmOriginalSearch.SearchInWate.Supplier))
                 {
-                    // إذا اختار المستخدم موردًا من نتيجة البحث
-                    txtNewItemSuppliers.Text = searchForm.SelectedName;
-                    lblSuppliersID.Text = searchForm.SelectedID;
-
-                    // (اختياري) تحميل بيانات إضافية للمورد المختار إن احتجت
-                    DataTable result = DBServiecs.MainAcc_GetAccounts(typeId);
-                    if (result != null && result.Rows.Count > 0)
+                    if (frm.ShowDialog() == DialogResult.OK && frm.Tag is SearchResult result)
                     {
-                        // هنا يمكنك استخدام بيانات إضافية إذا لزم الأمر
+                        // يمكنك الآن الوصول للكود والاسم بشكل منفصل
+                        string code = result.Code;
+                        string name = result.Name;
+
+                        txtNewItemSuppliers.Text = name;  // عرض الاسم في TextBox
+                                                          // إذا حبيت تخزن الكود في متغير آخر، ممكن:
+                        lblSuppliersID.Text = code;
                     }
                 }
             }
@@ -2689,7 +2374,38 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 e.SuppressKeyPress = true;
                 txtU_Price.Focus();
             }
+
+            if (e.Control && e.KeyCode == Keys.H)
+            {
+                HelpTextReader.ShowHelpForControl(this, sender);
+                e.SuppressKeyPress = true;
+            }
+
+            if (e.Control && e.KeyCode == Keys.F)
+            {
+                e.SuppressKeyPress = true;
+
+                // فتح frmCatTree في وضع SelectCategory فقط
+                using (var frm = new frmCatTree(frmCatTree.FrmCatTreeMode.SelectCategory))
+                {
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        // تعطيل أي حدث Leave مؤقتًا
+                        txtCategory.Leave -= txtCategory_Leave;
+
+                        // تعيين الاسم والرقم مباشرة
+                        txtCategory.Text = frm.SelectedCategoryName ?? string.Empty;
+                        lblCategoryID.Text = frm.SelectedCategoryID.ToString();
+
+                        // إعادة تفعيل الحدث
+                        txtCategory.Leave += txtCategory_Leave;
+                    }
+                }
+
+            }
+
         }
+
 
         private void txtU_Price_KeyDown(object sender, KeyEventArgs e)
         {
@@ -2736,7 +2452,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
 
-        #endregion
+
 
         private void txtNewItemSuppliers_Leave(object sender, EventArgs e)
         {
@@ -2770,7 +2486,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
 
-        private void txtCategory_Leave(object sender, EventArgs e)
+        private void txtCategory_Leave(object? sender, EventArgs e)
         {
             if (tblCategory == null) return;
 
@@ -2795,6 +2511,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 viewer.ShowDialog();
             }
         }
+        #endregion
 
     }
 }

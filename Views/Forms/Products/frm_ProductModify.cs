@@ -110,22 +110,22 @@ namespace MizanOriginalSoft.Views.Forms.Products
             // عند الضغط على Ctrl + F يتم فتح شاشة البحث عن الموردين
             if (e.Control && e.KeyCode == Keys.F)
             {
-
-                e.SuppressKeyPress = true;
-
-
-                // رقم 14 يمثل الموردين
-                //  فتح نموذج البحث العام
-                frmSearch searchForm = new frmSearch(14, SearchEntityType.Supplier);
-
-                if (searchForm.ShowDialog() == DialogResult.OK)
+                using (var frm = new frmOriginalSearch(frmOriginalSearch.SearchInWate.Supplier))
                 {
-                    // إذا اختار المستخدم موردًا من نتيجة البحث
-                    txtSuppliers.Text = searchForm.SelectedName;
-                    lblSuppliers.Text = searchForm.SelectedID;
+                    if (frm.ShowDialog() == DialogResult.OK && frm.Tag is SearchResult result)
+                    {
+                        // يمكنك الآن الوصول للكود والاسم بشكل منفصل
+                        string code = result.Code;
+                        string name = result.Name;
 
+                        txtSuppliers.Text = name;  // عرض الاسم في TextBox
+                                                   // إذا حبيت تخزن الكود في متغير آخر، ممكن:
+                        lblSuppliers.Text = code;
+                    }
                 }
+
             }
+
         }
 
         private void txtProdCodeOnSuplier_KeyDown(object sender, KeyEventArgs e)
@@ -138,8 +138,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
         private void txtCategories_KeyDown(object sender, KeyEventArgs e)
         {
-
-            // عند الضغط على Enter يتم الانتقال إلى حقل كود المنتج لدى المورد
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
@@ -148,28 +146,23 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
             if (e.Control && e.KeyCode == Keys.H)
             {
-
                 HelpTextReader.ShowHelpForControl(this, sender);
                 e.SuppressKeyPress = true;
             }
 
-            // عند الضغط على Ctrl + F يتم فتح شاشة البحث عن الموردين
             if (e.Control && e.KeyCode == Keys.F)
             {
-
                 e.SuppressKeyPress = true;
 
-                //    int typeId = 20;
-
-                //  فتح نموذج البحث العام
-                frmSearch searchForm = new frmSearch(20, SearchEntityType.Catigory);
-
-                if (searchForm.ShowDialog() == DialogResult.OK)
+                // فتح frmCatTree في وضع SelectCategory فقط
+                using (var frm = new frmCatTree(frmCatTree.FrmCatTreeMode.SelectCategory))
                 {
-                    // إذا اختار المستخدم موردًا من نتيجة البحث
-                    txtCategories.Text = searchForm.SelectedName;
-                    lblCategory_id.Text = searchForm.SelectedID;
-
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        // استرجاع رقم واسم التصنيف المختار
+                        lblCategory_id .Text = frm.SelectedCategoryID.ToString();
+                        txtCategories.Text = frm.SelectedCategoryName;
+                    }
                 }
             }
         }
@@ -470,8 +463,8 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 ProdCodeOnSuplier = txtProdCodeOnSuplier.Text.Trim();
                 MinLenth = float.TryParse(txtMinLenth.Text, out float minL) ? minL : 0f;
                 MinStock = float.TryParse(txtMinStock.Text, out float minS) ? minS : 0f;
-                Category_id = int.TryParse(txtCategories.Text, out int catId) ? catId : 0;
-                SuplierID = int.TryParse(txtSuppliers.Text, out int supId) ? supId : 0;
+                Category_id = int.TryParse(lblCategory_id .Text, out int catId) ? catId : 0;
+                SuplierID = int.TryParse(lblSuppliers.Text, out int supId) ? supId : 0;
                 picProductPath = lblPathProductPic.Text.Trim();
             }
             catch (Exception ex)
@@ -546,8 +539,11 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 if (result > 0)
                 {
                     MessageBox.Show("تم حفظ الصنف بنجاح", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    this.DialogResult = DialogResult.OK; // 🔴 لازم
                     this.Close();
                 }
+
                 else
                 {
                     MessageBox.Show("فشل في حفظ بيانات الصنف", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
