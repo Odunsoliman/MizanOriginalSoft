@@ -437,15 +437,17 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
             if (e.Control && e.KeyCode == Keys.F)
             {
-                // استدعاء شاشة البحث باستخدام SearchHelper
-                string selectedAccount = SearchHelper.SearchAccount("Suppliers");
+                var provider = new GenericSearchProvider(SearchEntityType.Accounts, AccountKind.Suppliers);
+                var selected = SearchHelper.ShowSearchDialog(provider);
 
-                if (!string.IsNullOrEmpty(selectedAccount))
+                if (!string.IsNullOrEmpty(selected.Code))
                 {
-                    lblSupplier_ID.Text = selectedAccount;
+                    lblSupplier_ID.Text = selected.Code; // الكود
+                    txtSupplierSelected.Text = selected.Name; // الاسم
                 }
             }
         }
+
 
 
 

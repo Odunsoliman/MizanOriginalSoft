@@ -1,7 +1,7 @@
-﻿using MizanOriginalSoft.MainClasses.SearchClasses;
-using System;
+﻿using System;
 using System.Data;
 using System.Windows.Forms;
+using MizanOriginalSoft.MainClasses.SearchClasses;
 
 namespace MizanOriginalSoft.Views.Forms.MainForms
 {
@@ -13,12 +13,9 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             InitializeComponent();
             _provider = provider ?? throw new ArgumentNullException(nameof(provider));
-
-            // ربط الحدث يدويًا
-            this.Load += frmGeneralSearch_Load;
         }
 
-        private void frmGeneralSearch_Load(object? sender, EventArgs e)
+        private void frmGeneralSearch_Load(object sender, EventArgs e)
         {
             lblTitel.Text = _provider.Title;
             LoadData();
@@ -41,17 +38,14 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             if (e.RowIndex >= 0)
             {
-                string code = _provider.GetSelectedCode(DGV.Rows[e.RowIndex]);
-                this.Tag = code;
+                var selected = _provider.GetSelectedItem(DGV.Rows[e.RowIndex]);
+                this.Tag = selected;
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
         }
     }
 }
-
-
-
 
 
 /*

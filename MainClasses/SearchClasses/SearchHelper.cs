@@ -1,39 +1,25 @@
-﻿using MizanOriginalSoft.Views.Forms.MainForms;
-using System;
-using System.Windows.Forms;
-using static MizanOriginalSoft.Views.Forms.MainForms.frmSearch;
+﻿using System.Windows.Forms;
+using MizanOriginalSoft.Views.Forms.MainForms;
 
 namespace MizanOriginalSoft.MainClasses.SearchClasses
 {
     public static class SearchHelper
     {
-        /// <summary>
-        /// فتح شاشة البحث في الحسابات وإرجاع كود الحساب المختار.
-        /// </summary>
-        public static string SearchAccount(string accountType)
+        public static (string Code, string Name) ShowSearchDialog(ISearchProvider provider)
         {
-            var provider = new AccountsSearchProvider(accountType);
             using (var frm = new frmGeneralSearch(provider))
             {
-                if (frm.ShowDialog() == DialogResult.OK)
-                    return frm.Tag as string ?? string.Empty;
+                if (frm.ShowDialog() == DialogResult.OK && frm.Tag is ValueTuple<string, string> tuple)
+                {
+                    return tuple; // الآن نستطيع تفكيكه بشكل صحيح
+                }
 
-                return string.Empty;
+                return (string.Empty, string.Empty);
             }
         }
-
-        /// <summary>
-        /// فتح شاشة البحث باستخدام Enum SearchEntityType
-        /// </summary>
-        public static string SearchAccount(SearchEntityType type)
-        {
-            return SearchAccount(type.ToString());
-        }
     }
+
 }
-
-
-
 
 /*
 using MizanOriginalSoft.Views.Forms.MainForms;
