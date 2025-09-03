@@ -296,7 +296,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 else if (Type_ID == (int)TransactionType.BatchOut) // 12
                     entityType = frmSearch.SearchEntityType.Supplier;
                 else
-                    entityType = frmSearch.SearchEntityType.AllAccounts;
+                    entityType = frmSearch.SearchEntityType.Boths;
 
                 frmSearch searchForm = new frmSearch(Type_ID, entityType);
 

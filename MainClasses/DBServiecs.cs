@@ -247,6 +247,20 @@ namespace MizanOriginalSoft.MainClasses
             return result ?? new DataTable(); // تأمين ضد null
           
         }
+
+        public static DataTable MainAcc_GetParentAccounts(string accountType)
+        {
+            DataTable? result = dbHelper.ExecuteSelectQuery(
+                "MainAcc_GetParentAccounts",
+                cmd =>
+                {
+                    cmd.CommandType = CommandType.StoredProcedure; // تأكد أن النوع SP
+                    cmd.Parameters.Add("@AccountType", SqlDbType.NVarChar, 50).Value = accountType;
+                });
+
+            return result ?? new DataTable(); // fallback في حالة null
+        }
+
         #endregion 
 
         #region ************  ProductModify *****************

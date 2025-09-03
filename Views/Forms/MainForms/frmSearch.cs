@@ -48,11 +48,14 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         public enum SearchEntityType
         {
-            Product = 0,
-            Customer = 7,
-            Supplier = 14,
-            AllAccounts = 200,
-            Pice = 201
+           /*هذه شاشة البحث العامة يمكن استخدامها فى البحث فى امور متعددة كانت تعتمد على كتابة ارقام الاباء هنا ولكن اريد تعديلها
+            بحيث تتناسب مع النظام الجديد فيما يخص الحسابات*/
+            Customer ,
+            Supplier,
+            Boths ,
+            Parteners,
+            Product,
+            Pice 
         }
 
         private void frmSearch_Load(object sender, EventArgs e)
@@ -98,24 +101,31 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     break;
 
                 case SearchEntityType.Customer:
-                    dt = DBServiecs.MainAcc_GetAccounts((int)SearchEntityType.Supplier);
+                    dt = DBServiecs.MainAcc_GetParentAccounts(SearchEntityType.Customer.ToString());
                     DGV.DataSource = dt;
                     DGVStylAcc();
-                    lblNameTable.Text = "التصنيفات";
+                    lblNameTable.Text = "بحث العملاء";
                     break;
 
                 case SearchEntityType.Supplier:
-                    dt = DBServiecs.MainAcc_GetAccounts((int)SearchEntityType.Supplier);
+                    dt = DBServiecs.MainAcc_GetParentAccounts(SearchEntityType.Supplier.ToString());
                     DGV.DataSource = dt;
                     DGVStylAcc();
-                    lblNameTable.Text = "الموردين";
+                    lblNameTable.Text = "بحث الموردين";
                     break;
 
-                case SearchEntityType.AllAccounts:
-                    dt = DBServiecs.MainAcc_GetAccounts((int)SearchEntityType.AllAccounts);
+                case SearchEntityType.Boths:
+                    dt = DBServiecs.MainAcc_GetParentAccounts(SearchEntityType.Boths.ToString());
                     DGV.DataSource = dt;
                     DGVStylAcc();
-                    lblNameTable.Text = "الموردين والعملاء";
+                    lblNameTable.Text = "بحث العملاء والموردين";
+                    break;
+
+                case SearchEntityType.Parteners: // الملاك / الشركاء
+                    dt = DBServiecs.MainAcc_GetParentAccounts(SearchEntityType.Parteners.ToString());
+                    DGV.DataSource = dt;
+                    DGVStylAcc();
+                    lblNameTable.Text = "بحث الملاك/الشركاء";
                     break;
 
                 case SearchEntityType.Pice:
@@ -125,6 +135,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                         DGV.DataSource = dt;
                         btnDelete.Visible = true;
                         StylPice();
+                        lblNameTable.Text = "قطع المنتج";
                     }
                     else
                     {
@@ -132,12 +143,10 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     }
                     break;
 
-
                 default:
                     CustomMessageBox.ShowWarning("لم يتم تعريف نوع البحث!", "تحذير");
                     break;
             }
-
         }
         #region ********  Styl DGV **************
 
@@ -311,10 +320,10 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
 
         private void DGV_RowPrePaint_(object sender, DataGridViewRowPrePaintEventArgs e)
-        { // هذا الحدث يخص هالة واحد فقط وهى عرض الكاتيجورى فكيف نتجاوزها فى الحالات الاخرى
+        { 
             if (DGV.Rows[e.RowIndex].DataBoundItem is DataRowView rowView)
             {
-                int depth = rowView.Row.Field<int>("Depth");//System.ArgumentException: 'Column 'Depth' does not belong to table .'
+                int depth = rowView.Row.Field<int>("Depth");
 
                 // إعداد نمط الخلية
                 var style = new DataGridViewCellStyle(DGV.DefaultCellStyle);
@@ -358,7 +367,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
             else if (EntityType == SearchEntityType.Customer ||
                      EntityType == SearchEntityType.Supplier ||
-                     EntityType == SearchEntityType.AllAccounts)
+                     EntityType == SearchEntityType.Boths)
             {
                 SelectedID = row.Cells["AccID"]?.Value?.ToString() ?? string.Empty;
                 SelectedName = row.Cells["AccName"]?.Value?.ToString() ?? string.Empty;

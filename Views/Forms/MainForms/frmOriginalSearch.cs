@@ -146,7 +146,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         private DataTable LoadAllAccounts()
         {
-            _dtResults = DBServiecs.MainAcc_GetAccounts((int)SearchEntityType.AllAccounts);
+            _dtResults = DBServiecs.MainAcc_GetAccounts((int)SearchEntityType.Boths);
             DGV.DataSource = _dtResults;
 
             return _dtResults;
@@ -155,7 +155,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         private DataTable LoadInvoices()
         {
-            _dtResults = DBServiecs.MainAcc_GetAccounts((int)SearchEntityType.AllAccounts);
+            _dtResults = DBServiecs.MainAcc_GetAccounts((int)SearchEntityType.Boths);
             DGV.DataSource = _dtResults;
 
             return _dtResults;
