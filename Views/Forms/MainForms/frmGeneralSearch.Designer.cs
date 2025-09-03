@@ -107,6 +107,7 @@
             txtSearch.Size = new Size(340, 32);
             txtSearch.TabIndex = 2;
             txtSearch.TextAlign = HorizontalAlignment.Center;
+            txtSearch.TextChanged += txtSearch_TextChanged;
             // 
             // label1
             // 
@@ -127,6 +128,7 @@
             DGV.Name = "DGV";
             DGV.Size = new Size(774, 338);
             DGV.TabIndex = 2;
+            DGV.CellDoubleClick += DGV_CellDoubleClick;
             // 
             // frmGeneralSearch
             // 

@@ -52,63 +52,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
 
 
-/*
-using MizanOriginalSoft.MainClasses.SearchClasses;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace MizanOriginalSoft.Views.Forms.MainForms
-{
-    public partial class frmGeneralSearch : Form
-    {
-        private ISearchProvider _provider;
-
-        public frmGeneralSearch(ISearchProvider provider)
-        {
-            InitializeComponent();
-            _provider = provider;
-        }
-
-        private void frmGeneralSearch_Load(object sender, EventArgs e)
-        {
-            lblTitel.Text = _provider.Title;
-            LoadData();
-        }
-
-        private void txtSearch_TextChanged(object sender, EventArgs e)
-        {
-            LoadData();
-        }
-
-        private void LoadData()
-        {
-            var data = _provider.GetData(txtSearch.Text.Trim());
-            DGV.DataSource = data;
-            lblcountResulte.Text = $"عدد النتائج: {data.Rows.Count}";
-            _provider.ApplyGridFormatting(DGV);
-        }
-
-        private void DGV_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                string code = _provider.GetSelectedCode(DGV.Rows[e.RowIndex]);
-                this.Tag = code;
-                this.DialogResult = DialogResult.OK;
-                this.Close();
-            }
-        }
-    }
-
-}
-*/
 
 /*
 

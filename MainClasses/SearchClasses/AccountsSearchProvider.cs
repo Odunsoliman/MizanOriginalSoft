@@ -52,17 +52,51 @@ namespace MizanOriginalSoft.MainClasses.SearchClasses
 
         public void ApplyGridFormatting(DataGridView dgv)
         {
+            // أولاً: إظهار فقط الأعمدة المطلوبة
+            foreach (DataGridViewColumn col in dgv.Columns)
+            {
+                col.Visible = false; // إخفاء الكل
+            }
+
+            // إعداد الأعمدة المطلوبة
             if (dgv.Columns.Contains("AccID"))
-                dgv.Columns["AccID"].HeaderText = "كود الحساب";
+            {
+                dgv.Columns["AccID"].Visible = true;
+                dgv.Columns["AccID"].HeaderText = "كود";
+                dgv.Columns["AccID"].FillWeight = 20; // نسبة العرض
+            }
 
             if (dgv.Columns.Contains("AccName"))
+            {
+                dgv.Columns["AccName"].Visible = true;
                 dgv.Columns["AccName"].HeaderText = "اسم الحساب";
+                dgv.Columns["AccName"].FillWeight = 60; // نسبة العرض
+            }
 
+            if (dgv.Columns.Contains("Balance"))
+            {
+                dgv.Columns["Balance"].Visible = true;
+                dgv.Columns["Balance"].HeaderText = "الرصيد";
+                dgv.Columns["Balance"].FillWeight = 20; // نسبة العرض
+            }
+
+            if (dgv.Columns.Contains("BalanceState"))
+            {
+                dgv.Columns["BalanceState"].Visible = true;
+                dgv.Columns["BalanceState"].HeaderText = "--";
+                dgv.Columns["BalanceState"].FillWeight = 20; // نسبة العرض
+            }
+
+            // إعداد خصائص الجدول
+            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
             dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10);
             dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 11, FontStyle.Bold);
             dgv.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv.MultiSelect = false;
         }
+
     }
 }
 
