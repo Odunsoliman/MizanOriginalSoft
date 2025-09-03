@@ -1,5 +1,6 @@
 ﻿using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.MainClasses.SearchClasses;
+using MizanOriginalSoft.MainClasses.SearchClasses.MizanOriginalSoft.MainClasses.SearchClasses;
 using MizanOriginalSoft.Views.Forms.MainForms;
 using System;
 using System.Collections.Generic;
@@ -438,12 +439,12 @@ namespace MizanOriginalSoft.Views.Forms.Products
             if (e.Control && e.KeyCode == Keys.F)
             {
                 var provider = new GenericSearchProvider(SearchEntityType.Accounts, AccountKind.Suppliers);
-                var selected = SearchHelper.ShowSearchDialog(provider);
+                var result = SearchHelper.ShowSearchDialog(provider);
 
-                if (!string.IsNullOrEmpty(selected.Code))
+                if (!string.IsNullOrEmpty(result.Code))
                 {
-                    lblSupplier_ID.Text = selected.Code; // الكود
-                    txtSupplierSelected.Text = selected.Name; // الاسم
+                    lblSupplier_ID.Text = result.Code;
+                    txtSupplierSelected.Text = result.Name;
                 }
             }
         }

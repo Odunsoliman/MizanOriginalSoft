@@ -21,6 +21,6 @@ namespace MizanOriginalSoft.MainClasses.SearchClasses
         Customers,   // العملاء
         Suppliers,   // الموردين
         Boths,       // كلاهما
-        Parteners    // الشركاء
+        Parteners    // الشركاء/المالكين
     }
 }
