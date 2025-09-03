@@ -497,3 +497,19 @@ namespace MizanOriginalSoft.Views.Forms.Products
     }
 }
 
+/* استدعاء البحث
+ 
+             if (e.Control && e.KeyCode == Keys.F)
+            {
+                var provider = new GenericSearchProvider(SearchEntityType.Accounts, AccountKind.Suppliers);
+                var result = SearchHelper.ShowSearchDialog(provider);
+
+                if (!string.IsNullOrEmpty(result.Code))
+                {
+                    lblSuppliers .Text = result.Code;
+                    txtSuppliers .Text = result.Name;
+                }
+            }
+ 
+ 
+ */

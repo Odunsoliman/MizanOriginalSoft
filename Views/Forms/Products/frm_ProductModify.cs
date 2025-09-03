@@ -13,6 +13,8 @@ using MizanOriginalSoft.MainClasses.OriginalClasses;
 
 using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.Views.Forms.MainForms;
+using MizanOriginalSoft.MainClasses.SearchClasses.MizanOriginalSoft.MainClasses.SearchClasses;
+using MizanOriginalSoft.MainClasses.SearchClasses;
 
 namespace MizanOriginalSoft.Views.Forms.Products
 {
@@ -109,8 +111,16 @@ namespace MizanOriginalSoft.Views.Forms.Products
             // عند الضغط على Ctrl + F يتم فتح شاشة البحث عن الموردين
             if (e.Control && e.KeyCode == Keys.F)
             {
-  
+                var provider = new GenericSearchProvider(SearchEntityType.Accounts, AccountKind.Suppliers);
+                var result = SearchHelper.ShowSearchDialog(provider);
+
+                if (!string.IsNullOrEmpty(result.Code))
+                {
+                    lblSuppliers .Text = result.Code;
+                    txtSuppliers .Text = result.Name;
+                }
             }
+
 
         }
 

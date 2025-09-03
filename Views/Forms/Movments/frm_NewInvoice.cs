@@ -2,6 +2,8 @@
 using Microsoft.CodeAnalysis;
 using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
+using MizanOriginalSoft.MainClasses.SearchClasses.MizanOriginalSoft.MainClasses.SearchClasses;
+using MizanOriginalSoft.MainClasses.SearchClasses;
 using MizanOriginalSoft.Views.Forms.Accounts;
 using MizanOriginalSoft.Views.Forms.MainForms;
 using MizanOriginalSoft.Views.Forms.Products;
@@ -745,14 +747,27 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     currentInvoiceType != InvoiceType.PurchaseReturn)
                     return;
 
+                // 🔎 اختيار نوع الحساب حسب نوع الفاتورة
+                AccountKind accountKind = (currentInvoiceType == InvoiceType.Purchase ||
+                                           currentInvoiceType == InvoiceType.PurchaseReturn)
+                                           ? AccountKind.Suppliers
+                                           : AccountKind.Customers;
+
                 // 🔎 فتح شاشة البحث
-                
-     
+                var provider = new GenericSearchProvider(SearchEntityType.Accounts, accountKind);
+                var result = SearchHelper.ShowSearchDialog(provider);
+
+                if (!string.IsNullOrEmpty(result.Code))
+                {
+                    lblAccID.Text = result.Code;
+                    txtAccName.Text = result.Name;
+                }
+
                 e.SuppressKeyPress = true;
                 return;
             }
 
-            // ✅ عند الضغط على Enter
+            // ✅ باقي الكود كما هو...
             if (e.KeyCode == Keys.Enter)
             {
                 string input = txtAccName.Text.Trim();
@@ -774,13 +789,11 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
                 if (selectedAccount.Length > 0)
                 {
-                    // حساب موجود → تحميل بياناته
                     LoadAccountData(selectedAccount[0]);
                     SaveDraftInvoice();
                 }
                 else
                 {
-                    // حساب غير موجود → عرض خيار إضافة حساب جديد
                     DialogResult result = CustomMessageBox.ShowQuestion(
                         "الحساب غير موجود، هل تريد إضافة حساب جديد؟",
                         "حساب جديد"
@@ -789,8 +802,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     if (result == DialogResult.OK)
                     {
                         OpenNewAccountForm();
-                        LoadAcc();               // تحديث الحسابات
-                        InitializeAutoComplete(); // تحديث الإكمال التلقائي
+                        LoadAcc();
+                        InitializeAutoComplete();
 
                         txtAccName.Focus();
                         txtAccName.SelectAll();
@@ -801,14 +814,12 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     }
                 }
 
-                // منع مرور الحدث إلى النظام
                 e.Handled = true;
                 e.SuppressKeyPress = true;
-
-                // الانتقال إلى حقل البائع
                 cbxSellerID.Focus();
             }
         }
+
 
         /// <summary>
         /// فتح نموذج إضافة حساب جديد وربطه بالفاتورة

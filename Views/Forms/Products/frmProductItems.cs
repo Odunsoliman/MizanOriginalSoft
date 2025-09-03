@@ -2,6 +2,8 @@
 using Microsoft.CodeAnalysis;
 using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
+using MizanOriginalSoft.MainClasses.SearchClasses.MizanOriginalSoft.MainClasses.SearchClasses;
+using MizanOriginalSoft.MainClasses.SearchClasses;
 using MizanOriginalSoft.Views.Forms.MainForms;
 using MizanOriginalSoft.Views.Reports;
 using Signee.Views.Forms.Products;
@@ -1654,13 +1656,18 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
         // 🔹 دالة مساعدة لجمع أبناء العقدة
-        private List<int> CollectCategoryIds(TreeNode parentNode)
+
+
+        private List<int> CollectCategoryIds(TreeNode? parentNode)
         {
             List<int> ids = new List<int>();
 
-            void Collect(TreeNode node)
+            void Collect(TreeNode? node)
             {
-                if (node?.Tag != null && int.TryParse(node.Tag.ToString(), out int id))
+                if (node == null)
+                    return;
+
+                if (node.Tag != null && int.TryParse(node.Tag.ToString(), out int id))
                     ids.Add(id);
 
                 foreach (TreeNode child in node.Nodes)
@@ -1670,6 +1677,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             Collect(parentNode);
             return ids;
         }
+
 
         // 🔹 حدث اختيار العقدة من الشجرة
         private void treeViewCategories_AfterSelect(object sender, TreeViewEventArgs e)
@@ -1887,7 +1895,9 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
         // جدول وسيط يحفظ نتيجة فلترة الشجرة
-        private DataTable? tblFilteredByTree;
+        private DataTable tblFilteredByTree = new DataTable();
+
+        //Field 'frmProductItems.tblFilteredByTree' is never assigned to, and will always have its default value null
 
 
         // 🔎 البحث داخل نتيجة الشجرة فقط
@@ -2330,8 +2340,16 @@ namespace MizanOriginalSoft.Views.Forms.Products
             // عند الضغط على Ctrl + F يتم فتح شاشة البحث عن الموردين
             if (e.Control && e.KeyCode == Keys.F)
             {
-  
+                var provider = new GenericSearchProvider(SearchEntityType.Accounts, AccountKind.Suppliers);
+                var result = SearchHelper.ShowSearchDialog(provider);
+
+                if (!string.IsNullOrEmpty(result.Code))
+                {
+                    lblSuppliersID .Text = result.Code;
+                    txtSuppliers.Text = result.Name;
+                }
             }
+
         }
 
         private void txtProdCodeOnSuplier_KeyDown(object sender, KeyEventArgs e)
