@@ -26,7 +26,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             LoadData();
         }
-
+ 
         private void LoadData()
         {
             var data = _provider.GetData(txtSearch.Text.Trim());
@@ -47,6 +47,19 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
     }
 }
+
+/*النسخة الاخيرة
+ 
+هذا الكود الان يتم الفتح بشكل جيد وعند اختيار صف بدبل كليك يتم نقل الحساب كود واسم بشكل جيد 
+ولكن فقط 
+      private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            LoadData();
+        }
+ لا تعمل رغم ربطها 
+ */
+
+
 
 /*
 

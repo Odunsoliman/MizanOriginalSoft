@@ -70,12 +70,12 @@ namespace MizanOriginalSoft.MainClasses.SearchClasses
                 }
             }
 
-            private DataTable Filter(DataTable dt, string filter, string[] columns)
+            private DataTable Filter_(DataTable dt, string filter, string[] columns)
             {
                 if (string.IsNullOrWhiteSpace(filter)) return dt;
 
                 var expr = string.Join(" OR ",
-                    columns.Select(c => $"{c} LIKE '%{filter.Replace("'", "''")}%'"));
+                    columns.Select(c => $"{c} LIKE '%{filter.Replace("'", "''")}%'"));// او هنا
 
                 try
                 {
@@ -83,7 +83,31 @@ namespace MizanOriginalSoft.MainClasses.SearchClasses
                     return rows.Length > 0 ? rows.CopyToDataTable() : dt.Clone();
                 }
                 catch
+                {//System.Data.EvaluateException: 'Cannot perform 'Like' operation on System.Int32 and System.String.'
+                    // اعتقد ان المشكلة هنا
+                    return dt;
+                }
+            }
+            private DataTable Filter(DataTable dt, string filter, string[] columns)
+            {
+                if (string.IsNullOrWhiteSpace(filter)) return dt;
+
+                // تأمين الفلتر ضد علامات '
+                string safeFilter = filter.Replace("'", "''");
+
+                // تحويل كل الأعمدة لنص باستخدام CONVERT
+                var expr = string.Join(" OR ",
+                    columns.Select(c => $"CONVERT({c}, 'System.String') LIKE '%{safeFilter}%'"));
+
+                try
                 {
+                    var rows = dt.Select(expr);
+                    return rows.Length > 0 ? rows.CopyToDataTable() : dt.Clone();
+                }
+                catch (Exception ex)
+                {
+                    // Debugging
+                    System.Diagnostics.Debug.WriteLine("Filter error: " + ex.Message);
                     return dt;
                 }
             }
