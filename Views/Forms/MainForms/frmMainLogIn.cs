@@ -598,7 +598,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
-            int TopID = 13;
+            int TopID = 3;
             frmMainAccounts frm = new frmMainAccounts(TopID);
             OpenFormInPanel(frm);
         }
@@ -610,7 +610,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
-            int TopID = 23;
+            int TopID = 4;
             frmMainAccounts frm = new frmMainAccounts(TopID);
             OpenFormInPanel(frm);
 
@@ -623,7 +623,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
-            int TopID = 29;
+            int TopID = 40;
             frmMainAccounts frm = new frmMainAccounts(TopID);
             OpenFormInPanel(frm);
 
@@ -636,7 +636,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
-            int TopID = 11;
+            int TopID = 18;
             frmMainAccounts frm = new frmMainAccounts(TopID);
             OpenFormInPanel(frm);
 
@@ -649,7 +649,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
-            int TopID = 62;
+            int TopID = 8;
             frmMainAccounts frm = new frmMainAccounts(TopID);
             OpenFormInPanel(frm);
         }
@@ -673,7 +673,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
-            int TopID = 10;
+            int TopID = 21;
             frmMainAccounts frm = new frmMainAccounts(TopID);
             OpenFormInPanel(frm);
         }
@@ -685,7 +685,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
-            int TopID = 63;
+            int TopID = 52;
             frmMainAccounts frm = new frmMainAccounts(TopID);
             OpenFormInPanel(frm);
         }
@@ -697,7 +697,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 HighlightTransparentButton(btn);
             }
-            int TopID = 64;
+            int TopID = 53;
             frmMainAccounts frm = new frmMainAccounts(TopID);
             OpenFormInPanel(frm);
         }
