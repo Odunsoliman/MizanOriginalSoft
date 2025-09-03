@@ -1,4 +1,5 @@
 ﻿using MizanOriginalSoft.MainClasses;
+using MizanOriginalSoft.MainClasses.SearchClasses;
 using MizanOriginalSoft.Views.Forms.MainForms;
 using System;
 using System.Collections.Generic;
@@ -433,24 +434,21 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 e.SuppressKeyPress = true;
                 txtCategoriesSelected.Focus();
             }
+
             if (e.Control && e.KeyCode == Keys.F)
             {
-                using (var frm = new frmOriginalSearch(frmOriginalSearch.SearchInWate.Supplier))
+                // استدعاء شاشة البحث باستخدام SearchHelper
+                string selectedAccount = SearchHelper.SearchAccount("Suppliers");
+
+                if (!string.IsNullOrEmpty(selectedAccount))
                 {
-                    if (frm.ShowDialog() == DialogResult.OK && frm.Tag is SearchResult result)
-                    {
-                        // يمكنك الآن الوصول للكود والاسم بشكل منفصل
-                        string code = result.Code;
-                        string name = result.Name;
-
-                        txtSupplierSelected.Text = name;  // عرض الاسم في TextBox
-                                                          // إذا حبيت تخزن الكود في متغير آخر، ممكن:
-                        lblSupplier_ID.Text = code;
-                    }
+                    txtSupplierSelected.Text = selectedAccount;
                 }
-
             }
         }
+
+
+
         private void txtCategoriesSelected_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
