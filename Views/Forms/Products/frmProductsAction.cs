@@ -442,7 +442,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
                 if (!string.IsNullOrEmpty(selectedAccount))
                 {
-                    txtSupplierSelected.Text = selectedAccount;
+                    lblSupplier_ID.Text = selectedAccount;
                 }
             }
         }
