@@ -1018,13 +1018,16 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
             if (e.Control && e.KeyCode == Keys.F)
             {
+                var provider = new GenericSearchProvider(SearchEntityType.Products);
 
+                var result = SearchHelper.ShowSearchDialog(provider);
 
-
-
-                e.SuppressKeyPress = true;
-                return;
+                if (!string.IsNullOrEmpty(result.Code))
+                {
+                    txtSeaarchProd .Text = result.Code;
+                }
             }
+
 
             if (e.KeyCode == Keys.Enter && !string.IsNullOrWhiteSpace(txtSeaarchProd.Text))
             {

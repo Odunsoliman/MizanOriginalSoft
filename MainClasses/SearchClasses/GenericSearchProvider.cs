@@ -52,8 +52,8 @@ namespace MizanOriginalSoft.MainClasses.SearchClasses
 
                     case SearchEntityType.Products:
                         dt = new DataTable();
-                        // TODO: جلب المنتجات
-                        return Filter(dt, filter, new[] { "ProductID", "ProductName" });
+                        dt = DBServiecs.Product_GetAll();
+                        return Filter(dt, filter, new[] { "ProductCode", "ProdName" });
 
                     case SearchEntityType.Categories:
                         dt = new DataTable();
@@ -70,24 +70,6 @@ namespace MizanOriginalSoft.MainClasses.SearchClasses
                 }
             }
 
-            private DataTable Filter_(DataTable dt, string filter, string[] columns)
-            {
-                if (string.IsNullOrWhiteSpace(filter)) return dt;
-
-                var expr = string.Join(" OR ",
-                    columns.Select(c => $"{c} LIKE '%{filter.Replace("'", "''")}%'"));// او هنا
-
-                try
-                {
-                    var rows = dt.Select(expr);
-                    return rows.Length > 0 ? rows.CopyToDataTable() : dt.Clone();
-                }
-                catch
-                {//System.Data.EvaluateException: 'Cannot perform 'Like' operation on System.Int32 and System.String.'
-                    // اعتقد ان المشكلة هنا
-                    return dt;
-                }
-            }
             private DataTable Filter(DataTable dt, string filter, string[] columns)
             {
                 if (string.IsNullOrWhiteSpace(filter)) return dt;
@@ -132,34 +114,64 @@ namespace MizanOriginalSoft.MainClasses.SearchClasses
                 return (code, name);
             }
 
+            // 🔹 دالة توزيع التنسيقات
             public void ApplyGridFormatting(DataGridView dgv)
             {
+                // 1️⃣ التنسيق الموحد أولاً
                 dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 dgv.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
                 dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10);
                 dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 11, FontStyle.Bold);
                 dgv.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
+                foreach (DataGridViewColumn col in dgv.Columns)
+                    col.Visible = false;
+
+                // 2️⃣ ثم توزيع التنسيقات
                 if (_type == SearchEntityType.Accounts)
-                {
-                    foreach (DataGridViewColumn col in dgv.Columns)
-                        col.Visible = false;
-
-                    void Show(string name, string header, float weight)
-                    {
-                        if (!dgv.Columns.Contains(name)) return;
-                        var c = dgv.Columns[name];
-                        c.Visible = true;
-                        c.HeaderText = header;
-                        c.FillWeight = weight;
-                    }
-
-                    Show("AccID", "كود", 1f);
-                    Show("AccName", "اسم الحساب", 3f);
-                    Show("Balance", "الرصيد", 1f);
-                    Show("BalanceState", "--", 1f);
-                }
+                    ApplyAccountsGridFormatting(dgv);
+                else if (_type == SearchEntityType.Products)
+                    ApplyProductsGridFormatting(dgv);
             }
+
+            // 🔹 الدالة الحالية تبقى لحسابات فقط
+            public void ApplyAccountsGridFormatting(DataGridView dgv)
+            {
+                void Show(string name, string header, float weight)
+                {
+                    if (!dgv.Columns.Contains(name)) return;
+                    var c = dgv.Columns[name];
+                    c.Visible = true;
+                    c.HeaderText = header;
+                    c.FillWeight = weight;
+                }
+
+                Show("AccID", "كود", 1f);
+                Show("AccName", "اسم الحساب", 3f);
+                Show("Balance", "الرصيد", 1f);
+                Show("BalanceState", "--", 1f);
+            }
+
+            // 🔹 دالة جديدة لتنسيق الأصناف
+            public void ApplyProductsGridFormatting(DataGridView dgv)
+            {
+                void Show(string name, string header, float weight)
+                {
+                    if (!dgv.Columns.Contains(name)) return;
+                    var c = dgv.Columns[name];
+                    c.Visible = true;
+                    c.HeaderText = header;
+                    c.FillWeight = weight;
+                }
+
+                Show("ProductCode", "كود", 1f);
+                Show("ProdName", "اسم الصنف", 3f);
+                Show("RegistYear", "سنة", 1f);
+                Show("U_Price", "السعر", 1f);
+                Show("ProductStock", "الرصيد", 1f);
+                Show("NoteProduct", "ملاحظات الصنف", 4f);
+            }
+
         }
     }
 
