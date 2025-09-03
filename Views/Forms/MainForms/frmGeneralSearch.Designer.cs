@@ -122,10 +122,14 @@
             // 
             // DGV
             // 
+            DGV.AllowUserToAddRows = false;
+            DGV.AllowUserToDeleteRows = false;
             DGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DGV.Dock = DockStyle.Fill;
             DGV.Location = new Point(13, 99);
             DGV.Name = "DGV";
+            DGV.ReadOnly = true;
+            DGV.RowHeadersVisible = false;
             DGV.Size = new Size(774, 338);
             DGV.TabIndex = 2;
             DGV.CellDoubleClick += DGV_CellDoubleClick;
