@@ -14,7 +14,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static MizanOriginalSoft.Views.Forms.MainForms.frmSearch;
 
 
 #endregion 
@@ -747,30 +746,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     return;
 
                 // 🔎 فتح شاشة البحث
-                frmSearch searchForm = new frmSearch(
-                    (int)currentInvoiceType,
-                    SearchEntityType.Product
-                );
-
-                if (searchForm.ShowDialog() == DialogResult.OK)
-                {
-                    lblAccID.Text = searchForm.SelectedID;
-
-                    // تحميل بيانات الحساب من قاعدة البيانات
-                    DataTable result = DBServiecs.MainAcc_GetAccounts(
-                        Convert.ToInt32(lblAccID.Text)
-                    );
-
-                    if (result != null && result.Rows.Count > 0)
-                    {
-                        DataRow row = result.Rows[0];
-                        txtAccName.Text = row["FirstPhon"].ToString();
-
-                        // تحميل البيانات الإضافية للحساب
-                        LoadAccountData(row);
-                    }
-                }
-
+                
+     
                 e.SuppressKeyPress = true;
                 return;
             }
@@ -1030,17 +1007,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
             if (e.Control && e.KeyCode == Keys.F)
             {
-                frmSearch searchForm = new frmSearch(
-                    (int)currentInvoiceType,
-                    SearchEntityType.Product
-                );
 
-                if (searchForm.ShowDialog() == DialogResult.OK)
-                {
-                    txtSeaarchProd.Text = searchForm.SelectedID;
-                    txtSeaarchProd.SelectionStart = txtSeaarchProd.Text.Length;
-                    SendKeys.Send("{ENTER}");
-                }
+
+
 
                 e.SuppressKeyPress = true;
                 return;

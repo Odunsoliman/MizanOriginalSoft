@@ -173,19 +173,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         {
             if (e.Control && e.KeyCode == Keys.F)
             {
-                using (var frm = new frmOriginalSearch(frmOriginalSearch.SearchInWate.Supplier))
-                {
-                    if (frm.ShowDialog() == DialogResult.OK && frm.Tag is SearchResult result)
-                    {
-                        // يمكنك الآن الوصول للكود والاسم بشكل منفصل
-                        string code = result.Code;
-                        string name = result.Name;
-
-                        txtSuppliers.Text = name;  // عرض الاسم في TextBox
-                                                   // إذا حبيت تخزن الكود في متغير آخر، ممكن:
-                                                   // txtSupplierCode.Text = code;
-                    }
-                }
+ 
             }
         }
 
@@ -2342,19 +2330,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             // عند الضغط على Ctrl + F يتم فتح شاشة البحث عن الموردين
             if (e.Control && e.KeyCode == Keys.F)
             {
-                using (var frm = new frmOriginalSearch(frmOriginalSearch.SearchInWate.Supplier))
-                {
-                    if (frm.ShowDialog() == DialogResult.OK && frm.Tag is SearchResult result)
-                    {
-                        // يمكنك الآن الوصول للكود والاسم بشكل منفصل
-                        string code = result.Code;
-                        string name = result.Name;
-
-                        txtNewItemSuppliers.Text = name;  // عرض الاسم في TextBox
-                                                          // إذا حبيت تخزن الكود في متغير آخر، ممكن:
-                        lblSuppliersID.Text = code;
-                    }
-                }
+  
             }
         }
 

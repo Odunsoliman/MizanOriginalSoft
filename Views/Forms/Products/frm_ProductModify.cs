@@ -13,7 +13,6 @@ using MizanOriginalSoft.MainClasses.OriginalClasses;
 
 using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.Views.Forms.MainForms;
-using static MizanOriginalSoft.Views.Forms.MainForms.frmSearch;
 
 namespace MizanOriginalSoft.Views.Forms.Products
 {
@@ -110,20 +109,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             // عند الضغط على Ctrl + F يتم فتح شاشة البحث عن الموردين
             if (e.Control && e.KeyCode == Keys.F)
             {
-                using (var frm = new frmOriginalSearch(frmOriginalSearch.SearchInWate.Supplier))
-                {
-                    if (frm.ShowDialog() == DialogResult.OK && frm.Tag is SearchResult result)
-                    {
-                        // يمكنك الآن الوصول للكود والاسم بشكل منفصل
-                        string code = result.Code;
-                        string name = result.Name;
-
-                        txtSuppliers.Text = name;  // عرض الاسم في TextBox
-                                                   // إذا حبيت تخزن الكود في متغير آخر، ممكن:
-                        lblSuppliers.Text = code;
-                    }
-                }
-
+  
             }
 
         }
@@ -598,10 +584,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                     // إظهار تنبيه
                     MessageBox.Show("لا يمكن تغيير الوحدة لأن هناك قطع مرتبطة بهذا المنتج. يجب حذفها أولاً.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                    // فتح نموذج عرض القطع
-                    frmSearch frm = new frmSearch(201, SearchEntityType.Pice, prodId); // 123 هو رقم الصنف
-                    frm.ShowDialog();
-
+             
 
                     // بعد العودة من شاشة القطع، تأكد إن كانت القطع لا تزال موجودة
                     dt = DBServiecs.Product_GetPiecesByProductID(prodId); // إعادة استخدام نفس المتغير dt

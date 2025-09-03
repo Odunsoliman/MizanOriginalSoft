@@ -289,46 +289,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
             if (e.Control && e.KeyCode == Keys.F)
             {
-                frmSearch.SearchEntityType entityType;
 
-                if (Type_ID == (int)TransactionType.BatchIn)   // 11
-                    entityType = frmSearch.SearchEntityType.Customer;
-                else if (Type_ID == (int)TransactionType.BatchOut) // 12
-                    entityType = frmSearch.SearchEntityType.Supplier;
-                else
-                    entityType = frmSearch.SearchEntityType.Boths;
-
-                frmSearch searchForm = new frmSearch(Type_ID, entityType);
-
-                if (searchForm.ShowDialog() == DialogResult.OK)
-                {
-                    // تعبئة بيانات الحساب المختار
-                    txtAccName.Text = searchForm.SelectedName;
-                    lblAccID.Text = searchForm.SelectedID;
-                    lblAntherPhon.Text = searchForm.SelectedAntherPhon;
-                    lblFirstPhon.Text = searchForm.SelectedFirstPhon;
-                    lblClientAddress.Text = searchForm.SelectedClientAddress;
-                    lblBalance.Text = searchForm.SelectedBalance.ToString();
-                    lblB_Status.Text = searchForm.SelectedBalanceState;
-                    lblClientEmail.Text = searchForm.SelectedClientEmail;
-                }
-
-                isFinalSave = false; isNavigating = false;
-                Save();
-
-                if (string.IsNullOrEmpty(searchForm.SelectedID) || searchForm.SelectedID == "0")
-                {
-                    System.Media.SystemSounds.Exclamation.Play();
-                    MessageBox.Show("لم يتم اختيار حساب صالح، يرجى المحاولة مرة أخرى", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    txtNoteBatch.Focus();
-                }
-
-                AttachAutoSaveEvents();
-                e.SuppressKeyPress = true;
-                return;
             }
         }
 
