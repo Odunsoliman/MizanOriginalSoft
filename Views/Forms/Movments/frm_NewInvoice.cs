@@ -146,9 +146,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             string accountIDs = "";
 
             if (currentInvoiceType == InvoiceType.Sale || currentInvoiceType == InvoiceType.SaleReturn)
-                accountIDs = "79"; // البائعين
+                accountIDs = "60"; // البائعين
             else
-                accountIDs = "80"; // منفذو الشراء أو التسوية
+                accountIDs = "8"; // منفذو الشراء أو التسوية
 
             if (string.IsNullOrEmpty(accountIDs))
                 return;
