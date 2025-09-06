@@ -29,10 +29,12 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             DGVSelectedAcc.DataSource = SelectedAccounts;
             DGVStylSelected();
             DGVSelectedAcc.ClearSelection();
+            lblCountSelected.Text = "عدد الحسابات المنقولة:   " + DGVSelectedAcc.RowCount.ToString();
             // ✅ تحميل باقي الحسابات
             DataTable dt = DBServiecs.MainAcc_GetHierarchy();
             DGV.DataSource = dt;
             DGVStyl();
+            lblTitel.Text = "يتم النقل الى الحساب الرئيسى :  ";
         }
         public void ApplyGridFormatting()
         {
@@ -47,7 +49,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // 🔹 الدالة الحالية تبقى لحسابات فقط
         public void DGVStyl_()
         {
-         //   Show("AccID", "كود", 1f);
+            //   Show("AccID", "كود", 1f);
         }
         public void DGVStyl()
         {
@@ -79,7 +81,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             DGVSelectedAcc.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 11, FontStyle.Bold);
             DGVSelectedAcc.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             // إخفاء كل الأعمدة
-            foreach (DataGridViewColumn col in DGVSelectedAcc .Columns)
+            foreach (DataGridViewColumn col in DGVSelectedAcc.Columns)
                 col.Visible = false;
 
             // إظهار العمود HierarchyName
@@ -109,7 +111,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             //    return;
             //}
 
-          //  int newP = Convert.ToInt32(DGV .SelectedValue);
+            //  int newP = Convert.ToInt32(DGV .SelectedValue);
 
             // جمع الأكواد المحددة من الـ DGV
             List<string> selectedAccIDs = new List<string>();
@@ -133,11 +135,24 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             string accIDs = string.Join(",", selectedAccIDs);
 
             // استدعاء الإجراء
-     //       string resultMessage;
-       //     bool success = DBServiecs.MainAcc_ChangAccCat(newP, accIDs, out resultMessage);
+            //       string resultMessage;
+            //     bool success = DBServiecs.MainAcc_ChangAccCat(newP, accIDs, out resultMessage);
 
 
-            
+
+        }
+
+        private void DGV_SelectionChanged(object sender, EventArgs e)
+        {
+            if (DGV.CurrentRow != null && !DGV.CurrentRow.IsNewRow)
+            {
+                var hierarchyName = DGV.CurrentRow.Cells["HierarchyName"].Value?.ToString() ?? "غير معروف";
+                lblTitel.Text = "يتم النقل الى الحساب الرئيسى : " + hierarchyName;
+            }
+            else
+            {
+                lblTitel.Text = "يتم النقل الى الحساب الرئيسى : (لا يوجد حساب محدد)";
+            }
         }
 
     }

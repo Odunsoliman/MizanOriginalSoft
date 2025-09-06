@@ -30,9 +30,9 @@
         {
             tableLayoutPanel1 = new TableLayoutPanel();
             DGVSelectedAcc = new DataGridView();
-            label2 = new Label();
+            lblCountSelected = new Label();
             DGV = new DataGridView();
-            label1 = new Label();
+            lblTitel = new Label();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DGVSelectedAcc).BeginInit();
             ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
@@ -44,9 +44,9 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.Controls.Add(DGVSelectedAcc, 1, 1);
-            tableLayoutPanel1.Controls.Add(label2, 1, 0);
+            tableLayoutPanel1.Controls.Add(lblCountSelected, 1, 0);
             tableLayoutPanel1.Controls.Add(DGV, 0, 1);
-            tableLayoutPanel1.Controls.Add(label1, 0, 0);
+            tableLayoutPanel1.Controls.Add(lblTitel, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(10, 10);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -70,16 +70,16 @@
             DGVSelectedAcc.Size = new Size(434, 570);
             DGVSelectedAcc.TabIndex = 3;
             // 
-            // label2
+            // lblCountSelected
             // 
-            label2.AutoSize = true;
-            label2.Dock = DockStyle.Fill;
-            label2.Location = new Point(3, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(434, 64);
-            label2.TabIndex = 2;
-            label2.Text = "label2";
-            label2.TextAlign = ContentAlignment.MiddleCenter;
+            lblCountSelected.AutoSize = true;
+            lblCountSelected.Dock = DockStyle.Fill;
+            lblCountSelected.Location = new Point(3, 0);
+            lblCountSelected.Name = "lblCountSelected";
+            lblCountSelected.Size = new Size(434, 64);
+            lblCountSelected.TabIndex = 2;
+            lblCountSelected.Text = "label2";
+            lblCountSelected.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // DGV
             // 
@@ -94,17 +94,18 @@
             DGV.Size = new Size(433, 570);
             DGV.TabIndex = 0;
             DGV.CellDoubleClick += DGV_CellDoubleClick;
+            DGV.SelectionChanged += DGV_SelectionChanged;
             // 
-            // label1
+            // lblTitel
             // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Fill;
-            label1.Location = new Point(443, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(433, 64);
-            label1.TabIndex = 1;
-            label1.Text = "label1";
-            label1.TextAlign = ContentAlignment.MiddleCenter;
+            lblTitel.AutoSize = true;
+            lblTitel.Dock = DockStyle.Fill;
+            lblTitel.Location = new Point(443, 0);
+            lblTitel.Name = "lblTitel";
+            lblTitel.Size = new Size(433, 64);
+            lblTitel.TabIndex = 1;
+            lblTitel.Text = "يتم النقل الى الحساب الرئيسى ";
+            lblTitel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // frmModifyParentAccID
             // 
@@ -131,8 +132,8 @@
 
         private TableLayoutPanel tableLayoutPanel1;
         private DataGridView DGV;
-        private Label label1;
+        private Label lblTitel;
         private DataGridView DGVSelectedAcc;
-        private Label label2;
+        private Label lblCountSelected;
     }
 }
