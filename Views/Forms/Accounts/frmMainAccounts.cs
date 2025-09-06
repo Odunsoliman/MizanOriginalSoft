@@ -1360,8 +1360,11 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 : "غير متوفر";
             bool isHidden = row["IsHidden"] != DBNull.Value && Convert.ToBoolean(row["IsHidden"]);
             string status = isHidden ? "معطل" : "فعال";
+            // اجلب المعرف القديم
+            string sorceIDAcc = row["SorceIDAcc"]?.ToString() ?? "غير متوفر";
 
-            lblFirstLine.Text = $"رقم الحساب: {accID}    تاريخ الانضمام: {dateOfJoin}    الحالة: {status}";
+            // عرض السطر في اللابل
+            lblFirstLine.Text = $"رقم الحساب: {accID}    معرف قديم: {sorceIDAcc}    تاريخ الانضمام: {dateOfJoin}    الحالة: {status}";
 
             // 🟢 السطر الثاني: اسم الحساب - الرصيد - حالة الرصيد
             string accName = row["AccName"]?.ToString() ?? "غير معروف";
@@ -1482,7 +1485,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             string selectedAccID = cellValue.ToString() ?? "";
             DataRow[] matchedRows = tblAccDGV.Select($"AccID = '{selectedAccID}'");
-
+             
             if (matchedRows.Length > 0)
             {
                 FillAccountFields(matchedRows[0]);
