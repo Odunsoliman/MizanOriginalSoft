@@ -104,43 +104,35 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void DGV_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            //if (cbxChangeCat.SelectedValue == null)
-            //{
-            //    MessageBox.Show("يرجى تحديد التصنيف الذي تريد نقل الأصناف إليه", "تنبيه",
-            //        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //    return;
-            //}
+            if (e.RowIndex < 0) return; // تجاهل النقر على الهيدر
 
-            //  int newP = Convert.ToInt32(DGV .SelectedValue);
+            // 🔹 1. الحصول على AccID للحساب الذي نقر عليه المستخدم
+            int newP = Convert.ToInt32(DGV.Rows[e.RowIndex].Cells["AccID"].Value);
 
-            // جمع الأكواد المحددة من الـ DGV
-            List<string> selectedAccIDs = new List<string>();
-            foreach (DataGridViewRow row in DGV.SelectedRows)
+            // 🔹 2. جمع كل الحسابات الموجودة في DGVSelectedAcc (المحددة مسبقاً)
+            List<int> accountIds = new List<int>();
+            foreach (DataGridViewRow row in DGVSelectedAcc.Rows)
             {
-                object? accIdVal = row.Cells["AccID"].Value;
-                if (accIdVal != null && !string.IsNullOrWhiteSpace(accIdVal.ToString()))
+                if (!row.IsNewRow)
                 {
-                    selectedAccIDs.Add(accIdVal.ToString()!);
+                    int id = Convert.ToInt32(row.Cells["AccID"].Value);
+                    accountIds.Add(id);
                 }
             }
 
-            if (selectedAccIDs.Count == 0)
-            {
-                MessageBox.Show("يرجى تحديد الحسابات التي تريد نقلها", "تنبيه",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            // 🔹 3. تحويل القائمة إلى نص مفصول بفواصل لتمريره إلى SQL
+            string accIDs = string.Join(",", accountIds);
 
-            // تحويل القائمة إلى نص مفصول بفواصل
-            string accIDs = string.Join(",", selectedAccIDs);
+            // 🔹 4. استدعاء الإجراء المخزن لتغيير الأب
+            string resultMessage;
+            bool success = DBServiecs.MainAcc_ChangAccCat(newP, accIDs, out resultMessage);
 
-            // استدعاء الإجراء
-            //       string resultMessage;
-            //     bool success = DBServiecs.MainAcc_ChangAccCat(newP, accIDs, out resultMessage);
-
-
-
+            // 🔹 5. عرض النتيجة للمستخدم
+            MessageBox.Show(resultMessage, success ? "نجاح" : "خطأ",
+                            MessageBoxButtons.OK,
+                            success ? MessageBoxIcon.Information : MessageBoxIcon.Error);
         }
+
 
         private void DGV_SelectionChanged(object sender, EventArgs e)
         {
