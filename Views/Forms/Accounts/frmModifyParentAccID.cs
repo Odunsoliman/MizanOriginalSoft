@@ -131,6 +131,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             MessageBox.Show(resultMessage, success ? "نجاح" : "خطأ",
                             MessageBoxButtons.OK,
                             success ? MessageBoxIcon.Information : MessageBoxIcon.Error);
+            this.Close();
         }
 
 
