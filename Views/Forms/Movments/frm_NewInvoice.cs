@@ -410,7 +410,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 {
                     var rows = tblAcc.Select($"AccID = {defaultAccID}");
                     if (rows.Length > 0)
-                        LoadAccountData(rows[0]);
+                        LoadAccountData(rows[0]); 
                 }
             }
         }
