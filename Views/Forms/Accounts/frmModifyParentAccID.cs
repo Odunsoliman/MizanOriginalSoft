@@ -57,8 +57,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 c.FillWeight = weight;
             }
 
-            Show("AccID", "كود", 1f);
-            Show("AccName", "اسم الحساب", 3f);
+         //   Show("AccID", "كود", 1f);
+            Show("AccName", "اسم الحساب الرئيسى", 3f);
         }
 
         private void DGV_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
