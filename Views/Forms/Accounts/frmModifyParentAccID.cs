@@ -27,62 +27,12 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         {
             // ✅ ربط البيانات مباشرة
             DGVSelectedAcc.DataSource = SelectedAccounts;
-
+            DGVStylSelected();
             // ✅ تحميل باقي الحسابات
             DataTable dt = DBServiecs.MainAcc_GetHierarchy();
             DGV.DataSource = dt;
             DGVStyl();
         }
-        /*
-         لدى شاشة رئيسية اسمها frmMainAccounts وبها زر باسم btnStripChangeCat وبها جريد باسم DGV
-        عند النقر على btnStripChangeCat يتم فتح هذه الشاشة والمطلوب تمرير رقم واسم الحساب المحمل اساسة فى الجريد وتم تحديده
-              private void btnStripChangeCat_Click(object sender, EventArgs e)
-        {
-            // جمع كل الحسابات المحددة في الـ DGV
-            List<int> selectedAccIDs = new List<int>();
-            foreach (DataGridViewRow row in DGV.SelectedRows)
-            {
-                if (!row.IsNewRow)
-                {
-                    // افترض أن العمود يحتوي على AccID
-                    int accID = Convert.ToInt32(row.Cells["AccID"].Value);
-                    selectedAccIDs.Add(accID);
-                }
-            }
-
-            // تمريرها إلى الفورم الجديد
-            frmModifyParentAccID frm = new frmModifyParentAccID();
-            frm.SelectedAccIDs = selectedAccIDs;
-            frm.ShowDialog();
-        }
-
-        وبعد التمرير يجب العرض فى DGVSelectedAcc رقم حساب واسم
-
-        فقط فما الحل الجذرى
-
-
-
-         
-         
-         
-         */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public void ApplyGridFormatting()
         {
             // 1️⃣ التنسيق الموحد أولاً
@@ -96,26 +46,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // 🔹 الدالة الحالية تبقى لحسابات فقط
         public void DGVStyl_()
         {
-            /*
-            
-            AccName,
-            اريد اخفاء كل الاعمدة الواردة واظهار حقل واحد فقط ولكن لا يظهر
-            فما السبب
-             */
-            ApplyGridFormatting();
-            foreach (DataGridViewColumn col in DGV.Columns)
-                col.Visible = false;
-            void Show(string name, string header, float weight)
-            {
-                if (!DGV.Columns.Contains(name)) return;
-                var c = DGV.Columns[name];
-                c.Visible = true;
-                c.HeaderText = header;
-                c.FillWeight = weight;
-            }
-
          //   Show("AccID", "كود", 1f);
-            Show("AccName", "اسم الحساب الرئيسى", 3f);
         }
         public void DGVStyl()
         {
@@ -138,6 +69,32 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
 
             Show("HierarchyName", "اسم الحساب الرئيسى", 3f);
+        }
+        public void DGVStylSelected()
+        {
+            DGVSelectedAcc.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            DGVSelectedAcc.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
+            DGVSelectedAcc.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+            DGVSelectedAcc.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+            DGVSelectedAcc.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            // إخفاء كل الأعمدة
+            foreach (DataGridViewColumn col in DGVSelectedAcc .Columns)
+                col.Visible = false;
+
+            // إظهار العمود HierarchyName
+            void Show(string name, string header, float weight)
+            {
+                var c = DGVSelectedAcc.Columns.Cast<DataGridViewColumn>()
+                          .FirstOrDefault(x => x.DataPropertyName == name || x.Name == name);
+                if (c == null) return;
+                c.Visible = true;
+                c.HeaderText = header;
+                c.FillWeight = weight;
+                c.Width = 300; // اجعلها مناسبة
+            }
+
+            Show("AccID", "كود الحساب", 3f);
+            Show("AccName", "اسم الحساب الفرعى", 3f);
         }
 
 

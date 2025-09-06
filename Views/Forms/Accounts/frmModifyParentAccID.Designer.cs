@@ -58,10 +58,13 @@
             // 
             // DGVSelectedAcc
             // 
+            DGVSelectedAcc.AllowUserToAddRows = false;
+            DGVSelectedAcc.AllowUserToDeleteRows = false;
             DGVSelectedAcc.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DGVSelectedAcc.Dock = DockStyle.Fill;
             DGVSelectedAcc.Location = new Point(3, 67);
             DGVSelectedAcc.Name = "DGVSelectedAcc";
+            DGVSelectedAcc.ReadOnly = true;
             DGVSelectedAcc.RowHeadersVisible = false;
             DGVSelectedAcc.Size = new Size(434, 570);
             DGVSelectedAcc.TabIndex = 3;
@@ -79,10 +82,13 @@
             // 
             // DGV
             // 
+            DGV.AllowUserToAddRows = false;
+            DGV.AllowUserToDeleteRows = false;
             DGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DGV.Dock = DockStyle.Fill;
             DGV.Location = new Point(443, 67);
             DGV.Name = "DGV";
+            DGV.ReadOnly = true;
             DGV.RowHeadersVisible = false;
             DGV.Size = new Size(433, 570);
             DGV.TabIndex = 0;
