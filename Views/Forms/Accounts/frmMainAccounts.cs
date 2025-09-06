@@ -1364,7 +1364,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             string sorceIDAcc = row["SorceIDAcc"]?.ToString() ?? "غير متوفر";
 
             // عرض السطر في اللابل
-            lblFirstLine.Text = $"رقم الحساب: {accID}    معرف قديم: {sorceIDAcc}    تاريخ الانضمام: {dateOfJoin}    الحالة: {status}";
+            lblFirstLine.Text = $"رقم الحساب: {accID}    معرف قديم: {sorceIDAcc}   ";
+            lblLastLine .Text = $"تاريخ الانضمام: {dateOfJoin}    الحالة: {status}";
 
             // 🟢 السطر الثاني: اسم الحساب - الرصيد - حالة الرصيد
             string accName = row["AccName"]?.ToString() ?? "غير معروف";

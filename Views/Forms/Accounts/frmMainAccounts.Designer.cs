@@ -141,6 +141,7 @@
             lblMonthlyInstallment = new Label();
             rdoIsEndedFixedAssets_Yes = new RadioButton();
             panel2 = new Panel();
+            lblLastLine = new Label();
             tableLayoutPanel6.SuspendLayout();
             tableLayoutPanel8.SuspendLayout();
             tableLayoutPanel7.SuspendLayout();
@@ -1280,6 +1281,7 @@
             // 
             tlpShowMainData.ColumnCount = 1;
             tlpShowMainData.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tlpShowMainData.Controls.Add(lblLastLine, 0, 2);
             tlpShowMainData.Controls.Add(lblNameLine, 0, 1);
             tlpShowMainData.Controls.Add(lblFirstLine, 0, 0);
             tlpShowMainData.Dock = DockStyle.Top;
@@ -1837,6 +1839,20 @@
             panel2.Size = new Size(437, 1);
             panel2.TabIndex = 94;
             // 
+            // lblLastLine
+            // 
+            lblLastLine.AutoSize = true;
+            lblLastLine.Dock = DockStyle.Fill;
+            lblLastLine.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblLastLine.ForeColor = SystemColors.ActiveCaption;
+            lblLastLine.Location = new Point(4, 54);
+            lblLastLine.Margin = new Padding(4, 0, 4, 0);
+            lblLastLine.Name = "lblLastLine";
+            lblLastLine.Size = new Size(360, 28);
+            lblLastLine.TabIndex = 61;
+            lblLastLine.Text = "-";
+            lblLastLine.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // frmMainAccounts
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -2012,5 +2028,6 @@
         private TableLayoutPanel tableLayoutPanel20;
         private Button btnDGV_DOWN;
         private Button btnDGV_UP;
+        private Label lblLastLine;
     }
 }
