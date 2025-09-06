@@ -15,6 +15,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 {
     public partial class frmModifyParentAccID : Form
     {
+        // قائمة لتخزين الحسابات المحددة
+        public List<int> SelectedAccIDs { get; set; } = new List<int>();
+
         public frmModifyParentAccID()
         {
             InitializeComponent();
@@ -22,6 +25,12 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         DataTable dt = new DataTable();
         private void frmModifyParentAccID_Load(object sender, EventArgs e)
         {
+            // مثال: عرض الحسابات المحددة في ListBox أو أي عنصر تحكم
+            foreach (var id in SelectedAccIDs)
+            {
+                DGVSelectedAcc .DataSource = id;
+            }
+
             dt = DBServiecs.MainAcc_GetHierarchy();
             DGV.DataSource = dt;
             DGVStyl();
@@ -69,19 +78,21 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             foreach (DataGridViewColumn col in DGV.Columns)
                 col.Visible = false;
 
-            // دالة إظهار العمود
+            // إظهار العمود HierarchyName
             void Show(string name, string header, float weight)
             {
-                var c = DGV.Columns.Cast<DataGridViewColumn>().FirstOrDefault(x => x.Name == name);
+                var c = DGV.Columns.Cast<DataGridViewColumn>()
+                          .FirstOrDefault(x => x.DataPropertyName == name || x.Name == name);
                 if (c == null) return;
                 c.Visible = true;
                 c.HeaderText = header;
                 c.FillWeight = weight;
+                c.Width = 300; // اجعلها مناسبة
             }
 
-            // إظهار العمود المطلوب
-            Show("AccName", "اسم الحساب الرئيسى", 3f);
+            Show("HierarchyName", "اسم الحساب الرئيسى", 3f);
         }
+
 
         private void DGV_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
