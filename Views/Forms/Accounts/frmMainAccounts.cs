@@ -2121,6 +2121,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             bool isHasDetails = hasDetails;
 
             frmModifyParentAccID frm = new frmModifyParentAccID();
+            frm.ShowDialog();
 
 
         }
