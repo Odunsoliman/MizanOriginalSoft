@@ -24,9 +24,10 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         {
             dt = DBServiecs.MainAcc_GetHierarchy();
             DGV.DataSource = dt;
+            DGVStyl();
 
         }
-        public void ApplyGridFormatting(DataGridView dgv)
+        public void ApplyGridFormatting()
         {
             // 1️⃣ التنسيق الموحد أولاً
             DGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
@@ -34,17 +35,19 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             DGV.DefaultCellStyle.Font = new Font("Segoe UI", 10);
             DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 11, FontStyle.Bold);
             DGV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            foreach (DataGridViewColumn col in DGV.Columns)
-                col.Visible = false;
-
-            // 2️⃣ ثم توزيع التنسيقات
-            DGVStyl();
         }
 
         // 🔹 الدالة الحالية تبقى لحسابات فقط
         public void DGVStyl()
         {
+            /*
+             AccID,
+            AccName,
+            اريد اخفاء كل الاعمدة الواردة واظهار الحقلين فقط ولكن الجميع يظهر
+             */
+            ApplyGridFormatting();
+            foreach (DataGridViewColumn col in DGV.Columns)
+                col.Visible = false;
             void Show(string name, string header, float weight)
             {
                 if (!DGV.Columns.Contains(name)) return;
