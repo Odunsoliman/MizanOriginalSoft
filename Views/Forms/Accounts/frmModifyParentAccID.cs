@@ -38,12 +38,13 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         // 🔹 الدالة الحالية تبقى لحسابات فقط
-        public void DGVStyl()
+        public void DGVStyl_()
         {
             /*
-             AccID,
+            
             AccName,
-            اريد اخفاء كل الاعمدة الواردة واظهار الحقلين فقط ولكن الجميع يظهر
+            اريد اخفاء كل الاعمدة الواردة واظهار حقل واحد فقط ولكن لا يظهر
+            فما السبب
              */
             ApplyGridFormatting();
             foreach (DataGridViewColumn col in DGV.Columns)
@@ -58,6 +59,27 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
 
          //   Show("AccID", "كود", 1f);
+            Show("AccName", "اسم الحساب الرئيسى", 3f);
+        }
+        public void DGVStyl()
+        {
+            ApplyGridFormatting();
+
+            // إخفاء كل الأعمدة
+            foreach (DataGridViewColumn col in DGV.Columns)
+                col.Visible = false;
+
+            // دالة إظهار العمود
+            void Show(string name, string header, float weight)
+            {
+                var c = DGV.Columns.Cast<DataGridViewColumn>().FirstOrDefault(x => x.Name == name);
+                if (c == null) return;
+                c.Visible = true;
+                c.HeaderText = header;
+                c.FillWeight = weight;
+            }
+
+            // إظهار العمود المطلوب
             Show("AccName", "اسم الحساب الرئيسى", 3f);
         }
 

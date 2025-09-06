@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             tableLayoutPanel1 = new TableLayoutPanel();
+            DGVSelectedAcc = new DataGridView();
+            label2 = new Label();
             DGV = new DataGridView();
             label1 = new Label();
-            label2 = new Label();
-            DGVSelectedAcc = new DataGridView();
             tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
             ((System.ComponentModel.ISupportInitialize)DGVSelectedAcc).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -56,12 +56,34 @@
             tableLayoutPanel1.Size = new Size(879, 640);
             tableLayoutPanel1.TabIndex = 0;
             // 
+            // DGVSelectedAcc
+            // 
+            DGVSelectedAcc.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            DGVSelectedAcc.Dock = DockStyle.Fill;
+            DGVSelectedAcc.Location = new Point(3, 67);
+            DGVSelectedAcc.Name = "DGVSelectedAcc";
+            DGVSelectedAcc.RowHeadersVisible = false;
+            DGVSelectedAcc.Size = new Size(434, 570);
+            DGVSelectedAcc.TabIndex = 3;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Dock = DockStyle.Fill;
+            label2.Location = new Point(3, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(434, 64);
+            label2.TabIndex = 2;
+            label2.Text = "label2";
+            label2.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // DGV
             // 
             DGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DGV.Dock = DockStyle.Fill;
             DGV.Location = new Point(443, 67);
             DGV.Name = "DGV";
+            DGV.RowHeadersVisible = false;
             DGV.Size = new Size(433, 570);
             DGV.TabIndex = 0;
             DGV.CellDoubleClick += DGV_CellDoubleClick;
@@ -76,26 +98,6 @@
             label1.TabIndex = 1;
             label1.Text = "label1";
             label1.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Dock = DockStyle.Fill;
-            label2.Location = new Point(3, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(434, 64);
-            label2.TabIndex = 2;
-            label2.Text = "label2";
-            label2.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // DGVSelectedAcc
-            // 
-            DGVSelectedAcc.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            DGVSelectedAcc.Dock = DockStyle.Fill;
-            DGVSelectedAcc.Location = new Point(3, 67);
-            DGVSelectedAcc.Name = "DGVSelectedAcc";
-            DGVSelectedAcc.Size = new Size(434, 570);
-            DGVSelectedAcc.TabIndex = 3;
             // 
             // frmModifyParentAccID
             // 
@@ -113,8 +115,8 @@
             Load += frmModifyParentAccID_Load;
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)DGV).EndInit();
             ((System.ComponentModel.ISupportInitialize)DGVSelectedAcc).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DGV).EndInit();
             ResumeLayout(false);
         }
 
