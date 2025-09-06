@@ -28,6 +28,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // ✅ ربط البيانات مباشرة
             DGVSelectedAcc.DataSource = SelectedAccounts;
             DGVStylSelected();
+            DGVSelectedAcc.ClearSelection();
             // ✅ تحميل باقي الحسابات
             DataTable dt = DBServiecs.MainAcc_GetHierarchy();
             DGV.DataSource = dt;
@@ -95,6 +96,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             Show("AccID", "كود الحساب", 3f);
             Show("AccName", "اسم الحساب الفرعى", 3f);
+            DGVSelectedAcc.ClearSelection();
         }
 
 
