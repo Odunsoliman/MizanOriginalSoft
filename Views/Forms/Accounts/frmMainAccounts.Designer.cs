@@ -45,6 +45,8 @@
             rdoDaeen = new RadioButton();
             tableLayoutPanel7 = new TableLayoutPanel();
             DGV = new DataGridView();
+            contextMenuDGV = new ContextMenuStrip(components);
+            btnStripChangeCat = new ToolStripMenuItem();
             tableLayoutPanel13 = new TableLayoutPanel();
             label7 = new Label();
             txtSearch = new TextBox();
@@ -104,6 +106,7 @@
             lblClientAddress = new Label();
             lblAccNote = new Label();
             tlpShowMainData = new TableLayoutPanel();
+            lblLastLine = new Label();
             lblNameLine = new Label();
             lblFirstLine = new Label();
             tabPage2 = new TabPage();
@@ -141,11 +144,11 @@
             lblMonthlyInstallment = new Label();
             rdoIsEndedFixedAssets_Yes = new RadioButton();
             panel2 = new Panel();
-            lblLastLine = new Label();
             tableLayoutPanel6.SuspendLayout();
             tableLayoutPanel8.SuspendLayout();
             tableLayoutPanel7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
+            contextMenuDGV.SuspendLayout();
             tableLayoutPanel13.SuspendLayout();
             tableLayoutPanel9.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
@@ -392,6 +395,7 @@
             DGV.AllowUserToAddRows = false;
             DGV.AllowUserToDeleteRows = false;
             DGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            DGV.ContextMenuStrip = contextMenuDGV;
             DGV.Dock = DockStyle.Fill;
             DGV.Location = new Point(4, 51);
             DGV.Margin = new Padding(4);
@@ -408,6 +412,20 @@
             DGV.CellClick += DGV_CellClick;
             DGV.RowPrePaint += DGV_RowPrePaint;
             DGV.SelectionChanged += DGV_SelectionChanged;
+            // 
+            // contextMenuDGV
+            // 
+            contextMenuDGV.Items.AddRange(new ToolStripItem[] { btnStripChangeCat });
+            contextMenuDGV.Name = "contextMenuDGV";
+            contextMenuDGV.RightToLeft = RightToLeft.Yes;
+            contextMenuDGV.Size = new Size(230, 26);
+            // 
+            // btnStripChangeCat
+            // 
+            btnStripChangeCat.Name = "btnStripChangeCat";
+            btnStripChangeCat.Size = new Size(229, 22);
+            btnStripChangeCat.Text = "تغير التصنيف الى حساب خارجى";
+            btnStripChangeCat.Click += btnStripChangeCat_Click;
             // 
             // tableLayoutPanel13
             // 
@@ -1294,6 +1312,20 @@
             tlpShowMainData.Size = new Size(368, 82);
             tlpShowMainData.TabIndex = 97;
             // 
+            // lblLastLine
+            // 
+            lblLastLine.AutoSize = true;
+            lblLastLine.Dock = DockStyle.Fill;
+            lblLastLine.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblLastLine.ForeColor = SystemColors.ActiveCaption;
+            lblLastLine.Location = new Point(4, 54);
+            lblLastLine.Margin = new Padding(4, 0, 4, 0);
+            lblLastLine.Name = "lblLastLine";
+            lblLastLine.Size = new Size(360, 28);
+            lblLastLine.TabIndex = 61;
+            lblLastLine.Text = "-";
+            lblLastLine.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // lblNameLine
             // 
             lblNameLine.AutoSize = true;
@@ -1839,20 +1871,6 @@
             panel2.Size = new Size(437, 1);
             panel2.TabIndex = 94;
             // 
-            // lblLastLine
-            // 
-            lblLastLine.AutoSize = true;
-            lblLastLine.Dock = DockStyle.Fill;
-            lblLastLine.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblLastLine.ForeColor = SystemColors.ActiveCaption;
-            lblLastLine.Location = new Point(4, 54);
-            lblLastLine.Margin = new Padding(4, 0, 4, 0);
-            lblLastLine.Name = "lblLastLine";
-            lblLastLine.Size = new Size(360, 28);
-            lblLastLine.TabIndex = 61;
-            lblLastLine.Text = "-";
-            lblLastLine.TextAlign = ContentAlignment.MiddleLeft;
-            // 
             // frmMainAccounts
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1869,6 +1887,7 @@
             tableLayoutPanel8.PerformLayout();
             tableLayoutPanel7.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)DGV).EndInit();
+            contextMenuDGV.ResumeLayout(false);
             tableLayoutPanel13.ResumeLayout(false);
             tableLayoutPanel13.PerformLayout();
             tableLayoutPanel9.ResumeLayout(false);
@@ -2029,5 +2048,7 @@
         private Button btnDGV_DOWN;
         private Button btnDGV_UP;
         private Label lblLastLine;
+        private ContextMenuStrip contextMenuDGV;
+        private ToolStripMenuItem btnStripChangeCat;
     }
 }

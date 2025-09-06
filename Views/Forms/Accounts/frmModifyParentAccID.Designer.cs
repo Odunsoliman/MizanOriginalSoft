@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             tableLayoutPanel1 = new TableLayoutPanel();
-            dataGridView1 = new DataGridView();
+            DGV = new DataGridView();
             label1 = new Label();
             tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -40,7 +40,7 @@
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.Controls.Add(dataGridView1, 0, 1);
+            tableLayoutPanel1.Controls.Add(DGV, 0, 1);
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(10, 10);
@@ -51,14 +51,15 @@
             tableLayoutPanel1.Size = new Size(348, 640);
             tableLayoutPanel1.TabIndex = 0;
             // 
-            // dataGridView1
+            // DGV
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(3, 67);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(342, 570);
-            dataGridView1.TabIndex = 0;
+            DGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            DGV.Dock = DockStyle.Fill;
+            DGV.Location = new Point(3, 67);
+            DGV.Name = "DGV";
+            DGV.Size = new Size(342, 570);
+            DGV.TabIndex = 0;
+            DGV.CellDoubleClick += DGV_CellDoubleClick;
             // 
             // label1
             // 
@@ -84,16 +85,17 @@
             RightToLeft = RightToLeft.Yes;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "تعديل اب حساب";
+            Load += frmModifyParentAccID_Load;
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DGV).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
         private TableLayoutPanel tableLayoutPanel1;
-        private DataGridView dataGridView1;
+        private DataGridView DGV;
         private Label label1;
     }
 }

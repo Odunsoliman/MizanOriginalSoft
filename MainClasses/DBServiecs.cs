@@ -217,6 +217,12 @@ namespace MizanOriginalSoft.MainClasses
             return result ?? new DataTable(); // إذا كانت null نُرجع DataTable فارغ
         }
 
+        // جلب قائمة الاباء الهرميين
+        public static DataTable MainAcc_GetHierarchy()//@@@
+        {
+            DataTable? result = dbHelper.ExecuteSelectQuery("MainAcc_GetHierarchy");
+            return result ?? new DataTable(); // إذا كانت null نُرجع DataTable فارغ
+        }
         // جلب الفواتير السابقة حسب النوع
         public static DataTable NewInvoice_GetOldInvoicesByType(int InvType_ID)
         {

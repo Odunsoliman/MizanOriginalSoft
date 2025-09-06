@@ -63,10 +63,10 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         }
 
-  
+
         private void frmMainAccounts_Load(object sender, EventArgs e)
         {
-            this.Visible = false ;
+            this.Visible = false;
             TypAcc();
             AccTop_LoadFollowers();
             AccountDGV(AccTopID);
@@ -80,11 +80,11 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             txtSearch.Focus();
             txtSearch.SelectAll();
             ConnectKeyDown();
-            this.Visible = true ;
+            this.Visible = true;
         }
         private void DGVStyl()
         {
-            
+
             if (DGV.DataSource == null) return;
 
             // مهم: لا تعيد إنشاء DataTable جديد — استخدم الـ DefaultView للحفاظ على الربط
@@ -132,7 +132,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 }
             }
         }
- 
+
 
 
 
@@ -914,7 +914,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         #region تنسيق DataGridView
 
-  
+
         private void DGV_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e) // إعادة تلوين الصف حسب رقم الحساب
         {
             try
@@ -1365,7 +1365,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             // عرض السطر في اللابل
             lblFirstLine.Text = $"رقم الحساب: {accID}    معرف قديم: {sorceIDAcc}   ";
-            lblLastLine .Text = $"تاريخ الانضمام: {dateOfJoin}    الحالة: {status}";
+            lblLastLine.Text = $"تاريخ الانضمام: {dateOfJoin}    الحالة: {status}";
 
             // 🟢 السطر الثاني: اسم الحساب - الرصيد - حالة الرصيد
             string accName = row["AccName"]?.ToString() ?? "غير معروف";
@@ -1486,7 +1486,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             string selectedAccID = cellValue.ToString() ?? "";
             DataRow[] matchedRows = tblAccDGV.Select($"AccID = '{selectedAccID}'");
-             
+
             if (matchedRows.Length > 0)
             {
                 FillAccountFields(matchedRows[0]);
@@ -2084,7 +2084,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 int currentAccID = Convert.ToInt32(DGV.CurrentRow.Cells["AccID"].Value);
 
                 DBServiecs.MainAcc_MoveSortTree(currentAccID, "UP");
-                
+
                 // إعادة تحميل الجريد مع تحديد الحساب
                 ReloadGrid(currentAccID);
             }
@@ -2105,6 +2105,25 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // 
 
         #endregion
+
+
+        private void btnStripChangeCat_Click(object sender, EventArgs e)
+        {
+            //if (DGV.CurrentRow == null)
+            //{
+            //    MessageBox.Show("يرجى تحديد صف لتعديله");
+            //    return;
+            //}
+
+            // حفظ القيم قبل فتح شاشة التعديل
+            int accID = Convert.ToInt32(DGV.CurrentRow.Cells["AccID"].Value);
+            bool IsAssests = hasFixedAssets;
+            bool isHasDetails = hasDetails;
+
+            frmModifyParentAccID frm = new frmModifyParentAccID();
+
+
+        }
 
     }
 }
