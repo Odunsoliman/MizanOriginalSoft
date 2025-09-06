@@ -62,6 +62,7 @@
             DGVSelectedAcc.AllowUserToDeleteRows = false;
             DGVSelectedAcc.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DGVSelectedAcc.Dock = DockStyle.Fill;
+            DGVSelectedAcc.Enabled = false;
             DGVSelectedAcc.Location = new Point(3, 67);
             DGVSelectedAcc.Name = "DGVSelectedAcc";
             DGVSelectedAcc.ReadOnly = true;
