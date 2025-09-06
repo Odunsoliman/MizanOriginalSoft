@@ -53,6 +53,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         private void frmMainLogIn_Load(object sender, EventArgs e)
         {
+            DBServiecs.A_UpdateAllDataBase();
             LoadAppInfo();
             SetupAutoComplete();
             txtUserName.Focus();
