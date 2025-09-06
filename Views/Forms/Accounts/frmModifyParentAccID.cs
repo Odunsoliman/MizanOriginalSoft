@@ -15,27 +15,74 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 {
     public partial class frmModifyParentAccID : Form
     {
-        // قائمة لتخزين الحسابات المحددة
-        public List<int> SelectedAccIDs { get; set; } = new List<int>();
+        // 🟢 نخزن الجدول مباشرة
+        public DataTable? SelectedAccounts { get; set; }
 
         public frmModifyParentAccID()
         {
             InitializeComponent();
         }
-        DataTable dt = new DataTable();
+
         private void frmModifyParentAccID_Load(object sender, EventArgs e)
         {
-            // مثال: عرض الحسابات المحددة في ListBox أو أي عنصر تحكم
-            foreach (var id in SelectedAccIDs)
-            {
-                DGVSelectedAcc .DataSource = id;
-            }
+            // ✅ ربط البيانات مباشرة
+            DGVSelectedAcc.DataSource = SelectedAccounts;
 
-            dt = DBServiecs.MainAcc_GetHierarchy();
+            // ✅ تحميل باقي الحسابات
+            DataTable dt = DBServiecs.MainAcc_GetHierarchy();
             DGV.DataSource = dt;
             DGVStyl();
-
         }
+        /*
+         لدى شاشة رئيسية اسمها frmMainAccounts وبها زر باسم btnStripChangeCat وبها جريد باسم DGV
+        عند النقر على btnStripChangeCat يتم فتح هذه الشاشة والمطلوب تمرير رقم واسم الحساب المحمل اساسة فى الجريد وتم تحديده
+              private void btnStripChangeCat_Click(object sender, EventArgs e)
+        {
+            // جمع كل الحسابات المحددة في الـ DGV
+            List<int> selectedAccIDs = new List<int>();
+            foreach (DataGridViewRow row in DGV.SelectedRows)
+            {
+                if (!row.IsNewRow)
+                {
+                    // افترض أن العمود يحتوي على AccID
+                    int accID = Convert.ToInt32(row.Cells["AccID"].Value);
+                    selectedAccIDs.Add(accID);
+                }
+            }
+
+            // تمريرها إلى الفورم الجديد
+            frmModifyParentAccID frm = new frmModifyParentAccID();
+            frm.SelectedAccIDs = selectedAccIDs;
+            frm.ShowDialog();
+        }
+
+        وبعد التمرير يجب العرض فى DGVSelectedAcc رقم حساب واسم
+
+        فقط فما الحل الجذرى
+
+
+
+         
+         
+         
+         */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public void ApplyGridFormatting()
         {
             // 1️⃣ التنسيق الموحد أولاً

@@ -2109,23 +2109,32 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void btnStripChangeCat_Click(object sender, EventArgs e)
         {
-            // جمع كل الحسابات المحددة في الـ DGV
-            List<int> selectedAccIDs = new List<int>();
+            // 🔹 تجهيز DataTable للحسابات المحددة
+            DataTable selectedTable = new DataTable();
+            selectedTable.Columns.Add("AccID", typeof(int));
+            selectedTable.Columns.Add("AccName", typeof(string));
+
             foreach (DataGridViewRow row in DGV.SelectedRows)
             {
                 if (!row.IsNewRow)
                 {
-                    // افترض أن العمود يحتوي على AccID
-                    int accID = Convert.ToInt32(row.Cells["AccID"].Value);
-                    selectedAccIDs.Add(accID);
+                    int accID = row.Cells["AccID"].Value != null
+                        ? Convert.ToInt32(row.Cells["AccID"].Value)
+                        : 0; // أو تجاهل السطر لو null
+
+                    string accName = row.Cells["AccName"].Value?.ToString() ?? "غير متوفر";
+
+                    selectedTable.Rows.Add(accID, accName);
                 }
             }
 
-            // تمريرها إلى الفورم الجديد
+            // 🔹 تمرير الجدول للفورم الجديد
             frmModifyParentAccID frm = new frmModifyParentAccID();
-            frm.SelectedAccIDs = selectedAccIDs;
+            frm.SelectedAccounts = selectedTable;
             frm.ShowDialog();
         }
+
+
 
 
     }
