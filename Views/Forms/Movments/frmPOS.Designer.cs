@@ -655,7 +655,6 @@
             cbxPiece_ID.Name = "cbxPiece_ID";
             cbxPiece_ID.Size = new Size(105, 30);
             cbxPiece_ID.TabIndex = 33;
-            cbxPiece_ID.Visible = false;
             // 
             // tableLayoutPanel6
             // 
@@ -1096,7 +1095,6 @@
             label2.TabIndex = 36;
             label2.Text = "الكمية";
             label2.TextAlign = ContentAlignment.MiddleRight;
-            label2.Visible = false;
             // 
             // tlpPiece
             // 
@@ -1112,6 +1110,7 @@
             tlpPiece.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tlpPiece.Size = new Size(225, 40);
             tlpPiece.TabIndex = 4;
+            tlpPiece.Visible = false;
             // 
             // label1
             // 
@@ -1126,7 +1125,6 @@
             label1.TabIndex = 35;
             label1.Text = "القطعة";
             label1.TextAlign = ContentAlignment.MiddleRight;
-            label1.Visible = false;
             // 
             // tableLayoutPanel8
             // 

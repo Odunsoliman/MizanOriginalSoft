@@ -30,14 +30,14 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // ✅ قراءة الإعدادات
             LoadSettings();
 
-            // ✅ رسالة للتأكد من القيم
-            MessageBox.Show(
-                $"NegativeStockSale = {allowNegativeStock}\n" +
-                $"ReSaleByInvoiceSale = {reSaleByInvoiceSale}",
-                "📌 قيم الإعدادات",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-            );
+            //// ✅ رسالة للتأكد من القيم
+            //MessageBox.Show(
+            //    $"NegativeStockSale = {allowNegativeStock}\n" +
+            //    $"ReSaleByInvoiceSale = {reSaleByInvoiceSale}",
+            //    "📌 قيم الإعدادات",
+            //    MessageBoxButtons.OK,
+            //    MessageBoxIcon.Information
+            //);
 
             // ✅ ضبط الواجهة حسب الاختيار الافتراضي
             if (rdoSale.Checked)
@@ -46,25 +46,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 UpdateLabelsForResale();
         }
 
-        private void frmPOS_Load_(object sender, EventArgs e)
-        {
-            // ✅ تحميل ملف الإعدادات مرة واحدة فقط
-            if (!AppSettingsIsLoaded())
-            {
-                string settingsPath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
-                AppSettings.Load(settingsPath);
-            }
-
-            // ✅ قراءة الإعدادات
-            LoadSettings();
-
-            // ✅ ضبط الواجهة حسب الاختيار الافتراضي
-            if (rdoSale.Checked)
-                UpdateLabelsForSale();
-            else if (rdoResale.Checked)
-                UpdateLabelsForResale();
-        }
-
+    
+        
+        #region ========  ضبط اختيارات البيع والبيع المرتد ============
         // ✅ التحقق إذا كان AppSettings متحمل
         private bool AppSettingsIsLoaded()
         {
@@ -93,6 +77,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             {
                 tlpTyoe_color();       // تغيير الألوان
                 UpdateLabelsForSale(); // تحديث النصوص
+                lblTypeInv.Text = "فاتورة بيع رقم";
             }
         }
 
@@ -102,6 +87,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             {
                 tlpTyoe_color();        // تغيير الألوان
                 UpdateLabelsForResale();// تحديث النصوص
+                lblTypeInv.Text = "فاتورة بيع مرتد رقم ";
             }
         }
 
@@ -149,5 +135,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 lblTafqet.BackColor = Color.FromArgb(255, 230, 230);
             }
         }
+
+        #endregion 
     }
 }
