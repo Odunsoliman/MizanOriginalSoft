@@ -159,6 +159,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             else if (dt.Rows.Count > 0)
             {
                 cbxSellerID.SelectedIndex = 0;
+                
             }
         }
         #endregion
@@ -185,88 +186,87 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
         #endregion
 
-        /*
-         هذا اجراء جلب البيانات التى من المفترض تعبئ txtAccName و lblAccID , cbxSellerID 
+        #region Account Data Display
+        private void txtAccName_Leave(object sender, EventArgs e)
+        {
+            string accName = txtAccName.Text.Trim();
+            if (string.IsNullOrEmpty(accName))
+            {
+                ClearAccountDetails();
+                return;
+            }
 
-        ALTER PROCEDURE [dbo].[NewInvoice_GetAcc]
-    @InvoiceType NVARCHAR(50)
-AS
-BEGIN
-    SET NOCOUNT ON;
+            string invoiceTypeKey = InvoiceTypeHelper.ToAccountTypeString(currentInvoiceType);
+            if (string.IsNullOrEmpty(invoiceTypeKey))
+            {
+                ClearAccountDetails();
+                return;
+            }
 
-    DECLARE @IDs NVARCHAR(MAX);
+            DataTable dt = DBServiecs.NewInvoice_GetAcc(invoiceTypeKey);
 
-    -- جدول التحويل
-    DECLARE @Mapping TABLE (TypeName NVARCHAR(50), IDs NVARCHAR(MAX));
-    INSERT INTO @Mapping VALUES
-        ('SalesMen', '60'),      --البائعون
-        ('PurchaseMen', '70'),   -- مسؤولى الشراء
-        ('Sale', '3,8,40'),      -- عملاء البيع والبيع المرتد
-        ('Purchase', '4,40'),    -- موردين الشراء والشراء المرتد
-        ('Inventory', '30');     -- حسابات ضبط المخزون
+            DataRow? selectedAccount = dt.AsEnumerable()
+                .FirstOrDefault(row =>
+                    string.Equals(row.Field<string?>("AccName"), accName, StringComparison.OrdinalIgnoreCase));
 
-    SELECT @IDs = IDs FROM @Mapping WHERE TypeName = @InvoiceType;
+            if (selectedAccount != null)
+            {
+                lblAccID.Text = selectedAccount["AccID"]?.ToString() ?? "0";
+                DisplayAccountDetails(selectedAccount);
+            }
+            else
+            {
+                ClearAccountDetails();
+            }
+        }
 
-    IF @IDs IS NULL OR @IDs = N''
-    BEGIN
-        SELECT TOP 0 * FROM dbo.MainAccounts;
-        RETURN;
-    END
+        private void DisplayAccountDetails(DataRow accountRow)
+        {
+            // 🔹 الهاتفين
+            string? firstPhone = accountRow.Field<string?>("FirstPhon");
+            string? anotherPhone = accountRow.Field<string?>("AntherPhon");
 
-    ;WITH StartAccs AS (
-        SELECT TRY_CAST(value AS INT) AS AccID
-        FROM STRING_SPLIT(@IDs, ',')
-        WHERE TRY_CAST(value AS INT) IS NOT NULL
-    ),
-    RecursiveAccs AS (
-        SELECT MA.AccID
-        FROM dbo.MainAccounts MA
-        INNER JOIN StartAccs SA ON MA.ParentAccID = SA.AccID
-        UNION ALL
-        SELECT MA.AccID
-        FROM dbo.MainAccounts MA
-        INNER JOIN RecursiveAccs R ON MA.ParentAccID = R.AccID
-    )
-    SELECT 
-        MA.AccID,
-        MA.AccName,
-        (MA.AccName + ' / ' + ISNULL(ParentAcc.AccName, 'بدون')) AS FullAccName,
-        MA.Balance,
-        MA.BalanceState,
-        MA.FirstPhon,
-        MA.AntherPhon,
-        MA.AccNote,
-        MA.ClientEmail,
-        MA.ClientAddress
-    FROM dbo.MainAccounts MA
-    LEFT JOIN dbo.MainAccounts ParentAcc ON MA.ParentAccID = ParentAcc.AccID
-    WHERE MA.IsFinalAccount = 1
-      AND MA.IsHidden = 0
-      AND (MA.AccID IN (SELECT AccID FROM RecursiveAccs)
-           OR MA.ParentAccID IN (SELECT AccID FROM RecursiveAccs));
-END
+            if (!string.IsNullOrWhiteSpace(firstPhone) && !string.IsNullOrWhiteSpace(anotherPhone))
+            {
+                lblFirstPhon.Text = $"هواتف: {firstPhone} - {anotherPhone}";
+            }
+            else if (!string.IsNullOrWhiteSpace(firstPhone))
+            {
+                lblFirstPhon.Text = $"هاتف: {firstPhone}";
+            }
+            else if (!string.IsNullOrWhiteSpace(anotherPhone))
+            {
+                lblFirstPhon.Text = $"هاتف: {anotherPhone}";
+            }
+            else
+            {
+                lblFirstPhon.Text = string.Empty;
+            }
 
-/*
-خاص بتعبئة الكمبو بكس cbxSellerID --------------------
-فى حالة فاتورة البيع او مردوداته يتم تعبئة الكمبوبكس بهذة الحسابات مع مراعات الافتراضى cbxSellerID
-EXEC dbo.NewInvoice_GetAcc @InvoiceType = N'SalesMen';     -- الحساب الافتراضى للفاتورة الجديدة = 57 ادارة البائعين
 
-فى حالة فاتورة الشراء او مردوداته يتم تعبئة الكمبوبكس بهذة الحسابات مع مراعات الافتراضى cbxSellerID
-EXEC dbo.NewInvoice_GetAcc @InvoiceType = N'PurchaseMen';  -- الحساب الافتراضى للفاتورة الجديدة = 228 الادارة العليا
-===================================================================
-===================================================================
-حاص بتعبة الحساب المرتبط بالفاتورة txtAccName و lblAccID-----------------------
-فى حالة فاتورة البيع او مردوداته يتم تعبئة التكست بكس  والليبل بهذة الحسابات مع مراعات الافتراضى txtAccName و lblAccID
-EXEC dbo.NewInvoice_GetAcc @InvoiceType = N'Sale';       -- الحساب الافتراضى للفاتورة الجديدة = 55 عميل نقدى
+            // 🔹 البريد الإلكتروني
+            string? email = accountRow.Field<string?>("ClientEmail");
+            lblClientEmail.Text = !string.IsNullOrWhiteSpace(email)
+                ? $"Email: {email}"
+                : string.Empty;
 
-فى حالة فاتورة الشراء او مردوداته يتم تعبئة التكست بكس  والليبل بهذة الحسابات مع مراعات الافتراضى txtAccName و lblAccID
-EXEC dbo.NewInvoice_GetAcc @InvoiceType = N'Purchase';   -- الحساب الافتراضى للفاتورة الجديدة = 56 مورد عام نقدى
+            // 🔹 العنوان
+            string? address = accountRow.Field<string?>("ClientAddress");
+            lblClientAddress.Text = !string.IsNullOrWhiteSpace(address)
+                ? $"العنوان: {address}"
+                : string.Empty;
+        }
 
-فى حالة فاتورة ضبط المخزون يتم تعبئة التكست بكس  والليبل بهذة الحسابات مع مراعات الافتراضى txtAccName و lblAccID
-EXEC dbo.NewInvoice_GetAcc @InvoiceType = N'Inventory';  -- الحساب الافتراضى للفاتورة الجديدة = 72 حساب تسوية رصيد
+        private void ClearAccountDetails()
+        {
+            lblAccID.Text = "0";
+            lblFirstPhon.Text = string.Empty;
+            lblAntherPhon.Text = string.Empty;
+            lblClientEmail.Text = string.Empty;
+            lblClientAddress.Text = string.Empty;
+        }
+        #endregion
 
-*/
-       
 
 
 
