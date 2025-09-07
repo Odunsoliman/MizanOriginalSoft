@@ -69,17 +69,12 @@
             tableLayoutPanel4 = new TableLayoutPanel();
             chkAllowNegative = new CheckBox();
             lblBalance = new Label();
-            label5 = new Label();
-            label15 = new Label();
-            lblAntherPhon = new Label();
             lblClientEmail = new Label();
             lblClientAddress = new Label();
-            label17 = new Label();
             lblFirstPhon = new Label();
             cbxSellerID = new ComboBox();
             txtAccName = new TextBox();
             lblAccID = new Label();
-            label23 = new Label();
             lblCodeTitel = new Label();
             lblProductName = new Label();
             tlpPiece = new TableLayoutPanel();
@@ -759,50 +754,6 @@
             lblBalance.Text = "0";
             lblBalance.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // label5
-            // 
-            label5.BackColor = Color.Transparent;
-            label5.Dock = DockStyle.Fill;
-            label5.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label5.ForeColor = Color.Green;
-            label5.Location = new Point(393, 0);
-            label5.Margin = new Padding(4, 0, 4, 0);
-            label5.Name = "label5";
-            label5.RightToLeft = RightToLeft.No;
-            label5.Size = new Size(138, 31);
-            label5.TabIndex = 25;
-            label5.Text = ":العنوان";
-            label5.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // label15
-            // 
-            label15.BackColor = Color.Transparent;
-            label15.Dock = DockStyle.Fill;
-            label15.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label15.ForeColor = Color.Green;
-            label15.Location = new Point(393, 31);
-            label15.Margin = new Padding(4, 0, 4, 0);
-            label15.Name = "label15";
-            label15.RightToLeft = RightToLeft.No;
-            label15.Size = new Size(138, 31);
-            label15.TabIndex = 25;
-            label15.Text = ":بريدالكترونى";
-            label15.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // lblAntherPhon
-            // 
-            lblAntherPhon.BackColor = Color.Transparent;
-            lblAntherPhon.Dock = DockStyle.Fill;
-            lblAntherPhon.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblAntherPhon.ForeColor = Color.Navy;
-            lblAntherPhon.Location = new Point(4, 93);
-            lblAntherPhon.Margin = new Padding(4, 0, 4, 0);
-            lblAntherPhon.Name = "lblAntherPhon";
-            lblAntherPhon.Size = new Size(381, 33);
-            lblAntherPhon.TabIndex = 25;
-            lblAntherPhon.Text = "0";
-            lblAntherPhon.TextAlign = ContentAlignment.MiddleLeft;
-            // 
             // lblClientEmail
             // 
             lblClientEmail.BackColor = Color.Transparent;
@@ -814,7 +765,8 @@
             lblClientEmail.Name = "lblClientEmail";
             lblClientEmail.Size = new Size(381, 31);
             lblClientEmail.TabIndex = 25;
-            lblClientEmail.TextAlign = ContentAlignment.MiddleLeft;
+            lblClientEmail.Text = "0";
+            lblClientEmail.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblClientAddress
             // 
@@ -828,21 +780,6 @@
             lblClientAddress.Size = new Size(381, 31);
             lblClientAddress.TabIndex = 25;
             lblClientAddress.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // label17
-            // 
-            label17.BackColor = Color.Transparent;
-            label17.Dock = DockStyle.Fill;
-            label17.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label17.ForeColor = Color.Green;
-            label17.Location = new Point(393, 62);
-            label17.Margin = new Padding(4, 0, 4, 0);
-            label17.Name = "label17";
-            label17.RightToLeft = RightToLeft.No;
-            label17.Size = new Size(138, 31);
-            label17.TabIndex = 26;
-            label17.Text = ":ت1";
-            label17.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblFirstPhon
             // 
@@ -895,21 +832,6 @@
             lblAccID.TabIndex = 25;
             lblAccID.Text = "0";
             lblAccID.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // label23
-            // 
-            label23.BackColor = Color.Transparent;
-            label23.Dock = DockStyle.Fill;
-            label23.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label23.ForeColor = Color.Green;
-            label23.Location = new Point(393, 93);
-            label23.Margin = new Padding(4, 0, 4, 0);
-            label23.Name = "label23";
-            label23.RightToLeft = RightToLeft.No;
-            label23.Size = new Size(138, 33);
-            label23.TabIndex = 27;
-            label23.Text = ":ت2";
-            label23.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblCodeTitel
             // 
@@ -1525,14 +1447,9 @@
             tableLayoutPanel7.ColumnCount = 2;
             tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.3743F));
             tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 72.6257F));
-            tableLayoutPanel7.Controls.Add(label5, 0, 0);
-            tableLayoutPanel7.Controls.Add(label15, 0, 1);
-            tableLayoutPanel7.Controls.Add(lblAntherPhon, 1, 3);
             tableLayoutPanel7.Controls.Add(lblClientEmail, 1, 1);
             tableLayoutPanel7.Controls.Add(lblClientAddress, 1, 0);
-            tableLayoutPanel7.Controls.Add(label17, 0, 2);
             tableLayoutPanel7.Controls.Add(lblFirstPhon, 1, 2);
-            tableLayoutPanel7.Controls.Add(label23, 0, 3);
             tableLayoutPanel7.Dock = DockStyle.Fill;
             tableLayoutPanel7.Location = new Point(4, 2);
             tableLayoutPanel7.Margin = new Padding(4, 2, 4, 2);
@@ -1688,17 +1605,12 @@
         private TableLayoutPanel tableLayoutPanel4;
         private CheckBox chkAllowNegative;
         private Label lblBalance;
-        private Label label5;
-        private Label label15;
-        private Label lblAntherPhon;
         private Label lblClientEmail;
         private Label lblClientAddress;
-        private Label label17;
         private Label lblFirstPhon;
         private ComboBox cbxSellerID;
         private TextBox txtAccName;
         private Label lblAccID;
-        private Label label23;
         private Label lblCodeTitel;
         private Label lblProductName;
         private TableLayoutPanel tlpPiece;

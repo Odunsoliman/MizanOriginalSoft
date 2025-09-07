@@ -261,7 +261,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
             lblAccID.Text = "0";
             lblFirstPhon.Text = string.Empty;
-            lblAntherPhon.Text = string.Empty;
             lblClientEmail.Text = string.Empty;
             lblClientAddress.Text = string.Empty;
         }
