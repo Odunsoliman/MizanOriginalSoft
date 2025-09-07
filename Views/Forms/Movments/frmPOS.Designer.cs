@@ -29,13 +29,14 @@
         private void InitializeComponent()
         {
             tableLayoutPanel10 = new TableLayoutPanel();
-            label19 = new Label();
+            lblDiscount = new Label();
             btnAllCach = new Button();
             txtPayment_Cash = new TextBox();
             txtPayment_Electronic = new TextBox();
             btnAllVisa = new Button();
             lblStateRemaining = new Label();
             lblRemainingOnAcc = new Label();
+            label19 = new Label();
             lblTafqet = new Label();
             lblTax = new Label();
             lblTotalText = new Label();
@@ -70,15 +71,17 @@
             lblFirstPhon = new Label();
             label23 = new Label();
             tlpAcc = new TableLayoutPanel();
-            tableLayoutPanel4 = new TableLayoutPanel();
             lblDir = new Label();
             label13 = new Label();
             txtAccName = new TextBox();
             lblAccID = new Label();
             cbxSellerID = new ComboBox();
-            chkAllowNegative = new CheckBox();
             lblBalance = new Label();
             lblB_Status = new Label();
+            tlpType = new TableLayoutPanel();
+            chkAllowNegative = new CheckBox();
+            rdoResale = new RadioButton();
+            rdoSale = new RadioButton();
             tlpHader = new TableLayoutPanel();
             btnHelp = new Button();
             lblInfoInvoice = new Label();
@@ -120,6 +123,7 @@
             tableLayoutPanel6.SuspendLayout();
             tableLayoutPanel7.SuspendLayout();
             tlpAcc.SuspendLayout();
+            tlpType.SuspendLayout();
             tlpHader.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
@@ -136,18 +140,19 @@
             // tableLayoutPanel10
             // 
             tableLayoutPanel10.ColumnCount = 5;
-            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 39.36709F));
-            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 14.0506325F));
+            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 34.263958F));
+            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 19.0355339F));
             tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.2784815F));
             tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.329113F));
             tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.8481F));
-            tableLayoutPanel10.Controls.Add(label19, 0, 0);
+            tableLayoutPanel10.Controls.Add(lblDiscount, 1, 1);
             tableLayoutPanel10.Controls.Add(btnAllCach, 2, 0);
             tableLayoutPanel10.Controls.Add(txtPayment_Cash, 3, 0);
             tableLayoutPanel10.Controls.Add(txtPayment_Electronic, 3, 1);
             tableLayoutPanel10.Controls.Add(btnAllVisa, 2, 1);
             tableLayoutPanel10.Controls.Add(lblStateRemaining, 4, 0);
             tableLayoutPanel10.Controls.Add(lblRemainingOnAcc, 4, 1);
+            tableLayoutPanel10.Controls.Add(label19, 1, 0);
             tableLayoutPanel10.Dock = DockStyle.Fill;
             tableLayoutPanel10.Location = new Point(4, 2);
             tableLayoutPanel10.Margin = new Padding(4, 2, 4, 2);
@@ -158,19 +163,18 @@
             tableLayoutPanel10.Size = new Size(788, 65);
             tableLayoutPanel10.TabIndex = 33;
             // 
-            // label19
+            // lblDiscount
             // 
-            label19.BackColor = Color.Transparent;
-            label19.Dock = DockStyle.Fill;
-            label19.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label19.ForeColor = Color.DarkBlue;
-            label19.Location = new Point(482, 0);
-            label19.Margin = new Padding(4, 0, 4, 0);
-            label19.Name = "label19";
-            label19.Size = new Size(302, 32);
-            label19.TabIndex = 25;
-            label19.Text = "خصم مسموح";
-            label19.TextAlign = ContentAlignment.MiddleRight;
+            lblDiscount.BackColor = Color.Transparent;
+            lblDiscount.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblDiscount.ForeColor = Color.DarkBlue;
+            lblDiscount.Location = new Point(372, 32);
+            lblDiscount.Margin = new Padding(4, 0, 4, 0);
+            lblDiscount.Name = "lblDiscount";
+            lblDiscount.Size = new Size(142, 32);
+            lblDiscount.TabIndex = 51;
+            lblDiscount.Text = "0";
+            lblDiscount.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // btnAllCach
             // 
@@ -251,9 +255,22 @@
             lblRemainingOnAcc.Text = "0";
             lblRemainingOnAcc.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // label19
+            // 
+            label19.BackColor = Color.Transparent;
+            label19.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label19.ForeColor = Color.DarkBlue;
+            label19.Location = new Point(372, 0);
+            label19.Margin = new Padding(4, 0, 4, 0);
+            label19.Name = "label19";
+            label19.Size = new Size(142, 32);
+            label19.TabIndex = 25;
+            label19.Text = "خصم مسموح";
+            label19.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // lblTafqet
             // 
-            lblTafqet.BackColor = Color.RosyBrown;
+            lblTafqet.BackColor = Color.Transparent;
             lblTafqet.Dock = DockStyle.Fill;
             lblTafqet.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTafqet.ForeColor = Color.DarkViolet;
@@ -741,15 +758,14 @@
             tlpAcc.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 42.41733F));
             tlpAcc.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30.55872F));
             tlpAcc.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tlpAcc.Controls.Add(tableLayoutPanel4, 0, 2);
             tlpAcc.Controls.Add(lblDir, 0, 1);
             tlpAcc.Controls.Add(label13, 0, 0);
             tlpAcc.Controls.Add(txtAccName, 1, 0);
             tlpAcc.Controls.Add(lblAccID, 2, 0);
             tlpAcc.Controls.Add(cbxSellerID, 1, 1);
-            tlpAcc.Controls.Add(chkAllowNegative, 1, 2);
             tlpAcc.Controls.Add(lblBalance, 2, 2);
             tlpAcc.Controls.Add(lblB_Status, 2, 1);
+            tlpAcc.Controls.Add(tlpType, 1, 2);
             tlpAcc.Location = new Point(537, 2);
             tlpAcc.Margin = new Padding(4, 2, 4, 2);
             tlpAcc.Name = "tlpAcc";
@@ -759,19 +775,6 @@
             tlpAcc.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
             tlpAcc.Size = new Size(857, 100);
             tlpAcc.TabIndex = 7;
-            // 
-            // tableLayoutPanel4
-            // 
-            tableLayoutPanel4.ColumnCount = 2;
-            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel4.Location = new Point(654, 69);
-            tableLayoutPanel4.Name = "tableLayoutPanel4";
-            tableLayoutPanel4.RowCount = 2;
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel4.Size = new Size(200, 28);
-            tableLayoutPanel4.TabIndex = 0;
             // 
             // lblDir
             // 
@@ -838,21 +841,6 @@
             cbxSellerID.Size = new Size(164, 30);
             cbxSellerID.TabIndex = 28;
             // 
-            // chkAllowNegative
-            // 
-            chkAllowNegative.AutoSize = true;
-            chkAllowNegative.Checked = true;
-            chkAllowNegative.CheckState = CheckState.Checked;
-            chkAllowNegative.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            chkAllowNegative.ForeColor = Color.Navy;
-            chkAllowNegative.Location = new Point(489, 68);
-            chkAllowNegative.Margin = new Padding(4, 2, 4, 2);
-            chkAllowNegative.Name = "chkAllowNegative";
-            chkAllowNegative.Size = new Size(132, 23);
-            chkAllowNegative.TabIndex = 29;
-            chkAllowNegative.Text = "البيع على المكشوف";
-            chkAllowNegative.UseVisualStyleBackColor = true;
-            // 
             // lblBalance
             // 
             lblBalance.BackColor = Color.Transparent;
@@ -880,6 +868,66 @@
             lblB_Status.TabIndex = 25;
             lblB_Status.Text = "0";
             lblB_Status.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // tlpType
+            // 
+            tlpType.ColumnCount = 3;
+            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 52.38095F));
+            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21.5686283F));
+            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26.05042F));
+            tlpType.Controls.Add(chkAllowNegative, 0, 0);
+            tlpType.Controls.Add(rdoResale, 2, 0);
+            tlpType.Controls.Add(rdoSale, 1, 0);
+            tlpType.Dock = DockStyle.Fill;
+            tlpType.ForeColor = Color.Navy;
+            tlpType.Location = new Point(265, 69);
+            tlpType.Name = "tlpType";
+            tlpType.RowCount = 1;
+            tlpType.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tlpType.Size = new Size(357, 28);
+            tlpType.TabIndex = 0;
+            // 
+            // chkAllowNegative
+            // 
+            chkAllowNegative.AutoSize = true;
+            chkAllowNegative.Checked = true;
+            chkAllowNegative.CheckState = CheckState.Checked;
+            chkAllowNegative.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            chkAllowNegative.ForeColor = Color.Navy;
+            chkAllowNegative.Location = new Point(221, 2);
+            chkAllowNegative.Margin = new Padding(4, 2, 4, 2);
+            chkAllowNegative.Name = "chkAllowNegative";
+            chkAllowNegative.Size = new Size(132, 23);
+            chkAllowNegative.TabIndex = 29;
+            chkAllowNegative.Text = "البيع على المكشوف";
+            chkAllowNegative.UseVisualStyleBackColor = true;
+            // 
+            // rdoResale
+            // 
+            rdoResale.AutoSize = true;
+            rdoResale.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            rdoResale.ForeColor = Color.Navy;
+            rdoResale.Location = new Point(20, 3);
+            rdoResale.Name = "rdoResale";
+            rdoResale.Size = new Size(70, 22);
+            rdoResale.TabIndex = 30;
+            rdoResale.Text = "بيع مرتد";
+            rdoResale.UseVisualStyleBackColor = true;
+            rdoResale.CheckedChanged += rdoResale_CheckedChanged;
+            // 
+            // rdoSale
+            // 
+            rdoSale.AutoSize = true;
+            rdoSale.Checked = true;
+            rdoSale.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            rdoSale.Location = new Point(124, 3);
+            rdoSale.Name = "rdoSale";
+            rdoSale.Size = new Size(43, 22);
+            rdoSale.TabIndex = 31;
+            rdoSale.TabStop = true;
+            rdoSale.Text = "بيع";
+            rdoSale.UseVisualStyleBackColor = true;
+            rdoSale.CheckedChanged += rdoSale_CheckedChanged;
             // 
             // tlpHader
             // 
@@ -1415,6 +1463,8 @@
             tableLayoutPanel7.ResumeLayout(false);
             tlpAcc.ResumeLayout(false);
             tlpAcc.PerformLayout();
+            tlpType.ResumeLayout(false);
+            tlpType.PerformLayout();
             tlpHader.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel5.ResumeLayout(false);
@@ -1501,7 +1551,7 @@
         private TextBox txtSeaarchProd;
         private Label lblCodeTitel;
         private TableLayoutPanel tableLayoutPanel2;
-        private TableLayoutPanel tableLayoutPanel4;
+        private TableLayoutPanel tlpType;
         private TableLayoutPanel tableLayoutPanel5;
         private TableLayoutPanel tableLayoutPanel19;
         private TableLayoutPanel tableLayoutPanel17;
@@ -1524,5 +1574,8 @@
         private Button btnFrist;
         private Button btnPrevious;
         private Button btnNext;
+        private Label lblDiscount;
+        private RadioButton rdoResale;
+        private RadioButton rdoSale;
     }
 }

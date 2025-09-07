@@ -68,6 +68,8 @@
             tlpTop = new TableLayoutPanel();
             btnBackPrococh = new Button();
             pnlMovement = new Panel();
+            btnPOS = new Button();
+            label1 = new Label();
             btnPrococh = new Button();
             lblInvSeparator = new Label();
             btnBackSales = new Button();
@@ -97,8 +99,6 @@
             tlpDown = new TableLayoutPanel();
             tableLayoutPanel3 = new TableLayoutPanel();
             tableLayoutPanel1 = new TableLayoutPanel();
-            label1 = new Label();
-            btnPOS = new Button();
             pnlSetting.SuspendLayout();
             pnlAccounts.SuspendLayout();
             pnlMoreSetting.SuspendLayout();
@@ -734,6 +734,35 @@
             pnlMovement.Size = new Size(134, 338);
             pnlMovement.TabIndex = 1;
             // 
+            // btnPOS
+            // 
+            btnPOS.Dock = DockStyle.Top;
+            btnPOS.FlatAppearance.BorderSize = 0;
+            btnPOS.FlatStyle = FlatStyle.Flat;
+            btnPOS.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            btnPOS.Location = new Point(3, 237);
+            btnPOS.Margin = new Padding(3, 2, 3, 2);
+            btnPOS.MaximumSize = new Size(0, 29);
+            btnPOS.MinimumSize = new Size(0, 29);
+            btnPOS.Name = "btnPOS";
+            btnPOS.Padding = new Padding(0, 0, 22, 0);
+            btnPOS.RightToLeft = RightToLeft.No;
+            btnPOS.Size = new Size(128, 29);
+            btnPOS.TabIndex = 14;
+            btnPOS.Text = "POS_كاشير";
+            btnPOS.TextAlign = ContentAlignment.MiddleRight;
+            btnPOS.UseVisualStyleBackColor = true;
+            btnPOS.Click += btnPOS_Click;
+            // 
+            // label1
+            // 
+            label1.BackColor = SystemColors.ControlLight;
+            label1.Dock = DockStyle.Top;
+            label1.Location = new Point(3, 236);
+            label1.Name = "label1";
+            label1.Size = new Size(128, 1);
+            label1.TabIndex = 13;
+            // 
             // btnPrococh
             // 
             btnPrococh.Dock = DockStyle.Top;
@@ -1193,35 +1222,6 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
             tableLayoutPanel1.Size = new Size(982, 556);
             tableLayoutPanel1.TabIndex = 1;
-            // 
-            // label1
-            // 
-            label1.BackColor = SystemColors.ControlLight;
-            label1.Dock = DockStyle.Top;
-            label1.Location = new Point(3, 236);
-            label1.Name = "label1";
-            label1.Size = new Size(128, 1);
-            label1.TabIndex = 13;
-            // 
-            // btnPOS
-            // 
-            btnPOS.Dock = DockStyle.Top;
-            btnPOS.FlatAppearance.BorderSize = 0;
-            btnPOS.FlatStyle = FlatStyle.Flat;
-            btnPOS.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnPOS.Location = new Point(3, 237);
-            btnPOS.Margin = new Padding(3, 2, 3, 2);
-            btnPOS.MaximumSize = new Size(0, 29);
-            btnPOS.MinimumSize = new Size(0, 29);
-            btnPOS.Name = "btnPOS";
-            btnPOS.Padding = new Padding(0, 0, 22, 0);
-            btnPOS.RightToLeft = RightToLeft.No;
-            btnPOS.Size = new Size(128, 29);
-            btnPOS.TabIndex = 14;
-            btnPOS.Text = "POS_كاشير";
-            btnPOS.TextAlign = ContentAlignment.MiddleRight;
-            btnPOS.UseVisualStyleBackColor = true;
-            btnPOS.Click += btnPOS_Click;
             // 
             // frmMainLogIn
             // 
