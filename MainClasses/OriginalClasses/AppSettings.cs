@@ -107,8 +107,25 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
 
         public static double GetDouble(string key, double defaultValue = 0) =>
             double.TryParse(GetString(key), out var result) ? result : defaultValue;
+        public static bool GetBool(string key, bool defaultValue = false)
+        {
+            string? value = GetString(key);
 
-        public static bool GetBool(string key, bool defaultValue = false) =>
+            if (string.IsNullOrWhiteSpace(value))
+                return defaultValue;
+
+            value = value.Trim().ToLower();
+
+            if (bool.TryParse(value, out bool boolResult))
+                return boolResult;
+
+            if (value == "1") return true;
+            if (value == "0") return false;
+
+            return defaultValue;
+        }
+
+        public static bool GetBool_(string key, bool defaultValue = false) =>
             bool.TryParse(GetString(key), out var result) ? result : defaultValue;
 
         public static DateTime GetDateTime(string key, DateTime defaultValue) =>

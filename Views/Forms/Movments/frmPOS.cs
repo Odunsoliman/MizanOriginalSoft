@@ -18,8 +18,35 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
             InitializeComponent();
         }
-
         private void frmPOS_Load(object sender, EventArgs e)
+        {
+            // ✅ تحميل ملف الإعدادات
+            if (!AppSettingsIsLoaded())
+            {
+                string settingsPath = Path.Combine(Application.StartupPath, "AppSettings.txt");
+                AppSettings.Load(settingsPath);
+            }
+
+            // ✅ قراءة الإعدادات
+            LoadSettings();
+
+            // ✅ رسالة للتأكد من القيم
+            MessageBox.Show(
+                $"NegativeStockSale = {allowNegativeStock}\n" +
+                $"ReSaleByInvoiceSale = {reSaleByInvoiceSale}",
+                "📌 قيم الإعدادات",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+
+            // ✅ ضبط الواجهة حسب الاختيار الافتراضي
+            if (rdoSale.Checked)
+                UpdateLabelsForSale();
+            else if (rdoResale.Checked)
+                UpdateLabelsForResale();
+        }
+
+        private void frmPOS_Load_(object sender, EventArgs e)
         {
             // ✅ تحميل ملف الإعدادات مرة واحدة فقط
             if (!AppSettingsIsLoaded())
