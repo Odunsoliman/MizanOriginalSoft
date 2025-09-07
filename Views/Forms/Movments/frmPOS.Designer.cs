@@ -496,11 +496,12 @@
             // rdoResale
             // 
             rdoResale.AutoSize = true;
+            rdoResale.Dock = DockStyle.Fill;
             rdoResale.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
             rdoResale.ForeColor = Color.Navy;
-            rdoResale.Location = new Point(936, 3);
+            rdoResale.Location = new Point(792, 3);
             rdoResale.Name = "rdoResale";
-            rdoResale.Size = new Size(70, 23);
+            rdoResale.Size = new Size(214, 24);
             rdoResale.TabIndex = 30;
             rdoResale.Text = "بيع مرتد";
             rdoResale.UseVisualStyleBackColor = true;
@@ -791,15 +792,16 @@
             // lblBalance
             // 
             lblBalance.BackColor = Color.Transparent;
+            lblBalance.Dock = DockStyle.Fill;
             lblBalance.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblBalance.ForeColor = Color.Red;
-            lblBalance.Location = new Point(604, 33);
+            lblBalance.Location = new Point(588, 33);
             lblBalance.Margin = new Padding(4, 0, 4, 0);
             lblBalance.Name = "lblBalance";
-            lblBalance.Size = new Size(254, 33);
+            lblBalance.Size = new Size(270, 33);
             lblBalance.TabIndex = 25;
             lblBalance.Text = "0";
-            lblBalance.TextAlign = ContentAlignment.MiddleCenter;
+            lblBalance.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // tlpHader
             // 

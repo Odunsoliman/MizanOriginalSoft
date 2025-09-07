@@ -46,8 +46,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 UpdateLabelsForResale();
         }
 
-    
-        
+
+
         #region ========  ضبط اختيارات البيع والبيع المرتد ============
         // ✅ التحقق إذا كان AppSettings متحمل
         private bool AppSettingsIsLoaded()
@@ -78,6 +78,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 tlpTyoe_color();       // تغيير الألوان
                 UpdateLabelsForSale(); // تحديث النصوص
                 lblTypeInv.Text = "فاتورة بيع رقم: ";
+                lblTypeInvID.Text = "1";
             }
         }
 
@@ -88,6 +89,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 tlpTyoe_color();        // تغيير الألوان
                 UpdateLabelsForResale();// تحديث النصوص
                 lblTypeInv.Text = "فاتورة بيع مرتد رقم: ";
+                lblTypeInvID.Text = "2";
             }
         }
 
@@ -112,7 +114,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 lblCodeTitel.Text = " رقم فاتورة البيع";
                 lblInvStat.Text = "البيع المرتد يكون عن طريق رقم فاتورة البيع الاصلية";
             }
-                
+
             else
                 lblCodeTitel.Text = "ادخل كود الصنف";
         }
@@ -136,6 +138,11 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-        #endregion 
+        #endregion
+
+        private void lblTypeInvID_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
