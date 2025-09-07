@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             tableLayoutPanel4 = new TableLayoutPanel();
-            label4 = new Label();
+            lblNewAcc_In = new Label();
             tableLayoutPanel16 = new TableLayoutPanel();
             btnSave = new Button();
             tableLayoutPanel6 = new TableLayoutPanel();
@@ -65,7 +65,7 @@
             // 
             tableLayoutPanel4.ColumnCount = 1;
             tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel4.Controls.Add(label4, 0, 0);
+            tableLayoutPanel4.Controls.Add(lblNewAcc_In, 0, 0);
             tableLayoutPanel4.Controls.Add(tableLayoutPanel16, 0, 2);
             tableLayoutPanel4.Controls.Add(tableLayoutPanel6, 0, 1);
             tableLayoutPanel4.Dock = DockStyle.Fill;
@@ -78,19 +78,19 @@
             tableLayoutPanel4.Size = new Size(800, 422);
             tableLayoutPanel4.TabIndex = 2;
             // 
-            // label4
+            // lblNewAcc_In
             // 
-            label4.AutoSize = true;
-            label4.Dock = DockStyle.Fill;
-            label4.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.ForeColor = Color.Purple;
-            label4.Location = new Point(4, 0);
-            label4.Margin = new Padding(4, 0, 4, 0);
-            label4.Name = "label4";
-            label4.Size = new Size(792, 42);
-            label4.TabIndex = 96;
-            label4.Text = "حساب جديد";
-            label4.TextAlign = ContentAlignment.MiddleCenter;
+            lblNewAcc_In.AutoSize = true;
+            lblNewAcc_In.Dock = DockStyle.Fill;
+            lblNewAcc_In.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblNewAcc_In.ForeColor = Color.Purple;
+            lblNewAcc_In.Location = new Point(4, 0);
+            lblNewAcc_In.Margin = new Padding(4, 0, 4, 0);
+            lblNewAcc_In.Name = "lblNewAcc_In";
+            lblNewAcc_In.Size = new Size(792, 42);
+            lblNewAcc_In.TabIndex = 96;
+            lblNewAcc_In.Text = "حساب جديد";
+            lblNewAcc_In.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel16
             // 
@@ -490,6 +490,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lbl;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblNewAcc_In;
     }
 }

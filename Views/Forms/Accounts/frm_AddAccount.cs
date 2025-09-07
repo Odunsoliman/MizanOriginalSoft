@@ -22,6 +22,20 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             InitializeComponent();
             TypeAcc = type;
 
+            // 🏷️ تعيين العنوان بناءً على TypeAcc
+            if (TypeAcc == 1 || TypeAcc == 2)
+            {
+                lblNewAcc_In.Text = "حساب جديد فى العملاء";
+            }
+            else if (TypeAcc == 3 || TypeAcc == 4)
+            {
+                lblNewAcc_In.Text = "حساب جديد فى الموردين";
+            }
+            else
+            {
+                lblNewAcc_In.Text = "حساب جديد"; // قيمة افتراضية
+            }
+
             // 🔍 التحقق: هل النص عبارة عن رقم هاتف فقط (digits, +, -) بدون أحرف؟
             bool isPhoneNumber = nameAcc.All(c => char.IsDigit(c) || c == '+' || c == '-');
 
