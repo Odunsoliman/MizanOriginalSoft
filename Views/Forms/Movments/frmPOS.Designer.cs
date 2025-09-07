@@ -459,7 +459,7 @@
             tlpType.ForeColor = Color.Navy;
             tlpType.Location = new Point(8, 8);
             tlpType.Name = "tlpType";
-            tlpType.Padding = new Padding(10, 0, 10, 0);
+            tlpType.Padding = new Padding(30, 0, 30, 0);
             tlpType.RowCount = 1;
             tlpType.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tlpType.Size = new Size(1139, 30);
@@ -471,10 +471,10 @@
             lblInvStat.Dock = DockStyle.Fill;
             lblInvStat.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblInvStat.ForeColor = Color.Red;
-            lblInvStat.Location = new Point(14, 0);
+            lblInvStat.Location = new Point(34, 0);
             lblInvStat.Margin = new Padding(4, 0, 4, 0);
             lblInvStat.Name = "lblInvStat";
-            lblInvStat.Size = new Size(492, 30);
+            lblInvStat.Size = new Size(476, 30);
             lblInvStat.TabIndex = 32;
             lblInvStat.Text = "0";
             lblInvStat.TextAlign = ContentAlignment.MiddleRight;
@@ -484,7 +484,7 @@
             rdoSale.AutoSize = true;
             rdoSale.Checked = true;
             rdoSale.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            rdoSale.Location = new Point(1083, 3);
+            rdoSale.Location = new Point(1063, 3);
             rdoSale.Name = "rdoSale";
             rdoSale.Size = new Size(43, 23);
             rdoSale.TabIndex = 31;
@@ -498,7 +498,7 @@
             rdoResale.AutoSize = true;
             rdoResale.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
             rdoResale.ForeColor = Color.Navy;
-            rdoResale.Location = new Point(952, 3);
+            rdoResale.Location = new Point(936, 3);
             rdoResale.Name = "rdoResale";
             rdoResale.Size = new Size(70, 23);
             rdoResale.TabIndex = 30;
