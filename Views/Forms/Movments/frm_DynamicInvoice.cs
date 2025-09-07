@@ -63,7 +63,27 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
             DataTable dt = DBServiecs.NewInvoice_GetAcc(invoiceTypeKey);
 
-            // اختيار الحساب الافتراضي (أول حساب في الجدول)
+            // 🔥 تحديد الحساب الافتراضي حسب نوع الفاتورة
+            int defaultAccID = currentInvoiceType switch
+            {
+                InvoiceType.Sale or InvoiceType.SaleReturn => 55, // عميل نقدي
+                InvoiceType.Purchase or InvoiceType.PurchaseReturn => 56, // مورد نقدي
+                _ => -1
+            };
+
+            if (defaultAccID != -1)
+            {
+                // 🔍 البحث عن الحساب في الجدول
+                DataRow[] rows = dt.Select($"AccID = {defaultAccID}");
+                if (rows.Length > 0)
+                {
+                    lblAccID.Text = rows[0]["AccID"].ToString();
+                    txtAccName.Text = rows[0]["AccName"].ToString();
+                    return;
+                }
+            }
+
+            // 📌 لو الحساب الافتراضي غير موجود نرجع لأول صف
             if (dt.Rows.Count > 0)
             {
                 lblAccID.Text = dt.Rows[0]["AccID"].ToString();
@@ -101,7 +121,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #region Seller ComboBox
         private void FillSellerComboBox()
         {
-            string sellerKey = InvoiceTypeHelper.ToAccountTypeString(currentInvoiceType, forSeller: true);//لماذا وجود خط احمر تحت forSeller
+            string sellerKey = InvoiceTypeHelper.ToAccountTypeString(currentInvoiceType, forSeller: true);
 
             if (string.IsNullOrEmpty(sellerKey))
             {
@@ -115,9 +135,31 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             cbxSellerID.DisplayMember = "AccName";
             cbxSellerID.ValueMember = "AccID";
 
-            // اختيار الحساب الافتراضي (مثلاً أول حساب)
-            if (dt.Rows.Count > 0)
+            // 🔥 حدد الحساب الافتراضي حسب نوع الفاتورة
+            int defaultAccID = currentInvoiceType switch
+            {
+                InvoiceType.Sale or InvoiceType.SaleReturn => 57, // ادارة البائعين
+                InvoiceType.Purchase or InvoiceType.PurchaseReturn => 61, // ادارة المشتريات
+                _ => -1 // لا يوجد حساب افتراضي
+            };
+
+            // 🔍 البحث عن الصف الذي يحتوي على الحساب الافتراضي
+            if (defaultAccID != -1)
+            {
+                DataRow[] rows = dt.Select($"AccID = {defaultAccID}");
+                if (rows.Length > 0)
+                {
+                    cbxSellerID.SelectedValue = defaultAccID;
+                }
+                else if (dt.Rows.Count > 0)
+                {
+                    cbxSellerID.SelectedIndex = 0; // fallback لو الحساب الافتراضي غير موجود
+                }
+            }
+            else if (dt.Rows.Count > 0)
+            {
                 cbxSellerID.SelectedIndex = 0;
+            }
         }
         #endregion
 
