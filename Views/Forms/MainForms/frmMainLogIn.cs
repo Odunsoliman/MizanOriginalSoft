@@ -798,7 +798,16 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             OpenFormInPanel(frm);
         }
 
-
+        private void btnPOS_Click(object sender, EventArgs e)
+        {
+            if (sender is Button btn)
+            {
+                HighlightTransparentButton(btn);
+            }
+            CloseAllFormsExceptMain();
+            frmPOS  frm = new frmPOS ();
+            OpenFormInPanel(frm);
+        }
         #endregion
 
         #region *****************   قائمة السندات  **********************
@@ -1403,5 +1412,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             using frmSettingReports previewForm = new frmSettingReports(reportParameters);
             previewForm.ShowDialog();
         }
+
+  
     }
 }

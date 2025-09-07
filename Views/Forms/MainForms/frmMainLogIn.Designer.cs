@@ -97,6 +97,8 @@
             tlpDown = new TableLayoutPanel();
             tableLayoutPanel3 = new TableLayoutPanel();
             tableLayoutPanel1 = new TableLayoutPanel();
+            label1 = new Label();
+            btnPOS = new Button();
             pnlSetting.SuspendLayout();
             pnlAccounts.SuspendLayout();
             pnlMoreSetting.SuspendLayout();
@@ -315,7 +317,7 @@
             pnlSetting.MinimumSize = new Size(0, 34);
             pnlSetting.Name = "pnlSetting";
             pnlSetting.Padding = new Padding(3, 2, 3, 2);
-            pnlSetting.Size = new Size(134, 328);
+            pnlSetting.Size = new Size(134, 95);
             pnlSetting.TabIndex = 1;
             // 
             // pnlAccounts
@@ -341,7 +343,7 @@
             pnlAccounts.MinimumSize = new Size(0, 34);
             pnlAccounts.Name = "pnlAccounts";
             pnlAccounts.Padding = new Padding(3, 2, 3, 2);
-            pnlAccounts.Size = new Size(128, 220);
+            pnlAccounts.Size = new Size(128, 34);
             pnlAccounts.TabIndex = 4;
             // 
             // btn_Accounts
@@ -710,6 +712,8 @@
             // pnlMovement
             // 
             pnlMovement.BackColor = Color.Transparent;
+            pnlMovement.Controls.Add(btnPOS);
+            pnlMovement.Controls.Add(label1);
             pnlMovement.Controls.Add(btnIncreaseStock);
             pnlMovement.Controls.Add(btnDecreaseStock);
             pnlMovement.Controls.Add(btnGardStock);
@@ -721,13 +725,13 @@
             pnlMovement.Controls.Add(btnSales);
             pnlMovement.Controls.Add(btn_MainMove);
             pnlMovement.Dock = DockStyle.Top;
-            pnlMovement.Location = new Point(0, 328);
+            pnlMovement.Location = new Point(0, 95);
             pnlMovement.Margin = new Padding(3, 2, 3, 2);
             pnlMovement.MaximumSize = new Size(0, 338);
             pnlMovement.MinimumSize = new Size(0, 34);
             pnlMovement.Name = "pnlMovement";
             pnlMovement.Padding = new Padding(3, 2, 3, 2);
-            pnlMovement.Size = new Size(134, 34);
+            pnlMovement.Size = new Size(134, 338);
             pnlMovement.TabIndex = 1;
             // 
             // btnPrococh
@@ -814,7 +818,7 @@
             pnlReports.Controls.Add(DGV);
             pnlReports.Controls.Add(btn_MainReports);
             pnlReports.Dock = DockStyle.Top;
-            pnlReports.Location = new Point(0, 396);
+            pnlReports.Location = new Point(0, 467);
             pnlReports.Margin = new Padding(3, 2, 3, 2);
             pnlReports.MaximumSize = new Size(0, 400);
             pnlReports.MinimumSize = new Size(0, 34);
@@ -905,7 +909,7 @@
             pnlBills.Controls.Add(btnCashOut);
             pnlBills.Controls.Add(btn_MainBill);
             pnlBills.Dock = DockStyle.Top;
-            pnlBills.Location = new Point(0, 362);
+            pnlBills.Location = new Point(0, 433);
             pnlBills.Margin = new Padding(3, 2, 3, 2);
             pnlBills.MaximumSize = new Size(0, 338);
             pnlBills.MinimumSize = new Size(0, 34);
@@ -1190,6 +1194,35 @@
             tableLayoutPanel1.Size = new Size(982, 556);
             tableLayoutPanel1.TabIndex = 1;
             // 
+            // label1
+            // 
+            label1.BackColor = SystemColors.ControlLight;
+            label1.Dock = DockStyle.Top;
+            label1.Location = new Point(3, 236);
+            label1.Name = "label1";
+            label1.Size = new Size(128, 1);
+            label1.TabIndex = 13;
+            // 
+            // btnPOS
+            // 
+            btnPOS.Dock = DockStyle.Top;
+            btnPOS.FlatAppearance.BorderSize = 0;
+            btnPOS.FlatStyle = FlatStyle.Flat;
+            btnPOS.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            btnPOS.Location = new Point(3, 237);
+            btnPOS.Margin = new Padding(3, 2, 3, 2);
+            btnPOS.MaximumSize = new Size(0, 29);
+            btnPOS.MinimumSize = new Size(0, 29);
+            btnPOS.Name = "btnPOS";
+            btnPOS.Padding = new Padding(0, 0, 22, 0);
+            btnPOS.RightToLeft = RightToLeft.No;
+            btnPOS.Size = new Size(128, 29);
+            btnPOS.TabIndex = 14;
+            btnPOS.Text = "POS_كاشير";
+            btnPOS.TextAlign = ContentAlignment.MiddleRight;
+            btnPOS.UseVisualStyleBackColor = true;
+            btnPOS.Click += btnPOS_Click;
+            // 
             // frmMainLogIn
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1290,5 +1323,7 @@
         private TableLayoutPanel tableLayoutPanel3;
         private TableLayoutPanel tableLayoutPanel1;
         private DataGridView DGV;
+        private Button btnPOS;
+        private Label label1;
     }
 }
