@@ -632,7 +632,6 @@
             lblMinLinth.TabIndex = 33;
             lblMinLinth.Text = "0";
             lblMinLinth.TextAlign = ContentAlignment.MiddleLeft;
-            lblMinLinth.Click += lblMinLinth_Click;
             // 
             // lblProductStock
             // 
@@ -673,7 +672,6 @@
             cbxPiece_ID.Size = new Size(105, 30);
             cbxPiece_ID.TabIndex = 33;
             cbxPiece_ID.Visible = false;
-            cbxPiece_ID.SelectedIndexChanged += cbxPiece_ID_SelectedIndexChanged;
             // 
             // tableLayoutPanel6
             // 
