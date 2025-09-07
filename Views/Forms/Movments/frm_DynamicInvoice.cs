@@ -189,8 +189,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #region Account Data Display
         private void txtAccName_Leave(object sender, EventArgs e)
         {
-            string accName = txtAccName.Text.Trim();
-            if (string.IsNullOrEmpty(accName))
+            string input = txtAccName.Text.Trim();
+            if (string.IsNullOrEmpty(input))
             {
                 ClearAccountDetails();
                 return;
@@ -205,9 +205,38 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
             DataTable dt = DBServiecs.NewInvoice_GetAcc(invoiceTypeKey);
 
-            DataRow? selectedAccount = dt.AsEnumerable()
-                .FirstOrDefault(row =>
-                    string.Equals(row.Field<string?>("AccName"), accName, StringComparison.OrdinalIgnoreCase));
+            DataRow? selectedAccount = null;
+
+            // 🔹 تحقق: هل المدخل رقم هاتف؟
+            bool isPhoneNumber = input.All(c => char.IsDigit(c) || c == '+' || c == '-');
+
+            if (isPhoneNumber)
+            {
+                // 🔹 البحث بالهاتف
+                selectedAccount = dt.AsEnumerable()
+                    .FirstOrDefault(row =>
+                        string.Equals(row.Field<string?>("FirstPhon"), input, StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(row.Field<string?>("AntherPhon"), input, StringComparison.OrdinalIgnoreCase));
+
+                if (selectedAccount == null)
+                {
+                    MessageBox.Show("⚠️ هذا الرقم غير مسجل", "تنبيه",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtAccName.Clear();
+                    ClearAccountDetails();
+                    return;
+                }
+
+                // استبدل الرقم بالاسم
+                txtAccName.Text = selectedAccount["AccName"]?.ToString() ?? string.Empty;
+            }
+            else
+            {
+                // 🔹 البحث بالاسم
+                selectedAccount = dt.AsEnumerable()
+                    .FirstOrDefault(row =>
+                        string.Equals(row.Field<string?>("AccName"), input, StringComparison.OrdinalIgnoreCase));
+            }
 
             if (selectedAccount != null)
             {
@@ -220,6 +249,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
+
+  
         private void DisplayAccountDetails(DataRow accountRow)
         {
             // 🔹 الهاتفين
