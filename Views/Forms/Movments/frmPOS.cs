@@ -43,11 +43,13 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             {
                 // لون فاتح يعبر عن البيع
                 tlpType.BackColor = Color.LightGreen;
+                lblTafqet.BackColor = Color.LightGreen;
             }
             else if (rdoResale.Checked)
             {
                 // لون فاتح يعبر عن البيع المرتد
                 tlpType.BackColor = Color.LightPink;
+                lblTafqet.BackColor = Color.LightPink;
             }
             else
             {
