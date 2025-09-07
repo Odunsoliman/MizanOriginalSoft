@@ -41,19 +41,21 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
             if (rdoSale.Checked)
             {
-                // لون فاتح يعبر عن البيع
-                tlpType.BackColor = Color.LightGreen;
-                lblTafqet.BackColor = Color.LightGreen;
+                // لون بيع: أخضر فاتح جدًا
+                tlpType.BackColor = Color.FromArgb(230, 255, 230);
+                tlpHader .BackColor = Color.FromArgb(230, 255, 230);
+                lblTafqet.BackColor = Color.FromArgb(230, 255, 230);
             }
             else if (rdoResale.Checked)
             {
-                // لون فاتح يعبر عن البيع المرتد
-                tlpType.BackColor = Color.LightPink;
-                lblTafqet.BackColor = Color.LightPink;
+                // لون بيع مرتد: وردي فاتح جدًا
+                tlpType.BackColor = Color.FromArgb(255, 230, 230);
+                tlpHader.BackColor = Color.FromArgb(255, 230, 230);
+                lblTafqet .BackColor = Color.FromArgb(255, 230, 230);
             }
             else
             {
-                // لون افتراضي لو ما فيش اختيار
+                // اللون الافتراضي
                 tlpType.BackColor = SystemColors.Control;
             }
         }

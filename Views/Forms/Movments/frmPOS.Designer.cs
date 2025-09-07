@@ -259,7 +259,7 @@
             // 
             // lblTafqet
             // 
-            lblTafqet.BackColor = Color.Transparent;
+            lblTafqet.BackColor = Color.FromArgb(230, 255, 230);
             lblTafqet.Dock = DockStyle.Fill;
             lblTafqet.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTafqet.ForeColor = Color.DarkViolet;
@@ -446,7 +446,7 @@
             // 
             // tlpType
             // 
-            tlpType.BackColor = Color.LightGreen;
+            tlpType.BackColor = Color.FromArgb(230, 255, 230);
             tlpType.ColumnCount = 3;
             tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 23.09043F));
             tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 7.638279F));
@@ -805,7 +805,7 @@
             // 
             // tlpHader
             // 
-            tlpHader.BackColor = Color.LightSteelBlue;
+            tlpHader.BackColor = Color.FromArgb(230, 255, 230);
             tlpHader.ColumnCount = 11;
             tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 2F));
             tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15F));
@@ -829,6 +829,7 @@
             tlpHader.Controls.Add(label18, 7, 0);
             tlpHader.Controls.Add(lblWarehouseName, 5, 0);
             tlpHader.Controls.Add(lblUserID, 6, 0);
+            tlpHader.Dock = DockStyle.Fill;
             tlpHader.Location = new Point(7, 6);
             tlpHader.Margin = new Padding(4, 3, 4, 3);
             tlpHader.Name = "tlpHader";
@@ -1367,7 +1368,6 @@
         private CheckBox chkAllowNegative;
         private Label lblBalance;
         private TableLayoutPanel tableLayoutPanel10;
-        private Label lblTafqet;
         private Label lblStateRemaining;
         private Button btnAllVisa;
         private Label lblAdditionalRate;
@@ -1428,5 +1428,6 @@
         private Label lblDiscount;
         private RadioButton rdoResale;
         private RadioButton rdoSale;
+        public Label lblTafqet;
     }
 }
