@@ -32,10 +32,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         public void InitializeInvoice(InvoiceType type)
         {
             currentInvoiceType = type;
-            lblTypeInv.Text = type.ToString();
 
-            // 🔹 استخدم switch للتعيين
-            (this.Text, lblTypeInvID.Text) = type switch
+            // 🔹 استخدم switch لتحديد العنوان والرقم مع النص العربي
+            (string arabicTitle, string typeId) = type switch
             {
                 InvoiceType.Sale => ("فاتورة بيع", "1"),
                 InvoiceType.SaleReturn => ("فاتورة بيع مرتد", "2"),
@@ -47,12 +46,18 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 _ => ("فاتورة", "0")
             };
 
+            // 🔹 عيّن القيم
+            this.Text = arabicTitle;
+            lblTypeInv.Text = arabicTitle;   // 🔥 الآن يعرض النص العربي
+            lblTypeInvID.Text = typeId;
+
             // تعبئة الحقول
-            FillDefaultAccount();              // txtAccName + lblAccID
-            ConfigureAutoCompleteForAccount(); // AutoComplete
-            FillSellerComboBox();              // cbxSellerID
-            SetupFormByInvoiceType();          // إعدادات أخرى
+            FillDefaultAccount();
+            ConfigureAutoCompleteForAccount();
+            FillSellerComboBox();
+            SetupFormByInvoiceType();
         }
+
 
         #endregion
 
