@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
 
-using MizanOriginalSoft.MainClasses.Enums; // هنا يوجد enum InvoiceType
+using MizanOriginalSoft.MainClasses.Enums;
+using MizanOriginalSoft.MainClasses; // هنا يوجد enum InvoiceType
 
 namespace MizanOriginalSoft.Views.Forms.Movments
 {
@@ -31,7 +32,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
             currentInvoiceType = type;
 
-            // ضبط عنوان الفورم حسب نوع الفاتورة
+            // ضبط عنوان الفورم
             this.Text = type switch
             {
                 InvoiceType.Sale => "فاتورة بيع",
@@ -44,81 +45,82 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 _ => "فاتورة"
             };
 
-            // تعبئة الحساب الافتراضي بناء على نوع الفاتورة
-            FillDefaultAccount();
-
-            // ضبط تكست بكس العميل/المورد
-            ConfigureAutoCompleteForAccount();
-
-            // إعدادات إضافية للفورم (مثل تمكين/تعطيل حقول، جداول، ...)
-            SetupFormByInvoiceType();
+            // تعبئة الحقول
+            FillDefaultAccount();              // txtAccName + lblAccID
+            ConfigureAutoCompleteForAccount(); // AutoComplete
+            FillSellerComboBox();              // cbxSellerID
+            SetupFormByInvoiceType();          // إعدادات أخرى
         }
         #endregion
 
         #region Default Account
         private void FillDefaultAccount()
         {
-            int defaultAccID = currentInvoiceType switch
-            {
-                InvoiceType.Sale or InvoiceType.SaleReturn => 55,     // عميل نقدى
-                InvoiceType.Purchase or InvoiceType.PurchaseReturn => 56, // مورد نقدى
-                _ => 0 // لا يوجد
-            };
+            string invoiceTypeKey = InvoiceTypeHelper.ToAccountTypeString(currentInvoiceType);
 
-            lblAccID.Text = defaultAccID.ToString();
+            if (string.IsNullOrEmpty(invoiceTypeKey))
+                return;
 
-            if (defaultAccID != 0)
+            DataTable dt = DBServiecs.NewInvoice_GetAcc(invoiceTypeKey);
+
+            // اختيار الحساب الافتراضي (أول حساب في الجدول)
+            if (dt.Rows.Count > 0)
             {
-                // يمكنك استدعاء دالة لجلب الاسم من قاعدة البيانات
-                txtAccName.Text = GetAccountNameByID(defaultAccID);
+                lblAccID.Text = dt.Rows[0]["AccID"].ToString();
+                txtAccName.Text = dt.Rows[0]["AccName"].ToString();
             }
-        }
-
-        private string GetAccountNameByID(int accID)
-        {
-            // هنا ضع كود جلب الاسم من قاعدة البيانات
-            return accID switch
+            else
             {
-                55 => "عميل نقدى",
-                56 => "مورد نقدى",
-                _ => string.Empty
-            };
+                lblAccID.Text = "0";
+                txtAccName.Text = string.Empty;
+            }
         }
         #endregion
 
         #region AutoComplete Configuration
         private void ConfigureAutoCompleteForAccount()
         {
-            // مسح المحتويات القديمة
             txtAccName.AutoCompleteCustomSource.Clear();
+            string invoiceTypeKey = InvoiceTypeHelper.ToAccountTypeString(currentInvoiceType);
 
-            if (currentInvoiceType == InvoiceType.Sale || currentInvoiceType == InvoiceType.SaleReturn)
+            if (!string.IsNullOrEmpty(invoiceTypeKey))
             {
-                // إضافة العملاء
-                txtAccName.AutoCompleteCustomSource.AddRange(GetCustomerNames());
-            }
-            else if (currentInvoiceType == InvoiceType.Purchase || currentInvoiceType == InvoiceType.PurchaseReturn)
-            {
-                // إضافة الموردين
-                txtAccName.AutoCompleteCustomSource.AddRange(GetSupplierNames());
+                DataTable dt = DBServiecs.NewInvoice_GetAcc(invoiceTypeKey);
+                var names = dt.AsEnumerable()
+                              .Select(r => r.Field<string?>("AccName") ?? string.Empty)
+                              .ToArray();
+
+                txtAccName.AutoCompleteCustomSource.AddRange(names);
             }
 
             txtAccName.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             txtAccName.AutoCompleteSource = AutoCompleteSource.CustomSource;
         }
+        #endregion
 
-        private string[] GetCustomerNames()
+        #region Seller ComboBox
+        private void FillSellerComboBox()
         {
-            // جلب أسماء العملاء من قاعدة البيانات
-            return new string[] { "عميل 1", "عميل 2", "عميل 3" };
-        }
+            string sellerKey = InvoiceTypeHelper.ToAccountTypeString(currentInvoiceType, forSeller: true);//لماذا وجود خط احمر تحت forSeller
 
-        private string[] GetSupplierNames()
-        {
-            // جلب أسماء الموردين من قاعدة البيانات
-            return new string[] { "مورد 1", "مورد 2", "مورد 3" };
+            if (string.IsNullOrEmpty(sellerKey))
+            {
+                cbxSellerID.DataSource = null;
+                return;
+            }
+
+            DataTable dt = DBServiecs.NewInvoice_GetAcc(sellerKey);
+
+            cbxSellerID.DataSource = dt;
+            cbxSellerID.DisplayMember = "AccName";
+            cbxSellerID.ValueMember = "AccID";
+
+            // اختيار الحساب الافتراضي (مثلاً أول حساب)
+            if (dt.Rows.Count > 0)
+                cbxSellerID.SelectedIndex = 0;
         }
         #endregion
+
 
         #region Form Setup by Invoice Type
         private void SetupFormByInvoiceType()
@@ -141,7 +143,88 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
         #endregion
 
+        /*
+         هذا اجراء جلب البيانات التى من المفترض تعبئ txtAccName و lblAccID , cbxSellerID 
 
+        ALTER PROCEDURE [dbo].[NewInvoice_GetAcc]
+    @InvoiceType NVARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @IDs NVARCHAR(MAX);
+
+    -- جدول التحويل
+    DECLARE @Mapping TABLE (TypeName NVARCHAR(50), IDs NVARCHAR(MAX));
+    INSERT INTO @Mapping VALUES
+        ('SalesMen', '60'),      --البائعون
+        ('PurchaseMen', '70'),   -- مسؤولى الشراء
+        ('Sale', '3,8,40'),      -- عملاء البيع والبيع المرتد
+        ('Purchase', '4,40'),    -- موردين الشراء والشراء المرتد
+        ('Inventory', '30');     -- حسابات ضبط المخزون
+
+    SELECT @IDs = IDs FROM @Mapping WHERE TypeName = @InvoiceType;
+
+    IF @IDs IS NULL OR @IDs = N''
+    BEGIN
+        SELECT TOP 0 * FROM dbo.MainAccounts;
+        RETURN;
+    END
+
+    ;WITH StartAccs AS (
+        SELECT TRY_CAST(value AS INT) AS AccID
+        FROM STRING_SPLIT(@IDs, ',')
+        WHERE TRY_CAST(value AS INT) IS NOT NULL
+    ),
+    RecursiveAccs AS (
+        SELECT MA.AccID
+        FROM dbo.MainAccounts MA
+        INNER JOIN StartAccs SA ON MA.ParentAccID = SA.AccID
+        UNION ALL
+        SELECT MA.AccID
+        FROM dbo.MainAccounts MA
+        INNER JOIN RecursiveAccs R ON MA.ParentAccID = R.AccID
+    )
+    SELECT 
+        MA.AccID,
+        MA.AccName,
+        (MA.AccName + ' / ' + ISNULL(ParentAcc.AccName, 'بدون')) AS FullAccName,
+        MA.Balance,
+        MA.BalanceState,
+        MA.FirstPhon,
+        MA.AntherPhon,
+        MA.AccNote,
+        MA.ClientEmail,
+        MA.ClientAddress
+    FROM dbo.MainAccounts MA
+    LEFT JOIN dbo.MainAccounts ParentAcc ON MA.ParentAccID = ParentAcc.AccID
+    WHERE MA.IsFinalAccount = 1
+      AND MA.IsHidden = 0
+      AND (MA.AccID IN (SELECT AccID FROM RecursiveAccs)
+           OR MA.ParentAccID IN (SELECT AccID FROM RecursiveAccs));
+END
+
+/*
+خاص بتعبئة الكمبو بكس cbxSellerID --------------------
+فى حالة فاتورة البيع او مردوداته يتم تعبئة الكمبوبكس بهذة الحسابات مع مراعات الافتراضى cbxSellerID
+EXEC dbo.NewInvoice_GetAcc @InvoiceType = N'SalesMen';     -- الحساب الافتراضى للفاتورة الجديدة = 57 ادارة البائعين
+
+فى حالة فاتورة الشراء او مردوداته يتم تعبئة الكمبوبكس بهذة الحسابات مع مراعات الافتراضى cbxSellerID
+EXEC dbo.NewInvoice_GetAcc @InvoiceType = N'PurchaseMen';  -- الحساب الافتراضى للفاتورة الجديدة = 228 الادارة العليا
+===================================================================
+===================================================================
+حاص بتعبة الحساب المرتبط بالفاتورة txtAccName و lblAccID-----------------------
+فى حالة فاتورة البيع او مردوداته يتم تعبئة التكست بكس  والليبل بهذة الحسابات مع مراعات الافتراضى txtAccName و lblAccID
+EXEC dbo.NewInvoice_GetAcc @InvoiceType = N'Sale';       -- الحساب الافتراضى للفاتورة الجديدة = 55 عميل نقدى
+
+فى حالة فاتورة الشراء او مردوداته يتم تعبئة التكست بكس  والليبل بهذة الحسابات مع مراعات الافتراضى txtAccName و lblAccID
+EXEC dbo.NewInvoice_GetAcc @InvoiceType = N'Purchase';   -- الحساب الافتراضى للفاتورة الجديدة = 56 مورد عام نقدى
+
+فى حالة فاتورة ضبط المخزون يتم تعبئة التكست بكس  والليبل بهذة الحسابات مع مراعات الافتراضى txtAccName و lblAccID
+EXEC dbo.NewInvoice_GetAcc @InvoiceType = N'Inventory';  -- الحساب الافتراضى للفاتورة الجديدة = 72 حساب تسوية رصيد
+
+*/
+       
 
 
 
