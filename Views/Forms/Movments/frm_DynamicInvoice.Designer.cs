@@ -1234,8 +1234,8 @@
             // 
             tlpHader.BackColor = Color.LightSteelBlue;
             tlpHader.ColumnCount = 11;
-            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 2F));
-            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15F));
+            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 3.01966286F));
+            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13.9044943F));
             tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8F));
             tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
@@ -1273,7 +1273,7 @@
             btnHelp.Location = new Point(4, 3);
             btnHelp.Margin = new Padding(4, 3, 4, 3);
             btnHelp.Name = "btnHelp";
-            btnHelp.Size = new Size(40, 37);
+            btnHelp.Size = new Size(37, 37);
             btnHelp.TabIndex = 39;
             btnHelp.TabStop = false;
             btnHelp.Text = "?";
@@ -1285,7 +1285,7 @@
             lblInfoInvoice.Dock = DockStyle.Fill;
             lblInfoInvoice.Font = new Font("Times New Roman", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblInfoInvoice.ForeColor = Color.IndianRed;
-            lblInfoInvoice.Location = new Point(648, 0);
+            lblInfoInvoice.Location = new Point(646, 0);
             lblInfoInvoice.Margin = new Padding(4, 0, 4, 0);
             lblInfoInvoice.Name = "lblInfoInvoice";
             lblInfoInvoice.RightToLeft = RightToLeft.No;
@@ -1299,14 +1299,13 @@
             lblTypeInvID.Dock = DockStyle.Fill;
             lblTypeInvID.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTypeInvID.ForeColor = Color.Lavender;
-            lblTypeInvID.Location = new Point(1400, 0);
+            lblTypeInvID.Location = new Point(1385, 0);
             lblTypeInvID.Margin = new Padding(4, 0, 4, 0);
             lblTypeInvID.Name = "lblTypeInvID";
-            lblTypeInvID.Size = new Size(20, 43);
+            lblTypeInvID.Size = new Size(35, 43);
             lblTypeInvID.TabIndex = 28;
             lblTypeInvID.Text = "نوع الفاتورة";
             lblTypeInvID.TextAlign = ContentAlignment.MiddleCenter;
-            lblTypeInvID.Visible = false;
             // 
             // lblInv_ID
             // 
@@ -1314,10 +1313,10 @@
             lblInv_ID.Dock = DockStyle.Fill;
             lblInv_ID.Font = new Font("Times New Roman", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblInv_ID.ForeColor = Color.IndianRed;
-            lblInv_ID.Location = new Point(790, 0);
+            lblInv_ID.Location = new Point(788, 0);
             lblInv_ID.Margin = new Padding(4, 0, 4, 0);
             lblInv_ID.Name = "lblInv_ID";
-            lblInv_ID.Size = new Size(105, 43);
+            lblInv_ID.Size = new Size(106, 43);
             lblInv_ID.TabIndex = 27;
             lblInv_ID.Text = "0";
             lblInv_ID.TextAlign = ContentAlignment.MiddleRight;
@@ -1328,7 +1327,7 @@
             label10.Dock = DockStyle.Fill;
             label10.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label10.ForeColor = Color.DarkBlue;
-            label10.Location = new Point(336, 0);
+            label10.Location = new Point(334, 0);
             label10.Margin = new Padding(4, 0, 4, 0);
             label10.Name = "label10";
             label10.Size = new Size(63, 43);
@@ -1345,7 +1344,7 @@
             lblTypeInv.Location = new Point(1187, 0);
             lblTypeInv.Margin = new Padding(4, 0, 4, 0);
             lblTypeInv.Name = "lblTypeInv";
-            lblTypeInv.Size = new Size(205, 43);
+            lblTypeInv.Size = new Size(190, 43);
             lblTypeInv.TabIndex = 25;
             lblTypeInv.Text = "فاتورة مبيعات";
             lblTypeInv.TextAlign = ContentAlignment.MiddleRight;
@@ -1356,10 +1355,10 @@
             lblInv_Counter.Dock = DockStyle.Fill;
             lblInv_Counter.Font = new Font("Times New Roman", 16F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblInv_Counter.ForeColor = Color.DarkBlue;
-            lblInv_Counter.Location = new Point(903, 0);
+            lblInv_Counter.Location = new Point(902, 0);
             lblInv_Counter.Margin = new Padding(4, 0, 4, 0);
             lblInv_Counter.Name = "lblInv_Counter";
-            lblInv_Counter.Size = new Size(276, 43);
+            lblInv_Counter.Size = new Size(277, 43);
             lblInv_Counter.TabIndex = 25;
             lblInv_Counter.Text = "0";
             lblInv_Counter.TextAlign = ContentAlignment.MiddleLeft;
@@ -1368,12 +1367,12 @@
             // 
             dtpInv_Date.Dock = DockStyle.Fill;
             dtpInv_Date.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dtpInv_Date.Location = new Point(52, 3);
+            dtpInv_Date.Location = new Point(49, 3);
             dtpInv_Date.Margin = new Padding(4, 3, 4, 3);
             dtpInv_Date.Name = "dtpInv_Date";
             dtpInv_Date.RightToLeft = RightToLeft.Yes;
             dtpInv_Date.RightToLeftLayout = true;
-            dtpInv_Date.Size = new Size(276, 26);
+            dtpInv_Date.Size = new Size(277, 26);
             dtpInv_Date.TabIndex = 26;
             // 
             // label18
@@ -1382,7 +1381,7 @@
             label18.Dock = DockStyle.Fill;
             label18.Font = new Font("Times New Roman", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label18.ForeColor = Color.IndianRed;
-            label18.Location = new Point(407, 0);
+            label18.Location = new Point(405, 0);
             label18.Margin = new Padding(4, 0, 4, 0);
             label18.Name = "label18";
             label18.RightToLeft = RightToLeft.No;
@@ -1398,7 +1397,7 @@
             lblWarehouseName.Dock = DockStyle.Fill;
             lblWarehouseName.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblWarehouseName.ForeColor = Color.FromArgb(0, 0, 192);
-            lblWarehouseName.Location = new Point(435, 0);
+            lblWarehouseName.Location = new Point(433, 0);
             lblWarehouseName.Margin = new Padding(4, 0, 4, 0);
             lblWarehouseName.Name = "lblWarehouseName";
             lblWarehouseName.RightToLeft = RightToLeft.No;
@@ -1413,7 +1412,7 @@
             lblUserID.Dock = DockStyle.Fill;
             lblUserID.Font = new Font("Times New Roman", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblUserID.ForeColor = Color.IndianRed;
-            lblUserID.Location = new Point(421, 0);
+            lblUserID.Location = new Point(419, 0);
             lblUserID.Margin = new Padding(4, 0, 4, 0);
             lblUserID.Name = "lblUserID";
             lblUserID.Size = new Size(6, 43);
