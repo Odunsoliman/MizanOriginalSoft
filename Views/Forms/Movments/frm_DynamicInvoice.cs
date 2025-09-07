@@ -10,7 +10,8 @@ using System.Windows.Forms;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
 
 using MizanOriginalSoft.MainClasses.Enums;
-using MizanOriginalSoft.MainClasses; // هنا يوجد enum InvoiceType
+using MizanOriginalSoft.MainClasses;
+using MizanOriginalSoft.Views.Forms.Accounts; // هنا يوجد enum InvoiceType
 
 namespace MizanOriginalSoft.Views.Forms.Movments
 {
@@ -220,14 +221,27 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
                 if (selectedAccount == null)
                 {
-                    MessageBox.Show("⚠️ هذا الرقم غير مسجل", "تنبيه",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtAccName.Clear();
-                    ClearAccountDetails();
+                    // ❗ الرقم غير مسجل
+                    DialogResult result = MessageBox.Show(
+                        "⚠️ هذا الرقم غير مسجل، هل تريد إضافته إلى البيانات؟",
+                        "إضافة حساب جديد",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        int type = (currentInvoiceType == InvoiceType.Sale || currentInvoiceType == InvoiceType.SaleReturn) ? 1 : 2;
+                        frm_AddAccount frm = new frm_AddAccount(input, type);
+                        frm.ShowDialog();
+                    }
+                    else
+                    {
+                        LoadDefaultAccount();
+                    }
+
                     return;
                 }
 
-                // استبدل الرقم بالاسم
                 txtAccName.Text = selectedAccount["AccName"]?.ToString() ?? string.Empty;
             }
             else
@@ -236,6 +250,29 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 selectedAccount = dt.AsEnumerable()
                     .FirstOrDefault(row =>
                         string.Equals(row.Field<string?>("AccName"), input, StringComparison.OrdinalIgnoreCase));
+
+                if (selectedAccount == null)
+                {
+                    // ❗ الاسم غير مسجل
+                    DialogResult result = MessageBox.Show(
+                        "⚠️ هذا الاسم غير مسجل، هل تريد إضافته إلى البيانات؟",
+                        "إضافة حساب جديد",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        int type = (currentInvoiceType == InvoiceType.Sale || currentInvoiceType == InvoiceType.SaleReturn) ? 1 : 2;
+                        frm_AddAccount frm = new frm_AddAccount(input, type);
+                        frm.ShowDialog();
+                    }
+                    else
+                    {
+                        LoadDefaultAccount();
+                    }
+
+                    return;
+                }
             }
 
             if (selectedAccount != null)
@@ -249,8 +286,33 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
+        // 🔹 دالة تحميل الحساب الافتراضي
+        private void LoadDefaultAccount()
+        {
+            string invoiceTypeKey = InvoiceTypeHelper.ToAccountTypeString(currentInvoiceType);
+            if (string.IsNullOrEmpty(invoiceTypeKey)) return;
 
-  
+            DataTable dt = DBServiecs.NewInvoice_GetAcc(invoiceTypeKey);
+
+            if (dt.Rows.Count > 0)
+            {
+                int defaultId = (currentInvoiceType == InvoiceType.Sale || currentInvoiceType == InvoiceType.SaleReturn) ? 55 : 56;
+                DataRow? defaultAccount = dt.AsEnumerable()
+                    .FirstOrDefault(row => row.Field<int>("AccID") == defaultId);
+
+                if (defaultAccount != null)
+                {
+                    lblAccID.Text = defaultAccount["AccID"].ToString();
+                    txtAccName.Text = defaultAccount["AccName"].ToString();
+                    DisplayAccountDetails(defaultAccount);
+                }
+            }
+        }
+
+
+
+
+
         private void DisplayAccountDetails(DataRow accountRow)
         {
             // 🔹 الهاتفين
