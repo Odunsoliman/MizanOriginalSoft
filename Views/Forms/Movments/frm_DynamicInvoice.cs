@@ -243,7 +243,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 lblFirstPhon.Text = string.Empty;
             }
 
-
             // 🔹 البريد الإلكتروني
             string? email = accountRow.Field<string?>("ClientEmail");
             lblClientEmail.Text = !string.IsNullOrWhiteSpace(email)
@@ -255,6 +254,26 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             lblClientAddress.Text = !string.IsNullOrWhiteSpace(address)
                 ? $"العنوان: {address}"
                 : string.Empty;
+
+            // 🔹 الرصيد (حل مشكلة التحويل)
+            decimal balance = 0;
+            if (accountRow["Balance"] != DBNull.Value)
+            {
+                balance = Convert.ToDecimal(accountRow["Balance"]);
+            }
+
+            if (balance == 0)
+            {
+                lblB_Status.Text = "الرصيد: متوازن";
+            }
+            else if (balance > 0)
+            {
+                lblB_Status.Text = $"الرصيد: دائن بـ {balance:N2}";
+            }
+            else
+            {
+                lblB_Status.Text = $"الرصيد: مدين بـ {Math.Abs(balance):N2}";
+            }
         }
 
         private void ClearAccountDetails()

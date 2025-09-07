@@ -751,8 +751,7 @@
             lblBalance.Name = "lblBalance";
             lblBalance.Size = new Size(260, 42);
             lblBalance.TabIndex = 25;
-            lblBalance.Text = "0";
-            lblBalance.TextAlign = ContentAlignment.MiddleCenter;
+            lblBalance.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblClientEmail
             // 
@@ -765,8 +764,7 @@
             lblClientEmail.Name = "lblClientEmail";
             lblClientEmail.Size = new Size(381, 31);
             lblClientEmail.TabIndex = 25;
-            lblClientEmail.Text = "0";
-            lblClientEmail.TextAlign = ContentAlignment.MiddleRight;
+            lblClientEmail.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblClientAddress
             // 
@@ -792,7 +790,6 @@
             lblFirstPhon.Name = "lblFirstPhon";
             lblFirstPhon.Size = new Size(381, 31);
             lblFirstPhon.TabIndex = 25;
-            lblFirstPhon.Text = "0";
             lblFirstPhon.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // cbxSellerID
@@ -830,8 +827,7 @@
             lblAccID.Name = "lblAccID";
             lblAccID.Size = new Size(260, 40);
             lblAccID.TabIndex = 25;
-            lblAccID.Text = "0";
-            lblAccID.TextAlign = ContentAlignment.MiddleCenter;
+            lblAccID.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblCodeTitel
             // 
@@ -1526,8 +1522,7 @@
             lblB_Status.Name = "lblB_Status";
             lblB_Status.Size = new Size(260, 40);
             lblB_Status.TabIndex = 25;
-            lblB_Status.Text = "0";
-            lblB_Status.TextAlign = ContentAlignment.MiddleCenter;
+            lblB_Status.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // frm_DynamicInvoice
             // 
