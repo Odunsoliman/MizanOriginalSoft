@@ -51,7 +51,6 @@
             DGV = new DataGridView();
             tlpType = new TableLayoutPanel();
             lblInvStat = new Label();
-            chkAllowNegative = new CheckBox();
             rdoResale = new RadioButton();
             rdoSale = new RadioButton();
             lblGemDisVal = new Label();
@@ -449,14 +448,13 @@
             // 
             tlpType.BackColor = Color.FromArgb(230, 255, 230);
             tlpType.ColumnCount = 4;
-            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
-            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
-            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 9.306409F));
+            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20.4565411F));
+            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.548727F));
+            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 44.6005249F));
             tlpType.Controls.Add(lblInvStat, 3, 0);
-            tlpType.Controls.Add(chkAllowNegative, 0, 0);
-            tlpType.Controls.Add(rdoResale, 2, 0);
-            tlpType.Controls.Add(rdoSale, 1, 0);
+            tlpType.Controls.Add(rdoSale, 0, 0);
+            tlpType.Controls.Add(rdoResale, 1, 0);
             tlpType.Dock = DockStyle.Fill;
             tlpType.ForeColor = Color.Navy;
             tlpType.Location = new Point(8, 8);
@@ -470,37 +468,22 @@
             // 
             lblInvStat.BackColor = Color.Transparent;
             lblInvStat.Dock = DockStyle.Fill;
-            lblInvStat.Font = new Font("Times New Roman", 16F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblInvStat.ForeColor = Color.DarkBlue;
+            lblInvStat.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblInvStat.ForeColor = Color.Red;
             lblInvStat.Location = new Point(4, 0);
             lblInvStat.Margin = new Padding(4, 0, 4, 0);
             lblInvStat.Name = "lblInvStat";
-            lblInvStat.Size = new Size(678, 30);
+            lblInvStat.Size = new Size(501, 30);
             lblInvStat.TabIndex = 32;
             lblInvStat.Text = "0";
-            lblInvStat.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // chkAllowNegative
-            // 
-            chkAllowNegative.AutoSize = true;
-            chkAllowNegative.Checked = true;
-            chkAllowNegative.CheckState = CheckState.Checked;
-            chkAllowNegative.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            chkAllowNegative.ForeColor = Color.Navy;
-            chkAllowNegative.Location = new Point(1003, 2);
-            chkAllowNegative.Margin = new Padding(4, 2, 4, 2);
-            chkAllowNegative.Name = "chkAllowNegative";
-            chkAllowNegative.Size = new Size(132, 23);
-            chkAllowNegative.TabIndex = 29;
-            chkAllowNegative.Text = "البيع على المكشوف";
-            chkAllowNegative.UseVisualStyleBackColor = true;
+            lblInvStat.TextAlign = ContentAlignment.MiddleRight;
             // 
             // rdoResale
             // 
             rdoResale.AutoSize = true;
             rdoResale.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
             rdoResale.ForeColor = Color.Navy;
-            rdoResale.Location = new Point(726, 3);
+            rdoResale.Location = new Point(960, 3);
             rdoResale.Name = "rdoResale";
             rdoResale.Size = new Size(70, 23);
             rdoResale.TabIndex = 30;
@@ -513,7 +496,7 @@
             rdoSale.AutoSize = true;
             rdoSale.Checked = true;
             rdoSale.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            rdoSale.Location = new Point(866, 3);
+            rdoSale.Location = new Point(1093, 3);
             rdoSale.Name = "rdoSale";
             rdoSale.Size = new Size(43, 23);
             rdoSale.TabIndex = 31;
@@ -1381,7 +1364,6 @@
         private TextBox txtAccName;
         private Label lblAccID;
         private ComboBox cbxSellerID;
-        private CheckBox chkAllowNegative;
         private Label lblBalance;
         private TableLayoutPanel tableLayoutPanel10;
         private Label lblStateRemaining;
