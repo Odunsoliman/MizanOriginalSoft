@@ -4,6 +4,7 @@ using MizanOriginalSoft.Views.Forms.Accounts;
 using MizanOriginalSoft.Views.Forms.Movments;
 using MizanOriginalSoft.Views.Forms.Products;
 using MizanOriginalSoft.Views.Reports;
+using MizanOriginalSoft.MainClasses.Enums; // هنا يوجد enum InvoiceType
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -712,55 +713,118 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             TogglePanel(pnlMovement);
         }
-
+        #region Button Handlers
         private void btnSales_Click(object? sender, EventArgs e)
         {
             if (sender is Button btn)
             {
-                HighlightTransparentButton(btn);
+                HighlightTransparentButton(btn); // إبراز الزر
             }
 
-            CloseAllFormsExceptMain();
-            int id_Type = 1;
-            frm_NewInvoice frm = new frm_NewInvoice(id_Type);
-            OpenFormInPanel(frm);
+            CloseAllFormsExceptMain(); // غلق كل الفورمز المفتوحة ما عدا الرئيسي
+
+            // تحديد نوع الفاتورة الجديد باستخدام enum
+            InvoiceType type = InvoiceType.Sale;
+
+            // إنشاء الفورم الذكي وتهيئته
+            frm_DynamicInvoice frm = new frm_DynamicInvoice();
+            frm.InitializeInvoice(type); // هنا نمرر النوع بدلاً من رقم
+
+            OpenFormInPanel(frm); // فتح الفورم داخل الـ Panel
         }
 
-        private void btnBackSales_Click(object? sender, EventArgs e)
+
+        private void btnBackSales_Click(object sender, EventArgs e)
         {
             if (sender is Button btn)
             {
-                HighlightTransparentButton(btn);
+                HighlightTransparentButton(btn); // إبراز الزر
             }
-            CloseAllFormsExceptMain();
-            int id_Type = 2;
-            frm_NewInvoice frm = new frm_NewInvoice(id_Type);
-            OpenFormInPanel(frm);
+
+            CloseAllFormsExceptMain(); // غلق كل الفورمز المفتوحة ما عدا الرئيسي
+
+            // تحديد نوع الفاتورة الجديد باستخدام enum
+            InvoiceType type = InvoiceType.SaleReturn ;
+
+            // إنشاء الفورم الذكي وتهيئته
+            frm_DynamicInvoice frm = new frm_DynamicInvoice();
+            frm.InitializeInvoice(type); // هنا نمرر النوع بدلاً من رقم
+
+            OpenFormInPanel(frm); // فتح الفورم داخل الـ Panel
+
+
+
+           
         }
 
         private void btnPrococh_Click(object? sender, EventArgs e)
         {
             if (sender is Button btn)
             {
-                HighlightTransparentButton(btn);
+                HighlightTransparentButton(btn); // إبراز الزر
             }
-            CloseAllFormsExceptMain();
-            int id_Type = 3;
-            frm_NewInvoice frm = new frm_NewInvoice(id_Type);
-            OpenFormInPanel(frm);
+
+            CloseAllFormsExceptMain(); // غلق كل الفورمز المفتوحة ما عدا الرئيسي
+
+            // تحديد نوع الفاتورة الجديد باستخدام enum
+            InvoiceType type = InvoiceType.Purchase ;
+
+            // إنشاء الفورم الذكي وتهيئته
+            frm_DynamicInvoice frm = new frm_DynamicInvoice();
+            frm.InitializeInvoice(type); // هنا نمرر النوع بدلاً من رقم
+
+            OpenFormInPanel(frm); // فتح الفورم داخل الـ Panel
+
         }
 
         private void btnBackPrococh_Click(object? sender, EventArgs e)
         {
             if (sender is Button btn)
             {
-                HighlightTransparentButton(btn);
+                HighlightTransparentButton(btn); // إبراز الزر
             }
-            CloseAllFormsExceptMain();
-            int id_Type = 4;
-            frm_NewInvoice frm = new frm_NewInvoice(id_Type);
-            OpenFormInPanel(frm);
+
+            CloseAllFormsExceptMain(); // غلق كل الفورمز المفتوحة ما عدا الرئيسي
+
+            // تحديد نوع الفاتورة الجديد باستخدام enum
+            InvoiceType type = InvoiceType.PurchaseReturn;
+
+            // إنشاء الفورم الذكي وتهيئته
+            frm_DynamicInvoice frm = new frm_DynamicInvoice();
+            frm.InitializeInvoice(type); // هنا نمرر النوع بدلاً من رقم
+
+            OpenFormInPanel(frm); // فتح الفورم داخل الـ Panel
+
         }
+
+        private void btnInventory_Click(object? sender, EventArgs e)
+        {
+            if (sender is Button btn)
+            {
+                HighlightTransparentButton(btn); // إبراز الزر
+            }
+
+            CloseAllFormsExceptMain(); // غلق كل الفورمز المفتوحة ما عدا الرئيسي
+
+            // تحديد نوع الفاتورة الجديد باستخدام enum
+            InvoiceType type = InvoiceType.Inventory;
+
+            // إنشاء الفورم الذكي وتهيئته
+            frm_DynamicInvoice frm = new frm_DynamicInvoice();
+            frm.InitializeInvoice(type); // هنا نمرر النوع بدلاً من رقم
+
+            OpenFormInPanel(frm); // فتح الفورم داخل الـ Panel
+
+        }
+
+        //private void OpenInvoice(InvoiceType type)
+        //{
+        //    frm_DynamicInvoice frm = new frm_DynamicInvoice();
+        //    frm.InitializeInvoice(type);
+        //    frm.ShowDialog();
+        //}
+        #endregion
+
 
         private void btnGardStock_Click(object? sender, EventArgs e)
         {
@@ -805,7 +869,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 HighlightTransparentButton(btn);
             }
             CloseAllFormsExceptMain();
-            frmPOS  frm = new frmPOS ();
+            frmPOS frm = new frmPOS();
             OpenFormInPanel(frm);
         }
         #endregion
@@ -1412,7 +1476,5 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             using frmSettingReports previewForm = new frmSettingReports(reportParameters);
             previewForm.ShowDialog();
         }
-
-  
     }
 }

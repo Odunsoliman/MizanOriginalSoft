@@ -1,8 +1,12 @@
 ﻿using MizanOriginalSoft.MainClasses.OriginalClasses;
+using MizanOriginalSoft.MainClasses.SearchClasses.MizanOriginalSoft.MainClasses.SearchClasses;
+using MizanOriginalSoft.MainClasses.SearchClasses;
 using System;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using static MizanOriginalSoft.Views.Forms.Movments.frm_NewInvoice;
 
 namespace MizanOriginalSoft.Views.Forms.Movments
 {
@@ -13,8 +17,55 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         // 🔹 متغير يحدد إذا كان المرتجع يشترط إدخال رقم فاتورة البيع
         private bool reSaleByInvoiceSale;
+        private InvoiceType currentInvoiceType;
+        private KeyboardLanguageManager? langManager;
 
-        public frmPOS()
+        // أنواع الفواتير
+        public enum InvoiceType
+        {
+            Sale = 1,            // بيع
+            SaleReturn = 2,      // بيع مرتد
+            Purchase = 3,        // شراء
+            PurchaseReturn = 4,  // شراء مرتد
+            Inventory = 5,       // إذن جرد
+            DeductStock = 6,     // إذن خصم
+            AddStock = 7         // إذن إضافة
+        }
+        private void txtAccName_KeyDown(object sender, KeyEventArgs e)
+        {
+            // ✅ فتح شاشة البحث عند الضغط على Ctrl + F
+            if (e.Control && e.KeyCode == Keys.F)
+            {
+                // السماح فقط لأنواع الفواتير المدعومة
+                if (currentInvoiceType != InvoiceType.Sale &&
+                    currentInvoiceType != InvoiceType.SaleReturn &&
+                    currentInvoiceType != InvoiceType.Purchase &&
+                    currentInvoiceType != InvoiceType.PurchaseReturn)
+                    return;
+
+                // 🔎 اختيار نوع الحساب حسب نوع الفاتورة
+                AccountKind accountKind = (currentInvoiceType == InvoiceType.Purchase ||
+                                           currentInvoiceType == InvoiceType.PurchaseReturn)
+                                           ? AccountKind.Suppliers
+                                           : AccountKind.Customers;
+
+                // 🔎 فتح شاشة البحث
+                var provider = new GenericSearchProvider(SearchEntityType.Accounts, accountKind);
+                var result = SearchHelper.ShowSearchDialog(provider);
+
+                if (!string.IsNullOrEmpty(result.Code))
+                {
+                    lblAccID.Text = result.Code;
+                    txtAccName.Text = result.Name;
+                }
+
+                e.SuppressKeyPress = true;
+                return;
+            }
+
+        }
+
+        public frmPOS()// التحذير 8618
         {
             InitializeComponent();
         }

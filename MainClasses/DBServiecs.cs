@@ -794,11 +794,12 @@ namespace MizanOriginalSoft.MainClasses
         }
 
         //احضار حسابات التى تعرض فى الفاتورة
-        public static DataTable NewInvoice_GetAcc(string accountIDsCsv)
+        public static DataTable NewInvoice_GetAcc(string invoiceType)
         {
             var result = dbHelper.ExecuteSelectQuery("NewInvoice_GetAcc", cmd =>
             {
-                cmd.Parameters.AddWithValue("@IDs", accountIDsCsv);
+                // 👌 إرسال نوع الفاتورة بدلاً من أرقام الحسابات
+                cmd.Parameters.AddWithValue("@InvoiceType", invoiceType);
             });
 
             return result ?? new DataTable(); // ✅ إرجاع جدول فارغ إذا كانت النتيجة null

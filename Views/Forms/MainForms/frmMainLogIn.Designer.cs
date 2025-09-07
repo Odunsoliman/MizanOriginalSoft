@@ -825,6 +825,7 @@
             btnSales.Text = "المبيعـــــات";
             btnSales.TextAlign = ContentAlignment.MiddleLeft;
             btnSales.UseVisualStyleBackColor = true;
+            btnSales.Click += btnSales_Click;
             // 
             // btn_MainMove
             // 
