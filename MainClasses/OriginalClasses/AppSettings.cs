@@ -125,9 +125,6 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             return defaultValue;
         }
 
-        public static bool GetBool_(string key, bool defaultValue = false) =>
-            bool.TryParse(GetString(key), out var result) ? result : defaultValue;
-
         public static DateTime GetDateTime(string key, DateTime defaultValue) =>
             DateTime.TryParse(GetString(key), out var result) ? result : defaultValue;
 

@@ -122,7 +122,11 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             lblInvStat.Text = ""; // ممكن تكتب "مرتجع" لو تحب
 
             if (reSaleByInvoiceSale)
-                lblCodeTitel.Text = "ادخل رقم فاتورة البيع";
+            {
+                lblCodeTitel.Text = " رقم فاتورة البيع";
+                lblInvStat.Text = "البيع المرتد يكون عن طريق رقم فاتورة البيع الاصلية";
+            }
+                
             else
                 lblCodeTitel.Text = "ادخل كود الصنف";
         }
