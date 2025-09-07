@@ -32,18 +32,19 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         public void InitializeInvoice(InvoiceType type)
         {
             currentInvoiceType = type;
+            lblTypeInv.Text = type.ToString();
 
-            // ضبط عنوان الفورم
-            this.Text = type switch
+            // 🔹 استخدم switch للتعيين
+            (this.Text, lblTypeInvID.Text) = type switch
             {
-                InvoiceType.Sale => "فاتورة بيع",
-                InvoiceType.SaleReturn => "فاتورة بيع مرتد",
-                InvoiceType.Purchase => "فاتورة شراء",
-                InvoiceType.PurchaseReturn => "فاتورة شراء مرتد",
-                InvoiceType.Inventory => "إذن تسوية مخزن",
-                InvoiceType.DeductStock => "إذن خصم مخزن",
-                InvoiceType.AddStock => "إذن إضافة مخزن",
-                _ => "فاتورة"
+                InvoiceType.Sale => ("فاتورة بيع", "1"),
+                InvoiceType.SaleReturn => ("فاتورة بيع مرتد", "2"),
+                InvoiceType.Purchase => ("فاتورة شراء", "3"),
+                InvoiceType.PurchaseReturn => ("فاتورة شراء مرتد", "4"),
+                InvoiceType.Inventory => ("إذن تسوية مخزن", "5"),
+                InvoiceType.DeductStock => ("إذن خصم مخزن", "6"),
+                InvoiceType.AddStock => ("إذن إضافة مخزن", "7"),
+                _ => ("فاتورة", "0")
             };
 
             // تعبئة الحقول
@@ -52,6 +53,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             FillSellerComboBox();              // cbxSellerID
             SetupFormByInvoiceType();          // إعدادات أخرى
         }
+
         #endregion
 
         #region Default Account
