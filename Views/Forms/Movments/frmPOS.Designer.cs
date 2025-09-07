@@ -918,7 +918,7 @@
             lblTypeInv.Name = "lblTypeInv";
             lblTypeInv.Size = new Size(201, 41);
             lblTypeInv.TabIndex = 25;
-            lblTypeInv.Text = "فاتورة مبيعات";
+            lblTypeInv.Text = "فاتورة بيع رقم :";
             lblTypeInv.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblInv_Counter

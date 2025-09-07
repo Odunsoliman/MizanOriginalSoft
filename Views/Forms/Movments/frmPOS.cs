@@ -77,7 +77,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             {
                 tlpTyoe_color();       // تغيير الألوان
                 UpdateLabelsForSale(); // تحديث النصوص
-                lblTypeInv.Text = "فاتورة بيع رقم";
+                lblTypeInv.Text = "فاتورة بيع رقم: ";
             }
         }
 
@@ -87,7 +87,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             {
                 tlpTyoe_color();        // تغيير الألوان
                 UpdateLabelsForResale();// تحديث النصوص
-                lblTypeInv.Text = "فاتورة بيع مرتد رقم ";
+                lblTypeInv.Text = "فاتورة بيع مرتد رقم: ";
             }
         }
 
