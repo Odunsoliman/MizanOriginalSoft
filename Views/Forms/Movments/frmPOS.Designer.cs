@@ -877,7 +877,7 @@
             lblTypeInvID.Name = "lblTypeInvID";
             lblTypeInvID.Size = new Size(19, 41);
             lblTypeInvID.TabIndex = 28;
-            lblTypeInvID.Text = "نوع الفاتورة";
+            lblTypeInvID.Text = "1";
             lblTypeInvID.TextAlign = ContentAlignment.MiddleCenter;
             lblTypeInvID.Visible = false;
             // 
