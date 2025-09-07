@@ -21,8 +21,24 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         {
             InitializeComponent();
             TypeAcc = type;
-            txtAccName.Text = nameAcc;
+
+            // 🔍 التحقق: هل النص عبارة عن رقم هاتف فقط (digits, +, -) بدون أحرف؟
+            bool isPhoneNumber = nameAcc.All(c => char.IsDigit(c) || c == '+' || c == '-');
+
+            if (isPhoneNumber)
+            {
+                // 📞 رقم هاتف → ضع النص في حقل الهاتف
+                txtFirstPhon.Text = nameAcc;
+                txtAccName.Clear();
+            }
+            else
+            {
+                // 📝 اسم → ضع النص في حقل الاسم
+                txtAccName.Text = nameAcc;
+                txtFirstPhon.Clear();
+            }
         }
+
 
         private void frm_AddAccount_Load(object sender, EventArgs e)
         {
