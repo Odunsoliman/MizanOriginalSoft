@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MizanOriginalSoft.MainClasses.OriginalClasses;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -43,7 +44,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             {
                 // لون بيع: أخضر فاتح جدًا
                 tlpType.BackColor = Color.FromArgb(230, 255, 230);
-                tlpHader .BackColor = Color.FromArgb(230, 255, 230);
+                tlpHader.BackColor = Color.FromArgb(230, 255, 230);
                 lblTafqet.BackColor = Color.FromArgb(230, 255, 230);
             }
             else if (rdoResale.Checked)
@@ -51,14 +52,42 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 // لون بيع مرتد: وردي فاتح جدًا
                 tlpType.BackColor = Color.FromArgb(255, 230, 230);
                 tlpHader.BackColor = Color.FromArgb(255, 230, 230);
-                lblTafqet .BackColor = Color.FromArgb(255, 230, 230);
+                lblTafqet.BackColor = Color.FromArgb(255, 230, 230);
+            }
+
+        }
+        private bool allowNegativeStock;
+        private bool reSaleByInvoiceSale;
+        private void appsett()
+        {
+            allowNegativeStock = AppSettings.GetBool("NegativeStockSale");
+
+            if (allowNegativeStock)
+            {
+                lblInvStat.Text = "البيع على مكشوف";
             }
             else
             {
-                // اللون الافتراضي
-                tlpType.BackColor = SystemColors.Control;
+                lblInvStat.Text = "البيع حسب الرصيد";
             }
+
+
+            reSaleByInvoiceSale = AppSettings.GetBool("ReSaleByInvoiceSale");
+
+            if (reSaleByInvoiceSale)
+            {
+                lblCodeTitel.Text = "ادخل رقم فاتورة البيع";
+            }
+            else
+            {
+                lblCodeTitel.Text = "ادخل كود الصنف";
+            }
+
         }
 
+        private void frmPOS_Load(object sender, EventArgs e)
+        {
+            appsett();
+        }
     }
 }

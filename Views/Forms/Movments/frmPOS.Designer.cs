@@ -50,6 +50,7 @@
             tableLayoutPanel11 = new TableLayoutPanel();
             DGV = new DataGridView();
             tlpType = new TableLayoutPanel();
+            lblInvStat = new Label();
             chkAllowNegative = new CheckBox();
             rdoResale = new RadioButton();
             rdoSale = new RadioButton();
@@ -447,10 +448,12 @@
             // tlpType
             // 
             tlpType.BackColor = Color.FromArgb(230, 255, 230);
-            tlpType.ColumnCount = 3;
-            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 23.09043F));
-            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 7.638279F));
-            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 69.3590851F));
+            tlpType.ColumnCount = 4;
+            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
+            tlpType.Controls.Add(lblInvStat, 3, 0);
             tlpType.Controls.Add(chkAllowNegative, 0, 0);
             tlpType.Controls.Add(rdoResale, 2, 0);
             tlpType.Controls.Add(rdoSale, 1, 0);
@@ -462,6 +465,20 @@
             tlpType.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tlpType.Size = new Size(1139, 30);
             tlpType.TabIndex = 0;
+            // 
+            // lblInvStat
+            // 
+            lblInvStat.BackColor = Color.Transparent;
+            lblInvStat.Dock = DockStyle.Fill;
+            lblInvStat.Font = new Font("Times New Roman", 16F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblInvStat.ForeColor = Color.DarkBlue;
+            lblInvStat.Location = new Point(4, 0);
+            lblInvStat.Margin = new Padding(4, 0, 4, 0);
+            lblInvStat.Name = "lblInvStat";
+            lblInvStat.Size = new Size(678, 30);
+            lblInvStat.TabIndex = 32;
+            lblInvStat.Text = "0";
+            lblInvStat.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // chkAllowNegative
             // 
@@ -483,7 +500,7 @@
             rdoResale.AutoSize = true;
             rdoResale.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
             rdoResale.ForeColor = Color.Navy;
-            rdoResale.Location = new Point(718, 3);
+            rdoResale.Location = new Point(726, 3);
             rdoResale.Name = "rdoResale";
             rdoResale.Size = new Size(70, 23);
             rdoResale.TabIndex = 30;
@@ -496,7 +513,7 @@
             rdoSale.AutoSize = true;
             rdoSale.Checked = true;
             rdoSale.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            rdoSale.Location = new Point(831, 3);
+            rdoSale.Location = new Point(866, 3);
             rdoSale.Name = "rdoSale";
             rdoSale.Size = new Size(43, 23);
             rdoSale.TabIndex = 31;
@@ -1315,6 +1332,7 @@
             Padding = new Padding(10);
             RightToLeft = RightToLeft.Yes;
             Text = "frmPOS";
+            Load += frmPOS_Load;
             tableLayoutPanel10.ResumeLayout(false);
             tableLayoutPanel10.PerformLayout();
             tableLayoutPanel3.ResumeLayout(false);
@@ -1429,5 +1447,6 @@
         private RadioButton rdoResale;
         private RadioButton rdoSale;
         public Label lblTafqet;
+        private Label lblInvStat;
     }
 }
