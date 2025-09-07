@@ -1261,6 +1261,7 @@
             btnSave.TabStop = false;
             btnSave.Text = "حفظ";
             btnSave.UseVisualStyleBackColor = false;
+            btnSave.Click += btnSave_Click;
             // 
             // btnFrist
             // 

@@ -144,5 +144,41 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
 
         }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(lblSave.Text))
+            {
+                CustomMessageBox.ShowInformation("تم حفظ الفاتورة من قبل ولا يمكن تعديلها.", "تنبيه");
+                return;
+            }
+
+            //int actualRowCount = DGV.Rows.Cast<DataGridViewRow>()
+            //                      .Count(r => !r.IsNewRow &&
+            //                                  r.Cells["ProductCode"].Value != null &&
+            //                                  r.Cells["ProductCode"].Value != DBNull.Value);
+
+            //if (actualRowCount == 0)
+            //{
+            //    CustomMessageBox.ShowInformation("لا توجد بيانات لحفظ الفاتورة.", "تنبيه");
+            //    return;
+            //}
+
+            if (!int.TryParse(lblInv_ID.Text, out int invID))
+            {
+                CustomMessageBox.ShowInformation("رقم الفاتورة غير صالح.", "خطأ");
+                return;
+            }
+
+            if (lblTypeInvID.Text == "1")
+            {
+                MessageBox.Show("سيتم الحفظ النهائي لفاتورة البيع.", "تنبيه");
+            }
+            else if (lblTypeInvID.Text == "2")
+            {
+                MessageBox.Show("سيتم الحفظ النهائي لفاتورة البيع المرتد.", "تنبيه");
+            }
+        }
+
     }
 }
