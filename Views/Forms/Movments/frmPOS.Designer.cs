@@ -278,7 +278,7 @@
             lblTafqet.Margin = new Padding(4, 0, 4, 0);
             lblTafqet.Name = "lblTafqet";
             lblTafqet.Padding = new Padding(20, 0, 0, 0);
-            lblTafqet.Size = new Size(788, 35);
+            lblTafqet.Size = new Size(788, 36);
             lblTafqet.TabIndex = 49;
             lblTafqet.Text = "0";
             lblTafqet.TextAlign = ContentAlignment.MiddleRight;
@@ -334,7 +334,7 @@
             lblTotalValueAfterTax.Location = new Point(4, 68);
             lblTotalValueAfterTax.Margin = new Padding(4, 0, 4, 0);
             lblTotalValueAfterTax.Name = "lblTotalValueAfterTax";
-            lblTotalValueAfterTax.Size = new Size(157, 36);
+            lblTotalValueAfterTax.Size = new Size(157, 37);
             lblTotalValueAfterTax.TabIndex = 25;
             lblTotalValueAfterTax.Text = "0";
             lblTotalValueAfterTax.TextAlign = ContentAlignment.MiddleLeft;
@@ -348,7 +348,7 @@
             label7.Location = new Point(169, 68);
             label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
-            label7.Size = new Size(156, 36);
+            label7.Size = new Size(156, 37);
             label7.TabIndex = 25;
             label7.Text = "اجمالى بعد الضريبة";
             label7.TextAlign = ContentAlignment.MiddleRight;
@@ -371,15 +371,17 @@
             // 
             tableLayoutPanel3.ColumnCount = 1;
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Controls.Add(tableLayoutPanel9, 0, 1);
-            tableLayoutPanel3.Controls.Add(DGV, 0, 0);
+            tableLayoutPanel3.Controls.Add(tableLayoutPanel9, 0, 2);
+            tableLayoutPanel3.Controls.Add(DGV, 0, 1);
+            tableLayoutPanel3.Controls.Add(tlpType, 0, 0);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(4, 2);
             tableLayoutPanel3.Margin = new Padding(4, 2, 4, 2);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.Padding = new Padding(5);
-            tableLayoutPanel3.RowCount = 2;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 75F));
+            tableLayoutPanel3.RowCount = 3;
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 8F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 67F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
             tableLayoutPanel3.Size = new Size(1155, 466);
             tableLayoutPanel3.TabIndex = 31;
@@ -394,12 +396,12 @@
             tableLayoutPanel9.Controls.Add(tableLayoutPanel12, 1, 0);
             tableLayoutPanel9.Controls.Add(tableLayoutPanel11, 0, 0);
             tableLayoutPanel9.Dock = DockStyle.Fill;
-            tableLayoutPanel9.Location = new Point(9, 349);
+            tableLayoutPanel9.Location = new Point(9, 348);
             tableLayoutPanel9.Margin = new Padding(4, 2, 4, 2);
             tableLayoutPanel9.Name = "tableLayoutPanel9";
             tableLayoutPanel9.RowCount = 1;
             tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel9.Size = new Size(1137, 110);
+            tableLayoutPanel9.Size = new Size(1137, 111);
             tableLayoutPanel9.TabIndex = 35;
             // 
             // tableLayoutPanel12
@@ -415,7 +417,7 @@
             tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 66.66445F));
             tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 33.335556F));
             tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel12.Size = new Size(796, 104);
+            tableLayoutPanel12.Size = new Size(796, 105);
             tableLayoutPanel12.TabIndex = 1;
             // 
             // tableLayoutPanel11
@@ -436,7 +438,7 @@
             tableLayoutPanel11.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
             tableLayoutPanel11.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
             tableLayoutPanel11.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel11.Size = new Size(329, 104);
+            tableLayoutPanel11.Size = new Size(329, 105);
             tableLayoutPanel11.TabIndex = 0;
             // 
             // DGV
@@ -444,13 +446,13 @@
             DGV.AllowUserToAddRows = false;
             DGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DGV.Dock = DockStyle.Fill;
-            DGV.Location = new Point(9, 8);
+            DGV.Location = new Point(9, 44);
             DGV.Margin = new Padding(4, 3, 4, 3);
             DGV.Name = "DGV";
             DGV.ReadOnly = true;
             DGV.RowHeadersWidth = 51;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DGV.Size = new Size(1137, 336);
+            DGV.Size = new Size(1137, 299);
             DGV.TabIndex = 32;
             // 
             // lblGemDisVal
@@ -765,7 +767,6 @@
             tlpAcc.Controls.Add(cbxSellerID, 1, 1);
             tlpAcc.Controls.Add(lblBalance, 2, 2);
             tlpAcc.Controls.Add(lblB_Status, 2, 1);
-            tlpAcc.Controls.Add(tlpType, 1, 2);
             tlpAcc.Location = new Point(537, 2);
             tlpAcc.Margin = new Padding(4, 2, 4, 2);
             tlpAcc.Name = "tlpAcc";
@@ -871,20 +872,21 @@
             // 
             // tlpType
             // 
+            tlpType.BackColor = Color.LightGreen;
             tlpType.ColumnCount = 3;
-            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 52.38095F));
-            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21.5686283F));
-            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26.05042F));
+            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 23.09043F));
+            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 7.638279F));
+            tlpType.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 69.3590851F));
             tlpType.Controls.Add(chkAllowNegative, 0, 0);
             tlpType.Controls.Add(rdoResale, 2, 0);
             tlpType.Controls.Add(rdoSale, 1, 0);
             tlpType.Dock = DockStyle.Fill;
             tlpType.ForeColor = Color.Navy;
-            tlpType.Location = new Point(265, 69);
+            tlpType.Location = new Point(8, 8);
             tlpType.Name = "tlpType";
             tlpType.RowCount = 1;
             tlpType.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tlpType.Size = new Size(357, 28);
+            tlpType.Size = new Size(1139, 30);
             tlpType.TabIndex = 0;
             // 
             // chkAllowNegative
@@ -894,7 +896,7 @@
             chkAllowNegative.CheckState = CheckState.Checked;
             chkAllowNegative.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             chkAllowNegative.ForeColor = Color.Navy;
-            chkAllowNegative.Location = new Point(221, 2);
+            chkAllowNegative.Location = new Point(1003, 2);
             chkAllowNegative.Margin = new Padding(4, 2, 4, 2);
             chkAllowNegative.Name = "chkAllowNegative";
             chkAllowNegative.Size = new Size(132, 23);
@@ -907,9 +909,9 @@
             rdoResale.AutoSize = true;
             rdoResale.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
             rdoResale.ForeColor = Color.Navy;
-            rdoResale.Location = new Point(20, 3);
+            rdoResale.Location = new Point(718, 3);
             rdoResale.Name = "rdoResale";
-            rdoResale.Size = new Size(70, 22);
+            rdoResale.Size = new Size(70, 23);
             rdoResale.TabIndex = 30;
             rdoResale.Text = "بيع مرتد";
             rdoResale.UseVisualStyleBackColor = true;
@@ -920,9 +922,9 @@
             rdoSale.AutoSize = true;
             rdoSale.Checked = true;
             rdoSale.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            rdoSale.Location = new Point(124, 3);
+            rdoSale.Location = new Point(831, 3);
             rdoSale.Name = "rdoSale";
-            rdoSale.Size = new Size(43, 22);
+            rdoSale.Size = new Size(43, 23);
             rdoSale.TabIndex = 31;
             rdoSale.TabStop = true;
             rdoSale.Text = "بيع";
