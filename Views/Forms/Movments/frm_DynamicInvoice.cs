@@ -127,6 +127,14 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #endregion
 
         #region Seller ComboBox
+        private void cbxSellerID_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                txtSeaarchProd.Focus();
+            }
+        }
+
         private void FillSellerComboBox()
         {
             string sellerKey = InvoiceTypeHelper.ToAccountTypeString(currentInvoiceType, forSeller: true);
@@ -204,7 +212,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             if (e.KeyCode == Keys.Enter)
             {
 
-                cbxSellerID .Focus();
+                cbxSellerID.Focus();
             }
 
         }
@@ -398,7 +406,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
 
-   
+
+
     }
 }
 

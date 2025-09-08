@@ -67,7 +67,6 @@
             label1 = new Label();
             tableLayoutPanel3 = new TableLayoutPanel();
             tableLayoutPanel4 = new TableLayoutPanel();
-            chkAllowNegative = new CheckBox();
             lblBalance = new Label();
             lblClientEmail = new Label();
             lblClientAddress = new Label();
@@ -725,21 +724,6 @@
             tableLayoutPanel4.Size = new Size(1424, 377);
             tableLayoutPanel4.TabIndex = 14;
             // 
-            // chkAllowNegative
-            // 
-            chkAllowNegative.AutoSize = true;
-            chkAllowNegative.Checked = true;
-            chkAllowNegative.CheckState = CheckState.Checked;
-            chkAllowNegative.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            chkAllowNegative.ForeColor = Color.Navy;
-            chkAllowNegative.Location = new Point(501, 82);
-            chkAllowNegative.Margin = new Padding(4, 2, 4, 2);
-            chkAllowNegative.Name = "chkAllowNegative";
-            chkAllowNegative.Size = new Size(132, 23);
-            chkAllowNegative.TabIndex = 29;
-            chkAllowNegative.Text = "البيع على المكشوف";
-            chkAllowNegative.UseVisualStyleBackColor = true;
-            // 
             // lblBalance
             // 
             lblBalance.BackColor = Color.Transparent;
@@ -802,6 +786,7 @@
             cbxSellerID.Name = "cbxSellerID";
             cbxSellerID.Size = new Size(164, 30);
             cbxSellerID.TabIndex = 28;
+            cbxSellerID.KeyDown += cbxSellerID_KeyDown;
             // 
             // txtAccName
             // 
@@ -1470,7 +1455,6 @@
             tlpAcc.Controls.Add(txtAccName, 1, 0);
             tlpAcc.Controls.Add(lblAccID, 2, 0);
             tlpAcc.Controls.Add(cbxSellerID, 1, 1);
-            tlpAcc.Controls.Add(chkAllowNegative, 1, 2);
             tlpAcc.Controls.Add(lblBalance, 2, 2);
             tlpAcc.Controls.Add(lblB_Status, 2, 1);
             tlpAcc.Location = new Point(547, 2);
@@ -1598,7 +1582,6 @@
         private Label label1;
         private TableLayoutPanel tableLayoutPanel3;
         private TableLayoutPanel tableLayoutPanel4;
-        private CheckBox chkAllowNegative;
         private Label lblBalance;
         private Label lblClientEmail;
         private Label lblClientAddress;
