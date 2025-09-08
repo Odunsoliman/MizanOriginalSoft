@@ -130,6 +130,11 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #endregion
 
         #region Seller ComboBox
+        private void cbxSellerID_Enter(object sender, EventArgs e)
+        {
+            cbxSellerID.DroppedDown = true;
+        }
+
         private void cbxSellerID_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter && !e.Shift)

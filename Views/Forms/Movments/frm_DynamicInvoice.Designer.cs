@@ -786,6 +786,7 @@
             cbxSellerID.Name = "cbxSellerID";
             cbxSellerID.Size = new Size(164, 30);
             cbxSellerID.TabIndex = 28;
+            cbxSellerID.Enter += cbxSellerID_Enter;
             cbxSellerID.KeyDown += cbxSellerID_KeyDown;
             // 
             // txtAccName
