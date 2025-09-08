@@ -108,9 +108,6 @@
             lblTypeInv = new Label();
             lblInv_Counter = new Label();
             dtpInv_Date = new DateTimePicker();
-            label18 = new Label();
-            lblWarehouseName = new Label();
-            lblUserID = new Label();
             tableLayoutPanel6 = new TableLayoutPanel();
             tableLayoutPanel7 = new TableLayoutPanel();
             tlpAcc = new TableLayoutPanel();
@@ -1221,29 +1218,26 @@
             // tlpHader
             // 
             tlpHader.BackColor = Color.LightSteelBlue;
-            tlpHader.ColumnCount = 11;
-            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 3.01966286F));
-            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13.9044943F));
-            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8F));
-            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
-            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15F));
-            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 1F));
-            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 1F));
-            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5F));
-            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 3F));
-            tlpHader.Controls.Add(btnHelp, 10, 0);
+            tlpHader.ColumnCount = 8;
+            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 3.641476F));
+            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.767725F));
+            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 24.1184254F));
+            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 0.561797738F));
+            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21.0674152F));
+            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 6.02960634F));
+            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 24.1184254F));
+            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 3.61776376F));
+            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tlpHader.Controls.Add(btnHelp, 7, 0);
             tlpHader.Controls.Add(lblInfoInvoice, 4, 0);
             tlpHader.Controls.Add(lblTypeInvID, 0, 0);
             tlpHader.Controls.Add(lblInv_ID, 3, 0);
-            tlpHader.Controls.Add(label10, 8, 0);
+            tlpHader.Controls.Add(label10, 5, 0);
             tlpHader.Controls.Add(lblTypeInv, 1, 0);
             tlpHader.Controls.Add(lblInv_Counter, 2, 0);
-            tlpHader.Controls.Add(dtpInv_Date, 9, 0);
-            tlpHader.Controls.Add(label18, 7, 0);
-            tlpHader.Controls.Add(lblWarehouseName, 5, 0);
-            tlpHader.Controls.Add(lblUserID, 6, 0);
+            tlpHader.Controls.Add(dtpInv_Date, 6, 0);
             tlpHader.Dock = DockStyle.Fill;
             tlpHader.Location = new Point(4, 3);
             tlpHader.Margin = new Padding(4, 3, 4, 3);
@@ -1261,7 +1255,7 @@
             btnHelp.Location = new Point(4, 3);
             btnHelp.Margin = new Padding(4, 3, 4, 3);
             btnHelp.Name = "btnHelp";
-            btnHelp.Size = new Size(37, 37);
+            btnHelp.Size = new Size(48, 37);
             btnHelp.TabIndex = 39;
             btnHelp.TabStop = false;
             btnHelp.Text = "?";
@@ -1273,11 +1267,11 @@
             lblInfoInvoice.Dock = DockStyle.Fill;
             lblInfoInvoice.Font = new Font("Times New Roman", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblInfoInvoice.ForeColor = Color.IndianRed;
-            lblInfoInvoice.Location = new Point(646, 0);
+            lblInfoInvoice.Location = new Point(488, 0);
             lblInfoInvoice.Margin = new Padding(4, 0, 4, 0);
             lblInfoInvoice.Name = "lblInfoInvoice";
             lblInfoInvoice.RightToLeft = RightToLeft.No;
-            lblInfoInvoice.Size = new Size(134, 43);
+            lblInfoInvoice.Size = new Size(292, 43);
             lblInfoInvoice.TabIndex = 31;
             lblInfoInvoice.TextAlign = ContentAlignment.MiddleRight;
             // 
@@ -1287,12 +1281,11 @@
             lblTypeInvID.Dock = DockStyle.Fill;
             lblTypeInvID.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTypeInvID.ForeColor = Color.Lavender;
-            lblTypeInvID.Location = new Point(1385, 0);
+            lblTypeInvID.Location = new Point(1377, 0);
             lblTypeInvID.Margin = new Padding(4, 0, 4, 0);
             lblTypeInvID.Name = "lblTypeInvID";
-            lblTypeInvID.Size = new Size(35, 43);
+            lblTypeInvID.Size = new Size(43, 43);
             lblTypeInvID.TabIndex = 28;
-            lblTypeInvID.Text = "نوع الفاتورة";
             lblTypeInvID.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblInv_ID
@@ -1304,10 +1297,11 @@
             lblInv_ID.Location = new Point(788, 0);
             lblInv_ID.Margin = new Padding(4, 0, 4, 0);
             lblInv_ID.Name = "lblInv_ID";
-            lblInv_ID.Size = new Size(106, 43);
+            lblInv_ID.Size = new Size(1, 43);
             lblInv_ID.TabIndex = 27;
             lblInv_ID.Text = "0";
             lblInv_ID.TextAlign = ContentAlignment.MiddleRight;
+            lblInv_ID.Visible = false;
             // 
             // label10
             // 
@@ -1315,10 +1309,10 @@
             label10.Dock = DockStyle.Fill;
             label10.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label10.ForeColor = Color.DarkBlue;
-            label10.Location = new Point(334, 0);
+            label10.Location = new Point(403, 0);
             label10.Margin = new Padding(4, 0, 4, 0);
             label10.Name = "label10";
-            label10.Size = new Size(63, 43);
+            label10.Size = new Size(77, 43);
             label10.TabIndex = 25;
             label10.Text = "تاريخ";
             label10.TextAlign = ContentAlignment.MiddleRight;
@@ -1329,10 +1323,10 @@
             lblTypeInv.Dock = DockStyle.Fill;
             lblTypeInv.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTypeInv.ForeColor = Color.DarkBlue;
-            lblTypeInv.Location = new Point(1187, 0);
+            lblTypeInv.Location = new Point(1139, 0);
             lblTypeInv.Margin = new Padding(4, 0, 4, 0);
             lblTypeInv.Name = "lblTypeInv";
-            lblTypeInv.Size = new Size(190, 43);
+            lblTypeInv.Size = new Size(230, 43);
             lblTypeInv.TabIndex = 25;
             lblTypeInv.Text = "فاتورة مبيعات";
             lblTypeInv.TextAlign = ContentAlignment.MiddleRight;
@@ -1343,10 +1337,10 @@
             lblInv_Counter.Dock = DockStyle.Fill;
             lblInv_Counter.Font = new Font("Times New Roman", 16F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblInv_Counter.ForeColor = Color.DarkBlue;
-            lblInv_Counter.Location = new Point(902, 0);
+            lblInv_Counter.Location = new Point(796, 0);
             lblInv_Counter.Margin = new Padding(4, 0, 4, 0);
             lblInv_Counter.Name = "lblInv_Counter";
-            lblInv_Counter.Size = new Size(277, 43);
+            lblInv_Counter.Size = new Size(335, 43);
             lblInv_Counter.TabIndex = 25;
             lblInv_Counter.Text = "0";
             lblInv_Counter.TextAlign = ContentAlignment.MiddleLeft;
@@ -1355,59 +1349,13 @@
             // 
             dtpInv_Date.Dock = DockStyle.Fill;
             dtpInv_Date.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dtpInv_Date.Location = new Point(49, 3);
+            dtpInv_Date.Location = new Point(60, 3);
             dtpInv_Date.Margin = new Padding(4, 3, 4, 3);
             dtpInv_Date.Name = "dtpInv_Date";
             dtpInv_Date.RightToLeft = RightToLeft.Yes;
             dtpInv_Date.RightToLeftLayout = true;
-            dtpInv_Date.Size = new Size(277, 26);
+            dtpInv_Date.Size = new Size(335, 26);
             dtpInv_Date.TabIndex = 26;
-            // 
-            // label18
-            // 
-            label18.BackColor = Color.Transparent;
-            label18.Dock = DockStyle.Fill;
-            label18.Font = new Font("Times New Roman", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label18.ForeColor = Color.IndianRed;
-            label18.Location = new Point(405, 0);
-            label18.Margin = new Padding(4, 0, 4, 0);
-            label18.Name = "label18";
-            label18.RightToLeft = RightToLeft.No;
-            label18.Size = new Size(6, 43);
-            label18.TabIndex = 30;
-            label18.Text = "us:";
-            label18.TextAlign = ContentAlignment.MiddleRight;
-            label18.Visible = false;
-            // 
-            // lblWarehouseName
-            // 
-            lblWarehouseName.BackColor = Color.Transparent;
-            lblWarehouseName.Dock = DockStyle.Fill;
-            lblWarehouseName.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblWarehouseName.ForeColor = Color.FromArgb(0, 0, 192);
-            lblWarehouseName.Location = new Point(433, 0);
-            lblWarehouseName.Margin = new Padding(4, 0, 4, 0);
-            lblWarehouseName.Name = "lblWarehouseName";
-            lblWarehouseName.RightToLeft = RightToLeft.No;
-            lblWarehouseName.Size = new Size(205, 43);
-            lblWarehouseName.TabIndex = 32;
-            lblWarehouseName.Text = "الفرع";
-            lblWarehouseName.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // lblUserID
-            // 
-            lblUserID.BackColor = Color.Transparent;
-            lblUserID.Dock = DockStyle.Fill;
-            lblUserID.Font = new Font("Times New Roman", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblUserID.ForeColor = Color.IndianRed;
-            lblUserID.Location = new Point(419, 0);
-            lblUserID.Margin = new Padding(4, 0, 4, 0);
-            lblUserID.Name = "lblUserID";
-            lblUserID.Size = new Size(6, 43);
-            lblUserID.TabIndex = 29;
-            lblUserID.Text = "0";
-            lblUserID.TextAlign = ContentAlignment.MiddleRight;
-            lblUserID.Visible = false;
             // 
             // tableLayoutPanel6
             // 
@@ -1625,9 +1573,6 @@
         private Label lblTypeInv;
         private Label lblInv_Counter;
         private DateTimePicker dtpInv_Date;
-        private Label label18;
-        private Label lblWarehouseName;
-        private Label lblUserID;
         private TableLayoutPanel tableLayoutPanel6;
         private TableLayoutPanel tableLayoutPanel7;
         private TableLayoutPanel tlpAcc;
