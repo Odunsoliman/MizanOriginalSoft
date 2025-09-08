@@ -42,13 +42,13 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // 🔹 استخدم switch لتحديد العنوان والرقم مع النص العربي
             (string arabicTitle, string typeId) = type switch
             {
-                InvoiceType.Sale => ("فاتورة بيع", "1"),
-                InvoiceType.SaleReturn => ("فاتورة بيع مرتد", "2"),
-                InvoiceType.Purchase => ("فاتورة شراء", "3"),
-                InvoiceType.PurchaseReturn => ("فاتورة شراء مرتد", "4"),
-                InvoiceType.Inventory => ("إذن تسوية مخزن", "5"),
-                InvoiceType.DeductStock => ("إذن خصم مخزن", "6"),
-                InvoiceType.AddStock => ("إذن إضافة مخزن", "7"),
+                InvoiceType.Sale => ("فاتورة بيع رقم: ", "1"),
+                InvoiceType.SaleReturn => ("فاتورة بيع مرتد رقم: ", "2"),
+                InvoiceType.Purchase => ("فاتورة شراء رقم: ", "3"),
+                InvoiceType.PurchaseReturn => ("فاتورة شراء مرتد رقم: ", "4"),
+                InvoiceType.Inventory => ("إذن تسوية مخزن رقم: ", "5"),
+                InvoiceType.DeductStock => ("إذن خصم مخزن رقم: ", "6"),
+                InvoiceType.AddStock => ("إذن إضافة مخزن رقم: ", "7"),
                 _ => ("فاتورة", "0")
             };
 
