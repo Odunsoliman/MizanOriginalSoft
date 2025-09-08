@@ -89,7 +89,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
         #endregion
 
-        #region Header   وظائف الجزء الاعلى من الفاتورة
+  
         // ✅ التحقق إذا كان AppSettings متحمل
         private bool AppSettingsIsLoaded()
         {
@@ -139,7 +139,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             reSaleByInvoiceSale = AppSettings.GetBool("ReSaleByInvoiceSale");
         }
 
-
+        #region Header   وظائف الجزء الاعلى من الفاتورة
 
         #region Default Account
         private void FillDefaultAccount()
