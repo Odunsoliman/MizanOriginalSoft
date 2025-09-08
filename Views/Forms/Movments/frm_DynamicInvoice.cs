@@ -237,7 +237,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
                     if (result == DialogResult.Yes)
                     {
-                        int type = (currentInvoiceType == InvoiceType.Sale || currentInvoiceType == InvoiceType.SaleReturn) ? 1 : 2;
+                        int type = (int)currentInvoiceType;  // 🔥 يحوّل Enum لرقم حقيقي
                         frm_AddAccount frm = new frm_AddAccount(input, type);
                         frm.ShowDialog();
                     }
