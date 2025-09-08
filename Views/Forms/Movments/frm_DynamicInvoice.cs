@@ -135,6 +135,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // ✅ تحميل القيم من ملف الإعدادات
         private void LoadSettings()
         {
+            
             allowNegativeStock = AppSettings.GetBool("NegativeStockSale");
             reSaleByInvoiceSale = AppSettings.GetBool("ReSaleByInvoiceSale");
         }

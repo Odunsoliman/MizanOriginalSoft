@@ -613,48 +613,11 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
             // نكتب الملف من جديد مع الحفاظ على التعليقات
             File.WriteAllLines(configFilePath, lines);
+
+            // الكلاس AppSettings يقرأ مرة واحدة عند فتح البرنامج ملف  الستينج فيجب اعادة القرائة بعد تعديل اى اعداد
+            LoadSettings();
         }
-
-
-
-
-
-        //    private void SaveData()
-        //    {
-        //        List<string> settings = new List<string>
-        //{
-        //    $"serverName={txtServerName.Text}",
-        //    $"DBName={txtDBName.Text}",
-        //    $"maxBackups={txtMaxBackups.Text}",
-        //    $"BackupsPath={txtBackupsPath.Text}",
-        //    $"RollPrinter={lblRollPrinter.Text}",
-        //    $"SheetPrinter={lblSheetPrinter.Text}",
-        //    $"SheetRows={txtSheetRows.Text}",
-        //    $"SheetCols={txtSheetCols.Text}",
-        //    $"SheetMarginTop={txtMarginTop.Text}",
-        //    $"SheetMarginBottom={txtMarginBottom.Text}",
-        //    $"SheetMarginRight={txtMarginRight.Text}",
-        //    $"SheetMarginLeft={txtMarginLeft.Text}",
-        //    $"RollLabelWidth={txtRollLabelWidth.Text}",
-        //    $"RollLabelHeight={txtRollLabelHeight.Text}",
-        //    $"CompanyName={txtNameCo.Text}",
-        //    $"CompanyPhon={txtPhon.Text}",
-        //    $"CompanyAnthrPhon={txtAnthrPhon.Text}",
-        //    $"SalesTax={txtSalesTax.Text}",
-        //    $"CompanyAdreass={txtAdreass.Text}",
-        //    $"EmailCo={txtCompanyEmail.Text}",
-        //    $"CompanyLoGoFolder={lblLogoPath.Text}",
-        //    $"LogoImagName={lblLogoImageName.Text}",
-        //    $"DefaultWarehouseId={(cbxWarehouseId.SelectedValue ?? "")}"
-        //};
-
-        //        File.WriteAllLines(configFilePath, settings);
-        //    }
-
-        /*هذه الدالة تسبب خطأ كبير فى الحفظ فهى تغير الملف باكمله وما اريده الحفاظ على الملف بما فيه من تعليقات وتحفظ 
-         فقط القيمة ولا تغير كل الملف
-        وما هو الاجراء الذى اقوم به عندما اضيف قيمة جديدة فى الملف واريد حفظها من خلال الدالة
-         */
+        
         #endregion
 
         #region === مرفقات خاصة بمربعات النصوص ===
