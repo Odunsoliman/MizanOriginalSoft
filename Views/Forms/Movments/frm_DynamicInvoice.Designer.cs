@@ -56,7 +56,6 @@
             label20 = new Label();
             label19 = new Label();
             lblTotalValueAfterTax = new Label();
-            txtTaxVal = new TextBox();
             label7 = new Label();
             lblTotalInv = new Label();
             lblCount = new Label();
@@ -115,6 +114,7 @@
             lblDir = new Label();
             label13 = new Label();
             lblB_Status = new Label();
+            txtTaxVal = new TextBox();
             ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
             tableLayoutPanel9.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
@@ -142,7 +142,6 @@
             lblNetTotal.Name = "lblNetTotal";
             lblNetTotal.Size = new Size(219, 23);
             lblNetTotal.TabIndex = 28;
-            lblNetTotal.Text = "0";
             lblNetTotal.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // DGV
@@ -188,7 +187,6 @@
             lblTafqet.Padding = new Padding(20, 0, 0, 0);
             lblTafqet.Size = new Size(929, 23);
             lblTafqet.TabIndex = 31;
-            lblTafqet.Text = "0";
             lblTafqet.TextAlign = ContentAlignment.MiddleRight;
             // 
             // label2
@@ -311,7 +309,6 @@
             lblAdditionalRate.Name = "lblAdditionalRate";
             lblAdditionalRate.Size = new Size(121, 33);
             lblAdditionalRate.TabIndex = 29;
-            lblAdditionalRate.Text = "0";
             lblAdditionalRate.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // btnAllCach
@@ -352,7 +349,6 @@
             lblRemainingOnAcc.Name = "lblRemainingOnAcc";
             lblRemainingOnAcc.Size = new Size(121, 34);
             lblRemainingOnAcc.TabIndex = 3;
-            lblRemainingOnAcc.Text = "0";
             lblRemainingOnAcc.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // label9
@@ -420,7 +416,6 @@
             lblDiscountRate.Name = "lblDiscountRate";
             lblDiscountRate.Size = new Size(121, 33);
             lblDiscountRate.TabIndex = 28;
-            lblDiscountRate.Text = "0";
             lblDiscountRate.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblTaxRate
@@ -434,7 +429,6 @@
             lblTaxRate.Name = "lblTaxRate";
             lblTaxRate.Size = new Size(121, 33);
             lblTaxRate.TabIndex = 32;
-            lblTaxRate.Text = "0";
             lblTaxRate.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // btnDiscountRate
@@ -557,19 +551,7 @@
             lblTotalValueAfterTax.Name = "lblTotalValueAfterTax";
             lblTotalValueAfterTax.Size = new Size(121, 34);
             lblTotalValueAfterTax.TabIndex = 25;
-            lblTotalValueAfterTax.Text = "0";
             lblTotalValueAfterTax.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // txtTaxVal
-            // 
-            txtTaxVal.Dock = DockStyle.Fill;
-            txtTaxVal.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtTaxVal.Location = new Point(999, 36);
-            txtTaxVal.Margin = new Padding(4, 3, 4, 3);
-            txtTaxVal.Name = "txtTaxVal";
-            txtTaxVal.Size = new Size(121, 29);
-            txtTaxVal.TabIndex = 26;
-            txtTaxVal.Text = "0";
             // 
             // label7
             // 
@@ -596,7 +578,7 @@
             lblTotalInv.Name = "lblTotalInv";
             lblTotalInv.Size = new Size(121, 33);
             lblTotalInv.TabIndex = 25;
-            lblTotalInv.Text = "0";
+            lblTotalInv.Text = "1000";
             lblTotalInv.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblCount
@@ -1473,6 +1455,17 @@
             lblB_Status.TabIndex = 25;
             lblB_Status.TextAlign = ContentAlignment.MiddleLeft;
             // 
+            // txtTaxVal
+            // 
+            txtTaxVal.Dock = DockStyle.Fill;
+            txtTaxVal.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtTaxVal.Location = new Point(999, 36);
+            txtTaxVal.Margin = new Padding(4, 3, 4, 3);
+            txtTaxVal.Name = "txtTaxVal";
+            txtTaxVal.Size = new Size(121, 29);
+            txtTaxVal.TabIndex = 26;
+            txtTaxVal.Text = "0";
+            // 
             // frm_DynamicInvoice
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
@@ -1537,7 +1530,6 @@
         private Label label20;
         private Label label19;
         private Label lblTotalValueAfterTax;
-        private TextBox txtTaxVal;
         private Label label7;
         private Label lblTotalInv;
         private Label lblCount;
@@ -1596,5 +1588,6 @@
         private Label label13;
         private Label lblB_Status;
         private Label lblInvStat;
+        private TextBox txtTaxVal;
     }
 }
