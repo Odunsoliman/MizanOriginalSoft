@@ -890,6 +890,7 @@
             txtSeaarchProd.TabIndex = 26;
             txtSeaarchProd.Text = "0";
             txtSeaarchProd.TextAlign = HorizontalAlignment.Center;
+            txtSeaarchProd.KeyDown += txtSeaarchProd_KeyDown;
             // 
             // txtAmount
             // 

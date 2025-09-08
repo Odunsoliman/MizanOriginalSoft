@@ -61,6 +61,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #endregion
 
+        #region Header   وظائف الجزء الاعلى من الفاتورة
+        
+
         #region Default Account
         private void FillDefaultAccount()
         {
@@ -129,9 +132,17 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #region Seller ComboBox
         private void cbxSellerID_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter && !e.Shift)
             {
+                // Enter فقط → التالي
                 txtSeaarchProd.Focus();
+                e.Handled = true;
+            }
+            else if ((e.KeyCode == Keys.Enter && e.Shift) || e.KeyCode == Keys.Up)
+            {
+                // Shift+Enter أو سهم ↑ → السابق
+                this.SelectNextControl((Control)sender, false, true, true, true);
+                e.Handled = true;
             }
         }
 
@@ -209,10 +220,17 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #region Account Data Display
         private void txtAccName_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter && !e.Shift)
             {
-
+                // Enter فقط → التالي
                 cbxSellerID.Focus();
+                e.Handled = true;
+            }
+            else if ((e.KeyCode == Keys.Enter && e.Shift) || e.KeyCode == Keys.Up)
+            {
+                // Shift+Enter أو سهم ↑ → السابق
+                this.SelectNextControl((Control)sender, false, true, true, true);
+                e.Handled = true;
             }
 
         }
@@ -402,12 +420,35 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
         #endregion
 
+        #endregion End Heder
+
+
+        #region Body  وظائف الجزء الخاص بالاصناف 
+        private void txtSeaarchProd_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && !e.Shift)
+            {
+                // Enter فقط → التالي
+                //cbxSellerID.Focus();
+                //e.Handled = true;
+            }
+            else if ((e.KeyCode == Keys.Enter && e.Shift) || e.KeyCode == Keys.Up)
+            {
+                // Shift+Enter أو سهم ↑ → السابق
+                cbxSellerID.Focus();
+                e.Handled = true;
+            }
+
+        }
+
+
+        #endregion
+
+        #region Foter وظائف اجماليات الفاتورة والحفظ النهائى
 
 
 
-
-
-
+        #endregion 
     }
 }
 
