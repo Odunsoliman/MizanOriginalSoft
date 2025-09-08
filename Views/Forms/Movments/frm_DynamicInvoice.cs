@@ -529,6 +529,163 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #region Foter وظائف اجماليات الفاتورة والحفظ النهائى
 
+        #region Footer Leave Handlers
+
+        private void txtDiscount_Leave(object? sender, EventArgs e)
+        {
+            if (decimal.TryParse(txtDiscount.Text, out var amount))
+            {
+                if (amount == 0m)
+                {
+                    lblDiscountRate.Text = "0.00";
+                }
+                else if (decimal.TryParse(lblTotalValueAfterTax.Text, out var baseVal) && baseVal > 0m)
+                {
+                    lblDiscountRate.Text = Math.Round((amount / baseVal) * 100m, 2).ToString("N2");
+                }
+                else
+                {
+                    txtDiscount.Text = "0.00";
+                    lblDiscountRate.Text = "0.00";
+                    CustomMessageBox.ShowInformation("يجب إدخال قيمة للفاتورة بعد الضريبة أولًا قبل حساب الخصم.", "تنبيه");
+                    txtDiscount.Focus();
+                }
+            }
+            CalculateInvoiceFooter();
+        }
+
+        private void txtTaxVal_Leave(object? sender, EventArgs e)
+        {
+            if (decimal.TryParse(txtTaxVal.Text, out var amount))
+            {
+                if (amount == 0m)
+                {
+                    lblTaxRate.Text = "0.00";
+                }
+                else if (decimal.TryParse(lblTotalInv.Text, out var baseVal) && baseVal > 0m)
+                {
+                    lblTaxRate.Text = Math.Round((amount / baseVal) * 100m, 2).ToString("N2");
+
+                }
+                else
+                {
+                    txtTaxVal.Text = "0.00";
+                    lblTaxRate.Text = "0.00";
+                    CustomMessageBox.ShowInformation("يجب إدخال قيمة للفاتورة أولًا قبل حساب نسبة الإضافة.", "تنبيه");
+                    txtTaxVal.Focus();
+                }
+            }
+            CalculateInvoiceFooter();
+        }
+
+        private void txtValueAdded_Leave(object? sender, EventArgs e)
+        {
+            if (decimal.TryParse(txtValueAdded.Text, out var amount))
+            {
+                if (amount == 0m)
+                {
+                    lblAdditionalRate.Text = "0.00";
+                }
+                else if (decimal.TryParse(lblTotalValueAfterTax.Text, out var baseVal) && baseVal > 0m)
+                {
+                    lblAdditionalRate.Text = Math.Round((amount / baseVal) * 100m, 2).ToString("N2");
+                }
+                else
+                {
+                    txtValueAdded.Text = "0.00";
+                    lblAdditionalRate.Text = "0.00";
+                    CustomMessageBox.ShowInformation("يجب إدخال قيمة للفاتورة بعد الضريبة أولًا قبل حساب الإضافة.", "تنبيه");
+                    txtValueAdded.Focus();
+                }
+            }
+            CalculateInvoiceFooter();
+        }
+
+        private void txtPayment_Cash_Leave(object? sender, EventArgs e)
+        {
+            CalculateRemainingOnAccount();
+        }
+
+        private void txtPayment_Electronic_Leave(object? sender, EventArgs e)
+        {
+            CalculateRemainingOnAccount();
+        }
+
+        #endregion
+
+        #region  احداث ووظائف تذييل الفاتورة
+
+        private void CalculateRemainingOnAccount()
+        {
+            // 🟦 التحويل إلى أرقام بطريقة آمنة (في حالة الحقول فارغة)
+            decimal.TryParse(lblNetTotal.Text, out decimal netTotal);
+            decimal.TryParse(txtPayment_Cash.Text, out decimal cash);
+            decimal.TryParse(txtPayment_Electronic.Text, out decimal electronic);
+
+            // 🟦 حساب المتبقي
+            decimal paid = cash + electronic;
+            decimal remaining = netTotal - paid;
+
+            // 🟦 عرض الرصيد المتبقي
+            lblRemainingOnAcc.Text = remaining.ToString("N2");
+
+            // 🟦 تحديد الحالة اللونية
+            if (remaining > 0)
+            {
+                lblStateRemaining.Text = "باقي عليه";
+                lblStateRemaining.ForeColor = Color.Red;
+                lblRemainingOnAcc.ForeColor = Color.Red;
+            }
+            else if (remaining < 0)
+            {
+                lblStateRemaining.Text = "باقي له";
+                lblStateRemaining.ForeColor = Color.Green;
+                lblRemainingOnAcc.ForeColor = Color.Green;
+            }
+            else
+            {
+                lblStateRemaining.Text = "تم السداد";
+                lblStateRemaining.ForeColor = Color.Blue;
+                lblRemainingOnAcc.ForeColor = Color.Blue;
+            }
+        }
+
+        private void CalculateInvoiceFooter()
+        {
+            if (DGV.DataSource is not DataTable dt) return; // حماية من null
+
+            // 🟦 حساب إجمالي الصفوف
+            decimal total = 0;
+            foreach (DataRow row in dt.Rows)
+                if (row["NetRow"] != DBNull.Value)
+                    total += Convert.ToDecimal(row["NetRow"]);
+            lblTotalInv.Text = total.ToString("N2");
+
+            // 🟦 قراءة الضريبة والخصومات والإضافات
+            decimal.TryParse(txtTaxVal.Text, out var tax);
+            decimal.TryParse(txtDiscount.Text, out var discount);
+            decimal.TryParse(txtValueAdded.Text, out var added);
+
+            // 🟦 الإجمالي بعد الضريبة
+            var afterTax = total + tax;
+            lblTotalValueAfterTax.Text = afterTax.ToString("N2");
+
+            // 🟦 الصافي النهائي
+            var net = total + tax - discount + added;
+            lblNetTotal.Text = net.ToString("N2");
+
+            // 🟦 المدفوعات
+            decimal.TryParse(txtPayment_Cash.Text, out var cash);
+            decimal.TryParse(txtPayment_Electronic.Text, out var visa);
+
+            // 🟦 المتبقي
+            var remaining = net - (cash + visa);
+            lblRemainingOnAcc.Text = remaining.ToString("N2");
+
+            // 🟦 تحديث الحالة النصية واللونية
+            CalculateRemainingOnAccount();
+        }
+        #endregion
 
 
         #endregion
