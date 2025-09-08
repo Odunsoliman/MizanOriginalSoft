@@ -21,6 +21,12 @@ namespace MizanOriginalSoft.Views.Forms.Movments
     {
         #region Fields
         private InvoiceType currentInvoiceType; // نوع الفاتورة الحالية
+
+        // 🔹 متغير يحدد إذا كان مسموح البيع بدون رصيد (على المكشوف)
+        private bool allowNegativeStock;
+
+        // 🔹 متغير يحدد إذا كان المرتجع يشترط إدخال رقم فاتورة البيع
+        private bool reSaleByInvoiceSale;
         #endregion
 
         #region Form Initialization
@@ -58,11 +64,82 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             SetupFormByInvoiceType();
         }
 
+        private void frm_DynamicInvoice_Load(object sender, EventArgs e)
+        {
+            // ✅ تحميل ملف الإعدادات
+            if (!AppSettingsIsLoaded())
+            {
+                string settingsPath = Path.Combine(Application.StartupPath, "AppSettings.txt");
+                AppSettings.Load(settingsPath);
+            }
 
+            // ✅ قراءة الإعدادات
+            LoadSettings();
+
+            // ✅ تحويل النص لرقم أولاً
+            if (int.TryParse(lblTypeInvID.Text, out int typeInvID))
+            {
+                if (typeInvID == 1)
+                    UpdateLabelsForSale();
+                else if (typeInvID == 2)
+                    UpdateLabelsForResale();
+            }
+
+
+        }
         #endregion
 
         #region Header   وظائف الجزء الاعلى من الفاتورة
-        
+        // ✅ التحقق إذا كان AppSettings متحمل
+        private bool AppSettingsIsLoaded()
+        {
+            try
+            {
+                // لو حاولنا قراءة أي قيمة من غير تحميل هيعمل Exception
+                AppSettings.GetAllSettings();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        // 🔹 تحديث النصوص لو اخترت "بيع"
+        private void UpdateLabelsForSale()
+        {
+            if (allowNegativeStock)
+                lblInvStat.Text = "البيع على مكشوف";
+            else
+                lblInvStat.Text = "البيع حسب الرصيد";
+
+            lblCodeTitel.Text = "ادخل كود الصنف";
+        }
+
+        // 🔹 تحديث النصوص لو اخترت "مرتجع"
+        private void UpdateLabelsForResale()
+        {
+            lblInvStat.Text = ""; // ممكن تكتب "مرتجع" لو تحب
+
+            if (reSaleByInvoiceSale)
+            {
+                lblCodeTitel.Text = " رقم فاتورة البيع";
+                lblInvStat.Text = "البيع المرتد يكون عن طريق رقم فاتورة البيع الاصلية";
+            }
+
+            else
+                lblCodeTitel.Text = "ادخل كود الصنف";
+        }
+
+        // ✅ تحميل القيم من ملف الإعدادات
+        private void LoadSettings()
+        {
+            allowNegativeStock = AppSettings.GetBool("NegativeStockSale");
+            reSaleByInvoiceSale = AppSettings.GetBool("ReSaleByInvoiceSale");
+        }
+
+
 
         #region Default Account
         private void FillDefaultAccount()
@@ -453,7 +530,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
 
-        #endregion 
+        #endregion
+
+
     }
 }
 

@@ -111,6 +111,7 @@
             tableLayoutPanel6 = new TableLayoutPanel();
             tableLayoutPanel7 = new TableLayoutPanel();
             tlpAcc = new TableLayoutPanel();
+            lblInvStat = new Label();
             lblDir = new Label();
             label13 = new Label();
             lblB_Status = new Label();
@@ -840,7 +841,6 @@
             lblProductName.RightToLeft = RightToLeft.No;
             lblProductName.Size = new Size(365, 38);
             lblProductName.TabIndex = 25;
-            lblProductName.Text = "Product Name";
             lblProductName.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // tlpPiece
@@ -1400,6 +1400,7 @@
             tlpAcc.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 42.41733F));
             tlpAcc.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30.55872F));
             tlpAcc.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tlpAcc.Controls.Add(lblInvStat, 1, 2);
             tlpAcc.Controls.Add(lblDir, 0, 1);
             tlpAcc.Controls.Add(label13, 0, 0);
             tlpAcc.Controls.Add(txtAccName, 1, 0);
@@ -1416,6 +1417,20 @@
             tlpAcc.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
             tlpAcc.Size = new Size(873, 122);
             tlpAcc.TabIndex = 7;
+            // 
+            // lblInvStat
+            // 
+            lblInvStat.BackColor = Color.Transparent;
+            lblInvStat.Dock = DockStyle.Fill;
+            lblInvStat.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblInvStat.ForeColor = Color.Red;
+            lblInvStat.Location = new Point(272, 80);
+            lblInvStat.Margin = new Padding(4, 0, 4, 0);
+            lblInvStat.Name = "lblInvStat";
+            lblInvStat.RightToLeft = RightToLeft.Yes;
+            lblInvStat.Size = new Size(361, 42);
+            lblInvStat.TabIndex = 32;
+            lblInvStat.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblDir
             // 
@@ -1469,6 +1484,7 @@
             Name = "frm_DynamicInvoice";
             RightToLeft = RightToLeft.Yes;
             Text = "frm_DynamicInvoice";
+            Load += frm_DynamicInvoice_Load;
             ((System.ComponentModel.ISupportInitialize)DGV).EndInit();
             tableLayoutPanel9.ResumeLayout(false);
             tableLayoutPanel5.ResumeLayout(false);
@@ -1579,5 +1595,6 @@
         private Label lblDir;
         private Label label13;
         private Label lblB_Status;
+        private Label lblInvStat;
     }
 }

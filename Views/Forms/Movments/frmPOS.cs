@@ -81,15 +81,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // ✅ قراءة الإعدادات
             LoadSettings();
 
-            //// ✅ رسالة للتأكد من القيم
-            //MessageBox.Show(
-            //    $"NegativeStockSale = {allowNegativeStock}\n" +
-            //    $"ReSaleByInvoiceSale = {reSaleByInvoiceSale}",
-            //    "📌 قيم الإعدادات",
-            //    MessageBoxButtons.OK,
-            //    MessageBoxIcon.Information
-            //);
-
             // ✅ ضبط الواجهة حسب الاختيار الافتراضي
             if (rdoSale.Checked)
                 UpdateLabelsForSale();
