@@ -814,6 +814,7 @@
             txtAccName.TabIndex = 26;
             txtAccName.Text = "0";
             txtAccName.TextAlign = HorizontalAlignment.Center;
+            txtAccName.KeyDown += txtAccName_KeyDown;
             txtAccName.Leave += txtAccName_Leave;
             // 
             // lblAccID

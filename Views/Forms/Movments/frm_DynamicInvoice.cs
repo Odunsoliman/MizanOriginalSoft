@@ -146,8 +146,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // 🔥 حدد الحساب الافتراضي حسب نوع الفاتورة
             int defaultAccID = currentInvoiceType switch
             {
-                InvoiceType.Sale or InvoiceType.SaleReturn => 57, // ادارة البائعين
-                InvoiceType.Purchase or InvoiceType.PurchaseReturn => 61, // ادارة المشتريات
+                InvoiceType.Sale or InvoiceType.SaleReturn => 57, // حساب ادارة البائعين
+                InvoiceType.Purchase or InvoiceType.PurchaseReturn => 61, // حساب  ادارة المشتريات
                 _ => -1 // لا يوجد حساب افتراضي
             };
 
@@ -167,8 +167,12 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             else if (dt.Rows.Count > 0)
             {
                 cbxSellerID.SelectedIndex = 0;
-                
+
             }
+
+
+            // 🔒 منع الكتابة في الكومبوبوكس
+            cbxSellerID.DropDownStyle = ComboBoxStyle.DropDownList;
         }
         #endregion
 
@@ -195,6 +199,15 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #endregion
 
         #region Account Data Display
+        private void txtAccName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+
+                cbxSellerID .Focus();
+            }
+
+        }
         private void txtAccName_Leave(object sender, EventArgs e)
         {
             string input = txtAccName.Text.Trim();
@@ -316,10 +329,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-
-
-
-
         private void DisplayAccountDetails(DataRow accountRow)
         {
             // 🔹 الهاتفين
@@ -389,6 +398,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
 
+   
     }
 }
 
