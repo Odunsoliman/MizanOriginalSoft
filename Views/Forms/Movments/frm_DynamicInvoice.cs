@@ -631,8 +631,17 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
 
         // 🔹 تحديث المدفوعات
-        private void txtPayment_Cash_Leave(object? sender, EventArgs e) => CalculateRemainingOnAccount();
-        private void txtPayment_Electronic_Leave(object? sender, EventArgs e) => CalculateRemainingOnAccount();
+        private void txtPayment_Cash_Leave(object? sender, EventArgs e)
+        {
+            CalculateRemainingOnAccount();
+            UpdatePaymentNote();
+        }
+
+        private void txtPayment_Electronic_Leave(object? sender, EventArgs e)
+        {
+            CalculateRemainingOnAccount();
+            UpdatePaymentNote();
+        }
         // 🔹 دعم النقر المزدوج للمدفوعات
         private void txtPayment_Cash_DoubleClick(object? sender, EventArgs e)
         {
