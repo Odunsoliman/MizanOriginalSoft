@@ -549,7 +549,61 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         #endregion
 
         #region حفظ الإعدادات بصمت (بدون رسالة)
+        /// <summary>
+        /// ربط أحداث التغيير تلقائيًا لمربعات النصوص والـ CheckBox داخل الحاوية.
+        /// </summary>
+        private void AttachControlHandlers(Control parent)
+        {
+            foreach (Control ctrl in parent.Controls)
+            {
+                if (ctrl is TextBox txt)
+                {
+                    txt.Tag = txt.Text; // حفظ القيمة الأصلية للمقارنة لاحقًا
+                    txt.Leave += TextBox_Leave;
+                }
+                else if (ctrl is CheckBox chk)
+                {
+                    chk.Tag = chk.Checked; // حفظ القيمة الأصلية
+                    chk.CheckedChanged += CheckBox_CheckedChanged;
+                }
+                else if (ctrl.HasChildren)
+                {
+                    AttachControlHandlers(ctrl); // تكرار على الأبناء
+                }
+            }
+        }
 
+        /// <summary>
+        /// تنفيذ الحفظ عند تغيير قيمة مربع النص.
+        /// </summary>
+        private void TextBox_Leave(object? sender, EventArgs e)
+        {
+            if (sender is TextBox txt)
+            {
+                if ((txt.Tag is string oldValue) && txt.Text != oldValue)
+                {
+                    SaveData();
+                    txt.Tag = txt.Text; // تحديث القيمة المرجعية
+                }
+            }
+        }
+
+        /// <summary>
+        /// تنفيذ الحفظ عند تغيير حالة CheckBox.
+        /// </summary>
+        private void CheckBox_CheckedChanged(object? sender, EventArgs e)
+        {
+            if (sender is CheckBox chk)
+            {
+                if ((chk.Tag is bool oldValue) && chk.Checked != oldValue)
+                {
+                    SaveData();
+                    chk.Tag = chk.Checked; // تحديث القيمة المرجعية
+                }
+            }
+        }
+
+        /**/
         private void SaveData()
         {
             // اقرأ كل الأسطر من الملف (مع التعليقات)
@@ -625,10 +679,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             LoadSettings();
         }
 
-        #endregion
-
-        #region === مرفقات خاصة بمربعات النصوص ===
-
         /// <summary>
         /// ربط حدث الخروج (Leave) بجميع مربعات النص داخل الحاوية.
         /// عند الخروج من أي مربع نص وتغيير القيمة، يتم حفظ التغييرات تلقائيًا.
@@ -653,7 +703,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         /// تنفيذ الحفظ عند تغيير قيمة مربع النص.
         /// </summary>
         /// 
-        private void TextBox_Leave(object? sender, EventArgs e)
+        private void TextBox_Leave_(object? sender, EventArgs e)
         {
             if (sender is TextBox txt)
             {
