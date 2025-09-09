@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Globalization;
 
 public static class TafqeetHelper
 {
     private static readonly string[] Units =
     {
-        "", "واحد", "اثنان", "ثلاثة", "أربعة", "خمسة", "ستة", "سبعة", "ثمانية", "تسعة",
-        "عشرة", "أحد عشر", "اثنا عشر", "ثلاثة عشر", "أربعة عشر", "خمسة عشر",
-        "ستة عشر", "سبعة عشر", "ثمانية عشر", "تسعة عشر"
+        "", "واحد", "اثنان", "ثلاثة", "أربعة", "خمسة",
+        "ستة", "سبعة", "ثمانية", "تسعة",
+        "عشرة", "أحد عشر", "اثنا عشر", "ثلاثة عشر",
+        "أربعة عشر", "خمسة عشر", "ستة عشر",
+        "سبعة عشر", "ثمانية عشر", "تسعة عشر"
     };
 
     private static readonly string[] Tens =
@@ -18,13 +19,8 @@ public static class TafqeetHelper
 
     private static readonly string[] Hundreds =
     {
-        "", "مائة", "مائتان", "ثلاثمائة", "أربعمائة", "خمسمائة",
-        "ستمائة", "سبعمائة", "ثمانمائة", "تسعمائة"
-    };
-
-    private static readonly string[] ThousandsGroups =
-    {
-        "", "ألف", "مليون", "مليار", "تريليون"
+        "", "مائة", "مائتان", "ثلاثمائة", "أربعمائة",
+        "خمسمائة", "ستمائة", "سبعمائة", "ثمانمائة", "تسعمائة"
     };
 
     public static string Tafqeet(decimal number)
@@ -36,7 +32,7 @@ public static class TafqeetHelper
 
         string result = $"{ConvertToArabicWords(integerPart)} جنيه";
         if (fractionPart > 0)
-            result += $" و{ConvertToArabicWords(fractionPart)} قرشاً";
+            result += $" و{fractionPart} قرشاً"; // ✅ الكسور بالأرقام فقط
 
         return result;
     }
@@ -54,14 +50,37 @@ public static class TafqeetHelper
             if (threeDigits != 0)
             {
                 string groupText = ConvertThreeDigits(threeDigits);
-                if (!string.IsNullOrEmpty(groupText))
+
+                // 🟢 معالجة الآلاف
+                if (group == 1)
                 {
-                    if (group > 0)
-                        words = $"{groupText} {ThousandsGroups[group]}{(groupText.EndsWith("ة") ? "" : "")} {(string.IsNullOrEmpty(words) ? "" : "و" + words)}";
+                    if (threeDigits == 1)
+                        groupText = "ألف";
+                    else if (threeDigits == 2)
+                        groupText = "ألفين";
+                    else if (threeDigits >= 3 && threeDigits <= 10)
+                        groupText += " آلاف";
                     else
-                        words = $"{groupText} {(string.IsNullOrEmpty(words) ? "" : "و" + words)}";
+                        groupText += " ألف";
                 }
+                else if (group == 2)
+                {
+                    if (threeDigits == 1)
+                        groupText = "مليون";
+                    else if (threeDigits == 2)
+                        groupText = "مليونين";
+                    else if (threeDigits >= 3 && threeDigits <= 10)
+                        groupText += " ملايين";
+                    else
+                        groupText += " مليون";
+                }
+
+                if (!string.IsNullOrEmpty(words))
+                    words = groupText + " و" + words;
+                else
+                    words = groupText;
             }
+
             number /= 1000;
             group++;
         }
