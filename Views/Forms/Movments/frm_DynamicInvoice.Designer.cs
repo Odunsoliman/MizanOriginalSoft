@@ -35,13 +35,7 @@
             label2 = new Label();
             tableLayoutPanel5 = new TableLayoutPanel();
             tableLayoutPanel10 = new TableLayoutPanel();
-            lblStateRemaining = new Label();
             lblAdditionalRate = new Label();
-            lblRemainingOnAcc = new Label();
-            label9 = new Label();
-            txtPayment_Electronic = new TextBox();
-            label8 = new Label();
-            txtPayment_Cash = new TextBox();
             lblDiscountRate = new Label();
             lblTaxRate = new Label();
             lblTotalText = new Label();
@@ -54,6 +48,12 @@
             txtTaxVal = new TextBox();
             label7 = new Label();
             lblTotalInv = new Label();
+            label9 = new Label();
+            label8 = new Label();
+            txtPayment_Electronic = new TextBox();
+            txtPayment_Cash = new TextBox();
+            lblStateRemaining = new Label();
+            lblRemainingOnAcc = new Label();
             lblCount = new Label();
             label11 = new Label();
             lblMinLinth = new Label();
@@ -136,10 +136,10 @@
             lblNetTotal.Dock = DockStyle.Fill;
             lblNetTotal.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblNetTotal.ForeColor = Color.DarkViolet;
-            lblNetTotal.Location = new Point(212, 0);
+            lblNetTotal.Location = new Point(80, 0);
             lblNetTotal.Margin = new Padding(4, 0, 4, 0);
             lblNetTotal.Name = "lblNetTotal";
-            lblNetTotal.Size = new Size(121, 33);
+            lblNetTotal.Size = new Size(136, 33);
             lblNetTotal.TabIndex = 28;
             lblNetTotal.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -159,11 +159,11 @@
             // 
             // tableLayoutPanel9
             // 
-            tableLayoutPanel9.ColumnCount = 1;
-            tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel9.ColumnCount = 2;
+            tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
+            tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
             tableLayoutPanel9.Controls.Add(lblTafqet, 0, 0);
+            tableLayoutPanel9.Controls.Add(lblStateRemaining, 1, 0);
             tableLayoutPanel9.Location = new Point(4, 344);
             tableLayoutPanel9.Margin = new Padding(4, 2, 4, 2);
             tableLayoutPanel9.Name = "tableLayoutPanel9";
@@ -178,11 +178,11 @@
             lblTafqet.Dock = DockStyle.Fill;
             lblTafqet.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTafqet.ForeColor = Color.DarkViolet;
-            lblTafqet.Location = new Point(4, 0);
+            lblTafqet.Location = new Point(392, 0);
             lblTafqet.Margin = new Padding(4, 0, 4, 0);
             lblTafqet.Name = "lblTafqet";
             lblTafqet.Padding = new Padding(20, 0, 0, 0);
-            lblTafqet.Size = new Size(1283, 23);
+            lblTafqet.Size = new Size(895, 23);
             lblTafqet.TabIndex = 31;
             lblTafqet.TextAlign = ContentAlignment.MiddleRight;
             // 
@@ -192,10 +192,10 @@
             label2.Dock = DockStyle.Fill;
             label2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label2.ForeColor = Color.DarkViolet;
-            label2.Location = new Point(341, 0);
+            label2.Location = new Point(224, 0);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(121, 33);
+            label2.Size = new Size(244, 33);
             label2.TabIndex = 27;
             label2.Text = "صافى القيمة";
             label2.TextAlign = ContentAlignment.MiddleRight;
@@ -227,9 +227,9 @@
             tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
             tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
             tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
-            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
-            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
-            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16F));
+            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 19.6746712F));
+            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.309063F));
+            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5.731991F));
             tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel10.Controls.Add(lblAdditionalRate, 5, 1);
             tableLayoutPanel10.Controls.Add(lblNetTotal, 7, 0);
@@ -250,8 +250,7 @@
             tableLayoutPanel10.Controls.Add(label8, 6, 1);
             tableLayoutPanel10.Controls.Add(txtPayment_Electronic, 7, 2);
             tableLayoutPanel10.Controls.Add(txtPayment_Cash, 7, 1);
-            tableLayoutPanel10.Controls.Add(lblStateRemaining, 8, 1);
-            tableLayoutPanel10.Controls.Add(lblRemainingOnAcc, 8, 0);
+            tableLayoutPanel10.Controls.Add(lblRemainingOnAcc, 5, 2);
             tableLayoutPanel10.Dock = DockStyle.Fill;
             tableLayoutPanel10.Location = new Point(4, 240);
             tableLayoutPanel10.Margin = new Padding(4, 2, 4, 2);
@@ -263,100 +262,18 @@
             tableLayoutPanel10.Size = new Size(1291, 100);
             tableLayoutPanel10.TabIndex = 32;
             // 
-            // lblStateRemaining
-            // 
-            lblStateRemaining.Dock = DockStyle.Fill;
-            lblStateRemaining.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblStateRemaining.ForeColor = Color.Blue;
-            lblStateRemaining.Location = new Point(4, 33);
-            lblStateRemaining.Margin = new Padding(4, 0, 4, 0);
-            lblStateRemaining.Name = "lblStateRemaining";
-            lblStateRemaining.Size = new Size(200, 33);
-            lblStateRemaining.TabIndex = 48;
-            lblStateRemaining.TextAlign = ContentAlignment.MiddleRight;
-            // 
             // lblAdditionalRate
             // 
             lblAdditionalRate.BackColor = Color.Transparent;
             lblAdditionalRate.Dock = DockStyle.Fill;
             lblAdditionalRate.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblAdditionalRate.ForeColor = Color.DarkBlue;
-            lblAdditionalRate.Location = new Point(470, 33);
+            lblAdditionalRate.Location = new Point(476, 33);
             lblAdditionalRate.Margin = new Padding(4, 0, 4, 0);
             lblAdditionalRate.Name = "lblAdditionalRate";
-            lblAdditionalRate.Size = new Size(121, 33);
+            lblAdditionalRate.Size = new Size(120, 33);
             lblAdditionalRate.TabIndex = 29;
             lblAdditionalRate.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // lblRemainingOnAcc
-            // 
-            lblRemainingOnAcc.Dock = DockStyle.Fill;
-            lblRemainingOnAcc.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblRemainingOnAcc.ForeColor = Color.Blue;
-            lblRemainingOnAcc.Location = new Point(4, 0);
-            lblRemainingOnAcc.Margin = new Padding(4, 0, 4, 0);
-            lblRemainingOnAcc.Name = "lblRemainingOnAcc";
-            lblRemainingOnAcc.Size = new Size(200, 33);
-            lblRemainingOnAcc.TabIndex = 3;
-            lblRemainingOnAcc.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Dock = DockStyle.Fill;
-            label9.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label9.ForeColor = Color.Blue;
-            label9.Location = new Point(341, 66);
-            label9.Margin = new Padding(4, 0, 4, 0);
-            label9.Name = "label9";
-            label9.Size = new Size(121, 34);
-            label9.TabIndex = 3;
-            label9.Text = "المدفوع فيزا";
-            label9.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // txtPayment_Electronic
-            // 
-            txtPayment_Electronic.Dock = DockStyle.Fill;
-            txtPayment_Electronic.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtPayment_Electronic.ForeColor = Color.Purple;
-            txtPayment_Electronic.Location = new Point(212, 69);
-            txtPayment_Electronic.Margin = new Padding(4, 3, 4, 3);
-            txtPayment_Electronic.Name = "txtPayment_Electronic";
-            txtPayment_Electronic.Size = new Size(121, 29);
-            txtPayment_Electronic.TabIndex = 2;
-            txtPayment_Electronic.Text = "0";
-            txtPayment_Electronic.TextAlign = HorizontalAlignment.Center;
-            txtPayment_Electronic.DoubleClick += txtPayment_Electronic_DoubleClick;
-            txtPayment_Electronic.Leave += txtPayment_Electronic_Leave;
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Dock = DockStyle.Fill;
-            label8.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.ForeColor = Color.Blue;
-            label8.Location = new Point(341, 33);
-            label8.Margin = new Padding(4, 0, 4, 0);
-            label8.Name = "label8";
-            label8.Size = new Size(121, 33);
-            label8.TabIndex = 3;
-            label8.Text = "المدفوع كاش";
-            label8.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // txtPayment_Cash
-            // 
-            txtPayment_Cash.Dock = DockStyle.Fill;
-            txtPayment_Cash.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtPayment_Cash.ForeColor = Color.Purple;
-            txtPayment_Cash.Location = new Point(212, 36);
-            txtPayment_Cash.Margin = new Padding(4, 3, 4, 3);
-            txtPayment_Cash.Name = "txtPayment_Cash";
-            txtPayment_Cash.Size = new Size(121, 29);
-            txtPayment_Cash.TabIndex = 2;
-            txtPayment_Cash.Text = "0";
-            txtPayment_Cash.TextAlign = HorizontalAlignment.Center;
-            txtPayment_Cash.DoubleClick += txtPayment_Cash_DoubleClick;
-            txtPayment_Cash.Leave += txtPayment_Cash_Leave;
             // 
             // lblDiscountRate
             // 
@@ -364,10 +281,10 @@
             lblDiscountRate.Dock = DockStyle.Fill;
             lblDiscountRate.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblDiscountRate.ForeColor = Color.DarkBlue;
-            lblDiscountRate.Location = new Point(470, 0);
+            lblDiscountRate.Location = new Point(476, 0);
             lblDiscountRate.Margin = new Padding(4, 0, 4, 0);
             lblDiscountRate.Name = "lblDiscountRate";
-            lblDiscountRate.Size = new Size(121, 33);
+            lblDiscountRate.Size = new Size(120, 33);
             lblDiscountRate.TabIndex = 28;
             lblDiscountRate.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -377,10 +294,10 @@
             lblTaxRate.Dock = DockStyle.Fill;
             lblTaxRate.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTaxRate.ForeColor = Color.DarkBlue;
-            lblTaxRate.Location = new Point(857, 33);
+            lblTaxRate.Location = new Point(860, 33);
             lblTaxRate.Margin = new Padding(4, 0, 4, 0);
             lblTaxRate.Name = "lblTaxRate";
-            lblTaxRate.Size = new Size(121, 33);
+            lblTaxRate.Size = new Size(120, 33);
             lblTaxRate.TabIndex = 32;
             lblTaxRate.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -390,10 +307,10 @@
             lblTotalText.Dock = DockStyle.Fill;
             lblTotalText.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTotalText.ForeColor = Color.DarkBlue;
-            lblTotalText.Location = new Point(1115, 0);
+            lblTotalText.Location = new Point(1116, 0);
             lblTotalText.Margin = new Padding(4, 0, 4, 0);
             lblTotalText.Name = "lblTotalText";
-            lblTotalText.Size = new Size(172, 33);
+            lblTotalText.Size = new Size(171, 33);
             lblTotalText.TabIndex = 25;
             lblTotalText.Text = "اجمالى الفاتورة";
             lblTotalText.TextAlign = ContentAlignment.MiddleRight;
@@ -404,10 +321,10 @@
             label6.Dock = DockStyle.Fill;
             label6.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label6.ForeColor = Color.DarkBlue;
-            label6.Location = new Point(1115, 33);
+            label6.Location = new Point(1116, 33);
             label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
-            label6.Size = new Size(172, 33);
+            label6.Size = new Size(171, 33);
             label6.TabIndex = 25;
             label6.Text = "ض . م";
             label6.TextAlign = ContentAlignment.MiddleRight;
@@ -416,10 +333,10 @@
             // 
             txtValueAdded.Dock = DockStyle.Fill;
             txtValueAdded.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtValueAdded.Location = new Point(599, 36);
+            txtValueAdded.Location = new Point(604, 36);
             txtValueAdded.Margin = new Padding(4, 3, 4, 3);
             txtValueAdded.Name = "txtValueAdded";
-            txtValueAdded.Size = new Size(121, 29);
+            txtValueAdded.Size = new Size(120, 29);
             txtValueAdded.TabIndex = 26;
             txtValueAdded.Text = "0";
             txtValueAdded.TextAlign = HorizontalAlignment.Center;
@@ -430,10 +347,10 @@
             txtDiscount.AllowDrop = true;
             txtDiscount.Dock = DockStyle.Fill;
             txtDiscount.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtDiscount.Location = new Point(599, 3);
+            txtDiscount.Location = new Point(604, 3);
             txtDiscount.Margin = new Padding(4, 3, 4, 3);
             txtDiscount.Name = "txtDiscount";
-            txtDiscount.Size = new Size(121, 29);
+            txtDiscount.Size = new Size(120, 29);
             txtDiscount.TabIndex = 26;
             txtDiscount.Text = "0";
             txtDiscount.TextAlign = HorizontalAlignment.Center;
@@ -445,10 +362,10 @@
             label20.Dock = DockStyle.Fill;
             label20.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label20.ForeColor = Color.DarkBlue;
-            label20.Location = new Point(728, 33);
+            label20.Location = new Point(732, 33);
             label20.Margin = new Padding(4, 0, 4, 0);
             label20.Name = "label20";
-            label20.Size = new Size(121, 33);
+            label20.Size = new Size(120, 33);
             label20.TabIndex = 25;
             label20.Text = "اضافات";
             label20.TextAlign = ContentAlignment.MiddleRight;
@@ -459,10 +376,10 @@
             label19.Dock = DockStyle.Fill;
             label19.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label19.ForeColor = Color.DarkBlue;
-            label19.Location = new Point(728, 0);
+            label19.Location = new Point(732, 0);
             label19.Margin = new Padding(4, 0, 4, 0);
             label19.Name = "label19";
-            label19.Size = new Size(121, 33);
+            label19.Size = new Size(120, 33);
             label19.TabIndex = 25;
             label19.Text = "خصومات";
             label19.TextAlign = ContentAlignment.MiddleRight;
@@ -473,10 +390,10 @@
             lblTotalValueAfterTax.Dock = DockStyle.Fill;
             lblTotalValueAfterTax.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTotalValueAfterTax.ForeColor = Color.DarkViolet;
-            lblTotalValueAfterTax.Location = new Point(986, 66);
+            lblTotalValueAfterTax.Location = new Point(988, 66);
             lblTotalValueAfterTax.Margin = new Padding(4, 0, 4, 0);
             lblTotalValueAfterTax.Name = "lblTotalValueAfterTax";
-            lblTotalValueAfterTax.Size = new Size(121, 34);
+            lblTotalValueAfterTax.Size = new Size(120, 34);
             lblTotalValueAfterTax.TabIndex = 25;
             lblTotalValueAfterTax.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -484,10 +401,10 @@
             // 
             txtTaxVal.Dock = DockStyle.Fill;
             txtTaxVal.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtTaxVal.Location = new Point(986, 36);
+            txtTaxVal.Location = new Point(988, 36);
             txtTaxVal.Margin = new Padding(4, 3, 4, 3);
             txtTaxVal.Name = "txtTaxVal";
-            txtTaxVal.Size = new Size(121, 29);
+            txtTaxVal.Size = new Size(120, 29);
             txtTaxVal.TabIndex = 26;
             txtTaxVal.Text = "0";
             txtTaxVal.Leave += txtTaxVal_Leave;
@@ -498,10 +415,10 @@
             label7.Dock = DockStyle.Fill;
             label7.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label7.ForeColor = Color.DarkViolet;
-            label7.Location = new Point(1115, 66);
+            label7.Location = new Point(1116, 66);
             label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
-            label7.Size = new Size(172, 34);
+            label7.Size = new Size(171, 34);
             label7.TabIndex = 25;
             label7.Text = "بعد الضريبة";
             label7.TextAlign = ContentAlignment.MiddleRight;
@@ -512,13 +429,93 @@
             lblTotalInv.Dock = DockStyle.Fill;
             lblTotalInv.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTotalInv.ForeColor = Color.DarkBlue;
-            lblTotalInv.Location = new Point(986, 0);
+            lblTotalInv.Location = new Point(988, 0);
             lblTotalInv.Margin = new Padding(4, 0, 4, 0);
             lblTotalInv.Name = "lblTotalInv";
-            lblTotalInv.Size = new Size(121, 33);
+            lblTotalInv.Size = new Size(120, 33);
             lblTotalInv.TabIndex = 25;
             lblTotalInv.Text = "1000";
             lblTotalInv.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Dock = DockStyle.Fill;
+            label9.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label9.ForeColor = Color.Blue;
+            label9.Location = new Point(224, 66);
+            label9.Margin = new Padding(4, 0, 4, 0);
+            label9.Name = "label9";
+            label9.Size = new Size(244, 34);
+            label9.TabIndex = 3;
+            label9.Text = "المدفوع فيزا";
+            label9.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Dock = DockStyle.Fill;
+            label8.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label8.ForeColor = Color.Blue;
+            label8.Location = new Point(224, 33);
+            label8.Margin = new Padding(4, 0, 4, 0);
+            label8.Name = "label8";
+            label8.Size = new Size(244, 33);
+            label8.TabIndex = 3;
+            label8.Text = "المدفوع كاش";
+            label8.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // txtPayment_Electronic
+            // 
+            txtPayment_Electronic.Dock = DockStyle.Fill;
+            txtPayment_Electronic.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtPayment_Electronic.ForeColor = Color.Purple;
+            txtPayment_Electronic.Location = new Point(80, 69);
+            txtPayment_Electronic.Margin = new Padding(4, 3, 4, 3);
+            txtPayment_Electronic.Name = "txtPayment_Electronic";
+            txtPayment_Electronic.Size = new Size(136, 29);
+            txtPayment_Electronic.TabIndex = 2;
+            txtPayment_Electronic.Text = "0";
+            txtPayment_Electronic.TextAlign = HorizontalAlignment.Center;
+            txtPayment_Electronic.DoubleClick += txtPayment_Electronic_DoubleClick;
+            txtPayment_Electronic.Leave += txtPayment_Electronic_Leave;
+            // 
+            // txtPayment_Cash
+            // 
+            txtPayment_Cash.Dock = DockStyle.Fill;
+            txtPayment_Cash.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtPayment_Cash.ForeColor = Color.Purple;
+            txtPayment_Cash.Location = new Point(80, 36);
+            txtPayment_Cash.Margin = new Padding(4, 3, 4, 3);
+            txtPayment_Cash.Name = "txtPayment_Cash";
+            txtPayment_Cash.Size = new Size(136, 29);
+            txtPayment_Cash.TabIndex = 2;
+            txtPayment_Cash.Text = "0";
+            txtPayment_Cash.TextAlign = HorizontalAlignment.Center;
+            txtPayment_Cash.DoubleClick += txtPayment_Cash_DoubleClick;
+            txtPayment_Cash.Leave += txtPayment_Cash_Leave;
+            // 
+            // lblStateRemaining
+            // 
+            lblStateRemaining.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStateRemaining.ForeColor = Color.Blue;
+            lblStateRemaining.Location = new Point(184, 0);
+            lblStateRemaining.Margin = new Padding(4, 0, 4, 0);
+            lblStateRemaining.Name = "lblStateRemaining";
+            lblStateRemaining.Size = new Size(200, 23);
+            lblStateRemaining.TabIndex = 48;
+            lblStateRemaining.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // lblRemainingOnAcc
+            // 
+            lblRemainingOnAcc.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblRemainingOnAcc.ForeColor = Color.Blue;
+            lblRemainingOnAcc.Location = new Point(476, 66);
+            lblRemainingOnAcc.Margin = new Padding(4, 0, 4, 0);
+            lblRemainingOnAcc.Name = "lblRemainingOnAcc";
+            lblRemainingOnAcc.Size = new Size(120, 33);
+            lblRemainingOnAcc.TabIndex = 3;
+            lblRemainingOnAcc.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblCount
             // 
