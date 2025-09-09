@@ -573,9 +573,29 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-        /// <summary>
-        /// تنفيذ الحفظ عند تغيير قيمة مربع النص.
-        /// </summary>
+        // ربط الحدث لكل TextBox و CheckBox.
+        private void AttachTextBoxHandlers(Control parent)
+        {
+            foreach (Control ctrl in parent.Controls)
+            {
+                if (ctrl is TextBox txt)
+                {
+                    txt.Tag = txt.Text; // حفظ القيمة القديمة
+                    txt.Leave += TextBox_Leave;
+                }
+                else if (ctrl is CheckBox chk)
+                {
+                    chk.Tag = chk.Checked; // حفظ القيمة القديمة
+                    chk.CheckedChanged += CheckBox_CheckedChanged;
+                }
+                else if (ctrl.HasChildren)
+                {
+                    AttachTextBoxHandlers(ctrl); // Recursion
+                }
+            }
+        }
+
+        // تنفيذ الحفظ عند تغيير قيمة مربع النص.
         private void TextBox_Leave(object? sender, EventArgs e)
         {
             if (sender is TextBox txt)
@@ -583,14 +603,12 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 if ((txt.Tag is string oldValue) && txt.Text != oldValue)
                 {
                     SaveData();
-                    txt.Tag = txt.Text; // تحديث القيمة المرجعية
+                    txt.Tag = txt.Text;
                 }
             }
         }
 
-        /// <summary>
-        /// تنفيذ الحفظ عند تغيير حالة CheckBox.
-        /// </summary>
+        // تنفيذ الحفظ عند تغيير حالة الـ CheckBox.
         private void CheckBox_CheckedChanged(object? sender, EventArgs e)
         {
             if (sender is CheckBox chk)
@@ -598,7 +616,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 if ((chk.Tag is bool oldValue) && chk.Checked != oldValue)
                 {
                     SaveData();
-                    chk.Tag = chk.Checked; // تحديث القيمة المرجعية
+                    chk.Tag = chk.Checked;
                 }
             }
         }
@@ -679,25 +697,25 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             LoadSettings();
         }
 
-        /// <summary>
-        /// ربط حدث الخروج (Leave) بجميع مربعات النص داخل الحاوية.
-        /// عند الخروج من أي مربع نص وتغيير القيمة، يتم حفظ التغييرات تلقائيًا.
-        /// </summary>
-        private void AttachTextBoxHandlers(Control parent)
-        {
-            foreach (Control ctrl in parent.Controls)
-            {
-                if (ctrl is TextBox txt)
-                {
-                    txt.Tag = txt.Text; // حفظ القيمة الأصلية للمقارنة لاحقًا
-                    txt.Leave += TextBox_Leave;
-                }
-                else if (ctrl.HasChildren)
-                {
-                    AttachTextBoxHandlers(ctrl); // تكرار على الأبناء (Recursive)
-                }
-            }
-        }
+        ///// <summary>
+        ///// ربط حدث الخروج (Leave) بجميع مربعات النص داخل الحاوية.
+        ///// عند الخروج من أي مربع نص وتغيير القيمة، يتم حفظ التغييرات تلقائيًا.
+        ///// </summary>
+        //private void AttachTextBoxHandlers(Control parent)
+        //{
+        //    foreach (Control ctrl in parent.Controls)
+        //    {
+        //        if (ctrl is TextBox txt)
+        //        {
+        //            txt.Tag = txt.Text; // حفظ القيمة الأصلية للمقارنة لاحقًا
+        //            txt.Leave += TextBox_Leave;
+        //        }
+        //        else if (ctrl.HasChildren)
+        //        {
+        //            AttachTextBoxHandlers(ctrl); // تكرار على الأبناء (Recursive)
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// تنفيذ الحفظ عند تغيير قيمة مربع النص.
