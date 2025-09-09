@@ -32,6 +32,7 @@
             DGV = new DataGridView();
             tableLayoutPanel9 = new TableLayoutPanel();
             lblTafqet = new Label();
+            lblStateRemaining = new Label();
             label2 = new Label();
             tableLayoutPanel5 = new TableLayoutPanel();
             tableLayoutPanel10 = new TableLayoutPanel();
@@ -52,7 +53,6 @@
             label8 = new Label();
             txtPayment_Electronic = new TextBox();
             txtPayment_Cash = new TextBox();
-            lblStateRemaining = new Label();
             lblRemainingOnAcc = new Label();
             lblCount = new Label();
             label11 = new Label();
@@ -160,8 +160,8 @@
             // tableLayoutPanel9
             // 
             tableLayoutPanel9.ColumnCount = 2;
-            tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
-            tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+            tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 75.3679352F));
+            tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 24.6320686F));
             tableLayoutPanel9.Controls.Add(lblTafqet, 0, 0);
             tableLayoutPanel9.Controls.Add(lblStateRemaining, 1, 0);
             tableLayoutPanel9.Location = new Point(4, 344);
@@ -178,13 +178,25 @@
             lblTafqet.Dock = DockStyle.Fill;
             lblTafqet.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTafqet.ForeColor = Color.DarkViolet;
-            lblTafqet.Location = new Point(392, 0);
+            lblTafqet.Location = new Point(322, 0);
             lblTafqet.Margin = new Padding(4, 0, 4, 0);
             lblTafqet.Name = "lblTafqet";
             lblTafqet.Padding = new Padding(20, 0, 0, 0);
-            lblTafqet.Size = new Size(895, 23);
+            lblTafqet.Size = new Size(965, 23);
             lblTafqet.TabIndex = 31;
             lblTafqet.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // lblStateRemaining
+            // 
+            lblStateRemaining.Dock = DockStyle.Fill;
+            lblStateRemaining.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStateRemaining.ForeColor = Color.Blue;
+            lblStateRemaining.Location = new Point(4, 0);
+            lblStateRemaining.Margin = new Padding(4, 0, 4, 0);
+            lblStateRemaining.Name = "lblStateRemaining";
+            lblStateRemaining.Size = new Size(310, 23);
+            lblStateRemaining.TabIndex = 48;
+            lblStateRemaining.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // label2
             // 
@@ -494,17 +506,6 @@
             txtPayment_Cash.TextAlign = HorizontalAlignment.Center;
             txtPayment_Cash.DoubleClick += txtPayment_Cash_DoubleClick;
             txtPayment_Cash.Leave += txtPayment_Cash_Leave;
-            // 
-            // lblStateRemaining
-            // 
-            lblStateRemaining.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblStateRemaining.ForeColor = Color.Blue;
-            lblStateRemaining.Location = new Point(184, 0);
-            lblStateRemaining.Margin = new Padding(4, 0, 4, 0);
-            lblStateRemaining.Name = "lblStateRemaining";
-            lblStateRemaining.Size = new Size(200, 23);
-            lblStateRemaining.TabIndex = 48;
-            lblStateRemaining.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblRemainingOnAcc
             // 
