@@ -638,11 +638,13 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         private void txtPayment_Cash_DoubleClick(object? sender, EventArgs e)
         {
             txtPayment_Cash.Text = lblNetTotal.Text;
+            txtPayment_Electronic.Text = "0";
             CalculateRemainingOnAccount();
         }
         private void txtPayment_Electronic_DoubleClick(object? sender, EventArgs e)
         {
             txtPayment_Electronic.Text = lblNetTotal.Text;
+            txtPayment_Cash.Text = "0";
             CalculateRemainingOnAccount();
         }
 
@@ -658,22 +660,23 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
             if (remaining > 0)
             {
-                lblStateRemaining.Text = "باقي عليه";
+                lblStateRemaining.Text = $"باقي عليه {remaining:N2}";
                 lblStateRemaining.ForeColor = Color.Red;
-                lblRemainingOnAcc.ForeColor = Color.Red;
+                lblRemainingOnAcc.Visible = false;
             }
             else if (remaining < 0)
             {
-                lblStateRemaining.Text = "باقي له";
+                lblStateRemaining.Text = $"باقي له {Math.Abs(remaining):N2}";
                 lblStateRemaining.ForeColor = Color.Green;
-                lblRemainingOnAcc.ForeColor = Color.Green;
+                lblRemainingOnAcc.Visible = false;
             }
             else
             {
                 lblStateRemaining.Text = "تم السداد";
                 lblStateRemaining.ForeColor = Color.Blue;
-                lblRemainingOnAcc.ForeColor = Color.Blue;
+                lblRemainingOnAcc.Visible = false;
             }
+
         }
 
         // 🔹 حساب جميع القيم
