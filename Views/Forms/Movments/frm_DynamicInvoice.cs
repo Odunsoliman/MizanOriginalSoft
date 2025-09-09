@@ -664,7 +664,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // 🔹 حساب جميع القيم
         private void CalculateInvoiceFooter()
         {
-            if (DGV.DataSource is not DataTable dt) return;
+           // if (DGV.DataSource is not DataTable dt) return;
 
             decimal total = 1000;// تعطيل مؤقت للتجربة للحساب من الجريد
             //foreach (DataRow row in dt.Rows)
