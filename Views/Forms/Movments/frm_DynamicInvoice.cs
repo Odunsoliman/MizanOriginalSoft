@@ -633,7 +633,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // 🔹 تحديث المدفوعات
         private void txtPayment_Cash_Leave(object? sender, EventArgs e) => CalculateRemainingOnAccount();
         private void txtPayment_Electronic_Leave(object? sender, EventArgs e) => CalculateRemainingOnAccount();
-
         // 🔹 دعم النقر المزدوج للمدفوعات
         private void txtPayment_Cash_DoubleClick(object? sender, EventArgs e)
         {
@@ -650,6 +649,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 txtPayment_Cash.SelectAll(); // تحديد النص لكتابة يدويّة
             }
 
+            UpdatePaymentNote();
             CalculateRemainingOnAccount();
         }
 
@@ -668,8 +668,26 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 txtPayment_Electronic.SelectAll(); // تحديد النص لكتابة يدويّة
             }
 
+            UpdatePaymentNote();
             CalculateRemainingOnAccount();
         }
+
+        // 🔹 دالة لتحديث طريقة الدفع
+        private void UpdatePaymentNote()
+        {
+            decimal.TryParse(txtPayment_Cash.Text, out var cash);
+            decimal.TryParse(txtPayment_Electronic.Text, out var electronic);
+
+            if (cash > 0 && electronic > 0)
+                txtPayment_Note.Text = "مدفوع نقدي وبالفيزا معا";
+            else if (cash > 0)
+                txtPayment_Note.Text = "مدفوع نقدي";
+            else if (electronic > 0)
+                txtPayment_Note.Text = "مدفوع بالفيزا";
+            else
+                txtPayment_Note.Clear(); // لا يوجد مدفوع
+        }
+
 
         // 🔹 حساب الرصيد المتبقي
         private void CalculateRemainingOnAccount()
