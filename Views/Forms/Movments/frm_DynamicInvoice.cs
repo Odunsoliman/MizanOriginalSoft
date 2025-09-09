@@ -565,13 +565,22 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 AllowChangeTax = AppSettings.GetBool("IsEnablToChangTax", true);
                 MaxRateDiscount = AppSettings.GetDecimal("MaxRateDiscount", 0.10m); // 10% افتراضياً
 
-                // 🟦 تعيين الضريبة
-                txtTaxVal.Text = defaultTax.ToString("N2");
+                // 🟦 تعيين نسبة الضريبة في الليبل
+                lblTaxRate.Text = defaultTax > 0 ? (defaultTax * 100m).ToString("N2") + "%" : "0%";
+
+                // 🟦 حساب قيمة الضريبة حسب الإجمالي إن وجد
+                decimal total = 0m;
+                decimal.TryParse(lblTotalInv.Text, out total); // يحاول قراءة الإجمالي
+
+                decimal taxValue = total > 0 ? total * defaultTax : 0m;
+                txtTaxVal.Text = taxValue.ToString("N2");
+
+                // 🟦 السماح/منع تعديل قيمة الضريبة
                 txtTaxVal.ReadOnly = !AllowChangeTax;
             }
             catch (Exception ex)
             {
-                CustomMessageBox.ShowWarning ($"خطأ أثناء تحميل إعدادات الفاتورة:\n{ex.Message}", "خطأ");
+                CustomMessageBox.ShowWarning($"خطأ أثناء تحميل إعدادات الفاتورة:\n{ex.Message}", "خطأ");
             }
         }
 
@@ -591,7 +600,10 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     "تنبيه");
             }
 
-            lblDiscountRate.Text = total > 0 ? ((discount / total) * 100m).ToString("N2") : "0.00";
+            lblDiscountRate.Text = total > 0
+            ? ((discount / total) * 100m).ToString("N2") + "%"
+            : "0%";
+
             CalculateInvoiceFooter();
         }
 
@@ -611,7 +623,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             if (!decimal.TryParse(txtValueAdded.Text, out var added)) added = 0m;
             if (!decimal.TryParse(lblTotalInv.Text, out var total)) total = 0m;
 
-            lblAdditionalRate.Text = total > 0 ? ((added / total) * 100m).ToString("N2") : "0.00";
+            lblAdditionalRate.Text = total > 0
+            ? ((added / total) * 100m).ToString("N2") + "%"
+            : "0%";
             CalculateInvoiceFooter();
         }
 
