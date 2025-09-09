@@ -704,37 +704,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             CalculateRemainingOnAccount();
         }
 
-        /*المنطق المتبع فى تذييل الفاتورة
-         
-        lblTotalInv; مجموع اجمالى قيم الاسطر فى الجريد DGV  فى الحقل NetRow
-        txtTaxVal; قيمة موجودة فى ملف الاعداد يمكن قرائتها باسم SalesTax مع وجود خاصية بالملف باسم IsEnablToChangTax تسمح للمستخدم من تغيير القيمة او تجعل التكست غير مسموح التغيير فيه
-
-        lblTotalValueAfterTax;=lblTotalInv + lblTotalInv * txtTaxVal
-        txtDiscount;قيمة يكتبها المستخدم تكون متاحة فقط فى حال وجود قيمة قى lblTotalValueAfterTax
-        ولها خاصية فى ملف الاعداد باسم MaxRateDiscount لا يسمح بكتابة قيمة تتعدى هذه النسبة من قيمة lblTotalInv
-        وفى حال تعداها المستخدم تعود القيمة الى اعلى قيمة مسموح بها تلقائيا
-        lblDiscountRate;= نسبة الرقم المخصوم من اجمالى الفاتورة lblTotalInv
-        txtValueAdded;= القيمة المضافة على الفاتورة 
-        lblAdditionalRate;=نسبة القيمة المضافة منسوبة الى lblTotalInv
-        lblNetTotal;=lblTotalValueAfterTax - txtDiscount + txtValueAdded
-
-        txtPayment_Cash;= القيمة المدفوعة كاش من صافى الفاتورة تكتب يدويا او بالنقر المزدوج يتم ترحيل كل المبلغ اليها من lblNetTotal
-        txtPayment_Electronic;= القيمة المدفوعة بفيزا من صافى الفاتورة تكتب يدويا او بالنقر المزدوج يتم ترحيل كل المبلغ اليها من lblNetTotal
-        lblRemainingOnAcc;= lblNetTotal -(txtPayment_Cash+txtPayment_Electronic)
-
-        فماذا ينقصنا فى الكود التالى ام ما الذى يجب تعديله فيه 
-        اريد كود متكامل داخل الريجون
-         */
-
-
         #endregion
-        /**/
-        #region Save invoice الحفظ النهائى
-
-        #endregion
-
-
-
     }
 }
 
