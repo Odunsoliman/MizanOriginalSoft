@@ -613,6 +613,9 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             if (sender is CheckBox chk)
             {
+                // 🔹 تغيير النص حسب حالة الـ CheckBox
+                lblTypeSaleStock.Text = chk.Checked ? "البيع على المكشوف" : "البيع حسب الرصيد";
+
                 if ((chk.Tag is bool oldValue) && chk.Checked != oldValue)
                 {
                     SaveData();
@@ -622,7 +625,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-        /**/
         private void SaveData()
         {
             // اقرأ كل الأسطر من الملف (مع التعليقات)

@@ -66,7 +66,7 @@
             label34 = new Label();
             txtReturnSaleMode = new TextBox();
             chkIsSaleByNegativeStock = new CheckBox();
-            label35 = new Label();
+            lblTypeSaleStock = new Label();
             tabPagePrinterSetting = new TabPage();
             tableLayoutPanel18 = new TableLayoutPanel();
             tableLayoutPanel22 = new TableLayoutPanel();
@@ -413,7 +413,7 @@
             tableLayoutPanel8.Controls.Add(label34, 2, 3);
             tableLayoutPanel8.Controls.Add(txtReturnSaleMode, 3, 1);
             tableLayoutPanel8.Controls.Add(chkIsSaleByNegativeStock, 3, 0);
-            tableLayoutPanel8.Controls.Add(label35, 2, 0);
+            tableLayoutPanel8.Controls.Add(lblTypeSaleStock, 2, 0);
             tableLayoutPanel8.Dock = DockStyle.Top;
             tableLayoutPanel8.Location = new Point(46, 44);
             tableLayoutPanel8.Name = "tableLayoutPanel8";
@@ -717,16 +717,16 @@
             chkIsSaleByNegativeStock.TextAlign = ContentAlignment.MiddleRight;
             chkIsSaleByNegativeStock.UseVisualStyleBackColor = true;
             // 
-            // label35
+            // lblTypeSaleStock
             // 
-            label35.AutoSize = true;
-            label35.Dock = DockStyle.Fill;
-            label35.Location = new Point(95, 0);
-            label35.Name = "label35";
-            label35.Size = new Size(202, 33);
-            label35.TabIndex = 43;
-            label35.Text = "البيع حسب الرصيد";
-            label35.TextAlign = ContentAlignment.MiddleRight;
+            lblTypeSaleStock.AutoSize = true;
+            lblTypeSaleStock.Dock = DockStyle.Fill;
+            lblTypeSaleStock.Location = new Point(95, 0);
+            lblTypeSaleStock.Name = "lblTypeSaleStock";
+            lblTypeSaleStock.Size = new Size(202, 33);
+            lblTypeSaleStock.TabIndex = 43;
+            lblTypeSaleStock.Text = "البيع حسب الرصيد";
+            lblTypeSaleStock.TextAlign = ContentAlignment.MiddleRight;
             // 
             // tabPagePrinterSetting
             // 
@@ -2077,6 +2077,6 @@
         private Label label32;
         private Label label33;
         private Label label34;
-        private Label label35;
+        private Label lblTypeSaleStock;
     }
 }
