@@ -26,7 +26,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         private bool allowNegativeStock;
 
         // 🔹 متغير يحدد إذا كان المرتجع يشترط إدخال رقم فاتورة البيع
-        private bool reSaleByInvoiceSale;
+        private int returnSaleMode;
         #endregion
 
         #region Form Initialization
@@ -66,13 +66,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         private void frm_DynamicInvoice_Load(object sender, EventArgs e)
         {
-            // ✅ تحميل ملف الإعدادات
-            if (!AppSettingsIsLoaded())
-            {
-                string settingsPath = Path.Combine(Application.StartupPath, "AppSettings.txt");
-                AppSettings.Load(settingsPath);
-            }
-
             // ✅ قراءة الإعدادات
             LoadSettings();
 
@@ -87,24 +80,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
         }
-        #endregion
-
-  
-        // ✅ التحقق إذا كان AppSettings متحمل
-        private bool AppSettingsIsLoaded()
-        {
-            try
-            {
-                // لو حاولنا قراءة أي قيمة من غير تحميل هيعمل Exception
-                AppSettings.GetAllSettings();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
 
         // 🔹 تحديث النصوص لو اخترت "بيع"
         private void UpdateLabelsForSale()
@@ -120,16 +95,39 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // 🔹 تحديث النصوص لو اخترت "مرتجع"
         private void UpdateLabelsForResale()
         {
-            lblInvStat.Text = ""; // ممكن تكتب "مرتجع" لو تحب
 
-            if (reSaleByInvoiceSale)
+            // نفّذ حسب القيمة
+            switch (returnSaleMode)
             {
-                lblCodeTitel.Text = " رقم فاتورة البيع";
-                lblInvStat.Text = "البيع المرتد يكون عن طريق رقم فاتورة البيع الاصلية";
-            }
+                case 1: // InvoiceOnly
+                    lblCodeTitel.Text = "رقم فاتورة البيع";
+                    lblInvStat.Text = "البيع المرتد يكون عن طريق رقم فاتورة البيع الأصلية";
+                    tlpReturnMod.Visible = false;
+                    rdoInvoice.Checked = true;
+                    break;
 
-            else
-                lblCodeTitel.Text = "ادخل كود الصنف";
+                case 2: // FreeMode
+                    lblCodeTitel.Text = "رقم كود الصنف";
+                    lblInvStat.Text = "إرجاع حر";
+                    tlpReturnMod.Visible = false;
+                    rdoFree.Checked = true;
+                    break;
+
+                case 3: // MixedMode
+                    lblCodeTitel.Text = "رقم كود الصنف";
+                    lblInvStat.Text = "إرجاع حر";
+                    tlpReturnMod.Visible = true;
+                    rdoFree.Checked = true;
+                    break;
+
+                default:
+                    // fallback لو فيه خطأ بالملف
+                    lblCodeTitel.Text = "رقم كود الصنف";
+                    lblInvStat.Text = "إرجاع حر";
+                    tlpReturnMod.Visible = false;
+                    rdoFree.Checked = true;
+                    break;
+            }
         }
 
         // ✅ تحميل القيم من ملف الإعدادات
@@ -137,8 +135,10 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
             
             allowNegativeStock = AppSettings.GetBool("NegativeStockSale");
-            reSaleByInvoiceSale = AppSettings.GetBool("ReSaleByInvoiceSale");
+            returnSaleMode = AppSettings.GetInt("ReturnSaleMode");
         }
+
+        #endregion 
 
         #region Header   وظائف الجزء الاعلى من الفاتورة
 
@@ -686,7 +686,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             CalculateRemainingOnAccount();
         }
         #endregion
-
+        /**/
 
         #endregion
 

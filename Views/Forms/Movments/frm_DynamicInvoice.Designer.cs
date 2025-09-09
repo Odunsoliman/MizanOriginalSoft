@@ -115,6 +115,9 @@
             lblDir = new Label();
             label13 = new Label();
             lblB_Status = new Label();
+            tlpReturnMod = new TableLayoutPanel();
+            rdoFree = new RadioButton();
+            rdoInvoice = new RadioButton();
             ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
             tableLayoutPanel9.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
@@ -129,6 +132,7 @@
             tableLayoutPanel6.SuspendLayout();
             tableLayoutPanel7.SuspendLayout();
             tlpAcc.SuspendLayout();
+            tlpReturnMod.SuspendLayout();
             SuspendLayout();
             // 
             // lblNetTotal
@@ -1406,6 +1410,7 @@
             tlpAcc.Controls.Add(cbxSellerID, 1, 1);
             tlpAcc.Controls.Add(lblBalance, 2, 2);
             tlpAcc.Controls.Add(lblB_Status, 2, 1);
+            tlpAcc.Controls.Add(tlpReturnMod, 0, 2);
             tlpAcc.Location = new Point(547, 2);
             tlpAcc.Margin = new Padding(4, 2, 4, 2);
             tlpAcc.Name = "tlpAcc";
@@ -1471,6 +1476,44 @@
             lblB_Status.TabIndex = 25;
             lblB_Status.TextAlign = ContentAlignment.MiddleLeft;
             // 
+            // tlpReturnMod
+            // 
+            tlpReturnMod.ColumnCount = 2;
+            tlpReturnMod.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tlpReturnMod.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tlpReturnMod.Controls.Add(rdoFree, 0, 0);
+            tlpReturnMod.Controls.Add(rdoInvoice, 1, 0);
+            tlpReturnMod.Dock = DockStyle.Fill;
+            tlpReturnMod.Location = new Point(640, 83);
+            tlpReturnMod.Name = "tlpReturnMod";
+            tlpReturnMod.RowCount = 1;
+            tlpReturnMod.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tlpReturnMod.Size = new Size(230, 36);
+            tlpReturnMod.TabIndex = 33;
+            tlpReturnMod.Visible = false;
+            // 
+            // rdoFree
+            // 
+            rdoFree.AutoSize = true;
+            rdoFree.Location = new Point(170, 3);
+            rdoFree.Name = "rdoFree";
+            rdoFree.Size = new Size(57, 23);
+            rdoFree.TabIndex = 0;
+            rdoFree.TabStop = true;
+            rdoFree.Text = "بالكود";
+            rdoFree.UseVisualStyleBackColor = true;
+            // 
+            // rdoInvoice
+            // 
+            rdoInvoice.AutoSize = true;
+            rdoInvoice.Location = new Point(25, 3);
+            rdoInvoice.Name = "rdoInvoice";
+            rdoInvoice.Size = new Size(87, 23);
+            rdoInvoice.TabIndex = 0;
+            rdoInvoice.TabStop = true;
+            rdoInvoice.Text = "فاتورة البيع";
+            rdoInvoice.UseVisualStyleBackColor = true;
+            // 
             // frm_DynamicInvoice
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
@@ -1502,6 +1545,8 @@
             tableLayoutPanel7.ResumeLayout(false);
             tlpAcc.ResumeLayout(false);
             tlpAcc.PerformLayout();
+            tlpReturnMod.ResumeLayout(false);
+            tlpReturnMod.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -1594,5 +1639,8 @@
         private Label lblB_Status;
         private Label lblInvStat;
         private TextBox txtTaxVal;
+        private TableLayoutPanel tlpReturnMod;
+        private RadioButton rdoFree;
+        private RadioButton rdoInvoice;
     }
 }
