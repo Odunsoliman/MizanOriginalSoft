@@ -1495,24 +1495,30 @@
             // rdoFree
             // 
             rdoFree.AutoSize = true;
-            rdoFree.Location = new Point(170, 3);
+            rdoFree.Dock = DockStyle.Fill;
+            rdoFree.ForeColor = Color.Red;
+            rdoFree.Location = new Point(118, 3);
             rdoFree.Name = "rdoFree";
-            rdoFree.Size = new Size(57, 23);
+            rdoFree.Size = new Size(109, 30);
             rdoFree.TabIndex = 0;
             rdoFree.TabStop = true;
             rdoFree.Text = "بالكود";
             rdoFree.UseVisualStyleBackColor = true;
+            rdoFree.CheckedChanged += rdoFree_CheckedChanged;
             // 
             // rdoInvoice
             // 
             rdoInvoice.AutoSize = true;
-            rdoInvoice.Location = new Point(25, 3);
+            rdoInvoice.Dock = DockStyle.Fill;
+            rdoInvoice.ForeColor = Color.Red;
+            rdoInvoice.Location = new Point(3, 3);
             rdoInvoice.Name = "rdoInvoice";
-            rdoInvoice.Size = new Size(87, 23);
+            rdoInvoice.Size = new Size(109, 30);
             rdoInvoice.TabIndex = 0;
             rdoInvoice.TabStop = true;
             rdoInvoice.Text = "فاتورة البيع";
             rdoInvoice.UseVisualStyleBackColor = true;
+            rdoInvoice.CheckedChanged += rdoInvoice_CheckedChanged;
             // 
             // frm_DynamicInvoice
             // 

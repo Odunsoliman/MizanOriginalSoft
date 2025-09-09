@@ -108,14 +108,14 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
                 case 2: // FreeMode
                     lblCodeTitel.Text = "رقم كود الصنف";
-                    lblInvStat.Text = "إرجاع حر";
+                    lblInvStat.Text = "إرجاع بالكود";
                     tlpReturnMod.Visible = false;
                     rdoFree.Checked = true;
                     break;
 
                 case 3: // MixedMode
                     lblCodeTitel.Text = "رقم كود الصنف";
-                    lblInvStat.Text = "إرجاع حر";
+                    lblInvStat.Text = "إرجاع بالكود";
                     tlpReturnMod.Visible = true;
                     rdoFree.Checked = true;
                     break;
@@ -133,9 +133,27 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // ✅ تحميل القيم من ملف الإعدادات
         private void LoadSettings()
         {
-            
-            allowNegativeStock = AppSettings.GetBool("NegativeStockSale");
+
+            allowNegativeStock = AppSettings.GetBool("IsSaleByNegativeStock");
             returnSaleMode = AppSettings.GetInt("ReturnSaleMode");
+        }
+
+        private void rdoFree_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdoFree.Checked) // تأكد أن الراديو مفعّل
+            {
+                lblCodeTitel.Text = "رقم كود الصنف";
+                lblInvStat.Text = "إرجاع بالكود";
+            }
+        }
+
+        private void rdoInvoice_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdoInvoice.Checked)
+            {
+                lblCodeTitel.Text = "رقم فاتورة البيع";
+                lblInvStat.Text = "البيع المرتد يكون عن طريق رقم فاتورة البيع الأصلية";
+            }
         }
 
         #endregion 
@@ -689,6 +707,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         /**/
 
         #endregion
+
 
 
     }
