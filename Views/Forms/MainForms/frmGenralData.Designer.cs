@@ -61,6 +61,12 @@
             btnDeleteWarehous = new Button();
             btnSetAsDefaultWarehouse = new Button();
             btnRenamWarehous = new Button();
+            label32 = new Label();
+            label33 = new Label();
+            label34 = new Label();
+            txtReturnSaleMode = new TextBox();
+            chkIsSaleByNegativeStock = new CheckBox();
+            label35 = new Label();
             tabPagePrinterSetting = new TabPage();
             tableLayoutPanel18 = new TableLayoutPanel();
             tableLayoutPanel22 = new TableLayoutPanel();
@@ -402,6 +408,12 @@
             tableLayoutPanel8.Controls.Add(btnDeleteWarehous, 3, 6);
             tableLayoutPanel8.Controls.Add(btnSetAsDefaultWarehouse, 2, 6);
             tableLayoutPanel8.Controls.Add(btnRenamWarehous, 3, 7);
+            tableLayoutPanel8.Controls.Add(label32, 2, 1);
+            tableLayoutPanel8.Controls.Add(label33, 2, 2);
+            tableLayoutPanel8.Controls.Add(label34, 2, 3);
+            tableLayoutPanel8.Controls.Add(txtReturnSaleMode, 3, 1);
+            tableLayoutPanel8.Controls.Add(chkIsSaleByNegativeStock, 3, 0);
+            tableLayoutPanel8.Controls.Add(label35, 2, 0);
             tableLayoutPanel8.Dock = DockStyle.Top;
             tableLayoutPanel8.Location = new Point(46, 44);
             tableLayoutPanel8.Name = "tableLayoutPanel8";
@@ -651,6 +663,70 @@
             btnRenamWarehous.Text = "تعديل اسم";
             btnRenamWarehous.UseVisualStyleBackColor = true;
             btnRenamWarehous.Click += btnRenamWarehous_Click;
+            // 
+            // label32
+            // 
+            label32.AutoSize = true;
+            label32.Dock = DockStyle.Fill;
+            label32.Location = new Point(95, 33);
+            label32.Name = "label32";
+            label32.Size = new Size(202, 33);
+            label32.TabIndex = 43;
+            label32.Text = " البيع المرتد حسب ف البيع=1";
+            label32.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label33
+            // 
+            label33.AutoSize = true;
+            label33.Dock = DockStyle.Fill;
+            label33.Location = new Point(95, 66);
+            label33.Name = "label33";
+            label33.Size = new Size(202, 33);
+            label33.TabIndex = 43;
+            label33.Text = " البيع المرتد بالكود مباشر=2";
+            label33.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label34
+            // 
+            label34.AutoSize = true;
+            label34.Dock = DockStyle.Fill;
+            label34.Location = new Point(95, 99);
+            label34.Name = "label34";
+            label34.Size = new Size(202, 33);
+            label34.TabIndex = 43;
+            label34.Text = " البيع المرتد بالنظامين=3";
+            label34.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // txtReturnSaleMode
+            // 
+            txtReturnSaleMode.Dock = DockStyle.Left;
+            txtReturnSaleMode.Location = new Point(40, 36);
+            txtReturnSaleMode.Name = "txtReturnSaleMode";
+            txtReturnSaleMode.Size = new Size(49, 26);
+            txtReturnSaleMode.TabIndex = 42;
+            txtReturnSaleMode.KeyPress += txtReturnSaleMode_KeyPress;
+            // 
+            // chkIsSaleByNegativeStock
+            // 
+            chkIsSaleByNegativeStock.AutoSize = true;
+            chkIsSaleByNegativeStock.Dock = DockStyle.Left;
+            chkIsSaleByNegativeStock.Location = new Point(74, 3);
+            chkIsSaleByNegativeStock.Name = "chkIsSaleByNegativeStock";
+            chkIsSaleByNegativeStock.Size = new Size(15, 27);
+            chkIsSaleByNegativeStock.TabIndex = 41;
+            chkIsSaleByNegativeStock.TextAlign = ContentAlignment.MiddleRight;
+            chkIsSaleByNegativeStock.UseVisualStyleBackColor = true;
+            // 
+            // label35
+            // 
+            label35.AutoSize = true;
+            label35.Dock = DockStyle.Fill;
+            label35.Location = new Point(95, 0);
+            label35.Name = "label35";
+            label35.Size = new Size(202, 33);
+            label35.TabIndex = 43;
+            label35.Text = "البيع حسب الرصيد";
+            label35.TextAlign = ContentAlignment.MiddleRight;
             // 
             // tabPagePrinterSetting
             // 
@@ -1996,5 +2072,11 @@
         private ComboBox cbxUsers;
         private Label label31;
         private Button btnUserPermissions;
+        private CheckBox chkIsSaleByNegativeStock;
+        private TextBox txtReturnSaleMode;
+        private Label label32;
+        private Label label33;
+        private Label label34;
+        private Label label35;
     }
 }

@@ -38,7 +38,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             LoadUsers();
             cbxUsers.SelectedIndexChanged += CbxUsers_SelectedIndexChanged;
             DGVStyl();
- 
+
 
         }
 
@@ -76,7 +76,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         #endregion
 
- 
+
         #region ====== إدارة المستخدمين والصلاحيات ======
         private void StyleDGV_Users()
         {/*اريد المستخدم الغير مفعل IsActive=0 يظهر بلون بخلفية مميز*/
@@ -113,7 +113,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             DGV_Users.ColumnHeadersHeight = 40;
             DGV_Users.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 
-            DGV_Users.DefaultCellStyle.Font = new Font("Times New Roman", 14F, FontStyle.Bold );
+            DGV_Users.DefaultCellStyle.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
             DGV_Users.DefaultCellStyle.ForeColor = Color.Black;
             DGV_Users.DefaultCellStyle.BackColor = Color.White;
         }
@@ -510,6 +510,11 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     case "SalesTax": txtSalesTax.Text = value; break;
                     case "CompanyAdreass": txtAdreass.Text = value; break;
                     case "EmailCo": txtCompanyEmail.Text = value; break;
+                    case "IsSaleByNegativeStock":
+                        if (bool.TryParse(value, out bool isNegativeStock))
+                            chkIsSaleByNegativeStock.Checked = isNegativeStock;
+                        break;
+                    case "ReturnSaleMode": txtReturnSaleMode.Text = value; break;
                     case "CompanyLoGoFolder": lblLogoPath.Text = value; break;
                     case "LogoImagName": lblLogoImageName.Text = value; break;
                     case "DefaultWarehouseId":
@@ -532,14 +537,14 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         #region حفظ الإعدادات إلى الملف
         private void btnSave_Click(object sender, EventArgs e)
         {
-           
+
             if (string.IsNullOrWhiteSpace(txtServerName.Text) || string.IsNullOrWhiteSpace(txtDBName.Text))
             {
                 MessageBox.Show("يرجى تحديد السيرفر وقاعدة البيانات.");
                 return;
             }
-             SaveData();
-          
+            SaveData();
+
         }
         #endregion
 
@@ -575,6 +580,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 ["SalesTax"] = txtSalesTax.Text,
                 ["CompanyAdreass"] = txtAdreass.Text,
                 ["EmailCo"] = txtCompanyEmail.Text,
+                ["ReturnSaleMode"] = txtReturnSaleMode  .Text  ,
+                ["IsSaleByNegativeStock"] = chkIsSaleByNegativeStock.Checked.ToString(),
                 ["CompanyLoGoFolder"] = lblLogoPath.Text,
                 ["LogoImagName"] = lblLogoImageName.Text,
                 ["DefaultWarehouseId"] = cbxWarehouseId.SelectedValue?.ToString() ?? ""
@@ -617,7 +624,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             // الكلاس AppSettings يقرأ مرة واحدة عند فتح البرنامج ملف  الستينج فيجب اعادة القرائة بعد تعديل اى اعداد
             LoadSettings();
         }
-        
+
         #endregion
 
         #region === مرفقات خاصة بمربعات النصوص ===
@@ -971,7 +978,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     {
                         folderDialog.SelectedPath = txtBackupsPath.Text;
                     }
-                    
+
                     if (folderDialog.ShowDialog() == DialogResult.OK)
                     {
                         txtBackupsPath.Text = folderDialog.SelectedPath;
@@ -1231,6 +1238,19 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
 
         #endregion
+
+        private void txtReturnSaleMode_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // السماح بـ Backspace
+            if (e.KeyChar == (char)Keys.Back)
+                return;
+
+            // السماح فقط بـ 1 أو 2 أو 3
+            if (e.KeyChar != '1' && e.KeyChar != '2' && e.KeyChar != '3')
+            {
+                e.Handled = true; // منع الإدخال
+            }
+        }
 
     }
 }
