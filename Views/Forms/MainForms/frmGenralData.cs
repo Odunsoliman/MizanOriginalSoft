@@ -616,6 +616,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 if ((chk.Tag is bool oldValue) && chk.Checked != oldValue)
                 {
                     SaveData();
+                    LoadSettings();
                     chk.Tag = chk.Checked;
                 }
             }
