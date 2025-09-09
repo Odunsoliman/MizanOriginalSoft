@@ -678,24 +678,28 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // 🔹 حساب جميع القيم
         private void CalculateInvoiceFooter()
         {
-           // if (DGV.DataSource is not DataTable dt) return;
+            // 🔹 مجموع الفاتورة من الجريد (مؤقتاً ثابت للتجربة)
+            decimal total = 1000m;
+            // if (DGV.DataSource is not DataTable dt) return;
+            // total = dt.AsEnumerable()
+            //          .Where(r => r["NetRow"] != DBNull.Value)
+            //          .Sum(r => Convert.ToDecimal(r["NetRow"]));
+            // lblTotalInv.Text = total.ToString("N2");
 
-            decimal total = 1000;// تعطيل مؤقت للتجربة للحساب من الجريد
-            //foreach (DataRow row in dt.Rows)
-            //    if (row["NetRow"] != DBNull.Value)
-            //        total += Convert.ToDecimal(row["NetRow"]);
-            //lblTotalInv.Text = total.ToString("N2");
-
+            // 🔹 قراءة القيم
             decimal.TryParse(txtTaxVal.Text, out var tax);
             decimal.TryParse(txtDiscount.Text, out var discount);
             decimal.TryParse(txtValueAdded.Text, out var added);
 
-            var afterTax = total + (tax * total);
-            lblTotalValueAfterTax.Text = afterTax.ToString("N2");
+            // 🔹 حساب الإجمالي بعد الضريبة فقط
+            var totalAfterTax = total + tax;
+            lblTotalValueAfterTax.Text = totalAfterTax.ToString("N2");
 
+            // 🔹 حساب الصافي النهائي
             var net = total + tax - discount + added;
             lblNetTotal.Text = net.ToString("N2");
 
+            // 🔹 تحديث المتبقي
             CalculateRemainingOnAccount();
         }
 
@@ -721,7 +725,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         اريد كود متكامل داخل الريجون
          */
 
- 
+
         #endregion
         /**/
         #region Save invoice الحفظ النهائى
