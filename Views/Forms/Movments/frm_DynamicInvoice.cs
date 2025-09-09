@@ -566,7 +566,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 MaxRateDiscount = AppSettings.GetDecimal("MaxRateDiscount", 0.10m); // 10% افتراضياً
 
                 // 🟦 تعيين نسبة الضريبة في الليبل
-                lblTaxRate.Text = defaultTax > 0 ? (defaultTax * 100m).ToString("N2") + "%" : "0%";
+                lblTaxRate.Text = defaultTax > 0 ? (defaultTax * 100m).ToString("N0") + "%" : "0%";
 
                 // 🟦 حساب قيمة الضريبة حسب الإجمالي إن وجد
                 decimal total = 0m;
@@ -601,7 +601,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
 
             lblDiscountRate.Text = total > 0
-            ? ((discount / total) * 100m).ToString("N2") + "%"
+            ? ((discount / total) * 100m).ToString("N0") + "%"
             : "0%";
 
             CalculateInvoiceFooter();
@@ -613,7 +613,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             if (!decimal.TryParse(txtTaxVal.Text, out var tax)) tax = 0m;
             if (!decimal.TryParse(lblTotalInv.Text, out var total)) total = 0m;
 
-            lblTaxRate.Text = total > 0 ? ((tax / total) * 100m).ToString("N2") : "0.00";
+            lblTaxRate.Text = total > 0 ? ((tax / total) * 100m).ToString("N0") : "0.00";
             CalculateInvoiceFooter();
         }
 
@@ -624,8 +624,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             if (!decimal.TryParse(lblTotalInv.Text, out var total)) total = 0m;
 
             lblAdditionalRate.Text = total > 0
-            ? ((added / total) * 100m).ToString("N2") + "%"
-            : "0%";
+              ? ((added / total) * 100m).ToString("N0") + "%"
+              : "0%";
+
             CalculateInvoiceFooter();
         }
 
