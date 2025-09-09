@@ -637,14 +637,37 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // 🔹 دعم النقر المزدوج للمدفوعات
         private void txtPayment_Cash_DoubleClick(object? sender, EventArgs e)
         {
-            txtPayment_Cash.Text = lblNetTotal.Text;
-            txtPayment_Electronic.Text = "0";
+            decimal.TryParse(txtPayment_Electronic.Text, out var electronic);
+            decimal.TryParse(lblNetTotal.Text, out var net);
+
+            if (electronic == 0)
+            {
+                txtPayment_Cash.Text = net.ToString("N2");
+                txtPayment_Electronic.Text = "0";
+            }
+            else
+            {
+                txtPayment_Cash.SelectAll(); // تحديد النص لكتابة يدويّة
+            }
+
             CalculateRemainingOnAccount();
         }
+
         private void txtPayment_Electronic_DoubleClick(object? sender, EventArgs e)
         {
-            txtPayment_Electronic.Text = lblNetTotal.Text;
-            txtPayment_Cash.Text = "0";
+            decimal.TryParse(txtPayment_Cash.Text, out var cash);
+            decimal.TryParse(lblNetTotal.Text, out var net);
+
+            if (cash == 0)
+            {
+                txtPayment_Electronic.Text = net.ToString("N2");
+                txtPayment_Cash.Text = "0";
+            }
+            else
+            {
+                txtPayment_Electronic.SelectAll(); // تحديد النص لكتابة يدويّة
+            }
+
             CalculateRemainingOnAccount();
         }
 
