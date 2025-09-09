@@ -512,7 +512,12 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     case "EmailCo": txtCompanyEmail.Text = value; break;
                     case "IsSaleByNegativeStock":
                         if (bool.TryParse(value, out bool isNegativeStock))
+                        {
                             chkIsSaleByNegativeStock.Checked = isNegativeStock;
+                            lblTypeSaleStock.Text = isNegativeStock
+                                ? "البيع على المكشوف"
+                                : "البيع حسب الرصيد";
+                        }
                         break;
                     case "ReturnSaleMode": txtReturnSaleMode.Text = value; break;
                     case "CompanyLoGoFolder": lblLogoPath.Text = value; break;
