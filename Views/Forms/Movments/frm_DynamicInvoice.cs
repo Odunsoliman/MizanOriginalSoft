@@ -676,7 +676,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             decimal.TryParse(txtDiscount.Text, out var discount);
             decimal.TryParse(txtValueAdded.Text, out var added);
 
-            var afterTax = total + tax;
+            var afterTax = total + (tax * total);
             lblTotalValueAfterTax.Text = afterTax.ToString("N2");
 
             var net = total + tax - discount + added;
