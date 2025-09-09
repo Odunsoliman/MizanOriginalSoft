@@ -557,7 +557,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         // 🔹 تحميل الإعدادات
         private void LoadFooterSettings()
-        {
+        { 
             try
             {
                 // 🟦 قراءة القيم من ملف الإعدادات
@@ -702,6 +702,10 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // 🔹 حساب الصافي النهائي
             var net = total + tax - discount + added;
             lblNetTotal.Text = net.ToString("N2");
+            decimal value = net;
+            string result = TafqeetHelper.Tafqeet(value);
+            lblTafqet .Text = result;   
+
 
             // 🔹 تحديث المتبقي
             CalculateRemainingOnAccount();
