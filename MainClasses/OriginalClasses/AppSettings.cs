@@ -129,8 +129,47 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             if (settings.Remove(key))
                 SettingChanged?.Invoke(key, string.Empty);
         }
-
         public static void Save(string? filePath = null)
+        {
+            EnsureLoaded();
+            if (!isEditMode)
+                throw new UnauthorizedAccessException("❌ لا يمكن حفظ الإعدادات إلا من شاشة الإعدادات.");
+
+            var targetPath = filePath ?? settingsFilePath;
+            var lines = File.Exists(targetPath) ? File.ReadAllLines(targetPath).ToList() : new List<string>();
+
+            // تحديث القيم الموجودة
+            foreach (var key in settings.Keys)
+            {
+                bool found = false;
+                for (int i = 0; i < lines.Count; i++)
+                {
+                    string line = lines[i].Trim();
+                    if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#") || line.StartsWith("//") || line.StartsWith(";"))
+                        continue;
+
+                    int equalIndex = line.IndexOf('=');
+                    if (equalIndex <= 0) continue;
+
+                    string existingKey = line.Substring(0, equalIndex).Trim();
+                    if (string.Equals(existingKey, key, StringComparison.OrdinalIgnoreCase))
+                    {
+                        lines[i] = $"{key}={settings[key]}";
+                        found = true;
+                        break;
+                    }
+                }
+
+                // إضافة المفتاح إذا لم يوجد
+                if (!found)
+                    lines.Add($"{key}={settings[key]}");
+            }
+
+            // كتابة الملف من جديد
+            File.WriteAllLines(targetPath, lines);
+        }
+
+        public static void Save_(string? filePath = null)
         {
             EnsureLoaded();
             if (!isEditMode)
