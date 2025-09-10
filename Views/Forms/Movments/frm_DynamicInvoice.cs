@@ -1116,7 +1116,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             lblTypeInv.Text = row["MovType"].ToString(); // نوع الحركة
             Inv_ID = Convert.ToInt32(lblInv_ID.Text);
 
-
             // 🔹 التاريخ
             if (row["Inv_Date"] != DBNull.Value)
                 dtpInv_Date.Value = Convert.ToDateTime(row["Inv_Date"]);
@@ -1151,6 +1150,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
             // 🔹 تحميل تفاصيل الفاتورة
             GetInvoiceDetails();
+
+            // 🔥 إعادة حساب الإجماليات والتفقيط
+            CalculateInvoiceFooter();
         }
 
         /// <summary>
@@ -2140,12 +2142,12 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         private void CalculateInvoiceFooter()
         {
             // 🔹 مجموع الفاتورة من الجريد (مؤقتاً ثابت للتجربة)
-            decimal total = 1000m;
-            // if (DGV.DataSource is not DataTable dt) return;
-            // total = dt.AsEnumerable()
-            //          .Where(r => r["NetRow"] != DBNull.Value)
-            //          .Sum(r => Convert.ToDecimal(r["NetRow"]));
-            // lblTotalInv.Text = total.ToString("N2");
+            decimal total = 0;
+            if (DGV.DataSource is not DataTable dt) return;
+            total = dt.AsEnumerable()
+                     .Where(r => r["NetRow"] != DBNull.Value)
+                     .Sum(r => Convert.ToDecimal(r["NetRow"]));
+            lblTotalInv.Text = total.ToString("N2");
 
             // 🔹 قراءة القيم
             decimal.TryParse(txtTaxVal.Text, out var tax);
@@ -2167,81 +2169,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // 🔹 تحديث المتبقي
             CalculateRemainingOnAccount();
         }
-
+        /*هذه الوظيفة تعمل جيدا ولكن المشكلة فى التفقيط لا يتم تحديثه بالقيم الجديدة عند التنقل بين الفواتير*/
         #endregion
     }
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
- لدى الان هذه الفاتورة واريد ان تكون اسمارت افتحها بازرار مختلفة مثل 
- //btnSales_Click او btnBackSales او btnPrococh او btnBackPrococh
-حسب نوع الاداء الذى يريده المستخدم
-ويوجد زر اخر خاص بالجرد باسم سانشء له شاشة اخرى مناسبة له 
-
-فاكتب لى كود يستخدم الكلاسين 
-using System;
-
-namespace MizanOriginalSoft.MainClasses.Enums
-{
-    /// <summary>
-    /// أنواع الفواتير المستخدمة في النظام
-    /// </summary>
-    public enum InvoiceType
-    {
-        Sale = 1,            // فاتورة بيع
-        SaleReturn = 2,      // فاتورة بيع مرتد
-        Purchase = 3,        // فاتورة شراء
-        PurchaseReturn = 4,  // فاتورة شراء مرتد
-        Inventory = 5,       // إذن تسوية مخزن
-        DeductStock = 6,     // إذن خصم مخزن
-        AddStock = 7         // إذن إضافة مخزن
-    }
-}
-والكلاس
-using System;
-using MizanOriginalSoft.MainClasses.Enums; // 👈 أضف هذا السطر
-
-namespace MizanOriginalSoft.MainClasses.OriginalClasses
-{
-    public static class InvoiceTypeHelper
-    {
-        public static string ToAccountTypeString(InvoiceType type)
-        {
-            return type switch
-            {
-                InvoiceType.Sale or InvoiceType.SaleReturn => "SalesMen",
-                InvoiceType.Purchase or InvoiceType.PurchaseReturn => "PurchaseMen",
-                InvoiceType.Inventory or InvoiceType.DeductStock or InvoiceType.AddStock => "Inventory",
-                _ => string.Empty
-            };
-        }
-    }
-}
-
-
-واستطيع فيما بعد تعبءة الحساب الافتراضى لكل فاتورة عميل نقدى رقمه 55 او مورد نقدى رقمه 56  فى ليبل lblAccID
-وبناء عليه يتم تعبئة التكست بكس txtAccName باسم هذا الحساب
-
-مع العلم ان txtAccName به تعبئة تلقائية بالعملاء او الموردين حسب نوع الفاتورة  التى ستفتح
-
-فما هو السينارية العام لضبط هذه الفاتورة الجديدة والاستغناء عن القديمة بتنسيق وترتيب محترف داخل ريجونز لسهولة المراجعة
-
-
-
- */
