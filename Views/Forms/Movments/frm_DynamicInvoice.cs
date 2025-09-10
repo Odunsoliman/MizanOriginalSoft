@@ -126,9 +126,10 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         public void InitializeInvoice(InvoiceType type)
         {
+            // 🔹 تعيين النوع الحالي
             currentInvoiceType = type;
 
-            // 🔹 استخدم switch لتحديد العنوان والرقم مع النص العربي
+            // 🔹 تحديد العنوان ورقم النوع
             (string arabicTitle, string typeId) = type switch
             {
                 InvoiceType.Sale => ("فاتورة بيع رقم: ", "1"),
@@ -141,17 +142,97 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 _ => ("فاتورة", "0")
             };
 
-            // 🔹 عيّن القيم
+            // 🔹 تحديث العناوين في الفورم
             this.Text = arabicTitle;
-            lblTypeInv.Text = arabicTitle;   // 🔥 الآن يعرض النص العربي
+            lblTypeInv.Text = arabicTitle;
             lblTypeInvID.Text = typeId;
 
-            // تعبئة الحقول
+            // 🔹 تجهيز الحقول الأساسية
             FillDefaultAccount();
             ConfigureAutoCompleteForAccount();
             FillSellerComboBox();
             SetupFormByInvoiceType();
+
+            // 🔥 تحميل جميع الفواتير من قاعدة البيانات
+            GetInvoices();
+
+            // 🔥 تحميل تفاصيل أول فاتورة إذا وجدت
+            if (tblInv != null && tblInv.Rows.Count > 0)
+            {
+                currentInvoiceIndex = 0;
+                DisplayCurentRow(currentInvoiceIndex);  // هذا سيستدعي GetInvoiceDetails()
+            }
+            else
+            {
+                lblInfoInvoice.Text = "لا توجد فواتير";
+                PrepareEmptyGridStructure();
+                DGV.DataSource = null;
+            }
         }
+
+        #region تحميل وتجهيز بيانات الفاتورة
+
+        // جلب تفاصيل الفاتورة (أصنافها + تهيئة الجدول)
+        public void GetInvoiceDetails()
+        {
+            if (string.IsNullOrWhiteSpace(lblInv_ID.Text) || !int.TryParse(lblInv_ID.Text, out Inv_ID))
+            {
+                MessageBox.Show("رقم الفاتورة غير صالح أو غير موجود.", "تنبيه",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            tblInvDetails = DBServiecs.NewInvoice_GetInvoiceDetails(Inv_ID);
+            lblCount.Text = tblInvDetails?.Rows.Count.ToString() ?? "0";
+
+            if (tblInvDetails == null || tblInvDetails.Rows.Count == 0)
+            {
+                PrepareEmptyGridStructure();
+                DGV.DataSource = null;
+            }
+            else
+            {
+                DGV.DataSource = tblInvDetails;
+            }
+
+            DGVStyl();
+            CalculateRemainingOnAccount();
+        }
+
+        // جلب الفواتير حسب النوع + إضافة فاتورة جديدة فارغة
+        private void GetInvoices()
+        {
+            tblInv = DBServiecs.NewInvoice_GetInvoicesByType((int)currentInvoiceType);
+
+            DataRow newRow = tblInv.NewRow();
+            newRow["Inv_ID"] = DBServiecs.NewInvoice_GetNewID();
+            newRow["Inv_Counter"] = DBServiecs.NewInvoice_GetNewCounter((int)currentInvoiceType);
+            newRow["MovType"] = lblTypeInv.Text;
+            newRow["Inv_Date"] = DateTime.Now;
+            newRow["Seller_ID"] = cbxSellerID.Items.Count > 0 ? cbxSellerID.SelectedValue : DBNull.Value;
+            newRow["User_ID"] = US;
+            newRow["Acc_ID"] = lblAccID.Text;
+
+            // قيم مالية افتراضية
+            newRow["TotalValue"] = 0;
+            newRow["TaxVal"] = 0;
+            newRow["TotalValueAfterTax"] = 0;
+            newRow["Discount"] = 0;
+            newRow["ValueAdded"] = 0;
+            newRow["NetTotal"] = 0;
+            newRow["Payment_Cash"] = 0;
+            newRow["Payment_Electronic"] = 0;
+            newRow["Payment_Note"] = "";
+            newRow["RemainingOnAcc"] = 0;
+            newRow["NoteInvoice"] = "";
+            newRow["Saved"] = "";
+
+            tblInv.Rows.Add(newRow);
+            currentInvoiceIndex = tblInv.Rows.Count - 1;
+            lblInfoInvoice.Text = "فاتورة جديدة";
+            DisplayCurentRow(currentInvoiceIndex);
+        }
+        #endregion
 
         private void frm_DynamicInvoice_Load(object sender, EventArgs e)
         {
@@ -168,18 +249,17 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     UpdateLabelsForResale();
             }
             LoadFooterSettings();
+         
             CalculateInvoiceFooter();
-            
-            //LoadAcc();                          // تحميل الحسابات
-            //SetDefaultAccount();                // تعيين الحساب الافتراضي
-            //InitializeAutoComplete();           // إعداد الإكمال التلقائي
-            //GetSalseMan();                      // جلب البائعين / المنفذين
-           // InvTypeData();                      // تحميل بيانات النوع
             DGVStyl();                          // تنسيق الداتا جريد
             RegisterEvents();                   // ربط أحداث إضافية
         }
 
 
+
+        #endregion  
+        
+        #region تنقل بين الحقول
         private void RegisterEvents()
         {
             foreach (Control ctrl in inputFieldsBeforeSearch.Concat(inputFieldsAfterSearch))
@@ -188,9 +268,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 ctrl.Leave += InputFields_Leave;
             }
         }
-        /// <summary>
-        /// عند مغادرة أي حقل إدخال يتم الحفظ كمسودة إذا لم تكن الفاتورة محفوظة نهائيًا.
-        /// </summary>
+        // عند مغادرة أي حقل إدخال يتم الحفظ كمسودة إذا لم تكن الفاتورة محفوظة نهائيًا.
         private void InputFields_Leave(object? sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(lblSave.Text)) // لم يتم الحفظ النهائي بعد
@@ -198,8 +276,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 SaveDraftInvoice();
             }
         }
-        #region تنقل بين الحقول
-
         /// <summary>
         /// عند الضغط على Enter داخل أي حقل إدخال:
         /// - ينتقل إلى الحقل التالي بالترتيب.
@@ -223,7 +299,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
         #endregion
 
-        #endregion
+
 
         #region Body  وظائف الجزء الخاص بالاصناف 
 
@@ -1252,69 +1328,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #endregion
 
-        #region تحميل وتجهيز بيانات الفاتورة
-        
-        // جلب تفاصيل الفاتورة (أصنافها + تهيئة الجدول)
-        public void GetInvoiceDetails()
-        {
-            if (string.IsNullOrWhiteSpace(lblInv_ID.Text) || !int.TryParse(lblInv_ID.Text, out Inv_ID))
-            {
-                MessageBox.Show("رقم الفاتورة غير صالح أو غير موجود.", "تنبيه",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            tblInvDetails = DBServiecs.NewInvoice_GetInvoiceDetails(Inv_ID);
-            lblCount.Text = tblInvDetails?.Rows.Count.ToString() ?? "0";
-
-            if (tblInvDetails == null || tblInvDetails.Rows.Count == 0)
-            {
-                PrepareEmptyGridStructure();
-                DGV.DataSource = null;
-            }
-            else
-            {
-                DGV.DataSource = tblInvDetails;
-            }
-
-            DGVStyl();
-            CalculateRemainingOnAccount();
-        }
-
-        // جلب الفواتير حسب النوع + إضافة فاتورة جديدة فارغة
-        private void GetInvoices()
-        {
-            tblInv = DBServiecs.NewInvoice_GetInvoicesByType((int)currentInvoiceType);
-
-            DataRow newRow = tblInv.NewRow();
-            newRow["Inv_ID"] = DBServiecs.NewInvoice_GetNewID();
-            newRow["Inv_Counter"] = DBServiecs.NewInvoice_GetNewCounter((int)currentInvoiceType);
-            newRow["MovType"] = lblTypeInv.Text;
-            newRow["Inv_Date"] = DateTime.Now;
-            newRow["Seller_ID"] = cbxSellerID.Items.Count > 0 ? cbxSellerID.SelectedValue : DBNull.Value;
-            newRow["User_ID"] = US;
-            newRow["Acc_ID"] = lblAccID.Text;
-
-            // قيم مالية افتراضية
-            newRow["TotalValue"] = 0;
-            newRow["TaxVal"] = 0;
-            newRow["TotalValueAfterTax"] = 0;
-            newRow["Discount"] = 0;
-            newRow["ValueAdded"] = 0;
-            newRow["NetTotal"] = 0;
-            newRow["Payment_Cash"] = 0;
-            newRow["Payment_Electronic"] = 0;
-            newRow["Payment_Note"] = "";
-            newRow["RemainingOnAcc"] = 0;
-            newRow["NoteInvoice"] = "";
-            newRow["Saved"] = "";
-
-            tblInv.Rows.Add(newRow);
-            currentInvoiceIndex = tblInv.Rows.Count - 1;
-            lblInfoInvoice.Text = "فاتورة جديدة";
-            DisplayCurentRow(currentInvoiceIndex);
-        }
-        #endregion
 
         #region التحكم في تفعيل وتعطيل عناصر النموذج
 

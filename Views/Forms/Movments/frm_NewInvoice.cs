@@ -525,6 +525,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
             if (EnsureInvoicesLoaded())
                 NavigateToInvoice(0);
+             
         }
 
         /// <summary>
