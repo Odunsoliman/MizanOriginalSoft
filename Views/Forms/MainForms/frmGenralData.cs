@@ -22,6 +22,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             tabMang.ItemSize = new Size(150, 40); // ضبط حجم عناصر التبويب
             LoadWarehouses();                        // تحميل الفروع إلى ComboBox
+            FillcbxReturnSaleMode();
             LoadSettings();    //هل من الضرورى اعادة التحميل هنا                      // إعادة تحميل الإعدادات بعد تحميل الفروع
             tlpPading();                             // ضبط الحشوات (تصميم)
             UpdateLabelCount();                      // تحديث عداد ملصقات الطباعة أو العناصر
@@ -38,7 +39,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             LoadUsers();
             cbxUsers.SelectedIndexChanged += CbxUsers_SelectedIndexChanged;
             DGVStyl();
-            FillcbxReturnSaleMode();
+           
 
         }
         private void FillcbxReturnSaleMode()
