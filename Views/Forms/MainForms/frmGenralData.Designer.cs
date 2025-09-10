@@ -66,7 +66,6 @@
             chkIsSaleByNegativeStock = new CheckBox();
             lblTypeSaleStock = new Label();
             cbxReturnSaleMode = new ComboBox();
-            txtReturnSaleMode = new TextBox();
             tabPagePrinterSetting = new TabPage();
             tableLayoutPanel18 = new TableLayoutPanel();
             tableLayoutPanel22 = new TableLayoutPanel();
@@ -373,7 +372,6 @@
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 94.6650162F));
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5.33498764F));
             tableLayoutPanel5.Controls.Add(tableLayoutPanel8, 0, 1);
-            tableLayoutPanel5.Controls.Add(txtReturnSaleMode, 1, 0);
             tableLayoutPanel5.Dock = DockStyle.Top;
             tableLayoutPanel5.Location = new Point(3, 3);
             tableLayoutPanel5.Name = "tableLayoutPanel5";
@@ -716,14 +714,6 @@
             cbxReturnSaleMode.Size = new Size(202, 27);
             cbxReturnSaleMode.TabIndex = 44;
             cbxReturnSaleMode.SelectedIndexChanged += cbxReturnSaleMode_SelectedIndexChanged;
-            // 
-            // txtReturnSaleMode
-            // 
-            txtReturnSaleMode.Location = new Point(3, 3);
-            txtReturnSaleMode.Name = "txtReturnSaleMode";
-            txtReturnSaleMode.Size = new Size(37, 26);
-            txtReturnSaleMode.TabIndex = 42;
-            txtReturnSaleMode.KeyPress += txtReturnSaleMode_KeyPress;
             // 
             // tabPagePrinterSetting
             // 
@@ -1905,7 +1895,6 @@
             tabMang.ResumeLayout(false);
             tabPageGenralData.ResumeLayout(false);
             tableLayoutPanel5.ResumeLayout(false);
-            tableLayoutPanel5.PerformLayout();
             tableLayoutPanel8.ResumeLayout(false);
             tableLayoutPanel8.PerformLayout();
             tabPagePrinterSetting.ResumeLayout(false);
@@ -2072,7 +2061,6 @@
         private Label label31;
         private Button btnUserPermissions;
         private CheckBox chkIsSaleByNegativeStock;
-        private TextBox txtReturnSaleMode;
         private Label label33;
         private Label label34;
         private Label lblTypeSaleStock;

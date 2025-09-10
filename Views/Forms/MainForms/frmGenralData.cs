@@ -529,7 +529,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                         }
                         break;
                     case "ReturnSaleMode":
-                        txtReturnSaleMode.Text = value;
                         // 🔹 ضبط الكمبو على القيمة من الملف
                         if (int.TryParse(value, out int selectedMode))
                         {
@@ -721,7 +720,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 ["SalesTax"] = txtSalesTax.Text,
                 ["CompanyAdreass"] = txtAdreass.Text,
                 ["EmailCo"] = txtCompanyEmail.Text,
-                ["ReturnSaleMode"] = txtReturnSaleMode.Text,
                 ["IsSaleByNegativeStock"] = chkIsSaleByNegativeStock.Checked.ToString(),
                 ["CompanyLoGoFolder"] = lblLogoPath.Text,
                 ["LogoImagName"] = lblLogoImageName.Text,
