@@ -761,8 +761,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         private void cbxReturnSaleMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SaveData();
-            LoadSettings();
+            //SaveData();
+            //LoadSettings();
         }
         #endregion
 
