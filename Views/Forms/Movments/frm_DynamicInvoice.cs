@@ -1962,13 +1962,73 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
         #region Foter وظائف اجماليات الفاتورة
+        private decimal defaultTax = 0m; // 🟦 نخزن النسبة هنا لاستخدامها لاحقاً
 
+        private void LoadFooterSettings()
+        {
+            try
+            {
+                // 🟦 قراءة القيم من ملف الإعدادات
+                defaultTax = AppSettings.GetDecimal("SalesTax", 0m);
+                AllowChangeTax = AppSettings.GetBool("IsEnablToChangTax", true);
+                MaxRateDiscount = AppSettings.GetDecimal("MaxRateDiscount", 0.10m); // 10% افتراضياً
+
+                // 🟦 عند التحميل نخلي الحقول فاضية
+                lblTaxRate.Text = "غير مفعل";
+                txtTaxVal.Text = "0.00";
+
+                // 🟦 السماح/منع تعديل قيمة الضريبة
+                txtTaxVal.ReadOnly = !AllowChangeTax;
+            }
+            catch (Exception ex)
+            {
+                CustomMessageBox.ShowWarning($"خطأ أثناء تحميل إعدادات الفاتورة:\n{ex.Message}", "خطأ");
+            }
+        }
+
+        private void txtTaxVal_DoubleClick(object sender, EventArgs e)
+        {
+            // 🟦 إذا مافيش نسبة ضريبة في الإعدادات
+            if (defaultTax <= 0)
+            {
+                MessageBox.Show("لا توجد نسبة ضريبة محددة في الإعدادات.", "تنبيه",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // 🟦 نقرأ الإجمالي
+            if (!decimal.TryParse(lblTotalInv.Text, out decimal total) || total <= 0)
+            {
+                MessageBox.Show("يجب إدخال إجمالي الفاتورة أولاً.", "تنبيه",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // 🟦 عرض النسبة
+            lblTaxRate.Text = (defaultTax * 100m).ToString("N0") + "%";
+
+            // 🟦 حساب القيمة
+            decimal taxValue = total * defaultTax;
+            txtTaxVal.Text = taxValue.ToString("N2");
+
+            // 🟦 تحديث الفوتر
+            CalculateInvoiceFooter();
+        }
 
         // 🔹 تحميل الإعدادات
-        private void LoadFooterSettings()
+        private void LoadFooterSettings___()
         { 
             try
             {
+                /*اريد ان يكون السيناريو هنا كالاتى
+                 بعد قرائة الملف وحضار نسبة الضريبة المسجلة فى الملف لا يضعها فى lblTaxRateمباشرة 
+                لانه قد يوجد بعض الفواتير لا تطبق عليها هذه الضريبة وتكون غير موجودة اصلا 
+                ولكن يترك للمستخدم ان يفعلها بالنقر المزدوج على txtTaxVal
+                فيتم بذلك شيئان الاول وضع النسبة المقروءة فى lblTaxRate
+                ثم حساب القيمة ووضعها فى التكست txtTaxVal
+                وهذا فى حال وجود قيمة اصلا فى lblTotalInv 
+                مع اعتبار باقى الامور
+                 */
                 // 🟦 قراءة القيم من ملف الإعدادات
                 decimal defaultTax = AppSettings.GetDecimal("SalesTax", 0m);
                 AllowChangeTax = AppSettings.GetBool("IsEnablToChangTax", true);
@@ -1991,6 +2051,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             {
                 CustomMessageBox.ShowWarning($"خطأ أثناء تحميل إعدادات الفاتورة:\n{ex.Message}", "خطأ");
             }
+             
         }
 
         // 🔹 الحد من الخصم
@@ -2169,7 +2230,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // 🔹 تحديث المتبقي
             CalculateRemainingOnAccount();
         }
-        /*هذه الوظيفة تعمل جيدا ولكن المشكلة فى التفقيط لا يتم تحديثه بالقيم الجديدة عند التنقل بين الفواتير*/
         #endregion
     }
 }
