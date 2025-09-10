@@ -551,7 +551,15 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                                 : "البيع حسب الرصيد";
                         }
                         break;
-                    case "ReturnSaleMode": txtReturnSaleMode.Text = value; break;
+                    case "ReturnSaleMode":
+                        txtReturnSaleMode.Text = value;
+                        // 🔹 ضبط الكمبو على القيمة من الملف
+                        if (int.TryParse(value, out int selectedMode))
+                        {
+                            cbxReturnSaleMode.SelectedValue = selectedMode;
+                        }
+                        break;
+
                     case "CompanyLoGoFolder": lblLogoPath.Text = value; break;
                     case "LogoImagName": lblLogoImageName.Text = value; break;
                     case "DefaultWarehouseId":

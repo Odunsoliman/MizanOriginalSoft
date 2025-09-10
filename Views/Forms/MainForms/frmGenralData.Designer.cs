@@ -61,7 +61,6 @@
             btnDeleteWarehous = new Button();
             btnSetAsDefaultWarehouse = new Button();
             btnRenamWarehous = new Button();
-            label32 = new Label();
             label33 = new Label();
             label34 = new Label();
             chkIsSaleByNegativeStock = new CheckBox();
@@ -410,12 +409,11 @@
             tableLayoutPanel8.Controls.Add(btnDeleteWarehous, 3, 6);
             tableLayoutPanel8.Controls.Add(btnSetAsDefaultWarehouse, 2, 6);
             tableLayoutPanel8.Controls.Add(btnRenamWarehous, 3, 7);
-            tableLayoutPanel8.Controls.Add(label32, 2, 1);
             tableLayoutPanel8.Controls.Add(label33, 2, 2);
             tableLayoutPanel8.Controls.Add(label34, 2, 3);
             tableLayoutPanel8.Controls.Add(chkIsSaleByNegativeStock, 3, 0);
             tableLayoutPanel8.Controls.Add(lblTypeSaleStock, 2, 0);
-            tableLayoutPanel8.Controls.Add(cbxReturnSaleMode, 3, 1);
+            tableLayoutPanel8.Controls.Add(cbxReturnSaleMode, 2, 1);
             tableLayoutPanel8.Dock = DockStyle.Top;
             tableLayoutPanel8.Location = new Point(46, 44);
             tableLayoutPanel8.Name = "tableLayoutPanel8";
@@ -666,17 +664,6 @@
             btnRenamWarehous.UseVisualStyleBackColor = true;
             btnRenamWarehous.Click += btnRenamWarehous_Click;
             // 
-            // label32
-            // 
-            label32.AutoSize = true;
-            label32.Dock = DockStyle.Fill;
-            label32.Location = new Point(95, 33);
-            label32.Name = "label32";
-            label32.Size = new Size(202, 33);
-            label32.TabIndex = 43;
-            label32.Text = " البيع المرتد حسب ف البيع=1";
-            label32.TextAlign = ContentAlignment.MiddleRight;
-            // 
             // label33
             // 
             label33.AutoSize = true;
@@ -724,9 +711,9 @@
             // cbxReturnSaleMode
             // 
             cbxReturnSaleMode.FormattingEnabled = true;
-            cbxReturnSaleMode.Location = new Point(3, 36);
+            cbxReturnSaleMode.Location = new Point(95, 36);
             cbxReturnSaleMode.Name = "cbxReturnSaleMode";
-            cbxReturnSaleMode.Size = new Size(86, 27);
+            cbxReturnSaleMode.Size = new Size(202, 27);
             cbxReturnSaleMode.TabIndex = 44;
             // 
             // txtReturnSaleMode
@@ -2084,7 +2071,6 @@
         private Button btnUserPermissions;
         private CheckBox chkIsSaleByNegativeStock;
         private TextBox txtReturnSaleMode;
-        private Label label32;
         private Label label33;
         private Label label34;
         private Label lblTypeSaleStock;
