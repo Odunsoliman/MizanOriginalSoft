@@ -39,41 +39,10 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             LoadUsers();
             cbxUsers.SelectedIndexChanged += CbxUsers_SelectedIndexChanged;
             DGVStyl();
-           
+
 
         }
-        private void FillcbxReturnSaleMode()
-        {
-            // 🔹 اجعل الكمبوبوكس غير قابل للكتابة
-            cbxReturnSaleMode.DropDownStyle = ComboBoxStyle.DropDownList;
-
-            // 🔹 أنشئ مصدر البيانات
-            var saleModes = new List<KeyValuePair<int, string>>
-            {
-                new KeyValuePair<int, string>(1, "البيع المرتد حسب الفاتورة"),
-                new KeyValuePair<int, string>(2, "البيع المرتد بالكود مباشر"),
-                new KeyValuePair<int, string>(3, "البيع المرتد بالنظامين")
-            };
-
-            // 🔹 ربط البيانات بالكمبوبوكس
-            cbxReturnSaleMode.DataSource = saleModes;
-            cbxReturnSaleMode.DisplayMember = "Value"; // النص الظاهر
-            cbxReturnSaleMode.ValueMember = "Key";     // القيمة المخفية
-
-            // 🔹 حدث الاختيار
-            cbxReturnSaleMode.SelectedIndexChanged += (s, e) =>
-            {
-                if (cbxReturnSaleMode.SelectedValue != null)
-                {
-                    txtReturnSaleMode.Text = cbxReturnSaleMode.SelectedValue.ToString();
-                }
-            };
-
-            // 🔹 اختيار أول عنصر تلقائياً
-            cbxReturnSaleMode.SelectedIndex = 0;
-        }
-
-
+        
 
         #region *********  ApplyPermissions  ******************************
         private void ApplyPermissionsToControls()
@@ -578,6 +547,39 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     picLogoCo.Image = Image.FromFile(logoPath);
             }
         }
+
+        private void FillcbxReturnSaleMode()
+        {
+            // 🔹 اجعل الكمبوبوكس غير قابل للكتابة
+            cbxReturnSaleMode.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            // 🔹 أنشئ مصدر البيانات
+            var saleModes = new List<KeyValuePair<int, string>>
+            {
+                new KeyValuePair<int, string>(1, "البيع المرتد حسب الفاتورة"),
+                new KeyValuePair<int, string>(2, "البيع المرتد بالكود مباشر"),
+                new KeyValuePair<int, string>(3, "البيع المرتد بالنظامين")
+            };
+
+            // 🔹 ربط البيانات بالكمبوبوكس
+            cbxReturnSaleMode.DataSource = saleModes;
+            cbxReturnSaleMode.DisplayMember = "Value"; // النص الظاهر
+            cbxReturnSaleMode.ValueMember = "Key";     // القيمة المخفية
+
+            // 🔹 حدث الاختيار
+            cbxReturnSaleMode.SelectedIndexChanged += (s, e) =>
+            {
+                if (cbxReturnSaleMode.SelectedValue != null)
+                {
+                    txtReturnSaleMode.Text = cbxReturnSaleMode.SelectedValue.ToString();
+                }
+            };
+
+            // 🔹 اختيار أول عنصر تلقائياً
+            cbxReturnSaleMode.SelectedIndex = 0;
+        }
+
+
         #endregion
 
         #region حفظ الإعدادات إلى الملف
@@ -595,9 +597,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         #endregion
 
         #region حفظ الإعدادات بصمت (بدون رسالة)
-        /// <summary>
-        /// ربط أحداث التغيير تلقائيًا لمربعات النصوص والـ CheckBox داخل الحاوية.
-        /// </summary>
+        // ربط أحداث التغيير تلقائيًا لمربعات النصوص والـ CheckBox داخل الحاوية.
         private void AttachControlHandlers(Control parent)
         {
             foreach (Control ctrl in parent.Controls)
@@ -701,7 +701,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 ["SalesTax"] = txtSalesTax.Text,
                 ["CompanyAdreass"] = txtAdreass.Text,
                 ["EmailCo"] = txtCompanyEmail.Text,
-                ["ReturnSaleMode"] = txtReturnSaleMode  .Text  ,
+                ["ReturnSaleMode"] = txtReturnSaleMode.Text,
                 ["IsSaleByNegativeStock"] = chkIsSaleByNegativeStock.Checked.ToString(),
                 ["CompanyLoGoFolder"] = lblLogoPath.Text,
                 ["LogoImagName"] = lblLogoImageName.Text,
@@ -746,42 +746,24 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             LoadSettings();
         }
 
-        ///// <summary>
-        ///// ربط حدث الخروج (Leave) بجميع مربعات النص داخل الحاوية.
-        ///// عند الخروج من أي مربع نص وتغيير القيمة، يتم حفظ التغييرات تلقائيًا.
-        ///// </summary>
-        //private void AttachTextBoxHandlers(Control parent)
-        //{
-        //    foreach (Control ctrl in parent.Controls)
-        //    {
-        //        if (ctrl is TextBox txt)
-        //        {
-        //            txt.Tag = txt.Text; // حفظ القيمة الأصلية للمقارنة لاحقًا
-        //            txt.Leave += TextBox_Leave;
-        //        }
-        //        else if (ctrl.HasChildren)
-        //        {
-        //            AttachTextBoxHandlers(ctrl); // تكرار على الأبناء (Recursive)
-        //        }
-        //    }
-        //}
-
-        /// <summary>
-        /// تنفيذ الحفظ عند تغيير قيمة مربع النص.
-        /// </summary>
-        /// 
-        private void TextBox_Leave_(object? sender, EventArgs e)
+        private void txtReturnSaleMode_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (sender is TextBox txt)
+            // السماح بـ Backspace
+            if (e.KeyChar == (char)Keys.Back)
+                return;
+
+            // السماح فقط بـ 1 أو 2 أو 3
+            if (e.KeyChar != '1' && e.KeyChar != '2' && e.KeyChar != '3')
             {
-                if ((txt.Tag is string oldValue) && txt.Text != oldValue)
-                {
-                    SaveData(); // حفظ التغييرات
-                    txt.Tag = txt.Text; // تحديث القيمة المرجعية
-                }
+                e.Handled = true; // منع الإدخال
             }
         }
 
+        private void cbxReturnSaleMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SaveData();
+            LoadSettings();
+        }
         #endregion
 
         #region === التنقل باستخدام Enter بين الحقول ===
@@ -1356,18 +1338,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         #endregion
 
-        private void txtReturnSaleMode_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // السماح بـ Backspace
-            if (e.KeyChar == (char)Keys.Back)
-                return;
-
-            // السماح فقط بـ 1 أو 2 أو 3
-            if (e.KeyChar != '1' && e.KeyChar != '2' && e.KeyChar != '3')
-            {
-                e.Handled = true; // منع الإدخال
-            }
-        }
 
     }
 }

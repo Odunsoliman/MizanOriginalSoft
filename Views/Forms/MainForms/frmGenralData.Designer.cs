@@ -715,6 +715,7 @@
             cbxReturnSaleMode.Name = "cbxReturnSaleMode";
             cbxReturnSaleMode.Size = new Size(202, 27);
             cbxReturnSaleMode.TabIndex = 44;
+            cbxReturnSaleMode.SelectedIndexChanged += cbxReturnSaleMode_SelectedIndexChanged;
             // 
             // txtReturnSaleMode
             // 
