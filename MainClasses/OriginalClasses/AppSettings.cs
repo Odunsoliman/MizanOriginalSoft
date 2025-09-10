@@ -53,28 +53,7 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             isLoaded = true;
         }
 
-        public static void Load_(string filePath)
-        {
-            settings.Clear();
-            isLoaded = false;
-            settingsFilePath = filePath;
-
-            if (!File.Exists(filePath))
-                throw new FileNotFoundException($"❌ ملف الإعدادات غير موجود: {filePath}");
-
-            foreach (var line in File.ReadAllLines(filePath))
-            {
-                if (string.IsNullOrWhiteSpace(line) || !line.Contains("="))
-                    continue;
-
-                var parts = line.Split(new[] { '=' }, 2);
-                if (parts.Length == 2)
-                    settings[parts[0].Trim()] = parts[1].Trim();
-            }
-
-            isLoaded = true;
-        }
-
+ 
         private static void EnsureLoaded()
         {
             if (!isLoaded)
@@ -136,7 +115,7 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             EnsureLoaded();
             if (!isEditMode)
                 throw new UnauthorizedAccessException("❌ لا يمكن تعديل الإعدادات إلا من شاشة الإعدادات.");
-
+            
             settings[key] = value;
             SettingChanged?.Invoke(key, value);
         }

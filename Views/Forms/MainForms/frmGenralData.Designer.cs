@@ -1894,6 +1894,7 @@
             RightToLeft = RightToLeft.Yes;
             StartPosition = FormStartPosition.WindowsDefaultBounds;
             Text = "frmGenralData";
+            FormClosing += frmGenralData_FormClosing;
             Load += frmGenralData_Load;
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel7.ResumeLayout(false);

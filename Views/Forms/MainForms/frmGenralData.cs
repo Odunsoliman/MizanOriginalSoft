@@ -20,17 +20,20 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         private void frmGenralData_Load(object sender, EventArgs e)
         {
-            tabMang.ItemSize = new Size(150, 40); // ضبط حجم عناصر التبويب
-            LoadWarehouses();                        // تحميل الفروع إلى ComboBox
+            // ✅ السماح بالتعديل داخل شاشة الإعدادات
+            AppSettings.EnableEditMode(nameof(frmGenralData));
+
+            tabMang.ItemSize = new Size(150, 40);
+            LoadWarehouses();
             FillcbxReturnSaleMode();
-            LoadSettings();    //هل من الضرورى اعادة التحميل هنا                      // إعادة تحميل الإعدادات بعد تحميل الفروع
-            tlpPading();                             // ضبط الحشوات (تصميم)
-            UpdateLabelCount();                      // تحديث عداد ملصقات الطباعة أو العناصر
-            TextBoxesInTabs();                       // إعداد مربعات النص ضمن التبويبات
-            txtNameCo.Focus();                       // تركيز المؤشر على اسم الشركة
-            txtNameCo.SelectAll();                   // تحديد كامل النص
-            LoadBackupFiles();                       // تحميل النسخ الاحتياطية (تأكد من جاهزيتها)
-            AttachTextBoxHandlers(this);             // ربط أحداث مربعات النص العامة
+            LoadSettings();   // يفضل الإبقاء عليه لتحميل القيم
+            tlpPading();
+            UpdateLabelCount();
+            TextBoxesInTabs();
+            txtNameCo.Focus();
+            txtNameCo.SelectAll();
+            LoadBackupFiles();
+            AttachTextBoxHandlers(this);
             ApplyPermissionsToControls();
             LoadAllUsers();
             DGV_Users.SelectionChanged += DGV_Users_SelectionChanged;
@@ -39,10 +42,14 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             LoadUsers();
             cbxUsers.SelectedIndexChanged += CbxUsers_SelectedIndexChanged;
             DGVStyl();
-
-
         }
-        
+
+        // 🔹 تعطيل التحرير عند إغلاق الشاشة
+        private void frmGenralData_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            AppSettings.DisableEditMode();
+        }
+
 
         #region *********  ApplyPermissions  ******************************
         private void ApplyPermissionsToControls()
@@ -548,37 +555,12 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-        private void FillcbxReturnSaleMode()
-        {
-            // 🔹 اجعل الكمبوبوكس غير قابل للكتابة
-            cbxReturnSaleMode.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            // 🔹 أنشئ مصدر البيانات
-            var saleModes = new List<KeyValuePair<int, string>>
-            {
-                new KeyValuePair<int, string>(1, "البيع المرتد حسب الفاتورة"),
-                new KeyValuePair<int, string>(2, "البيع المرتد بالكود مباشر"),
-                new KeyValuePair<int, string>(3, "البيع المرتد بالنظامين")
-            };
-
-            // 🔹 ربط البيانات بالكمبوبوكس
-            cbxReturnSaleMode.DataSource = saleModes;
-            cbxReturnSaleMode.DisplayMember = "Value"; // النص الظاهر
-            cbxReturnSaleMode.ValueMember = "Key";     // القيمة المخفية
-
-            // 🔹 حدث الاختيار
-            cbxReturnSaleMode.SelectedIndexChanged += (s, e) =>
-            {
-                if (cbxReturnSaleMode.SelectedValue != null)
-                {
-                    txtReturnSaleMode.Text = cbxReturnSaleMode.SelectedValue.ToString();
-                }
-            };
-
-            // 🔹 اختيار أول عنصر تلقائياً
-            cbxReturnSaleMode.SelectedIndex = 0;
-        }
-
+        /*توجد فكرة لا ادرى مدى فاعليتها 
+             وهى ان الكمبوبكس يتم تعبئته عند الفتح بهذة الطريقة وتم ربطه بالتكست الذى يتم كتابة القيمة فيه 
+            وقبل ذلك كنت اكتب يدويا فى التكست وكان يتم حفظ القيمة عند خروجى من التكست اما بعد ربطه بالكمبوبس لم اعد ادخل واغير القيم ثم اخرج فلا يتم الحفظ 
+            فهل لو تم الحفظ بمجرد تغير قيمته يوفى الغرض دون مسح البيانات
+             */
 
         #endregion
 
@@ -596,7 +578,45 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
         #endregion
 
+        #region 🔹 إعداد وضع البيع المرتد (ReturnSaleMode)
+
+        // 🔹 ملء ComboBox بالقيم المتاحة (1، 2، 3) وربطه بالبيانات
+        private void FillcbxReturnSaleMode()
+        {
+            cbxReturnSaleMode.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            var saleModes = new List<KeyValuePair<int, string>>
+    {
+        new KeyValuePair<int, string>(1, "البيع المرتد حسب الفاتورة"),
+        new KeyValuePair<int, string>(2, "البيع المرتد بالكود مباشر"),
+        new KeyValuePair<int, string>(3, "البيع المرتد بالنظامين")
+    };
+
+            cbxReturnSaleMode.DataSource = saleModes;
+            cbxReturnSaleMode.DisplayMember = "Value";
+            cbxReturnSaleMode.ValueMember = "Key";
+
+            // عند تغيير القيمة نحفظ تلقائيًا
+            cbxReturnSaleMode.SelectedIndexChanged += (s, e) =>
+            {
+                if (cbxReturnSaleMode.SelectedValue != null)
+                {
+                    int mode = (int)cbxReturnSaleMode.SelectedValue;
+                    AppSettings.Set("ReturnSaleMode", mode.ToString());
+                    AppSettings.Save();
+                }
+            };
+
+            // تحميل القيمة المحفوظة
+            int savedMode = AppSettings.GetInt("ReturnSaleMode", 1);
+            cbxReturnSaleMode.SelectedValue = savedMode;
+        }
+
+        #endregion
+
+
         #region حفظ الإعدادات بصمت (بدون رسالة)
+
         // ربط أحداث التغيير تلقائيًا لمربعات النصوص والـ CheckBox داخل الحاوية.
         private void AttachControlHandlers(Control parent)
         {
@@ -761,8 +781,9 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         private void cbxReturnSaleMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //SaveData();
-            //LoadSettings();
+           /*شاشة الاعداد لم تعد تفتح تخرج الرسالة السابقة لما فتحت شاشة الاعداد
+            وهذا الكود المسؤول عن الحفظ الصامت لكل ادوات الشاشة فاين الخلل
+            */
         }
         #endregion
 
