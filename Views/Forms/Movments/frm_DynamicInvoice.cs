@@ -156,8 +156,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         private void frm_DynamicInvoice_Load(object sender, EventArgs e)
         {
             DBServiecs.A_UpdateAllDataBase();   // تحديث أرصدة الأصناف والحسابات
-            // ✅ قراءة الإعدادات
-            LoadSettings();
+            // ✅ قراءة سياسات البيع والبيع المرتد
+            LoadSalesPolicies();
 
             // ✅ تحويل النص لرقم أولاً
             if (int.TryParse(lblTypeInvID.Text, out int typeInvID))
@@ -174,10 +174,12 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             //SetDefaultAccount();                // تعيين الحساب الافتراضي
             //InitializeAutoComplete();           // إعداد الإكمال التلقائي
             //GetSalseMan();                      // جلب البائعين / المنفذين
-            //InvTypeData();                      // تحميل بيانات النوع
+           // InvTypeData();                      // تحميل بيانات النوع
             DGVStyl();                          // تنسيق الداتا جريد
             RegisterEvents();                   // ربط أحداث إضافية
         }
+
+
         private void RegisterEvents()
         {
             foreach (Control ctrl in inputFieldsBeforeSearch.Concat(inputFieldsAfterSearch))
@@ -230,9 +232,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #endregion
         #region أحداث ووظائف إضافة صنف
 
-        /// <summary>
-        /// إدخال صنف جديد إلى تفاصيل الفاتورة وحفظه في قاعدة البيانات.
-        /// </summary>
+        // إدخال صنف جديد إلى تفاصيل الفاتورة وحفظه في قاعدة البيانات.
         public string InvoiceDetails_Insert()
         {
             GetVar(); // تحميل المتغيرات الأساسية من الواجهة
@@ -246,9 +246,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             return message;
         }
 
-        /// <summary>
-        /// تحميل بيانات القطع الخاصة بالصنف (في حال كان المنتج يقبل القص).
-        /// </summary>
+        // تحميل بيانات القطع الخاصة بالصنف (في حال كان المنتج يقبل القص).
         private void LoadPieceData()
         {
             cbxPiece_ID.Visible =
@@ -292,9 +290,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-        /// <summary>
-        /// تحميل بيانات منتج حسب كوده.
-        /// </summary>
+        // تحميل بيانات منتج حسب كوده.
         private bool GetProd(string code)
         {
             txtAmount.Text = "0";
@@ -333,9 +329,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             return true;
         }
 
-        /// <summary>
-        /// حدث إدخال الكمية (Enter في txtAmount).
-        /// </summary>
+        // حدث إدخال الكمية (Enter في txtAmount).
         private void txtAmount_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode != Keys.Enter || IsInvoiceSaved()) return;
@@ -388,9 +382,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             CalculateInvoiceFooter();
         }
 
-        /// <summary>
-        /// حدث إدخال كود المنتج أو رقم فاتورة مرتجعة.
-        /// </summary>
+        // حدث إدخال كود المنتج أو رقم فاتورة مرتجعة.
         private void txtSeaarchProd_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.F)
@@ -453,9 +445,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-        /// <summary>
-        /// تجهيز منتج لفاتورة شراء.
-        /// </summary>
+        // تجهيز منتج لفاتورة شراء.
         private void PreparePurchaseProduct(string code)
         {
             if (!GetProd(code)) return;
@@ -472,9 +462,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             txtAmount.SelectAll();
         }
 
-        /// <summary>
-        /// إدراج منتج في فاتورة شراء.
-        /// </summary>
+        // إدراج منتج في فاتورة شراء.
         private void InsertPurchaseRow(float amount)
         {
             if (amount <= 0)
@@ -490,9 +478,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             DGVStyl();
         }
 
-        /// <summary>
-        /// إدراج منتج في فاتورة بيع.
-        /// </summary>
+        // إدراج منتج في فاتورة بيع.
         private void InsertSaleRow(float amount, float pieceLength)
         {
             if (unit_ID == 1) // منتج يقبل القص
@@ -550,27 +536,21 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-        /// <summary>
-        /// إعداد منتج لعملية بيع.
-        /// </summary>
+        // إعداد منتج لعملية بيع.
         private void PrepareSaleProduct(string code)
         {
             if (!GetProd(code)) return;
             LoadPieceData();
         }
 
-        /// <summary>
-        /// إدراج منتج في فاتورة جرد أو تسوية.
-        /// </summary>
+        // إدراج منتج في فاتورة جرد أو تسوية.
         private void InsertInventoryRow(float amount)
         {
             InsertRow(unit_ID == 1);
             AfterInsertActions();
         }
 
-        /// <summary>
-        /// فتح فاتورة مرتجعة حسب رقمها.
-        /// </summary>
+        // فتح فاتورة مرتجعة حسب رقمها.
         private void OpenReturnedInvoiceForm(string serial)
         {
             if (!int.TryParse(serial, out int serInv))
@@ -621,9 +601,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             DGVStyl();
         }
 
-        /// <summary>
-        /// تحميل الأصناف المرتجعة إلى الجدول.
-        /// </summary>
+        // تحميل الأصناف المرتجعة إلى الجدول.
         private void LoadReturnedItems(DataTable returnedItems)
         {
             foreach (DataRow row in returnedItems.Rows)
@@ -873,9 +851,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #region حساب المتغيرات وتفريغ البيانات
 
-        /// <summary>
-        /// تحميل القيم من الحقول وتحويلها إلى متغيرات رقمية
-        /// </summary>
+        // تحميل القيم من الحقول وتحويلها إلى متغيرات رقمية
         private void GetVar()
         {
             int.TryParse(lblInv_ID.Text, out Inv_ID);
@@ -889,9 +865,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             NetRow = TotalRow - GemDisVal;
         }
 
-        /// <summary>
-        /// تفريغ بيانات المنتج بعد الإضافة أو الإلغاء
-        /// </summary>
+        // تفريغ بيانات المنتج بعد الإضافة أو الإلغاء
         private void EmptyProdData()
         {
             txtSeaarchProd.Text = "0";
@@ -1131,9 +1105,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #region 🔹 العمليات العامة للحفظ
 
-        /// <summary>
-        /// التحقق من صحة الفاتورة قبل الحفظ
-        /// </summary>
+        // التحقق من صحة الفاتورة قبل الحفظ
         private List<string> ValidateInvoice()
         {
             var missing = new List<string>();
@@ -1158,9 +1130,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             return missing;
         }
 
-        /// <summary>
-        /// حفظ مسودة الفاتورة
-        /// </summary>
+        // حفظ مسودة الفاتورة
         public void SaveDraftInvoice(string? savedText = null)
         {
             if (!string.IsNullOrWhiteSpace(lblSave.Text))
@@ -1205,9 +1175,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             );
         }
 
-        /// <summary>
-        /// دالة مساعدة لتحويل النص إلى رقم عائم
-        /// </summary>
+        // دالة مساعدة لتحويل النص إلى رقم عائم
         private static float ToFloat(object? value, float defaultVal = 0) =>
             float.TryParse(value?.ToString(), out float result) ? result : defaultVal;
 
@@ -1215,9 +1183,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #region عمليات إدخال الصفوف
 
-        /// <summary>
-        /// إدراج صف جديد في تفاصيل الفاتورة
-        /// </summary>
+        // إدراج صف جديد في تفاصيل الفاتورة
         private void InsertRow(bool isPiece)
         {
             // التحقق من الكمية
@@ -1275,9 +1241,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             GetInvoiceDetails();
         }
 
-        /// <summary>
-        /// الإجراءات التي تتم بعد إدراج صف جديد
-        /// </summary>
+        // الإجراءات التي تتم بعد إدراج صف جديد
         private void AfterInsertActions()
         {
             txtSeaarchProd.Focus();
@@ -1289,9 +1253,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #endregion
 
         #region تحميل وتجهيز بيانات الفاتورة
-        /// <summary>
-        /// جلب تفاصيل الفاتورة (أصنافها + تهيئة الجدول)
-        /// </summary>
+        
+        // جلب تفاصيل الفاتورة (أصنافها + تهيئة الجدول)
         public void GetInvoiceDetails()
         {
             if (string.IsNullOrWhiteSpace(lblInv_ID.Text) || !int.TryParse(lblInv_ID.Text, out Inv_ID))
@@ -1318,9 +1281,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             CalculateRemainingOnAccount();
         }
 
-        /// <summary>
-        /// جلب الفواتير حسب النوع + إضافة فاتورة جديدة فارغة
-        /// </summary>
+        // جلب الفواتير حسب النوع + إضافة فاتورة جديدة فارغة
         private void GetInvoices()
         {
             tblInv = DBServiecs.NewInvoice_GetInvoicesByType((int)currentInvoiceType);
@@ -1357,9 +1318,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #region التحكم في تفعيل وتعطيل عناصر النموذج
 
-        /// <summary>
-        /// تعطيل أو تمكين عناصر النموذج بناءً على حالة الحفظ النهائي.
-        /// </summary>
+        // تعطيل أو تمكين عناصر النموذج بناءً على حالة الحفظ النهائي.
         private void ToggleControlsBasedOnSaveStatus()
         {
             bool isFinalSaved = !string.IsNullOrWhiteSpace(lblSave.Text);
@@ -1367,9 +1326,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             DGVStyl(); // إعادة تهيئة شكل الجدول
         }
 
-        /// <summary>
-        /// تطبيق التمكين/التعطيل بشكل متكرر على جميع عناصر التحكم.
-        /// </summary>
+        // تطبيق التمكين/التعطيل بشكل متكرر على جميع عناصر التحكم.
         private void ToggleControlsRecursive(Control.ControlCollection controls, bool isFinalSaved)
         {
             foreach (Control ctrl in controls)
@@ -1402,9 +1359,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
         #region تهيئة وتصميم DataGridView
-        /// <summary>
-        /// إنشاء أعمدة الجدول يدوياً عند عدم وجود بيانات
-        /// </summary>
+        
+        // إنشاء أعمدة الجدول يدوياً عند عدم وجود بيانات
         private void PrepareEmptyGridStructure()
         {
             DGV.Columns.Clear();
@@ -1431,9 +1387,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 AddHiddenColumn(name);
         }
 
-        /// <summary>
-        /// إضافة عمود نصي مرئي
-        /// </summary>
+        // إضافة عمود نصي مرئي
         private void AddTextColumn(string name, string header, int width = 100,
             string? format = null, bool alignRight = false, bool readOnly = false)
         {
@@ -1456,9 +1410,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             DGV.Columns.Add(col);
         }
 
-        /// <summary>
-        /// إضافة عمود مخفي
-        /// </summary>
+        // إضافة عمود مخفي
         private void AddHiddenColumn(string name)
         {
             var col = new DataGridViewTextBoxColumn
@@ -1505,6 +1457,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
         #region Header   وظائف الجزء الاعلى من الفاتورة
+
         // 🔹 تحديث النصوص لو اخترت "بيع"
         private void UpdateLabelsForSale()
         {
@@ -1555,7 +1508,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
 
         // ✅ تحميل القيم من ملف الإعدادات
-        private void LoadSettings()
+        private void LoadSalesPolicies()
         {
 
             allowNegativeStock = AppSettings.GetBool("IsSaleByNegativeStock");
