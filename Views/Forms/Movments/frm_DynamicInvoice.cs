@@ -627,7 +627,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
               ? ((added / total) * 100m).ToString("N0") + "%"
               : "0%";
 
-            CalculateInvoiceFooter();
+            CalculateInvoiceFooter();   
         }
 
         // 🔹 تحديث المدفوعات
