@@ -132,6 +132,8 @@ namespace MizanOriginalSoft.MainClasses.SearchClasses
                     ApplyAccountsGridFormatting(dgv);
                 else if (_type == SearchEntityType.Products)
                     ApplyProductsGridFormatting(dgv);
+                else if (_type == SearchEntityType.Invoices )
+                    ApplyInvoiceGridFormatting(dgv);
             }
 
             // 🔹 الدالة الحالية تبقى لحسابات فقط
@@ -171,6 +173,28 @@ namespace MizanOriginalSoft.MainClasses.SearchClasses
                 Show("ProductStock", "الرصيد", 1f);
                 Show("NoteProduct", "ملاحظات الصنف", 4f);
             }
+
+            // 🔹 دالة جديدة لتنسيق الفواتير
+            public void ApplyInvoiceGridFormatting(DataGridView dgv)
+            {
+                void Show(string name, string header, float weight)
+                {
+                    if (!dgv.Columns.Contains(name)) return;
+                    var c = dgv.Columns[name];
+                    c.Visible = true;
+                    c.HeaderText = header;
+                    c.FillWeight = weight;
+                }
+
+                Show("ProductCode", "كود", 1f);
+                Show("ProdName", "اسم الصنف", 3f);
+                Show("RegistYear", "سنة", 1f);
+                Show("U_Price", "السعر", 1f);
+                Show("ProductStock", "الرصيد", 1f);
+                Show("NoteProduct", "ملاحظات الصنف", 4f);
+            }
+
+
 
         }
     }
