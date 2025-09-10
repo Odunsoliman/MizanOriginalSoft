@@ -1963,6 +1963,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #region Foter وظائف اجماليات الفاتورة
         private decimal defaultTax = 0m; // 🟦 نخزن النسبة هنا لاستخدامها لاحقاً
+
+        // 🔹 تحميل الإعدادات
         private void LoadFooterSettings()
         {
             try
@@ -2014,35 +2016,16 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
 
 
-        private void LoadFooterSettings_()
-        {
-            try
-            {
-                // 🟦 قراءة القيم من ملف الإعدادات
-                defaultTax = AppSettings.GetDecimal("SalesTax", 0m);
-                AllowChangeTax = AppSettings.GetBool("IsEnablToChangTax", true);
-                MaxRateDiscount = AppSettings.GetDecimal("MaxRateDiscount", 0.10m); // 10% افتراضياً
-
-                // 🟦 عند التحميل نخلي الحقول فاضية
-                lblTaxRate.Text = "";
-                txtTaxVal.Text = "0.00";
-
-                // 🟦 السماح/منع تعديل قيمة الضريبة
-                txtTaxVal.ReadOnly = !AllowChangeTax;/*السيناريو هنا مختلف قليلا
-                                                      اريد ان تكون txtTaxVal متاحة دائما للقراءة والكتابة ولكن
-                فى حال السماح بتغيير الضريبة يكون الوضع عادى
-                وفى حال عدم السماح بتغييرها مهما كتب من قيمة داخلها ثم خرج من التكست يقوم تلقائيا بحساب القيمة الاصلية ثم يعيدها الى التكست
-                لكن فى الحالتين متاحة للكتابة
-                                                      */
-            }
-            catch (Exception ex)
-            {
-                CustomMessageBox.ShowWarning($"خطأ أثناء تحميل إعدادات الفاتورة:\n{ex.Message}", "خطأ");
-            }
-        }
-
         private void txtTaxVal_DoubleClick(object sender, EventArgs e)
         {
+            // 🟦 منع التعديل إذا كانت الفاتورة محفوظة
+            if (IsInvoiceSaved())
+            {
+                //MessageBox.Show("لا يمكن تعديل الضريبة بعد حفظ الفاتورة.", "تنبيه",
+                //    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             // 🟦 إذا مافيش نسبة ضريبة في الإعدادات
             if (defaultTax <= 0)
             {
@@ -2070,44 +2053,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             CalculateInvoiceFooter();
         }
 
-        // 🔹 تحميل الإعدادات
-        private void LoadFooterSettings___()
-        { 
-            try
-            {
-                /*اريد ان يكون السيناريو هنا كالاتى
-                 بعد قرائة الملف وحضار نسبة الضريبة المسجلة فى الملف لا يضعها فى lblTaxRateمباشرة 
-                لانه قد يوجد بعض الفواتير لا تطبق عليها هذه الضريبة وتكون غير موجودة اصلا 
-                ولكن يترك للمستخدم ان يفعلها بالنقر المزدوج على txtTaxVal
-                فيتم بذلك شيئان الاول وضع النسبة المقروءة فى lblTaxRate
-                ثم حساب القيمة ووضعها فى التكست txtTaxVal
-                وهذا فى حال وجود قيمة اصلا فى lblTotalInv 
-                مع اعتبار باقى الامور
-                 */
-                // 🟦 قراءة القيم من ملف الإعدادات
-                decimal defaultTax = AppSettings.GetDecimal("SalesTax", 0m);
-                AllowChangeTax = AppSettings.GetBool("IsEnablToChangTax", true);
-                MaxRateDiscount = AppSettings.GetDecimal("MaxRateDiscount", 0.10m); // 10% افتراضياً
 
-                // 🟦 تعيين نسبة الضريبة في الليبل
-                lblTaxRate.Text = defaultTax > 0 ? (defaultTax * 100m).ToString("N0") + "%" : "0%";
-
-                // 🟦 حساب قيمة الضريبة حسب الإجمالي إن وجد
-                decimal total = 0m;
-                decimal.TryParse(lblTotalInv.Text, out total); // يحاول قراءة الإجمالي
-
-                decimal taxValue = total > 0 ? total * defaultTax : 0m;
-                txtTaxVal.Text = taxValue.ToString("N2");
-
-                // 🟦 السماح/منع تعديل قيمة الضريبة
-                txtTaxVal.ReadOnly = !AllowChangeTax;
-            }
-            catch (Exception ex)
-            {
-                CustomMessageBox.ShowWarning($"خطأ أثناء تحميل إعدادات الفاتورة:\n{ex.Message}", "خطأ");
-            }
-             
-        }
 
         // 🔹 الحد من الخصم
         private void txtDiscount_Leave(object? sender, EventArgs e)
@@ -2162,6 +2108,14 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // 🔹 دعم النقر المزدوج للمدفوعات
         private void txtPayment_Cash_DoubleClick(object? sender, EventArgs e)
         {
+            // 🟦 منع التعديل إذا كانت الفاتورة محفوظة
+            if (IsInvoiceSaved())
+            {
+                //MessageBox.Show("لا يمكن تعديل القيمة بعد حفظ الفاتورة.", "تنبيه",
+                //    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             decimal.TryParse(txtPayment_Electronic.Text, out var electronic);
             decimal.TryParse(lblNetTotal.Text, out var net);
 
@@ -2181,6 +2135,14 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         private void txtPayment_Electronic_DoubleClick(object? sender, EventArgs e)
         {
+            // 🟦 منع التعديل إذا كانت الفاتورة محفوظة
+            if (IsInvoiceSaved())
+            {
+                //MessageBox.Show("لا يمكن تعديل القيمة بعد حفظ الفاتورة.", "تنبيه",
+                //    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             decimal.TryParse(txtPayment_Cash.Text, out var cash);
             decimal.TryParse(lblNetTotal.Text, out var net);
 
