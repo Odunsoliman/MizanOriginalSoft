@@ -64,9 +64,10 @@
             label32 = new Label();
             label33 = new Label();
             label34 = new Label();
-            txtReturnSaleMode = new TextBox();
             chkIsSaleByNegativeStock = new CheckBox();
             lblTypeSaleStock = new Label();
+            cbxReturnSaleMode = new ComboBox();
+            txtReturnSaleMode = new TextBox();
             tabPagePrinterSetting = new TabPage();
             tableLayoutPanel18 = new TableLayoutPanel();
             tableLayoutPanel22 = new TableLayoutPanel();
@@ -373,6 +374,7 @@
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 94.6650162F));
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5.33498764F));
             tableLayoutPanel5.Controls.Add(tableLayoutPanel8, 0, 1);
+            tableLayoutPanel5.Controls.Add(txtReturnSaleMode, 1, 0);
             tableLayoutPanel5.Dock = DockStyle.Top;
             tableLayoutPanel5.Location = new Point(3, 3);
             tableLayoutPanel5.Name = "tableLayoutPanel5";
@@ -411,9 +413,9 @@
             tableLayoutPanel8.Controls.Add(label32, 2, 1);
             tableLayoutPanel8.Controls.Add(label33, 2, 2);
             tableLayoutPanel8.Controls.Add(label34, 2, 3);
-            tableLayoutPanel8.Controls.Add(txtReturnSaleMode, 3, 1);
             tableLayoutPanel8.Controls.Add(chkIsSaleByNegativeStock, 3, 0);
             tableLayoutPanel8.Controls.Add(lblTypeSaleStock, 2, 0);
+            tableLayoutPanel8.Controls.Add(cbxReturnSaleMode, 3, 1);
             tableLayoutPanel8.Dock = DockStyle.Top;
             tableLayoutPanel8.Location = new Point(46, 44);
             tableLayoutPanel8.Name = "tableLayoutPanel8";
@@ -697,15 +699,6 @@
             label34.Text = " البيع المرتد بالنظامين=3";
             label34.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // txtReturnSaleMode
-            // 
-            txtReturnSaleMode.Dock = DockStyle.Left;
-            txtReturnSaleMode.Location = new Point(40, 36);
-            txtReturnSaleMode.Name = "txtReturnSaleMode";
-            txtReturnSaleMode.Size = new Size(49, 26);
-            txtReturnSaleMode.TabIndex = 42;
-            txtReturnSaleMode.KeyPress += txtReturnSaleMode_KeyPress;
-            // 
             // chkIsSaleByNegativeStock
             // 
             chkIsSaleByNegativeStock.AutoSize = true;
@@ -727,6 +720,22 @@
             lblTypeSaleStock.TabIndex = 43;
             lblTypeSaleStock.Text = "البيع حسب الرصيد";
             lblTypeSaleStock.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // cbxReturnSaleMode
+            // 
+            cbxReturnSaleMode.FormattingEnabled = true;
+            cbxReturnSaleMode.Location = new Point(3, 36);
+            cbxReturnSaleMode.Name = "cbxReturnSaleMode";
+            cbxReturnSaleMode.Size = new Size(86, 27);
+            cbxReturnSaleMode.TabIndex = 44;
+            // 
+            // txtReturnSaleMode
+            // 
+            txtReturnSaleMode.Location = new Point(3, 3);
+            txtReturnSaleMode.Name = "txtReturnSaleMode";
+            txtReturnSaleMode.Size = new Size(37, 26);
+            txtReturnSaleMode.TabIndex = 42;
+            txtReturnSaleMode.KeyPress += txtReturnSaleMode_KeyPress;
             // 
             // tabPagePrinterSetting
             // 
@@ -1907,6 +1916,7 @@
             tabMang.ResumeLayout(false);
             tabPageGenralData.ResumeLayout(false);
             tableLayoutPanel5.ResumeLayout(false);
+            tableLayoutPanel5.PerformLayout();
             tableLayoutPanel8.ResumeLayout(false);
             tableLayoutPanel8.PerformLayout();
             tabPagePrinterSetting.ResumeLayout(false);
@@ -2078,5 +2088,6 @@
         private Label label33;
         private Label label34;
         private Label lblTypeSaleStock;
+        private ComboBox cbxReturnSaleMode;
     }
 }

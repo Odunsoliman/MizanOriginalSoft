@@ -38,9 +38,41 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             LoadUsers();
             cbxUsers.SelectedIndexChanged += CbxUsers_SelectedIndexChanged;
             DGVStyl();
-
+            FillcbxReturnSaleMode();
 
         }
+        private void FillcbxReturnSaleMode()
+        {
+            // 🔹 اجعل الكمبوبوكس غير قابل للكتابة
+            cbxReturnSaleMode.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            // 🔹 أنشئ مصدر البيانات
+            var saleModes = new List<KeyValuePair<int, string>>
+            {
+                new KeyValuePair<int, string>(1, "البيع المرتد حسب الفاتورة"),
+                new KeyValuePair<int, string>(2, "البيع المرتد بالكود مباشر"),
+                new KeyValuePair<int, string>(3, "البيع المرتد بالنظامين")
+            };
+
+            // 🔹 ربط البيانات بالكمبوبوكس
+            cbxReturnSaleMode.DataSource = saleModes;
+            cbxReturnSaleMode.DisplayMember = "Value"; // النص الظاهر
+            cbxReturnSaleMode.ValueMember = "Key";     // القيمة المخفية
+
+            // 🔹 حدث الاختيار
+            cbxReturnSaleMode.SelectedIndexChanged += (s, e) =>
+            {
+                if (cbxReturnSaleMode.SelectedValue != null)
+                {
+                    txtReturnSaleMode.Text = cbxReturnSaleMode.SelectedValue.ToString();
+                }
+            };
+
+            // 🔹 اختيار أول عنصر تلقائياً
+            cbxReturnSaleMode.SelectedIndex = 0;
+        }
+
+
 
         #region *********  ApplyPermissions  ******************************
         private void ApplyPermissionsToControls()
