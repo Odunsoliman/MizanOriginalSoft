@@ -124,7 +124,54 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             InitializeComponent();
         }
 
+        #region تحميل وتجهيز بيانات الفاتورة
         public void InitializeInvoice(InvoiceType type)
+        {
+            // 🔹 تعيين النوع الحالي
+            currentInvoiceType = type;
+
+            // 🔹 تحديد العنوان ورقم النوع
+            (string arabicTitle, string typeId) = type switch
+            {
+                InvoiceType.Sale => ("فاتورة بيع رقم: ", "1"),
+                InvoiceType.SaleReturn => ("فاتورة بيع مرتد رقم: ", "2"),
+                InvoiceType.Purchase => ("فاتورة شراء رقم: ", "3"),
+                InvoiceType.PurchaseReturn => ("فاتورة شراء مرتد رقم: ", "4"),
+                InvoiceType.Inventory => ("إذن تسوية مخزن رقم: ", "5"),
+                InvoiceType.DeductStock => ("إذن خصم مخزن رقم: ", "6"),
+                InvoiceType.AddStock => ("إذن إضافة مخزن رقم: ", "7"),
+                _ => ("فاتورة", "0")
+            };
+
+            // 🔹 تحديث العناوين في الفورم
+            this.Text = arabicTitle;
+            lblTypeInv.Text = arabicTitle;
+            lblTypeInvID.Text = typeId;
+
+            // 🔹 تجهيز الحقول الأساسية
+            FillDefaultAccount();
+            ConfigureAutoCompleteForAccount();
+            FillSellerComboBox();
+            SetupFormByInvoiceType();
+
+            // 🔥 تحميل كل الفواتير
+            GetInvoices();
+
+            // 🔥 الانتقال مباشرة إلى آخر فاتورة (الجديدة)
+            if (tblInv != null && tblInv.Rows.Count > 0)
+            {
+                currentInvoiceIndex = tblInv.Rows.Count - 1; // آخر صف
+                DisplayCurentRow(currentInvoiceIndex);       // يعرض الفاتورة الجديدة
+            }
+            else
+            {
+                lblInfoInvoice.Text = "لا توجد فواتير";
+                PrepareEmptyGridStructure();
+                DGV.DataSource = null;
+            }
+        }
+
+        public void InitializeInvoice_(InvoiceType type)
         {
             // 🔹 تعيين النوع الحالي
             currentInvoiceType = type;
@@ -169,8 +216,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 DGV.DataSource = null;
             }
         }
-
-        #region تحميل وتجهيز بيانات الفاتورة
 
         // جلب تفاصيل الفاتورة (أصنافها + تهيئة الجدول)
         public void GetInvoiceDetails()

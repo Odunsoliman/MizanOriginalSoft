@@ -906,6 +906,7 @@
             btnNew.TabStop = false;
             btnNew.Text = "جديد";
             btnNew.UseVisualStyleBackColor = false;
+            btnNew.Click += btnNew_Click;
             // 
             // btnLast
             // 
@@ -920,6 +921,7 @@
             btnLast.TabStop = false;
             btnLast.Text = "الاخير";
             btnLast.UseVisualStyleBackColor = false;
+            btnLast.Click += btnLast_Click;
             // 
             // lblSave
             // 
@@ -961,6 +963,7 @@
             btnFrist.TabStop = false;
             btnFrist.Text = "الاول";
             btnFrist.UseVisualStyleBackColor = false;
+            btnFrist.Click += btnFrist_Click;
             // 
             // btnPrevious
             // 
@@ -975,6 +978,7 @@
             btnPrevious.TabStop = false;
             btnPrevious.Text = "السابق";
             btnPrevious.UseVisualStyleBackColor = false;
+            btnPrevious.Click += btnPrevious_Click;
             // 
             // label22
             // 
@@ -1030,6 +1034,7 @@
             btnNext.TabStop = false;
             btnNext.Text = "التالى";
             btnNext.UseVisualStyleBackColor = false;
+            btnNext.Click += btnNext_Click;
             // 
             // btnJournal
             // 
