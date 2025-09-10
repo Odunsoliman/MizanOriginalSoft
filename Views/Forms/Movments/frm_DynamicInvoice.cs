@@ -1974,7 +1974,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 MaxRateDiscount = AppSettings.GetDecimal("MaxRateDiscount", 0.10m); // 10% افتراضياً
 
                 // 🟦 عند التحميل نخلي الحقول فاضية
-                lblTaxRate.Text = "غير مفعل";
+                lblTaxRate.Text = "";
                 txtTaxVal.Text = "0.00";
 
                 // 🟦 السماح/منع تعديل قيمة الضريبة
