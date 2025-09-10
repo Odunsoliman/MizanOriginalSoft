@@ -419,6 +419,7 @@
             txtTaxVal.Size = new Size(120, 29);
             txtTaxVal.TabIndex = 26;
             txtTaxVal.Text = "0";
+            txtTaxVal.DoubleClick += txtTaxVal_DoubleClick;
             txtTaxVal.Leave += txtTaxVal_Leave;
             // 
             // label7

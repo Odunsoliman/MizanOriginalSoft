@@ -1963,7 +1963,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #region Foter وظائف اجماليات الفاتورة
         private decimal defaultTax = 0m; // 🟦 نخزن النسبة هنا لاستخدامها لاحقاً
-
         private void LoadFooterSettings()
         {
             try
@@ -1977,8 +1976,64 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 lblTaxRate.Text = "";
                 txtTaxVal.Text = "0.00";
 
+                // 🟦 لا نغير خاصية ReadOnly
+                txtTaxVal.ReadOnly = false;
+            }
+            catch (Exception ex)
+            {
+                CustomMessageBox.ShowWarning($"خطأ أثناء تحميل إعدادات الفاتورة:\n{ex.Message}", "خطأ");
+            }
+        }
+
+        // 🔹 تحديث نسبة الضريبة
+        private void txtTaxVal_Leave(object sender, EventArgs e)
+        {
+            if (!decimal.TryParse(lblTotalInv.Text, out decimal total))
+                total = 0m;
+
+            if (!AllowChangeTax)
+            {
+                // 🟦 إعادة حساب الضريبة من جديد من القيمة الافتراضية
+                decimal taxValue = (total > 0 && defaultTax > 0) ? total * defaultTax : 0m;
+                txtTaxVal.Text = taxValue.ToString("N2");
+                lblTaxRate.Text = total > 0 ? (defaultTax * 100m).ToString("N0") + "%" : "0%";
+            }
+            else
+            {
+                // 🟦 حساب نسبة الضريبة بناءً على القيمة المدخلة
+                if (!decimal.TryParse(txtTaxVal.Text, out decimal tax))
+                    tax = 0m;
+
+                lblTaxRate.Text = total > 0
+                    ? ((tax / total) * 100m).ToString("N0") + "%"
+                    : "0%";
+            }
+
+            // 🟦 في كل الحالات نحسب الفوتر من جديد
+            CalculateInvoiceFooter();
+        }
+
+
+        private void LoadFooterSettings_()
+        {
+            try
+            {
+                // 🟦 قراءة القيم من ملف الإعدادات
+                defaultTax = AppSettings.GetDecimal("SalesTax", 0m);
+                AllowChangeTax = AppSettings.GetBool("IsEnablToChangTax", true);
+                MaxRateDiscount = AppSettings.GetDecimal("MaxRateDiscount", 0.10m); // 10% افتراضياً
+
+                // 🟦 عند التحميل نخلي الحقول فاضية
+                lblTaxRate.Text = "";
+                txtTaxVal.Text = "0.00";
+
                 // 🟦 السماح/منع تعديل قيمة الضريبة
-                txtTaxVal.ReadOnly = !AllowChangeTax;
+                txtTaxVal.ReadOnly = !AllowChangeTax;/*السيناريو هنا مختلف قليلا
+                                                      اريد ان تكون txtTaxVal متاحة دائما للقراءة والكتابة ولكن
+                فى حال السماح بتغيير الضريبة يكون الوضع عادى
+                وفى حال عدم السماح بتغييرها مهما كتب من قيمة داخلها ثم خرج من التكست يقوم تلقائيا بحساب القيمة الاصلية ثم يعيدها الى التكست
+                لكن فى الحالتين متاحة للكتابة
+                                                      */
             }
             catch (Exception ex)
             {
@@ -2077,15 +2132,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             CalculateInvoiceFooter();
         }
 
-        // 🔹 تحديث نسبة الضريبة
-        private void txtTaxVal_Leave(object? sender, EventArgs e)
-        {
-            if (!decimal.TryParse(txtTaxVal.Text, out var tax)) tax = 0m;
-            if (!decimal.TryParse(lblTotalInv.Text, out var total)) total = 0m;
 
-            lblTaxRate.Text = total > 0 ? ((tax / total) * 100m).ToString("N0") : "0.00";
-            CalculateInvoiceFooter();
-        }
 
         // 🔹 تحديث نسبة الإضافة
         private void txtValueAdded_Leave(object? sender, EventArgs e)
