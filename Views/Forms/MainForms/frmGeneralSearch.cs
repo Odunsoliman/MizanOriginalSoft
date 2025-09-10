@@ -26,7 +26,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             LoadData();
         }
- 
+
         private void LoadData()
         {
             var data = _provider.GetData(txtSearch.Text.Trim());
@@ -44,6 +44,11 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
+        }
+
+        private void frmGeneralSearch_Load_1(object sender, EventArgs e)
+        {
+
         }
     }
 }
