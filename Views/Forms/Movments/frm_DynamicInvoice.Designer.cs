@@ -1053,6 +1053,7 @@
             btnJournal.TabStop = false;
             btnJournal.Text = "القيد المحاسبى";
             btnJournal.UseVisualStyleBackColor = false;
+            btnJournal.Click += btnJournal_Click;
             // 
             // tlpNotes
             // 

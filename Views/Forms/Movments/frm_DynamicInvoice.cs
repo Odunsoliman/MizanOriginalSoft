@@ -13,7 +13,8 @@ using MizanOriginalSoft.MainClasses.Enums;
 using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.Views.Forms.Accounts;
 using MizanOriginalSoft.MainClasses.SearchClasses.MizanOriginalSoft.MainClasses.SearchClasses;
-using MizanOriginalSoft.MainClasses.SearchClasses; // هنا يوجد enum InvoiceType
+using MizanOriginalSoft.MainClasses.SearchClasses;
+using MizanOriginalSoft.Views.Forms.MainForms; // هنا يوجد enum InvoiceType
 
 namespace MizanOriginalSoft.Views.Forms.Movments
 {
@@ -294,7 +295,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     UpdateLabelsForResale();
             }
             LoadFooterSettings();
-         
+
             CalculateInvoiceFooter();
             DGVStyl();                          // تنسيق الداتا جريد
             RegisterEvents();                   // ربط أحداث إضافية
@@ -302,8 +303,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
 
-        #endregion  
-        
+        #endregion
+
         #region تنقل بين الحقول
         private void RegisterEvents()
         {
@@ -525,7 +526,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 else if (rdoInvoice.Checked)
                 {
                     // 🔍 بحث عن فاتورة قديمة
-                    var provider = new GenericSearchProvider(SearchEntityType.Invoices );
+                    var provider = new GenericSearchProvider(SearchEntityType.Invoices);
                     var result = SearchHelper.ShowSearchDialog(provider);
                     return result.Code;
                 }
@@ -1062,7 +1063,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #region التنقل بين الفواتير
 
-  
+
 
         /// <summary>
         /// الانتقال إلى أول فاتورة
@@ -1217,7 +1218,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         /// </summary>
         private void btnNew_Click(object sender, EventArgs e)
         {
-       //     SetDefaultAccount();
+            //     SetDefaultAccount();
 
             if (tblInv == null)
                 GetInvoices();
@@ -1476,7 +1477,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
         #region تهيئة وتصميم DataGridView
-        
+
         // إنشاء أعمدة الجدول يدوياً عند عدم وجود بيانات
         private void PrepareEmptyGridStructure()
         {
@@ -2148,7 +2149,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
               ? ((added / total) * 100m).ToString("N0") + "%"
               : "0%";
 
-            CalculateInvoiceFooter();   
+            CalculateInvoiceFooter();
         }
 
         // 🔹 تحديث المدفوعات
@@ -2291,13 +2292,36 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             lblNetTotal.Text = net.ToString("N2");
             decimal value = net;
             string result = TafqeetHelper.Tafqeet(value);
-            lblTafqet .Text = result;   
+            lblTafqet.Text = result;
 
 
             // 🔹 تحديث المتبقي
             CalculateRemainingOnAccount();
         }
         #endregion
+
+        /// <summary>فتح قيد اليومية المرتبط بالفاتورة.</summary>
+        private void btnJournal_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(lblSave.Text))
+            {
+                if (int.TryParse(lblInv_ID.Text, out int billNo) &&
+                    int.TryParse(lblTypeInvID.Text, out int invTypeId))
+                {
+                    frm_Journal journalForm = new frm_Journal(billNo, invTypeId);
+                    journalForm.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("تأكد من رقم السند ونوع العملية", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            else
+            {
+                MessageBox.Show("يجب حفظ السند أولًا قبل عرض القيد المحاسبي", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
     }
 }
 
