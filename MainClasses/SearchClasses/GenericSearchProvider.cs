@@ -63,7 +63,7 @@ namespace MizanOriginalSoft.MainClasses.SearchClasses
                     case SearchEntityType.Invoices:
                         dt = new DataTable();
                         dt = DBServiecs.NewInvoice_GetInvoicesByType(1);
-                        return Filter(dt, filter, new[] { "InvoiceID", "InvoiceNumber" });
+                        return Filter(dt, filter, new[] { "Inv_ID", "Inv_Counter" });
 
                     default:
                         return new DataTable();
