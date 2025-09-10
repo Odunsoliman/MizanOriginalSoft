@@ -113,6 +113,8 @@
             tlpReturnMod = new TableLayoutPanel();
             rdoFree = new RadioButton();
             rdoInvoice = new RadioButton();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            lblSellerID = new Label();
             ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
             tableLayoutPanel9.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
@@ -128,6 +130,7 @@
             tableLayoutPanel7.SuspendLayout();
             tlpAcc.SuspendLayout();
             tlpReturnMod.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
             SuspendLayout();
             // 
             // lblNetTotal
@@ -699,7 +702,7 @@
             cbxSellerID.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             cbxSellerID.ForeColor = Color.FromArgb(192, 0, 192);
             cbxSellerID.FormattingEnabled = true;
-            cbxSellerID.Location = new Point(469, 43);
+            cbxSellerID.Location = new Point(195, 3);
             cbxSellerID.Margin = new Padding(4, 3, 4, 3);
             cbxSellerID.Name = "cbxSellerID";
             cbxSellerID.Size = new Size(164, 30);
@@ -1330,10 +1333,10 @@
             tlpAcc.Controls.Add(label13, 0, 0);
             tlpAcc.Controls.Add(txtAccName, 1, 0);
             tlpAcc.Controls.Add(lblAccID, 2, 0);
-            tlpAcc.Controls.Add(cbxSellerID, 1, 1);
             tlpAcc.Controls.Add(lblBalance, 2, 2);
             tlpAcc.Controls.Add(lblB_Status, 2, 1);
             tlpAcc.Controls.Add(tlpReturnMod, 0, 2);
+            tlpAcc.Controls.Add(tableLayoutPanel2, 1, 1);
             tlpAcc.Location = new Point(547, 2);
             tlpAcc.Margin = new Padding(4, 2, 4, 2);
             tlpAcc.Name = "tlpAcc";
@@ -1443,6 +1446,34 @@
             rdoInvoice.UseVisualStyleBackColor = true;
             rdoInvoice.CheckedChanged += rdoInvoice_CheckedChanged;
             // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 2;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Controls.Add(lblSellerID, 1, 0);
+            tableLayoutPanel2.Controls.Add(cbxSellerID, 0, 0);
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Location = new Point(271, 43);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 1;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Size = new Size(363, 34);
+            tableLayoutPanel2.TabIndex = 34;
+            // 
+            // lblSellerID
+            // 
+            lblSellerID.BackColor = Color.Transparent;
+            lblSellerID.Dock = DockStyle.Fill;
+            lblSellerID.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblSellerID.ForeColor = Color.FromArgb(192, 0, 192);
+            lblSellerID.Location = new Point(4, 0);
+            lblSellerID.Margin = new Padding(4, 0, 4, 0);
+            lblSellerID.Name = "lblSellerID";
+            lblSellerID.Size = new Size(174, 34);
+            lblSellerID.TabIndex = 31;
+            lblSellerID.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // frm_DynamicInvoice
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
@@ -1476,6 +1507,7 @@
             tlpAcc.PerformLayout();
             tlpReturnMod.ResumeLayout(false);
             tlpReturnMod.PerformLayout();
+            tableLayoutPanel2.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -1566,5 +1598,7 @@
         private TableLayoutPanel tlpReturnMod;
         private RadioButton rdoFree;
         private RadioButton rdoInvoice;
+        private TableLayoutPanel tableLayoutPanel2;
+        private Label lblSellerID;
     }
 }

@@ -503,22 +503,57 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             CalculateInvoiceFooter();
         }
 
-        // حدث إدخال كود المنتج أو رقم فاتورة مرتجعة.
-        private void txtSeaarchProd_KeyDown(object sender, KeyEventArgs e)
+
+
+
+
+
+
+        // 🔹 دالة البحث حسب نوع الفاتورة واختيار المستخدم
+        private string SearchProductOrInvoice()
         {
-            if (e.Control && e.KeyCode == Keys.F)
+            // 🟢 في حالة فاتورة مرتجع
+            if (currentInvoiceType == InvoiceType.SaleReturn || currentInvoiceType == InvoiceType.PurchaseReturn)
             {
-                var provider = new GenericSearchProvider(SearchEntityType.Products);
-
-                var result = SearchHelper.ShowSearchDialog(provider);
-
-                if (!string.IsNullOrEmpty(result.Code))
+                if (rdoFree.Checked)
                 {
-                    txtSeaarchProd.Text = result.Code;
+                    // 🔍 بحث عن صنف
+                    var provider = new GenericSearchProvider(SearchEntityType.Products);
+                    var result = SearchHelper.ShowSearchDialog(provider);
+                    return result.Code;
+                }
+                else if (rdoInvoice.Checked)
+                {
+                    // 🔍 بحث عن فاتورة قديمة
+                    var provider = new GenericSearchProvider(SearchEntityType.Invoices );
+                    var result = SearchHelper.ShowSearchDialog(provider);
+                    return result.Code;
                 }
             }
+            else
+            {
+                // 🟢 باقي الأنواع → بحث عن صنف
+                var provider = new GenericSearchProvider(SearchEntityType.Products);
+                var result = SearchHelper.ShowSearchDialog(provider);
+                return result.Code;
+            }
 
+            return string.Empty;
+        }
 
+        // 🔹 حدث إدخال كود المنتج أو رقم فاتورة مرتجعة
+        private void txtSeaarchProd_KeyDown(object sender, KeyEventArgs e)
+        {
+            // 🟦 CTRL + F → فتح شاشة البحث
+            if (e.Control && e.KeyCode == Keys.F)
+            {
+                var code = SearchProductOrInvoice();
+                if (!string.IsNullOrEmpty(code))
+                    txtSeaarchProd.Text = code;
+                return;
+            }
+
+            // 🟦 ENTER → تنفيذ
             if (e.KeyCode == Keys.Enter && !string.IsNullOrWhiteSpace(txtSeaarchProd.Text))
             {
                 if (IsInvoiceSaved()) return;
@@ -533,8 +568,14 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
                     case InvoiceType.SaleReturn:
                     case InvoiceType.PurchaseReturn:
-                    case InvoiceType.Inventory:
-                        OpenReturnedInvoiceForm(code);
+                        if (rdoFree.Checked)
+                        {
+                            PrepareSaleProduct(code); // كود صنف
+                        }
+                        else if (rdoInvoice.Checked)
+                        {
+                            OpenReturnedInvoiceForm(code); // رقم فاتورة
+                        }
                         break;
 
                     case InvoiceType.Purchase:
@@ -550,21 +591,37 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
                 e.Handled = true;
                 e.SuppressKeyPress = true;
+                return;
             }
 
+            // 🟦 التنقل باستخدام ENTER أو SHIFT+ENTER
             if (e.KeyCode == Keys.Enter && !e.Shift)
             {
-                // Enter فقط → التالي
-                //cbxSellerID.Focus();
-                //e.Handled = true;
+                // ENTER → التالي
+                // cbxSellerID.Focus();
             }
             else if ((e.KeyCode == Keys.Enter && e.Shift) || e.KeyCode == Keys.Up)
             {
-                // Shift+Enter أو سهم ↑ → السابق
+                // SHIFT+ENTER أو ↑ → السابق
                 cbxSellerID.Focus();
                 e.Handled = true;
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // تجهيز منتج لفاتورة شراء.
         private void PreparePurchaseProduct(string code)
@@ -1586,6 +1643,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         private void rdoInvoice_CheckedChanged(object sender, EventArgs e)
         {
+            // if (rdoFree.Checked) 
             if (rdoInvoice.Checked)
             {
                 lblCodeTitel.Text = "رقم فاتورة البيع";
