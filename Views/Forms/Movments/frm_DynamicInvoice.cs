@@ -11,7 +11,9 @@ using MizanOriginalSoft.MainClasses.OriginalClasses;
 
 using MizanOriginalSoft.MainClasses.Enums;
 using MizanOriginalSoft.MainClasses;
-using MizanOriginalSoft.Views.Forms.Accounts; // هنا يوجد enum InvoiceType
+using MizanOriginalSoft.Views.Forms.Accounts;
+using MizanOriginalSoft.MainClasses.SearchClasses.MizanOriginalSoft.MainClasses.SearchClasses;
+using MizanOriginalSoft.MainClasses.SearchClasses; // هنا يوجد enum InvoiceType
 
 namespace MizanOriginalSoft.Views.Forms.Movments
 {
@@ -33,7 +35,89 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         private bool AllowChangeTax = true;
 
         #endregion
+        #region 🔹 المتغيرات العامة
 
+        // 📝 DataTable يحتوي كل الفواتير المحملة من قاعدة البيانات
+        private DataTable tblInv = new DataTable();
+
+        // 📝 مؤشر الفاتورة الحالية داخل DataTable
+        private int currentInvoiceIndex = 0;
+        // حقول قبل وبعد البحث
+        private readonly List<Control> inputFieldsBeforeSearch = new();
+        private readonly List<Control> inputFieldsAfterSearch = new();
+
+        // جداول المنتجات
+        private DataTable tblProd = new();
+        private DataTable tblProdPieces = new();
+        DataTable tblInvDetails = new DataTable();
+        // متغيرات بسيطة
+        private string unit = string.Empty;
+        public string SelectedAccID { get; set; } = string.Empty;
+
+        // معرفات
+        private int US;          // كود المستخدم
+        private int Inv_ID;      // رقم الفاتورة
+        private int ID_Prod;
+        private int Piece_id = 0;
+
+        private DataTable? tblAcc = null;
+        private DataTable? tblAccSals = null;
+
+        // متغيرات مالية
+        private int PieceID;
+        private float PriceMove;
+        private float Amount;
+        private float TotalRow;
+        private float GemDisVal;
+        private float ComitionVal = 0;
+        private float NetRow;
+
+        //private InvoiceType currentInvoiceType;
+        private KeyboardLanguageManager? langManager;
+
+        #endregion
+
+        #region فحص صلاحيات وصحة البيانات
+
+        /// <summary>
+        /// تحديد إذا كان يمكن قص القطعة (true = يمكن قصها)
+        /// </summary>
+        public bool isCanCut = true;
+
+        /// <summary>
+        /// معرّف الوحدة الحالي
+        /// </summary>
+        private int unit_ID;
+
+        /// <summary>
+        /// محاولة قراءة كمية صحيحة > 0
+        /// </summary>
+        private bool TryGetValidAmount(out float amount)
+        {
+            return float.TryParse(txtAmount.Text, out amount) && amount > 0;
+        }
+
+        /// <summary>
+        /// محاولة قراءة سعر صحيح > 0
+        /// </summary>
+        private bool TryGetValidPrice(out float price)
+        {
+            return float.TryParse(lblPriceMove.Text, out price) && price > 0;
+        }
+
+        /// <summary>
+        /// التحقق هل الفاتورة محفوظة نهائيًا (لا يمكن تعديلها)
+        /// </summary>
+        private bool IsInvoiceSaved()
+        {
+            if (!string.IsNullOrWhiteSpace(lblSave.Text))
+            {
+                MessageBox.Show("الفاتورة محفوظة نهائيًا، لا يمكن التعديل.");
+                return true;
+            }
+            return false;
+        }
+        #endregion
         #region Form Initialization
         public frm_DynamicInvoice()
         {
@@ -71,6 +155,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         private void frm_DynamicInvoice_Load(object sender, EventArgs e)
         {
+            DBServiecs.A_UpdateAllDataBase();   // تحديث أرصدة الأصناف والحسابات
             // ✅ قراءة الإعدادات
             LoadSettings();
 
@@ -84,10 +169,1340 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
             LoadFooterSettings();
             CalculateInvoiceFooter();
+            
+            //LoadAcc();                          // تحميل الحسابات
+            //SetDefaultAccount();                // تعيين الحساب الافتراضي
+            //InitializeAutoComplete();           // إعداد الإكمال التلقائي
+            //GetSalseMan();                      // جلب البائعين / المنفذين
+            //InvTypeData();                      // تحميل بيانات النوع
+            DGVStyl();                          // تنسيق الداتا جريد
+            RegisterEvents();                   // ربط أحداث إضافية
+        }
+        private void RegisterEvents()
+        {
+            foreach (Control ctrl in inputFieldsBeforeSearch.Concat(inputFieldsAfterSearch))
+            {
+                ctrl.KeyDown += InputFields_KeyDown;
+                ctrl.Leave += InputFields_Leave;
+            }
+        }
+        /// <summary>
+        /// عند مغادرة أي حقل إدخال يتم الحفظ كمسودة إذا لم تكن الفاتورة محفوظة نهائيًا.
+        /// </summary>
+        private void InputFields_Leave(object? sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(lblSave.Text)) // لم يتم الحفظ النهائي بعد
+            {
+                SaveDraftInvoice();
+            }
+        }
+        #region تنقل بين الحقول
 
+        /// <summary>
+        /// عند الضغط على Enter داخل أي حقل إدخال:
+        /// - ينتقل إلى الحقل التالي بالترتيب.
+        /// - إذا الحقل التالي TextBox → يتم تحديد النص بالكامل.
+        /// </summary>
+        private void InputFields_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter) return;
+
+            Control[] fields = inputFieldsBeforeSearch.Concat(inputFieldsAfterSearch).ToArray();
+            var index = Array.IndexOf(fields, sender as Control);
+
+            if (index >= 0 && index < fields.Length - 1)
+            {
+                e.SuppressKeyPress = true;
+                fields[index + 1].Focus();
+
+                if (fields[index + 1] is TextBox tb)
+                    tb.SelectAll();
+            }
+        }
+        #endregion
+
+        #endregion
+
+        #region Body  وظائف الجزء الخاص بالاصناف 
+
+
+
+        #endregion
+        #region أحداث ووظائف إضافة صنف
+
+        /// <summary>
+        /// إدخال صنف جديد إلى تفاصيل الفاتورة وحفظه في قاعدة البيانات.
+        /// </summary>
+        public string InvoiceDetails_Insert()
+        {
+            GetVar(); // تحميل المتغيرات الأساسية من الواجهة
+
+            string message = DBServiecs.InvoiceDetails_Insert(
+                (int)currentInvoiceType, Inv_ID, PieceID, PriceMove, Amount,
+                TotalRow, GemDisVal, ComitionVal, NetRow, 0
+            );
+
+            DGVStyl(); // إعادة تهيئة تصميم الجدول
+            return message;
+        }
+
+        /// <summary>
+        /// تحميل بيانات القطع الخاصة بالصنف (في حال كان المنتج يقبل القص).
+        /// </summary>
+        private void LoadPieceData()
+        {
+            cbxPiece_ID.Visible =
+                (currentInvoiceType == InvoiceType.Sale && isCanCut);
+
+            if (unit_ID == 1) // المنتج يقبل القص
+            {
+                tblProdPieces = DBServiecs.Product_GetOrCreatePieces(ID_Prod);
+                DataRow[] filtered = tblProdPieces.Select("Piece_Length <> 0");
+
+                if (filtered.Length > 0)
+                {
+                    cbxPiece_ID.DataSource = filtered.CopyToDataTable();
+                    cbxPiece_ID.DisplayMember = "Piece_Length";
+                    cbxPiece_ID.ValueMember = "Piece_ID";
+
+                    if (cbxPiece_ID.Visible)
+                    {
+                        cbxPiece_ID.DroppedDown = true;
+                        cbxPiece_ID.Focus();
+                    }
+                    else
+                    {
+                        txtAmount.Focus();
+                    }
+                }
+                else
+                {
+                    cbxPiece_ID.DataSource = null;
+                    MessageBox.Show("لا توجد أرصدة بهذا الصنف.");
+                    txtAmount.Focus();
+                }
+            }
+            else // المنتج لا يقبل القص
+            {
+                DataTable piece = DBServiecs.Product_GetOrCreate_DefaultPiece(ID_Prod);
+                if (piece.Rows.Count > 0)
+                    lblPieceID.Text = piece.Rows[0]["Piece_ID"].ToString();
+
+                txtAmount.Focus();
+            }
+        }
+
+        /// <summary>
+        /// تحميل بيانات منتج حسب كوده.
+        /// </summary>
+        private bool GetProd(string code)
+        {
+            txtAmount.Text = "0";
+
+            tblProd = DBServiecs.Item_GetProductByCode(code, out string msg);
+
+            if (tblProd == null || tblProd.Rows.Count == 0)
+            {
+                MessageBox.Show(msg, "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                EmptyProdData();
+                return false;
+            }
+
+            DataRow row = tblProd.Rows[0];
+
+            // ✅ السعر حسب نوع الفاتورة
+            lblPriceMove.Text = (currentInvoiceType == InvoiceType.Sale ||
+                                 currentInvoiceType == InvoiceType.SaleReturn)
+                ? row["U_Price"].ToString()
+                : row["B_Price"].ToString();
+
+            // ✅ البيانات العامة
+            ID_Prod = Convert.ToInt32(row["ID_Product"]);
+            lblProductName.Text = row["ProdName"].ToString();
+            unit_ID = Convert.ToInt32(row["UnitID"]);
+            unit = (row["UnitProd"]?.ToString() ?? "").Trim();
+            lblProductStock.Text = row["ProductStock"].ToString();
+
+            // الطول الأدنى (للمنتجات القابلة للقص)
+            lblMinLinth.Text = unit_ID == 1 ? row["MinLenth"].ToString() : "";
+            lblLinthText.Text = unit_ID == 1 ? "اقل طول" : unit;
+
+            isCanCut = (unit_ID == 1);
+            cbxPiece_ID.Visible = (currentInvoiceType == InvoiceType.Sale && isCanCut);
+
+            return true;
+        }
+
+        /// <summary>
+        /// حدث إدخال الكمية (Enter في txtAmount).
+        /// </summary>
+        private void txtAmount_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter || IsInvoiceSaved()) return;
+
+            int currentIndexBeforeInsert = currentInvoiceIndex;
+            SaveDraftInvoice(); // حفظ الفاتورة مؤقتًا
+
+            if (!TryGetValidAmount(out float amount))
+            {
+                CustomMessageBox.ShowWarning("يرجى إدخال كمية صحيحة للمنتج", "خطأ");
+                txtAmount.Focus();
+                txtAmount.SelectAll();
+                return;
+            }
+
+            // التحقق من طول القطعة عند البيع
+            float.TryParse(cbxPiece_ID.Text, out float pieceLength);
+            if (currentInvoiceType == InvoiceType.Sale && unit_ID == 1 && pieceLength == 0)
+            {
+                CustomMessageBox.ShowWarning("يرجى اختيار طول القطعة", "خطأ");
+                cbxPiece_ID.Focus();
+                return;
+            }
+
+            // إدراج حسب نوع الفاتورة
+            switch (currentInvoiceType)
+            {
+                case InvoiceType.Sale:
+                    InsertSaleRow(amount, pieceLength);
+                    break;
+
+                case InvoiceType.Purchase:
+                    InsertPurchaseRow(amount);
+                    break;
+
+                case InvoiceType.Inventory:
+                    InsertInventoryRow(amount);
+                    break;
+
+                default:
+                    CustomMessageBox.ShowWarning("نوع الفاتورة غير مدعوم", "خطأ");
+                    return;
+            }
+
+            // ✅ تحديثات بعد الإدخال
+            DBServiecs.A_UpdateAllDataBase();
+            PrepareSaleProduct(txtSeaarchProd.Text);
+            GetInvoices();
+            NavigateToInvoice(currentIndexBeforeInsert);
+            CalculateInvoiceFooter();
+        }
+
+        /// <summary>
+        /// حدث إدخال كود المنتج أو رقم فاتورة مرتجعة.
+        /// </summary>
+        private void txtSeaarchProd_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.F)
+            {
+                var provider = new GenericSearchProvider(SearchEntityType.Products);
+
+                var result = SearchHelper.ShowSearchDialog(provider);
+
+                if (!string.IsNullOrEmpty(result.Code))
+                {
+                    txtSeaarchProd.Text = result.Code;
+                }
+            }
+
+
+            if (e.KeyCode == Keys.Enter && !string.IsNullOrWhiteSpace(txtSeaarchProd.Text))
+            {
+                if (IsInvoiceSaved()) return;
+
+                string code = txtSeaarchProd.Text.Trim();
+
+                switch (currentInvoiceType)
+                {
+                    case InvoiceType.Sale:
+                        PrepareSaleProduct(code);
+                        break;
+
+                    case InvoiceType.SaleReturn:
+                    case InvoiceType.PurchaseReturn:
+                    case InvoiceType.Inventory:
+                        OpenReturnedInvoiceForm(code);
+                        break;
+
+                    case InvoiceType.Purchase:
+                        PreparePurchaseProduct(code);
+                        break;
+
+                    default:
+                        CustomMessageBox.ShowWarning(
+                            "نوع الفاتورة غير مدعوم في هذه العملية", "خطأ"
+                        );
+                        break;
+                }
+
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+
+            if (e.KeyCode == Keys.Enter && !e.Shift)
+            {
+                // Enter فقط → التالي
+                //cbxSellerID.Focus();
+                //e.Handled = true;
+            }
+            else if ((e.KeyCode == Keys.Enter && e.Shift) || e.KeyCode == Keys.Up)
+            {
+                // Shift+Enter أو سهم ↑ → السابق
+                cbxSellerID.Focus();
+                e.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// تجهيز منتج لفاتورة شراء.
+        /// </summary>
+        private void PreparePurchaseProduct(string code)
+        {
+            if (!GetProd(code)) return;
+
+            float price = float.TryParse(lblPriceMove.Text, out float result) ? result : 0;
+
+            if (price <= 0)
+            {
+                CustomMessageBox.ShowWarning("يرجى تحديد سعر شراء صالح.", "تنبيه");
+                return;
+            }
+
+            txtAmount.Focus();
+            txtAmount.SelectAll();
+        }
+
+        /// <summary>
+        /// إدراج منتج في فاتورة شراء.
+        /// </summary>
+        private void InsertPurchaseRow(float amount)
+        {
+            if (amount <= 0)
+            {
+                CustomMessageBox.ShowWarning("الرجاء إدخال كمية صحيحة أكبر من الصفر.", "تنبيه");
+                txtAmount.Focus();
+                txtAmount.SelectAll();
+                return;
+            }
+
+            InsertRow(unit_ID == 1);
+            AfterInsertActions();
+            DGVStyl();
+        }
+
+        /// <summary>
+        /// إدراج منتج في فاتورة بيع.
+        /// </summary>
+        private void InsertSaleRow(float amount, float pieceLength)
+        {
+            if (unit_ID == 1) // منتج يقبل القص
+            {
+                float minLength = float.Parse(lblMinLinth.Text);
+                float remaining = pieceLength - amount;
+
+                if (remaining >= minLength || remaining == 0)
+                {
+                    InsertRow(true);
+                    AfterInsertActions();
+                }
+                else
+                {
+                    DialogResult result = CustomMessageBox.ShowQuestion(
+                        $"لا يجوز أن تكون القطعة المتبقية أقل من الحد الأدنى: {minLength}\nهل تريد المتابعة بالرغم من ذلك؟",
+                        "تنبيه"
+                    );
+
+                    if (result == DialogResult.OK)
+                    {
+                        InsertRow(true);
+                        AfterInsertActions();
+                    }
+                    else
+                    {
+                        txtAmount.Focus();
+                        txtAmount.SelectAll();
+                    }
+                }
+            }
+            else // منتج لا يقبل القص
+            {
+                if (float.TryParse(lblProductStock.Text, out float stock))
+                {
+                    //if (amount > stock && !chkAllowNegative.Checked)
+                    //{
+                    //    CustomMessageBox.ShowWarning(
+                    //        "الكمية المطلوبة أكبر من الرصيد ولا يسمح بالبيع على المكشوف.",
+                    //        "تنبيه"
+                    //    );
+                    //    txtAmount.Focus();
+                    //    txtAmount.SelectAll();
+                    //    return;
+                    //}
+                }
+
+                if (float.TryParse(lblMinLinth.Text, out float minLength2))
+                {
+                    txtAmount.Text = (amount * minLength2).ToString();
+                }
+
+                InsertRow(false);
+                AfterInsertActions();
+            }
+        }
+
+        /// <summary>
+        /// إعداد منتج لعملية بيع.
+        /// </summary>
+        private void PrepareSaleProduct(string code)
+        {
+            if (!GetProd(code)) return;
+            LoadPieceData();
+        }
+
+        /// <summary>
+        /// إدراج منتج في فاتورة جرد أو تسوية.
+        /// </summary>
+        private void InsertInventoryRow(float amount)
+        {
+            InsertRow(unit_ID == 1);
+            AfterInsertActions();
+        }
+
+        /// <summary>
+        /// فتح فاتورة مرتجعة حسب رقمها.
+        /// </summary>
+        private void OpenReturnedInvoiceForm(string serial)
+        {
+            if (!int.TryParse(serial, out int serInv))
+            {
+                CustomMessageBox.ShowWarning("الرجاء إدخال رقم فاتورة صالح.", "تنبيه");
+                return;
+            }
+
+            DataTable tblInvoice = DBServiecs.NewInvoice_GetInvoiceByTypeAndCounter(
+                1, serInv, out string? msg
+            );
+
+            if (!string.IsNullOrWhiteSpace(msg))
+            {
+                CustomMessageBox.ShowWarning(msg, "تنبيه");
+                return;
+            }
+
+            if (tblInvoice == null || tblInvoice.Rows.Count == 0)
+            {
+                CustomMessageBox.ShowWarning("لم يتم العثور على الفاتورة.", "تنبيه");
+                return;
+            }
+
+            if (!int.TryParse(tblInvoice.Rows[0]["Inv_ID"]?.ToString(), out int Inv_ID))
+            {
+                CustomMessageBox.ShowWarning("فشل في قراءة رقم الفاتورة.", "خطأ");
+                return;
+            }
+
+            DataTable tblDetails = DBServiecs.NewInvoice_GetInvoiceDetails(Inv_ID);
+
+            if (!int.TryParse(lblInv_ID.Text, out int CurrentInvoiceID))
+            {
+                CustomMessageBox.ShowWarning("رقم الفاتورة الحالي غير صالح.", "خطأ");
+                return;
+            }
+
+            using (frm_ReturnedInvoice returnedForm = new frm_ReturnedInvoice(
+                1, serInv, tblInvoice, tblDetails, CurrentInvoiceID))
+            {
+                if (returnedForm.ShowDialog() == DialogResult.OK)
+                {
+                    LoadReturnedItems(returnedForm.SelectedItems);
+                }
+            }
+
+            DGVStyl();
+        }
+
+        /// <summary>
+        /// تحميل الأصناف المرتجعة إلى الجدول.
+        /// </summary>
+        private void LoadReturnedItems(DataTable returnedItems)
+        {
+            foreach (DataRow row in returnedItems.Rows)
+            {
+                DGV.Rows.Add(
+                    row["ProdID"],
+                    row["ProdName"],
+                    row["Piece_ID"],
+                    row["Amount"],
+                    row["Price"],
+                    row["Total"]
+                );
+            }
         }
 
         #endregion
+
+        #region  تنسيق واحداث  DataGridView
+
+        /// <summary>
+        /// عند تغيير التحديد في الجدول:
+        /// - إذا الصف فارغ → إفراغ الحقول.
+        /// - إذا يحتوي بيانات → عرض الحد الأدنى للطول والمخزون.
+        /// </summary>
+        private void DGV_SelectionChanged(object? sender, EventArgs e)
+        {
+            if (DGV.Rows.Count == 0 || DGV.CurrentRow == null || DGV.CurrentRow.IsNewRow)
+            {
+                lblMinLinth.Text = "";
+                lblProductStock.Text = "";
+                return;
+            }
+
+            lblMinLinth.Text = DGV.Columns.Contains("MinLenth")
+                ? DGV.CurrentRow.Cells["MinLenth"].Value?.ToString()
+                : "";
+
+            lblProductStock.Text = DGV.Columns.Contains("ProductStock")
+                ? DGV.CurrentRow.Cells["ProductStock"].Value?.ToString()
+                : "";
+        }
+
+        /// <summary>
+        /// عند الضغط على Enter أو Tab:
+        /// - التنقل بين الأعمدة القابلة للتحرير (السعر → الكمية → الخصم).
+        /// - عند اكتمال الدورة، ينتقل للسطر التالي.
+        /// </summary>
+        private void DGV_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
+            {
+                e.SuppressKeyPress = true;
+
+                var currentCell = DGV.CurrentCell;
+                if (currentCell == null) return;
+
+                string[] editableCols = { "PriceMove", "Amount", "GemDisVal" };
+                int colIndex = Array.IndexOf(editableCols, currentCell.OwningColumn.Name);
+
+                if (colIndex >= 0)
+                {
+                    int nextColIndex = (colIndex + 1) % editableCols.Length;
+                    int rowIndex = currentCell.RowIndex;
+
+                    if (nextColIndex == 0) // دورة كاملة
+                    {
+                        if (rowIndex + 1 < DGV.Rows.Count)
+                            rowIndex++;
+                        else
+                            return;
+                    }
+
+                    DGV.CurrentCell = DGV.Rows[rowIndex].Cells[editableCols[nextColIndex]];
+                }
+            }
+        }
+
+        /// <summary>
+        /// تنسيق الأعمدة:
+        /// - خلفيات الصفوف (متناوبة).
+        /// - الأعمدة القابلة للتحرير باللون الأزرق الغامق قبل الحفظ.
+        /// - الأعمدة المغلقة أو بعد الحفظ باللون الرمادي.
+        /// </summary>
+        private void DGV_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+        {
+            string columnName = DGV.Columns[e.ColumnIndex].Name;
+            string[] editableColumns = { "PriceMove", "Amount", "GemDisVal" };
+
+            bool isEditable = editableColumns.Contains(columnName);
+            bool isSaved = !string.IsNullOrWhiteSpace(lblSave.Text);
+
+            Color evenBackColor = Color.WhiteSmoke;
+            Color oddBackColor = Color.LemonChiffon;
+
+            if (e.CellStyle != null)
+            {
+                e.CellStyle.BackColor = (e.RowIndex % 2 == 0) ? evenBackColor : oddBackColor;
+
+                if (isEditable && !isSaved)
+                {
+                    e.CellStyle.ForeColor = Color.DarkBlue;
+                    e.CellStyle.Font = new Font("Times New Roman", 14, FontStyle.Bold);
+                }
+                else
+                {
+                    e.CellStyle.ForeColor = Color.FromArgb(100, 100, 100);
+                    e.CellStyle.Font = new Font("Times New Roman", 14, FontStyle.Regular);
+                }
+            }
+        }
+
+        /// <summary>
+        /// عند بدء التحرير داخل خلية:
+        /// - إذا كانت من الأعمدة الثلاثة المسموح بها،
+        ///   يتم تحديد النص بالكامل عند الدخول (SelectAll).
+        /// </summary>
+        private void DGV_EditingControlShowing(object? sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (e.Control is TextBox tb)
+            {
+                tb.Enter -= TextBox_Enter_SelectAll; // إزالة الاشتراك القديم
+
+                string? columnName = DGV.CurrentCell?.OwningColumn?.Name;
+                if (columnName is "PriceMove" or "Amount" or "GemDisVal")
+                    tb.Enter += TextBox_Enter_SelectAll;
+            }
+        }
+
+        /// <summary>
+        /// إعداد المظهر العام للجدول:
+        /// - إظهار الأعمدة المطلوبة فقط.
+        /// - التحكم في الصلاحيات (Editable / ReadOnly).
+        /// - تنسيق العناوين والصفوف والألوان.
+        /// </summary>
+        private void DGVStyl()
+        {
+            if (DGV.Columns.Count == 0) return;
+
+            DGV.SuspendLayout();
+            try
+            {
+                DGV.ClearSelection();
+                DGV.CurrentCell = null;
+
+                DGV.ColumnHeadersVisible = true;
+                DGV.EnableHeadersVisualStyles = false;
+                DGV.RightToLeft = RightToLeft.Yes;
+
+                bool allowEdit = string.IsNullOrWhiteSpace(lblSave.Text);
+
+                foreach (DataGridViewColumn col in DGV.Columns)
+                {
+                    col.Visible = false;
+                    col.ReadOnly = true;
+                }
+
+                var columns = new (string Name, string Header, bool Editable, float Width)[]
+                {
+            ("ProductCode", "الكود", false, 1),
+            ("ProdName", "اسم الصنف", false, 3),
+            ("UnitProd", "الوحدة", false, 1),
+            ("PriceMove", "السعر", true, 1),
+            ("Amount", "الكمية", true, 1),
+            ("TotalRow", "الإجمالي", false, 1),
+            ("GemDisVal", "الخصم", true, 1),
+            ("NetRow", "الصافي", false, 1)
+                };
+
+                foreach (var (name, header, editable, width) in columns)
+                {
+                    if (!DGV.Columns.Contains(name)) continue;
+
+                    var col = DGV.Columns[name];
+                    col.Visible = true;
+                    col.HeaderText = header;
+                    col.ReadOnly = !(editable && allowEdit);
+                    col.FillWeight = width;
+
+                    if (name is "TotalRow" or "NetRow" or "PriceMove" or "Amount" or "GemDisVal")
+                    {
+                        col.DefaultCellStyle.Format = "N2";
+                        col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    }
+
+                    col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                }
+
+                // 🟦 تنسيقات عامة
+                DGV.DefaultCellStyle.Font = new Font("Times New Roman", 14);
+                DGV.DefaultCellStyle.ForeColor = Color.Blue;
+                DGV.DefaultCellStyle.BackColor = Color.LightYellow;
+                DGV.DefaultCellStyle.SelectionBackColor = Color.SteelBlue;
+                DGV.DefaultCellStyle.SelectionForeColor = Color.White;
+
+                DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Bold);
+                DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.Blue;
+                DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGray;
+                DGV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+                DGV.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+                DGV.RowHeadersVisible = false;
+                DGV.GridColor = Color.Black;
+                DGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+                DGV.RowsDefaultCellStyle.BackColor = Color.WhiteSmoke;
+                DGV.AlternatingRowsDefaultCellStyle.BackColor = Color.LemonChiffon;
+            }
+            finally
+            {
+                DGV.ResumeLayout();
+            }
+        }
+        #endregion
+
+        #region دوال مساعدة عامة
+        /// <summary>
+        /// تحديد النص بالكامل عند دخول المؤشر لحقل نصي
+        /// </summary>
+        private void TextBox_Enter_SelectAll(object? sender, EventArgs e)
+        {
+            if (sender is TextBox tb)
+                tb.SelectAll();
+        }
+
+        /// <summary>
+        /// تنسيق رقم عشري (مثال: 1234.5 → 1,234.50)
+        /// </summary>
+        private string FormatNumber(object val)
+        {
+            if (val == null || val == DBNull.Value)
+                return "0";
+
+            return decimal.TryParse(val.ToString(), out decimal number)
+                ? number.ToString("N2")
+                : "0";
+        }
+
+        /// <summary>
+        /// محاولة التحويل إلى Float وإرجاع Null عند الفشل
+        /// </summary>
+        public static float? TryParseFloat(string text)
+        {
+            return float.TryParse(text, out float value) ? value : null;
+        }
+        #endregion
+
+        #region حساب المتغيرات وتفريغ البيانات
+
+        /// <summary>
+        /// تحميل القيم من الحقول وتحويلها إلى متغيرات رقمية
+        /// </summary>
+        private void GetVar()
+        {
+            int.TryParse(lblInv_ID.Text, out Inv_ID);
+            float.TryParse(lblPriceMove.Text, out PriceMove);
+            float.TryParse(txtAmount.Text, out Amount);
+            float.TryParse(lblGemDisVal.Text, out GemDisVal);
+            int.TryParse(lblPieceID.Text, out PieceID);
+
+            // الحسابات الأساسية
+            TotalRow = Amount * PriceMove;
+            NetRow = TotalRow - GemDisVal;
+        }
+
+        /// <summary>
+        /// تفريغ بيانات المنتج بعد الإضافة أو الإلغاء
+        /// </summary>
+        private void EmptyProdData()
+        {
+            txtSeaarchProd.Text = "0";
+            txtSeaarchProd.Focus();
+            txtSeaarchProd.SelectAll();
+
+            lblPriceMove.Text = "0";
+            lblProductName.Text = "Product Name";
+            cbxPiece_ID.SelectedIndex = -1;
+            txtAmount.Text = "0";
+            lblGemDisVal.Text = "0";
+            Piece_id = 0;
+        }
+
+        #endregion
+
+        #region التنقل بين الفواتير
+
+  
+
+        /// <summary>
+        /// الانتقال إلى أول فاتورة
+        /// </summary>
+        private void btnFrist_Click(object sender, EventArgs e)
+        {
+            if (EnsureInvoicesLoaded())
+                NavigateToInvoice(0);
+        }
+
+        /// <summary>
+        /// الانتقال إلى الفاتورة التالية
+        /// </summary>
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            if (EnsureInvoicesLoaded() && currentInvoiceIndex < tblInv.Rows.Count - 1)
+                NavigateToInvoice(currentInvoiceIndex + 1);
+            else
+                MessageBox.Show("تم الوصول إلى آخر فاتورة.");
+        }
+
+        /// <summary>
+        /// الانتقال إلى الفاتورة السابقة
+        /// </summary>
+        private void btnPrevious_Click(object sender, EventArgs e)
+        {
+            if (EnsureInvoicesLoaded() && currentInvoiceIndex > 0)
+                NavigateToInvoice(currentInvoiceIndex - 1);
+            else
+                MessageBox.Show("تم الوصول إلى أول فاتورة.");
+        }
+
+        /// <summary>
+        /// الانتقال إلى آخر فاتورة
+        /// </summary>
+        private void btnLast_Click(object sender, EventArgs e)
+        {
+            if (EnsureInvoicesLoaded())
+                NavigateToInvoice(tblInv.Rows.Count - 1);
+        }
+
+        /// <summary>
+        /// وظيفة التنقل بين الفواتير
+        /// </summary>
+        /// <param name="targetIndex">الفهرس المستهدف للفواتير</param>
+        private void NavigateToInvoice(int targetIndex)
+        {
+            if (!EnsureInvoicesLoaded()) return;
+
+            // 📝 ضبط المؤشر ليكون دائمًا داخل الحدود
+            targetIndex = Math.Max(0, Math.Min(targetIndex, tblInv.Rows.Count - 1));
+            currentInvoiceIndex = targetIndex;
+
+            // تحميل بيانات الفاتورة
+            DisplayCurentRow(currentInvoiceIndex);
+
+            // تفعيل أو تعطيل الأزرار بناءً على حالة الحفظ والموقع الحالي
+            ToggleControlsBasedOnSaveStatus();
+            ToggleNavigationButtons();
+
+            // تحديث شريط المعلومات
+            lblInfoInvoice.Text = $"فاتورة {targetIndex + 1} من {tblInv.Rows.Count}";
+        }
+
+        /// <summary>
+        /// تفعيل/تعطيل أزرار التنقل حسب موقع الفاتورة
+        /// </summary>
+        private void ToggleNavigationButtons()
+        {
+            btnFrist.Enabled = currentInvoiceIndex > 0;
+            btnPrevious.Enabled = currentInvoiceIndex > 0;
+            btnNext.Enabled = currentInvoiceIndex < tblInv.Rows.Count - 1;
+            btnLast.Enabled = currentInvoiceIndex < tblInv.Rows.Count - 1;
+        }
+
+        /// <summary>
+        /// التأكد من تحميل الفواتير
+        /// </summary>
+        /// <returns>True إذا كانت الفواتير متاحة، False خلاف ذلك</returns>
+        private bool EnsureInvoicesLoaded()
+        {
+            if (tblInv == null || tblInv.Rows.Count == 0)
+                GetInvoices();
+
+            if (tblInv == null || tblInv.Rows.Count == 0)
+            {
+                MessageBox.Show("لا توجد فواتير.");
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// عرض بيانات الفاتورة الحالية في الواجهة
+        /// </summary>
+        /// <param name="CIndex">فهرس الفاتورة داخل الجدول</param>
+        public void DisplayCurentRow(int CIndex)
+        {
+            if (tblInv == null || tblInv.Rows.Count <= CIndex)
+                return;
+
+            DataRow row = tblInv.Rows[CIndex];
+
+            // 🔹 تحميل قيم أساسية
+            lblInv_ID.Text = row["Inv_ID"].ToString();
+            lblInv_Counter.Text = row["Inv_Counter"].ToString();
+            lblTypeInv.Text = row["MovType"].ToString(); // نوع الحركة
+            Inv_ID = Convert.ToInt32(lblInv_ID.Text);
+
+
+            // 🔹 التاريخ
+            if (row["Inv_Date"] != DBNull.Value)
+                dtpInv_Date.Value = Convert.ToDateTime(row["Inv_Date"]);
+
+            // 🔹 البائع / منفذ العملية
+            cbxSellerID.SelectedValue = row["Seller_ID"] != DBNull.Value
+                ? Convert.ToInt32(row["Seller_ID"])
+                : -1;
+
+            // 🔹 المستخدم والحساب
+            lblAccID.Text = row["Acc_ID"].ToString();
+
+            // 🔹 القيم المالية
+            lblTotalInv.Text = FormatNumber(row["TotalValue"]);
+            txtTaxVal.Text = FormatNumber(row["TaxVal"]);
+            lblTotalValueAfterTax.Text = FormatNumber(row["TotalValueAfterTax"]);
+            txtDiscount.Text = FormatNumber(row["Discount"]);
+            txtValueAdded.Text = FormatNumber(row["ValueAdded"]);
+            lblNetTotal.Text = FormatNumber(row["NetTotal"]);
+
+            // 🔹 المدفوعات
+            txtPayment_Cash.Text = FormatNumber(row["Payment_Cash"]);
+            txtPayment_Electronic.Text = FormatNumber(row["Payment_Electronic"]);
+            txtPayment_Note.Text = row["Payment_Note"]?.ToString();
+
+            // 🔹 الباقي على الحساب
+            lblRemainingOnAcc.Text = FormatNumber(row["RemainingOnAcc"]);
+
+            // 🔹 الملاحظات وحالة الحفظ
+            txtNoteInvoice.Text = row["NoteInvoice"]?.ToString();
+            lblSave.Text = row["Saved"]?.ToString();
+
+            // 🔹 تحميل تفاصيل الفاتورة
+            GetInvoiceDetails();
+        }
+
+        /// <summary>
+        /// فتح فاتورة جديدة
+        /// </summary>
+        private void btnNew_Click(object sender, EventArgs e)
+        {
+       //     SetDefaultAccount();
+
+            if (tblInv == null)
+                GetInvoices();
+
+            // الحصول على الأرقام الجديدة من قاعدة البيانات
+            string nextCounter = DBServiecs.NewInvoice_GetNewCounter((int)currentInvoiceType);
+            int nextID = DBServiecs.NewInvoice_GetNewID();
+
+            // تعيين البيانات المبدئية
+            lblInv_Counter.Text = nextCounter;
+            lblInv_ID.Text = nextID.ToString();
+
+            DisplayNewRow((int)currentInvoiceType, US);
+            ToggleControlsBasedOnSaveStatus();
+        }
+
+        /// <summary>
+        /// تجهيز واجهة فاتورة جديدة بقيم افتراضية
+        /// </summary>
+        public void DisplayNewRow(int invType, int userId)
+        {
+            dtpInv_Date.Value = DateTime.Now;
+            cbxSellerID.SelectedValue = 26; // 🔹 قيمة افتراضية مؤقتة
+
+            // 🔹 الحساب الافتراضي حسب نوع الفاتورة
+            lblAccID.Text = invType switch
+            {
+                1 or 2 => "55", // بيع أو مرتجع بيع
+                3 or 4 => "56", // شراء أو مرتجع شراء
+                _ => "72"
+            };
+
+            // 🔹 إعادة ضبط القيم المالية
+            string zero = "0";
+            lblTotalInv.Text = zero;
+            txtTaxVal.Text = zero;
+            lblTotalValueAfterTax.Text = zero;
+            txtDiscount.Text = zero;
+            txtValueAdded.Text = zero;
+            lblNetTotal.Text = zero;
+            txtPayment_Cash.Text = zero;
+            txtPayment_Electronic.Text = zero;
+            lblRemainingOnAcc.Text = zero;
+
+            // 🔹 باقي الحقول
+            txtPayment_Note.Text = "";
+            txtNoteInvoice.Text = "";
+            lblSave.Text = "";
+            txtSeaarchProd.Text = "0";
+            txtAmount.Text = "0";
+            lblPriceMove.Text = "0";
+            lblCount.Text = "0";
+            lblInfoInvoice.Text = "فاتورة جديدة";
+
+            // 🔹 تغيير النصوص حسب النوع
+            lblProductName.Text = invType is 1 or 3 ? "Product Name :" : "Invoice No :";
+            lblCodeTitel.Text = invType is 1 or 3 ? "كود صنف" : "فاتورة بيع رقم";
+
+            // 🔹 إعادة تهيئة الـ DataGridView و ComboBox
+            DGV.DataSource = null;
+            cbxPiece_ID.DataSource = null;
+        }
+
+        #endregion
+
+        #region 🔹 العمليات العامة للحفظ
+
+        /// <summary>
+        /// التحقق من صحة الفاتورة قبل الحفظ
+        /// </summary>
+        private List<string> ValidateInvoice()
+        {
+            var missing = new List<string>();
+
+            if (string.IsNullOrWhiteSpace(lblInv_ID.Text))
+                missing.Add("رقم الفاتورة");
+
+            if (string.IsNullOrWhiteSpace(lblInv_Counter.Text))
+                missing.Add("الرقم التسلسلي للفاتورة");
+
+            if (cbxSellerID.SelectedValue == null)
+                missing.Add(currentInvoiceType is InvoiceType.Sale or InvoiceType.SaleReturn
+                    ? "البائع"
+                    : "منفذ الشراء / التسوية");
+
+            if (string.IsNullOrWhiteSpace(lblAccID.Text))
+                missing.Add("الحساب");
+
+            if (CurrentSession.WarehouseId <= 0)
+                missing.Add("المخزن");
+
+            return missing;
+        }
+
+        /// <summary>
+        /// حفظ مسودة الفاتورة
+        /// </summary>
+        public void SaveDraftInvoice(string? savedText = null)
+        {
+            if (!string.IsNullOrWhiteSpace(lblSave.Text))
+            {
+                MessageBox.Show("الفاتورة محفوظة نهائيًا، لا يمكن التعديل.");
+                return;
+            }
+
+            var missingFields = ValidateInvoice();
+            if (missingFields.Count > 0)
+            {
+                string message = "يرجى استكمال البيانات التالية:\n• " + string.Join("\n• ", missingFields);
+                CustomMessageBox.ShowWarning(message, "بيانات ناقصة");
+                return;
+            }
+
+            // استدعاء الحفظ
+            DBServiecs.NewInvoice_InsertOrUpdate(
+                invID: Convert.ToInt32(lblInv_ID.Text),
+                invCounter: lblInv_Counter.Text,
+                invType_ID: (int)currentInvoiceType,
+                invDate: dtpInv_Date.Value,
+                seller_ID: Convert.ToInt32(cbxSellerID.SelectedValue),
+                user_ID: US,
+                acc_ID: int.TryParse(lblAccID.Text, out int accId) ? accId : (int?)null,
+                totalValue: ToFloat(lblTotalInv.Text),
+                taxVal: ToFloat(txtTaxVal.Text),
+                totalValueAfterTax: ToFloat(lblTotalValueAfterTax.Text),
+                discount: ToFloat(txtDiscount.Text),
+                valueAdded: ToFloat(txtValueAdded.Text),
+                netTotal: ToFloat(lblNetTotal.Text),
+                payment_Cash: ToFloat(txtPayment_Cash.Text),
+                payment_Electronic: ToFloat(txtPayment_Electronic.Text),
+                payment_BankCheck: 0,
+                payment_Note: txtPayment_Note.Text,
+                remainingOnAcc: ToFloat(lblRemainingOnAcc.Text),
+                isReturnable: false,
+                noteInvoice: txtNoteInvoice.Text,
+                saved: savedText ?? string.Empty,
+                Warehouse_Id: CurrentSession.WarehouseId,
+                out _ // تجاهل رسالة الإخراج
+            );
+        }
+
+        /// <summary>
+        /// دالة مساعدة لتحويل النص إلى رقم عائم
+        /// </summary>
+        private static float ToFloat(object? value, float defaultVal = 0) =>
+            float.TryParse(value?.ToString(), out float result) ? result : defaultVal;
+
+        #endregion
+
+        #region عمليات إدخال الصفوف
+
+        /// <summary>
+        /// إدراج صف جديد في تفاصيل الفاتورة
+        /// </summary>
+        private void InsertRow(bool isPiece)
+        {
+            // التحقق من الكمية
+            if (!TryGetValidAmount(out float amount))
+            {
+                CustomMessageBox.ShowWarning("يرجى إدخال كمية صحيحة للمنتج", "خطأ");
+                txtAmount.Focus();
+                txtAmount.SelectAll();
+                return;
+            }
+
+            // التحقق من السعر
+            if (!TryGetValidPrice(out float priceMove))
+            {
+                CustomMessageBox.ShowWarning("انتبه لعدم وجود سعر للصنف", "تحذير");
+            }
+
+            // التعامل مع القطعة (قابلة للقص / غير قابلة للقص)
+            if (unit_ID == 1) // قابل للقص
+            {
+                int newPieceID = DBServiecs.Product_CreateNewPiece(ID_Prod);
+                lblPieceID.Text = newPieceID.ToString();
+            }
+            else // غير قابل للقص → جلب القطعة الافتراضية
+            {
+                DataTable piece = DBServiecs.Product_GetOrCreate_DefaultPiece(ID_Prod);
+                if (piece.Rows.Count > 0)
+                {
+                    lblPieceID.Text = piece.Rows[0]["Piece_ID"].ToString();
+                }
+                else
+                {
+                    MessageBox.Show("لم يتم العثور على قطعة للمنتج المحدد.",
+                        "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            // التحقق من صلاحية معرف القطعة
+            if (isPiece)
+            {
+                if (!int.TryParse(lblPieceID.Text, out Piece_id))
+                {
+                    CustomMessageBox.ShowWarning("معرف القطعة غير صالح", "خطأ");
+                    return;
+                }
+            }
+            else
+            {
+                Piece_id = 0;
+            }
+
+            // إدراج تفاصيل الصف
+            InvoiceDetails_Insert();
+            Piece_id = 0;
+            GetInvoiceDetails();
+        }
+
+        /// <summary>
+        /// الإجراءات التي تتم بعد إدراج صف جديد
+        /// </summary>
+        private void AfterInsertActions()
+        {
+            txtSeaarchProd.Focus();
+            txtSeaarchProd.SelectAll();
+            txtAmount.Text = "0";
+            lblGemDisVal.Text = "0";
+        }
+
+        #endregion
+
+        #region تحميل وتجهيز بيانات الفاتورة
+        /// <summary>
+        /// جلب تفاصيل الفاتورة (أصنافها + تهيئة الجدول)
+        /// </summary>
+        public void GetInvoiceDetails()
+        {
+            if (string.IsNullOrWhiteSpace(lblInv_ID.Text) || !int.TryParse(lblInv_ID.Text, out Inv_ID))
+            {
+                MessageBox.Show("رقم الفاتورة غير صالح أو غير موجود.", "تنبيه",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            tblInvDetails = DBServiecs.NewInvoice_GetInvoiceDetails(Inv_ID);
+            lblCount.Text = tblInvDetails?.Rows.Count.ToString() ?? "0";
+
+            if (tblInvDetails == null || tblInvDetails.Rows.Count == 0)
+            {
+                PrepareEmptyGridStructure();
+                DGV.DataSource = null;
+            }
+            else
+            {
+                DGV.DataSource = tblInvDetails;
+            }
+
+            DGVStyl();
+            CalculateRemainingOnAccount();
+        }
+
+        /// <summary>
+        /// جلب الفواتير حسب النوع + إضافة فاتورة جديدة فارغة
+        /// </summary>
+        private void GetInvoices()
+        {
+            tblInv = DBServiecs.NewInvoice_GetInvoicesByType((int)currentInvoiceType);
+
+            DataRow newRow = tblInv.NewRow();
+            newRow["Inv_ID"] = DBServiecs.NewInvoice_GetNewID();
+            newRow["Inv_Counter"] = DBServiecs.NewInvoice_GetNewCounter((int)currentInvoiceType);
+            newRow["MovType"] = lblTypeInv.Text;
+            newRow["Inv_Date"] = DateTime.Now;
+            newRow["Seller_ID"] = cbxSellerID.Items.Count > 0 ? cbxSellerID.SelectedValue : DBNull.Value;
+            newRow["User_ID"] = US;
+            newRow["Acc_ID"] = lblAccID.Text;
+
+            // قيم مالية افتراضية
+            newRow["TotalValue"] = 0;
+            newRow["TaxVal"] = 0;
+            newRow["TotalValueAfterTax"] = 0;
+            newRow["Discount"] = 0;
+            newRow["ValueAdded"] = 0;
+            newRow["NetTotal"] = 0;
+            newRow["Payment_Cash"] = 0;
+            newRow["Payment_Electronic"] = 0;
+            newRow["Payment_Note"] = "";
+            newRow["RemainingOnAcc"] = 0;
+            newRow["NoteInvoice"] = "";
+            newRow["Saved"] = "";
+
+            tblInv.Rows.Add(newRow);
+            currentInvoiceIndex = tblInv.Rows.Count - 1;
+            lblInfoInvoice.Text = "فاتورة جديدة";
+            DisplayCurentRow(currentInvoiceIndex);
+        }
+        #endregion
+
+        #region التحكم في تفعيل وتعطيل عناصر النموذج
+
+        /// <summary>
+        /// تعطيل أو تمكين عناصر النموذج بناءً على حالة الحفظ النهائي.
+        /// </summary>
+        private void ToggleControlsBasedOnSaveStatus()
+        {
+            bool isFinalSaved = !string.IsNullOrWhiteSpace(lblSave.Text);
+            ToggleControlsRecursive(this.Controls, isFinalSaved);
+            DGVStyl(); // إعادة تهيئة شكل الجدول
+        }
+
+        /// <summary>
+        /// تطبيق التمكين/التعطيل بشكل متكرر على جميع عناصر التحكم.
+        /// </summary>
+        private void ToggleControlsRecursive(Control.ControlCollection controls, bool isFinalSaved)
+        {
+            foreach (Control ctrl in controls)
+            {
+                if (ctrl is TextBox tb)
+                {
+                    // استثناء لبعض TextBox التي يجب أن تُغلق تمامًا
+                    if (tb.Name == "txtAccName" || tb.Name == "txtSeaarchProd")
+                        tb.Enabled = !isFinalSaved;
+                    else
+                        tb.ReadOnly = isFinalSaved;
+                }
+                else if (ctrl is ComboBox || ctrl is DateTimePicker)
+                {
+                    ctrl.Enabled = !isFinalSaved;
+                }
+                else if (ctrl is DataGridView dgv)
+                {
+                    dgv.ReadOnly = isFinalSaved;
+                }
+
+                // تكرار داخل العناصر الفرعية
+                if (ctrl.HasChildren)
+                    ToggleControlsRecursive(ctrl.Controls, isFinalSaved);
+            }
+        }
+
+        #endregion
+
+
+
+        #region تهيئة وتصميم DataGridView
+        /// <summary>
+        /// إنشاء أعمدة الجدول يدوياً عند عدم وجود بيانات
+        /// </summary>
+        private void PrepareEmptyGridStructure()
+        {
+            DGV.Columns.Clear();
+            DGV.AutoGenerateColumns = false;
+
+            // أعمدة مرئية
+            AddTextColumn("ProductCode", "الكود");
+            AddTextColumn("ProdName", "اسم الصنف", 200);
+            AddTextColumn("UnitProd", "الوحدة");
+            AddTextColumn("PriceMove", "السعر", format: "N2", alignRight: true);
+            AddTextColumn("Amount", "الكمية", format: "N2", alignRight: true);
+            AddTextColumn("TotalRow", "الإجمالي", format: "N2", alignRight: true, readOnly: true);
+            AddTextColumn("GemDisVal", "الخصم", format: "N2", alignRight: true);
+            AddTextColumn("NetRow", "الصافي", format: "N2", alignRight: true, readOnly: true);
+
+            // أعمدة مخفية مهمة للحفظ
+            string[] hiddenCols =
+            {
+        "serInvDetail","Inv_ID_fk","PieceID_fk","AIn","AOut",
+        "ReturnedInInvoiceNo","B_Price","U_Price","MinLenth","MinStock","ProductStock"
+    };
+
+            foreach (var name in hiddenCols)
+                AddHiddenColumn(name);
+        }
+
+        /// <summary>
+        /// إضافة عمود نصي مرئي
+        /// </summary>
+        private void AddTextColumn(string name, string header, int width = 100,
+            string? format = null, bool alignRight = false, bool readOnly = false)
+        {
+            var col = new DataGridViewTextBoxColumn
+            {
+                Name = name,
+                DataPropertyName = name,
+                HeaderText = header,
+                Width = width,
+                ReadOnly = readOnly
+            };
+
+            if (!string.IsNullOrWhiteSpace(format))
+                col.DefaultCellStyle.Format = format;
+
+            col.DefaultCellStyle.Alignment =
+                alignRight ? DataGridViewContentAlignment.MiddleRight : DataGridViewContentAlignment.MiddleCenter;
+            col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+            DGV.Columns.Add(col);
+        }
+
+        /// <summary>
+        /// إضافة عمود مخفي
+        /// </summary>
+        private void AddHiddenColumn(string name)
+        {
+            var col = new DataGridViewTextBoxColumn
+            {
+                Name = name,
+                DataPropertyName = name,
+                Visible = false,
+                ReadOnly = true
+            };
+            DGV.Columns.Add(col);
+        }
+        #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         #region Header   وظائف الجزء الاعلى من الفاتورة
         // 🔹 تحديث النصوص لو اخترت "بيع"
@@ -531,26 +1946,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #endregion End Heder
 
 
-        #region Body  وظائف الجزء الخاص بالاصناف 
-        private void txtSeaarchProd_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter && !e.Shift)
-            {
-                // Enter فقط → التالي
-                //cbxSellerID.Focus();
-                //e.Handled = true;
-            }
-            else if ((e.KeyCode == Keys.Enter && e.Shift) || e.KeyCode == Keys.Up)
-            {
-                // Shift+Enter أو سهم ↑ → السابق
-                cbxSellerID.Focus();
-                e.Handled = true;
-            }
 
-        }
-
-
-        #endregion
 
         #region Foter وظائف اجماليات الفاتورة
 
