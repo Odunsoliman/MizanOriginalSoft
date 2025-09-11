@@ -1198,7 +1198,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
             // 🔹 المستخدم والحساب
             lblAccID.Text = row["Acc_ID"].ToString();
-
+            txtAccName .Text = row["AccName"].ToString();
             // 🔹 القيم المالية
             lblTotalInv.Text = FormatNumber(row["TotalValue"]);
             txtTaxVal.Text = FormatNumber(row["TaxVal"]);
