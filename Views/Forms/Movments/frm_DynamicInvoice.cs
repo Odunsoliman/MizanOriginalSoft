@@ -403,7 +403,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     txtSeaarchProd.Focus();
                     txtSeaarchProd.Text ="";
                     cbxPiece_ID .Visible =false ;
-                    clearInpotItem();
+                    EmptyProdData();
 
                 }
             }
@@ -1058,15 +1058,17 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // تفريغ بيانات المنتج بعد الإضافة أو الإلغاء
         private void EmptyProdData()
         {
-            txtSeaarchProd.Text = "0";
+            txtSeaarchProd.Text = string.Empty;
             txtSeaarchProd.Focus();
             txtSeaarchProd.SelectAll();
 
-            lblPriceMove.Text = "0";
-            lblProductName.Text = "Product Name";
+            lblPriceMove.Text = string.Empty;
+            lblProductName.Text = string.Empty;
             cbxPiece_ID.SelectedIndex = -1;
-            txtAmount.Text = "0";
-            lblGemDisVal.Text = "0";
+            txtAmount.Visible = false;
+            txtAmount.Text = string.Empty;
+            lblGemDisVal.Text = string.Empty;
+            lblUnit.Text = string.Empty;
             Piece_id = 0;
         }
 
@@ -1651,7 +1653,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             {
                 lblCodeTitel.Text = "رقم كود الصنف";
                 lblInvStat.Text = "إرجاع حر بالكود";
-                clearInpotItem();
+                EmptyProdData();
             }
         }
 
@@ -1662,17 +1664,10 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             {
                 lblCodeTitel.Text = "رقم فاتورة البيع";
                 lblInvStat.Text = "البيع المرتد يكون عن طريق رقم فاتورة البيع الأصلية";
-                clearInpotItem();
+                EmptyProdData();
             }
         }
-        private void clearInpotItem()
-        {
-            txtSeaarchProd.Text = string.Empty;
-            lblProductName.Text = string.Empty;
-            lblPriceMove .Text = string.Empty;
-            txtAmount .Visible = false;
-            lblUnit .Text = string.Empty;
-        }
+
 
 
         #region Default Account
