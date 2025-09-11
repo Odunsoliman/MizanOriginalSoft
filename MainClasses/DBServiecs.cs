@@ -884,10 +884,8 @@ namespace MizanOriginalSoft.MainClasses
             float? netTotal,
             float? payment_Cash,
             float? payment_Electronic,
-            float? payment_BankCheck,
             string payment_Note,
             float? remainingOnAcc,
-            bool? isReturnable,
             string noteInvoice,
             string saved,
             int Warehouse_Id,
@@ -912,10 +910,8 @@ namespace MizanOriginalSoft.MainClasses
                     cmd.Parameters.AddWithValue("@NetTotal", netTotal ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@Payment_Cash", payment_Cash ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@Payment_Electronic", payment_Electronic ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Payment_BankCheck", payment_BankCheck ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@Payment_Note", payment_Note ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@RemainingOnAcc", remainingOnAcc ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@IsReturnable", isReturnable ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@NoteInvoice", noteInvoice ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@Saved", saved ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@Warehouse_Id", Warehouse_Id);
@@ -923,8 +919,7 @@ namespace MizanOriginalSoft.MainClasses
                 expectMessageOutput: false // إذا لم يكن الإجراء يرجع OUTPUT message
             );
 
-            // في حال أردت لاحقًا أن ترجع SP رسالة، غير expectMessageOutput إلى true
-            return true; // أو يمكنك تعديل المنطق لاحقاً حسب رسالة الإجراء
+            return true; 
         }
 
 

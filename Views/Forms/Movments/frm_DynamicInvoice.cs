@@ -482,32 +482,40 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
 
         // حدث إدخال الكمية (Enter في txtAmount).
+        // 🔹 حدث إدخال الكمية (Enter في txtAmount)
         private void txtAmount_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode != Keys.Enter || IsInvoiceSaved()) return;
+            // الخروج إذا لم يضغط المستخدم Enter أو إذا كانت الفاتورة محفوظة مسبقًا
+            if (e.KeyCode != Keys.Enter || IsInvoiceSaved())
+                return;
 
+            // حفظ مؤشر الفاتورة الحالي (لتحديد موقع العودة)لاحقا
             int currentIndexBeforeInsert = currentInvoiceIndex;
-            SaveDraftInvoice(); // حفظ الفاتورة مؤقتًا
 
-            if (!TryGetValidAmount(out float amount))
+            // حفظ الفاتورة مؤقتًا لتجنب فقدان البيانات
+            SaveDraftInvoice();
+
+            // التحقق من أن القيمة رقم وصحيحة (>0)
+            if (!float.TryParse(txtAmount.Text, out float amount) || amount <= 0)
             {
-                CustomMessageBox.ShowWarning("يرجى إدخال كمية صحيحة للمنتج", "خطأ");
-                txtAmount.Visible = true;
+                // 🔹 تظليل الحقل بالأحمر
+                txtAmount.BackColor = Color.LightPink;
+
+                CustomMessageBox.ShowWarning("يرجى إدخال كمية صحيحة", "خطأ");
                 txtAmount.Focus();
                 txtAmount.SelectAll();
                 return;
             }
-
-            // التحقق من طول القطعة عند البيع
-            float.TryParse(cbxPiece_ID.Text, out float pieceLength);
-            if (currentInvoiceType == InvoiceType.Sale && unit_ID == 1 && pieceLength == 0)
+            else
             {
-                CustomMessageBox.ShowWarning("يرجى اختيار طول القطعة", "خطأ");
-                cbxPiece_ID.Focus();
-                return;
+                // 🔹 إعادة اللون الطبيعي عند إدخال قيمة صحيحة
+                txtAmount.BackColor = SystemColors.Window;
             }
 
-            // إدراج حسب نوع الفاتورة
+            // قراءة طول القطعة
+            float.TryParse(cbxPiece_ID.Text, out float pieceLength);
+
+            // إدراج الصف حسب نوع الفاتورة
             switch (currentInvoiceType)
             {
                 case InvoiceType.Sale:
@@ -527,7 +535,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     return;
             }
 
-            // ✅ تحديثات بعد الإدخال
+            // تحديث البيانات والواجهة بعد الإدخال
             DBServiecs.A_UpdateAllDataBase();
             PrepareSaleProduct(txtSeaarchProd.Text);
             GetInvoices();
@@ -535,12 +543,24 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             CalculateInvoiceFooter();
         }
 
-        // 🔹 منع كتابة غير الارقام والعلامة العشرية الواحدة
+        // 🔹 منع كتابة أي شيء غير الأرقام + التحكم في الفاصلة العشرية
         private void txtAmount_KeyPress(object sender, KeyPressEventArgs e)
         {
-            AllowNumbersOnly((TextBox)sender, e);
+            // لو الوحدة = 2 → يمنع كتابة فاصلة عشرية
+            if (unit_ID == 2)
+            {
+                // يسمح فقط بالأرقام ومفاتيح التحكم
+                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+                    e.Handled = true;
+            }
+            else
+            {
+                // في أي حالة أخرى → استخدم الدالة العامة (أرقام + فاصلة عشرية واحدة)
+                AllowNumbersOnly((TextBox)sender, e);
+            }
         }
 
+        
 
 
 
@@ -1395,14 +1415,12 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 netTotal: ToFloat(lblNetTotal.Text),
                 payment_Cash: ToFloat(txtPayment_Cash.Text),
                 payment_Electronic: ToFloat(txtPayment_Electronic.Text),
-                payment_BankCheck: 0,
                 payment_Note: txtPayment_Note.Text,
                 remainingOnAcc: ToFloat(lblRemainingOnAcc.Text),
-                isReturnable: false,
                 noteInvoice: txtNoteInvoice.Text,
                 saved: savedText ?? string.Empty,
                 Warehouse_Id: CurrentSession.WarehouseId,
-                out _ // تجاهل رسالة الإخراج
+                resultMessage: out _ // ✅ استخدم اسم المعامل الصحيح
             );
         }
 

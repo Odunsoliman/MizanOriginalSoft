@@ -428,9 +428,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #region 🔹 العمليات العامة للحفظ
 
-        /// <summary>
-        /// التحقق من صحة الفاتورة قبل الحفظ
-        /// </summary>
+        // التحقق من صحة الفاتورة قبل الحفظ
         private List<string> ValidateInvoice()
         {
             var missing = new List<string>();
@@ -455,9 +453,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             return missing;
         }
 
-        /// <summary>
-        /// حفظ مسودة الفاتورة
-        /// </summary>
+        // حفظ مسودة الفاتورة
+        // 🔹 حفظ مسودة الفاتورة
         public void SaveDraftInvoice(string? savedText = null)
         {
             if (!string.IsNullOrWhiteSpace(lblSave.Text))
@@ -474,7 +471,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 return;
             }
 
-            // استدعاء الحفظ
+            // ✅ استدعاء الحفظ باستخدام Named Arguments بالكامل
             DBServiecs.NewInvoice_InsertOrUpdate(
                 invID: Convert.ToInt32(lblInv_ID.Text),
                 invCounter: lblInv_Counter.Text,
@@ -491,23 +488,20 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 netTotal: ToFloat(lblNetTotal.Text),
                 payment_Cash: ToFloat(txtPayment_Cash.Text),
                 payment_Electronic: ToFloat(txtPayment_Electronic.Text),
-                payment_BankCheck: 0,
                 payment_Note: txtPayment_Note.Text,
                 remainingOnAcc: ToFloat(lblRemainingOnAcc.Text),
-                isReturnable: false,
                 noteInvoice: txtNoteInvoice.Text,
                 saved: savedText ?? string.Empty,
                 Warehouse_Id: CurrentSession.WarehouseId,
-                out _ // تجاهل رسالة الإخراج
+                resultMessage: out _ // ✅ استخدم اسم المعامل الصحيح   
             );
         }
 
-        /// <summary>
-        /// دالة مساعدة لتحويل النص إلى رقم عائم
-        /// </summary>
+        // 🔹 دالة مساعدة لتحويل النص إلى رقم عائم
         private static float ToFloat(object? value, float defaultVal = 0) =>
             float.TryParse(value?.ToString(), out float result) ? result : defaultVal;
 
+   
         #endregion
 
         #region التنقل بين الفواتير
