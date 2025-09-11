@@ -1266,6 +1266,15 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 _ => "72"
             };
 
+            // 🔹 ضبط اسم الحساب بناءً على رقم الحساب
+            if (lblAccID.Text == "55")
+                txtAccName.Text = "عميل نقدى";
+            else if (lblAccID.Text == "56")
+                txtAccName.Text = "مورد عام نقدى";
+            else
+                txtAccName.Text = string.Empty; // أو أي نص افتراضي
+
+
             // 🔹 إعادة ضبط القيم المالية
             string zero = "0";
             lblTotalInv.Text = zero;
