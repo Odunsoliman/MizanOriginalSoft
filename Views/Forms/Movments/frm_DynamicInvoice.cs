@@ -403,6 +403,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     txtSeaarchProd.Focus();
                     txtSeaarchProd.Text ="";
                     cbxPiece_ID .Visible =false ;
+                    clearInpotItem();
 
                 }
             }
