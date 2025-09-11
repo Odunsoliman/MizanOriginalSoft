@@ -1199,6 +1199,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // 🔹 المستخدم والحساب
             lblAccID.Text = row["Acc_ID"].ToString();
             txtAccName .Text = row["AccName"].ToString();
+
             // 🔹 القيم المالية
             lblTotalInv.Text = FormatNumber(row["TotalValue"]);
             txtTaxVal.Text = FormatNumber(row["TaxVal"]);
@@ -1828,6 +1829,46 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
         #endregion
 
+        #region تحديث بيانات الحساب عند تغيير رقم الحساب
+
+        /// <summary>
+        /// تحميل بيانات الحساب عند تغيير قيمة lblAccID.
+        /// </summary>
+        private void lblAccID_TextChanged(object sender, EventArgs e)
+        {
+            string accountID = lblAccID.Text.Trim();
+
+            if (!string.IsNullOrEmpty(accountID) && tblAcc != null)
+            {
+                DataRow[] accountData = tblAcc.Select($"AccID = '{accountID}'");
+                if (accountData.Length > 0)
+                {
+                    LoadDefaultAccount();
+                    //LoadAccountData(accountData[0]);
+                }
+                else
+                {
+                    CustomMessageBox.ShowWarning("لا يوجد حساب مرتبط برقم الحساب المحدد.", "خطأ");
+
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// تحميل بيانات الحساب المحدد في الحقول المخصصة له.
+        /// </summary>
+        private void LoadAccountData(DataRow accountData)
+        {
+            lblAccID.Text = accountData["AccID"].ToString();
+            txtAccName.Text = accountData["AccName"].ToString();
+            lblBalance.Text = accountData["Balance"].ToString();
+            lblB_Status.Text = accountData["BalanceState"].ToString();
+            lblFirstPhon.Text = accountData["FirstPhon"].ToString();
+            lblClientAddress.Text = accountData["ClientAddress"].ToString();
+            lblClientEmail.Text = accountData["ClientEmail"].ToString();
+        }
+        #endregion
         #region Account Data Display
         private void txtAccName_KeyDown(object sender, KeyEventArgs e)
         {
