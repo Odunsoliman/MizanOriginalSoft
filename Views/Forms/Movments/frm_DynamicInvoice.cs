@@ -392,6 +392,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     }
                     else
                     {
+                        txtAmount.Visible = true;
                         txtAmount.Focus();
                     }
                 }
@@ -399,7 +400,10 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 {
                     cbxPiece_ID.DataSource = null;
                     MessageBox.Show("لا توجد أرصدة بهذا الصنف.");
-                    txtSeaarchProd .Focus();
+                    txtSeaarchProd.Focus();
+                    txtSeaarchProd.Text ="";
+                    cbxPiece_ID .Visible =false ;
+
                 }
             }
             else // المنتج لا يقبل القص
@@ -407,7 +411,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 DataTable piece = DBServiecs.Product_GetOrCreate_DefaultPiece(ID_Prod);
                 if (piece.Rows.Count > 0)
                     lblPieceID.Text = piece.Rows[0]["Piece_ID"].ToString();
-
+                txtAmount.Visible = true;
                 txtAmount.Focus();
             }
         }
@@ -465,6 +469,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             if (!TryGetValidAmount(out float amount))
             {
                 CustomMessageBox.ShowWarning("يرجى إدخال كمية صحيحة للمنتج", "خطأ");
+                txtAmount.Visible = true;
                 txtAmount.Focus();
                 txtAmount.SelectAll();
                 return;
@@ -639,7 +644,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 CustomMessageBox.ShowWarning("يرجى تحديد سعر شراء صالح.", "تنبيه");
                 return;
             }
-
+            txtAmount.Visible = true;
             txtAmount.Focus();
             txtAmount.SelectAll();
         }
@@ -650,6 +655,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             if (amount <= 0)
             {
                 CustomMessageBox.ShowWarning("الرجاء إدخال كمية صحيحة أكبر من الصفر.", "تنبيه");
+                txtAmount.Visible = true;
                 txtAmount.Focus();
                 txtAmount.SelectAll();
                 return;
@@ -687,6 +693,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     }
                     else
                     {
+                        txtAmount.Visible = true;
                         txtAmount.Focus();
                         txtAmount.SelectAll();
                     }
@@ -1374,6 +1381,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             if (!TryGetValidAmount(out float amount))
             {
                 CustomMessageBox.ShowWarning("يرجى إدخال كمية صحيحة للمنتج", "خطأ");
+                txtAmount.Visible = true;
                 txtAmount.Focus();
                 txtAmount.SelectAll();
                 return;

@@ -759,11 +759,11 @@
             lblProductName.Dock = DockStyle.Fill;
             lblProductName.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblProductName.ForeColor = Color.Red;
-            lblProductName.Location = new Point(790, 0);
+            lblProductName.Location = new Point(821, 0);
             lblProductName.Margin = new Padding(4, 0, 4, 0);
             lblProductName.Name = "lblProductName";
             lblProductName.RightToLeft = RightToLeft.No;
-            lblProductName.Size = new Size(365, 38);
+            lblProductName.Size = new Size(334, 38);
             lblProductName.TabIndex = 25;
             lblProductName.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -773,11 +773,11 @@
             tlpPiece.ColumnCount = 10;
             tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
             tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.16724F));
-            tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 28.63706F));
-            tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10.41348F));
-            tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 9.341501F));
-            tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10.64319F));
-            tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 9.418071F));
+            tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26.2269936F));
+            tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10.506135F));
+            tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.5797548F));
+            tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8.7423315F));
+            tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.3496933F));
             tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 6.75455F));
             tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8.105459F));
             tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5.403639F));
@@ -807,12 +807,12 @@
             lblUnit.Dock = DockStyle.Fill;
             lblUnit.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblUnit.ForeColor = Color.Blue;
-            lblUnit.Location = new Point(274, 0);
+            lblUnit.Location = new Point(271, 0);
             lblUnit.Margin = new Padding(4, 0, 4, 0);
             lblUnit.Name = "lblUnit";
-            lblUnit.Size = new Size(114, 38);
+            lblUnit.Size = new Size(140, 38);
             lblUnit.TabIndex = 36;
-            lblUnit.TextAlign = ContentAlignment.MiddleCenter;
+            lblUnit.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // txtSeaarchProd
             // 
@@ -833,13 +833,14 @@
             txtAmount.Dock = DockStyle.Fill;
             txtAmount.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             txtAmount.ForeColor = Color.FromArgb(192, 0, 192);
-            txtAmount.Location = new Point(396, 3);
+            txtAmount.Location = new Point(419, 3);
             txtAmount.Margin = new Padding(4, 3, 4, 3);
             txtAmount.Name = "txtAmount";
-            txtAmount.Size = new Size(130, 29);
+            txtAmount.Size = new Size(106, 29);
             txtAmount.TabIndex = 1;
             txtAmount.Text = "0";
             txtAmount.TextAlign = HorizontalAlignment.Center;
+            txtAmount.Visible = false;
             // 
             // lblGemDisVal
             // 
@@ -847,7 +848,7 @@
             lblGemDisVal.Dock = DockStyle.Fill;
             lblGemDisVal.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblGemDisVal.ForeColor = Color.Blue;
-            lblGemDisVal.Location = new Point(186, 0);
+            lblGemDisVal.Location = new Point(183, 0);
             lblGemDisVal.Margin = new Padding(4, 0, 4, 0);
             lblGemDisVal.Name = "lblGemDisVal";
             lblGemDisVal.Size = new Size(80, 38);
@@ -861,7 +862,7 @@
             lblPieceID.BackColor = Color.Transparent;
             lblPieceID.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblPieceID.ForeColor = Color.Navy;
-            lblPieceID.Location = new Point(8, 0);
+            lblPieceID.Location = new Point(5, 0);
             lblPieceID.Margin = new Padding(4, 0, 4, 0);
             lblPieceID.Name = "lblPieceID";
             lblPieceID.Size = new Size(65, 37);
@@ -876,10 +877,10 @@
             cbxPiece_ID.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             cbxPiece_ID.ForeColor = Color.FromArgb(192, 0, 192);
             cbxPiece_ID.FormattingEnabled = true;
-            cbxPiece_ID.Location = new Point(655, 3);
+            cbxPiece_ID.Location = new Point(684, 3);
             cbxPiece_ID.Margin = new Padding(4, 3, 4, 3);
             cbxPiece_ID.Name = "cbxPiece_ID";
-            cbxPiece_ID.Size = new Size(127, 30);
+            cbxPiece_ID.Size = new Size(129, 30);
             cbxPiece_ID.TabIndex = 33;
             cbxPiece_ID.Visible = false;
             // 
@@ -887,15 +888,14 @@
             // 
             lblPriceMove.BackColor = Color.Transparent;
             lblPriceMove.Dock = DockStyle.Fill;
-            lblPriceMove.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblPriceMove.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblPriceMove.ForeColor = Color.Red;
-            lblPriceMove.Location = new Point(534, 0);
+            lblPriceMove.Location = new Point(533, 0);
             lblPriceMove.Margin = new Padding(4, 0, 4, 0);
             lblPriceMove.Name = "lblPriceMove";
-            lblPriceMove.Size = new Size(113, 38);
+            lblPriceMove.Size = new Size(143, 38);
             lblPriceMove.TabIndex = 29;
-            lblPriceMove.Text = "0";
-            lblPriceMove.TextAlign = ContentAlignment.MiddleCenter;
+            lblPriceMove.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // btnPrent
             // 
