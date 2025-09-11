@@ -1843,8 +1843,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 DataRow[] accountData = tblAcc.Select($"AccID = '{accountID}'");
                 if (accountData.Length > 0)
                 {
-                    LoadDefaultAccount();
-                    //LoadAccountData(accountData[0]);
+                    //LoadDefaultAccount();
+                    LoadAccountData(accountData[0]);
                 }
                 else
                 {
