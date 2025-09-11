@@ -1649,7 +1649,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             if (rdoFree.Checked) // تأكد أن الراديو مفعّل
             {
                 lblCodeTitel.Text = "رقم كود الصنف";
-                lblInvStat.Text = "إرجاع بالكود";
+                lblInvStat.Text = "إرجاع حر بالكود";
+                clearInpotItem();
             }
         }
 
@@ -1660,9 +1661,18 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             {
                 lblCodeTitel.Text = "رقم فاتورة البيع";
                 lblInvStat.Text = "البيع المرتد يكون عن طريق رقم فاتورة البيع الأصلية";
+                clearInpotItem();
             }
         }
-
+        private void clearInpotItem()
+        {
+            txtSeaarchProd.Text = string.Empty;
+            lblProductName.Text = string.Empty;
+            lblPriceMove .Text = string.Empty;
+            lblPriceMove .Visible = false;
+            txtAmount .Visible = false;
+            lblUnit .Text = string.Empty;
+        }
 
 
         #region Default Account

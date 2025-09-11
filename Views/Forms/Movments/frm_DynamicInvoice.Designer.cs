@@ -824,7 +824,6 @@
             txtSeaarchProd.RightToLeft = RightToLeft.No;
             txtSeaarchProd.Size = new Size(137, 29);
             txtSeaarchProd.TabIndex = 26;
-            txtSeaarchProd.Text = "0";
             txtSeaarchProd.TextAlign = HorizontalAlignment.Center;
             txtSeaarchProd.KeyDown += txtSeaarchProd_KeyDown;
             // 
@@ -838,7 +837,6 @@
             txtAmount.Name = "txtAmount";
             txtAmount.Size = new Size(106, 29);
             txtAmount.TabIndex = 1;
-            txtAmount.Text = "0";
             txtAmount.TextAlign = HorizontalAlignment.Center;
             txtAmount.Visible = false;
             // 
