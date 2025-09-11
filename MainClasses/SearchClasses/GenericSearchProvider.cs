@@ -186,12 +186,9 @@ namespace MizanOriginalSoft.MainClasses.SearchClasses
                     c.FillWeight = weight;
                 }
 
-                Show("ProductCode", "كود", 1f);
-                Show("ProdName", "اسم الصنف", 3f);
-                Show("RegistYear", "سنة", 1f);
-                Show("U_Price", "السعر", 1f);
-                Show("ProductStock", "الرصيد", 1f);
-                Show("NoteProduct", "ملاحظات الصنف", 4f);
+                Show("Inv_Counter", "رقم الفاتورة", 1f);
+                Show("AccName", "اسم العميل/المورد", 3f);
+                Show("NetTotal", "صافى الفاتورة", 1f);
             }
 
 
