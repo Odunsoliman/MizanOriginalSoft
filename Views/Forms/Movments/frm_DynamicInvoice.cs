@@ -258,6 +258,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             newRow["Seller_ID"] = cbxSellerID.Items.Count > 0 ? cbxSellerID.SelectedValue : DBNull.Value;
             newRow["User_ID"] = US;
             newRow["Acc_ID"] = lblAccID.Text;
+            newRow["AccName"] = txtAccName .Text;
 
             // قيم مالية افتراضية
             newRow["TotalValue"] = 0;
