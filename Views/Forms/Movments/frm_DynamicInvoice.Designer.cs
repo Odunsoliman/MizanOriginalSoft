@@ -72,6 +72,7 @@
             lblCodeTitel = new Label();
             lblProductName = new Label();
             tlpPiece = new TableLayoutPanel();
+            lblUnit = new Label();
             txtSeaarchProd = new TextBox();
             txtAmount = new TextBox();
             lblGemDisVal = new Label();
@@ -782,6 +783,7 @@
             tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5.403639F));
             tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tlpPiece.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tlpPiece.Controls.Add(lblUnit, 6, 0);
             tlpPiece.Controls.Add(lblCodeTitel, 0, 0);
             tlpPiece.Controls.Add(txtSeaarchProd, 1, 0);
             tlpPiece.Controls.Add(lblProductName, 2, 0);
@@ -798,6 +800,19 @@
             tlpPiece.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tlpPiece.Size = new Size(1424, 38);
             tlpPiece.TabIndex = 8;
+            // 
+            // lblUnit
+            // 
+            lblUnit.AutoSize = true;
+            lblUnit.Dock = DockStyle.Fill;
+            lblUnit.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblUnit.ForeColor = Color.Blue;
+            lblUnit.Location = new Point(274, 0);
+            lblUnit.Margin = new Padding(4, 0, 4, 0);
+            lblUnit.Name = "lblUnit";
+            lblUnit.Size = new Size(114, 38);
+            lblUnit.TabIndex = 36;
+            lblUnit.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // txtSeaarchProd
             // 
@@ -1601,5 +1616,6 @@
         private RadioButton rdoInvoice;
         private TableLayoutPanel tableLayoutPanel2;
         private Label lblSellerID;
+        private Label lblUnit;
     }
 }

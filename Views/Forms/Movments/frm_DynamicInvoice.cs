@@ -429,10 +429,13 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             DataRow row = tblProd.Rows[0];
 
             // ✅ السعر حسب نوع الفاتورة
-            lblPriceMove.Text = (currentInvoiceType == InvoiceType.Sale ||
-                                 currentInvoiceType == InvoiceType.SaleReturn)
-                ? row["U_Price"].ToString()
-                : row["B_Price"].ToString();
+            PriceMove = (currentInvoiceType == InvoiceType.Sale ||
+                               currentInvoiceType == InvoiceType.SaleReturn)
+                ? Convert.ToSingle(row["U_Price"])
+                : Convert.ToSingle(row["B_Price"]);
+
+            lblPriceMove.Text = "سعر : " + PriceMove.ToString("0.00"); // عرض السعر برقمين عشريين
+
 
             // ✅ البيانات العامة
             ID_Prod = Convert.ToInt32(row["ID_Product"]);
@@ -440,7 +443,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             unit_ID = Convert.ToInt32(row["UnitID"]);
             unit = (row["UnitProd"]?.ToString() ?? "").Trim();
             lblProductStock.Text = row["ProductStock"].ToString();
-
+            lblUnit .Text = unit;
             // الطول الأدنى (للمنتجات القابلة للقص)
             lblMinLinth.Text = unit_ID == 1 ? row["MinLenth"].ToString() : "";
             lblLinthText.Text = unit_ID == 1 ? "اقل طول" : unit;
