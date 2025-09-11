@@ -399,7 +399,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 {
                     cbxPiece_ID.DataSource = null;
                     MessageBox.Show("لا توجد أرصدة بهذا الصنف.");
-                    txtAmount.Focus();
+                    txtSeaarchProd .Focus();
                 }
             }
             else // المنتج لا يقبل القص
