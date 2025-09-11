@@ -37,6 +37,27 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #endregion
         #region 🔹 المتغيرات العامة
+        // دالة عامة للتحكم في الإدخال
+        private void AllowNumbersOnly(TextBox textBox, KeyPressEventArgs e)
+        {
+            // السماح بمفاتيح التحكم (Backspace, Delete...)
+            if (char.IsControl(e.KeyChar))
+                return;
+
+            // السماح بالأرقام
+            if (char.IsDigit(e.KeyChar))
+                return;
+
+            // السماح بفاصلة عشرية واحدة (.) أو (,)
+            if ((e.KeyChar == '.' || e.KeyChar == ',') && !textBox.Text.Contains(".") && !textBox.Text.Contains(","))
+            {
+                e.KeyChar = '.'; // توحيد الفاصلة للنقطة
+                return;
+            }
+
+            // منع أي شيء آخر
+            e.Handled = true;
+        }
 
         // 📝 DataTable يحتوي كل الفواتير المحملة من قاعدة البيانات
         private DataTable tblInv = new DataTable();
@@ -258,7 +279,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             newRow["Seller_ID"] = cbxSellerID.Items.Count > 0 ? cbxSellerID.SelectedValue : DBNull.Value;
             newRow["User_ID"] = US;
             newRow["Acc_ID"] = lblAccID.Text;
-            newRow["AccName"] = txtAccName .Text;
+            newRow["AccName"] = txtAccName.Text;
 
             // قيم مالية افتراضية
             newRow["TotalValue"] = 0;
@@ -402,8 +423,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     cbxPiece_ID.DataSource = null;
                     MessageBox.Show("لا توجد أرصدة بهذا الصنف.");
                     txtSeaarchProd.Focus();
-                    txtSeaarchProd.Text ="";
-                    cbxPiece_ID .Visible =false ;
+                    txtSeaarchProd.Text = "";
+                    cbxPiece_ID.Visible = false;
                     EmptyProdData();
 
                 }
@@ -449,7 +470,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             unit_ID = Convert.ToInt32(row["UnitID"]);
             unit = (row["UnitProd"]?.ToString() ?? "").Trim();
             lblProductStock.Text = row["ProductStock"].ToString();
-            lblUnit .Text = unit;
+            lblUnit.Text = unit;
             // الطول الأدنى (للمنتجات القابلة للقص)
             lblMinLinth.Text = unit_ID == 1 ? row["MinLenth"].ToString() : "";
             lblLinthText.Text = unit_ID == 1 ? "اقل طول" : unit;
@@ -514,6 +535,11 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             CalculateInvoiceFooter();
         }
 
+        // 🔹 منع كتابة غير الارقام والعلامة العشرية الواحدة
+        private void txtAmount_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            AllowNumbersOnly((TextBox)sender, e);
+        }
 
 
 
@@ -640,7 +666,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             if (!GetProd(code)) return;
 
             //float price = float.TryParse(lblPriceMove.Text, out float result) ? result : 0;
-             
+
             if (PriceMove <= 0)
             {
                 CustomMessageBox.ShowWarning("يرجى تحديد سعر شراء صالح.", "تنبيه");
@@ -1199,7 +1225,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
             // 🔹 المستخدم والحساب
             lblAccID.Text = row["Acc_ID"].ToString();
-            txtAccName .Text = row["AccName"].ToString();
+            txtAccName.Text = row["AccName"].ToString();
 
             // 🔹 القيم المالية
             lblTotalInv.Text = FormatNumber(row["TotalValue"]);
@@ -1854,7 +1880,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 if (accountData.Length > 0)
                 {
                     LoadDefaultAccount();
-                 //   LoadAccountData(accountData[0]);
+                    //   LoadAccountData(accountData[0]);
                 }
                 else
                 {
@@ -2388,7 +2414,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 MessageBox.Show("يجب حفظ السند أولًا قبل عرض القيد المحاسبي", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
     }
 }
 

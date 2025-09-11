@@ -840,6 +840,7 @@
             txtAmount.TabIndex = 1;
             txtAmount.TextAlign = HorizontalAlignment.Center;
             txtAmount.Visible = false;
+            txtAmount.KeyDown += txtAmount_KeyDown;
             // 
             // lblGemDisVal
             // 
