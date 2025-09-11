@@ -841,6 +841,7 @@
             txtAmount.TextAlign = HorizontalAlignment.Center;
             txtAmount.Visible = false;
             txtAmount.KeyDown += txtAmount_KeyDown;
+            txtAmount.KeyPress += txtAmount_KeyPress;
             // 
             // lblGemDisVal
             // 
