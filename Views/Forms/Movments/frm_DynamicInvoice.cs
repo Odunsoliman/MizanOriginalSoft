@@ -637,9 +637,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
             if (!GetProd(code)) return;
 
-            float price = float.TryParse(lblPriceMove.Text, out float result) ? result : 0;
-
-            if (price <= 0)
+            //float price = float.TryParse(lblPriceMove.Text, out float result) ? result : 0;
+             
+            if (PriceMove <= 0)
             {
                 CustomMessageBox.ShowWarning("يرجى تحديد سعر شراء صالح.", "تنبيه");
                 return;
