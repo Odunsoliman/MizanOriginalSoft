@@ -737,6 +737,7 @@
             lblAccID.Size = new Size(260, 40);
             lblAccID.TabIndex = 25;
             lblAccID.TextAlign = ContentAlignment.MiddleLeft;
+            lblAccID.TextChanged += lblAccID_TextChanged;
             // 
             // lblCodeTitel
             // 
