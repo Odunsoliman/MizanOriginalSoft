@@ -1670,7 +1670,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             txtSeaarchProd.Text = string.Empty;
             lblProductName.Text = string.Empty;
             lblPriceMove .Text = string.Empty;
-            lblPriceMove .Visible = false;
             txtAmount .Visible = false;
             lblUnit .Text = string.Empty;
         }
