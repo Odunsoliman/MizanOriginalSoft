@@ -357,14 +357,37 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
         #endregion
 
-        #region أحداث عناصر الواجهة (Inputs & Controls)
 
-        // عند تغيير القطعة (Piece) يتم حفظ الـ ID في الـ Label
+
+
+        #region ******** cbxPiece_ID events
+
+        // عند تغيير القطعة 
         private void cbxPiece_ID_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        {//
             if (cbxPiece_ID.SelectedValue != null)
                 lblPieceID.Text = cbxPiece_ID.SelectedValue.ToString();
+
         }
+
+
+
+
+
+
+
+        #endregion 
+
+
+
+
+
+
+
+
+
+        #region أحداث عناصر الواجهة (Inputs & Controls)
+        //
 
         // عند الضغط على Enter في ComboBox البائع → حفظ مسودة الفاتورة ثم الانتقال للبحث عن المنتج
         private void cbxSellerID_KeyDown(object sender, KeyEventArgs e)
