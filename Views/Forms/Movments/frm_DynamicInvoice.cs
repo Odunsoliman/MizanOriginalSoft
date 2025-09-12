@@ -119,13 +119,13 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             return float.TryParse(txtAmount.Text, out amount) && amount > 0;
         }
 
-        /// <summary>
-        /// محاولة قراءة سعر صحيح > 0
-        /// </summary>
+        // محاولة قراءة سعر صحيح > 0
         private bool TryGetValidPrice(out float price)
         {
-            return float.TryParse(lblPriceMove.Text, out price) && price > 0;
+            price = PriceMove; // وضع القيمة في out
+            return price > 0;  // إرجاع true إذا كان السعر > 0
         }
+
 
         /// <summary>
         /// التحقق هل الفاتورة محفوظة نهائيًا (لا يمكن تعديلها)
@@ -514,7 +514,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
             // قراءة طول القطعة
             float.TryParse(cbxPiece_ID.Text, out float pieceLength);
-
+            
             // إدراج الصف حسب نوع الفاتورة
             switch (currentInvoiceType)
             {
@@ -751,16 +751,16 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             {
                 if (float.TryParse(lblProductStock.Text, out float stock))
                 {
-                    //if (amount > stock && !chkAllowNegative.Checked)
-                    //{
-                    //    CustomMessageBox.ShowWarning(
-                    //        "الكمية المطلوبة أكبر من الرصيد ولا يسمح بالبيع على المكشوف.",
-                    //        "تنبيه"
-                    //    );
-                    //    txtAmount.Focus();
-                    //    txtAmount.SelectAll();
-                    //    return;
-                    //}
+                    if (amount > stock && !allowNegativeStock)
+                    {
+                        CustomMessageBox.ShowWarning(
+                            "الكمية المطلوبة أكبر من الرصيد ولا يسمح بالبيع على المكشوف.",
+                            "تنبيه"
+                        );
+                        txtAmount.Focus();
+                        txtAmount.SelectAll();
+                        return;
+                    }
                 }
 
                 if (float.TryParse(lblMinLinth.Text, out float minLength2))
@@ -1092,15 +1092,15 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         private void GetVar()
         {
             int.TryParse(lblInv_ID.Text, out Inv_ID);
-            float.TryParse(lblPriceMove.Text, out PriceMove);
             float.TryParse(txtAmount.Text, out Amount);
             float.TryParse(lblGemDisVal.Text, out GemDisVal);
             int.TryParse(lblPieceID.Text, out PieceID);
 
-            // الحسابات الأساسية
+            // ✅ الحسابات الأساسية باستخدام PriceMove المخزن مسبقًا
             TotalRow = Amount * PriceMove;
             NetRow = TotalRow - GemDisVal;
         }
+
 
         // تفريغ بيانات المنتج بعد الإضافة أو الإلغاء
         private void EmptyProdData()
