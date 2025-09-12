@@ -1823,18 +1823,14 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #region أحداث عناصر الواجهة (Inputs & Controls)
 
-        /// <summary>
-        /// عند تغيير القطعة (Piece) يتم حفظ الـ ID في الـ Label
-        /// </summary>
+        // عند تغيير القطعة (Piece) يتم حفظ الـ ID في الـ Label
         private void cbxPiece_ID_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbxPiece_ID.SelectedValue != null)
                 lblPieceID.Text = cbxPiece_ID.SelectedValue.ToString();
         }
 
-        /// <summary>
-        /// عند الضغط على Enter في ComboBox البائع → حفظ مسودة الفاتورة ثم الانتقال للبحث عن المنتج
-        /// </summary>
+        // عند الضغط على Enter في ComboBox البائع → حفظ مسودة الفاتورة ثم الانتقال للبحث عن المنتج
         private void cbxSellerID_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -1847,9 +1843,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-        /// <summary>
-        /// عند الضغط على Enter في التاريخ → حفظ مسودة الفاتورة ثم الانتقال لاسم الحساب
-        /// </summary>
+        // عند الضغط على Enter في التاريخ → حفظ مسودة الفاتورة ثم الانتقال لاسم الحساب
         private void dtpInv_Date_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -1862,36 +1856,28 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-        /// <summary>
-        /// عند دخول المؤشر لحقل اسم الحساب → ضبط اللغة للعربية وتحديد النص
-        /// </summary>
+        // عند دخول المؤشر لحقل اسم الحساب → ضبط اللغة للعربية وتحديد النص
         private void txtAccName_Enter(object sender, EventArgs e)
         {
             langManager.SetArabicLanguage();
             txtAccName.SelectAll();
         }
 
-        /// <summary>
-        /// عند دخول المؤشر لحقل ملاحظات الفاتورة → ضبط اللغة للعربية
-        /// </summary>
+        // عند دخول المؤشر لحقل ملاحظات الفاتورة → ضبط اللغة للعربية
         private void txtNoteInvoice_Enter(object sender, EventArgs e)
         {
             langManager.SetArabicLanguage();
             txtNoteInvoice.SelectAll();
         }
 
-        /// <summary>
-        /// عند دخول المؤشر لحقل ملاحظات الدفع → ضبط اللغة للعربية
-        /// </summary>
+        // عند دخول المؤشر لحقل ملاحظات الدفع → ضبط اللغة للعربية
         private void txtPayment_Note_Enter(object sender, EventArgs e)
         {
             langManager.SetArabicLanguage();
             txtPayment_Note.SelectAll();
         }
 
-        /// <summary>
-        /// عند دخول المؤشر لحقل البحث عن منتج → منع التعديل إذا كانت الفاتورة محفوظة
-        /// </summary>
+        // عند دخول المؤشر لحقل البحث عن منتج → منع التعديل إذا كانت الفاتورة محفوظة
         private void txtSeaarchProd_Enter(object sender, EventArgs e)
         {
             if (IsInvoiceSaved()) return;

@@ -77,7 +77,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         public string SelectedAccID { get; set; } = string.Empty;
 
         // معرفات
-        private int US;          // كود المستخدم
+       // private int US;          // كود المستخدم
         private int Inv_ID;      // رقم الفاتورة
         private int ID_Prod;
         private int Piece_id = 0;
@@ -94,26 +94,13 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         private float ComitionVal = 0;
         private float NetRow;
 
-        //private InvoiceType currentInvoiceType;
-        private KeyboardLanguageManager? langManager;
-
-        #endregion
-
-        #region فحص صلاحيات وصحة البيانات
-
-        /// <summary>
-        /// تحديد إذا كان يمكن قص القطعة (true = يمكن قصها)
-        /// </summary>
+        // تحديد إذا كان يمكن قص القطعة (true = يمكن قصها)
         public bool isCanCut = true;
 
-        /// <summary>
-        /// معرّف الوحدة الحالي
-        /// </summary>
+        // معرف الوحدة الحالي
         private int unit_ID;
 
-        /// <summary>
-        /// محاولة قراءة كمية صحيحة > 0
-        /// </summary>
+        // محاولة قراءة كمية صحيحة > 0
         private bool TryGetValidAmount(out float amount)
         {
             return float.TryParse(txtAmount.Text, out amount) && amount > 0;
@@ -127,9 +114,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
 
 
-        /// <summary>
-        /// التحقق هل الفاتورة محفوظة نهائيًا (لا يمكن تعديلها)
-        /// </summary>
+        // التحقق هل الفاتورة محفوظة نهائيًا (لا يمكن تعديلها)
         private bool IsInvoiceSaved()
         {
             if (!string.IsNullOrWhiteSpace(lblSave.Text))
@@ -140,10 +125,15 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             return false;
         }
         #endregion
+
+
         #region Form Initialization
+        private KeyboardLanguageManager langManager;
+
         public frm_DynamicInvoice()
         {
             InitializeComponent();
+            langManager = new KeyboardLanguageManager(this);
         }
 
         #region تحميل وتجهيز بيانات الفاتورة
@@ -277,7 +267,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             newRow["MovType"] = lblTypeInv.Text;
             newRow["Inv_Date"] = DateTime.Now;
             newRow["Seller_ID"] = cbxSellerID.Items.Count > 0 ? cbxSellerID.SelectedValue : DBNull.Value;
-            newRow["User_ID"] = US;
+     //       newRow["User_ID"] = US;
             newRow["Acc_ID"] = lblAccID.Text;
             newRow["AccName"] = txtAccName.Text;
 
@@ -367,6 +357,78 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
         #endregion
 
+        #region أحداث عناصر الواجهة (Inputs & Controls)
+
+        // عند تغيير القطعة (Piece) يتم حفظ الـ ID في الـ Label
+        private void cbxPiece_ID_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbxPiece_ID.SelectedValue != null)
+                lblPieceID.Text = cbxPiece_ID.SelectedValue.ToString();
+        }
+
+        // عند الضغط على Enter في ComboBox البائع → حفظ مسودة الفاتورة ثم الانتقال للبحث عن المنتج
+        private void cbxSellerID_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (e.KeyCode == Keys.Enter && !e.Shift)
+            {
+                SaveDraftInvoice();
+                // Enter فقط → التالي
+                txtSeaarchProd.Focus();
+                txtSeaarchProd.SelectAll();
+                e.Handled = true;
+            }
+            else if ((e.KeyCode == Keys.Enter && e.Shift) || e.KeyCode == Keys.Up)
+            {
+                // Shift+Enter أو سهم ↑ → السابق
+                this.SelectNextControl((Control)sender, false, true, true, true);
+                e.Handled = true;
+            }
+
+        }
+
+        // عند الضغط على Enter في التاريخ → حفظ مسودة الفاتورة ثم الانتقال لاسم الحساب
+        private void dtpInv_Date_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                SaveDraftInvoice();
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                txtAccName.Focus();
+                txtAccName.SelectAll();
+            }
+        }
+
+        // عند دخول المؤشر لحقل اسم الحساب → ضبط اللغة للعربية وتحديد النص
+        private void txtAccName_Enter(object sender, EventArgs e)
+        {
+            langManager.SetArabicLanguage();//Field 'frm_DynamicInvoice.langManager' is never assigned to, and will always have its default value null
+            txtAccName.SelectAll();
+        }
+
+        // عند دخول المؤشر لحقل ملاحظات الفاتورة → ضبط اللغة للعربية
+        private void txtNoteInvoice_Enter(object sender, EventArgs e)
+        {
+            langManager.SetArabicLanguage();
+            txtNoteInvoice.SelectAll();
+        }
+
+        // عند دخول المؤشر لحقل ملاحظات الدفع → ضبط اللغة للعربية
+        private void txtPayment_Note_Enter(object sender, EventArgs e)
+        {
+            langManager.SetArabicLanguage();
+            txtPayment_Note.SelectAll();
+        }
+
+        // عند دخول المؤشر لحقل البحث عن منتج → منع التعديل إذا كانت الفاتورة محفوظة
+        private void txtSeaarchProd_Enter(object sender, EventArgs e)
+        {
+            if (IsInvoiceSaved()) return;
+            txtSeaarchProd.SelectAll();
+        }
+
+        #endregion
 
 
         #region Body  وظائف الجزء الخاص بالاصناف 
@@ -1292,7 +1354,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             lblInv_Counter.Text = nextCounter;
             lblInv_ID.Text = nextID.ToString();
 
-            DisplayNewRow((int)currentInvoiceType, US);
+            DisplayNewRow((int)currentInvoiceType, CurrentSession.UserID );
             ToggleControlsBasedOnSaveStatus();
         }
 
@@ -1405,7 +1467,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 invType_ID: (int)currentInvoiceType,
                 invDate: dtpInv_Date.Value,
                 seller_ID: Convert.ToInt32(cbxSellerID.SelectedValue),
-                user_ID: US,
+                user_ID: CurrentSession.UserID ,
                 acc_ID: int.TryParse(lblAccID.Text, out int accId) ? accId : (int?)null,
                 totalValue: ToFloat(lblTotalInv.Text),
                 taxVal: ToFloat(txtTaxVal.Text),
@@ -1794,22 +1856,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         private void cbxSellerID_Enter(object sender, EventArgs e)
         {
             cbxSellerID.DroppedDown = true;
-        }
-
-        private void cbxSellerID_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter && !e.Shift)
-            {
-                // Enter فقط → التالي
-                txtSeaarchProd.Focus();
-                e.Handled = true;
-            }
-            else if ((e.KeyCode == Keys.Enter && e.Shift) || e.KeyCode == Keys.Up)
-            {
-                // Shift+Enter أو سهم ↑ → السابق
-                this.SelectNextControl((Control)sender, false, true, true, true);
-                e.Handled = true;
-            }
         }
 
         private void FillSellerComboBox()

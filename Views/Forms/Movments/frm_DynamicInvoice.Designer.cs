@@ -854,9 +854,7 @@
             lblGemDisVal.Name = "lblGemDisVal";
             lblGemDisVal.Size = new Size(80, 38);
             lblGemDisVal.TabIndex = 32;
-            lblGemDisVal.Text = "0";
             lblGemDisVal.TextAlign = ContentAlignment.MiddleCenter;
-            lblGemDisVal.Visible = false;
             // 
             // lblPieceID
             // 
@@ -868,7 +866,6 @@
             lblPieceID.Name = "lblPieceID";
             lblPieceID.Size = new Size(65, 37);
             lblPieceID.TabIndex = 34;
-            lblPieceID.Text = "0";
             lblPieceID.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // cbxPiece_ID
@@ -883,6 +880,7 @@
             cbxPiece_ID.Size = new Size(129, 30);
             cbxPiece_ID.TabIndex = 33;
             cbxPiece_ID.Visible = false;
+            cbxPiece_ID.SelectedIndexChanged += cbxPiece_ID_SelectedIndexChanged;
             // 
             // lblPriceMove
             // 
