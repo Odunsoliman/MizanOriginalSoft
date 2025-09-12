@@ -870,7 +870,6 @@
             lblPieceID.TabIndex = 34;
             lblPieceID.Text = "0";
             lblPieceID.TextAlign = ContentAlignment.MiddleLeft;
-            lblPieceID.Visible = false;
             // 
             // cbxPiece_ID
             // 
