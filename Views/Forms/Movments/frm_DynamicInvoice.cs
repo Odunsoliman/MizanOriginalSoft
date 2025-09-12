@@ -461,7 +461,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #endregion
         #region أحداث ووظائف إضافة صنف
 
-        // إدخال صنف جديد إلى تفاصيل الفاتورة وحفظه في قاعدة البيانات.
+        // 🔹  إدخال صنف جديد إلى تفاصيل الفاتورة وحفظه في قاعدة البيانات.
         public string InvoiceDetails_Insert()
         {
             GetVar(); // تحميل المتغيرات الأساسية من الواجهة
@@ -475,7 +475,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             return message;
         }
 
-        // تحميل بيانات القطع الخاصة بالصنف (في حال كان المنتج يقبل القص).
+        // 🔹  تحميل بيانات القطع الخاصة بالصنف (في حال كان المنتج يقبل القص).
         private void LoadPieceData()
         {
             cbxPiece_ID.Visible =
@@ -524,7 +524,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-        // تحميل بيانات منتج حسب كوده.
+        // 🔹 تحميل بيانات منتج حسب كوده.
         private bool GetProd(string code)
         {
             txtAmount.Text = "0";
@@ -566,7 +566,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             return true;
         }
 
-        // حدث إدخال الكمية (Enter في txtAmount).
         // 🔹 حدث إدخال الكمية (Enter في txtAmount)
         private void txtAmount_KeyDown(object sender, KeyEventArgs e)
         {
@@ -769,8 +768,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         private void PreparePurchaseProduct(string code)
         {
             if (!GetProd(code)) return;
-
-            //float price = float.TryParse(lblPriceMove.Text, out float result) ? result : 0;
 
             if (PriceMove <= 0)
             {
@@ -1727,7 +1724,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
 
-
+        //*******************************************
         #region Header   وظائف الجزء الاعلى من الفاتورة
 
         // 🔹 تحديث النصوص لو اخترت "بيع"
@@ -2199,7 +2196,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
 
-
+        //*******************************************
         #region Foter وظائف اجماليات الفاتورة
         private decimal defaultTax = 0m; // 🟦 نخزن النسبة هنا لاستخدامها لاحقاً
 
@@ -2254,14 +2251,12 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             CalculateInvoiceFooter();
         }
 
-
+        // 🔹 حساب الصريبة
         private void txtTaxVal_DoubleClick(object sender, EventArgs e)
         {
             // 🟦 منع التعديل إذا كانت الفاتورة محفوظة
             if (IsInvoiceSaved())
             {
-                //MessageBox.Show("لا يمكن تعديل الضريبة بعد حفظ الفاتورة.", "تنبيه",
-                //    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -2292,8 +2287,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             CalculateInvoiceFooter();
         }
 
-
-
         // 🔹 الحد من الخصم
         private void txtDiscount_Leave(object? sender, EventArgs e)
         {
@@ -2316,8 +2309,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
             CalculateInvoiceFooter();
         }
-
-
 
         // 🔹 تحديث نسبة الإضافة
         private void txtValueAdded_Leave(object? sender, EventArgs e)
@@ -2350,8 +2341,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // 🟦 منع التعديل إذا كانت الفاتورة محفوظة
             if (IsInvoiceSaved())
             {
-                //MessageBox.Show("لا يمكن تعديل القيمة بعد حفظ الفاتورة.", "تنبيه",
-                //    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -2377,8 +2366,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // 🟦 منع التعديل إذا كانت الفاتورة محفوظة
             if (IsInvoiceSaved())
             {
-                //MessageBox.Show("لا يمكن تعديل القيمة بعد حفظ الفاتورة.", "تنبيه",
-                //    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -2478,9 +2465,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // 🔹 تحديث المتبقي
             CalculateRemainingOnAccount();
         }
-        #endregion
 
-        /// <summary>فتح قيد اليومية المرتبط بالفاتورة.</summary>
+
+        // فتح قيد اليومية المرتبط بالفاتورة
         private void btnJournal_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(lblSave.Text))
@@ -2501,6 +2488,11 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 MessageBox.Show("يجب حفظ السند أولًا قبل عرض القيد المحاسبي", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+        
+        
+        #endregion
+
+
     }
 }
 
