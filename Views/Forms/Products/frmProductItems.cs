@@ -16,7 +16,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
     {
         #region ===== Variables =====
         private DataTable? tblTree;
-        private DataTable? tblSupplier;
         public int? CategoryID { get; set; }
         public int Product_ID { get; private set; }
         public DataTable SelectedProducts { get; private set; } = new DataTable();
@@ -71,12 +70,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
             LoadItemSettings();
 
         }
-
- 
-
-
-
-
 
 
         // 🔍 دالة فحص AutoSize
@@ -137,14 +130,15 @@ namespace MizanOriginalSoft.Views.Forms.Products
         #endregion
 
         #region ========= SetupAutoComplete and Fill =================
-
+        // 🔹 خليه متغير عام
+        private DataTable? tblSupplier;
         private AutoCompleteStringCollection suppliersCollection;
 
         private void SetupAutoCompleteSuppliers()
         {
-            if (suppliersCollection == null) // تحميل الموردين مرة واحدة فقط
+            if (suppliersCollection == null)
             {
-                DataTable tblSupplier = DBServiecs.Accounts_GetSupplier();
+                tblSupplier = DBServiecs.Accounts_GetSupplier(); // خزّنه هنا
                 suppliersCollection = new AutoCompleteStringCollection();
 
                 if (tblSupplier != null && tblSupplier.Rows.Count > 0)
@@ -158,15 +152,18 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 }
             }
 
-            // ربط نفس المصدر بالاثنين
-            txtSuppliers.AutoCompleteCustomSource = suppliersCollection;
-            txtSuppliers.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            txtSuppliers.AutoCompleteSource = AutoCompleteSource.CustomSource;
-
-            txtNewItemSuppliers.AutoCompleteCustomSource = suppliersCollection;
-            txtNewItemSuppliers.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            txtNewItemSuppliers.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            // 🔹 اربط المصدر مع التكستات
+            ConfigureAutoCompleteTextBox(txtSuppliers);
+            ConfigureAutoCompleteTextBox(txtNewItemSuppliers);
         }
+
+        private void ConfigureAutoCompleteTextBox(TextBox textBox)
+        {
+            textBox.AutoCompleteCustomSource = suppliersCollection;
+            textBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            textBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+        }
+
         //هاذا يستخدم فى اعادة البحث بالشتراك مع txtSeaarchProd
         private void txtSuppliers_TextChanged(object sender, EventArgs e)
         {
@@ -265,7 +262,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
 
-
+        /*ما هى المشكلة الان كلاهما لا يظهر القوائم فلماذا مع ان كل وظائفهم الاخرى تسيير على ما يرام*/
 
 
 

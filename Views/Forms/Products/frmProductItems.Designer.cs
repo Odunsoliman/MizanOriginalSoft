@@ -466,6 +466,7 @@
             // 
             // txtSuppliers
             // 
+            txtSuppliers.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             txtSuppliers.BackColor = Color.FromArgb(255, 255, 192);
             txtSuppliers.Dock = DockStyle.Fill;
             txtSuppliers.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
