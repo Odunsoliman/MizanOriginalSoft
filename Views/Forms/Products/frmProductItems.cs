@@ -138,56 +138,131 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
         #region ========= SetupAutoComplete and Fill =================
 
+        private AutoCompleteStringCollection suppliersCollection;
 
-
-        /*كيف يكون التعديل النهائى*/
-        //تعبئة مربع الموردين تعبئة تلقائية  ###
         private void SetupAutoCompleteSuppliers()
         {
-            // جلب جميع الموردين
-            tblSupplier = DBServiecs.Accounts_GetSupplier();
-            // إنشاء مجموعة الإكمال التلقائي
-            AutoCompleteStringCollection autoCompleteCollection = new AutoCompleteStringCollection();//'new' expression can be simplified
-            // التأكد من أن الجدول يحتوي على بيانات
-            if (tblSupplier != null && tblSupplier.Rows.Count > 0)
+            if (suppliersCollection == null) // تحميل الموردين مرة واحدة فقط
             {
-                // إضافة أسماء المستخدمين إلى مجموعة الإكمال التلقائي
-                foreach (DataRow row in tblSupplier.Rows)
+                DataTable tblSupplier = DBServiecs.Accounts_GetSupplier();
+                suppliersCollection = new AutoCompleteStringCollection();
+
+                if (tblSupplier != null && tblSupplier.Rows.Count > 0)
                 {
-                    string? accName = row["AccName"]?.ToString();
-                    if (!string.IsNullOrEmpty(accName))
+                    foreach (DataRow row in tblSupplier.Rows)
                     {
-                        autoCompleteCollection.Add(accName);
+                        string? accName = row["AccName"]?.ToString();
+                        if (!string.IsNullOrEmpty(accName))
+                            suppliersCollection.Add(accName);
                     }
                 }
             }
 
-            // إعداد خصائص مربع النص لاستخدام الإكمال التلقائي
-            txtSuppliers.AutoCompleteCustomSource = autoCompleteCollection;
+            // ربط نفس المصدر بالاثنين
+            txtSuppliers.AutoCompleteCustomSource = suppliersCollection;
             txtSuppliers.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             txtSuppliers.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            /*اريد عند الكتابة وظهور القائمة المنسدلة ان  اتحكم في عرضها يكون اكبر من التكست نفسه*/
 
-            // إعداد خصائص مربع النص لاستخدام الإكمال التلقائي
-            txtNewItemSuppliers.AutoCompleteCustomSource = autoCompleteCollection;
+            txtNewItemSuppliers.AutoCompleteCustomSource = suppliersCollection;
             txtNewItemSuppliers.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             txtNewItemSuppliers.AutoCompleteSource = AutoCompleteSource.CustomSource;
         }
-
+        //هاذا يستخدم فى اعادة البحث بالشتراك مع txtSeaarchProd
         private void txtSuppliers_TextChanged(object sender, EventArgs e)
         {
             txtSeaarchProd_TextChanged(this, EventArgs.Empty);
         }
-
+        // ومفاتيح الكى داون شبه موحدة باختلاف سلوك الانتر 
         private void txtSuppliers_KeyDown(object sender, KeyEventArgs e)
         {
+            // عند الضغط على Enter يتم الانتقال إلى حقل كود المنتج لدى المورد
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                txtSeaarchProd.Focus();
+            }
+
+            if (e.Control && e.KeyCode == Keys.H)
+            {
+                ShowHelpForActiveControl();
+            }
+
+            // عند الضغط على Ctrl + F يتم فتح شاشة البحث عن الموردين
             if (e.Control && e.KeyCode == Keys.F)
             {
+                var provider = new GenericSearchProvider(SearchEntityType.Accounts, AccountKind.Suppliers);
+                var result = SearchHelper.ShowSearchDialog(provider);
 
+                if (!string.IsNullOrEmpty(result.Code))
+                {
+                    lblSuppliersID.Text = result.Code;
+                    txtNewItemSuppliers.Text = result.Name;
+
+                }
             }
         }
 
+        private void txtNewItemSuppliers_KeyDown(object sender, KeyEventArgs e)
+        {
+            // عند الضغط على Enter يتم الانتقال إلى حقل كود المنتج لدى المورد
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                txtProdCodeOnSuplier.Focus();
+            }
 
+            if (e.Control && e.KeyCode == Keys.H)
+            {
+                ShowHelpForActiveControl();
+            }
+
+            // عند الضغط على Ctrl + F يتم فتح شاشة البحث عن الموردين
+            if (e.Control && e.KeyCode == Keys.F)
+            {
+                var provider = new GenericSearchProvider(SearchEntityType.Accounts, AccountKind.Suppliers);
+                var result = SearchHelper.ShowSearchDialog(provider);
+
+                if (!string.IsNullOrEmpty(result.Code))
+                {
+                    lblSuppliersID.Text = result.Code;
+                    txtNewItemSuppliers.Text = result.Name;
+
+                }
+            }
+
+        }
+  
+        //هذا حدث اليف من txtNewItemSuppliers
+        private void txtNewItemSuppliers_Leave(object sender, EventArgs e)
+        {
+            if (tblSupplier == null) return;
+
+            string selectedName = txtNewItemSuppliers.Text.Trim();
+
+            // السماح بترك الحقل فارغًا
+            if (string.IsNullOrEmpty(selectedName))
+            {
+                lblSuppliersID.Text = "";
+                return;
+            }
+
+            // البحث عن اسم المورد في الجدول
+            DataRow[] matched = tblSupplier.Select($"AccName = '{selectedName.Replace("'", "''")}'");
+
+            if (matched.Length > 0)
+            {
+                // تم العثور على الاسم
+                lblSuppliersID.Text = matched[0]["AccID"].ToString();
+            }
+            else
+            {
+                // لم يتم العثور على الاسم → تنبيه المستخدم
+                MessageBox.Show("الاسم الذي أدخلته غير موجود في قائمة الموردين.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNewItemSuppliers.Focus();
+                txtNewItemSuppliers.SelectAll();
+                lblSuppliersID.Text = "";
+            }
+        }
 
 
 
@@ -2471,36 +2546,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
         // الحدث الذي يتعامل مع ضغطات المفاتيح داخل txtNewItemSuppliers
-        private void txtNewItemSuppliers_KeyDown(object sender, KeyEventArgs e)
-        {
-            // عند الضغط على Enter يتم الانتقال إلى حقل كود المنتج لدى المورد
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.SuppressKeyPress = true;
-                txtProdCodeOnSuplier.Focus();
-            }
-
-            if (e.Control && e.KeyCode == Keys.H)
-            {
-                ShowHelpForActiveControl();
-            }
-
-            // عند الضغط على Ctrl + F يتم فتح شاشة البحث عن الموردين
-            if (e.Control && e.KeyCode == Keys.F)
-            {
-                var provider = new GenericSearchProvider(SearchEntityType.Accounts, AccountKind.Suppliers);
-                var result = SearchHelper.ShowSearchDialog(provider);
-
-                if (!string.IsNullOrEmpty(result.Code))
-                {
-                    lblSuppliersID.Text = result.Code;
-                    txtNewItemSuppliers.Text = result.Name;
-
-                }
-            }
-
-        }
-
+  
         private void txtProdCodeOnSuplier_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -2597,36 +2643,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
 
 
-        private void txtNewItemSuppliers_Leave(object sender, EventArgs e)
-        {
-            if (tblSupplier == null) return;
-
-            string selectedName = txtNewItemSuppliers.Text.Trim();
-
-            // السماح بترك الحقل فارغًا
-            if (string.IsNullOrEmpty(selectedName))
-            {
-                lblSuppliersID.Text = "";
-                return;
-            }
-
-            // البحث عن اسم المورد في الجدول
-            DataRow[] matched = tblSupplier.Select($"AccName = '{selectedName.Replace("'", "''")}'");
-
-            if (matched.Length > 0)
-            {
-                // تم العثور على الاسم
-                lblSuppliersID.Text = matched[0]["AccID"].ToString();
-            }
-            else
-            {
-                // لم يتم العثور على الاسم → تنبيه المستخدم
-                MessageBox.Show("الاسم الذي أدخلته غير موجود في قائمة الموردين.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtNewItemSuppliers.Focus();
-                txtNewItemSuppliers.SelectAll();
-                lblSuppliersID.Text = "";
-            }
-        }
 
 
         private void txtCategory_Leave(object? sender, EventArgs e)
