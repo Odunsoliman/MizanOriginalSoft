@@ -1339,6 +1339,7 @@
             txtSalesPercentage.TabStop = false;
             txtSalesPercentage.Text = "0";
             txtSalesPercentage.TextAlign = HorizontalAlignment.Center;
+            txtSalesPercentage.TextChanged += txtSalesPercentage_TextChanged;
             // 
             // tableLayoutPanel28
             // 
@@ -1582,6 +1583,7 @@
             txtMaxRateDiscount.TabStop = false;
             txtMaxRateDiscount.Text = "0";
             txtMaxRateDiscount.TextAlign = HorizontalAlignment.Center;
+            txtMaxRateDiscount.TextChanged += txtMaxRateDiscount_TextChanged;
             // 
             // txtD_Price
             // 

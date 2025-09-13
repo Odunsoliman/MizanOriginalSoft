@@ -162,6 +162,54 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
 
+        private void txtSalesPercentage_TextChanged(object sender, EventArgs e)
+        {
+            if (!decimal.TryParse(txtB_Price.Text, out decimal bPrice))
+                bPrice = 0;
+            if (!decimal.TryParse(txtSalesPercentage.Text, out decimal salesPercentage))
+                salesPercentage = 0;
+            if (!decimal.TryParse(txtMaxRateDiscount.Text, out decimal maxRateDiscount))
+                maxRateDiscount = 0;
+
+            // 🔹 حساب سعر البيع
+            decimal uPrice = bPrice + (salesPercentage * bPrice);
+            txtU_Price.Text = uPrice.ToString("0.00");
+
+            // 🔹 نسبة الزيادة
+            lblU_PricePercentage.Text = $"{Math.Round(salesPercentage * 100, 0)}%";
+
+            // 🔹 حساب السعر بعد الخصم
+            decimal dPrice = uPrice - (maxRateDiscount * uPrice);
+            txtD_Price.Text = dPrice.ToString("0.00");
+
+            // 🔹 نسبة الخصم
+            lblD_PricePercentage.Text = $"{Math.Round(maxRateDiscount * 100, 0)}%";
+        }
+
+        private void txtMaxRateDiscount_TextChanged(object sender, EventArgs e)
+        {
+            if (!decimal.TryParse(txtB_Price.Text, out decimal bPrice))
+                bPrice = 0;
+            if (!decimal.TryParse(txtSalesPercentage.Text, out decimal salesPercentage))
+                salesPercentage = 0;
+            if (!decimal.TryParse(txtMaxRateDiscount.Text, out decimal maxRateDiscount))
+                maxRateDiscount = 0;
+
+            // 🔹 حساب سعر البيع
+            decimal uPrice = bPrice + (salesPercentage * bPrice);
+            txtU_Price.Text = uPrice.ToString("0.00");
+
+            // 🔹 نسبة الزيادة
+            lblU_PricePercentage.Text = $"{Math.Round(salesPercentage * 100, 0)}%";
+
+            // 🔹 حساب السعر بعد الخصم
+            decimal dPrice = uPrice - (maxRateDiscount * uPrice);
+            txtD_Price.Text = dPrice.ToString("0.00");
+
+            // 🔹 نسبة الخصم
+            lblD_PricePercentage.Text = $"{Math.Round(maxRateDiscount * 100, 0)}%";
+        }
+
         #endregion 
 
 
@@ -2609,6 +2657,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         #endregion
 
 
- 
+
+
     }
 }
