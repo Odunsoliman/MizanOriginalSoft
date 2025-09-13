@@ -33,10 +33,19 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
         private void BtnStyl()
         {
+            /*
+            btnNext.Text = "➡️";  // سهم يمين
+            btnNext.Text = "⏭️";  // زر الانتقال إلى الأمام
+            btnNext.Text = "🔄";  // رمز تحديث/تدوير إذا تريد دورة الصور
+            btnNext.Text = "▶️";  // زر تشغيل/السهم الأمامي
+            */
 
             // 🔹 زر التالي
             btnNext.Text = "🔄";  // رمز تحديث/تدوير إذا تريد دورة الصور
-            btnNext.Font = new Font("Segoe UI Emoji", 12);
+            btnNext.Font = new Font("Segoe UI Emoji", 14);
+            btnNext.BackColor = Color.LightCoral; // لون مميز
+            btnNext.ForeColor = Color.White;      // لون النص
+            btnNext.FlatStyle = FlatStyle.Flat;   // شكل بسيط
 
             // 🔹 زر الحذف
             btnDeletePhoto.Text = "🗑️"; // رمز سلة مهملات
