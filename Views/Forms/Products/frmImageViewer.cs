@@ -41,7 +41,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             */
 
             // 🔹 زر التالي
-            btnNext.Text = "🔄";  // رمز تحديث/تدوير إذا تريد دورة الصور
+            btnNext.Text = "🔄  التالية";  // رمز تحديث/تدوير إذا تريد دورة الصور
             btnNext.Font = new Font("Segoe UI Emoji", 14);
             btnNext.BackColor = Color.LightCoral; // لون مميز
             btnNext.ForeColor = Color.White;      // لون النص
