@@ -2539,8 +2539,8 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
             // ضبط الأعمدة لتملأ الجريد بالكامل
             int totalWidth = DGV_AddItem.ClientSize.Width - DGV_AddItem.RowHeadersWidth;
-            DGV_AddItem.Columns[0].Width = totalWidth / 5;     // ProdName = 1/5
-            DGV_AddItem.Columns[1].Width = totalWidth * 4 / 5; // U_Price = 4/5
+            DGV_AddItem.Columns[1].Width = totalWidth / 5;     // ProdName = 1/5
+            DGV_AddItem.Columns[0].Width = totalWidth * 4 / 5; // U_Price = 4/5
 
             DGV_AddItem.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None; // تعطيل وضع الحجم التلقائي
         }
