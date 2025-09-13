@@ -68,8 +68,35 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
             // 🔍 هنا نستدعي الدالة اللي تبحث عن الـControls عندها AutoSize = true
             CheckAutoSizeControls(this);
+            LoadItemSettings();
 
         }
+
+
+        // 🟦 متغيرات إعدادات
+        private decimal MaxRateDiscount = 0m;  // خاص بنسبة الاوكازيون 
+        private decimal SalesPercentage = 0m;  // خاص بنسب سعر البيع
+        // 🔍  تحميل الإعدادات
+        private void LoadItemSettings()
+        {
+            try
+            {
+                //SalesPercentage=0.35   MaxRateDiscount=0.15
+                // 🟦 قراءة القيم من ملف الإعدادات
+                MaxRateDiscount = AppSettings.GetDecimal("MaxRateDiscount", 0.10m); // 10% افتراضياً
+                SalesPercentage = AppSettings.GetDecimal("SalesPercentage", 0.10m); // 10% افتراضياً
+
+                // 🟦 عند التحميل توضع الاعدادات فى اماكنها
+                txtMaxRateDiscount .Text = MaxRateDiscount.ToString ();
+                txtSalesPercentage.Text = SalesPercentage.ToString();
+
+            }
+            catch (Exception ex)
+            {
+                CustomMessageBox.ShowWarning($"خطأ أثناء تحميل إعدادات الفاتورة:\n{ex.Message}", "خطأ");
+            }
+        }
+
 
         // 🔍 دالة فحص AutoSize
         private void CheckAutoSizeControls(Control parent)

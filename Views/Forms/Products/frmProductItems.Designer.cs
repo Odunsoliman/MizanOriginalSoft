@@ -103,16 +103,31 @@
             label19 = new Label();
             label18 = new Label();
             tableLayoutPanel7 = new TableLayoutPanel();
-            label9 = new Label();
-            cbxUnit_ID = new ComboBox();
+            tableLayoutPanel22 = new TableLayoutPanel();
+            lblU_PricePercentage = new Label();
+            btnSalesPercentage = new Button();
             txtU_Price = new TextBox();
-            txtB_Price = new TextBox();
-            txtMinLenth = new TextBox();
-            label16 = new Label();
+            txtSalesPercentage = new TextBox();
+            tableLayoutPanel28 = new TableLayoutPanel();
             txtMinStock = new TextBox();
-            labl = new Label();
+            tableLayoutPanel27 = new TableLayoutPanel();
+            txtMinLenth = new TextBox();
+            tableLayoutPanel26 = new TableLayoutPanel();
+            cbxUnit_ID = new ComboBox();
+            label16 = new Label();
             lblMinLenth = new Label();
             label17 = new Label();
+            label9 = new Label();
+            labl = new Label();
+            tableLayoutPanel17 = new TableLayoutPanel();
+            label5 = new Label();
+            txtB_Price = new TextBox();
+            tableLayoutPanel23 = new TableLayoutPanel();
+            btnMaxRateDiscount = new Button();
+            txtMaxRateDiscount = new TextBox();
+            txtD_Price = new TextBox();
+            lblD_PricePercentage = new Label();
+            label20 = new Label();
             tableLayoutPanel21 = new TableLayoutPanel();
             label13 = new Label();
             txtCategory = new TextBox();
@@ -131,20 +146,6 @@
             tableLayoutPanel3 = new TableLayoutPanel();
             btnHelp = new Button();
             tmr_MainReports = new System.Windows.Forms.Timer(components);
-            tableLayoutPanel17 = new TableLayoutPanel();
-            tableLayoutPanel23 = new TableLayoutPanel();
-            txtD_Price = new TextBox();
-            tableLayoutPanel26 = new TableLayoutPanel();
-            tableLayoutPanel27 = new TableLayoutPanel();
-            tableLayoutPanel28 = new TableLayoutPanel();
-            label20 = new Label();
-            lblU_PricePercentage = new Label();
-            lblD_PricePercentage = new Label();
-            button2 = new Button();
-            textBox1 = new TextBox();
-            tableLayoutPanel22 = new TableLayoutPanel();
-            textBox2 = new TextBox();
-            button1 = new Button();
             tableL_ayoutPanel1.SuspendLayout();
             panelDetails.SuspendLayout();
             panelList.SuspendLayout();
@@ -174,16 +175,16 @@
             tableLayoutPanel18.SuspendLayout();
             tableLayoutPanel19.SuspendLayout();
             tableLayoutPanel7.SuspendLayout();
+            tableLayoutPanel22.SuspendLayout();
+            tableLayoutPanel28.SuspendLayout();
+            tableLayoutPanel27.SuspendLayout();
+            tableLayoutPanel26.SuspendLayout();
+            tableLayoutPanel17.SuspendLayout();
+            tableLayoutPanel23.SuspendLayout();
             tableLayoutPanel21.SuspendLayout();
             tableLayoutPanel11.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
-            tableLayoutPanel17.SuspendLayout();
-            tableLayoutPanel23.SuspendLayout();
-            tableLayoutPanel26.SuspendLayout();
-            tableLayoutPanel27.SuspendLayout();
-            tableLayoutPanel28.SuspendLayout();
-            tableLayoutPanel22.SuspendLayout();
             SuspendLayout();
             // 
             // tableL_ayoutPanel1
@@ -1268,35 +1269,50 @@
             tableLayoutPanel7.Size = new Size(456, 282);
             tableLayoutPanel7.TabIndex = 14;
             // 
-            // label9
+            // tableLayoutPanel22
             // 
-            label9.BackColor = Color.Transparent;
-            label9.Dock = DockStyle.Fill;
-            label9.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label9.ForeColor = Color.FromArgb(0, 0, 192);
-            label9.Location = new Point(342, 80);
-            label9.Margin = new Padding(4, 0, 4, 0);
-            label9.Name = "label9";
-            label9.Size = new Size(110, 40);
-            label9.TabIndex = 25;
-            label9.Text = "سعر بيع";
-            label9.TextAlign = ContentAlignment.MiddleRight;
+            tableLayoutPanel22.ColumnCount = 4;
+            tableLayoutPanel22.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
+            tableLayoutPanel22.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
+            tableLayoutPanel22.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            tableLayoutPanel22.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            tableLayoutPanel22.Controls.Add(lblU_PricePercentage, 1, 0);
+            tableLayoutPanel22.Controls.Add(btnSalesPercentage, 2, 0);
+            tableLayoutPanel22.Controls.Add(txtU_Price, 0, 0);
+            tableLayoutPanel22.Controls.Add(txtSalesPercentage, 3, 0);
+            tableLayoutPanel22.Dock = DockStyle.Fill;
+            tableLayoutPanel22.Location = new Point(3, 83);
+            tableLayoutPanel22.Name = "tableLayoutPanel22";
+            tableLayoutPanel22.RowCount = 1;
+            tableLayoutPanel22.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel22.Size = new Size(332, 34);
+            tableLayoutPanel22.TabIndex = 60;
             // 
-            // cbxUnit_ID
+            // lblU_PricePercentage
             // 
-            cbxUnit_ID.Dock = DockStyle.Fill;
-            cbxUnit_ID.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            cbxUnit_ID.ForeColor = Color.FromArgb(0, 0, 192);
-            cbxUnit_ID.FormattingEnabled = true;
-            cbxUnit_ID.Location = new Point(219, 3);
-            cbxUnit_ID.Name = "cbxUnit_ID";
-            cbxUnit_ID.Size = new Size(110, 28);
-            cbxUnit_ID.TabIndex = 31;
-            cbxUnit_ID.SelectedIndexChanged += cbxUnit_ID_SelectedIndexChanged;
-            cbxUnit_ID.KeyDown += cbxUnit_ID_KeyDown;
+            lblU_PricePercentage.Dock = DockStyle.Fill;
+            lblU_PricePercentage.ForeColor = Color.FromArgb(192, 0, 192);
+            lblU_PricePercentage.Location = new Point(103, 0);
+            lblU_PricePercentage.Name = "lblU_PricePercentage";
+            lblU_PricePercentage.Size = new Size(110, 34);
+            lblU_PricePercentage.TabIndex = 27;
+            lblU_PricePercentage.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // btnSalesPercentage
+            // 
+            btnSalesPercentage.Dock = DockStyle.Fill;
+            btnSalesPercentage.Font = new Font("Times New Roman", 9.75F, FontStyle.Bold);
+            btnSalesPercentage.ForeColor = Color.Fuchsia;
+            btnSalesPercentage.Location = new Point(70, 3);
+            btnSalesPercentage.Name = "btnSalesPercentage";
+            btnSalesPercentage.Size = new Size(27, 28);
+            btnSalesPercentage.TabIndex = 28;
+            btnSalesPercentage.Text = "%";
+            btnSalesPercentage.UseVisualStyleBackColor = true;
             // 
             // txtU_Price
             // 
+            txtU_Price.Dock = DockStyle.Fill;
             txtU_Price.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             txtU_Price.ForeColor = Color.FromArgb(0, 0, 192);
             txtU_Price.Location = new Point(220, 4);
@@ -1308,47 +1324,32 @@
             txtU_Price.TextAlign = HorizontalAlignment.Center;
             txtU_Price.KeyDown += txtU_Price_KeyDown;
             // 
-            // txtB_Price
+            // txtSalesPercentage
             // 
-            txtB_Price.Dock = DockStyle.Fill;
-            txtB_Price.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtB_Price.ForeColor = Color.FromArgb(0, 0, 192);
-            txtB_Price.Location = new Point(220, 4);
-            txtB_Price.Margin = new Padding(4);
-            txtB_Price.Name = "txtB_Price";
-            txtB_Price.Size = new Size(108, 29);
-            txtB_Price.TabIndex = 26;
-            txtB_Price.Text = "0";
-            txtB_Price.TextAlign = HorizontalAlignment.Center;
-            txtB_Price.KeyDown += txtB_Price_KeyDown;
+            txtSalesPercentage.Dock = DockStyle.Fill;
+            txtSalesPercentage.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtSalesPercentage.ForeColor = Color.Fuchsia;
+            txtSalesPercentage.Location = new Point(4, 4);
+            txtSalesPercentage.Margin = new Padding(4);
+            txtSalesPercentage.Name = "txtSalesPercentage";
+            txtSalesPercentage.Size = new Size(59, 29);
+            txtSalesPercentage.TabIndex = 29;
+            txtSalesPercentage.Text = "0";
+            txtSalesPercentage.TextAlign = HorizontalAlignment.Center;
             // 
-            // txtMinLenth
+            // tableLayoutPanel28
             // 
-            txtMinLenth.Dock = DockStyle.Fill;
-            txtMinLenth.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtMinLenth.ForeColor = Color.FromArgb(0, 0, 192);
-            txtMinLenth.Location = new Point(220, 4);
-            txtMinLenth.Margin = new Padding(4);
-            txtMinLenth.Name = "txtMinLenth";
-            txtMinLenth.Size = new Size(108, 29);
-            txtMinLenth.TabIndex = 26;
-            txtMinLenth.Text = "0";
-            txtMinLenth.TextAlign = HorizontalAlignment.Center;
-            txtMinLenth.KeyDown += txtMinLenth_KeyDown;
-            // 
-            // label16
-            // 
-            label16.BackColor = Color.Transparent;
-            label16.Dock = DockStyle.Fill;
-            label16.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label16.ForeColor = Color.FromArgb(0, 0, 192);
-            label16.Location = new Point(342, 240);
-            label16.Margin = new Padding(4, 0, 4, 0);
-            label16.Name = "label16";
-            label16.Size = new Size(110, 42);
-            label16.TabIndex = 30;
-            label16.Text = "حد ادنى للرصيد";
-            label16.TextAlign = ContentAlignment.MiddleRight;
+            tableLayoutPanel28.ColumnCount = 2;
+            tableLayoutPanel28.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
+            tableLayoutPanel28.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65F));
+            tableLayoutPanel28.Controls.Add(txtMinStock, 0, 0);
+            tableLayoutPanel28.Dock = DockStyle.Fill;
+            tableLayoutPanel28.Location = new Point(3, 243);
+            tableLayoutPanel28.Name = "tableLayoutPanel28";
+            tableLayoutPanel28.RowCount = 1;
+            tableLayoutPanel28.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel28.Size = new Size(332, 36);
+            tableLayoutPanel28.TabIndex = 59;
             // 
             // txtMinStock
             // 
@@ -1364,19 +1365,74 @@
             txtMinStock.TextAlign = HorizontalAlignment.Center;
             txtMinStock.KeyDown += txtMinStock_KeyDown;
             // 
-            // labl
+            // tableLayoutPanel27
             // 
-            labl.BackColor = Color.Transparent;
-            labl.Dock = DockStyle.Fill;
-            labl.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labl.ForeColor = Color.FromArgb(0, 0, 192);
-            labl.Location = new Point(342, 40);
-            labl.Margin = new Padding(4, 0, 4, 0);
-            labl.Name = "labl";
-            labl.Size = new Size(110, 40);
-            labl.TabIndex = 25;
-            labl.Text = "سعر شراء";
-            labl.TextAlign = ContentAlignment.MiddleRight;
+            tableLayoutPanel27.ColumnCount = 2;
+            tableLayoutPanel27.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
+            tableLayoutPanel27.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65F));
+            tableLayoutPanel27.Controls.Add(txtMinLenth, 0, 0);
+            tableLayoutPanel27.Dock = DockStyle.Fill;
+            tableLayoutPanel27.Location = new Point(3, 203);
+            tableLayoutPanel27.Name = "tableLayoutPanel27";
+            tableLayoutPanel27.RowCount = 1;
+            tableLayoutPanel27.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel27.Size = new Size(332, 34);
+            tableLayoutPanel27.TabIndex = 58;
+            // 
+            // txtMinLenth
+            // 
+            txtMinLenth.Dock = DockStyle.Fill;
+            txtMinLenth.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtMinLenth.ForeColor = Color.FromArgb(0, 0, 192);
+            txtMinLenth.Location = new Point(220, 4);
+            txtMinLenth.Margin = new Padding(4);
+            txtMinLenth.Name = "txtMinLenth";
+            txtMinLenth.Size = new Size(108, 29);
+            txtMinLenth.TabIndex = 26;
+            txtMinLenth.Text = "0";
+            txtMinLenth.TextAlign = HorizontalAlignment.Center;
+            txtMinLenth.KeyDown += txtMinLenth_KeyDown;
+            // 
+            // tableLayoutPanel26
+            // 
+            tableLayoutPanel26.ColumnCount = 2;
+            tableLayoutPanel26.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
+            tableLayoutPanel26.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65F));
+            tableLayoutPanel26.Controls.Add(cbxUnit_ID, 0, 0);
+            tableLayoutPanel26.Dock = DockStyle.Fill;
+            tableLayoutPanel26.Location = new Point(3, 163);
+            tableLayoutPanel26.Name = "tableLayoutPanel26";
+            tableLayoutPanel26.RowCount = 1;
+            tableLayoutPanel26.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel26.Size = new Size(332, 34);
+            tableLayoutPanel26.TabIndex = 57;
+            // 
+            // cbxUnit_ID
+            // 
+            cbxUnit_ID.Dock = DockStyle.Fill;
+            cbxUnit_ID.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            cbxUnit_ID.ForeColor = Color.FromArgb(0, 0, 192);
+            cbxUnit_ID.FormattingEnabled = true;
+            cbxUnit_ID.Location = new Point(219, 3);
+            cbxUnit_ID.Name = "cbxUnit_ID";
+            cbxUnit_ID.Size = new Size(110, 28);
+            cbxUnit_ID.TabIndex = 31;
+            cbxUnit_ID.SelectedIndexChanged += cbxUnit_ID_SelectedIndexChanged;
+            cbxUnit_ID.KeyDown += cbxUnit_ID_KeyDown;
+            // 
+            // label16
+            // 
+            label16.BackColor = Color.Transparent;
+            label16.Dock = DockStyle.Fill;
+            label16.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label16.ForeColor = Color.FromArgb(0, 0, 192);
+            label16.Location = new Point(342, 240);
+            label16.Margin = new Padding(4, 0, 4, 0);
+            label16.Name = "label16";
+            label16.Size = new Size(110, 42);
+            label16.TabIndex = 30;
+            label16.Text = "حد ادنى للرصيد";
+            label16.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblMinLenth
             // 
@@ -1405,6 +1461,159 @@
             label17.TabIndex = 1;
             label17.Text = "الوحدة";
             label17.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label9
+            // 
+            label9.BackColor = Color.Transparent;
+            label9.Dock = DockStyle.Fill;
+            label9.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label9.ForeColor = Color.FromArgb(0, 0, 192);
+            label9.Location = new Point(342, 80);
+            label9.Margin = new Padding(4, 0, 4, 0);
+            label9.Name = "label9";
+            label9.Size = new Size(110, 40);
+            label9.TabIndex = 25;
+            label9.Text = "سعر بيع";
+            label9.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // labl
+            // 
+            labl.BackColor = Color.Transparent;
+            labl.Dock = DockStyle.Fill;
+            labl.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labl.ForeColor = Color.FromArgb(0, 0, 192);
+            labl.Location = new Point(342, 40);
+            labl.Margin = new Padding(4, 0, 4, 0);
+            labl.Name = "labl";
+            labl.Size = new Size(110, 40);
+            labl.TabIndex = 25;
+            labl.Text = "سعر شراء";
+            labl.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // tableLayoutPanel17
+            // 
+            tableLayoutPanel17.ColumnCount = 2;
+            tableLayoutPanel17.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
+            tableLayoutPanel17.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65F));
+            tableLayoutPanel17.Controls.Add(label5, 1, 0);
+            tableLayoutPanel17.Controls.Add(txtB_Price, 0, 0);
+            tableLayoutPanel17.Dock = DockStyle.Fill;
+            tableLayoutPanel17.Location = new Point(3, 43);
+            tableLayoutPanel17.Name = "tableLayoutPanel17";
+            tableLayoutPanel17.RowCount = 1;
+            tableLayoutPanel17.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel17.Size = new Size(332, 34);
+            tableLayoutPanel17.TabIndex = 55;
+            // 
+            // label5
+            // 
+            label5.BackColor = Color.Transparent;
+            label5.Dock = DockStyle.Fill;
+            label5.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label5.ForeColor = Color.Fuchsia;
+            label5.Location = new Point(4, 0);
+            label5.Margin = new Padding(4, 0, 4, 0);
+            label5.Name = "label5";
+            label5.Size = new Size(208, 34);
+            label5.TabIndex = 27;
+            label5.Text = "حساب النسب";
+            label5.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // txtB_Price
+            // 
+            txtB_Price.Dock = DockStyle.Fill;
+            txtB_Price.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtB_Price.ForeColor = Color.FromArgb(0, 0, 192);
+            txtB_Price.Location = new Point(220, 4);
+            txtB_Price.Margin = new Padding(4);
+            txtB_Price.Name = "txtB_Price";
+            txtB_Price.Size = new Size(108, 29);
+            txtB_Price.TabIndex = 26;
+            txtB_Price.Text = "0";
+            txtB_Price.TextAlign = HorizontalAlignment.Center;
+            txtB_Price.KeyDown += txtB_Price_KeyDown;
+            // 
+            // tableLayoutPanel23
+            // 
+            tableLayoutPanel23.ColumnCount = 4;
+            tableLayoutPanel23.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
+            tableLayoutPanel23.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
+            tableLayoutPanel23.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            tableLayoutPanel23.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            tableLayoutPanel23.Controls.Add(btnMaxRateDiscount, 2, 0);
+            tableLayoutPanel23.Controls.Add(txtMaxRateDiscount, 3, 0);
+            tableLayoutPanel23.Controls.Add(txtD_Price, 0, 0);
+            tableLayoutPanel23.Controls.Add(lblD_PricePercentage, 1, 0);
+            tableLayoutPanel23.Dock = DockStyle.Fill;
+            tableLayoutPanel23.Location = new Point(3, 123);
+            tableLayoutPanel23.Name = "tableLayoutPanel23";
+            tableLayoutPanel23.RowCount = 1;
+            tableLayoutPanel23.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel23.Size = new Size(332, 34);
+            tableLayoutPanel23.TabIndex = 55;
+            // 
+            // btnMaxRateDiscount
+            // 
+            btnMaxRateDiscount.Dock = DockStyle.Fill;
+            btnMaxRateDiscount.Font = new Font("Times New Roman", 9.75F, FontStyle.Bold);
+            btnMaxRateDiscount.ForeColor = Color.Fuchsia;
+            btnMaxRateDiscount.Location = new Point(70, 3);
+            btnMaxRateDiscount.Name = "btnMaxRateDiscount";
+            btnMaxRateDiscount.Size = new Size(27, 28);
+            btnMaxRateDiscount.TabIndex = 30;
+            btnMaxRateDiscount.Text = "%";
+            btnMaxRateDiscount.UseVisualStyleBackColor = true;
+            // 
+            // txtMaxRateDiscount
+            // 
+            txtMaxRateDiscount.Dock = DockStyle.Fill;
+            txtMaxRateDiscount.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtMaxRateDiscount.ForeColor = Color.Fuchsia;
+            txtMaxRateDiscount.Location = new Point(4, 4);
+            txtMaxRateDiscount.Margin = new Padding(4);
+            txtMaxRateDiscount.Name = "txtMaxRateDiscount";
+            txtMaxRateDiscount.Size = new Size(59, 29);
+            txtMaxRateDiscount.TabIndex = 29;
+            txtMaxRateDiscount.Text = "0";
+            txtMaxRateDiscount.TextAlign = HorizontalAlignment.Center;
+            // 
+            // txtD_Price
+            // 
+            txtD_Price.Dock = DockStyle.Fill;
+            txtD_Price.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtD_Price.ForeColor = Color.FromArgb(0, 0, 192);
+            txtD_Price.Location = new Point(220, 4);
+            txtD_Price.Margin = new Padding(4);
+            txtD_Price.Name = "txtD_Price";
+            txtD_Price.Size = new Size(108, 29);
+            txtD_Price.TabIndex = 26;
+            txtD_Price.Text = "0";
+            txtD_Price.TextAlign = HorizontalAlignment.Center;
+            txtD_Price.KeyDown += txtU_Price_KeyDown;
+            // 
+            // lblD_PricePercentage
+            // 
+            lblD_PricePercentage.Dock = DockStyle.Fill;
+            lblD_PricePercentage.ForeColor = Color.FromArgb(192, 0, 192);
+            lblD_PricePercentage.Location = new Point(103, 0);
+            lblD_PricePercentage.Name = "lblD_PricePercentage";
+            lblD_PricePercentage.Size = new Size(110, 34);
+            lblD_PricePercentage.TabIndex = 27;
+            lblD_PricePercentage.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label20
+            // 
+            label20.BackColor = Color.Transparent;
+            label20.Dock = DockStyle.Fill;
+            label20.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label20.ForeColor = Color.FromArgb(0, 0, 192);
+            label20.Location = new Point(342, 120);
+            label20.Margin = new Padding(4, 0, 4, 0);
+            label20.Name = "label20";
+            label20.Size = new Size(110, 40);
+            label20.TabIndex = 25;
+            label20.Text = "سعر الاوكازيون";
+            label20.TextAlign = ContentAlignment.MiddleRight;
             // 
             // tableLayoutPanel21
             // 
@@ -1533,7 +1742,7 @@
             label8.Name = "label8";
             label8.Size = new Size(108, 32);
             label8.TabIndex = 0;
-            label8.Text = "كود الصنف لدى المورد";
+            label8.Text = "باركود مطبوع";
             label8.TextAlign = ContentAlignment.MiddleRight;
             // 
             // txtProdCodeOnSuplier
@@ -1673,194 +1882,6 @@
             // 
             tmr_MainReports.Interval = 10;
             // 
-            // tableLayoutPanel17
-            // 
-            tableLayoutPanel17.ColumnCount = 2;
-            tableLayoutPanel17.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
-            tableLayoutPanel17.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65F));
-            tableLayoutPanel17.Controls.Add(txtB_Price, 0, 0);
-            tableLayoutPanel17.Dock = DockStyle.Fill;
-            tableLayoutPanel17.Location = new Point(3, 43);
-            tableLayoutPanel17.Name = "tableLayoutPanel17";
-            tableLayoutPanel17.RowCount = 1;
-            tableLayoutPanel17.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel17.Size = new Size(332, 34);
-            tableLayoutPanel17.TabIndex = 55;
-            // 
-            // tableLayoutPanel23
-            // 
-            tableLayoutPanel23.ColumnCount = 4;
-            tableLayoutPanel23.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
-            tableLayoutPanel23.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
-            tableLayoutPanel23.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
-            tableLayoutPanel23.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tableLayoutPanel23.Controls.Add(button1, 2, 0);
-            tableLayoutPanel23.Controls.Add(textBox1, 3, 0);
-            tableLayoutPanel23.Controls.Add(txtD_Price, 0, 0);
-            tableLayoutPanel23.Controls.Add(lblD_PricePercentage, 1, 0);
-            tableLayoutPanel23.Dock = DockStyle.Fill;
-            tableLayoutPanel23.Location = new Point(3, 123);
-            tableLayoutPanel23.Name = "tableLayoutPanel23";
-            tableLayoutPanel23.RowCount = 1;
-            tableLayoutPanel23.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel23.Size = new Size(332, 34);
-            tableLayoutPanel23.TabIndex = 55;
-            // 
-            // txtD_Price
-            // 
-            txtD_Price.Dock = DockStyle.Fill;
-            txtD_Price.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtD_Price.ForeColor = Color.FromArgb(0, 0, 192);
-            txtD_Price.Location = new Point(220, 4);
-            txtD_Price.Margin = new Padding(4);
-            txtD_Price.Name = "txtD_Price";
-            txtD_Price.Size = new Size(108, 29);
-            txtD_Price.TabIndex = 26;
-            txtD_Price.Text = "0";
-            txtD_Price.TextAlign = HorizontalAlignment.Center;
-            txtD_Price.KeyDown += txtU_Price_KeyDown;
-            // 
-            // tableLayoutPanel26
-            // 
-            tableLayoutPanel26.ColumnCount = 2;
-            tableLayoutPanel26.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
-            tableLayoutPanel26.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65F));
-            tableLayoutPanel26.Controls.Add(cbxUnit_ID, 0, 0);
-            tableLayoutPanel26.Dock = DockStyle.Fill;
-            tableLayoutPanel26.Location = new Point(3, 163);
-            tableLayoutPanel26.Name = "tableLayoutPanel26";
-            tableLayoutPanel26.RowCount = 1;
-            tableLayoutPanel26.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel26.Size = new Size(332, 34);
-            tableLayoutPanel26.TabIndex = 57;
-            // 
-            // tableLayoutPanel27
-            // 
-            tableLayoutPanel27.ColumnCount = 2;
-            tableLayoutPanel27.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
-            tableLayoutPanel27.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65F));
-            tableLayoutPanel27.Controls.Add(txtMinLenth, 0, 0);
-            tableLayoutPanel27.Dock = DockStyle.Fill;
-            tableLayoutPanel27.Location = new Point(3, 203);
-            tableLayoutPanel27.Name = "tableLayoutPanel27";
-            tableLayoutPanel27.RowCount = 1;
-            tableLayoutPanel27.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel27.Size = new Size(332, 34);
-            tableLayoutPanel27.TabIndex = 58;
-            // 
-            // tableLayoutPanel28
-            // 
-            tableLayoutPanel28.ColumnCount = 2;
-            tableLayoutPanel28.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
-            tableLayoutPanel28.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65F));
-            tableLayoutPanel28.Controls.Add(txtMinStock, 0, 0);
-            tableLayoutPanel28.Dock = DockStyle.Fill;
-            tableLayoutPanel28.Location = new Point(3, 243);
-            tableLayoutPanel28.Name = "tableLayoutPanel28";
-            tableLayoutPanel28.RowCount = 1;
-            tableLayoutPanel28.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel28.Size = new Size(332, 36);
-            tableLayoutPanel28.TabIndex = 59;
-            // 
-            // label20
-            // 
-            label20.BackColor = Color.Transparent;
-            label20.Dock = DockStyle.Fill;
-            label20.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label20.ForeColor = Color.FromArgb(0, 0, 192);
-            label20.Location = new Point(342, 120);
-            label20.Margin = new Padding(4, 0, 4, 0);
-            label20.Name = "label20";
-            label20.Size = new Size(110, 40);
-            label20.TabIndex = 25;
-            label20.Text = "سعر الاوكازيون";
-            label20.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // lblU_PricePercentage
-            // 
-            lblU_PricePercentage.ForeColor = Color.FromArgb(255, 128, 128);
-            lblU_PricePercentage.Location = new Point(156, 0);
-            lblU_PricePercentage.Name = "lblU_PricePercentage";
-            lblU_PricePercentage.Size = new Size(57, 19);
-            lblU_PricePercentage.TabIndex = 27;
-            lblU_PricePercentage.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // lblD_PricePercentage
-            // 
-            lblD_PricePercentage.Dock = DockStyle.Fill;
-            lblD_PricePercentage.ForeColor = Color.FromArgb(255, 128, 128);
-            lblD_PricePercentage.Location = new Point(103, 0);
-            lblD_PricePercentage.Name = "lblD_PricePercentage";
-            lblD_PricePercentage.Size = new Size(110, 34);
-            lblD_PricePercentage.TabIndex = 27;
-            lblD_PricePercentage.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // button2
-            // 
-            button2.Font = new Font("Times New Roman", 9.75F, FontStyle.Bold);
-            button2.Location = new Point(70, 3);
-            button2.Name = "button2";
-            button2.Size = new Size(27, 28);
-            button2.TabIndex = 28;
-            button2.Text = "%";
-            button2.UseVisualStyleBackColor = true;
-            // 
-            // textBox1
-            // 
-            textBox1.Dock = DockStyle.Fill;
-            textBox1.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            textBox1.ForeColor = Color.FromArgb(0, 0, 192);
-            textBox1.Location = new Point(4, 4);
-            textBox1.Margin = new Padding(4);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(59, 29);
-            textBox1.TabIndex = 29;
-            textBox1.Text = "0";
-            textBox1.TextAlign = HorizontalAlignment.Center;
-            // 
-            // tableLayoutPanel22
-            // 
-            tableLayoutPanel22.ColumnCount = 4;
-            tableLayoutPanel22.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
-            tableLayoutPanel22.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
-            tableLayoutPanel22.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
-            tableLayoutPanel22.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tableLayoutPanel22.Controls.Add(lblU_PricePercentage, 1, 0);
-            tableLayoutPanel22.Controls.Add(button2, 2, 0);
-            tableLayoutPanel22.Controls.Add(txtU_Price, 0, 0);
-            tableLayoutPanel22.Controls.Add(textBox2, 3, 0);
-            tableLayoutPanel22.Dock = DockStyle.Fill;
-            tableLayoutPanel22.Location = new Point(3, 83);
-            tableLayoutPanel22.Name = "tableLayoutPanel22";
-            tableLayoutPanel22.RowCount = 1;
-            tableLayoutPanel22.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel22.Size = new Size(332, 34);
-            tableLayoutPanel22.TabIndex = 60;
-            // 
-            // textBox2
-            // 
-            textBox2.Dock = DockStyle.Fill;
-            textBox2.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            textBox2.ForeColor = Color.FromArgb(0, 0, 192);
-            textBox2.Location = new Point(4, 4);
-            textBox2.Margin = new Padding(4);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(59, 29);
-            textBox2.TabIndex = 29;
-            textBox2.Text = "0";
-            textBox2.TextAlign = HorizontalAlignment.Center;
-            // 
-            // button1
-            // 
-            button1.Dock = DockStyle.Fill;
-            button1.Font = new Font("Times New Roman", 9.75F, FontStyle.Bold);
-            button1.Location = new Point(70, 3);
-            button1.Name = "button1";
-            button1.Size = new Size(27, 28);
-            button1.TabIndex = 30;
-            button1.Text = "%";
-            button1.UseVisualStyleBackColor = true;
-            // 
             // frmProductItems
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1910,22 +1931,22 @@
             tableLayoutPanel19.PerformLayout();
             tableLayoutPanel7.ResumeLayout(false);
             tableLayoutPanel7.PerformLayout();
+            tableLayoutPanel22.ResumeLayout(false);
+            tableLayoutPanel22.PerformLayout();
+            tableLayoutPanel28.ResumeLayout(false);
+            tableLayoutPanel28.PerformLayout();
+            tableLayoutPanel27.ResumeLayout(false);
+            tableLayoutPanel27.PerformLayout();
+            tableLayoutPanel26.ResumeLayout(false);
+            tableLayoutPanel17.ResumeLayout(false);
+            tableLayoutPanel17.PerformLayout();
+            tableLayoutPanel23.ResumeLayout(false);
+            tableLayoutPanel23.PerformLayout();
             tableLayoutPanel21.ResumeLayout(false);
             tableLayoutPanel21.PerformLayout();
             tableLayoutPanel11.ResumeLayout(false);
             tableLayoutPanel6.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
-            tableLayoutPanel17.ResumeLayout(false);
-            tableLayoutPanel17.PerformLayout();
-            tableLayoutPanel23.ResumeLayout(false);
-            tableLayoutPanel23.PerformLayout();
-            tableLayoutPanel26.ResumeLayout(false);
-            tableLayoutPanel27.ResumeLayout(false);
-            tableLayoutPanel27.PerformLayout();
-            tableLayoutPanel28.ResumeLayout(false);
-            tableLayoutPanel28.PerformLayout();
-            tableLayoutPanel22.ResumeLayout(false);
-            tableLayoutPanel22.PerformLayout();
             ResumeLayout(false);
 
         }
@@ -2044,10 +2065,11 @@
         private Label label20;
         private Label lblU_PricePercentage;
         private Label lblD_PricePercentage;
-        private Button button2;
-        private TextBox textBox1;
+        private Button btnSalesPercentage;
+        private TextBox txtMaxRateDiscount;
         private TableLayoutPanel tableLayoutPanel22;
-        private TextBox textBox2;
-        private Button button1;
+        private TextBox txtSalesPercentage;
+        private Button btnMaxRateDiscount;
+        private Label label5;
     }
 }
