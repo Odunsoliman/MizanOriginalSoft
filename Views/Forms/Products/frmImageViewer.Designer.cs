@@ -101,9 +101,9 @@
             // tableLayoutPanel5
             // 
             tableLayoutPanel5.ColumnCount = 3;
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
             tableLayoutPanel5.Controls.Add(btnNext, 0, 0);
             tableLayoutPanel5.Controls.Add(chkIsDefault, 1, 0);
             tableLayoutPanel5.Controls.Add(btnDeletePhoto, 2, 0);
@@ -118,9 +118,9 @@
             // btnNext
             // 
             btnNext.Dock = DockStyle.Fill;
-            btnNext.Location = new Point(489, 3);
+            btnNext.Location = new Point(586, 3);
             btnNext.Name = "btnNext";
-            btnNext.Size = new Size(236, 37);
+            btnNext.Size = new Size(139, 37);
             btnNext.TabIndex = 11;
             btnNext.Text = "<<< عرض الصور >>>";
             btnNext.UseVisualStyleBackColor = true;
@@ -130,9 +130,9 @@
             // 
             chkIsDefault.AutoSize = true;
             chkIsDefault.Dock = DockStyle.Fill;
-            chkIsDefault.Location = new Point(247, 3);
+            chkIsDefault.Location = new Point(77, 3);
             chkIsDefault.Name = "chkIsDefault";
-            chkIsDefault.Size = new Size(236, 37);
+            chkIsDefault.Size = new Size(503, 37);
             chkIsDefault.TabIndex = 10;
             chkIsDefault.Text = "تعيين كافتراضية";
             chkIsDefault.UseVisualStyleBackColor = true;
@@ -143,7 +143,7 @@
             btnDeletePhoto.Dock = DockStyle.Fill;
             btnDeletePhoto.Location = new Point(3, 3);
             btnDeletePhoto.Name = "btnDeletePhoto";
-            btnDeletePhoto.Size = new Size(238, 37);
+            btnDeletePhoto.Size = new Size(68, 37);
             btnDeletePhoto.TabIndex = 11;
             btnDeletePhoto.Text = "حذف صورة";
             btnDeletePhoto.UseVisualStyleBackColor = true;

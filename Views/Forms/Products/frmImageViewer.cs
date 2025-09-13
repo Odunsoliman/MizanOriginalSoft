@@ -28,9 +28,14 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
             LoadPhotos();
             ShowPhoto(0); // 👈 بداية من أول صورة
+            BtnStyl();
+            LoadItemData();
+        }
+        private void BtnStyl()
+        {
 
             // 🔹 زر التالي
-            btnNext.Text = "التالي";
+            btnNext.Text = "🔄";  // رمز تحديث/تدوير إذا تريد دورة الصور
             btnNext.Font = new Font("Segoe UI Emoji", 12);
 
             // 🔹 زر الحذف
@@ -39,9 +44,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             btnDeletePhoto.BackColor = Color.LightCoral; // لون مميز
             btnDeletePhoto.ForeColor = Color.White;      // لون النص
             btnDeletePhoto.FlatStyle = FlatStyle.Flat;   // شكل بسيط
-            LoadItemData();
         }
-
 
         DataTable _tblProd = new DataTable();
         private void LoadItemData()
