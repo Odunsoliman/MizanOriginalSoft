@@ -2538,11 +2538,9 @@ namespace MizanOriginalSoft.Views.Forms.Products
             DGV_AddItem.AllowUserToAddRows = false; // منع الصف الفارغ
 
             // ضبط الأعمدة لتملأ الجريد بالكامل
-            int totalWidth = DGV_AddItem.ClientSize.Width - DGV_AddItem.RowHeadersWidth;
-            DGV_AddItem.Columns[1].Width = totalWidth / 5;     // ProdName = 1/5
-            DGV_AddItem.Columns[0].Width = totalWidth * 4 / 5; // U_Price = 4/5
-
-            DGV_AddItem.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None; // تعطيل وضع الحجم التلقائي
+            DGV_AddItem.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill; // ✅ تفعيل Fill
+            DGV_AddItem.Columns[0].FillWeight = 80;  // 20% للعمود الأول
+            DGV_AddItem.Columns[1].FillWeight = 20;  // 80% للعمود الثاني
         }
 
 
