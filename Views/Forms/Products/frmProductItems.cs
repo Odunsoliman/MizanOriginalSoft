@@ -2777,11 +2777,9 @@ namespace MizanOriginalSoft.Views.Forms.Products
             if (int.TryParse(lblID_Product.Text, out int id))
             {
                 var viewer = new frmImageViewer(id);
-                /*وفى هذا النموذج يوجد 
-                lblCategory;lblNote;lblProdName;lblProductCode;lblRegistYear;lblStock;lblSuplierID;lblUPrice;
-                يجب تعبئتها اثناء عرض الصور الخاصة بالصنف وهى موجودة جميعا فى الجريد الذى حدد الصنف
-                 */
                 viewer.ShowDialog();
+                // ✅ 1- إعادة تحميل المنتجات
+                LoadProducts();
             }
             /*فى شاشة الاصناف
              يتم فتح frmImageViewer لعرض صور الصنف 
