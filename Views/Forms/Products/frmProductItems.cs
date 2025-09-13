@@ -56,6 +56,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
         private void frmProductItems_Load(object sender, EventArgs e)
         {
+            InitializeTempDGV(); // ✅ تهيئة الجدول المؤقت
             LoadTreeAndSelectSpecificNode();
 
             treeViewCategories.AllowDrop = true; // مهم جداً لتفعيل الإفلات
@@ -2423,7 +2424,22 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 if (result > 0)
                 {
                     MessageBox.Show("تم إضافة الصنف بنجاح", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    ResetFormForNewEntry(); // تفريغ النموذج لإدخال صنف جديد
+                    ResetFormForNewEntry();
+                    if (result > 0)
+                    {
+                        MessageBox.Show("تم إضافة الصنف بنجاح", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        ResetFormForNewEntry(); // تفريغ النموذج لإدخال صنف جديد
+
+                        // 🔹 إضافة الصنف الجديد إلى الجدول المؤقت
+                        DataRow newRow = tempAddedItems.NewRow();
+                        newRow["ProdName"] = ProdName;
+                        newRow["U_Price"] = U_Price;
+                        tempAddedItems.Rows.Add(newRow);
+
+                        LoadProducts(); // إعادة تحميل المنتجات من القاعدة (اختياري)
+                    }
+
+
                     LoadProducts();
                 }
                 else
@@ -2454,7 +2470,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 MinStock = float.TryParse(txtMinStock.Text, out float minS) ? minS : 0f;
                 Category_id = int.TryParse(txtCategory.Text, out int catId) ? catId : 0;
                 SuplierID = int.TryParse(txtNewItemSuppliers.Text, out int supId) ? supId : 0;
-                picProductPath = lblPathProductPic.Text.Trim();
             }
             catch (Exception ex)
             {
@@ -2503,16 +2518,34 @@ namespace MizanOriginalSoft.Views.Forms.Products
             txtB_Price.Text = "0";
             txtU_Price.Text = "0";
             txtProdCodeOnSuplier.Clear();
-            // txtMinLenth.Text = "0";
-            // txtMinStock.Text = "0";
-            //   txtCategory.Text = "";
-            //    txtNewItemSuppliers.Text = "";
-            //   cbxUnit_ID.SelectedIndex = -1;
-            lblPathProductPic.Text = "..";
             txtProdName.Focus();
-            PicProduct.Image = null;
 
         }
+
+        // اضافة الاصناف المضافة بشكل مؤقت
+        private DataTable tempAddedItems = new DataTable();
+        private void InitializeTempDGV()
+        {
+            tempAddedItems.Columns.Add("ProdName", typeof(string));
+            tempAddedItems.Columns.Add("U_Price", typeof(decimal));
+
+            DGV_AddItem.DataSource = tempAddedItems;
+
+            // ضبط عرض الأعمدة بنسبة 1:4
+            if (DGV_AddItem.Columns.Count == 2)
+            {
+                DGV_AddItem.Columns[0].Width = DGV_AddItem.Width / 5;     // ProdName = 1/5
+                DGV_AddItem.Columns[1].Width = DGV_AddItem.Width * 4 / 5; // U_Price = 4/5
+            }
+
+            // عناوين الأعمدة
+            DGV_AddItem.Columns[0].HeaderText = "اسم الصنف";
+            DGV_AddItem.Columns[1].HeaderText = "سعر الوحدة";
+
+            DGV_AddItem.AllowUserToAddRows = false; // لمنع الصف الفارغ
+        }
+
+
 
 
         private void btnLoadPicProduct_Click(object sender, EventArgs e)
@@ -2557,9 +2590,8 @@ namespace MizanOriginalSoft.Views.Forms.Products
                     // ✅ تحديث الصورة الظاهرة في PictureBox
                     if (ofd.FileNames.Length > 0)
                     {
-                        PicProduct.Image = Image.FromFile(ofd.FileNames[0]);
-                        PicProduct.SizeMode = PictureBoxSizeMode.StretchImage;
-                        lblPathProductPic.Text = ofd.FileNames[0];
+                        //PicProduct.Image = Image.FromFile(ofd.FileNames[0]);
+                        //PicProduct.SizeMode = PictureBoxSizeMode.StretchImage;
                     }
                 }
             }
@@ -2790,6 +2822,10 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
 
 
+        private void btnClearDGV_Click(object sender, EventArgs e)
+        {
+            tempAddedItems.Clear();
+        }
 
     }
 }
