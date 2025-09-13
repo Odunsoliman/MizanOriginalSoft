@@ -130,11 +130,90 @@ namespace MizanOriginalSoft.Views.Forms.Products
         #endregion
 
         #region ========= SetupAutoComplete and Fill =================
-        // 🔹 خليه متغير عام
-        private DataTable? tblSupplier;
+
+        // 🔹 اجعل الجدول والمجموعة متغيرات على مستوى الفورم
+        private DataTable tblSupplier;
         private AutoCompleteStringCollection suppliersCollection;
 
         private void SetupAutoCompleteSuppliers()
+        {
+            // تحميل الموردين مرة واحدة فقط
+            if (suppliersCollection == null)
+            {
+                tblSupplier = DBServiecs.Accounts_GetSupplier();
+                suppliersCollection = new AutoCompleteStringCollection();
+
+                if (tblSupplier != null && tblSupplier.Rows.Count > 0)
+                {
+                    foreach (DataRow row in tblSupplier.Rows)
+                    {
+                        string accName = row["AccName"]?.ToString();
+                        if (!string.IsNullOrEmpty(accName))
+                            suppliersCollection.Add(accName);
+                    }
+                }
+
+                // Debug: طباعة عدد الموردين للتأكد من أن البيانات اتحملت
+                System.Diagnostics.Debug.WriteLine($"📌 عدد الموردين المحملين: {suppliersCollection.Count}");
+            }
+
+            // 🔹 ربط نفس المصدر بكلا التكست بوكس
+            SetupAutoCompleteForTextBox(txtSuppliers);
+            SetupAutoCompleteForTextBox(txtNewItemSuppliers);
+        }
+
+        // 🔹 دالة مساعدة لتهيئة خاصية الـ AutoComplete
+        private void SetupAutoCompleteForTextBox(TextBox textBox)
+        {
+            textBox.AutoCompleteCustomSource = suppliersCollection;
+            textBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            textBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+        }
+
+        // 🔹 حدث Leave للتحقق من الاسم
+        private void txtNewItemSuppliers_Leave(object sender, EventArgs e)
+        {
+            if (tblSupplier == null) return;
+
+            string selectedName = txtNewItemSuppliers.Text.Trim();
+
+            // السماح بترك الحقل فارغًا
+            if (string.IsNullOrEmpty(selectedName))
+            {
+                lblSuppliersID.Text = "";
+                return;
+            }
+
+            // البحث عن المورد
+            DataRow[] matched = tblSupplier.Select($"AccName = '{selectedName.Replace("'", "''")}'");
+
+            if (matched.Length > 0)
+            {
+                lblSuppliersID.Text = matched[0]["AccID"].ToString();
+            }
+            else
+            {
+                MessageBox.Show("الاسم الذي أدخلته غير موجود في قائمة الموردين.", "تنبيه",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNewItemSuppliers.Focus();
+                txtNewItemSuppliers.SelectAll();
+                lblSuppliersID.Text = "";
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+        // 🔹 خليه متغير عام
+
+        private void SetupAutoCompleteSuppliers_()
         {
             if (suppliersCollection == null)
             {
@@ -230,7 +309,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
   
         //هذا حدث اليف من txtNewItemSuppliers
-        private void txtNewItemSuppliers_Leave(object sender, EventArgs e)
+        private void txtNewItemSuppliers_Leave_(object sender, EventArgs e)
         {
             if (tblSupplier == null) return;
 
