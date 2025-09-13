@@ -1052,6 +1052,7 @@
             DGV_AddItem.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DGV_AddItem.ContextMenuStrip = contextMenuStrip1;
             DGV_AddItem.Dock = DockStyle.Fill;
+            DGV_AddItem.Enabled = false;
             DGV_AddItem.Location = new Point(24, 45);
             DGV_AddItem.Margin = new Padding(4);
             DGV_AddItem.Name = "DGV_AddItem";

@@ -2423,7 +2423,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
                 if (result > 0)
                 {
-                    MessageBox.Show("تم إضافة الصنف بنجاح", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     ResetFormForNewEntry();
                     if (result > 0)
                     {
@@ -2526,6 +2525,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         private DataTable tempAddedItems = new DataTable();
         private void InitializeTempDGV()
         {
+            // إضافة الأعمدة
             tempAddedItems.Columns.Add("ProdName", typeof(string));
             tempAddedItems.Columns.Add("U_Price", typeof(decimal));
 
@@ -2535,12 +2535,39 @@ namespace MizanOriginalSoft.Views.Forms.Products
             DGV_AddItem.Columns[0].HeaderText = "اسم الصنف";
             DGV_AddItem.Columns[1].HeaderText = "سعر الوحدة";
 
-            DGV_AddItem.AllowUserToAddRows = false; // منع الصف الفارغ
+            // منع إضافة صفوف جديدة
+            DGV_AddItem.AllowUserToAddRows = false;
 
             // ضبط الأعمدة لتملأ الجريد بالكامل
-            DGV_AddItem.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill; // ✅ تفعيل Fill
-            DGV_AddItem.Columns[0].FillWeight = 80;  // 20% للعمود الأول
-            DGV_AddItem.Columns[1].FillWeight = 20;  // 80% للعمود الثاني
+            DGV_AddItem.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            DGV_AddItem.Columns[0].FillWeight = 80;
+            DGV_AddItem.Columns[1].FillWeight = 20;
+
+            // ✅ جعل الجريد للقراءة فقط
+            DGV_AddItem.ReadOnly = true;
+
+            // ✅ منع تحديد الخلايا نهائيًا
+            DGV_AddItem.SelectionMode = DataGridViewSelectionMode.FullRowSelect; // اختيار الصف كامل (لتسهيل اللون)
+            DGV_AddItem.MultiSelect = false;
+            DGV_AddItem.CurrentCell = null; // إزالة التحديد الحالي
+
+            // ✅ تعطيل التفاعل مع الجريد (تعطيل الكيبورد والفأرة)
+            DGV_AddItem.Enabled = false;
+
+            // ✅ تلوين الصفوف بلون خفيف (مثلاً رمادي فاتح)
+            DGV_AddItem.RowsDefaultCellStyle.BackColor = Color.LightGray;
+            DGV_AddItem.RowsDefaultCellStyle.ForeColor = Color.Black;
+
+            // اختيار لون مختلف للصفوف البديلة لإضفاء مظهر أجمل (اختياري)
+            DGV_AddItem.AlternatingRowsDefaultCellStyle.BackColor = Color.Gainsboro;
+
+            DGV_AddItem.ReadOnly = true;
+            DGV_AddItem.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            DGV_AddItem.ClearSelection();
+            DGV_AddItem.Enabled = true;
+            // ✅ مسح التحديد بعد الإضافة
+            DGV_AddItem.ClearSelection();
+
         }
 
 
