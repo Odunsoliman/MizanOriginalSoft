@@ -1531,6 +1531,7 @@
             txtB_Price.TabIndex = 26;
             txtB_Price.Text = "0";
             txtB_Price.TextAlign = HorizontalAlignment.Center;
+            txtB_Price.TextChanged += txtB_Price_TextChanged;
             txtB_Price.KeyDown += txtB_Price_KeyDown;
             // 
             // tableLayoutPanel23

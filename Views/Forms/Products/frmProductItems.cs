@@ -72,7 +72,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
         }
 
-
+        #region ***********  خاص باضافة الاصناف  ********************
         // 🟦 متغيرات إعدادات
         private decimal MaxRateDiscount = 0m;  // خاص بنسبة الاوكازيون 
         private decimal SalesPercentage = 0m;  // خاص بنسب سعر البيع
@@ -87,7 +87,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 SalesPercentage = AppSettings.GetDecimal("SalesPercentage", 0.10m); // 10% افتراضياً
 
                 // 🟦 عند التحميل توضع الاعدادات فى اماكنها
-                txtMaxRateDiscount .Text = MaxRateDiscount.ToString ();
+                txtMaxRateDiscount.Text = MaxRateDiscount.ToString();
                 txtSalesPercentage.Text = SalesPercentage.ToString();
 
             }
@@ -96,6 +96,42 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 CustomMessageBox.ShowWarning($"خطأ أثناء تحميل إعدادات الفاتورة:\n{ex.Message}", "خطأ");
             }
         }
+
+        private void txtB_Price_TextChanged(object sender, EventArgs e)
+        {
+            // ✅ التحقق من صحة المدخلات
+            if (!decimal.TryParse(txtB_Price.Text, out decimal bPrice))
+                bPrice = 0;
+
+            if (!decimal.TryParse(txtSalesPercentage.Text, out decimal salesPercentage))
+                salesPercentage = 0;
+
+            if (!decimal.TryParse(txtMaxRateDiscount.Text, out decimal maxRateDiscount))
+                maxRateDiscount = 0;
+
+            // 🔹 حساب سعر البيع
+            // لو salesPercentage = 0.35 => يعني 35%
+            decimal uPrice = bPrice + (salesPercentage * bPrice);
+            txtU_Price.Text = uPrice.ToString("0.00");
+
+            // 🔹 نسبة الزيادة في الليبل
+            lblU_PricePercentage.Text = $"{Math.Round(salesPercentage * 100, 0)}%";
+
+            // 🔹 حساب السعر بعد الخصم
+            decimal dPrice = uPrice - (maxRateDiscount * uPrice);
+            txtD_Price.Text = dPrice.ToString("0.00");
+
+            // 🔹 نسبة الخصم في الليبل
+            lblD_PricePercentage.Text = $"{Math.Round(maxRateDiscount * 100, 0)}%";
+        }
+
+
+        #endregion 
+
+
+
+
+
 
 
         // 🔍 دالة فحص AutoSize
@@ -2535,5 +2571,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
         #endregion
+
+
     }
 }
