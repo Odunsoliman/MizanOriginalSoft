@@ -2440,6 +2440,8 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
 
                     LoadProducts();
+                    // ✅ مسح التحديد بعد الإضافة
+                    DGV_AddItem.ClearSelection();
                 }
                 else
                 {
@@ -2556,7 +2558,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             // تلوين الصفوف
             DGV_AddItem.RowsDefaultCellStyle.BackColor = Color.LightGray;
             DGV_AddItem.RowsDefaultCellStyle.ForeColor = Color.Black;
-            DGV_AddItem.AlternatingRowsDefaultCellStyle.BackColor = Color.Gainsboro;
+            DGV_AddItem.AlternatingRowsDefaultCellStyle.BackColor = Color.LightCyan;
 
             // تعطيل التفاعل مع الجريد (اختياري)
             DGV_AddItem.Enabled = false;
