@@ -1307,6 +1307,7 @@
             btnSalesPercentage.Name = "btnSalesPercentage";
             btnSalesPercentage.Size = new Size(27, 28);
             btnSalesPercentage.TabIndex = 28;
+            btnSalesPercentage.TabStop = false;
             btnSalesPercentage.Text = "%";
             btnSalesPercentage.UseVisualStyleBackColor = true;
             // 
@@ -1322,6 +1323,7 @@
             txtU_Price.TabIndex = 26;
             txtU_Price.Text = "0";
             txtU_Price.TextAlign = HorizontalAlignment.Center;
+            txtU_Price.TextChanged += txtU_Price_TextChanged;
             txtU_Price.KeyDown += txtU_Price_KeyDown;
             // 
             // txtSalesPercentage
@@ -1334,6 +1336,7 @@
             txtSalesPercentage.Name = "txtSalesPercentage";
             txtSalesPercentage.Size = new Size(59, 29);
             txtSalesPercentage.TabIndex = 29;
+            txtSalesPercentage.TabStop = false;
             txtSalesPercentage.Text = "0";
             txtSalesPercentage.TextAlign = HorizontalAlignment.Center;
             // 
@@ -1562,6 +1565,7 @@
             btnMaxRateDiscount.Name = "btnMaxRateDiscount";
             btnMaxRateDiscount.Size = new Size(27, 28);
             btnMaxRateDiscount.TabIndex = 30;
+            btnMaxRateDiscount.TabStop = false;
             btnMaxRateDiscount.Text = "%";
             btnMaxRateDiscount.UseVisualStyleBackColor = true;
             // 
@@ -1575,6 +1579,7 @@
             txtMaxRateDiscount.Name = "txtMaxRateDiscount";
             txtMaxRateDiscount.Size = new Size(59, 29);
             txtMaxRateDiscount.TabIndex = 29;
+            txtMaxRateDiscount.TabStop = false;
             txtMaxRateDiscount.Text = "0";
             txtMaxRateDiscount.TextAlign = HorizontalAlignment.Center;
             // 
@@ -1590,6 +1595,7 @@
             txtD_Price.TabIndex = 26;
             txtD_Price.Text = "0";
             txtD_Price.TextAlign = HorizontalAlignment.Center;
+            txtD_Price.TextChanged += txtD_Price_TextChanged;
             txtD_Price.KeyDown += txtU_Price_KeyDown;
             // 
             // lblD_PricePercentage

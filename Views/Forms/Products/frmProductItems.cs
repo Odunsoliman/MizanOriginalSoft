@@ -124,7 +124,43 @@ namespace MizanOriginalSoft.Views.Forms.Products
             // 🔹 نسبة الخصم في الليبل
             lblD_PricePercentage.Text = $"{Math.Round(maxRateDiscount * 100, 0)}%";
         }
+        private void txtU_Price_TextChanged(object sender, EventArgs e)
+        {
+            if (!decimal.TryParse(txtB_Price.Text, out decimal bPrice))
+                bPrice = 0;
+            if (!decimal.TryParse(txtU_Price.Text, out decimal uPrice))
+                uPrice = 0;
 
+            if (bPrice > 0)
+            {
+                // نسبة الزيادة = (سعر البيع - سعر الشراء) / سعر الشراء
+                decimal salesPercentage = (uPrice - bPrice) / bPrice;
+                lblU_PricePercentage.Text = $"{Math.Round(salesPercentage * 100, 0)}%";
+            }
+            else
+            {
+                lblU_PricePercentage.Text = "0%";
+            }
+        }
+
+        private void txtD_Price_TextChanged(object sender, EventArgs e)
+        {
+            if (!decimal.TryParse(txtU_Price.Text, out decimal uPrice))
+                uPrice = 0;
+            if (!decimal.TryParse(txtD_Price.Text, out decimal dPrice))
+                dPrice = 0;
+
+            if (uPrice > 0)
+            {
+                // نسبة الخصم = (سعر البيع - سعر بعد الخصم) / سعر البيع
+                decimal discountPercentage = (uPrice - dPrice) / uPrice;
+                lblD_PricePercentage.Text = $"{Math.Round(discountPercentage * 100, 0)}%";
+            }
+            else
+            {
+                lblD_PricePercentage.Text = "0%";
+            }
+        }
 
         #endregion 
 
@@ -2573,5 +2609,6 @@ namespace MizanOriginalSoft.Views.Forms.Products
         #endregion
 
 
+ 
     }
 }
