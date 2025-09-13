@@ -175,7 +175,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         {
             if (e.Control && e.KeyCode == Keys.F)
             {
- 
+
             }
         }
 
@@ -604,7 +604,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 }
             }
         }
-    
+
         // بدء عملية السحب
         private void treeViewCategories_ItemDrag(object? sender, ItemDragEventArgs e)
         {
@@ -2047,16 +2047,16 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
         private void btnAdvanceSearch_Click(object sender, EventArgs e)
         {
-            if (tlpAdvanceSearch.Visible) 
+            if (tlpAdvanceSearch.Visible)
             {
-                tlpAdvanceSearch .Visible = false;
-                txtFromCode.Text =string.Empty ;
-                txtToCode.Text =string.Empty ;
+                tlpAdvanceSearch.Visible = false;
+                txtFromCode.Text = string.Empty;
+                txtToCode.Text = string.Empty;
                 LoadProducts();
             }
             else
             {
-                tlpAdvanceSearch .Visible=true;
+                tlpAdvanceSearch.Visible = true;
             }
         }
 
@@ -2275,11 +2275,11 @@ namespace MizanOriginalSoft.Views.Forms.Products
             txtB_Price.Text = "0";
             txtU_Price.Text = "0";
             txtProdCodeOnSuplier.Clear();
-            txtMinLenth.Text = "0";
-            txtMinStock.Text = "0";
-            txtCategory.Text = "";
-            txtNewItemSuppliers.Text = "";
-            cbxUnit_ID.SelectedIndex = -1;
+            // txtMinLenth.Text = "0";
+            // txtMinStock.Text = "0";
+            //   txtCategory.Text = "";
+            //    txtNewItemSuppliers.Text = "";
+            //   cbxUnit_ID.SelectedIndex = -1;
             lblPathProductPic.Text = "..";
             txtProdName.Focus();
             PicProduct.Image = null;
@@ -2345,8 +2345,9 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
                 if (!string.IsNullOrEmpty(result.Code))
                 {
-                    lblSuppliersID .Text = result.Code;
-                    txtSuppliers.Text = result.Name;
+                    lblSuppliersID.Text = result.Code;
+                    txtNewItemSuppliers.Text = result.Name;
+
                 }
             }
 
@@ -2505,7 +2506,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 viewer.ShowDialog();
             }
         }
-        #endregion
 
+        #endregion
     }
 }
