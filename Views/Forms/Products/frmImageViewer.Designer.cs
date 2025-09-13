@@ -117,6 +117,7 @@
             // 
             // btnNext
             // 
+            btnNext.Dock = DockStyle.Fill;
             btnNext.Location = new Point(489, 3);
             btnNext.Name = "btnNext";
             btnNext.Size = new Size(236, 37);
@@ -128,9 +129,10 @@
             // chkIsDefault
             // 
             chkIsDefault.AutoSize = true;
-            chkIsDefault.Location = new Point(342, 3);
+            chkIsDefault.Dock = DockStyle.Fill;
+            chkIsDefault.Location = new Point(247, 3);
             chkIsDefault.Name = "chkIsDefault";
-            chkIsDefault.Size = new Size(141, 28);
+            chkIsDefault.Size = new Size(236, 37);
             chkIsDefault.TabIndex = 10;
             chkIsDefault.Text = "تعيين كافتراضية";
             chkIsDefault.UseVisualStyleBackColor = true;
@@ -138,9 +140,10 @@
             // 
             // btnDeletePhoto
             // 
-            btnDeletePhoto.Location = new Point(5, 3);
+            btnDeletePhoto.Dock = DockStyle.Fill;
+            btnDeletePhoto.Location = new Point(3, 3);
             btnDeletePhoto.Name = "btnDeletePhoto";
-            btnDeletePhoto.Size = new Size(236, 37);
+            btnDeletePhoto.Size = new Size(238, 37);
             btnDeletePhoto.TabIndex = 11;
             btnDeletePhoto.Text = "حذف صورة";
             btnDeletePhoto.UseVisualStyleBackColor = true;
@@ -158,7 +161,6 @@
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel3.Controls.Add(lblCategory, 3, 0);
             tableLayoutPanel3.Controls.Add(lblSuplierID, 0, 0);
-            tableLayoutPanel3.Controls.Add(lblStock, 1, 0);
             tableLayoutPanel3.Controls.Add(lblNote, 2, 0);
             tableLayoutPanel3.Controls.Add(lblRegistYear, 4, 0);
             tableLayoutPanel3.Dock = DockStyle.Fill;
@@ -171,7 +173,6 @@
             // 
             // lblCategory
             // 
-            lblCategory.Dock = DockStyle.Fill;
             lblCategory.Location = new Point(178, 0);
             lblCategory.Name = "lblCategory";
             lblCategory.Size = new Size(191, 51);
@@ -181,7 +182,6 @@
             // 
             // lblSuplierID
             // 
-            lblSuplierID.Dock = DockStyle.Fill;
             lblSuplierID.Location = new Point(760, 0);
             lblSuplierID.Name = "lblSuplierID";
             lblSuplierID.Size = new Size(31, 51);
@@ -192,16 +192,15 @@
             // lblStock
             // 
             lblStock.Dock = DockStyle.Fill;
-            lblStock.Location = new Point(573, 0);
+            lblStock.Location = new Point(203, 0);
             lblStock.Name = "lblStock";
-            lblStock.Size = new Size(181, 51);
+            lblStock.Size = new Size(192, 50);
             lblStock.TabIndex = 2;
             lblStock.Text = "ProductStock";
             lblStock.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblNote
             // 
-            lblNote.Dock = DockStyle.Fill;
             lblNote.Location = new Point(375, 0);
             lblNote.Name = "lblNote";
             lblNote.Size = new Size(192, 51);
@@ -211,7 +210,6 @@
             // 
             // lblRegistYear
             // 
-            lblRegistYear.Dock = DockStyle.Fill;
             lblRegistYear.Location = new Point(46, 0);
             lblRegistYear.Name = "lblRegistYear";
             lblRegistYear.Size = new Size(126, 51);
@@ -221,13 +219,15 @@
             // 
             // tableLayoutPanel4
             // 
-            tableLayoutPanel4.ColumnCount = 3;
-            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 55.9193954F));
-            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21.15869F));
-            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 22.795969F));
-            tableLayoutPanel4.Controls.Add(lblUPrice, 1, 0);
-            tableLayoutPanel4.Controls.Add(lblProdName, 0, 0);
-            tableLayoutPanel4.Controls.Add(lblProductCode, 2, 0);
+            tableLayoutPanel4.ColumnCount = 4;
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15F));
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tableLayoutPanel4.Controls.Add(lblProductCode, 0, 0);
+            tableLayoutPanel4.Controls.Add(lblUPrice, 3, 0);
+            tableLayoutPanel4.Controls.Add(lblStock, 2, 0);
+            tableLayoutPanel4.Controls.Add(lblProdName, 1, 0);
             tableLayoutPanel4.Dock = DockStyle.Fill;
             tableLayoutPanel4.Location = new Point(3, 3);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -239,9 +239,9 @@
             // lblUPrice
             // 
             lblUPrice.Dock = DockStyle.Fill;
-            lblUPrice.Location = new Point(185, 0);
+            lblUPrice.Location = new Point(3, 0);
             lblUPrice.Name = "lblUPrice";
-            lblUPrice.Size = new Size(162, 50);
+            lblUPrice.Size = new Size(194, 50);
             lblUPrice.TabIndex = 11;
             lblUPrice.Text = "label1";
             lblUPrice.TextAlign = ContentAlignment.MiddleCenter;
@@ -249,9 +249,9 @@
             // lblProdName
             // 
             lblProdName.Dock = DockStyle.Fill;
-            lblProdName.Location = new Point(353, 0);
+            lblProdName.Location = new Point(401, 0);
             lblProdName.Name = "lblProdName";
-            lblProdName.Size = new Size(438, 50);
+            lblProdName.Size = new Size(271, 50);
             lblProdName.TabIndex = 10;
             lblProdName.Text = "label1";
             lblProdName.TextAlign = ContentAlignment.MiddleCenter;
@@ -259,9 +259,9 @@
             // lblProductCode
             // 
             lblProductCode.Dock = DockStyle.Fill;
-            lblProductCode.Location = new Point(3, 0);
+            lblProductCode.Location = new Point(678, 0);
             lblProductCode.Name = "lblProductCode";
-            lblProductCode.Size = new Size(176, 50);
+            lblProductCode.Size = new Size(113, 50);
             lblProductCode.TabIndex = 6;
             lblProductCode.Text = "ProductCode";
             lblProductCode.TextAlign = ContentAlignment.MiddleCenter;
