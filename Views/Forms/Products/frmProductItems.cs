@@ -38,7 +38,13 @@ namespace MizanOriginalSoft.Views.Forms.Products
         private List<TreeNode> matchedNodes = new List<TreeNode>();
         private int currentMatchIndex = -1;
 
+        // 🔹 اجعل الجدول والمجموعة متغيرات على مستوى الفورم
+        private DataTable? tblSupplier;
+        private AutoCompleteStringCollection? suppliersCollection;
+
+
         #endregion
+
         public frmProductItems()
         {
             InitializeComponent();
@@ -131,10 +137,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
         #region ========= SetupAutoComplete and Fill =================
 
-        // 🔹 اجعل الجدول والمجموعة متغيرات على مستوى الفورم
-        private DataTable tblSupplier;
-        private AutoCompleteStringCollection suppliersCollection;
-
+        
         private void SetupAutoCompleteSuppliers()
         {
             // تحميل الموردين مرة واحدة فقط
@@ -147,7 +150,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 {
                     foreach (DataRow row in tblSupplier.Rows)
                     {
-                        string accName = row["AccName"]?.ToString();
+                        string? accName = row["AccName"]?.ToString();
                         if (!string.IsNullOrEmpty(accName))
                             suppliersCollection.Add(accName);
                     }
@@ -170,78 +173,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             textBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
         }
 
-        // 🔹 حدث Leave للتحقق من الاسم
-        private void txtNewItemSuppliers_Leave(object sender, EventArgs e)
-        {
-            if (tblSupplier == null) return;
 
-            string selectedName = txtNewItemSuppliers.Text.Trim();
-
-            // السماح بترك الحقل فارغًا
-            if (string.IsNullOrEmpty(selectedName))
-            {
-                lblSuppliersID.Text = "";
-                return;
-            }
-
-            // البحث عن المورد
-            DataRow[] matched = tblSupplier.Select($"AccName = '{selectedName.Replace("'", "''")}'");
-
-            if (matched.Length > 0)
-            {
-                lblSuppliersID.Text = matched[0]["AccID"].ToString();
-            }
-            else
-            {
-                MessageBox.Show("الاسم الذي أدخلته غير موجود في قائمة الموردين.", "تنبيه",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtNewItemSuppliers.Focus();
-                txtNewItemSuppliers.SelectAll();
-                lblSuppliersID.Text = "";
-            }
-        }
-
-
-
-
-
-
-
-
-
-
-
-        // 🔹 خليه متغير عام
-
-        private void SetupAutoCompleteSuppliers_()
-        {
-            if (suppliersCollection == null)
-            {
-                tblSupplier = DBServiecs.Accounts_GetSupplier(); // خزّنه هنا
-                suppliersCollection = new AutoCompleteStringCollection();
-
-                if (tblSupplier != null && tblSupplier.Rows.Count > 0)
-                {
-                    foreach (DataRow row in tblSupplier.Rows)
-                    {
-                        string? accName = row["AccName"]?.ToString();
-                        if (!string.IsNullOrEmpty(accName))
-                            suppliersCollection.Add(accName);
-                    }
-                }
-            }
-
-            // 🔹 اربط المصدر مع التكستات
-            ConfigureAutoCompleteTextBox(txtSuppliers);
-            ConfigureAutoCompleteTextBox(txtNewItemSuppliers);
-        }
-
-        private void ConfigureAutoCompleteTextBox(TextBox textBox)
-        {
-            textBox.AutoCompleteCustomSource = suppliersCollection;
-            textBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            textBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
-        }
 
         //هاذا يستخدم فى اعادة البحث بالشتراك مع txtSeaarchProd
         private void txtSuppliers_TextChanged(object sender, EventArgs e)
@@ -278,71 +210,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
 
-        private void txtNewItemSuppliers_KeyDown(object sender, KeyEventArgs e)
-        {
-            // عند الضغط على Enter يتم الانتقال إلى حقل كود المنتج لدى المورد
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.SuppressKeyPress = true;
-                txtProdCodeOnSuplier.Focus();
-            }
-
-            if (e.Control && e.KeyCode == Keys.H)
-            {
-                ShowHelpForActiveControl();
-            }
-
-            // عند الضغط على Ctrl + F يتم فتح شاشة البحث عن الموردين
-            if (e.Control && e.KeyCode == Keys.F)
-            {
-                var provider = new GenericSearchProvider(SearchEntityType.Accounts, AccountKind.Suppliers);
-                var result = SearchHelper.ShowSearchDialog(provider);
-
-                if (!string.IsNullOrEmpty(result.Code))
-                {
-                    lblSuppliersID.Text = result.Code;
-                    txtNewItemSuppliers.Text = result.Name;
-
-                }
-            }
-
-        }
-  
-        //هذا حدث اليف من txtNewItemSuppliers
-        private void txtNewItemSuppliers_Leave_(object sender, EventArgs e)
-        {
-            if (tblSupplier == null) return;
-
-            string selectedName = txtNewItemSuppliers.Text.Trim();
-
-            // السماح بترك الحقل فارغًا
-            if (string.IsNullOrEmpty(selectedName))
-            {
-                lblSuppliersID.Text = "";
-                return;
-            }
-
-            // البحث عن اسم المورد في الجدول
-            DataRow[] matched = tblSupplier.Select($"AccName = '{selectedName.Replace("'", "''")}'");
-
-            if (matched.Length > 0)
-            {
-                // تم العثور على الاسم
-                lblSuppliersID.Text = matched[0]["AccID"].ToString();
-            }
-            else
-            {
-                // لم يتم العثور على الاسم → تنبيه المستخدم
-                MessageBox.Show("الاسم الذي أدخلته غير موجود في قائمة الموردين.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtNewItemSuppliers.Focus();
-                txtNewItemSuppliers.SelectAll();
-                lblSuppliersID.Text = "";
-            }
-        }
-
-
-        /*ما هى المشكلة الان كلاهما لا يظهر القوائم فلماذا مع ان كل وظائفهم الاخرى تسيير على ما يرام*/
-
+        
 
 
 
@@ -2311,6 +2179,67 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 CustomMessageBox.ShowWarning($"خطأ أثناء تحميل إعدادات الفاتورة:\n{ex.Message}", "خطأ");
             }
         }
+
+        // 🔹 حدث Leave للتحقق من الاسم
+        private void txtNewItemSuppliers_Leave(object sender, EventArgs e)
+        {
+            if (tblSupplier == null) return;
+
+            string selectedName = txtNewItemSuppliers.Text.Trim();
+
+            // السماح بترك الحقل فارغًا
+            if (string.IsNullOrEmpty(selectedName))
+            {
+                lblSuppliersID.Text = "";
+                return;
+            }
+
+            // البحث عن المورد
+            DataRow[] matched = tblSupplier.Select($"AccName = '{selectedName.Replace("'", "''")}'");
+
+            if (matched.Length > 0)
+            {
+                lblSuppliersID.Text = matched[0]["AccID"].ToString();
+            }
+            else
+            {
+                MessageBox.Show("الاسم الذي أدخلته غير موجود في قائمة الموردين.", "تنبيه",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNewItemSuppliers.Focus();
+                txtNewItemSuppliers.SelectAll();
+                lblSuppliersID.Text = "";
+            }
+        }
+
+
+        private void txtNewItemSuppliers_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)// للانتقال
+            {
+                e.SuppressKeyPress = true;
+                txtProdCodeOnSuplier.Focus();
+            }
+
+            if (e.Control && e.KeyCode == Keys.H) // لفتح المساعدة
+            {
+                ShowHelpForActiveControl();
+            }
+
+            if (e.Control && e.KeyCode == Keys.F)// Ctrl + F لفتح شاشة البحث
+            {
+                var provider = new GenericSearchProvider(SearchEntityType.Accounts, AccountKind.Suppliers);
+                var result = SearchHelper.ShowSearchDialog(provider);
+
+                if (!string.IsNullOrEmpty(result.Code))
+                {
+                    lblSuppliersID.Text = result.Code;
+                    txtNewItemSuppliers.Text = result.Name;
+
+                }
+            }
+
+        }
+
 
         private void txtB_Price_TextChanged(object sender, EventArgs e)
         {
