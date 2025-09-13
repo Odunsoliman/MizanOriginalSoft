@@ -413,7 +413,7 @@ namespace MizanOriginalSoft.MainClasses
 
 
         //دالة اضافة  صنف جديد
-        public static int Product_InsertItem(string ProdName, int UnitID, float B_Price, float U_Price,
+        public static int Product_InsertItem(string ProdName, int UnitID, float B_Price, float U_Price,float D_Price,
                                            string ProdCodeOnSuplier, float MinLenth, float MinStock,
                                            int Category_id, int SuplierID, string NoteProduct, string PicProduct)
         {
@@ -423,6 +423,7 @@ namespace MizanOriginalSoft.MainClasses
                 cmd.Parameters.Add("@UnitID", SqlDbType.Int).Value = UnitID;
                 cmd.Parameters.Add("@B_Price", SqlDbType.Real).Value = B_Price;
                 cmd.Parameters.Add("@U_Price", SqlDbType.Real).Value = U_Price;
+                cmd.Parameters.Add("@D_Price", SqlDbType.Real).Value = D_Price;
                 cmd.Parameters.Add("@ProdCodeOnSuplier", SqlDbType.NVarChar, 50).Value = ProdCodeOnSuplier;
                 cmd.Parameters.Add("@MinLenth", SqlDbType.Real).Value = MinLenth;
                 cmd.Parameters.Add("@MinStock", SqlDbType.Real).Value = MinStock;
