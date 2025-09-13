@@ -2543,31 +2543,23 @@ namespace MizanOriginalSoft.Views.Forms.Products
             DGV_AddItem.Columns[0].FillWeight = 80;
             DGV_AddItem.Columns[1].FillWeight = 20;
 
-            // ✅ جعل الجريد للقراءة فقط
+            // جعل الجريد للقراءة فقط
             DGV_AddItem.ReadOnly = true;
 
-            // ✅ منع تحديد الخلايا نهائيًا
-            DGV_AddItem.SelectionMode = DataGridViewSelectionMode.FullRowSelect; // اختيار الصف كامل (لتسهيل اللون)
+            // منع تحديد الخلايا
+            DGV_AddItem.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DGV_AddItem.MultiSelect = false;
-            DGV_AddItem.CurrentCell = null; // إزالة التحديد الحالي
 
-            // ✅ تعطيل التفاعل مع الجريد (تعطيل الكيبورد والفأرة)
-            DGV_AddItem.Enabled = false;
-
-            // ✅ تلوين الصفوف بلون خفيف (مثلاً رمادي فاتح)
-            DGV_AddItem.RowsDefaultCellStyle.BackColor = Color.LightGray;
-            DGV_AddItem.RowsDefaultCellStyle.ForeColor = Color.Black;
-
-            // اختيار لون مختلف للصفوف البديلة لإضفاء مظهر أجمل (اختياري)
-            DGV_AddItem.AlternatingRowsDefaultCellStyle.BackColor = Color.Gainsboro;
-
-            DGV_AddItem.ReadOnly = true;
-            DGV_AddItem.SelectionMode = DataGridViewSelectionMode.CellSelect;
-            DGV_AddItem.ClearSelection();
-            DGV_AddItem.Enabled = true;
             // ✅ مسح التحديد بعد الإضافة
             DGV_AddItem.ClearSelection();
 
+            // تلوين الصفوف
+            DGV_AddItem.RowsDefaultCellStyle.BackColor = Color.LightGray;
+            DGV_AddItem.RowsDefaultCellStyle.ForeColor = Color.Black;
+            DGV_AddItem.AlternatingRowsDefaultCellStyle.BackColor = Color.Gainsboro;
+
+            // تعطيل التفاعل مع الجريد (اختياري)
+            DGV_AddItem.Enabled = false;
         }
 
 
