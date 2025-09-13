@@ -31,6 +31,10 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             tableLayoutPanel2 = new TableLayoutPanel();
             pictureBoxLarge = new PictureBox();
+            tableLayoutPanel5 = new TableLayoutPanel();
+            btnNext = new Button();
+            chkIsDefault = new CheckBox();
+            btnDeletePhoto = new Button();
             tableLayoutPanel3 = new TableLayoutPanel();
             lblCategory = new Label();
             lblSuplierID = new Label();
@@ -44,6 +48,7 @@
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxLarge).BeginInit();
+            tableLayoutPanel5.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
             SuspendLayout();
@@ -69,14 +74,16 @@
             // tableLayoutPanel2
             // 
             tableLayoutPanel2.ColumnCount = 1;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel2.Controls.Add(pictureBoxLarge, 0, 0);
+            tableLayoutPanel2.Controls.Add(tableLayoutPanel5, 0, 1);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(3, 59);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.Padding = new Padding(30);
-            tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Padding = new Padding(30, 30, 30, 5);
+            tableLayoutPanel2.RowCount = 2;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 88F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 12F));
             tableLayoutPanel2.Size = new Size(794, 442);
             tableLayoutPanel2.TabIndex = 0;
             // 
@@ -86,19 +93,69 @@
             pictureBoxLarge.Dock = DockStyle.Fill;
             pictureBoxLarge.Location = new Point(33, 33);
             pictureBoxLarge.Name = "pictureBoxLarge";
-            pictureBoxLarge.Size = new Size(728, 376);
+            pictureBoxLarge.Size = new Size(728, 352);
             pictureBoxLarge.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBoxLarge.TabIndex = 0;
             pictureBoxLarge.TabStop = false;
             // 
+            // tableLayoutPanel5
+            // 
+            tableLayoutPanel5.ColumnCount = 3;
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel5.Controls.Add(btnNext, 0, 0);
+            tableLayoutPanel5.Controls.Add(chkIsDefault, 1, 0);
+            tableLayoutPanel5.Controls.Add(btnDeletePhoto, 2, 0);
+            tableLayoutPanel5.Dock = DockStyle.Fill;
+            tableLayoutPanel5.Location = new Point(33, 391);
+            tableLayoutPanel5.Name = "tableLayoutPanel5";
+            tableLayoutPanel5.RowCount = 1;
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel5.Size = new Size(728, 43);
+            tableLayoutPanel5.TabIndex = 1;
+            // 
+            // btnNext
+            // 
+            btnNext.Location = new Point(489, 3);
+            btnNext.Name = "btnNext";
+            btnNext.Size = new Size(236, 37);
+            btnNext.TabIndex = 11;
+            btnNext.Text = "<<< عرض الصور >>>";
+            btnNext.UseVisualStyleBackColor = true;
+            btnNext.Click += btnNext_Click;
+            // 
+            // chkIsDefault
+            // 
+            chkIsDefault.AutoSize = true;
+            chkIsDefault.Location = new Point(342, 3);
+            chkIsDefault.Name = "chkIsDefault";
+            chkIsDefault.Size = new Size(141, 28);
+            chkIsDefault.TabIndex = 10;
+            chkIsDefault.Text = "تعيين كافتراضية";
+            chkIsDefault.UseVisualStyleBackColor = true;
+            chkIsDefault.CheckedChanged += chkIsDefault_CheckedChanged;
+            // 
+            // btnDeletePhoto
+            // 
+            btnDeletePhoto.Location = new Point(5, 3);
+            btnDeletePhoto.Name = "btnDeletePhoto";
+            btnDeletePhoto.Size = new Size(236, 37);
+            btnDeletePhoto.TabIndex = 11;
+            btnDeletePhoto.Text = "حذف صورة";
+            btnDeletePhoto.UseVisualStyleBackColor = true;
+            btnDeletePhoto.Click += btnDeletePhoto_Click;
+            // 
             // tableLayoutPanel3
             // 
-            tableLayoutPanel3.ColumnCount = 5;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26.4483624F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26.3224182F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.6322422F));
+            tableLayoutPanel3.ColumnCount = 7;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 4.97993F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 24.8996487F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26.3421974F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26.2167568F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.5614662F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel3.Controls.Add(lblCategory, 3, 0);
             tableLayoutPanel3.Controls.Add(lblSuplierID, 0, 0);
             tableLayoutPanel3.Controls.Add(lblStock, 1, 0);
@@ -115,9 +172,9 @@
             // lblCategory
             // 
             lblCategory.Dock = DockStyle.Fill;
-            lblCategory.Location = new Point(144, 0);
+            lblCategory.Location = new Point(178, 0);
             lblCategory.Name = "lblCategory";
-            lblCategory.Size = new Size(202, 51);
+            lblCategory.Size = new Size(191, 51);
             lblCategory.TabIndex = 9;
             lblCategory.Text = "Category";
             lblCategory.TextAlign = ContentAlignment.MiddleCenter;
@@ -125,9 +182,9 @@
             // lblSuplierID
             // 
             lblSuplierID.Dock = DockStyle.Fill;
-            lblSuplierID.Location = new Point(758, 0);
+            lblSuplierID.Location = new Point(760, 0);
             lblSuplierID.Name = "lblSuplierID";
-            lblSuplierID.Size = new Size(33, 51);
+            lblSuplierID.Size = new Size(31, 51);
             lblSuplierID.TabIndex = 3;
             lblSuplierID.Text = "SuplierID";
             lblSuplierID.TextAlign = ContentAlignment.MiddleCenter;
@@ -135,9 +192,9 @@
             // lblStock
             // 
             lblStock.Dock = DockStyle.Fill;
-            lblStock.Location = new Point(561, 0);
+            lblStock.Location = new Point(573, 0);
             lblStock.Name = "lblStock";
-            lblStock.Size = new Size(191, 51);
+            lblStock.Size = new Size(181, 51);
             lblStock.TabIndex = 2;
             lblStock.Text = "ProductStock";
             lblStock.TextAlign = ContentAlignment.MiddleCenter;
@@ -145,9 +202,9 @@
             // lblNote
             // 
             lblNote.Dock = DockStyle.Fill;
-            lblNote.Location = new Point(352, 0);
+            lblNote.Location = new Point(375, 0);
             lblNote.Name = "lblNote";
-            lblNote.Size = new Size(203, 51);
+            lblNote.Size = new Size(192, 51);
             lblNote.TabIndex = 8;
             lblNote.Text = "Note";
             lblNote.TextAlign = ContentAlignment.MiddleCenter;
@@ -155,9 +212,9 @@
             // lblRegistYear
             // 
             lblRegistYear.Dock = DockStyle.Fill;
-            lblRegistYear.Location = new Point(3, 0);
+            lblRegistYear.Location = new Point(46, 0);
             lblRegistYear.Name = "lblRegistYear";
-            lblRegistYear.Size = new Size(135, 51);
+            lblRegistYear.Size = new Size(126, 51);
             lblRegistYear.TabIndex = 7;
             lblRegistYear.Text = "RegistYear";
             lblRegistYear.TextAlign = ContentAlignment.MiddleCenter;
@@ -225,6 +282,8 @@
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBoxLarge).EndInit();
+            tableLayoutPanel5.ResumeLayout(false);
+            tableLayoutPanel5.PerformLayout();
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel4.ResumeLayout(false);
             ResumeLayout(false);
@@ -245,5 +304,9 @@
         private Label lblUPrice;
         private Label lblProdName;
         private Label lblCategory;
+        private TableLayoutPanel tableLayoutPanel5;
+        private Button btnNext;
+        private CheckBox chkIsDefault;
+        private Button btnDeletePhoto;
     }
 }

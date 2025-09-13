@@ -74,13 +74,13 @@
             rdoZeroStok = new RadioButton();
             rdoAllStok = new RadioButton();
             tableLayoutPanel16 = new TableLayoutPanel();
+            btnLoadPicProduct = new Button();
             lblRegist_Year = new Label();
             lblID_Product = new Label();
             lblProductCode = new Label();
             PicBarcod = new PictureBox();
             btnDelete = new Button();
             btnModifyItem = new Button();
-            lblCount = new Label();
             btnBarcod = new Button();
             picProd = new PictureBox();
             tabPage2 = new TabPage();
@@ -91,7 +91,6 @@
             tableLayoutPanel20 = new TableLayoutPanel();
             btnSave = new Button();
             tableLayoutPanel10 = new TableLayoutPanel();
-            btnLoadPicProduct = new Button();
             tableLayoutPanel14 = new TableLayoutPanel();
             PicProduct = new PictureBox();
             tableLayoutPanel18 = new TableLayoutPanel();
@@ -169,7 +168,6 @@
             tableLayoutPanel12.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel20.SuspendLayout();
-            tableLayoutPanel10.SuspendLayout();
             tableLayoutPanel14.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)PicProduct).BeginInit();
             tableLayoutPanel18.SuspendLayout();
@@ -815,13 +813,13 @@
             // 
             tableLayoutPanel16.ColumnCount = 1;
             tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel16.Controls.Add(btnLoadPicProduct, 0, 1);
             tableLayoutPanel16.Controls.Add(lblRegist_Year, 0, 7);
             tableLayoutPanel16.Controls.Add(lblID_Product, 0, 9);
             tableLayoutPanel16.Controls.Add(lblProductCode, 0, 4);
             tableLayoutPanel16.Controls.Add(PicBarcod, 0, 6);
             tableLayoutPanel16.Controls.Add(btnDelete, 0, 3);
             tableLayoutPanel16.Controls.Add(btnModifyItem, 0, 2);
-            tableLayoutPanel16.Controls.Add(lblCount, 0, 1);
             tableLayoutPanel16.Controls.Add(btnBarcod, 0, 5);
             tableLayoutPanel16.Controls.Add(picProd, 0, 0);
             tableLayoutPanel16.Dock = DockStyle.Fill;
@@ -829,17 +827,29 @@
             tableLayoutPanel16.Name = "tableLayoutPanel16";
             tableLayoutPanel16.RowCount = 10;
             tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
-            tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
             tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
             tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
-            tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
+            tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 2.5F));
+            tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 2.5F));
             tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanel16.Size = new Size(87, 486);
             tableLayoutPanel16.TabIndex = 32;
+            // 
+            // btnLoadPicProduct
+            // 
+            btnLoadPicProduct.Dock = DockStyle.Fill;
+            btnLoadPicProduct.Font = new Font("Times New Roman", 10F, FontStyle.Bold);
+            btnLoadPicProduct.Location = new Point(3, 148);
+            btnLoadPicProduct.Name = "btnLoadPicProduct";
+            btnLoadPicProduct.Size = new Size(81, 42);
+            btnLoadPicProduct.TabIndex = 49;
+            btnLoadPicProduct.Text = "اضافة صور";
+            btnLoadPicProduct.UseVisualStyleBackColor = true;
+            btnLoadPicProduct.Click += btnLoadPicProduct_Click;
             // 
             // lblRegist_Year
             // 
@@ -847,9 +857,9 @@
             lblRegist_Year.Dock = DockStyle.Top;
             lblRegist_Year.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
             lblRegist_Year.ForeColor = Color.FromArgb(192, 0, 192);
-            lblRegist_Year.Location = new Point(3, 385);
+            lblRegist_Year.Location = new Point(3, 409);
             lblRegist_Year.Name = "lblRegist_Year";
-            lblRegist_Year.Size = new Size(81, 22);
+            lblRegist_Year.Size = new Size(81, 12);
             lblRegist_Year.TabIndex = 48;
             lblRegist_Year.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -871,7 +881,7 @@
             lblProductCode.Dock = DockStyle.Top;
             lblProductCode.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
             lblProductCode.ForeColor = Color.FromArgb(192, 0, 192);
-            lblProductCode.Location = new Point(3, 265);
+            lblProductCode.Location = new Point(3, 289);
             lblProductCode.Name = "lblProductCode";
             lblProductCode.Size = new Size(81, 22);
             lblProductCode.TabIndex = 44;
@@ -880,7 +890,7 @@
             // PicBarcod
             // 
             PicBarcod.Dock = DockStyle.Fill;
-            PicBarcod.Location = new Point(3, 340);
+            PicBarcod.Location = new Point(3, 364);
             PicBarcod.Name = "PicBarcod";
             PicBarcod.Size = new Size(81, 42);
             PicBarcod.TabIndex = 37;
@@ -892,7 +902,7 @@
             btnDelete.BackColor = Color.FromArgb(255, 192, 255);
             btnDelete.Dock = DockStyle.Fill;
             btnDelete.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnDelete.Location = new Point(4, 221);
+            btnDelete.Location = new Point(4, 245);
             btnDelete.Margin = new Padding(4);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(79, 40);
@@ -907,7 +917,7 @@
             btnModifyItem.BackColor = Color.FromArgb(255, 192, 255);
             btnModifyItem.Dock = DockStyle.Fill;
             btnModifyItem.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnModifyItem.Location = new Point(4, 173);
+            btnModifyItem.Location = new Point(4, 197);
             btnModifyItem.Margin = new Padding(4);
             btnModifyItem.Name = "btnModifyItem";
             btnModifyItem.Size = new Size(79, 40);
@@ -917,23 +927,11 @@
             btnModifyItem.UseVisualStyleBackColor = false;
             btnModifyItem.Click += btnModifyItem_Click;
             // 
-            // lblCount
-            // 
-            lblCount.AutoSize = true;
-            lblCount.Dock = DockStyle.Fill;
-            lblCount.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblCount.ForeColor = Color.Purple;
-            lblCount.Location = new Point(3, 145);
-            lblCount.Name = "lblCount";
-            lblCount.Size = new Size(81, 24);
-            lblCount.TabIndex = 39;
-            lblCount.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // btnBarcod
             // 
             btnBarcod.Dock = DockStyle.Fill;
             btnBarcod.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
-            btnBarcod.Location = new Point(3, 292);
+            btnBarcod.Location = new Point(3, 316);
             btnBarcod.Name = "btnBarcod";
             btnBarcod.Size = new Size(81, 42);
             btnBarcod.TabIndex = 43;
@@ -1066,7 +1064,6 @@
             tableLayoutPanel10.BackColor = Color.Transparent;
             tableLayoutPanel10.ColumnCount = 1;
             tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel10.Controls.Add(btnLoadPicProduct, 0, 0);
             tableLayoutPanel10.Dock = DockStyle.Fill;
             tableLayoutPanel10.Location = new Point(23, 357);
             tableLayoutPanel10.Name = "tableLayoutPanel10";
@@ -1075,18 +1072,6 @@
             tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel10.Size = new Size(416, 46);
             tableLayoutPanel10.TabIndex = 42;
-            // 
-            // btnLoadPicProduct
-            // 
-            btnLoadPicProduct.Dock = DockStyle.Fill;
-            btnLoadPicProduct.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
-            btnLoadPicProduct.Location = new Point(53, 3);
-            btnLoadPicProduct.Name = "btnLoadPicProduct";
-            btnLoadPicProduct.Size = new Size(310, 40);
-            btnLoadPicProduct.TabIndex = 4;
-            btnLoadPicProduct.Text = "صورة المنتج";
-            btnLoadPicProduct.UseVisualStyleBackColor = true;
-            btnLoadPicProduct.Click += btnLoadPicProduct_Click;
             // 
             // tableLayoutPanel14
             // 
@@ -1599,7 +1584,7 @@
             txtD_Price.Text = "0";
             txtD_Price.TextAlign = HorizontalAlignment.Center;
             txtD_Price.TextChanged += txtD_Price_TextChanged;
-            txtD_Price.KeyDown += txtU_Price_KeyDown;
+            txtD_Price.KeyDown += txtD_Price_KeyDown;
             // 
             // lblD_PricePercentage
             // 
@@ -1933,7 +1918,6 @@
             tableLayoutPanel12.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel20.ResumeLayout(false);
-            tableLayoutPanel10.ResumeLayout(false);
             tableLayoutPanel14.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)PicProduct).EndInit();
             tableLayoutPanel18.ResumeLayout(false);
@@ -1976,7 +1960,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.PictureBox PicBarcod;
-        private System.Windows.Forms.Label lblCount;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtSeaarchProd;
@@ -2032,7 +2015,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel14;
         private System.Windows.Forms.PictureBox PicProduct;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
-        private System.Windows.Forms.Button btnLoadPicProduct;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel16;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnModifyItem;
@@ -2081,5 +2063,6 @@
         private TextBox txtSalesPercentage;
         private Button btnMaxRateDiscount;
         private Label label5;
+        private Button btnLoadPicProduct;
     }
 }

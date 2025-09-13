@@ -137,7 +137,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
         #region ========= SetupAutoComplete and Fill =================
 
-        
+
         private void SetupAutoCompleteSuppliers()
         {
             // تحميل الموردين مرة واحدة فقط
@@ -210,7 +210,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
 
-        
+
 
 
 
@@ -2156,7 +2156,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         #endregion ---------------------------------------------
 
         #region ***********  خاص باضافة الاصناف  ********************
-        
+
         // 🟦 متغيرات إعدادات
         private decimal MaxRateDiscount = 0m;  // خاص بنسبة الاوكازيون 
         private decimal SalesPercentage = 0m;  // خاص بنسب سعر البيع
@@ -2165,7 +2165,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         {
             try
             {
-                 // 🟦 قراءة القيم من ملف الإعدادات
+                // 🟦 قراءة القيم من ملف الإعدادات
                 MaxRateDiscount = AppSettings.GetDecimal("MaxRateDiscount", 0.10m); // 10% افتراضياً
                 SalesPercentage = AppSettings.GetDecimal("SalesPercentage", 0.10m); // 10% افتراضياً
 
@@ -2513,24 +2513,61 @@ namespace MizanOriginalSoft.Views.Forms.Products
             PicProduct.Image = null;
 
         }
+
+
         private void btnLoadPicProduct_Click(object sender, EventArgs e)
         {
+            if (!int.TryParse(lblID_Product.Text, out int productId))
+            {
+                MessageBox.Show("⚠️ لم يتم تحديد الصنف.", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             using (OpenFileDialog ofd = new OpenFileDialog())
             {
-                ofd.Title = "اختر صورة المنتج";
+                ofd.Title = "اختر صور المنتج";
                 ofd.Filter = "ملفات الصور (*.jpg;*.jpeg;*.png;*.bmp)|*.jpg;*.jpeg;*.png;*.bmp";
+                ofd.Multiselect = true; // ✅ السماح باختيار أكثر من صورة
 
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
-                    // عرض الصورة في الـ PictureBox
-                    PicProduct.Image = Image.FromFile(ofd.FileName);
-                    PicProduct.SizeMode = PictureBoxSizeMode.StretchImage;
+                    bool isFirstImage = true;
 
-                    // عرض المسار في الليبل
-                    lblPathProductPic.Text = ofd.FileName;
+                    foreach (string filePath in ofd.FileNames)
+                    {
+                        try
+                        {
+                            // ✅ إضافة الصورة في قاعدة البيانات
+                            DBServiecs.Product_AddPhoto(
+                                productId,
+                                filePath,
+                                isFirstImage // أول صورة مضافة ستكون افتراضية
+                            );
+
+                            isFirstImage = false; // باقي الصور ليست افتراضية
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"حدث خطأ أثناء إضافة الصورة:\n{ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+
+                    MessageBox.Show("✅ تم إضافة الصور بنجاح.", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // ✅ تحديث الصورة الظاهرة في PictureBox
+                    if (ofd.FileNames.Length > 0)
+                    {
+                        PicProduct.Image = Image.FromFile(ofd.FileNames[0]);
+                        PicProduct.SizeMode = PictureBoxSizeMode.StretchImage;
+                        lblPathProductPic.Text = ofd.FileNames[0];
+                    }
                 }
             }
         }
+
+
+
+
 
         private void txtProdName_KeyDown(object sender, KeyEventArgs e)
         {
@@ -2551,7 +2588,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
         // الحدث الذي يتعامل مع ضغطات المفاتيح داخل txtNewItemSuppliers
-  
+
         private void txtProdCodeOnSuplier_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -2566,7 +2603,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                txtU_Price.Focus();
+                txtB_Price.Focus();
             }
 
             if (e.Control && e.KeyCode == Keys.H)
@@ -2600,22 +2637,29 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
         }
 
-
-        private void txtU_Price_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.SuppressKeyPress = true;
-                txtB_Price.Focus();
-            }
-        }
-
         private void txtB_Price_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
+                txtU_Price.Focus();
+            }
+        }
+        private void txtU_Price_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                txtD_Price.Focus();
+            }
+        }
+        private void txtD_Price_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
                 cbxUnit_ID.Focus();
+                cbxUnit_ID.DroppedDown = true; // 🔹 فتح القائمة تلقائيًا
             }
         }
 
@@ -2624,7 +2668,16 @@ namespace MizanOriginalSoft.Views.Forms.Products
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                txtMinLenth.Focus();
+
+                // 🔹 تحقق من القيمة المختارة
+                if (cbxUnit_ID.SelectedValue != null && cbxUnit_ID.SelectedValue.ToString() == "1")
+                {
+                    txtMinLenth.Focus();
+                }
+                else
+                {
+                    txtMinStock.Focus();
+                }
             }
         }
 
@@ -2645,6 +2698,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 txtProdName.Focus();
             }
         }
+
 
 
 
@@ -2677,6 +2731,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
         #endregion
+
 
 
 

@@ -434,7 +434,59 @@ namespace MizanOriginalSoft.MainClasses
             });
         }
 
+
+        //دالة اضافة صورة صنف جديدة
+        public static int Product_AddPhoto( int ProductID,string ImagePath, bool IsDefault)
+        {
+            return dbHelper.ExecuteScalar<int>("Product_AddPhoto", cmd =>
+            {
+                cmd.Parameters.Add("@ProductID", SqlDbType.Int).Value = ProductID;
+                cmd.Parameters.Add("@ImagePath", SqlDbType.NVarChar).Value = ImagePath;
+                cmd.Parameters.Add("@IsDefault", SqlDbType.Bit ).Value = IsDefault;
+            });
+        }
+
+
+        //دالة تعديل  صورة افتراضية
+        public static int Product_SetDefaultPhoto(int ProductID,int PhotoID)
+        {
+            return dbHelper.ExecuteScalar<int>("Product_SetDefaultPhoto", cmd =>
+            {
+                cmd.Parameters.Add("@ProductID", SqlDbType.Int).Value = ProductID;
+                cmd.Parameters.Add("@PhotoID", SqlDbType.Int ).Value = PhotoID;
+            });
+        }
+
+        // دالة حذف صورة 
+        public static bool Product_DeletePhoto(int photoId)
+        {
+            return dbHelper.ExecuteNonQuery("Product_DeletePhoto", cmd =>
+            {
+                cmd.Parameters.Add("@PhotoID", SqlDbType.Int).Value = photoId;
+            });
+        }
+
+
+        // دالة جلب  صور المنتج
+        public static DataTable Product_GetPhotos(int ProductID)
+        {
+            DataTable? result = dbHelper.ExecuteSelectQuery("Product_GetPhotos", cmd =>
+            {
+                cmd.Parameters.Add("@ProductID", SqlDbType.Int).Value = ProductID;
+            });
+
+            return result ?? new DataTable();
+        }
+
+        /*هذه الدوال تم وضعها فى كلاس DBServiecs ليتم استدعائها من الفورم*/
+
+
+
+
+
+
         //دالة تعديل  صنف 
+
         public static int Product_UpdateItem(
             int ID_Product,
             string ProdName,
