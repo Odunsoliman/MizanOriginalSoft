@@ -2531,18 +2531,18 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
             DGV_AddItem.DataSource = tempAddedItems;
 
-            // ضبط عرض الأعمدة بنسبة 1:4
-            if (DGV_AddItem.Columns.Count == 2)
-            {
-                DGV_AddItem.Columns[0].Width = DGV_AddItem.Width / 5;     // ProdName = 1/5
-                DGV_AddItem.Columns[1].Width = DGV_AddItem.Width * 4 / 5; // U_Price = 4/5
-            }
-
             // عناوين الأعمدة
             DGV_AddItem.Columns[0].HeaderText = "اسم الصنف";
             DGV_AddItem.Columns[1].HeaderText = "سعر الوحدة";
 
-            DGV_AddItem.AllowUserToAddRows = false; // لمنع الصف الفارغ
+            DGV_AddItem.AllowUserToAddRows = false; // منع الصف الفارغ
+
+            // ضبط الأعمدة لتملأ الجريد بالكامل
+            int totalWidth = DGV_AddItem.ClientSize.Width - DGV_AddItem.RowHeadersWidth;
+            DGV_AddItem.Columns[0].Width = totalWidth / 5;     // ProdName = 1/5
+            DGV_AddItem.Columns[1].Width = totalWidth * 4 / 5; // U_Price = 4/5
+
+            DGV_AddItem.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None; // تعطيل وضع الحجم التلقائي
         }
 
 
