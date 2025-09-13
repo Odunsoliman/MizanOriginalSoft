@@ -2726,9 +2726,64 @@ namespace MizanOriginalSoft.Views.Forms.Products
             if (int.TryParse(lblID_Product.Text, out int id))
             {
                 var viewer = new frmImageViewer(id);
+                /*وفى هذا النموذج يوجد 
+                lblCategory;lblNote;lblProdName;lblProductCode;lblRegistYear;lblStock;lblSuplierID;lblUPrice;
+                يجب تعبئتها اثناء عرض الصور الخاصة بالصنف وهى موجودة جميعا فى الجريد الذى حدد الصنف
+                 */
                 viewer.ShowDialog();
             }
+            /*فى شاشة الاصناف
+             يتم فتح frmImageViewer لعرض صور الصنف 
+            اريد بعد غلق frmImageViewer يتم تحديث بيانات الصنف المختار وتغيير الصورة الى الصورة الافتراضية 
+            ويقف على السطر المحدد من قبل
+             */
         }
+
+        /*
+         private void DGV_SelectionChanged(object sender, EventArgs e)
+        {
+            if (!isFormLoaded) return; // تجاهل الحدث إذا لم يتم تحميل الفورم بعد
+
+            if (DGV.SelectedRows.Count > 0)
+            {
+                DataGridViewRow selectedRow = DGV.SelectedRows[0];
+
+                object? idValue = selectedRow.Cells["ID_Product"]?.Value;
+                object? codeValue = selectedRow.Cells["ProductCode"]?.Value;
+                object? imagePath = selectedRow.Cells["PicProduct"]?.Value;
+                object? registYear = selectedRow.Cells["RegistYear"]?.Value;
+                object? noteProd = selectedRow.Cells["NoteProduct"]?.Value;
+
+                lblID_Product.Text = idValue?.ToString() ?? string.Empty;
+                lblProductCode.Text = codeValue?.ToString()?.Trim() ?? string.Empty;
+                lblRegist_Year.Text = registYear?.ToString() ?? string.Empty;
+                lblNoteProduct.Text = noteProd?.ToString() ?? string.Empty;
+
+                // تحميل الصورة إن وجدت
+                if (imagePath != null)
+                {
+                    string path = imagePath.ToString()!;
+                    if (File.Exists(path))
+                    {
+                        picProd.Image = Image.FromFile(path);
+                    }
+                    else
+                    {
+                        picProd.Image = ImageHelper.CreateTextImage("الصورة غير متوفرة", picProd.Width, picProd.Height);
+                    }
+                }
+                else
+                {
+                    picProd.Image = ImageHelper.CreateTextImage("الصورة غير متوفرة", picProd.Width, picProd.Height);
+                }
+
+
+                GenerateBarcode();
+            }
+        }
+
+         */
+
 
         #endregion
 

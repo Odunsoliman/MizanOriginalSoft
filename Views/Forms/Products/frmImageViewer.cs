@@ -24,6 +24,9 @@ namespace MizanOriginalSoft.Views.Forms.Products
         private void frmImageViewer_Load(object sender, EventArgs e)
         {
             LoadPhotos();
+            ShowPhoto(0);
+
+            LoadPhotos();
             ShowPhoto(0); // 👈 بداية من أول صورة
 
             // 🔹 زر التالي
@@ -36,7 +39,65 @@ namespace MizanOriginalSoft.Views.Forms.Products
             btnDeletePhoto.BackColor = Color.LightCoral; // لون مميز
             btnDeletePhoto.ForeColor = Color.White;      // لون النص
             btnDeletePhoto.FlatStyle = FlatStyle.Flat;   // شكل بسيط
+            LoadItemData();
         }
+
+
+        DataTable _tblProd = new DataTable();
+        private void LoadItemData()
+        {
+            _tblProd = DBServiecs.Product_GetAll();
+            DataRow[] rows = _tblProd.Select($"ID_Product = {_productId}");
+
+            if (rows.Length == 0) return;
+
+            DataRow row = rows[0];
+
+            lblCategory.ForeColor = Color.Green;
+            lblCategory.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            lblCategory.Text = $"الفئة: {row["CategoryName"]?.ToString() ?? ""}";
+
+            lblNote.ForeColor = Color.Gray;
+            lblNote.Font = new Font("Segoe UI", 9, FontStyle.Regular);
+            lblNote.Text = $"ملاحظات: {row["NoteProduct"]?.ToString() ?? ""}";
+
+            lblProdName.ForeColor = Color.DarkBlue;
+            lblProdName.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+            lblProdName.Text = $"اسم الصنف: {row["ProdName"]?.ToString() ?? ""}";
+
+            lblProductCode.ForeColor = Color.Black;
+            lblProductCode.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            lblProductCode.Text = $"كود الصنف: {row["ProductCode"]?.ToString() ?? ""}";
+
+            lblRegistYear.ForeColor = Color.Black;
+            lblRegistYear.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            lblRegistYear.Text = $"سنة التسجيل: {row["RegistYear"]?.ToString() ?? ""}";
+
+            lblStock.ForeColor = Color.DarkRed;
+            lblStock.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            lblStock.Text = $"المخزون: {row["ProductStock"]?.ToString() ?? ""}";
+
+            lblSuplierID.ForeColor = Color.Purple;
+            lblSuplierID.Font = new Font("Segoe UI", 10, FontStyle.Regular);
+            lblSuplierID.Text = $"المورد: {row["SuplierID"]?.ToString() ?? ""}";
+
+            lblUPrice.ForeColor = Color.Brown;
+            lblUPrice.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            lblUPrice.Text = $"سعر الوحدة: {row["U_Price"]?.ToString() ?? ""}";
+
+            // تحميل الصورة الافتراضية
+            string defaultPath = row["PicProduct"]?.ToString() ?? "";
+            if (File.Exists(defaultPath))
+            {
+                pictureBoxLarge.Image = Image.FromFile(defaultPath);
+                pictureBoxLarge.SizeMode = PictureBoxSizeMode.Zoom;
+            }
+            else
+            {
+                pictureBoxLarge.Image = ImageHelper.CreateTextImage("الصورة غير متوفرة", pictureBoxLarge.Width, pictureBoxLarge.Height);
+            }
+        }
+
 
         // 🔹 تحميل الصور من قاعدة البيانات
         private void LoadPhotos()
