@@ -83,7 +83,10 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
             lblUPrice.ForeColor = Color.Brown;
             lblUPrice.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            lblUPrice.Text = $"سعر الوحدة: {row["U_Price"]?.ToString() ?? ""}";
+            decimal price = 0;
+            decimal.TryParse(row["U_Price"]?.ToString(), out price);
+            lblUPrice.Text = $"سعر الوحدة: {price:N2} LE";
+
 
             // تحميل الصورة الافتراضية
             string defaultPath = row["PicProduct"]?.ToString() ?? "";
@@ -114,7 +117,8 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
 
         private bool _isUpdatingCheckBox = false; // 🔹 متغير للتحكم
-
+        
+        // 🔹 عرض صورة معينة حسب الفهرس
         private void ShowPhoto(int index)
         {
             if (_photos.Rows.Count == 0) return;
@@ -168,34 +172,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
 
-        // 🔹 عرض صورة معينة حسب الفهرس
-        private void ShowPhoto_(int index)
-        {
-            if (_photos.Rows.Count == 0) return;
-
-            // تأمين الفهرس
-            if (index < 0 || index >= _photos.Rows.Count)
-                index = 0;
-
-            _currentIndex = index;
-
-            var row = _photos.Rows[_currentIndex];
-            string path = row["ImagePath"].ToString() ?? ""; // ✅ تعديل الاسم
-            bool isDefault = Convert.ToBoolean(row["IsDefault"]); // ✅ تعديل الاسم
-
-            if (File.Exists(path))
-            {
-                pictureBoxLarge.Image = Image.FromFile(path);
-                pictureBoxLarge.SizeMode = PictureBoxSizeMode.Zoom;
-            }
-            else
-            {
-                pictureBoxLarge.Image = null;
-            }
-
-            chkIsDefault.Checked = isDefault;
-        }
-
+   
         // 🔹 زر التالي
         private void btnNext_Click(object sender, EventArgs e)
         {
@@ -223,8 +200,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 _photos.Rows[_currentIndex]["IsDefault"] = true;
             }
             else
-            {// يخرج هذه الرسالة فى كل تنقل واذا احببت التغير للافتراضية تظهر ايضا
-                // 🔹 ما ينفعش تلغي الافتراضية من غير اختيار تاني
+            {
                 chkIsDefault.Checked = true;
                 MessageBox.Show("يجب أن تكون هناك صورة افتراضية واحدة على الأقل.");
             }

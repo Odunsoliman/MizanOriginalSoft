@@ -38,13 +38,13 @@
             tableLayoutPanel3 = new TableLayoutPanel();
             lblCategory = new Label();
             lblSuplierID = new Label();
-            lblStock = new Label();
             lblNote = new Label();
             lblRegistYear = new Label();
             tableLayoutPanel4 = new TableLayoutPanel();
-            lblUPrice = new Label();
-            lblProdName = new Label();
             lblProductCode = new Label();
+            lblUPrice = new Label();
+            lblStock = new Label();
+            lblProdName = new Label();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxLarge).BeginInit();
@@ -151,18 +151,16 @@
             // 
             // tableLayoutPanel3
             // 
-            tableLayoutPanel3.ColumnCount = 7;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 4.97993F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 24.8996487F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26.3421974F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 26.2167568F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.5614662F));
+            tableLayoutPanel3.ColumnCount = 4;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel3.Controls.Add(lblCategory, 3, 0);
+            tableLayoutPanel3.Controls.Add(lblCategory, 2, 0);
             tableLayoutPanel3.Controls.Add(lblSuplierID, 0, 0);
-            tableLayoutPanel3.Controls.Add(lblNote, 2, 0);
-            tableLayoutPanel3.Controls.Add(lblRegistYear, 4, 0);
+            tableLayoutPanel3.Controls.Add(lblNote, 1, 0);
+            tableLayoutPanel3.Controls.Add(lblRegistYear, 3, 0);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(3, 507);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -173,46 +171,40 @@
             // 
             // lblCategory
             // 
-            lblCategory.Location = new Point(178, 0);
+            lblCategory.Dock = DockStyle.Fill;
+            lblCategory.Location = new Point(164, 0);
             lblCategory.Name = "lblCategory";
-            lblCategory.Size = new Size(191, 51);
+            lblCategory.Size = new Size(152, 51);
             lblCategory.TabIndex = 9;
             lblCategory.Text = "Category";
             lblCategory.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblSuplierID
             // 
-            lblSuplierID.Location = new Point(760, 0);
+            lblSuplierID.Dock = DockStyle.Fill;
+            lblSuplierID.Location = new Point(639, 0);
             lblSuplierID.Name = "lblSuplierID";
-            lblSuplierID.Size = new Size(31, 51);
+            lblSuplierID.Size = new Size(152, 51);
             lblSuplierID.TabIndex = 3;
             lblSuplierID.Text = "SuplierID";
             lblSuplierID.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // lblStock
-            // 
-            lblStock.Dock = DockStyle.Fill;
-            lblStock.Location = new Point(203, 0);
-            lblStock.Name = "lblStock";
-            lblStock.Size = new Size(192, 50);
-            lblStock.TabIndex = 2;
-            lblStock.Text = "ProductStock";
-            lblStock.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // lblNote
             // 
-            lblNote.Location = new Point(375, 0);
+            lblNote.Dock = DockStyle.Fill;
+            lblNote.Location = new Point(322, 0);
             lblNote.Name = "lblNote";
-            lblNote.Size = new Size(192, 51);
+            lblNote.Size = new Size(311, 51);
             lblNote.TabIndex = 8;
             lblNote.Text = "Note";
             lblNote.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblRegistYear
             // 
-            lblRegistYear.Location = new Point(46, 0);
+            lblRegistYear.Dock = DockStyle.Fill;
+            lblRegistYear.Location = new Point(3, 0);
             lblRegistYear.Name = "lblRegistYear";
-            lblRegistYear.Size = new Size(126, 51);
+            lblRegistYear.Size = new Size(155, 51);
             lblRegistYear.TabIndex = 7;
             lblRegistYear.Text = "RegistYear";
             lblRegistYear.TextAlign = ContentAlignment.MiddleCenter;
@@ -236,6 +228,16 @@
             tableLayoutPanel4.Size = new Size(794, 50);
             tableLayoutPanel4.TabIndex = 3;
             // 
+            // lblProductCode
+            // 
+            lblProductCode.Dock = DockStyle.Fill;
+            lblProductCode.Location = new Point(678, 0);
+            lblProductCode.Name = "lblProductCode";
+            lblProductCode.Size = new Size(113, 50);
+            lblProductCode.TabIndex = 6;
+            lblProductCode.Text = "ProductCode";
+            lblProductCode.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // lblUPrice
             // 
             lblUPrice.Dock = DockStyle.Fill;
@@ -246,6 +248,16 @@
             lblUPrice.Text = "label1";
             lblUPrice.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // lblStock
+            // 
+            lblStock.Dock = DockStyle.Fill;
+            lblStock.Location = new Point(203, 0);
+            lblStock.Name = "lblStock";
+            lblStock.Size = new Size(192, 50);
+            lblStock.TabIndex = 2;
+            lblStock.Text = "ProductStock";
+            lblStock.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // lblProdName
             // 
             lblProdName.Dock = DockStyle.Fill;
@@ -255,16 +267,6 @@
             lblProdName.TabIndex = 10;
             lblProdName.Text = "label1";
             lblProdName.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // lblProductCode
-            // 
-            lblProductCode.Dock = DockStyle.Fill;
-            lblProductCode.Location = new Point(678, 0);
-            lblProductCode.Name = "lblProductCode";
-            lblProductCode.Size = new Size(113, 50);
-            lblProductCode.TabIndex = 6;
-            lblProductCode.Text = "ProductCode";
-            lblProductCode.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // frmImageViewer
             // 
