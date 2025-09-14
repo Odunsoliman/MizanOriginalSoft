@@ -2579,7 +2579,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
             {
                 ofd.Title = "اختر صور المنتج";
                 ofd.Filter = "ملفات الصور (*.jpg;*.jpeg;*.png;*.bmp)|*.jpg;*.jpeg;*.png;*.bmp";
-                ofd.Multiselect = true; // ✅ السماح باختيار أكثر من صورة
+                ofd.Multiselect = true;
 
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
@@ -2589,14 +2589,9 @@ namespace MizanOriginalSoft.Views.Forms.Products
                     {
                         try
                         {
-                            // ✅ إضافة الصورة في قاعدة البيانات
-                            DBServiecs.Product_AddPhoto(
-                                productId,
-                                filePath,
-                                isFirstImage // أول صورة مضافة ستكون افتراضية
-                            );
-
-                            isFirstImage = false; // باقي الصور ليست افتراضية
+                            // إضافة الصورة في قاعدة البيانات
+                            DBServiecs.Product_AddPhoto(productId, filePath, isFirstImage);
+                            isFirstImage = false;
                         }
                         catch (Exception ex)
                         {
@@ -2604,14 +2599,35 @@ namespace MizanOriginalSoft.Views.Forms.Products
                         }
                     }
 
-                    MessageBox.Show("✅ تم إضافة الصور بنجاح.", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    // إعادة تحميل الجريد مرة واحدة بعد إضافة كل الصور
+                    LoadProducts();
 
-                    // ✅ تحديث الصورة الظاهرة في PictureBox
-                    if (ofd.FileNames.Length > 0)
+                    // مسح أي تحديد سابق
+                    DGV.ClearSelection();
+
+                    // تحديد نفس الصنف بعد التحميل
+                    foreach (DataGridViewRow row in DGV.Rows)
                     {
-                        //PicProduct.Image = Image.FromFile(ofd.FileNames[0]);
-                        //PicProduct.SizeMode = PictureBoxSizeMode.StretchImage;
+                        if (row.Cells["ID_Product"].Value != null &&
+                            int.TryParse(row.Cells["ID_Product"].Value.ToString(), out int rowId) &&
+                            rowId == productId)
+                        {
+                            row.Selected = true;
+
+                            // تعيين CurrentCell لأول خلية مرئية في الصف
+                            foreach (DataGridViewCell cell in row.Cells)
+                            {
+                                if (cell.Visible)
+                                {
+                                    DGV.CurrentCell = cell;
+                                    break;
+                                }
+                            }
+                            break;
+                        }
                     }
+
+                    MessageBox.Show("✅ تم إضافة الصور بنجاح.", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
@@ -2778,60 +2794,33 @@ namespace MizanOriginalSoft.Views.Forms.Products
             {
                 var viewer = new frmImageViewer(id);
                 viewer.ShowDialog();
-                // ✅ 1- إعادة تحميل المنتجات
+
                 LoadProducts();
-            }
-            /*فى شاشة الاصناف
-             يتم فتح frmImageViewer لعرض صور الصنف 
-            اريد بعد غلق frmImageViewer يتم تحديث بيانات الصنف المختار وتغيير الصورة الى الصورة الافتراضية 
-            ويقف على السطر المحدد من قبل
-             */
-        }
+                DGV.ClearSelection();
 
-        /*
-         private void DGV_SelectionChanged(object sender, EventArgs e)
-        {
-            if (!isFormLoaded) return; // تجاهل الحدث إذا لم يتم تحميل الفورم بعد
-
-            if (DGV.SelectedRows.Count > 0)
-            {
-                DataGridViewRow selectedRow = DGV.SelectedRows[0];
-
-                object? idValue = selectedRow.Cells["ID_Product"]?.Value;
-                object? codeValue = selectedRow.Cells["ProductCode"]?.Value;
-                object? imagePath = selectedRow.Cells["PicProduct"]?.Value;
-                object? registYear = selectedRow.Cells["RegistYear"]?.Value;
-                object? noteProd = selectedRow.Cells["NoteProduct"]?.Value;
-
-                lblID_Product.Text = idValue?.ToString() ?? string.Empty;
-                lblProductCode.Text = codeValue?.ToString()?.Trim() ?? string.Empty;
-                lblRegist_Year.Text = registYear?.ToString() ?? string.Empty;
-                lblNoteProduct.Text = noteProd?.ToString() ?? string.Empty;
-
-                // تحميل الصورة إن وجدت
-                if (imagePath != null)
+                foreach (DataGridViewRow row in DGV.Rows)
                 {
-                    string path = imagePath.ToString()!;
-                    if (File.Exists(path))
+                    if (row.Cells["ID_Product"].Value != null &&
+                        int.TryParse(row.Cells["ID_Product"].Value.ToString(), out int rowId) &&
+                        rowId == id)
                     {
-                        picProd.Image = Image.FromFile(path);
-                    }
-                    else
-                    {
-                        picProd.Image = ImageHelper.CreateTextImage("الصورة غير متوفرة", picProd.Width, picProd.Height);
+                        row.Selected = true;
+
+                        // تعيين CurrentCell لأول خلية مرئية في الصف
+                        foreach (DataGridViewCell cell in row.Cells)
+                        {
+                            if (cell.Visible)
+                            {
+                                DGV.CurrentCell = cell;
+                                break;
+                            }
+                        }
+
+                        break;
                     }
                 }
-                else
-                {
-                    picProd.Image = ImageHelper.CreateTextImage("الصورة غير متوفرة", picProd.Width, picProd.Height);
-                }
-
-
-                GenerateBarcode();
             }
         }
-
-         */
 
 
         #endregion
