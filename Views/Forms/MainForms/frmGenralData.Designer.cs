@@ -144,6 +144,8 @@
             tabPage1 = new TabPage();
             tableLayoutPanel27 = new TableLayoutPanel();
             tableLayoutPanel28 = new TableLayoutPanel();
+            chkIsEnablToChangTax = new CheckBox();
+            label32 = new Label();
             label34 = new Label();
             label36 = new Label();
             chkIsOpendMaxRateDiscount = new CheckBox();
@@ -160,8 +162,7 @@
             lblLogoPath = new Label();
             tableLayoutPanel17 = new TableLayoutPanel();
             btnSave = new Button();
-            label32 = new Label();
-            chkIsEnablToChangTax = new CheckBox();
+            tableLayoutPanel29 = new TableLayoutPanel();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel7.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
@@ -204,6 +205,7 @@
             tableLayoutPanel28.SuspendLayout();
             tableLayoutPanel16.SuspendLayout();
             tableLayoutPanel17.SuspendLayout();
+            tableLayoutPanel29.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel2
@@ -398,8 +400,8 @@
             // tableLayoutPanel8
             // 
             tableLayoutPanel8.ColumnCount = 4;
-            tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30.4081631F));
-            tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 69.591835F));
+            tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30.4081612F));
+            tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 69.59184F));
             tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 208F));
             tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 91F));
             tableLayoutPanel8.Controls.Add(txtWarehouseName, 1, 7);
@@ -416,9 +418,8 @@
             tableLayoutPanel8.Controls.Add(lblFirstPhon, 0, 4);
             tableLayoutPanel8.Controls.Add(cbxWarehouseId, 1, 6);
             tableLayoutPanel8.Controls.Add(btnAddWarehouse, 0, 7);
-            tableLayoutPanel8.Controls.Add(btnDeleteWarehous, 3, 6);
             tableLayoutPanel8.Controls.Add(btnSetAsDefaultWarehouse, 2, 6);
-            tableLayoutPanel8.Controls.Add(btnRenamWarehous, 3, 7);
+            tableLayoutPanel8.Controls.Add(tableLayoutPanel29, 2, 7);
             tableLayoutPanel8.Dock = DockStyle.Top;
             tableLayoutPanel8.Location = new Point(46, 44);
             tableLayoutPanel8.Name = "tableLayoutPanel8";
@@ -430,8 +431,8 @@
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 13F));
+            tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
             tableLayoutPanel8.Size = new Size(757, 336);
             tableLayoutPanel8.TabIndex = 1;
             // 
@@ -601,7 +602,7 @@
             btnAddWarehouse.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
             btnAddWarehouse.Location = new Point(621, 268);
             btnAddWarehouse.Name = "btnAddWarehouse";
-            btnAddWarehouse.Size = new Size(133, 27);
+            btnAddWarehouse.Size = new Size(133, 37);
             btnAddWarehouse.TabIndex = 39;
             btnAddWarehouse.Text = "اضافة فرع ...";
             btnAddWarehouse.UseVisualStyleBackColor = true;
@@ -611,9 +612,9 @@
             // 
             btnDeleteWarehous.Dock = DockStyle.Fill;
             btnDeleteWarehous.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnDeleteWarehous.Location = new Point(3, 235);
+            btnDeleteWarehous.Location = new Point(3, 3);
             btnDeleteWarehous.Name = "btnDeleteWarehous";
-            btnDeleteWarehous.Size = new Size(86, 27);
+            btnDeleteWarehous.Size = new Size(95, 31);
             btnDeleteWarehous.TabIndex = 39;
             btnDeleteWarehous.Text = "حذف الفرع";
             btnDeleteWarehous.UseVisualStyleBackColor = true;
@@ -621,7 +622,6 @@
             // 
             // btnSetAsDefaultWarehouse
             // 
-            btnSetAsDefaultWarehouse.Dock = DockStyle.Fill;
             btnSetAsDefaultWarehouse.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
             btnSetAsDefaultWarehouse.Location = new Point(95, 235);
             btnSetAsDefaultWarehouse.Name = "btnSetAsDefaultWarehouse";
@@ -635,9 +635,9 @@
             // 
             btnRenamWarehous.Dock = DockStyle.Fill;
             btnRenamWarehous.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnRenamWarehous.Location = new Point(3, 268);
+            btnRenamWarehous.Location = new Point(104, 3);
             btnRenamWarehous.Name = "btnRenamWarehous";
-            btnRenamWarehous.Size = new Size(86, 27);
+            btnRenamWarehous.Size = new Size(95, 31);
             btnRenamWarehous.TabIndex = 39;
             btnRenamWarehous.Text = "تعديل اسم";
             btnRenamWarehous.UseVisualStyleBackColor = true;
@@ -647,10 +647,10 @@
             // 
             tabPagePrinterSetting.BackColor = Color.WhiteSmoke;
             tabPagePrinterSetting.Controls.Add(tableLayoutPanel18);
-            tabPagePrinterSetting.Location = new Point(4, 44);
+            tabPagePrinterSetting.Location = new Point(4, 84);
             tabPagePrinterSetting.Name = "tabPagePrinterSetting";
             tabPagePrinterSetting.Padding = new Padding(3);
-            tabPagePrinterSetting.Size = new Size(812, 435);
+            tabPagePrinterSetting.Size = new Size(812, 395);
             tabPagePrinterSetting.TabIndex = 1;
             tabPagePrinterSetting.Text = "اعدادات الطابعات";
             // 
@@ -1264,10 +1264,10 @@
             // 
             tabPageServerSetting.BackColor = Color.WhiteSmoke;
             tabPageServerSetting.Controls.Add(tableLayoutPanel10);
-            tabPageServerSetting.Location = new Point(4, 44);
+            tabPageServerSetting.Location = new Point(4, 84);
             tabPageServerSetting.Name = "tabPageServerSetting";
             tabPageServerSetting.Padding = new Padding(3);
-            tabPageServerSetting.Size = new Size(812, 435);
+            tabPageServerSetting.Size = new Size(812, 395);
             tabPageServerSetting.TabIndex = 2;
             tabPageServerSetting.Text = "اعدادات السيرفر";
             // 
@@ -1803,6 +1803,28 @@
             tableLayoutPanel28.Size = new Size(397, 383);
             tableLayoutPanel28.TabIndex = 0;
             // 
+            // chkIsEnablToChangTax
+            // 
+            chkIsEnablToChangTax.AutoSize = true;
+            chkIsEnablToChangTax.Dock = DockStyle.Left;
+            chkIsEnablToChangTax.Location = new Point(135, 41);
+            chkIsEnablToChangTax.Name = "chkIsEnablToChangTax";
+            chkIsEnablToChangTax.Size = new Size(15, 32);
+            chkIsEnablToChangTax.TabIndex = 62;
+            chkIsEnablToChangTax.TextAlign = ContentAlignment.MiddleRight;
+            chkIsEnablToChangTax.UseVisualStyleBackColor = true;
+            // 
+            // label32
+            // 
+            label32.AutoSize = true;
+            label32.Dock = DockStyle.Fill;
+            label32.Location = new Point(156, 38);
+            label32.Name = "label32";
+            label32.Size = new Size(238, 38);
+            label32.TabIndex = 61;
+            label32.Text = "السماح بتغيير نسبة ضريبة البيع";
+            label32.TextAlign = ContentAlignment.MiddleRight;
+            // 
             // label34
             // 
             label34.AutoSize = true;
@@ -1998,27 +2020,20 @@
             btnSave.Visible = false;
             btnSave.Click += btnSave_Click;
             // 
-            // label32
+            // tableLayoutPanel29
             // 
-            label32.AutoSize = true;
-            label32.Dock = DockStyle.Fill;
-            label32.Location = new Point(156, 38);
-            label32.Name = "label32";
-            label32.Size = new Size(238, 38);
-            label32.TabIndex = 61;
-            label32.Text = "السماح بتغيير نسبة ضريبة البيع";
-            label32.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // chkIsEnablToChangTax
-            // 
-            chkIsEnablToChangTax.AutoSize = true;
-            chkIsEnablToChangTax.Dock = DockStyle.Left;
-            chkIsEnablToChangTax.Location = new Point(135, 41);
-            chkIsEnablToChangTax.Name = "chkIsEnablToChangTax";
-            chkIsEnablToChangTax.Size = new Size(15, 32);
-            chkIsEnablToChangTax.TabIndex = 62;
-            chkIsEnablToChangTax.TextAlign = ContentAlignment.MiddleRight;
-            chkIsEnablToChangTax.UseVisualStyleBackColor = true;
+            tableLayoutPanel29.ColumnCount = 2;
+            tableLayoutPanel29.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel29.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel29.Controls.Add(btnRenamWarehous, 0, 0);
+            tableLayoutPanel29.Controls.Add(btnDeleteWarehous, 1, 0);
+            tableLayoutPanel29.Dock = DockStyle.Fill;
+            tableLayoutPanel29.Location = new Point(95, 268);
+            tableLayoutPanel29.Name = "tableLayoutPanel29";
+            tableLayoutPanel29.RowCount = 1;
+            tableLayoutPanel29.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel29.Size = new Size(202, 37);
+            tableLayoutPanel29.TabIndex = 41;
             // 
             // frmGenralData
             // 
@@ -2086,6 +2101,7 @@
             tableLayoutPanel28.PerformLayout();
             tableLayoutPanel16.ResumeLayout(false);
             tableLayoutPanel17.ResumeLayout(false);
+            tableLayoutPanel29.ResumeLayout(false);
             ResumeLayout(false);
 
         }
@@ -2225,5 +2241,6 @@
         private Label label34;
         private CheckBox chkIsEnablToChangTax;
         private Label label32;
+        private TableLayoutPanel tableLayoutPanel29;
     }
 }

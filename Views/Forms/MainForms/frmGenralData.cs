@@ -584,116 +584,38 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
         #endregion
 
-        private void LoadSettings_()
-        {
-            if (!File.Exists(configFilePath))
-                return;
-
-            string[] lines = File.ReadAllLines(configFilePath);
-
-            foreach (string line in lines)
-            {
-                if (string.IsNullOrWhiteSpace(line) || !line.Contains("="))
-                    continue;
-
-                string key = line.Split('=')[0].Trim();
-                string value = line.Substring(line.IndexOf('=') + 1).Trim();
-
-                switch (key)
-                {
-                    case "serverName": txtServerName.Text = value; break;
-                    case "DBName": txtDBName.Text = value; break;
-                    case "RollPrinter": lblRollPrinter.Text = value; break;
-                    case "BackupsPath": txtBackupsPath.Text = value; break;
-                    case "maxBackups": txtMaxBackups.Text = value; break;
-                    case "SheetPrinter": lblSheetPrinter.Text = value; break;
-                    case "SheetRows": txtSheetRows.Text = value; break;
-                    case "SheetCols": txtSheetCols.Text = value; break;
-                    case "SheetMarginTop": txtMarginTop.Text = value; break;
-                    case "SheetMarginBottom": txtMarginBottom.Text = value; break;
-                    case "SheetMarginRight": txtMarginRight.Text = value; break;
-                    case "SheetMarginLeft": txtMarginLeft.Text = value; break;
-                    case "RollLabelWidth": txtRollLabelWidth.Text = value; break;
-                    case "RollLabelHeight": txtRollLabelHeight.Text = value; break;
-                    case "CompanyName": txtNameCo.Text = value; break;
-                    case "CompanyPhon": txtPhon.Text = value; break;
-                    case "CompanyAnthrPhon": txtAnthrPhon.Text = value; break;
-                    case "SalesTax": txtSalesTax.Text = value; break;
-                    case "CompanyAdreass": txtAdreass.Text = value; break;
-                    case "EmailCo": txtCompanyEmail.Text = value; break;
-                    case "IsSaleByNegativeStock":
-                        if (bool.TryParse(value, out bool isNegativeStock))
-                        {
-                            chkIsSaleByNegativeStock.Checked = isNegativeStock;
-                            lblTypeSaleStock.Text = isNegativeStock
-                                ? "البيع على المكشوف"
-                                : "البيع حسب الرصيد";
-                        }
-                        break;
-                    case "ReturnSaleMode":
-                        // 🔹 ضبط الكمبو على القيمة من الملف
-                        if (int.TryParse(value, out int selectedMode))
-                        {
-                            cbxReturnSaleMode.SelectedValue = selectedMode;
-                        }
-                        break;
-
-                    case "CompanyLoGoFolder": lblLogoPath.Text = value; break;
-                    case "LogoImagName": lblLogoImageName.Text = value; break;
-                    case "DefaultWarehouseId":
-                        if (int.TryParse(value, out int defWarehouseId))
-                            cbxWarehouseId.SelectedValue = defWarehouseId;
-                        break;
-                }
-            }
-
-            // تحميل الشعار إذا كان المسار صحيحاً
-            if (!string.IsNullOrEmpty(lblLogoPath.Text) && !string.IsNullOrEmpty(lblLogoImageName.Text))
-            {
-                string logoPath = Path.Combine(lblLogoPath.Text, lblLogoImageName.Text);
-                if (File.Exists(logoPath))
-                    picLogoCo.Image = Image.FromFile(logoPath);
-            }
-        }
         /* 
          * اريد تحديث التحميل للبيانات بما تم اضافته فى ملف التكست
          واسماء الكائنات نفس اسماء المفاتيح مسبوقة ب txt او مسبوقة ب chk لو كانت سؤال
 
-        بيانات الملف
+        بيانات الملف المسبوق عنوانها # واحدة هى اعدادت مسموح للمستخدم التحكم بها من خلال الشاشة
+        والبيانات التى عنوانها مسبوق ب ثلاث ### تعنى انها تخص المطور فقط وليس لها ادوات تحكم على الشاشة
 
-                # ==============================
-        # إعدادات الاتصال بقاعدة البيانات
-        # ==============================
+        # اسم السيرفر الحالى وقاعدة البيانات
         serverName=DESKTOP-EE70K28\SQLEXPRESS
         DBName=MizanOriginalDB
+        
+        ### اسماء الاجراءات المخزنة للباك اب والريستور
         BackupDB=Original_BackupDatabase
         RestoreDB=Original_RestoreDatabase
 
-        # ==============================
         # إعدادات النسخ الاحتياطي
-        # ==============================
         maxBackups=10
         BackupsPath=D:\MizanOriginalSoft\DataBaseApp\BakUpDB
 
-        # ==============================
-        # إعدادات رفع السحابي
-        # ==============================
-        # 📌 المسار المحلي لمجلد Google Drive على جهازك لرفع النسخ الاحتياطية تلقائيًا إلى السحابة
+        ### إعدادات رفع السحابي
+        ### 📌 المسار المحلي لمجلد Google Drive على جهازك لرفع النسخ الاحتياطية تلقائيًا إلى السحابة
         GoogleDrivePath=G:\
-        # 📌 مسار مشروع البرنامج الذي سيتم رفعه على Git عند الإغلاق للمزامنة مع المستودع
+        ### 📌 مسار مشروع البرنامج الذي سيتم رفعه على Git عند الإغلاق للمزامنة مع المستودع
         ProjectPath=D:\MizanOriginalSoft
-        # 📌 مسار مجلد مخصص لنسخ القواعد التي سيتم رفعها على Git (يمكن تركه فارغ إذا لم تستخدم هذه الميزة)
+        ### 📌 مسار مجلد مخصص لنسخ القواعد التي سيتم رفعها على Git (يمكن تركه فارغ إذا لم تستخدم هذه الميزة)
         BackupGitPath=
 
-        # ==============================
         # إعدادات الطباعة
-        # ==============================
         RollPrinter=Samsung SCX-3400 Series
         SheetPrinter=Samsung SCX-3400 Series
 
-        # ------------------------------
         # إعدادات تخطيط الورق (Sheet Printing)
-        # ------------------------------
         SheetRows=6
         SheetCols=10
         SheetMarginTop=23
@@ -701,36 +623,26 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         SheetMarginRight=24
         SheetMarginLeft=24
 
-        # ------------------------------
         # إعدادات طباعة الرول (Roll Printing)
-        # ------------------------------
         RollLabelWidth=50
         RollLabelHeight=25
 
-        # ==============================
         # بيانات الشركة
-        # ==============================
         CompanyName=Sondos 4 kids
         CompanyPhon=00010205060225
         CompanyAnthrPhon=010201201205000
         CompanyAdreass=5ش عبد الخالق ثروت العتبة وسط البلد القاهرة
         EmailCo=Sondos 4 kids@gmail.com
 
-        # ------------------------------
         # إعدادات الضرائب
-        # ------------------------------
         SalesTax=14
         IsEnablToChangTax=True
 
-        # ------------------------------
         # إعدادات الشعار (Logo)
-        # ------------------------------
         CompanyLoGoFolder=D:\MizanSoft\MizanLoom\Signee\Signee\bin\Debug
         LogoImagName=Mizan Logo.PNG
 
-        # ==============================
         # إعدادات المستودعات
-        # ==============================
         DefaultWarehouseId=1
         DefaultPrinter=Samsung SCX-3400 Series
         DefaultWarehouse=0
