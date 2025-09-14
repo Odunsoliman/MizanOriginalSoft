@@ -34,7 +34,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             txtNameCo.SelectAll();
             LoadBackupFiles();
             AttachTextBoxHandlers(this);
-//            ApplyPermissionsToControls();
+            ApplyPermissionsToControls();
             LoadAllUsers();
             DGV_Users.SelectionChanged += DGV_Users_SelectionChanged;
             DGV_Users.RowPrePaint += DGV_Users_RowPrePaint;
@@ -52,36 +52,36 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
 
         #region *********  ApplyPermissions  ******************************
-        //private void ApplyPermissionsToControls()
-        //{
-        //    var allControls = GetAllControls(this); 
+        private void ApplyPermissionsToControls()
+        {
+            var allControls = GetAllControls(this);
 
-        //    foreach (Control ctrl in allControls)
-        //    {
-        //        string controlName = ctrl.Name;
+            foreach (Control ctrl in allControls)
+            {
+                string controlName = ctrl.Name;
 
-        //        if (string.IsNullOrWhiteSpace(controlName)) continue;
+                if (string.IsNullOrWhiteSpace(controlName)) continue;
 
-        //        if (UserPermissionsManager.Permissions.TryGetValue(controlName, out var permission))
-        //        {
-        //            ctrl.Visible = permission.CanView;
-        //            ctrl.Enabled = permission.CanView;
-        //        }
-        //    }
-        //}
+                if (UserPermissionsManager.Permissions.TryGetValue(controlName, out var permission))
+                {
+                    ctrl.Visible = permission.CanView;
+                    ctrl.Enabled = permission.CanView;
+                }
+            }
+        }
 
-        //private List<Control> GetAllControls(Control parent)
-        //{
-        //    List<Control> controls = new List<Control>();
+        private List<Control> GetAllControls(Control parent)
+        {
+            List<Control> controls = new List<Control>();
 
-        //    foreach (Control child in parent.Controls)
-        //    {
-        //        controls.Add(child);
-        //        controls.AddRange(GetAllControls(child));
-        //    }
+            foreach (Control child in parent.Controls)
+            {
+                controls.Add(child);
+                controls.AddRange(GetAllControls(child));
+            }
 
-        //    return controls;
-        //}
+            return controls;
+        }
 
         #endregion
 
