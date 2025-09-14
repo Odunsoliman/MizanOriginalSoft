@@ -1001,8 +1001,8 @@
             // tableLayoutPanel2
             // 
             tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 90F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 81.97115F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 18.0288467F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
@@ -1024,7 +1024,7 @@
             btnClearDGV.Location = new Point(4, 4);
             btnClearDGV.Margin = new Padding(4);
             btnClearDGV.Name = "btnClearDGV";
-            btnClearDGV.Size = new Size(34, 27);
+            btnClearDGV.Size = new Size(67, 27);
             btnClearDGV.TabIndex = 38;
             btnClearDGV.TabStop = false;
             btnClearDGV.Text = "تفريغ";
@@ -1037,10 +1037,10 @@
             label22.Dock = DockStyle.Fill;
             label22.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label22.ForeColor = Color.FromArgb(0, 0, 192);
-            label22.Location = new Point(46, 0);
+            label22.Location = new Point(79, 0);
             label22.Margin = new Padding(4, 0, 4, 0);
             label22.Name = "label22";
-            label22.Size = new Size(366, 35);
+            label22.Size = new Size(333, 35);
             label22.TabIndex = 45;
             label22.Text = "الاصناف المضافة حاليا";
             label22.TextAlign = ContentAlignment.MiddleCenter;
