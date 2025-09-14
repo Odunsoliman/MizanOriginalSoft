@@ -104,8 +104,6 @@
             lblTypeInv = new Label();
             lblInv_Counter = new Label();
             dtpInv_Date = new DateTimePicker();
-            tableLayoutPanel6 = new TableLayoutPanel();
-            tableLayoutPanel7 = new TableLayoutPanel();
             tlpAcc = new TableLayoutPanel();
             lblInvStat = new Label();
             lblDir = new Label();
@@ -127,8 +125,6 @@
             tableLayoutPanel15.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             tlpHader.SuspendLayout();
-            tableLayoutPanel6.SuspendLayout();
-            tableLayoutPanel7.SuspendLayout();
             tlpAcc.SuspendLayout();
             tlpReturnMod.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
@@ -652,10 +648,10 @@
             lblBalance.Dock = DockStyle.Fill;
             lblBalance.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblBalance.ForeColor = Color.Red;
-            lblBalance.Location = new Point(4, 80);
+            lblBalance.Location = new Point(718, 86);
             lblBalance.Margin = new Padding(4, 0, 4, 0);
             lblBalance.Name = "lblBalance";
-            lblBalance.Size = new Size(260, 42);
+            lblBalance.Size = new Size(134, 44);
             lblBalance.TabIndex = 25;
             lblBalance.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -665,10 +661,10 @@
             lblClientEmail.Dock = DockStyle.Fill;
             lblClientEmail.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblClientEmail.ForeColor = Color.Navy;
-            lblClientEmail.Location = new Point(4, 31);
+            lblClientEmail.Location = new Point(4, 43);
             lblClientEmail.Margin = new Padding(4, 0, 4, 0);
             lblClientEmail.Name = "lblClientEmail";
-            lblClientEmail.Size = new Size(381, 31);
+            lblClientEmail.Size = new Size(706, 43);
             lblClientEmail.TabIndex = 25;
             lblClientEmail.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -681,7 +677,7 @@
             lblClientAddress.Location = new Point(4, 0);
             lblClientAddress.Margin = new Padding(4, 0, 4, 0);
             lblClientAddress.Name = "lblClientAddress";
-            lblClientAddress.Size = new Size(381, 31);
+            lblClientAddress.Size = new Size(706, 43);
             lblClientAddress.TabIndex = 25;
             lblClientAddress.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -691,22 +687,23 @@
             lblFirstPhon.Dock = DockStyle.Fill;
             lblFirstPhon.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblFirstPhon.ForeColor = Color.Navy;
-            lblFirstPhon.Location = new Point(4, 62);
+            lblFirstPhon.Location = new Point(4, 86);
             lblFirstPhon.Margin = new Padding(4, 0, 4, 0);
             lblFirstPhon.Name = "lblFirstPhon";
-            lblFirstPhon.Size = new Size(381, 31);
+            lblFirstPhon.Size = new Size(706, 44);
             lblFirstPhon.TabIndex = 25;
             lblFirstPhon.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // cbxSellerID
             // 
+            cbxSellerID.Dock = DockStyle.Fill;
             cbxSellerID.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             cbxSellerID.ForeColor = Color.FromArgb(192, 0, 192);
             cbxSellerID.FormattingEnabled = true;
-            cbxSellerID.Location = new Point(195, 3);
+            cbxSellerID.Location = new Point(143, 3);
             cbxSellerID.Margin = new Padding(4, 3, 4, 3);
             cbxSellerID.Name = "cbxSellerID";
-            cbxSellerID.Size = new Size(164, 30);
+            cbxSellerID.Size = new Size(131, 30);
             cbxSellerID.TabIndex = 28;
             cbxSellerID.Enter += cbxSellerID_Enter;
             cbxSellerID.KeyDown += cbxSellerID_KeyDown;
@@ -715,10 +712,10 @@
             // 
             txtAccName.Dock = DockStyle.Fill;
             txtAccName.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtAccName.Location = new Point(272, 3);
+            txtAccName.Location = new Point(860, 3);
             txtAccName.Margin = new Padding(4, 3, 4, 3);
             txtAccName.Name = "txtAccName";
-            txtAccName.Size = new Size(361, 29);
+            txtAccName.Size = new Size(276, 29);
             txtAccName.TabIndex = 26;
             txtAccName.Text = "0";
             txtAccName.TextAlign = HorizontalAlignment.Center;
@@ -731,10 +728,10 @@
             lblAccID.Dock = DockStyle.Fill;
             lblAccID.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblAccID.ForeColor = Color.Navy;
-            lblAccID.Location = new Point(4, 0);
+            lblAccID.Location = new Point(718, 0);
             lblAccID.Margin = new Padding(4, 0, 4, 0);
             lblAccID.Name = "lblAccID";
-            lblAccID.Size = new Size(260, 40);
+            lblAccID.Size = new Size(134, 43);
             lblAccID.TabIndex = 25;
             lblAccID.TextAlign = ContentAlignment.MiddleLeft;
             lblAccID.TextChanged += lblAccID_TextChanged;
@@ -1141,8 +1138,8 @@
             tableLayoutPanel1.Controls.Add(tlpNotes, 0, 4);
             tableLayoutPanel1.Controls.Add(tlpPiece, 0, 2);
             tableLayoutPanel1.Controls.Add(tlpHader, 0, 0);
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel6, 0, 1);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel4, 0, 3);
+            tableLayoutPanel1.Controls.Add(tlpAcc, 0, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Margin = new Padding(4, 2, 4, 2);
@@ -1299,50 +1296,17 @@
             dtpInv_Date.Size = new Size(335, 26);
             dtpInv_Date.TabIndex = 26;
             // 
-            // tableLayoutPanel6
-            // 
-            tableLayoutPanel6.ColumnCount = 2;
-            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 61.92146F));
-            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 38.07854F));
-            tableLayoutPanel6.Controls.Add(tableLayoutPanel7, 1, 0);
-            tableLayoutPanel6.Controls.Add(tlpAcc, 0, 0);
-            tableLayoutPanel6.Dock = DockStyle.Fill;
-            tableLayoutPanel6.Location = new Point(4, 51);
-            tableLayoutPanel6.Margin = new Padding(4, 2, 4, 2);
-            tableLayoutPanel6.Name = "tableLayoutPanel6";
-            tableLayoutPanel6.RowCount = 1;
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel6.Size = new Size(1424, 130);
-            tableLayoutPanel6.TabIndex = 13;
-            // 
-            // tableLayoutPanel7
-            // 
-            tableLayoutPanel7.ColumnCount = 2;
-            tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.3743F));
-            tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 72.6257F));
-            tableLayoutPanel7.Controls.Add(lblClientEmail, 1, 1);
-            tableLayoutPanel7.Controls.Add(lblClientAddress, 1, 0);
-            tableLayoutPanel7.Controls.Add(lblFirstPhon, 1, 2);
-            tableLayoutPanel7.Dock = DockStyle.Fill;
-            tableLayoutPanel7.Location = new Point(4, 2);
-            tableLayoutPanel7.Margin = new Padding(4, 2, 4, 2);
-            tableLayoutPanel7.Name = "tableLayoutPanel7";
-            tableLayoutPanel7.RowCount = 4;
-            tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
-            tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
-            tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
-            tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
-            tableLayoutPanel7.Size = new Size(535, 126);
-            tableLayoutPanel7.TabIndex = 0;
-            // 
             // tlpAcc
             // 
-            tlpAcc.ColumnCount = 3;
-            tlpAcc.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.13797F));
-            tlpAcc.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 42.41733F));
-            tlpAcc.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30.55872F));
-            tlpAcc.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tlpAcc.ColumnCount = 4;
+            tlpAcc.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            tlpAcc.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            tlpAcc.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            tlpAcc.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tlpAcc.Controls.Add(lblFirstPhon, 3, 2);
+            tlpAcc.Controls.Add(lblClientEmail, 3, 1);
             tlpAcc.Controls.Add(lblInvStat, 1, 2);
+            tlpAcc.Controls.Add(lblClientAddress, 3, 0);
             tlpAcc.Controls.Add(lblDir, 0, 1);
             tlpAcc.Controls.Add(label13, 0, 0);
             tlpAcc.Controls.Add(txtAccName, 1, 0);
@@ -1351,14 +1315,15 @@
             tlpAcc.Controls.Add(lblB_Status, 2, 1);
             tlpAcc.Controls.Add(tlpReturnMod, 0, 2);
             tlpAcc.Controls.Add(tableLayoutPanel2, 1, 1);
-            tlpAcc.Location = new Point(547, 2);
+            tlpAcc.Dock = DockStyle.Fill;
+            tlpAcc.Location = new Point(4, 51);
             tlpAcc.Margin = new Padding(4, 2, 4, 2);
             tlpAcc.Name = "tlpAcc";
             tlpAcc.RowCount = 3;
-            tlpAcc.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
-            tlpAcc.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
-            tlpAcc.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
-            tlpAcc.Size = new Size(873, 122);
+            tlpAcc.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+            tlpAcc.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+            tlpAcc.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+            tlpAcc.Size = new Size(1424, 130);
             tlpAcc.TabIndex = 7;
             // 
             // lblInvStat
@@ -1367,11 +1332,11 @@
             lblInvStat.Dock = DockStyle.Fill;
             lblInvStat.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblInvStat.ForeColor = Color.Red;
-            lblInvStat.Location = new Point(272, 80);
+            lblInvStat.Location = new Point(860, 86);
             lblInvStat.Margin = new Padding(4, 0, 4, 0);
             lblInvStat.Name = "lblInvStat";
             lblInvStat.RightToLeft = RightToLeft.Yes;
-            lblInvStat.Size = new Size(361, 42);
+            lblInvStat.Size = new Size(276, 44);
             lblInvStat.TabIndex = 32;
             lblInvStat.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -1381,10 +1346,10 @@
             lblDir.Dock = DockStyle.Fill;
             lblDir.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblDir.ForeColor = Color.FromArgb(192, 0, 192);
-            lblDir.Location = new Point(641, 40);
+            lblDir.Location = new Point(1144, 43);
             lblDir.Margin = new Padding(4, 0, 4, 0);
             lblDir.Name = "lblDir";
-            lblDir.Size = new Size(228, 40);
+            lblDir.Size = new Size(276, 43);
             lblDir.TabIndex = 30;
             lblDir.Text = "البائع";
             lblDir.TextAlign = ContentAlignment.MiddleRight;
@@ -1395,10 +1360,10 @@
             label13.Dock = DockStyle.Fill;
             label13.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label13.ForeColor = Color.DarkBlue;
-            label13.Location = new Point(641, 0);
+            label13.Location = new Point(1144, 0);
             label13.Margin = new Padding(4, 0, 4, 0);
             label13.Name = "label13";
-            label13.Size = new Size(228, 40);
+            label13.Size = new Size(276, 43);
             label13.TabIndex = 25;
             label13.Text = "اسم الحساب او الهاتف";
             label13.TextAlign = ContentAlignment.MiddleRight;
@@ -1409,10 +1374,10 @@
             lblB_Status.Dock = DockStyle.Fill;
             lblB_Status.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblB_Status.ForeColor = Color.Red;
-            lblB_Status.Location = new Point(4, 40);
+            lblB_Status.Location = new Point(718, 43);
             lblB_Status.Margin = new Padding(4, 0, 4, 0);
             lblB_Status.Name = "lblB_Status";
-            lblB_Status.Size = new Size(260, 40);
+            lblB_Status.Size = new Size(134, 43);
             lblB_Status.TabIndex = 25;
             lblB_Status.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -1424,11 +1389,11 @@
             tlpReturnMod.Controls.Add(rdoFree, 0, 0);
             tlpReturnMod.Controls.Add(rdoInvoice, 1, 0);
             tlpReturnMod.Dock = DockStyle.Fill;
-            tlpReturnMod.Location = new Point(640, 83);
+            tlpReturnMod.Location = new Point(1143, 89);
             tlpReturnMod.Name = "tlpReturnMod";
             tlpReturnMod.RowCount = 1;
             tlpReturnMod.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tlpReturnMod.Size = new Size(230, 36);
+            tlpReturnMod.Size = new Size(278, 38);
             tlpReturnMod.TabIndex = 33;
             tlpReturnMod.Visible = false;
             // 
@@ -1437,9 +1402,9 @@
             rdoFree.AutoSize = true;
             rdoFree.Dock = DockStyle.Fill;
             rdoFree.ForeColor = Color.Red;
-            rdoFree.Location = new Point(118, 3);
+            rdoFree.Location = new Point(142, 3);
             rdoFree.Name = "rdoFree";
-            rdoFree.Size = new Size(109, 30);
+            rdoFree.Size = new Size(133, 32);
             rdoFree.TabIndex = 0;
             rdoFree.TabStop = true;
             rdoFree.Text = "بالكود";
@@ -1453,7 +1418,7 @@
             rdoInvoice.ForeColor = Color.Red;
             rdoInvoice.Location = new Point(3, 3);
             rdoInvoice.Name = "rdoInvoice";
-            rdoInvoice.Size = new Size(109, 30);
+            rdoInvoice.Size = new Size(133, 32);
             rdoInvoice.TabIndex = 0;
             rdoInvoice.TabStop = true;
             rdoInvoice.Text = "فاتورة البيع";
@@ -1468,11 +1433,11 @@
             tableLayoutPanel2.Controls.Add(lblSellerID, 1, 0);
             tableLayoutPanel2.Controls.Add(cbxSellerID, 0, 0);
             tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(271, 43);
+            tableLayoutPanel2.Location = new Point(859, 46);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(363, 34);
+            tableLayoutPanel2.Size = new Size(278, 37);
             tableLayoutPanel2.TabIndex = 34;
             // 
             // lblSellerID
@@ -1484,7 +1449,7 @@
             lblSellerID.Location = new Point(4, 0);
             lblSellerID.Margin = new Padding(4, 0, 4, 0);
             lblSellerID.Name = "lblSellerID";
-            lblSellerID.Size = new Size(174, 34);
+            lblSellerID.Size = new Size(131, 37);
             lblSellerID.TabIndex = 31;
             lblSellerID.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -1515,8 +1480,6 @@
             tableLayoutPanel15.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tlpHader.ResumeLayout(false);
-            tableLayoutPanel6.ResumeLayout(false);
-            tableLayoutPanel7.ResumeLayout(false);
             tlpAcc.ResumeLayout(false);
             tlpAcc.PerformLayout();
             tlpReturnMod.ResumeLayout(false);
@@ -1601,8 +1564,6 @@
         private Label lblTypeInv;
         private Label lblInv_Counter;
         private DateTimePicker dtpInv_Date;
-        private TableLayoutPanel tableLayoutPanel6;
-        private TableLayoutPanel tableLayoutPanel7;
         private TableLayoutPanel tlpAcc;
         private Label lblDir;
         private Label label13;
