@@ -2242,20 +2242,22 @@ namespace MizanOriginalSoft.Views.Forms.Products
         }
 
 
-        private void txtB_Price_TextChanged(object sender, EventArgs e)
+
+        private decimal ParsePercentage(TextBox tb)
         {
-            // ✅ التحقق من صحة المدخلات
-            if (!decimal.TryParse(txtB_Price.Text, out decimal bPrice))
-                bPrice = 0;
+            // تحويل الرقم المدخل في TextBox إلى نسبة عشرية
+            if (decimal.TryParse(tb.Text, out decimal value))
+                return value / 100m; // تحويل 35 إلى 0.35
+            return 0m;
+        }
 
-            if (!decimal.TryParse(txtSalesPercentage.Text, out decimal salesPercentage))
-                salesPercentage = 0;
-
-            if (!decimal.TryParse(txtMaxRateDiscount.Text, out decimal maxRateDiscount))
-                maxRateDiscount = 0;
+        private void UpdatePrices()
+        {
+            decimal bPrice = decimal.TryParse(txtB_Price.Text, out decimal bp) ? bp : 0;
+            decimal salesPercentage = ParsePercentage(txtSalesPercentage);
+            decimal maxRateDiscount = ParsePercentage(txtMaxRateDiscount);
 
             // 🔹 حساب سعر البيع
-            // لو salesPercentage = 0.35 => يعني 35%
             decimal uPrice = bPrice + (salesPercentage * bPrice);
             txtU_Price.Text = uPrice.ToString("0.00");
 
@@ -2269,16 +2271,19 @@ namespace MizanOriginalSoft.Views.Forms.Products
             // 🔹 نسبة الخصم في الليبل
             lblD_PricePercentage.Text = $"{Math.Round(maxRateDiscount * 100, 0)}%";
         }
+
+        // الآن كل TextChanged يمكن استدعاء UpdatePrices
+        private void txtB_Price_TextChanged(object sender, EventArgs e) => UpdatePrices();
+        private void txtSalesPercentage_TextChanged(object sender, EventArgs e) => UpdatePrices();
+        private void txtMaxRateDiscount_TextChanged(object sender, EventArgs e) => UpdatePrices();
+
+        // لحساب النسبة من السعر المعدّل
         private void txtU_Price_TextChanged(object sender, EventArgs e)
         {
-            if (!decimal.TryParse(txtB_Price.Text, out decimal bPrice))
-                bPrice = 0;
-            if (!decimal.TryParse(txtU_Price.Text, out decimal uPrice))
-                uPrice = 0;
-
-            if (bPrice > 0)
+            if (decimal.TryParse(txtB_Price.Text, out decimal bPrice) &&
+                decimal.TryParse(txtU_Price.Text, out decimal uPrice) &&
+                bPrice > 0)
             {
-                // نسبة الزيادة = (سعر البيع - سعر الشراء) / سعر الشراء
                 decimal salesPercentage = (uPrice - bPrice) / bPrice;
                 lblU_PricePercentage.Text = $"{Math.Round(salesPercentage * 100, 0)}%";
             }
@@ -2290,14 +2295,10 @@ namespace MizanOriginalSoft.Views.Forms.Products
 
         private void txtD_Price_TextChanged(object sender, EventArgs e)
         {
-            if (!decimal.TryParse(txtU_Price.Text, out decimal uPrice))
-                uPrice = 0;
-            if (!decimal.TryParse(txtD_Price.Text, out decimal dPrice))
-                dPrice = 0;
-
-            if (uPrice > 0)
+            if (decimal.TryParse(txtU_Price.Text, out decimal uPrice) &&
+                decimal.TryParse(txtD_Price.Text, out decimal dPrice) &&
+                uPrice > 0)
             {
-                // نسبة الخصم = (سعر البيع - سعر بعد الخصم) / سعر البيع
                 decimal discountPercentage = (uPrice - dPrice) / uPrice;
                 lblD_PricePercentage.Text = $"{Math.Round(discountPercentage * 100, 0)}%";
             }
@@ -2307,53 +2308,124 @@ namespace MizanOriginalSoft.Views.Forms.Products
             }
         }
 
-        private void txtSalesPercentage_TextChanged(object sender, EventArgs e)
-        {
-            if (!decimal.TryParse(txtB_Price.Text, out decimal bPrice))
-                bPrice = 0;
-            if (!decimal.TryParse(txtSalesPercentage.Text, out decimal salesPercentage))
-                salesPercentage = 0;
-            if (!decimal.TryParse(txtMaxRateDiscount.Text, out decimal maxRateDiscount))
-                maxRateDiscount = 0;
 
-            // 🔹 حساب سعر البيع
-            decimal uPrice = bPrice + (salesPercentage * bPrice);
-            txtU_Price.Text = uPrice.ToString("0.00");
+        //private void txtB_Price_TextChanged(object sender, EventArgs e)
+        //{/*الرقم المكتوب رقم صحيح فى
+        //  txtSalesPercentage و txtMaxRateDiscount
+        //    يجب تحويله لنسبة مئوية فاذا كان 35 هذا يعنى انه 0.35 
+        //    فالمستخدم يكتب رقم صحيح ويعنى به النسبة سواء للبيع او الخصم 
+        //    فكيف يتم التعديل
 
-            // 🔹 نسبة الزيادة
-            lblU_PricePercentage.Text = $"{Math.Round(salesPercentage * 100, 0)}%";
+        //  */
+        //    // ✅ التحقق من صحة المدخلات
+        //    if (!decimal.TryParse(txtB_Price.Text, out decimal bPrice))
+        //        bPrice = 0;
 
-            // 🔹 حساب السعر بعد الخصم
-            decimal dPrice = uPrice - (maxRateDiscount * uPrice);
-            txtD_Price.Text = dPrice.ToString("0.00");
+        //    if (!decimal.TryParse(txtSalesPercentage.Text, out decimal salesPercentage))
+        //        salesPercentage = 0;
 
-            // 🔹 نسبة الخصم
-            lblD_PricePercentage.Text = $"{Math.Round(maxRateDiscount * 100, 0)}%";
-        }
+        //    if (!decimal.TryParse(txtMaxRateDiscount.Text, out decimal maxRateDiscount))
+        //        maxRateDiscount = 0;
 
-        private void txtMaxRateDiscount_TextChanged(object sender, EventArgs e)
-        {
-            if (!decimal.TryParse(txtB_Price.Text, out decimal bPrice))
-                bPrice = 0;
-            if (!decimal.TryParse(txtSalesPercentage.Text, out decimal salesPercentage))
-                salesPercentage = 0;
-            if (!decimal.TryParse(txtMaxRateDiscount.Text, out decimal maxRateDiscount))
-                maxRateDiscount = 0;
+        //    // 🔹 حساب سعر البيع
+        //    decimal uPrice = bPrice + (salesPercentage * bPrice);
+        //    txtU_Price.Text = uPrice.ToString("0.00");
 
-            // 🔹 حساب سعر البيع
-            decimal uPrice = bPrice + (salesPercentage * bPrice);
-            txtU_Price.Text = uPrice.ToString("0.00");
+        //    // 🔹 نسبة الزيادة في الليبل
+        //    lblU_PricePercentage.Text = $"{Math.Round(salesPercentage * 100, 0)}%";
 
-            // 🔹 نسبة الزيادة
-            lblU_PricePercentage.Text = $"{Math.Round(salesPercentage * 100, 0)}%";
+        //    // 🔹 حساب السعر بعد الخصم
+        //    decimal dPrice = uPrice - (maxRateDiscount * uPrice);
+        //    txtD_Price.Text = dPrice.ToString("0.00");
 
-            // 🔹 حساب السعر بعد الخصم
-            decimal dPrice = uPrice - (maxRateDiscount * uPrice);
-            txtD_Price.Text = dPrice.ToString("0.00");
+        //    // 🔹 نسبة الخصم في الليبل
+        //    lblD_PricePercentage.Text = $"{Math.Round(maxRateDiscount * 100, 0)}%";
+        //}
+        //private void txtU_Price_TextChanged(object sender, EventArgs e)
+        //{
+        //    if (!decimal.TryParse(txtB_Price.Text, out decimal bPrice))
+        //        bPrice = 0;
+        //    if (!decimal.TryParse(txtU_Price.Text, out decimal uPrice))
+        //        uPrice = 0;
 
-            // 🔹 نسبة الخصم
-            lblD_PricePercentage.Text = $"{Math.Round(maxRateDiscount * 100, 0)}%";
-        }
+        //    if (bPrice > 0)
+        //    {
+        //        // نسبة الزيادة = (سعر البيع - سعر الشراء) / سعر الشراء
+        //        decimal salesPercentage = (uPrice - bPrice) / bPrice;
+        //        lblU_PricePercentage.Text = $"{Math.Round(salesPercentage * 100, 0)}%";
+        //    }
+        //    else
+        //    {
+        //        lblU_PricePercentage.Text = "0%";
+        //    }
+        //}
+
+        //private void txtD_Price_TextChanged(object sender, EventArgs e)
+        //{
+        //    if (!decimal.TryParse(txtU_Price.Text, out decimal uPrice))
+        //        uPrice = 0;
+        //    if (!decimal.TryParse(txtD_Price.Text, out decimal dPrice))
+        //        dPrice = 0;
+
+        //    if (uPrice > 0)
+        //    {
+        //        // نسبة الخصم = (سعر البيع - سعر بعد الخصم) / سعر البيع
+        //        decimal discountPercentage = (uPrice - dPrice) / uPrice;
+        //        lblD_PricePercentage.Text = $"{Math.Round(discountPercentage * 100, 0)}%";
+        //    }
+        //    else
+        //    {
+        //        lblD_PricePercentage.Text = "0%";
+        //    }
+        //}
+
+        //private void txtSalesPercentage_TextChanged(object sender, EventArgs e)
+        //{
+        //    if (!decimal.TryParse(txtB_Price.Text, out decimal bPrice))
+        //        bPrice = 0;
+        //    if (!decimal.TryParse(txtSalesPercentage.Text, out decimal salesPercentage))
+        //        salesPercentage = 0;
+        //    if (!decimal.TryParse(txtMaxRateDiscount.Text, out decimal maxRateDiscount))
+        //        maxRateDiscount = 0;
+
+        //    // 🔹 حساب سعر البيع
+        //    decimal uPrice = bPrice + (salesPercentage * bPrice);
+        //    txtU_Price.Text = uPrice.ToString("0.00");
+
+        //    // 🔹 نسبة الزيادة
+        //    lblU_PricePercentage.Text = $"{Math.Round(salesPercentage * 100, 0)}%";
+
+        //    // 🔹 حساب السعر بعد الخصم
+        //    decimal dPrice = uPrice - (maxRateDiscount * uPrice);
+        //    txtD_Price.Text = dPrice.ToString("0.00");
+
+        //    // 🔹 نسبة الخصم
+        //    lblD_PricePercentage.Text = $"{Math.Round(maxRateDiscount * 100, 0)}%";
+        //}
+
+        //private void txtMaxRateDiscount_TextChanged(object sender, EventArgs e)
+        //{
+        //    if (!decimal.TryParse(txtB_Price.Text, out decimal bPrice))
+        //        bPrice = 0;
+        //    if (!decimal.TryParse(txtSalesPercentage.Text, out decimal salesPercentage))
+        //        salesPercentage = 0;
+        //    if (!decimal.TryParse(txtMaxRateDiscount.Text, out decimal maxRateDiscount))
+        //        maxRateDiscount = 0;
+
+        //    // 🔹 حساب سعر البيع
+        //    decimal uPrice = bPrice + (salesPercentage * bPrice);
+        //    txtU_Price.Text = uPrice.ToString("0.00");
+
+        //    // 🔹 نسبة الزيادة
+        //    lblU_PricePercentage.Text = $"{Math.Round(salesPercentage * 100, 0)}%";
+
+        //    // 🔹 حساب السعر بعد الخصم
+        //    decimal dPrice = uPrice - (maxRateDiscount * uPrice);
+        //    txtD_Price.Text = dPrice.ToString("0.00");
+
+        //    // 🔹 نسبة الخصم
+        //    lblD_PricePercentage.Text = $"{Math.Round(maxRateDiscount * 100, 0)}%";
+        //}
 
 
         private void FillUnits()
