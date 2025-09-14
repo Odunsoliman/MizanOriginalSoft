@@ -786,7 +786,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-      
+
         // ثلاث نقاط هامة يقوم بها هذا الحفظ
         //1- مفاتيح المطوّر الخاصة تفضل زي ما هي.
         //2- التعليقات تبقى زي ما هي.
@@ -801,10 +801,10 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             Dictionary<string, string> newSettings = new Dictionary<string, string>
             {
                 // 🔹 صفحة اعدادات السيرفر كاملة
-                ["serverName"] = txtServerName.Text,           // اسم السيرفر
-                ["DBName"] = txtDBName.Text,                   // اسم قاعدة البيانات 
-                ["maxBackups"] = txtMaxBackups.Text,           // عدد النسخ الاحتياطية
-                ["BackupsPath"] = txtBackupsPath.Text,         // مكان النسخ الاحتياطية
+                ["serverName"] = txtServerName.Text,
+                ["DBName"] = txtDBName.Text,
+                ["maxBackups"] = txtMaxBackups.Text,
+                ["BackupsPath"] = txtBackupsPath.Text,
 
                 // 🔹 صفحة الطباعة كاملة
                 ["RollPrinter"] = lblRollPrinter.Text,
@@ -819,25 +819,26 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 ["RollLabelHeight"] = txtRollLabelHeight.Text,
 
                 // 🔹 صفحة المعلومات العامة كاملة
-                ["CompanyName"] = txtNameCo.Text,              // اسم الشركة
-                ["CompanyPhon"] = txtPhon.Text,                // الهاتف
-                ["CompanyAnthrPhon"] = txtAnthrPhon.Text,      // هاتف آخر
-                ["CompanyAdreass"] = txtAdreass.Text,          // العنوان
-                ["EmailCo"] = txtCompanyEmail.Text,            // الايميل
+                ["CompanyName"] = txtNameCo.Text,
+                ["CompanyPhon"] = txtPhon.Text,
+                ["CompanyAnthrPhon"] = txtAnthrPhon.Text,
+                ["CompanyAdreass"] = txtAdreass.Text,
+                ["EmailCo"] = txtCompanyEmail.Text,
                 ["CompanyLoGoFolder"] = lblLogoPath.Text,
                 ["LogoImagName"] = lblLogoImageName.Text,
                 ["DefaultWarehouseId"] = cbxWarehouseId.SelectedValue?.ToString() ?? "",
 
                 // 🔹 صفحة البيع والشراء - كاملة الآن
-                ["IsSaleByNegativeStock"] = chkIsSaleByNegativeStock.Checked.ToString(), // البيع حسب الرصيد أو المكشوف
-                ["SalesTax"] = txtSalesTax.Text,                                         // نسبة الضريبة
-                ["IsEnablToChangTax"] = chkIsEnablToChangTax.Checked.ToString(),         // السماح بتغيير نسبة الضريبة
-                ["ReturnSaleMode"] = cbxReturnSaleMode.SelectedValue?.ToString() ?? "",  // سياسة البيع المرتد
-                ["SalesPercentage"] = txtSalesPercentage.Text,                           // نسبة التسعير من سعر الشراء
-                ["MaxRateDiscount"] = txtMaxRateDiscount.Text,                           // نسبة خصم الأوكازيون المقررة
-                ["IsOpendMaxRateDiscount"] = chkIsOpendMaxRateDiscount.Checked.ToString()// السماح بتعيين خصم أعلى
+                ["IsSaleByNegativeStock"] = chkIsSaleByNegativeStock.Checked.ToString(),
+                ["SalesTax"] = txtSalesTax.Text,
+                ["IsEnablToChangTax"] = chkIsEnablToChangTax.Checked.ToString(),
+                ["ReturnSaleMode"] = cbxReturnSaleMode.SelectedValue?.ToString() ?? "",
+                ["SalesPercentage"] = txtSalesPercentage.Text,
+                ["MaxRateDiscount"] = txtMaxRateDiscount.Text,
+                ["IsOpendMaxRateDiscount"] = chkIsOpendMaxRateDiscount.Checked.ToString()
             };
 
+            // 🔹 تحديث القيم الموجودة أو إضافتها
             foreach (var setting in newSettings)
             {
                 string key = setting.Key;
@@ -862,11 +863,107 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
 
             File.WriteAllLines(configFilePath, lines);
+
+            // 🔹 أعد تحميل القيم للبرنامج كله
+            AppSettings.Load(configFilePath);
+
+            // 🔹 أعد تعبئة الشاشة نفسها
             LoadSettings();
-     //       AppSettings.Load("config.txt");
-
         }
+        /*
+                  private void LoadSettings()
+           {
+               if (!File.Exists(configFilePath))
+                   return;
 
+               string[] lines = File.ReadAllLines(configFilePath);
+
+               foreach (string line in lines)
+               {
+                   if (string.IsNullOrWhiteSpace(line) || line.TrimStart().StartsWith("#") || !line.Contains("="))
+                       continue;
+
+                   string key = line.Split('=')[0].Trim();
+                   string value = line.Substring(line.IndexOf('=') + 1).Trim();
+
+                   switch (key)
+                   {
+                       // 🔹 صفحة إعدادات السيرفر
+                       case "serverName": txtServerName.Text = value; break;
+                       case "DBName": txtDBName.Text = value; break;
+                       case "BackupsPath": txtBackupsPath.Text = value; break;
+                       case "maxBackups": txtMaxBackups.Text = value; break;
+
+                       // 🔹 صفحة الطباعة
+                       case "RollPrinter": lblRollPrinter.Text = value; break;
+                       case "SheetPrinter": lblSheetPrinter.Text = value; break;
+                       case "SheetRows": txtSheetRows.Text = value; break;
+                       case "SheetCols": txtSheetCols.Text = value; break;
+                       case "SheetMarginTop": txtMarginTop.Text = value; break;
+                       case "SheetMarginBottom": txtMarginBottom.Text = value; break;
+                       case "SheetMarginRight": txtMarginRight.Text = value; break;
+                       case "SheetMarginLeft": txtMarginLeft.Text = value; break;
+                       case "RollLabelWidth": txtRollLabelWidth.Text = value; break;
+                       case "RollLabelHeight": txtRollLabelHeight.Text = value; break;
+
+                       // 🔹 صفحة المعلومات العامة
+                       case "CompanyName": txtNameCo.Text = value; break;
+                       case "CompanyPhon": txtPhon.Text = value; break;
+                       case "CompanyAnthrPhon": txtAnthrPhon.Text = value; break;
+                       case "CompanyAdreass": txtAdreass.Text = value; break;
+                       case "EmailCo": txtCompanyEmail.Text = value; break;
+                       case "CompanyLoGoFolder": lblLogoPath.Text = value; break;
+                       case "LogoImagName": lblLogoImageName.Text = value; break;
+                       case "DefaultWarehouseId":
+                           if (int.TryParse(value, out int defWarehouseId))
+                               cbxWarehouseId.SelectedValue = defWarehouseId;
+                           break;
+
+                       // 🔹 صفحة البيع والشراء
+                       case "IsSaleByNegativeStock":
+                           if (bool.TryParse(value, out bool isNegativeStock))
+                           {
+                               chkIsSaleByNegativeStock.Checked = isNegativeStock;
+                               lblTypeSaleStock.Text = isNegativeStock
+                                   ? "البيع على المكشوف"
+                                   : "البيع حسب الرصيد";
+                           }
+                           break;
+                       case "ReturnSaleMode":
+                           if (int.TryParse(value, out int selectedMode))
+                               cbxReturnSaleMode.SelectedValue = selectedMode;
+                           break;
+                       case "IsEnablToChangTax":
+                           if (bool.TryParse(value, out bool enableTax))
+                               chkIsEnablToChangTax.Checked = enableTax;
+                           break;
+                       case "SalesTax": txtSalesTax.Text = value; break;
+                       case "SalesPercentage": txtSalesPercentage.Text = value; break;
+                       case "MaxRateDiscount": txtMaxRateDiscount.Text = value; break;
+                       case "IsOpendMaxRateDiscount":
+                           if (bool.TryParse(value, out bool openDiscount))
+                               chkIsOpendMaxRateDiscount.Checked = openDiscount;
+                           break;
+
+                       // 🔹 إعدادات أخرى (إن وجدت)
+                       case "DefaultRdoCheck":
+                           Control[] radios = this.Controls.Find(value, true);
+                           if (radios.Length > 0 && radios[0] is RadioButton rdo)
+                               rdo.Checked = true;
+                           break;
+                   }
+               }
+
+               // 🔹 تحميل الشعار
+               if (!string.IsNullOrEmpty(lblLogoPath.Text) && !string.IsNullOrEmpty(lblLogoImageName.Text))
+               {
+                   string logoPath = Path.Combine(lblLogoPath.Text, lblLogoImageName.Text);
+                   if (File.Exists(logoPath))
+                       picLogoCo.Image = Image.FromFile(logoPath);
+               }
+           }
+
+            */
         #endregion
 
         #region === التنقل باستخدام Enter بين الحقول ===
