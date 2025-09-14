@@ -863,7 +863,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
             File.WriteAllLines(configFilePath, lines);
             LoadSettings();
-            AppSettings.Load("config.txt");
+     //       AppSettings.Load("config.txt");
 
         }
 

@@ -16,7 +16,7 @@ namespace MizanOriginalSoft
             {
                 MessageBox.Show($"⚠️ الملف غير موجود:\n{settingsPath}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
-            }
+            }//تجاوز الشرط الحمد لله معناها الملف فى مساره الصحيح
 
             AppSettings.Load(settingsPath);
 

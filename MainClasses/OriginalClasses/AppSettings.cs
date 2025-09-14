@@ -19,7 +19,7 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
 
             if (!File.Exists(filePath))
                 throw new FileNotFoundException($"❌ ملف الإعدادات غير موجود: {filePath}");//
-
+        //    System.IO.FileNotFoundException: '❌ ملف الإعدادات غير موجود: config.txt'
 
             foreach (var rawLine in File.ReadAllLines(filePath))
             {
