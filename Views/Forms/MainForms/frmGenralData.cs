@@ -33,7 +33,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             txtNameCo.Focus();
             txtNameCo.SelectAll();
             LoadBackupFiles();
-            AttachTextBoxHandlers(this);
+            AttachControlHandlers(this);
             ApplyPermissionsToControls();
             LoadAllUsers();
             DGV_Users.SelectionChanged += DGV_Users_SelectionChanged;
@@ -525,33 +525,18 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                             cbxWarehouseId.SelectedValue = defWarehouseId;
                         break;
 
-                    // 🔹 المفاتيح الجديدة
-                    //case "BackupDB": txtBackupDB.Text = value; break;
-                    //case "RestoreDB": txtRestoreDB.Text = value; break;
-                    //case "GoogleDrivePath": txtGoogleDrivePath.Text = value; break;
-                    //case "ProjectPath": txtProjectPath.Text = value; break;
-                    //case "BackupGitPath": txtBackupGitPath.Text = value; break;
                     case "IsEnablToChangTax":
                         if (bool.TryParse(value, out bool enableTax))
                             chkIsEnablToChangTax.Checked = enableTax;
                         break;
-                    //case "DefaultPrinter": txtDefaultPrinter.Text = value; break;
-                    //case "DefaultWarehouse": txtDefaultWarehouse.Text = value; break;
-                    //case "DefaultStartDate":
-                    //    if (DateTime.TryParse(value, out DateTime startDate))
-                    //        dtpStartDate.Value = startDate;
-                    //    break;
-                    //case "DefaultEndDate":
-                    //    if (DateTime.TryParse(value, out DateTime endDate))
-                    //        dtpEndDate.Value = endDate;
-                    //    break;
+
                     case "DefaultRdoCheck":
                         Control[] radios = this.Controls.Find(value, true);
                         if (radios.Length > 0 && radios[0] is RadioButton rdo)
                             rdo.Checked = true;
                         break;
-                    case "SalesPercentage": txtSalesPercentage.Text = value; break;
-                    case "MaxRateDiscount": txtMaxRateDiscount.Text = value; break;
+                    case "SalesPercentage": txtSalesPercentage.Text = value; break;// لماذا كلما غيرت القيمة فى هذا التكست وخرجت منه عاد الى الرقم القديم المسجل فى الملف
+                    case "MaxRateDiscount": txtMaxRateDiscount.Text = value; break;// وكذلك هنا بخلاف باقى المتغيرات اتحكم فى تغييرها هل المشكلة هنا ام فى وظيفة اخرى
                     case "IsOpendMaxRateDiscount":
                         if (bool.TryParse(value, out bool openDiscount))
                             chkIsOpendMaxRateDiscount.Checked = openDiscount;
@@ -567,6 +552,22 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     picLogoCo.Image = Image.FromFile(logoPath);
             }
         }
+
+        //case "BackupDB": txtBackupDB.Text = value; break;
+        //case "RestoreDB": txtRestoreDB.Text = value; break;
+        //case "GoogleDrivePath": txtGoogleDrivePath.Text = value; break;
+        //case "ProjectPath": txtProjectPath.Text = value; break;
+        //case "BackupGitPath": txtBackupGitPath.Text = value; break;
+        //case "DefaultPrinter": txtDefaultPrinter.Text = value; break;
+        //case "DefaultWarehouse": txtDefaultWarehouse.Text = value; break;
+        //case "DefaultStartDate":
+        //    if (DateTime.TryParse(value, out DateTime startDate))
+        //        dtpStartDate.Value = startDate;
+        //    break;
+        //case "DefaultEndDate":
+        //    if (DateTime.TryParse(value, out DateTime endDate))
+        //        dtpEndDate.Value = endDate;
+        //    break;
         #endregion
 
         /* 
@@ -696,98 +697,121 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         #endregion
 
 
-        #region حفظ الإعدادات بصمت (بدون رسالة)
+        #region ***********  حفظ الإعدادات بصمت بدون رسالة بمجرد اى تغيير فى الاعدادات  ********
 
-        // ربط أحداث التغيير تلقائيًا لمربعات النصوص والـ CheckBox داخل الحاوية.
+        /*
+            🔹 هذا الكود يراقب جميع الكنترولات (TextBox, CheckBox, ComboBox, Label, RadioButton)
+               ويقوم بالحفظ التلقائي في ملف الإعدادات فور حدوث أي تغيير.
+
+            🔹 الملف يحتفظ بالتعليقات (#...) كما هي، ولا يتم تعديل إلا الأسطر الخاصة بالمفاتيح.
+            🔹 صيغة القيم:
+                keyName=Value
+            🔹 لا يوجد مسافات أو تعليقات في نفس السطر.
+        */
+
         private void AttachControlHandlers(Control parent)
         {
             foreach (Control ctrl in parent.Controls)
             {
                 if (ctrl is TextBox txt)
                 {
-                    txt.Tag = txt.Text; // حفظ القيمة الأصلية للمقارنة لاحقًا
+                    txt.Tag = txt.Text;
                     txt.Leave += TextBox_Leave;
                 }
                 else if (ctrl is CheckBox chk)
                 {
-                    chk.Tag = chk.Checked; // حفظ القيمة الأصلية
+                    chk.Tag = chk.Checked;
                     chk.CheckedChanged += CheckBox_CheckedChanged;
                 }
-                else if (ctrl.HasChildren)
+                else if (ctrl is ComboBox cbx)
                 {
-                    AttachControlHandlers(ctrl); // تكرار على الأبناء
+                    cbx.Tag = cbx.SelectedValue?.ToString() ?? cbx.Text;
+                    cbx.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
                 }
+                else if (ctrl is Label lbl)
+                {
+                    lbl.Tag = lbl.Text;
+                    lbl.TextChanged += Label_TextChanged;
+                }
+                else if (ctrl is RadioButton rdo)
+                {
+                    rdo.Tag = rdo.Checked;
+                    rdo.CheckedChanged += RadioButton_CheckedChanged;
+                }
+
+                // Recursively attach handlers for child controls
+                if (ctrl.HasChildren)
+                    AttachControlHandlers(ctrl);
             }
         }
 
-        // ربط الحدث لكل TextBox و CheckBox.
-        private void AttachTextBoxHandlers(Control parent)
-        {
-            foreach (Control ctrl in parent.Controls)
-            {
-                if (ctrl is TextBox txt)
-                {
-                    txt.Tag = txt.Text; // حفظ القيمة القديمة
-                    txt.Leave += TextBox_Leave;
-                }
-                else if (ctrl is CheckBox chk)
-                {
-                    chk.Tag = chk.Checked; // حفظ القيمة القديمة
-                    chk.CheckedChanged += CheckBox_CheckedChanged;
-                }
-                else if (ctrl.HasChildren)
-                {
-                    AttachTextBoxHandlers(ctrl); // Recursion
-                }
-            }
-        }
-
-        // تنفيذ الحفظ عند تغيير قيمة مربع النص.
+        // 🔹 TextBox تغيير النص
         private void TextBox_Leave(object? sender, EventArgs e)
         {
-            if (sender is TextBox txt)
+            if (sender is TextBox txt && txt.Tag is string oldValue && txt.Text != oldValue)
             {
-                if ((txt.Tag is string oldValue) && txt.Text != oldValue)
-                {
-                    SaveData();
-                    txt.Tag = txt.Text;
-                }
+                SaveData();
+                txt.Tag = txt.Text;
             }
         }
 
-        // تنفيذ الحفظ عند تغيير حالة الـ CheckBox.
+        // 🔹 CheckBox تغيير الحالة
         private void CheckBox_CheckedChanged(object? sender, EventArgs e)
         {
-            if (sender is CheckBox chk)
+            if (sender is CheckBox chk && chk.Tag is bool oldValue && chk.Checked != oldValue)
             {
-                // 🔹 تغيير النص حسب حالة الـ CheckBox
-                lblTypeSaleStock.Text = chk.Checked ? "البيع على المكشوف" : "البيع حسب الرصيد";
+                SaveData();
+                chk.Tag = chk.Checked;
+            }
+        }
 
-                if ((chk.Tag is bool oldValue) && chk.Checked != oldValue)
+        // 🔹 ComboBox تغيير القيمة
+        private void ComboBox_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (sender is ComboBox cbx)
+            {
+                string currentValue = cbx.SelectedValue?.ToString() ?? cbx.Text;
+                if (cbx.Tag is string oldValue && currentValue != oldValue)
                 {
                     SaveData();
-                    LoadSettings();
-                    chk.Tag = chk.Checked;
+                    cbx.Tag = currentValue;
                 }
             }
         }
 
+        // 🔹 Label تغيير النص
+        private void Label_TextChanged(object? sender, EventArgs e)
+        {
+            if (sender is Label lbl && lbl.Tag is string oldValue && lbl.Text != oldValue)
+            {
+                SaveData();
+                lbl.Tag = lbl.Text;
+            }
+        }
+
+        // 🔹 RadioButton تغيير الحالة
+        private void RadioButton_CheckedChanged(object? sender, EventArgs e)
+        {
+            if (sender is RadioButton rdo && rdo.Tag is bool oldValue && rdo.Checked != oldValue)
+            {
+                SaveData();
+                rdo.Tag = rdo.Checked;
+            }
+        }
+
+        // 🔹 الحفظ الفعلي
         private void SaveData()
         {
-            // اقرأ كل الأسطر من الملف (مع التعليقات)
             List<string> lines = File.Exists(configFilePath)
                 ? File.ReadAllLines(configFilePath).ToList()
                 : new List<string>();
 
-            // إعدادات جديدة عايزين نحفظها
             Dictionary<string, string> newSettings = new Dictionary<string, string>
             {
-                //اعدادت السيرفر
                 ["serverName"] = txtServerName.Text,
                 ["DBName"] = txtDBName.Text,
                 ["maxBackups"] = txtMaxBackups.Text,
                 ["BackupsPath"] = txtBackupsPath.Text,
-                // اعدادت الطباعة
                 ["RollPrinter"] = lblRollPrinter.Text,
                 ["SheetPrinter"] = lblSheetPrinter.Text,
                 ["SheetRows"] = txtSheetRows.Text,
@@ -798,37 +822,29 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 ["SheetMarginLeft"] = txtMarginLeft.Text,
                 ["RollLabelWidth"] = txtRollLabelWidth.Text,
                 ["RollLabelHeight"] = txtRollLabelHeight.Text,
-                // اعدادات عامة
                 ["CompanyName"] = txtNameCo.Text,
                 ["CompanyPhon"] = txtPhon.Text,
                 ["CompanyAnthrPhon"] = txtAnthrPhon.Text,
-                
                 ["CompanyAdreass"] = txtAdreass.Text,
                 ["EmailCo"] = txtCompanyEmail.Text,
                 ["IsSaleByNegativeStock"] = chkIsSaleByNegativeStock.Checked.ToString(),
                 ["CompanyLoGoFolder"] = lblLogoPath.Text,
                 ["LogoImagName"] = lblLogoImageName.Text,
                 ["DefaultWarehouseId"] = cbxWarehouseId.SelectedValue?.ToString() ?? "",
-                // اعدادات البيع والشراء
                 ["SalesTax"] = txtSalesTax.Text
-
             };
 
-            // نحدث أو نضيف الإعدادات
             foreach (var setting in newSettings)
             {
                 string key = setting.Key;
                 string newValue = setting.Value;
-
                 bool found = false;
 
                 for (int i = 0; i < lines.Count; i++)
                 {
-                    // تخطي التعليقات والأسطر الفارغة
                     if (string.IsNullOrWhiteSpace(lines[i]) || lines[i].TrimStart().StartsWith("#"))
                         continue;
 
-                    // لو السطر فيه نفس المفتاح نعدله
                     if (lines[i].StartsWith(key + "=", StringComparison.OrdinalIgnoreCase))
                     {
                         lines[i] = $"{key}={newValue}";
@@ -837,39 +853,14 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     }
                 }
 
-                // لو المفتاح مش موجود نضيفه في الآخر
                 if (!found)
-                {
                     lines.Add($"{key}={newValue}");
-                }
             }
 
-            // نكتب الملف من جديد مع الحفاظ على التعليقات
             File.WriteAllLines(configFilePath, lines);
-
-            // الكلاس AppSettings يقرأ مرة واحدة عند فتح البرنامج ملف  الستينج فيجب اعادة القرائة بعد تعديل اى اعداد
             LoadSettings();
         }
 
-        private void txtReturnSaleMode_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // السماح بـ Backspace
-            if (e.KeyChar == (char)Keys.Back)
-                return;
-
-            // السماح فقط بـ 1 أو 2 أو 3
-            if (e.KeyChar != '1' && e.KeyChar != '2' && e.KeyChar != '3')
-            {
-                e.Handled = true; // منع الإدخال
-            }
-        }
-
-        private void cbxReturnSaleMode_SelectedIndexChanged(object sender, EventArgs e)
-        {
-           /*شاشة الاعداد لم تعد تفتح تخرج الرسالة السابقة لما فتحت شاشة الاعداد
-            وهذا الكود المسؤول عن الحفظ الصامت لكل ادوات الشاشة فاين الخلل
-            */
-        }
         #endregion
 
         #region === التنقل باستخدام Enter بين الحقول ===

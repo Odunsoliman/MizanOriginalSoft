@@ -660,10 +660,10 @@
             // 
             tabPagePrinterSetting.BackColor = Color.WhiteSmoke;
             tabPagePrinterSetting.Controls.Add(tableLayoutPanel18);
-            tabPagePrinterSetting.Location = new Point(4, 44);
+            tabPagePrinterSetting.Location = new Point(4, 84);
             tabPagePrinterSetting.Name = "tabPagePrinterSetting";
             tabPagePrinterSetting.Padding = new Padding(3);
-            tabPagePrinterSetting.Size = new Size(812, 435);
+            tabPagePrinterSetting.Size = new Size(812, 395);
             tabPagePrinterSetting.TabIndex = 1;
             tabPagePrinterSetting.Text = "اعدادات الطابعات";
             // 
@@ -1277,10 +1277,10 @@
             // 
             tabPageServerSetting.BackColor = Color.WhiteSmoke;
             tabPageServerSetting.Controls.Add(tableLayoutPanel10);
-            tabPageServerSetting.Location = new Point(4, 44);
+            tabPageServerSetting.Location = new Point(4, 84);
             tabPageServerSetting.Name = "tabPageServerSetting";
             tabPageServerSetting.Padding = new Padding(3);
-            tabPageServerSetting.Size = new Size(812, 435);
+            tabPageServerSetting.Size = new Size(812, 395);
             tabPageServerSetting.TabIndex = 2;
             tabPageServerSetting.Text = "اعدادات السيرفر";
             // 
@@ -1442,10 +1442,10 @@
             // tabPageUserSetting
             // 
             tabPageUserSetting.Controls.Add(tableLayoutPanel1);
-            tabPageUserSetting.Location = new Point(4, 44);
+            tabPageUserSetting.Location = new Point(4, 84);
             tabPageUserSetting.Name = "tabPageUserSetting";
             tabPageUserSetting.Padding = new Padding(6);
-            tabPageUserSetting.Size = new Size(812, 435);
+            tabPageUserSetting.Size = new Size(812, 395);
             tabPageUserSetting.TabIndex = 3;
             tabPageUserSetting.Text = "اعدادات المستخدمين";
             tabPageUserSetting.UseVisualStyleBackColor = true;
@@ -1464,7 +1464,7 @@
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(800, 423);
+            tableLayoutPanel1.Size = new Size(800, 383);
             tableLayoutPanel1.TabIndex = 10;
             // 
             // DGV_Users
@@ -1473,7 +1473,7 @@
             DGV_Users.Dock = DockStyle.Fill;
             DGV_Users.Location = new Point(537, 3);
             DGV_Users.Name = "DGV_Users";
-            DGV_Users.Size = new Size(260, 417);
+            DGV_Users.Size = new Size(260, 377);
             DGV_Users.TabIndex = 0;
             // 
             // tableLayoutPanel11
@@ -1488,16 +1488,16 @@
             tableLayoutPanel11.RowCount = 2;
             tableLayoutPanel11.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanel11.RowStyles.Add(new RowStyle(SizeType.Percent, 90F));
-            tableLayoutPanel11.Size = new Size(260, 417);
+            tableLayoutPanel11.Size = new Size(260, 377);
             tableLayoutPanel11.TabIndex = 1;
             // 
             // DGV_Permissions
             // 
             DGV_Permissions.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DGV_Permissions.Dock = DockStyle.Fill;
-            DGV_Permissions.Location = new Point(3, 44);
+            DGV_Permissions.Location = new Point(3, 40);
             DGV_Permissions.Name = "DGV_Permissions";
-            DGV_Permissions.Size = new Size(254, 370);
+            DGV_Permissions.Size = new Size(254, 334);
             DGV_Permissions.TabIndex = 6;
             // 
             // lblID_User
@@ -1506,7 +1506,7 @@
             lblID_User.Dock = DockStyle.Fill;
             lblID_User.Location = new Point(3, 0);
             lblID_User.Name = "lblID_User";
-            lblID_User.Size = new Size(254, 41);
+            lblID_User.Size = new Size(254, 37);
             lblID_User.TabIndex = 9;
             lblID_User.Text = "0";
             lblID_User.TextAlign = ContentAlignment.MiddleCenter;
@@ -1648,10 +1648,10 @@
             // tabPageUserPermissions
             // 
             tabPageUserPermissions.Controls.Add(tableLayoutPanel25);
-            tabPageUserPermissions.Location = new Point(4, 44);
+            tabPageUserPermissions.Location = new Point(4, 84);
             tabPageUserPermissions.Name = "tabPageUserPermissions";
             tabPageUserPermissions.Padding = new Padding(3);
-            tabPageUserPermissions.Size = new Size(812, 435);
+            tabPageUserPermissions.Size = new Size(812, 395);
             tabPageUserPermissions.TabIndex = 4;
             tabPageUserPermissions.Text = "اعداد الصلاحيات";
             tabPageUserPermissions.UseVisualStyleBackColor = true;
@@ -1672,16 +1672,16 @@
             tableLayoutPanel25.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanel25.RowStyles.Add(new RowStyle(SizeType.Percent, 80F));
             tableLayoutPanel25.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel25.Size = new Size(806, 429);
+            tableLayoutPanel25.Size = new Size(806, 389);
             tableLayoutPanel25.TabIndex = 1;
             // 
             // DGV
             // 
             DGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DGV.Dock = DockStyle.Fill;
-            DGV.Location = new Point(8, 49);
+            DGV.Location = new Point(8, 45);
             DGV.Name = "DGV";
-            DGV.Size = new Size(790, 329);
+            DGV.Size = new Size(790, 297);
             DGV.TabIndex = 0;
             // 
             // tableLayoutPanel26
@@ -1700,7 +1700,7 @@
             tableLayoutPanel26.Name = "tableLayoutPanel26";
             tableLayoutPanel26.RowCount = 1;
             tableLayoutPanel26.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel26.Size = new Size(790, 35);
+            tableLayoutPanel26.Size = new Size(790, 31);
             tableLayoutPanel26.TabIndex = 2;
             // 
             // label30
@@ -1709,7 +1709,7 @@
             label30.Dock = DockStyle.Fill;
             label30.Location = new Point(281, 0);
             label30.Name = "label30";
-            label30.Size = new Size(112, 35);
+            label30.Size = new Size(112, 31);
             label30.TabIndex = 5;
             label30.Text = "المخازن";
             label30.TextAlign = ContentAlignment.MiddleRight;
@@ -1739,7 +1739,7 @@
             label31.Dock = DockStyle.Fill;
             label31.Location = new Point(675, 0);
             label31.Name = "label31";
-            label31.Size = new Size(112, 35);
+            label31.Size = new Size(112, 31);
             label31.TabIndex = 2;
             label31.Text = "المستخدمين";
             label31.TextAlign = ContentAlignment.MiddleRight;
@@ -1747,9 +1747,9 @@
             // btnUserPermissions
             // 
             btnUserPermissions.Dock = DockStyle.Left;
-            btnUserPermissions.Location = new Point(524, 384);
+            btnUserPermissions.Location = new Point(524, 348);
             btnUserPermissions.Name = "btnUserPermissions";
-            btnUserPermissions.Size = new Size(274, 37);
+            btnUserPermissions.Size = new Size(274, 33);
             btnUserPermissions.TabIndex = 3;
             btnUserPermissions.Text = "حفظ الصلاحيات";
             btnUserPermissions.UseVisualStyleBackColor = true;
@@ -1971,7 +1971,6 @@
             cbxReturnSaleMode.Name = "cbxReturnSaleMode";
             cbxReturnSaleMode.Size = new Size(147, 27);
             cbxReturnSaleMode.TabIndex = 45;
-            cbxReturnSaleMode.SelectedIndexChanged += cbxReturnSaleMode_SelectedIndexChanged;
             // 
             // tableLayoutPanel16
             // 
