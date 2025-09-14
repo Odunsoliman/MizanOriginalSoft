@@ -31,6 +31,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // 🔹 متغير يحدد إذا كان المرتجع يشترط إدخال رقم فاتورة البيع
         private int returnSaleMode;
 
+        // 🔹 متغير يحدد إذا كان المرتجع يشترط إدخال رقم فاتورة البيع
+        private int returnPurchaseMode;
+
         // 🟦 متغيرات إعدادات
         private decimal MaxRateDiscount = 0m;
         private bool AllowChangeTax = true;
@@ -141,7 +144,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
             // 🔹 تعيين النوع الحالي
             currentInvoiceType = type;
-
+            
             // 🔹 تحديد العنوان ورقم النوع
             (string arabicTitle, string typeId) = type switch
             {
@@ -291,27 +294,52 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             DisplayCurentRow(currentInvoiceIndex);
         }
         #endregion
-
         private void frm_DynamicInvoice_Load(object sender, EventArgs e)
         {
             DBServiecs.A_UpdateAllDataBase();   // تحديث أرصدة الأصناف والحسابات
+
             // ✅ قراءة سياسات البيع والبيع المرتد
             LoadSalesPolicies();
 
             // ✅ تحويل النص لرقم أولاً
             if (int.TryParse(lblTypeInvID.Text, out int typeInvID))
             {
-                if (typeInvID == 1)
-                    UpdateLabelsForSale();
-                else if (typeInvID == 2)
-                    UpdateLabelsForResale();
-            }
-            LoadFooterSettings();
+                // 🔹 حدد نوع الفاتورة
+                switch (typeInvID)
+                {
+                    case 1:
+                        currentInvoiceType = InvoiceType.Sale;
+                        UpdateLabelsForSale();
+                        break;
 
+                    case 2:
+                        currentInvoiceType = InvoiceType.SaleReturn;
+                        UpdateLabelsForReturn(); // 🔹 بدل الدالة القديمة
+                        break;
+
+                    case 3:
+                        currentInvoiceType = InvoiceType.Purchase;
+                    //    UpdateLabelsForPurchase();
+                        break;
+
+                    case 4:
+                        currentInvoiceType = InvoiceType.PurchaseReturn;
+                        UpdateLabelsForReturn(); // 🔹 يدعم الشراء المرتد الآن
+                        break;
+
+                    default:
+                        currentInvoiceType = InvoiceType.Sale;
+                        UpdateLabelsForSale();
+                        break;
+                }
+            }
+
+            LoadFooterSettings();
             CalculateInvoiceFooter();
-            DGVStyl();                          // تنسيق الداتا جريد
-            RegisterEvents();                   // ربط أحداث إضافية
+            DGVStyl();          // تنسيق الداتا جريد
+            RegisterEvents();   // ربط أحداث إضافية
         }
+
 
 
 
@@ -1739,15 +1767,23 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
 
         // 🔹 تحديث النصوص لو اخترت "مرتجع"
-        private void UpdateLabelsForResale()
+        private void UpdateLabelsForReturn()
         {
+            int mode = currentInvoiceType == InvoiceType.SaleReturn
+                ? returnSaleMode
+                : returnPurchaseMode;
 
-            // نفّذ حسب القيمة
-            switch (returnSaleMode)
+            switch (mode)
             {
                 case 1: // InvoiceOnly
-                    lblCodeTitel.Text = "رقم فاتورة البيع";
-                    lblInvStat.Text = "البيع المرتد يكون عن طريق رقم فاتورة البيع الأصلية";
+                    lblCodeTitel.Text = currentInvoiceType == InvoiceType.SaleReturn
+                        ? "رقم فاتورة البيع"
+                        : "رقم فاتورة الشراء";
+
+                    lblInvStat.Text = currentInvoiceType == InvoiceType.SaleReturn
+                        ? "البيع المرتد يكون عن طريق رقم فاتورة البيع الأصلية"
+                        : "الشراء المرتد يكون عن طريق رقم فاتورة الشراء الأصلية";
+
                     tlpReturnMod.Visible = false;
                     rdoInvoice.Checked = true;
                     break;
@@ -1766,8 +1802,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     rdoFree.Checked = true;
                     break;
 
-                default:
-                    // fallback لو فيه خطأ بالملف
+                default: // fallback
                     lblCodeTitel.Text = "رقم كود الصنف";
                     lblInvStat.Text = "إرجاع حر";
                     tlpReturnMod.Visible = false;
@@ -1779,31 +1814,112 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // ✅ تحميل القيم من ملف الإعدادات
         private void LoadSalesPolicies()
         {
-
             allowNegativeStock = AppSettings.GetBool("IsSaleByNegativeStock");
             returnSaleMode = AppSettings.GetInt("ReturnSaleMode");
+            returnPurchaseMode = AppSettings.GetInt("ReturnPurchasesMode");
         }
 
+        // 🔹 تغيير النصوص لما أختار راديو
         private void rdoFree_CheckedChanged(object sender, EventArgs e)
         {
-            if (rdoFree.Checked) // تأكد أن الراديو مفعّل
-            {
-                lblCodeTitel.Text = "رقم كود الصنف";
-                lblInvStat.Text = "إرجاع حر بالكود";
-                EmptyProdData();
-            }
+            if (!rdoFree.Checked) return;
+
+            lblCodeTitel.Text = "رقم كود الصنف";
+            lblInvStat.Text = currentInvoiceType == InvoiceType.SaleReturn
+                ? "البيع المرتد بالكود"
+                : "الشراء المرتد بالكود";
+            EmptyProdData();
         }
 
         private void rdoInvoice_CheckedChanged(object sender, EventArgs e)
         {
-            // if (rdoFree.Checked) 
-            if (rdoInvoice.Checked)
-            {
-                lblCodeTitel.Text = "رقم فاتورة البيع";
-                lblInvStat.Text = "البيع المرتد يكون عن طريق رقم فاتورة البيع الأصلية";
-                EmptyProdData();
-            }
+            if (!rdoInvoice.Checked) return;
+
+            lblCodeTitel.Text = currentInvoiceType == InvoiceType.SaleReturn
+                ? "رقم فاتورة البيع"
+                : "رقم فاتورة الشراء";
+
+            lblInvStat.Text = currentInvoiceType == InvoiceType.SaleReturn
+                ? "البيع المرتد يكون عن طريق رقم فاتورة البيع الأصلية"
+                : "الشراء المرتد يكون عن طريق رقم فاتورة الشراء الأصلية";
+
+            EmptyProdData();
         }
+
+
+        //        /*يوجد حالتين حسب نوع الفاتورة
+        // // InvoiceType.PurchaseReturn او  InvoiceType.SaleReturn
+        //وبناء على ذلك نختار احد السطرين
+
+        //        اما الكود الحالى قديم يعمل على مرتجع المبيعات فقط اما الان اريده ان يعمل ايضا على مرتجع المشتريات ايضا
+        // */
+        //        // 🔹 تحديث النصوص لو اخترت "مرتجع"
+        //        private void UpdateLabelsForResale()
+        //        {
+
+        //            // نفّذ حسب القيمة
+        //            switch (returnSaleMode)
+        //            {
+        //                case 1: // InvoiceOnly
+        //                    lblCodeTitel.Text = "رقم فاتورة البيع";
+        //                    lblInvStat.Text = "البيع المرتد يكون عن طريق رقم فاتورة البيع الأصلية";
+        //                    tlpReturnMod.Visible = false;
+        //                    rdoInvoice.Checked = true;
+        //                    break;
+
+        //                case 2: // FreeMode
+        //                    lblCodeTitel.Text = "رقم كود الصنف";
+        //                    lblInvStat.Text = "إرجاع بالكود";
+        //                    tlpReturnMod.Visible = false;
+        //                    rdoFree.Checked = true;
+        //                    break;
+
+        //                case 3: // MixedMode
+        //                    lblCodeTitel.Text = "رقم كود الصنف";
+        //                    lblInvStat.Text = "إرجاع بالكود";
+        //                    tlpReturnMod.Visible = true;
+        //                    rdoFree.Checked = true;
+        //                    break;
+
+        //                default:
+        //                    // fallback لو فيه خطأ بالملف
+        //                    lblCodeTitel.Text = "رقم كود الصنف";
+        //                    lblInvStat.Text = "إرجاع حر";
+        //                    tlpReturnMod.Visible = false;
+        //                    rdoFree.Checked = true;
+        //                    break;
+        //            }
+        //        }
+
+        //        // ✅ تحميل القيم من ملف الإعدادات
+        //        private void LoadSalesPolicies()
+        //        {
+
+        //            allowNegativeStock = AppSettings.GetBool("IsSaleByNegativeStock");
+
+        //            returnSaleMode = AppSettings.GetInt("ReturnSaleMode");
+        //            returnPurchaseMode = AppSettings.GetInt("ReturnPurchasesMode");
+        //        }
+
+        //        private void rdoFree_CheckedChanged(object sender, EventArgs e)
+        //        {
+        //            if (rdoFree.Checked) // تأكد أن الراديو مفعّل
+        //            {
+        //                lblCodeTitel.Text = "رقم كود الصنف";
+        //                lblInvStat.Text = "البيع المرتد  بالكود";
+        //                EmptyProdData();
+        //            }
+        //        }
+
+        //        private void rdoInvoice_CheckedChanged(object sender, EventArgs e)
+        //        {
+        //            if (rdoInvoice.Checked)
+        //            {
+        //                lblCodeTitel.Text = "رقم فاتورة البيع";
+        //                lblInvStat.Text = "البيع المرتد يكون عن طريق رقم فاتورة البيع الأصلية";
+        //                EmptyProdData();
+        //            }
+        //        }
 
 
 
