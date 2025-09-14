@@ -1,14 +1,6 @@
-﻿
-
-
-
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace MizanOriginalSoft.MainClasses.OriginalClasses
 {
@@ -18,10 +10,7 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
         private static bool isLoaded = false;
         private static string settingsFilePath = string.Empty;
 
-        // 🔐 وضع التعديل
-        private static bool isEditMode = false;
-
-        public static event Action<string, string>? SettingChanged;
+        // 📌 تحميل الملف
         public static void Load(string filePath)
         {
             settings.Clear();
@@ -29,7 +18,8 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             settingsFilePath = filePath;
 
             if (!File.Exists(filePath))
-                throw new FileNotFoundException($"❌ ملف الإعدادات غير موجود: {filePath}");
+                throw new FileNotFoundException($"❌ ملف الإعدادات غير موجود: {filePath}");//
+
 
             foreach (var rawLine in File.ReadAllLines(filePath))
             {
@@ -53,28 +43,13 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             isLoaded = true;
         }
 
- 
         private static void EnsureLoaded()
         {
             if (!isLoaded)
                 throw new InvalidOperationException("⚠️ لم يتم تحميل ملف الإعدادات. استخدم AppSettings.Load() أولاً.");
         }
 
-        // 📌 تفعيل وضع التعديل (من شاشة الإعدادات فقط)
-        public static void EnableEditMode(string callerFormName)
-        {
-            if (callerFormName == "frmGenralData")
-                isEditMode = true;
-            else
-                throw new UnauthorizedAccessException("❌ لا يمكن تعديل الإعدادات إلا من شاشة الإعدادات.");
-        }
-
-        // 📌 تعطيل وضع التعديل (بعد الحفظ)
-        public static void DisableEditMode()
-        {
-            isEditMode = false;
-        }
-
+        // 📌 الدوال المساعدة لقراءة القيم
         public static string? GetString(string key, string? defaultValue = null)
         {
             EnsureLoaded();
@@ -86,15 +61,14 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
 
         public static double GetDouble(string key, double defaultValue = 0) =>
             double.TryParse(GetString(key), out var result) ? result : defaultValue;
+
         public static bool GetBool(string key, bool defaultValue = false)
         {
             string? value = GetString(key);
-
             if (string.IsNullOrWhiteSpace(value))
                 return defaultValue;
 
             value = value.Trim().ToLower();
-
             if (bool.TryParse(value, out bool boolResult))
                 return boolResult;
 
@@ -110,80 +84,10 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
         public static decimal GetDecimal(string key, decimal defaultValue = 0) =>
             decimal.TryParse(GetString(key), out var result) ? result : defaultValue;
 
-        public static void Set(string key, string value)
-        {
-            EnsureLoaded();
-            if (!isEditMode)
-                throw new UnauthorizedAccessException("❌ لا يمكن تعديل الإعدادات إلا من شاشة الإعدادات.");
-            
-            settings[key] = value;
-            SettingChanged?.Invoke(key, value);
-        }
-
-        public static void Remove(string key)
-        {
-            EnsureLoaded();
-            if (!isEditMode)
-                throw new UnauthorizedAccessException("❌ لا يمكن حذف الإعدادات إلا من شاشة الإعدادات.");
-
-            if (settings.Remove(key))
-                SettingChanged?.Invoke(key, string.Empty);
-        }
-        public static void Save(string? filePath = null)
-        {
-            EnsureLoaded();
-            if (!isEditMode)
-                throw new UnauthorizedAccessException("❌ لا يمكن حفظ الإعدادات إلا من شاشة الإعدادات.");
-
-            var targetPath = filePath ?? settingsFilePath;
-            var lines = File.Exists(targetPath) ? File.ReadAllLines(targetPath).ToList() : new List<string>();
-
-            // تحديث القيم الموجودة
-            foreach (var key in settings.Keys)
-            {
-                bool found = false;
-                for (int i = 0; i < lines.Count; i++)
-                {
-                    string line = lines[i].Trim();
-                    if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#") || line.StartsWith("//") || line.StartsWith(";"))
-                        continue;
-
-                    int equalIndex = line.IndexOf('=');
-                    if (equalIndex <= 0) continue;
-
-                    string existingKey = line.Substring(0, equalIndex).Trim();
-                    if (string.Equals(existingKey, key, StringComparison.OrdinalIgnoreCase))
-                    {
-                        lines[i] = $"{key}={settings[key]}";
-                        found = true;
-                        break;
-                    }
-                }
-
-                // إضافة المفتاح إذا لم يوجد
-                if (!found)
-                    lines.Add($"{key}={settings[key]}");
-            }
-
-            // كتابة الملف من جديد
-            File.WriteAllLines(targetPath, lines);
-        }
-
-        public static void Save_(string? filePath = null)
-        {
-            EnsureLoaded();
-            if (!isEditMode)
-                throw new UnauthorizedAccessException("❌ لا يمكن حفظ الإعدادات إلا من شاشة الإعدادات.");
-
-            var targetPath = filePath ?? settingsFilePath;
-            File.WriteAllLines(targetPath, settings.Select(kv => $"{kv.Key}={kv.Value}"));
-        }
-
         public static Dictionary<string, string> GetAllSettings()
         {
             EnsureLoaded();
             return new(settings);
         }
     }
-
 }

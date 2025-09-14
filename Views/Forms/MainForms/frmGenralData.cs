@@ -20,8 +20,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         private void frmGenralData_Load(object sender, EventArgs e)
         {
-            // ✅ السماح بالتعديل داخل شاشة الإعدادات
-            AppSettings.EnableEditMode(nameof(frmGenralData));
 
             tabMang.ItemSize = new Size(150, 40);
             LoadWarehouses();
@@ -42,12 +40,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             LoadUsers();
             cbxUsers.SelectedIndexChanged += CbxUsers_SelectedIndexChanged;
             DGVStyl();
-        }
-
-        // 🔹 تعطيل التحرير عند إغلاق الشاشة
-        private void frmGenralData_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            AppSettings.DisableEditMode();
         }
 
 
@@ -684,17 +676,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             cbxReturnSaleMode.DisplayMember = "Value";
             cbxReturnSaleMode.ValueMember = "Key";
 
-            // عند تغيير القيمة نحفظ تلقائيًا
-            cbxReturnSaleMode.SelectedIndexChanged += (s, e) =>
-            {
-                if (cbxReturnSaleMode.SelectedValue != null)
-                {
-                    int mode = (int)cbxReturnSaleMode.SelectedValue;
-                    AppSettings.Set("ReturnSaleMode", mode.ToString());
-                    AppSettings.Save();
-                }
-            };
-
             // تحميل القيمة المحفوظة
             int savedMode = AppSettings.GetInt("ReturnSaleMode", 1);
             cbxReturnSaleMode.SelectedValue = savedMode;
@@ -882,6 +863,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
             File.WriteAllLines(configFilePath, lines);
             LoadSettings();
+            AppSettings.Load("config.txt");
+
         }
 
         #endregion

@@ -10,14 +10,19 @@ namespace MizanOriginalSoft
         [STAThread]
         static void Main()
         {
-            // 📌 تحميل ملف الإعدادات مرة واحدة عند بدء البرنامج
             string settingsPath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
+
+            if (!File.Exists(settingsPath))
+            {
+                MessageBox.Show($"⚠️ الملف غير موجود:\n{settingsPath}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             AppSettings.Load(settingsPath);
 
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new Views.Forms.MainForms.frmMainLogIn());
         }
+
     }
 }
