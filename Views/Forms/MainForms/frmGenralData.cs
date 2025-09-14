@@ -54,7 +54,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         #region *********  ApplyPermissions  ******************************
         private void ApplyPermissionsToControls()
         {
-            var allControls = GetAllControls(this); // تأكد أنك أضفت هذه الدالة أدناه
+            var allControls = GetAllControls(this); 
 
             foreach (Control ctrl in allControls)
             {
@@ -313,7 +313,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         #endregion
 
-        #region ************  
+        #region ************  LoadUsers **************
         private void LoadUsers()
         {
             var usersTable = DBServiecs.User_GetAll();
@@ -477,12 +477,114 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             cbxWarehouses.DataSource = table;
         }
 
-        #endregion 
-        #region تحميل بيانات الفروع
         #endregion
 
         #region تحميل الإعدادات من الملف
+
+        #region تحميل الإعدادات من الملف
         private void LoadSettings()
+        {
+            if (!File.Exists(configFilePath))
+                return;
+
+            string[] lines = File.ReadAllLines(configFilePath);
+
+            foreach (string line in lines)
+            {
+                if (string.IsNullOrWhiteSpace(line) || line.TrimStart().StartsWith("#") || !line.Contains("="))
+                    continue;
+
+                string key = line.Split('=')[0].Trim();
+                string value = line.Substring(line.IndexOf('=') + 1).Trim();
+
+                switch (key)
+                {
+                    // 🔹 المفاتيح القديمة (كما هي)
+                    case "serverName": txtServerName.Text = value; break;
+                    case "DBName": txtDBName.Text = value; break;
+                    case "RollPrinter": lblRollPrinter.Text = value; break;
+                    case "BackupsPath": txtBackupsPath.Text = value; break;
+                    case "maxBackups": txtMaxBackups.Text = value; break;
+                    case "SheetPrinter": lblSheetPrinter.Text = value; break;
+                    case "SheetRows": txtSheetRows.Text = value; break;
+                    case "SheetCols": txtSheetCols.Text = value; break;
+                    case "SheetMarginTop": txtMarginTop.Text = value; break;
+                    case "SheetMarginBottom": txtMarginBottom.Text = value; break;
+                    case "SheetMarginRight": txtMarginRight.Text = value; break;
+                    case "SheetMarginLeft": txtMarginLeft.Text = value; break;
+                    case "RollLabelWidth": txtRollLabelWidth.Text = value; break;
+                    case "RollLabelHeight": txtRollLabelHeight.Text = value; break;
+                    case "CompanyName": txtNameCo.Text = value; break;
+                    case "CompanyPhon": txtPhon.Text = value; break;
+                    case "CompanyAnthrPhon": txtAnthrPhon.Text = value; break;
+                    case "SalesTax": txtSalesTax.Text = value; break;
+                    case "CompanyAdreass": txtAdreass.Text = value; break;
+                    case "EmailCo": txtCompanyEmail.Text = value; break;
+                    case "IsSaleByNegativeStock":
+                        if (bool.TryParse(value, out bool isNegativeStock))
+                        {
+                            chkIsSaleByNegativeStock.Checked = isNegativeStock;
+                            lblTypeSaleStock.Text = isNegativeStock
+                                ? "البيع على المكشوف"
+                                : "البيع حسب الرصيد";
+                        }
+                        break;
+                    case "ReturnSaleMode":
+                        if (int.TryParse(value, out int selectedMode))
+                            cbxReturnSaleMode.SelectedValue = selectedMode;
+                        break;
+                    case "CompanyLoGoFolder": lblLogoPath.Text = value; break;
+                    case "LogoImagName": lblLogoImageName.Text = value; break;
+                    case "DefaultWarehouseId":
+                        if (int.TryParse(value, out int defWarehouseId))
+                            cbxWarehouseId.SelectedValue = defWarehouseId;
+                        break;
+
+                    // 🔹 المفاتيح الجديدة
+                    //case "BackupDB": txtBackupDB.Text = value; break;
+                    //case "RestoreDB": txtRestoreDB.Text = value; break;
+                    //case "GoogleDrivePath": txtGoogleDrivePath.Text = value; break;
+                    //case "ProjectPath": txtProjectPath.Text = value; break;
+                    //case "BackupGitPath": txtBackupGitPath.Text = value; break;
+                    case "IsEnablToChangTax":
+                        if (bool.TryParse(value, out bool enableTax))
+                            chkIsEnablToChangTax.Checked = enableTax;
+                        break;
+                    //case "DefaultPrinter": txtDefaultPrinter.Text = value; break;
+                    //case "DefaultWarehouse": txtDefaultWarehouse.Text = value; break;
+                    //case "DefaultStartDate":
+                    //    if (DateTime.TryParse(value, out DateTime startDate))
+                    //        dtpStartDate.Value = startDate;
+                    //    break;
+                    //case "DefaultEndDate":
+                    //    if (DateTime.TryParse(value, out DateTime endDate))
+                    //        dtpEndDate.Value = endDate;
+                    //    break;
+                    case "DefaultRdoCheck":
+                        Control[] radios = this.Controls.Find(value, true);
+                        if (radios.Length > 0 && radios[0] is RadioButton rdo)
+                            rdo.Checked = true;
+                        break;
+                    case "SalesPercentage": txtSalesPercentage.Text = value; break;
+                    case "MaxRateDiscount": txtMaxRateDiscount.Text = value; break;
+                    case "IsOpendMaxRateDiscount":
+                        if (bool.TryParse(value, out bool openDiscount))
+                            chkIsOpendMaxRateDiscount.Checked = openDiscount;
+                        break;
+                }
+            }
+
+            // 🔹 تحميل الشعار
+            if (!string.IsNullOrEmpty(lblLogoPath.Text) && !string.IsNullOrEmpty(lblLogoImageName.Text))
+            {
+                string logoPath = Path.Combine(lblLogoPath.Text, lblLogoImageName.Text);
+                if (File.Exists(logoPath))
+                    picLogoCo.Image = Image.FromFile(logoPath);
+            }
+        }
+        #endregion
+
+        private void LoadSettings_()
         {
             if (!File.Exists(configFilePath))
                 return;
@@ -553,14 +655,111 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     picLogoCo.Image = Image.FromFile(logoPath);
             }
         }
+        /* 
+         * اريد تحديث التحميل للبيانات بما تم اضافته فى ملف التكست
+         واسماء الكائنات نفس اسماء المفاتيح مسبوقة ب txt او مسبوقة ب chk لو كانت سؤال
+
+        بيانات الملف
+
+                # ==============================
+        # إعدادات الاتصال بقاعدة البيانات
+        # ==============================
+        serverName=DESKTOP-EE70K28\SQLEXPRESS
+        DBName=MizanOriginalDB
+        BackupDB=Original_BackupDatabase
+        RestoreDB=Original_RestoreDatabase
+
+        # ==============================
+        # إعدادات النسخ الاحتياطي
+        # ==============================
+        maxBackups=10
+        BackupsPath=D:\MizanOriginalSoft\DataBaseApp\BakUpDB
+
+        # ==============================
+        # إعدادات رفع السحابي
+        # ==============================
+        # 📌 المسار المحلي لمجلد Google Drive على جهازك لرفع النسخ الاحتياطية تلقائيًا إلى السحابة
+        GoogleDrivePath=G:\
+        # 📌 مسار مشروع البرنامج الذي سيتم رفعه على Git عند الإغلاق للمزامنة مع المستودع
+        ProjectPath=D:\MizanOriginalSoft
+        # 📌 مسار مجلد مخصص لنسخ القواعد التي سيتم رفعها على Git (يمكن تركه فارغ إذا لم تستخدم هذه الميزة)
+        BackupGitPath=
+
+        # ==============================
+        # إعدادات الطباعة
+        # ==============================
+        RollPrinter=Samsung SCX-3400 Series
+        SheetPrinter=Samsung SCX-3400 Series
+
+        # ------------------------------
+        # إعدادات تخطيط الورق (Sheet Printing)
+        # ------------------------------
+        SheetRows=6
+        SheetCols=10
+        SheetMarginTop=23
+        SheetMarginBottom=24
+        SheetMarginRight=24
+        SheetMarginLeft=24
+
+        # ------------------------------
+        # إعدادات طباعة الرول (Roll Printing)
+        # ------------------------------
+        RollLabelWidth=50
+        RollLabelHeight=25
+
+        # ==============================
+        # بيانات الشركة
+        # ==============================
+        CompanyName=Sondos 4 kids
+        CompanyPhon=00010205060225
+        CompanyAnthrPhon=010201201205000
+        CompanyAdreass=5ش عبد الخالق ثروت العتبة وسط البلد القاهرة
+        EmailCo=Sondos 4 kids@gmail.com
+
+        # ------------------------------
+        # إعدادات الضرائب
+        # ------------------------------
+        SalesTax=14
+        IsEnablToChangTax=True
+
+        # ------------------------------
+        # إعدادات الشعار (Logo)
+        # ------------------------------
+        CompanyLoGoFolder=D:\MizanSoft\MizanLoom\Signee\Signee\bin\Debug
+        LogoImagName=Mizan Logo.PNG
+
+        # ==============================
+        # إعدادات المستودعات
+        # ==============================
+        DefaultWarehouseId=1
+        DefaultPrinter=Samsung SCX-3400 Series
+        DefaultWarehouse=0
+        DefaultStartDate=2025-01-01
+        DefaultEndDate=2025-12-31
+        DefaultRdoCheck=rdoThisYear
+
+        # ==============================
+        # إعدادات البيع والمردودات
+        # نظام الفواتير المرتدة فى المبيعات
+        # Mode=1 InvoiceOnly عن طريق فاتورة البيع الاصلية فقط
+        # Mode=2 FreeMode عن طريق كتابة اى كود صنف بحرية
+        # Mode=3 MixedMode عن طريق النظامين أيهما يختار المستخدم
+        # ==============================
+        ReturnSaleMode=1
+
+        # السماح بالبيع بالرصيد السالب
+        IsSaleByNegativeStock=True
+
+        # هامش سعر البيع
+        SalesPercentage=35
+
+        # هامش سعر الاوكازيون
+        MaxRateDiscount=15
+        IsOpendMaxRateDiscount=0
 
 
-        /*توجد فكرة لا ادرى مدى فاعليتها 
-             وهى ان الكمبوبكس يتم تعبئته عند الفتح بهذة الطريقة وتم ربطه بالتكست الذى يتم كتابة القيمة فيه 
-            وقبل ذلك كنت اكتب يدويا فى التكست وكان يتم حفظ القيمة عند خروجى من التكست اما بعد ربطه بالكمبوبس لم اعد ادخل واغير القيم ثم اخرج فلا يتم الحفظ 
-            فهل لو تم الحفظ بمجرد تغير قيمته يوفى الغرض دون مسح البيانات
-             */
 
+         */
         #endregion
 
         #region حفظ الإعدادات إلى الملف

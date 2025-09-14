@@ -144,24 +144,24 @@
             tabPage1 = new TabPage();
             tableLayoutPanel27 = new TableLayoutPanel();
             tableLayoutPanel28 = new TableLayoutPanel();
+            label34 = new Label();
             label36 = new Label();
             chkIsOpendMaxRateDiscount = new CheckBox();
             label37 = new Label();
             label35 = new Label();
-            label33 = new Label();
-            label32 = new Label();
             chkIsSaleByNegativeStock = new CheckBox();
             txtSalesTax = new TextBox();
             label7 = new Label();
             lblTypeSaleStock = new Label();
-            cbxReturnSaleMode = new ComboBox();
             txtSalesPercentage = new TextBox();
             txtMaxRateDiscount = new TextBox();
+            cbxReturnSaleMode = new ComboBox();
             tableLayoutPanel16 = new TableLayoutPanel();
             lblLogoPath = new Label();
             tableLayoutPanel17 = new TableLayoutPanel();
             btnSave = new Button();
-            label34 = new Label();
+            label32 = new Label();
+            chkIsEnablToChangTax = new CheckBox();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel7.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
@@ -1772,13 +1772,13 @@
             tableLayoutPanel28.ColumnCount = 2;
             tableLayoutPanel28.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 61.4609566F));
             tableLayoutPanel28.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 38.5390434F));
+            tableLayoutPanel28.Controls.Add(chkIsEnablToChangTax, 1, 1);
+            tableLayoutPanel28.Controls.Add(label32, 0, 1);
             tableLayoutPanel28.Controls.Add(label34, 0, 3);
             tableLayoutPanel28.Controls.Add(label36, 0, 6);
             tableLayoutPanel28.Controls.Add(chkIsOpendMaxRateDiscount, 1, 6);
             tableLayoutPanel28.Controls.Add(label37, 0, 5);
             tableLayoutPanel28.Controls.Add(label35, 0, 4);
-            tableLayoutPanel28.Controls.Add(label33, 1, 1);
-            tableLayoutPanel28.Controls.Add(label32, 0, 1);
             tableLayoutPanel28.Controls.Add(chkIsSaleByNegativeStock, 1, 2);
             tableLayoutPanel28.Controls.Add(txtSalesTax, 1, 0);
             tableLayoutPanel28.Controls.Add(label7, 0, 0);
@@ -1802,6 +1802,17 @@
             tableLayoutPanel28.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanel28.Size = new Size(397, 383);
             tableLayoutPanel28.TabIndex = 0;
+            // 
+            // label34
+            // 
+            label34.AutoSize = true;
+            label34.Dock = DockStyle.Fill;
+            label34.Location = new Point(156, 114);
+            label34.Name = "label34";
+            label34.Size = new Size(238, 38);
+            label34.TabIndex = 60;
+            label34.Text = "نظام البيع المرتد";
+            label34.TextAlign = ContentAlignment.MiddleRight;
             // 
             // label36
             // 
@@ -1846,28 +1857,6 @@
             label35.TabIndex = 52;
             label35.Text = "نسبة تسعير البيع";
             label35.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // label33
-            // 
-            label33.AutoSize = true;
-            label33.Dock = DockStyle.Fill;
-            label33.Location = new Point(3, 38);
-            label33.Name = "label33";
-            label33.Size = new Size(147, 38);
-            label33.TabIndex = 50;
-            label33.Text = "-----------------";
-            label33.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // label32
-            // 
-            label32.AutoSize = true;
-            label32.Dock = DockStyle.Fill;
-            label32.Location = new Point(156, 38);
-            label32.Name = "label32";
-            label32.Size = new Size(238, 38);
-            label32.TabIndex = 49;
-            label32.Text = "---------------------";
-            label32.TextAlign = ContentAlignment.MiddleRight;
             // 
             // chkIsSaleByNegativeStock
             // 
@@ -1918,15 +1907,6 @@
             lblTypeSaleStock.Text = "البيع حسب الرصيد";
             lblTypeSaleStock.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // cbxReturnSaleMode
-            // 
-            cbxReturnSaleMode.FormattingEnabled = true;
-            cbxReturnSaleMode.Location = new Point(3, 117);
-            cbxReturnSaleMode.Name = "cbxReturnSaleMode";
-            cbxReturnSaleMode.Size = new Size(147, 27);
-            cbxReturnSaleMode.TabIndex = 45;
-            cbxReturnSaleMode.SelectedIndexChanged += cbxReturnSaleMode_SelectedIndexChanged;
-            // 
             // txtSalesPercentage
             // 
             txtSalesPercentage.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -1948,6 +1928,15 @@
             txtMaxRateDiscount.TabIndex = 55;
             txtMaxRateDiscount.Text = "0";
             txtMaxRateDiscount.TextAlign = HorizontalAlignment.Center;
+            // 
+            // cbxReturnSaleMode
+            // 
+            cbxReturnSaleMode.FormattingEnabled = true;
+            cbxReturnSaleMode.Location = new Point(3, 117);
+            cbxReturnSaleMode.Name = "cbxReturnSaleMode";
+            cbxReturnSaleMode.Size = new Size(147, 27);
+            cbxReturnSaleMode.TabIndex = 45;
+            cbxReturnSaleMode.SelectedIndexChanged += cbxReturnSaleMode_SelectedIndexChanged;
             // 
             // tableLayoutPanel16
             // 
@@ -2009,16 +1998,27 @@
             btnSave.Visible = false;
             btnSave.Click += btnSave_Click;
             // 
-            // label34
+            // label32
             // 
-            label34.AutoSize = true;
-            label34.Dock = DockStyle.Fill;
-            label34.Location = new Point(156, 114);
-            label34.Name = "label34";
-            label34.Size = new Size(238, 38);
-            label34.TabIndex = 60;
-            label34.Text = "نظام البيع المرتد";
-            label34.TextAlign = ContentAlignment.MiddleRight;
+            label32.AutoSize = true;
+            label32.Dock = DockStyle.Fill;
+            label32.Location = new Point(156, 38);
+            label32.Name = "label32";
+            label32.Size = new Size(238, 38);
+            label32.TabIndex = 61;
+            label32.Text = "السماح بتغيير نسبة ضريبة البيع";
+            label32.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // chkIsEnablToChangTax
+            // 
+            chkIsEnablToChangTax.AutoSize = true;
+            chkIsEnablToChangTax.Dock = DockStyle.Left;
+            chkIsEnablToChangTax.Location = new Point(135, 41);
+            chkIsEnablToChangTax.Name = "chkIsEnablToChangTax";
+            chkIsEnablToChangTax.Size = new Size(15, 32);
+            chkIsEnablToChangTax.TabIndex = 62;
+            chkIsEnablToChangTax.TextAlign = ContentAlignment.MiddleRight;
+            chkIsEnablToChangTax.UseVisualStyleBackColor = true;
             // 
             // frmGenralData
             // 
@@ -2220,10 +2220,10 @@
         private TextBox txtMaxRateDiscount;
         private Label label37;
         private Label label35;
-        private Label label33;
-        private Label label32;
         private Label label36;
         private CheckBox chkIsOpendMaxRateDiscount;
         private Label label34;
+        private CheckBox chkIsEnablToChangTax;
+        private Label label32;
     }
 }
