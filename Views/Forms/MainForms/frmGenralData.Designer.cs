@@ -472,7 +472,7 @@
             label25.Name = "label25";
             label25.Size = new Size(227, 33);
             label25.TabIndex = 38;
-            label25.Text = "هذه نسخة فرع...";
+            label25.Text = "هذه نسخة فرع :";
             label25.TextAlign = ContentAlignment.TopRight;
             // 
             // txtCompanyEmail
@@ -497,7 +497,7 @@
             label13.Name = "label13";
             label13.Size = new Size(227, 33);
             label13.TabIndex = 35;
-            label13.Text = "بريد الكترونى";
+            label13.Text = "بريد الكترونى :";
             label13.TextAlign = ContentAlignment.TopRight;
             // 
             // txtNameCo
@@ -533,7 +533,7 @@
             label1.Name = "label1";
             label1.Size = new Size(227, 33);
             label1.TabIndex = 26;
-            label1.Text = "اسم المشروع";
+            label1.Text = "اسم المشروع :";
             label1.TextAlign = ContentAlignment.TopRight;
             // 
             // txtAnthrPhon
@@ -558,7 +558,7 @@
             label2.Name = "label2";
             label2.Size = new Size(227, 33);
             label2.TabIndex = 26;
-            label2.Text = "الهاتف";
+            label2.Text = "هاتف اخر :";
             label2.TextAlign = ContentAlignment.MiddleRight;
             // 
             // label6
@@ -572,7 +572,7 @@
             label6.Name = "label6";
             label6.Size = new Size(227, 33);
             label6.TabIndex = 31;
-            label6.Text = "الهاتف";
+            label6.Text = "الهاتف :";
             label6.TextAlign = ContentAlignment.MiddleRight;
             // 
             // txtAdreass
@@ -598,7 +598,7 @@
             lblFirstPhon.Name = "lblFirstPhon";
             lblFirstPhon.Size = new Size(227, 67);
             lblFirstPhon.TabIndex = 26;
-            lblFirstPhon.Text = "العنوان";
+            lblFirstPhon.Text = "العنوان :";
             lblFirstPhon.TextAlign = ContentAlignment.TopRight;
             // 
             // cbxWarehouseId
@@ -1860,6 +1860,7 @@
             label36.ForeColor = Color.FromArgb(0, 0, 192);
             label36.Location = new Point(298, 0);
             label36.Name = "label36";
+            label36.Padding = new Padding(15, 0, 0, 0);
             label36.Size = new Size(289, 36);
             label36.TabIndex = 59;
             label36.Text = "تغيير نسبة الخصم عند البيع";
@@ -1900,6 +1901,7 @@
             label37.ForeColor = Color.FromArgb(0, 0, 192);
             label37.Location = new Point(298, 0);
             label37.Name = "label37";
+            label37.Padding = new Padding(15, 0, 0, 0);
             label37.Size = new Size(289, 36);
             label37.TabIndex = 54;
             label37.Text = "نسبة خصم الاوكازيون";
@@ -1989,6 +1991,7 @@
             label34.ForeColor = Color.FromArgb(0, 0, 192);
             label34.Location = new Point(298, 0);
             label34.Name = "label34";
+            label34.Padding = new Padding(15, 0, 0, 0);
             label34.Size = new Size(289, 36);
             label34.TabIndex = 60;
             label34.Text = "سياسة البيع المرتد";
@@ -2019,6 +2022,7 @@
             lblTypeSaleStock.ForeColor = Color.FromArgb(0, 0, 192);
             lblTypeSaleStock.Location = new Point(298, 0);
             lblTypeSaleStock.Name = "lblTypeSaleStock";
+            lblTypeSaleStock.Padding = new Padding(15, 0, 0, 0);
             lblTypeSaleStock.Size = new Size(289, 36);
             lblTypeSaleStock.TabIndex = 47;
             lblTypeSaleStock.Text = "سياسة البيع";
@@ -2073,6 +2077,7 @@
             label32.ForeColor = Color.FromArgb(0, 0, 192);
             label32.Location = new Point(298, 0);
             label32.Name = "label32";
+            label32.Padding = new Padding(15, 0, 0, 0);
             label32.Size = new Size(289, 36);
             label32.TabIndex = 62;
             label32.Text = "تغيير نسبة ضريبة البيع";
@@ -2138,6 +2143,7 @@
             label7.Location = new Point(299, 0);
             label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
+            label7.Padding = new Padding(15, 0, 0, 0);
             label7.Size = new Size(287, 36);
             label7.TabIndex = 35;
             label7.Text = "ض . م %";
