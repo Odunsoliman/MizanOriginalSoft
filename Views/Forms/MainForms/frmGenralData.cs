@@ -799,6 +799,11 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
+      
+        // ثلاث نقاط هامة يقوم بها هذا الحفظ
+        //1- مفاتيح المطوّر الخاصة تفضل زي ما هي.
+        //2- التعليقات تبقى زي ما هي.
+        //3- المستخدم يتحكم بس في المفاتيح اللي أنت قررت تذكرها في newSettings.
         // 🔹 الحفظ الفعلي
         private void SaveData()
         {
@@ -808,10 +813,13 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
             Dictionary<string, string> newSettings = new Dictionary<string, string>
             {
-                ["serverName"] = txtServerName.Text,
-                ["DBName"] = txtDBName.Text,
-                ["maxBackups"] = txtMaxBackups.Text,
-                ["BackupsPath"] = txtBackupsPath.Text,
+                // 🔹 صفحة اعدادات السيرفر كاملة
+                ["serverName"] = txtServerName.Text,           // اسم السيرفر
+                ["DBName"] = txtDBName.Text,                   // اسم قاعدة البيانات 
+                ["maxBackups"] = txtMaxBackups.Text,           // عدد النسخ الاحتياطية
+                ["BackupsPath"] = txtBackupsPath.Text,         // مكان النسخ الاحتياطية
+
+                // 🔹 صفحة الطباعة كاملة
                 ["RollPrinter"] = lblRollPrinter.Text,
                 ["SheetPrinter"] = lblSheetPrinter.Text,
                 ["SheetRows"] = txtSheetRows.Text,
@@ -822,16 +830,25 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 ["SheetMarginLeft"] = txtMarginLeft.Text,
                 ["RollLabelWidth"] = txtRollLabelWidth.Text,
                 ["RollLabelHeight"] = txtRollLabelHeight.Text,
-                ["CompanyName"] = txtNameCo.Text,
-                ["CompanyPhon"] = txtPhon.Text,
-                ["CompanyAnthrPhon"] = txtAnthrPhon.Text,
-                ["CompanyAdreass"] = txtAdreass.Text,
-                ["EmailCo"] = txtCompanyEmail.Text,
-                ["IsSaleByNegativeStock"] = chkIsSaleByNegativeStock.Checked.ToString(),
+
+                // 🔹 صفحة المعلومات العامة كاملة
+                ["CompanyName"] = txtNameCo.Text,              // اسم الشركة
+                ["CompanyPhon"] = txtPhon.Text,                // الهاتف
+                ["CompanyAnthrPhon"] = txtAnthrPhon.Text,      // هاتف آخر
+                ["CompanyAdreass"] = txtAdreass.Text,          // العنوان
+                ["EmailCo"] = txtCompanyEmail.Text,            // الايميل
                 ["CompanyLoGoFolder"] = lblLogoPath.Text,
                 ["LogoImagName"] = lblLogoImageName.Text,
                 ["DefaultWarehouseId"] = cbxWarehouseId.SelectedValue?.ToString() ?? "",
-                ["SalesTax"] = txtSalesTax.Text
+
+                // 🔹 صفحة البيع والشراء - كاملة الآن
+                ["IsSaleByNegativeStock"] = chkIsSaleByNegativeStock.Checked.ToString(), // البيع حسب الرصيد أو المكشوف
+                ["SalesTax"] = txtSalesTax.Text,                                         // نسبة الضريبة
+                ["IsEnablToChangTax"] = chkIsEnablToChangTax.Checked.ToString(),         // السماح بتغيير نسبة الضريبة
+                ["ReturnSaleMode"] = cbxReturnSaleMode.SelectedValue?.ToString() ?? "",  // سياسة البيع المرتد
+                ["SalesPercentage"] = txtSalesPercentage.Text,                           // نسبة التسعير من سعر الشراء
+                ["MaxRateDiscount"] = txtMaxRateDiscount.Text,                           // نسبة خصم الأوكازيون المقررة
+                ["IsOpendMaxRateDiscount"] = chkIsOpendMaxRateDiscount.Checked.ToString()// السماح بتعيين خصم أعلى
             };
 
             foreach (var setting in newSettings)
