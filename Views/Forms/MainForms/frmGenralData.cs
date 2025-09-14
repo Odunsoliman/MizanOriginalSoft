@@ -484,12 +484,14 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
                 switch (key)
                 {
-                    // 🔹 المفاتيح القديمة (كما هي)
+                    // 🔹 صفحة إعدادات السيرفر
                     case "serverName": txtServerName.Text = value; break;
                     case "DBName": txtDBName.Text = value; break;
-                    case "RollPrinter": lblRollPrinter.Text = value; break;
                     case "BackupsPath": txtBackupsPath.Text = value; break;
                     case "maxBackups": txtMaxBackups.Text = value; break;
+
+                    // 🔹 صفحة الطباعة
+                    case "RollPrinter": lblRollPrinter.Text = value; break;
                     case "SheetPrinter": lblSheetPrinter.Text = value; break;
                     case "SheetRows": txtSheetRows.Text = value; break;
                     case "SheetCols": txtSheetCols.Text = value; break;
@@ -499,12 +501,21 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     case "SheetMarginLeft": txtMarginLeft.Text = value; break;
                     case "RollLabelWidth": txtRollLabelWidth.Text = value; break;
                     case "RollLabelHeight": txtRollLabelHeight.Text = value; break;
+
+                    // 🔹 صفحة المعلومات العامة
                     case "CompanyName": txtNameCo.Text = value; break;
                     case "CompanyPhon": txtPhon.Text = value; break;
                     case "CompanyAnthrPhon": txtAnthrPhon.Text = value; break;
-                    case "SalesTax": txtSalesTax.Text = value; break;
                     case "CompanyAdreass": txtAdreass.Text = value; break;
                     case "EmailCo": txtCompanyEmail.Text = value; break;
+                    case "CompanyLoGoFolder": lblLogoPath.Text = value; break;
+                    case "LogoImagName": lblLogoImageName.Text = value; break;
+                    case "DefaultWarehouseId":
+                        if (int.TryParse(value, out int defWarehouseId))
+                            cbxWarehouseId.SelectedValue = defWarehouseId;
+                        break;
+
+                    // 🔹 صفحة البيع والشراء
                     case "IsSaleByNegativeStock":
                         if (bool.TryParse(value, out bool isNegativeStock))
                         {
@@ -518,28 +529,23 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                         if (int.TryParse(value, out int selectedMode))
                             cbxReturnSaleMode.SelectedValue = selectedMode;
                         break;
-                    case "CompanyLoGoFolder": lblLogoPath.Text = value; break;
-                    case "LogoImagName": lblLogoImageName.Text = value; break;
-                    case "DefaultWarehouseId":
-                        if (int.TryParse(value, out int defWarehouseId))
-                            cbxWarehouseId.SelectedValue = defWarehouseId;
-                        break;
-
                     case "IsEnablToChangTax":
                         if (bool.TryParse(value, out bool enableTax))
                             chkIsEnablToChangTax.Checked = enableTax;
                         break;
+                    case "SalesTax": txtSalesTax.Text = value; break;
+                    case "SalesPercentage": txtSalesPercentage.Text = value; break;
+                    case "MaxRateDiscount": txtMaxRateDiscount.Text = value; break;
+                    case "IsOpendMaxRateDiscount":
+                        if (bool.TryParse(value, out bool openDiscount))
+                            chkIsOpendMaxRateDiscount.Checked = openDiscount;
+                        break;
 
+                    // 🔹 إعدادات أخرى (إن وجدت)
                     case "DefaultRdoCheck":
                         Control[] radios = this.Controls.Find(value, true);
                         if (radios.Length > 0 && radios[0] is RadioButton rdo)
                             rdo.Checked = true;
-                        break;
-                    case "SalesPercentage": txtSalesPercentage.Text = value; break;// لماذا كلما غيرت القيمة فى هذا التكست وخرجت منه عاد الى الرقم القديم المسجل فى الملف
-                    case "MaxRateDiscount": txtMaxRateDiscount.Text = value; break;// وكذلك هنا بخلاف باقى المتغيرات اتحكم فى تغييرها هل المشكلة هنا ام فى وظيفة اخرى
-                    case "IsOpendMaxRateDiscount":
-                        if (bool.TryParse(value, out bool openDiscount))
-                            chkIsOpendMaxRateDiscount.Checked = openDiscount;
                         break;
                 }
             }
