@@ -695,7 +695,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
             var PurchModes = new List<KeyValuePair<int, string>>
     {
-        new KeyValuePair<int, string>(1, "حسب فاتورة البيع"),
+        new KeyValuePair<int, string>(1, "حسب فاتورة الشراء"),
         new KeyValuePair<int, string>(2, "بالكود مباشر"),
         new KeyValuePair<int, string>(3, "بالنظامين")
     };
