@@ -304,7 +304,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         private void LoadUsers()
         {
             var usersTable = DBServiecs.User_GetAll();
-            cbxUsers.DisplayMember = "FullName";
+            cbxUsers.DisplayMember = "UserName";
             cbxUsers.ValueMember = "IDUser";
             cbxUsers.DataSource = usersTable;
         }
