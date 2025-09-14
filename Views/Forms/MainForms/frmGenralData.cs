@@ -511,7 +511,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     case "IsSaleByNegativeStock":
                         if (bool.TryParse(value, out bool isNegativeStock))
                         {
-                            chkIsSaleByNegativeStock.Checked = isNegativeStock;
+                            chkIsSaleByNegativeStock.Checked = isNegativeStock;// تم استبدال هذه الاداة ب اداتين ريديو بوتن         rdoAllowSaleByNegativeStock.Checked ; rdoNotAllowSaleByNegativeStock.Checked ;
                             lblTypeSaleStock.Text = isNegativeStock
                                 ? "البيع على المكشوف"
                                 : "البيع حسب الرصيد";
@@ -523,11 +523,12 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                         break;
                     case "IsEnablToChangTax":
                         if (bool.TryParse(value, out bool enableTax))
-                            chkIsEnablToChangTax.Checked = enableTax;
+                            chkIsEnablToChangTax.Checked = enableTax;// تم استبدال هذه الاداة ب اداتين ريديو بوتن         rdoAllowChangTax.Checked ; rdoNotAllowChangTax.Checked ;
+
                         break;
                     case "SalesTax": txtSalesTax.Text = value; break;
                     case "SalesPercentage": txtSalesPercentage.Text = value; break;
-                    case "MaxRateDiscount": txtMaxRateDiscount.Text = value; break;
+                    case "MaxRateDiscount": txtMaxRateDiscount.Text = value; break;//  // تم استبدال هذه الاداة ب اداتين ريديو بوتن         rdoOpendMaxRateDiscount.Checked ; rdoClosedMaxRateDiscount.Checked ;
                     case "IsOpendMaxRateDiscount":
                         if (bool.TryParse(value, out bool openDiscount))
                             chkIsOpendMaxRateDiscount.Checked = openDiscount;
@@ -541,7 +542,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                         break;
                 }
             }
-
+            /*اريد تغيير الادوات المشار اليها مع قرائة القيمة وتحديد الريديو المعنى و مع ضبط طريقة الحفظ بالمعايير المطلوبة عند اى تغيير فيها*/
             // 🔹 تحميل الشعار
             if (!string.IsNullOrEmpty(lblLogoPath.Text) && !string.IsNullOrEmpty(lblLogoImageName.Text))
             {
@@ -870,100 +871,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             // 🔹 أعد تعبئة الشاشة نفسها
             LoadSettings();
         }
-        /*
-                  private void LoadSettings()
-           {
-               if (!File.Exists(configFilePath))
-                   return;
-
-               string[] lines = File.ReadAllLines(configFilePath);
-
-               foreach (string line in lines)
-               {
-                   if (string.IsNullOrWhiteSpace(line) || line.TrimStart().StartsWith("#") || !line.Contains("="))
-                       continue;
-
-                   string key = line.Split('=')[0].Trim();
-                   string value = line.Substring(line.IndexOf('=') + 1).Trim();
-
-                   switch (key)
-                   {
-                       // 🔹 صفحة إعدادات السيرفر
-                       case "serverName": txtServerName.Text = value; break;
-                       case "DBName": txtDBName.Text = value; break;
-                       case "BackupsPath": txtBackupsPath.Text = value; break;
-                       case "maxBackups": txtMaxBackups.Text = value; break;
-
-                       // 🔹 صفحة الطباعة
-                       case "RollPrinter": lblRollPrinter.Text = value; break;
-                       case "SheetPrinter": lblSheetPrinter.Text = value; break;
-                       case "SheetRows": txtSheetRows.Text = value; break;
-                       case "SheetCols": txtSheetCols.Text = value; break;
-                       case "SheetMarginTop": txtMarginTop.Text = value; break;
-                       case "SheetMarginBottom": txtMarginBottom.Text = value; break;
-                       case "SheetMarginRight": txtMarginRight.Text = value; break;
-                       case "SheetMarginLeft": txtMarginLeft.Text = value; break;
-                       case "RollLabelWidth": txtRollLabelWidth.Text = value; break;
-                       case "RollLabelHeight": txtRollLabelHeight.Text = value; break;
-
-                       // 🔹 صفحة المعلومات العامة
-                       case "CompanyName": txtNameCo.Text = value; break;
-                       case "CompanyPhon": txtPhon.Text = value; break;
-                       case "CompanyAnthrPhon": txtAnthrPhon.Text = value; break;
-                       case "CompanyAdreass": txtAdreass.Text = value; break;
-                       case "EmailCo": txtCompanyEmail.Text = value; break;
-                       case "CompanyLoGoFolder": lblLogoPath.Text = value; break;
-                       case "LogoImagName": lblLogoImageName.Text = value; break;
-                       case "DefaultWarehouseId":
-                           if (int.TryParse(value, out int defWarehouseId))
-                               cbxWarehouseId.SelectedValue = defWarehouseId;
-                           break;
-
-                       // 🔹 صفحة البيع والشراء
-                       case "IsSaleByNegativeStock":
-                           if (bool.TryParse(value, out bool isNegativeStock))
-                           {
-                               chkIsSaleByNegativeStock.Checked = isNegativeStock;
-                               lblTypeSaleStock.Text = isNegativeStock
-                                   ? "البيع على المكشوف"
-                                   : "البيع حسب الرصيد";
-                           }
-                           break;
-                       case "ReturnSaleMode":
-                           if (int.TryParse(value, out int selectedMode))
-                               cbxReturnSaleMode.SelectedValue = selectedMode;
-                           break;
-                       case "IsEnablToChangTax":
-                           if (bool.TryParse(value, out bool enableTax))
-                               chkIsEnablToChangTax.Checked = enableTax;
-                           break;
-                       case "SalesTax": txtSalesTax.Text = value; break;
-                       case "SalesPercentage": txtSalesPercentage.Text = value; break;
-                       case "MaxRateDiscount": txtMaxRateDiscount.Text = value; break;
-                       case "IsOpendMaxRateDiscount":
-                           if (bool.TryParse(value, out bool openDiscount))
-                               chkIsOpendMaxRateDiscount.Checked = openDiscount;
-                           break;
-
-                       // 🔹 إعدادات أخرى (إن وجدت)
-                       case "DefaultRdoCheck":
-                           Control[] radios = this.Controls.Find(value, true);
-                           if (radios.Length > 0 && radios[0] is RadioButton rdo)
-                               rdo.Checked = true;
-                           break;
-                   }
-               }
-
-               // 🔹 تحميل الشعار
-               if (!string.IsNullOrEmpty(lblLogoPath.Text) && !string.IsNullOrEmpty(lblLogoImageName.Text))
-               {
-                   string logoPath = Path.Combine(lblLogoPath.Text, lblLogoImageName.Text);
-                   if (File.Exists(logoPath))
-                       picLogoCo.Image = Image.FromFile(logoPath);
-               }
-           }
-
-            */
         #endregion
 
         #region === التنقل باستخدام Enter بين الحقول ===
