@@ -172,6 +172,9 @@
             tableLayoutPanel16 = new TableLayoutPanel();
             lblLogoPath = new Label();
             tableLayoutPanel17 = new TableLayoutPanel();
+            tableLayoutPanel28 = new TableLayoutPanel();
+            cbxReturnPurchasesMode = new ComboBox();
+            label33 = new Label();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel7.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
@@ -221,6 +224,7 @@
             tableLayoutPanel32.SuspendLayout();
             tableLayoutPanel31.SuspendLayout();
             tableLayoutPanel16.SuspendLayout();
+            tableLayoutPanel28.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel2
@@ -1800,13 +1804,14 @@
             // 
             tableLayoutPanel30.ColumnCount = 1;
             tableLayoutPanel30.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel30.Controls.Add(tableLayoutPanel36, 0, 6);
-            tableLayoutPanel30.Controls.Add(tableLayoutPanel37, 0, 5);
-            tableLayoutPanel30.Controls.Add(tableLayoutPanel35, 0, 4);
+            tableLayoutPanel30.Controls.Add(tableLayoutPanel28, 0, 4);
             tableLayoutPanel30.Controls.Add(tableLayoutPanel34, 0, 3);
             tableLayoutPanel30.Controls.Add(tableLayoutPanel33, 0, 2);
             tableLayoutPanel30.Controls.Add(tableLayoutPanel32, 0, 1);
             tableLayoutPanel30.Controls.Add(tableLayoutPanel31, 0, 0);
+            tableLayoutPanel30.Controls.Add(tableLayoutPanel36, 0, 7);
+            tableLayoutPanel30.Controls.Add(tableLayoutPanel37, 0, 6);
+            tableLayoutPanel30.Controls.Add(tableLayoutPanel35, 0, 5);
             tableLayoutPanel30.Dock = DockStyle.Fill;
             tableLayoutPanel30.Location = new Point(207, 3);
             tableLayoutPanel30.Name = "tableLayoutPanel30";
@@ -1832,8 +1837,7 @@
             tableLayoutPanel36.Controls.Add(rdoOpendMaxRateDiscount, 1, 0);
             tableLayoutPanel36.Controls.Add(label36, 0, 0);
             tableLayoutPanel36.Controls.Add(rdoClosedMaxRateDiscount, 2, 0);
-            tableLayoutPanel36.Dock = DockStyle.Fill;
-            tableLayoutPanel36.Location = new Point(3, 255);
+            tableLayoutPanel36.Location = new Point(3, 297);
             tableLayoutPanel36.Name = "tableLayoutPanel36";
             tableLayoutPanel36.RowCount = 1;
             tableLayoutPanel36.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
@@ -1885,8 +1889,7 @@
             tableLayoutPanel37.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel37.Controls.Add(label37, 0, 0);
             tableLayoutPanel37.Controls.Add(txtMaxRateDiscount, 1, 0);
-            tableLayoutPanel37.Dock = DockStyle.Fill;
-            tableLayoutPanel37.Location = new Point(3, 213);
+            tableLayoutPanel37.Location = new Point(3, 255);
             tableLayoutPanel37.Name = "tableLayoutPanel37";
             tableLayoutPanel37.RowCount = 1;
             tableLayoutPanel37.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
@@ -1926,8 +1929,7 @@
             tableLayoutPanel35.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel35.Controls.Add(label35, 0, 0);
             tableLayoutPanel35.Controls.Add(txtSalesPercentage, 1, 0);
-            tableLayoutPanel35.Dock = DockStyle.Fill;
-            tableLayoutPanel35.Location = new Point(3, 171);
+            tableLayoutPanel35.Location = new Point(3, 213);
             tableLayoutPanel35.Name = "tableLayoutPanel35";
             tableLayoutPanel35.RowCount = 1;
             tableLayoutPanel35.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
@@ -2196,6 +2198,44 @@
             tableLayoutPanel17.Size = new Size(1096, 41);
             tableLayoutPanel17.TabIndex = 0;
             // 
+            // tableLayoutPanel28
+            // 
+            tableLayoutPanel28.ColumnCount = 2;
+            tableLayoutPanel28.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel28.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel28.Controls.Add(cbxReturnPurchasesMode, 1, 0);
+            tableLayoutPanel28.Controls.Add(label33, 0, 0);
+            tableLayoutPanel28.Dock = DockStyle.Fill;
+            tableLayoutPanel28.Location = new Point(3, 171);
+            tableLayoutPanel28.Name = "tableLayoutPanel28";
+            tableLayoutPanel28.RowCount = 1;
+            tableLayoutPanel28.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel28.Size = new Size(590, 36);
+            tableLayoutPanel28.TabIndex = 7;
+            // 
+            // cbxReturnPurchasesMode
+            // 
+            cbxReturnPurchasesMode.Dock = DockStyle.Fill;
+            cbxReturnPurchasesMode.FormattingEnabled = true;
+            cbxReturnPurchasesMode.Location = new Point(3, 3);
+            cbxReturnPurchasesMode.Name = "cbxReturnPurchasesMode";
+            cbxReturnPurchasesMode.Size = new Size(289, 27);
+            cbxReturnPurchasesMode.TabIndex = 45;
+            // 
+            // label33
+            // 
+            label33.AutoSize = true;
+            label33.Dock = DockStyle.Fill;
+            label33.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
+            label33.ForeColor = Color.FromArgb(0, 0, 192);
+            label33.Location = new Point(298, 0);
+            label33.Name = "label33";
+            label33.Padding = new Padding(15, 0, 0, 0);
+            label33.Size = new Size(289, 36);
+            label33.TabIndex = 60;
+            label33.Text = "سياسة الشراء المرتد :";
+            label33.TextAlign = ContentAlignment.MiddleRight;
+            // 
             // frmGenralData
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -2274,6 +2314,8 @@
             tableLayoutPanel31.ResumeLayout(false);
             tableLayoutPanel31.PerformLayout();
             tableLayoutPanel16.ResumeLayout(false);
+            tableLayoutPanel28.ResumeLayout(false);
+            tableLayoutPanel28.PerformLayout();
             ResumeLayout(false);
 
         }
@@ -2423,5 +2465,8 @@
         private TableLayoutPanel tableLayoutPanel35;
         private TableLayoutPanel tableLayoutPanel34;
         private Label lblTypeSaleStock;
+        private TableLayoutPanel tableLayoutPanel28;
+        private ComboBox cbxReturnPurchasesMode;
+        private Label label33;
     }
 }

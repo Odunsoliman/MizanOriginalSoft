@@ -24,6 +24,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             tabMang.ItemSize = new Size(150, 40);
             LoadWarehouses();
             FillcbxReturnSaleMode();
+            FillcbxReturnPurchasesMode();
             LoadSettings();   // يفضل الإبقاء عليه لتحميل القيم
             tlpPading();
             UpdateLabelCount();
@@ -516,6 +517,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                         }
                         break;
 
+
                     // 🔹 السماح بتغيير الضريبة
                     case "IsEnablToChangTax":
                         if (bool.TryParse(value, out bool enableTax))
@@ -532,6 +534,11 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     case "ReturnSaleMode":
                         if (int.TryParse(value, out int selectedMode))
                             cbxReturnSaleMode.SelectedValue = selectedMode;
+                        break;
+                    // 🔹 سياسة المشتريات المرتدة
+                    case "ReturnPurchasesModeurchasesMode":
+                        if (int.TryParse(value, out int selectedReturnPurchasesMode))
+                            cbxReturnPurchasesMode.SelectedValue = selectedReturnPurchasesMode;
                         break;
 
                     // 🔹 نسبة التسعير
@@ -679,6 +686,27 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             // تحميل القيمة المحفوظة
             int savedMode = AppSettings.GetInt("ReturnSaleMode", 1);
             cbxReturnSaleMode.SelectedValue = savedMode;
+        }
+
+        // 🔹 ملء ComboBox بالقيم المتاحة (1، 2، 3) وربطه بالبيانات
+        private void FillcbxReturnPurchasesMode()
+        {
+            cbxReturnPurchasesMode .DropDownStyle = ComboBoxStyle.DropDownList;
+
+            var PurchModes = new List<KeyValuePair<int, string>>
+    {
+        new KeyValuePair<int, string>(1, "حسب فاتورة البيع"),
+        new KeyValuePair<int, string>(2, "بالكود مباشر"),
+        new KeyValuePair<int, string>(3, "بالنظامين")
+    };
+
+            cbxReturnPurchasesMode.DataSource = PurchModes;
+            cbxReturnPurchasesMode.DisplayMember = "Value";
+            cbxReturnPurchasesMode.ValueMember = "Key";
+
+            // تحميل القيمة المحفوظة
+            int savedMode = AppSettings.GetInt("ReturnPurchasesMode", 1);
+            cbxReturnPurchasesMode.SelectedValue = savedMode;
         }
 
         #endregion
@@ -833,6 +861,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 ["SalesTax"] = txtSalesTax.Text,
                 ["IsEnablToChangTax"] = rdoAllowChangTax.Checked.ToString(),
                 ["ReturnSaleMode"] = cbxReturnSaleMode.SelectedValue?.ToString() ?? "",
+                ["ReturnPurchasesMode"] = cbxReturnPurchasesMode.SelectedValue?.ToString() ?? "",
                 ["SalesPercentage"] = txtSalesPercentage.Text,
                 ["MaxRateDiscount"] = txtMaxRateDiscount.Text,
                 ["IsOpendMaxRateDiscount"] = rdoOpendMaxRateDiscount.Checked.ToString()
