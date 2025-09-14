@@ -144,24 +144,24 @@
             tabPage1 = new TabPage();
             tableLayoutPanel27 = new TableLayoutPanel();
             tableLayoutPanel28 = new TableLayoutPanel();
+            label36 = new Label();
+            chkIsOpendMaxRateDiscount = new CheckBox();
+            label37 = new Label();
+            label35 = new Label();
+            label33 = new Label();
+            label32 = new Label();
             chkIsSaleByNegativeStock = new CheckBox();
-            lblTypeSaleStock = new Label();
-            cbxReturnSaleMode = new ComboBox();
             txtSalesTax = new TextBox();
             label7 = new Label();
+            lblTypeSaleStock = new Label();
+            cbxReturnSaleMode = new ComboBox();
+            txtSalesPercentage = new TextBox();
+            txtMaxRateDiscount = new TextBox();
             tableLayoutPanel16 = new TableLayoutPanel();
             lblLogoPath = new Label();
             tableLayoutPanel17 = new TableLayoutPanel();
             btnSave = new Button();
-            label32 = new Label();
-            label33 = new Label();
             label34 = new Label();
-            label35 = new Label();
-            label37 = new Label();
-            txtMaxRateDiscount = new TextBox();
-            txtSalesPercentage = new TextBox();
-            chkIsOpendMaxRateDiscount = new CheckBox();
-            label36 = new Label();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel7.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
@@ -1772,20 +1772,20 @@
             tableLayoutPanel28.ColumnCount = 2;
             tableLayoutPanel28.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 61.4609566F));
             tableLayoutPanel28.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 38.5390434F));
+            tableLayoutPanel28.Controls.Add(label34, 0, 3);
             tableLayoutPanel28.Controls.Add(label36, 0, 6);
             tableLayoutPanel28.Controls.Add(chkIsOpendMaxRateDiscount, 1, 6);
             tableLayoutPanel28.Controls.Add(label37, 0, 5);
             tableLayoutPanel28.Controls.Add(label35, 0, 4);
-            tableLayoutPanel28.Controls.Add(label34, 1, 3);
             tableLayoutPanel28.Controls.Add(label33, 1, 1);
             tableLayoutPanel28.Controls.Add(label32, 0, 1);
             tableLayoutPanel28.Controls.Add(chkIsSaleByNegativeStock, 1, 2);
             tableLayoutPanel28.Controls.Add(txtSalesTax, 1, 0);
             tableLayoutPanel28.Controls.Add(label7, 0, 0);
             tableLayoutPanel28.Controls.Add(lblTypeSaleStock, 0, 2);
-            tableLayoutPanel28.Controls.Add(cbxReturnSaleMode, 0, 3);
             tableLayoutPanel28.Controls.Add(txtSalesPercentage, 1, 4);
             tableLayoutPanel28.Controls.Add(txtMaxRateDiscount, 1, 5);
+            tableLayoutPanel28.Controls.Add(cbxReturnSaleMode, 1, 3);
             tableLayoutPanel28.Dock = DockStyle.Fill;
             tableLayoutPanel28.Location = new Point(406, 3);
             tableLayoutPanel28.Name = "tableLayoutPanel28";
@@ -1803,6 +1803,72 @@
             tableLayoutPanel28.Size = new Size(397, 383);
             tableLayoutPanel28.TabIndex = 0;
             // 
+            // label36
+            // 
+            label36.AutoSize = true;
+            label36.Dock = DockStyle.Fill;
+            label36.Location = new Point(156, 228);
+            label36.Name = "label36";
+            label36.Size = new Size(238, 38);
+            label36.TabIndex = 59;
+            label36.Text = "السماح بتغيير نسبة الخصم عند البيع";
+            label36.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // chkIsOpendMaxRateDiscount
+            // 
+            chkIsOpendMaxRateDiscount.AutoSize = true;
+            chkIsOpendMaxRateDiscount.Dock = DockStyle.Left;
+            chkIsOpendMaxRateDiscount.Location = new Point(135, 231);
+            chkIsOpendMaxRateDiscount.Name = "chkIsOpendMaxRateDiscount";
+            chkIsOpendMaxRateDiscount.Size = new Size(15, 32);
+            chkIsOpendMaxRateDiscount.TabIndex = 58;
+            chkIsOpendMaxRateDiscount.TextAlign = ContentAlignment.MiddleRight;
+            chkIsOpendMaxRateDiscount.UseVisualStyleBackColor = true;
+            // 
+            // label37
+            // 
+            label37.AutoSize = true;
+            label37.Dock = DockStyle.Fill;
+            label37.Location = new Point(156, 190);
+            label37.Name = "label37";
+            label37.Size = new Size(238, 38);
+            label37.TabIndex = 54;
+            label37.Text = "نسبة خصم الاوكازيون";
+            label37.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label35
+            // 
+            label35.AutoSize = true;
+            label35.Dock = DockStyle.Fill;
+            label35.Location = new Point(156, 152);
+            label35.Name = "label35";
+            label35.Size = new Size(238, 38);
+            label35.TabIndex = 52;
+            label35.Text = "نسبة تسعير البيع";
+            label35.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label33
+            // 
+            label33.AutoSize = true;
+            label33.Dock = DockStyle.Fill;
+            label33.Location = new Point(3, 38);
+            label33.Name = "label33";
+            label33.Size = new Size(147, 38);
+            label33.TabIndex = 50;
+            label33.Text = "-----------------";
+            label33.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label32
+            // 
+            label32.AutoSize = true;
+            label32.Dock = DockStyle.Fill;
+            label32.Location = new Point(156, 38);
+            label32.Name = "label32";
+            label32.Size = new Size(238, 38);
+            label32.TabIndex = 49;
+            label32.Text = "---------------------";
+            label32.TextAlign = ContentAlignment.MiddleRight;
+            // 
             // chkIsSaleByNegativeStock
             // 
             chkIsSaleByNegativeStock.AutoSize = true;
@@ -1814,27 +1880,6 @@
             chkIsSaleByNegativeStock.TextAlign = ContentAlignment.MiddleRight;
             chkIsSaleByNegativeStock.UseVisualStyleBackColor = true;
             chkIsSaleByNegativeStock.CheckedChanged += CheckBox_CheckedChanged;
-            // 
-            // lblTypeSaleStock
-            // 
-            lblTypeSaleStock.AutoSize = true;
-            lblTypeSaleStock.Dock = DockStyle.Fill;
-            lblTypeSaleStock.Location = new Point(156, 76);
-            lblTypeSaleStock.Name = "lblTypeSaleStock";
-            lblTypeSaleStock.Size = new Size(238, 38);
-            lblTypeSaleStock.TabIndex = 46;
-            lblTypeSaleStock.Text = "البيع حسب الرصيد";
-            lblTypeSaleStock.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // cbxReturnSaleMode
-            // 
-            cbxReturnSaleMode.Dock = DockStyle.Right;
-            cbxReturnSaleMode.FormattingEnabled = true;
-            cbxReturnSaleMode.Location = new Point(156, 117);
-            cbxReturnSaleMode.Name = "cbxReturnSaleMode";
-            cbxReturnSaleMode.Size = new Size(165, 27);
-            cbxReturnSaleMode.TabIndex = 45;
-            cbxReturnSaleMode.SelectedIndexChanged += cbxReturnSaleMode_SelectedIndexChanged;
             // 
             // txtSalesTax
             // 
@@ -1861,6 +1906,48 @@
             label7.TabIndex = 35;
             label7.Text = "ض . م %";
             label7.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // lblTypeSaleStock
+            // 
+            lblTypeSaleStock.AutoSize = true;
+            lblTypeSaleStock.Dock = DockStyle.Fill;
+            lblTypeSaleStock.Location = new Point(156, 76);
+            lblTypeSaleStock.Name = "lblTypeSaleStock";
+            lblTypeSaleStock.Size = new Size(238, 38);
+            lblTypeSaleStock.TabIndex = 46;
+            lblTypeSaleStock.Text = "البيع حسب الرصيد";
+            lblTypeSaleStock.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // cbxReturnSaleMode
+            // 
+            cbxReturnSaleMode.FormattingEnabled = true;
+            cbxReturnSaleMode.Location = new Point(3, 117);
+            cbxReturnSaleMode.Name = "cbxReturnSaleMode";
+            cbxReturnSaleMode.Size = new Size(147, 27);
+            cbxReturnSaleMode.TabIndex = 45;
+            cbxReturnSaleMode.SelectedIndexChanged += cbxReturnSaleMode_SelectedIndexChanged;
+            // 
+            // txtSalesPercentage
+            // 
+            txtSalesPercentage.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtSalesPercentage.Location = new Point(78, 156);
+            txtSalesPercentage.Margin = new Padding(4);
+            txtSalesPercentage.Name = "txtSalesPercentage";
+            txtSalesPercentage.Size = new Size(71, 29);
+            txtSalesPercentage.TabIndex = 56;
+            txtSalesPercentage.Text = "0";
+            txtSalesPercentage.TextAlign = HorizontalAlignment.Center;
+            // 
+            // txtMaxRateDiscount
+            // 
+            txtMaxRateDiscount.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtMaxRateDiscount.Location = new Point(78, 194);
+            txtMaxRateDiscount.Margin = new Padding(4);
+            txtMaxRateDiscount.Name = "txtMaxRateDiscount";
+            txtMaxRateDiscount.Size = new Size(71, 29);
+            txtMaxRateDiscount.TabIndex = 55;
+            txtMaxRateDiscount.Text = "0";
+            txtMaxRateDiscount.TextAlign = HorizontalAlignment.Center;
             // 
             // tableLayoutPanel16
             // 
@@ -1922,103 +2009,16 @@
             btnSave.Visible = false;
             btnSave.Click += btnSave_Click;
             // 
-            // label32
-            // 
-            label32.AutoSize = true;
-            label32.Dock = DockStyle.Fill;
-            label32.Location = new Point(156, 38);
-            label32.Name = "label32";
-            label32.Size = new Size(238, 38);
-            label32.TabIndex = 49;
-            label32.Text = "---------------------";
-            label32.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // label33
-            // 
-            label33.AutoSize = true;
-            label33.Dock = DockStyle.Fill;
-            label33.Location = new Point(3, 38);
-            label33.Name = "label33";
-            label33.Size = new Size(147, 38);
-            label33.TabIndex = 50;
-            label33.Text = "-----------------";
-            label33.TextAlign = ContentAlignment.MiddleRight;
-            // 
             // label34
             // 
             label34.AutoSize = true;
             label34.Dock = DockStyle.Fill;
-            label34.Location = new Point(3, 114);
+            label34.Location = new Point(156, 114);
             label34.Name = "label34";
-            label34.Size = new Size(147, 38);
-            label34.TabIndex = 51;
+            label34.Size = new Size(238, 38);
+            label34.TabIndex = 60;
+            label34.Text = "نظام البيع المرتد";
             label34.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // label35
-            // 
-            label35.AutoSize = true;
-            label35.Dock = DockStyle.Fill;
-            label35.Location = new Point(156, 152);
-            label35.Name = "label35";
-            label35.Size = new Size(238, 38);
-            label35.TabIndex = 52;
-            label35.Text = "نسبة تسعير البيع";
-            label35.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // label37
-            // 
-            label37.AutoSize = true;
-            label37.Dock = DockStyle.Fill;
-            label37.Location = new Point(156, 190);
-            label37.Name = "label37";
-            label37.Size = new Size(238, 38);
-            label37.TabIndex = 54;
-            label37.Text = "نسبة خصم الاوكازيون";
-            label37.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // txtMaxRateDiscount
-            // 
-            txtMaxRateDiscount.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtMaxRateDiscount.Location = new Point(78, 194);
-            txtMaxRateDiscount.Margin = new Padding(4);
-            txtMaxRateDiscount.Name = "txtMaxRateDiscount";
-            txtMaxRateDiscount.Size = new Size(71, 29);
-            txtMaxRateDiscount.TabIndex = 55;
-            txtMaxRateDiscount.Text = "0";
-            txtMaxRateDiscount.TextAlign = HorizontalAlignment.Center;
-            // 
-            // txtSalesPercentage
-            // 
-            txtSalesPercentage.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtSalesPercentage.Location = new Point(78, 156);
-            txtSalesPercentage.Margin = new Padding(4);
-            txtSalesPercentage.Name = "txtSalesPercentage";
-            txtSalesPercentage.Size = new Size(71, 29);
-            txtSalesPercentage.TabIndex = 56;
-            txtSalesPercentage.Text = "0";
-            txtSalesPercentage.TextAlign = HorizontalAlignment.Center;
-            // 
-            // chkIsOpendMaxRateDiscount
-            // 
-            chkIsOpendMaxRateDiscount.AutoSize = true;
-            chkIsOpendMaxRateDiscount.Dock = DockStyle.Left;
-            chkIsOpendMaxRateDiscount.Location = new Point(135, 231);
-            chkIsOpendMaxRateDiscount.Name = "chkIsOpendMaxRateDiscount";
-            chkIsOpendMaxRateDiscount.Size = new Size(15, 32);
-            chkIsOpendMaxRateDiscount.TabIndex = 58;
-            chkIsOpendMaxRateDiscount.TextAlign = ContentAlignment.MiddleRight;
-            chkIsOpendMaxRateDiscount.UseVisualStyleBackColor = true;
-            // 
-            // label36
-            // 
-            label36.AutoSize = true;
-            label36.Dock = DockStyle.Fill;
-            label36.Location = new Point(156, 228);
-            label36.Name = "label36";
-            label36.Size = new Size(238, 38);
-            label36.TabIndex = 59;
-            label36.Text = "السماح بتغيير نسبة الخصم عند البيع";
-            label36.TextAlign = ContentAlignment.MiddleRight;
             // 
             // frmGenralData
             // 
@@ -2220,10 +2220,10 @@
         private TextBox txtMaxRateDiscount;
         private Label label37;
         private Label label35;
-        private Label label34;
         private Label label33;
         private Label label32;
         private Label label36;
         private CheckBox chkIsOpendMaxRateDiscount;
+        private Label label34;
     }
 }

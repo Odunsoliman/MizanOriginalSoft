@@ -586,9 +586,9 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
             var saleModes = new List<KeyValuePair<int, string>>
     {
-        new KeyValuePair<int, string>(1, "البيع المرتد حسب الفاتورة"),
-        new KeyValuePair<int, string>(2, "البيع المرتد بالكود مباشر"),
-        new KeyValuePair<int, string>(3, "البيع المرتد بالنظامين")
+        new KeyValuePair<int, string>(1, "حسب فاتورة البيع"),
+        new KeyValuePair<int, string>(2, "بالكود مباشر"),
+        new KeyValuePair<int, string>(3, "بالنظامين")
     };
 
             cbxReturnSaleMode.DataSource = saleModes;
