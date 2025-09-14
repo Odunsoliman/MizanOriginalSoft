@@ -476,13 +476,13 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
                 switch (key)
                 {
-                    // 🔹 صفحة إعدادات السيرفر
+                    // 🔹 إعدادات السيرفر
                     case "serverName": txtServerName.Text = value; break;
                     case "DBName": txtDBName.Text = value; break;
                     case "BackupsPath": txtBackupsPath.Text = value; break;
                     case "maxBackups": txtMaxBackups.Text = value; break;
 
-                    // 🔹 صفحة الطباعة
+                    // 🔹 إعدادات الطباعة
                     case "RollPrinter": lblRollPrinter.Text = value; break;
                     case "SheetPrinter": lblSheetPrinter.Text = value; break;
                     case "SheetRows": txtSheetRows.Text = value; break;
@@ -494,7 +494,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     case "RollLabelWidth": txtRollLabelWidth.Text = value; break;
                     case "RollLabelHeight": txtRollLabelHeight.Text = value; break;
 
-                    // 🔹 صفحة المعلومات العامة
+                    // 🔹 المعلومات العامة
                     case "CompanyName": txtNameCo.Text = value; break;
                     case "CompanyPhon": txtPhon.Text = value; break;
                     case "CompanyAnthrPhon": txtAnthrPhon.Text = value; break;
@@ -507,34 +507,49 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                             cbxWarehouseId.SelectedValue = defWarehouseId;
                         break;
 
-                    // 🔹 صفحة البيع والشراء
+                    // 🔹 البيع حسب الرصيد أو المكشوف
                     case "IsSaleByNegativeStock":
                         if (bool.TryParse(value, out bool isNegativeStock))
                         {
-                            chkIsSaleByNegativeStock.Checked = isNegativeStock;// تم استبدال هذه الاداة ب اداتين ريديو بوتن         rdoAllowSaleByNegativeStock.Checked ; rdoNotAllowSaleByNegativeStock.Checked ;
-                            lblTypeSaleStock.Text = isNegativeStock
-                                ? "البيع على المكشوف"
-                                : "البيع حسب الرصيد";
+                            rdoAllowSaleByNegativeStock.Checked = isNegativeStock;
+                            rdoNotAllowSaleByNegativeStock.Checked = !isNegativeStock;
                         }
                         break;
+
+                    // 🔹 السماح بتغيير الضريبة
+                    case "IsEnablToChangTax":
+                        if (bool.TryParse(value, out bool enableTax))
+                        {
+                            rdoAllowChangTax.Checked = enableTax;
+                            rdoNotAllowChangTax.Checked = !enableTax;
+                        }
+                        break;
+
+                    // 🔹 نسبة الضريبة
+                    case "SalesTax": txtSalesTax.Text = value; break;
+
+                    // 🔹 سياسة البيع المرتد
                     case "ReturnSaleMode":
                         if (int.TryParse(value, out int selectedMode))
                             cbxReturnSaleMode.SelectedValue = selectedMode;
                         break;
-                    case "IsEnablToChangTax":
-                        if (bool.TryParse(value, out bool enableTax))
-                            chkIsEnablToChangTax.Checked = enableTax;// تم استبدال هذه الاداة ب اداتين ريديو بوتن         rdoAllowChangTax.Checked ; rdoNotAllowChangTax.Checked ;
 
-                        break;
-                    case "SalesTax": txtSalesTax.Text = value; break;
+                    // 🔹 نسبة التسعير
                     case "SalesPercentage": txtSalesPercentage.Text = value; break;
-                    case "MaxRateDiscount": txtMaxRateDiscount.Text = value; break;//  // تم استبدال هذه الاداة ب اداتين ريديو بوتن         rdoOpendMaxRateDiscount.Checked ; rdoClosedMaxRateDiscount.Checked ;
+
+                    // 🔹 نسبة الخصم
+                    case "MaxRateDiscount": txtMaxRateDiscount.Text = value; break;
+
+                    // 🔹 السماح بخصم أعلى
                     case "IsOpendMaxRateDiscount":
                         if (bool.TryParse(value, out bool openDiscount))
-                            chkIsOpendMaxRateDiscount.Checked = openDiscount;
+                        {
+                            rdoOpendMaxRateDiscount.Checked = openDiscount;
+                            rdoClosedMaxRateDiscount.Checked = !openDiscount;
+                        }
                         break;
 
-                    // 🔹 إعدادات أخرى (إن وجدت)
+                    // 🔹 اختيار راديو افتراضي
                     case "DefaultRdoCheck":
                         Control[] radios = this.Controls.Find(value, true);
                         if (radios.Length > 0 && radios[0] is RadioButton rdo)
@@ -542,7 +557,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                         break;
                 }
             }
-            /*اريد تغيير الادوات المشار اليها مع قرائة القيمة وتحديد الريديو المعنى و مع ضبط طريقة الحفظ بالمعايير المطلوبة عند اى تغيير فيها*/
+
             // 🔹 تحميل الشعار
             if (!string.IsNullOrEmpty(lblLogoPath.Text) && !string.IsNullOrEmpty(lblLogoImageName.Text))
             {
@@ -551,22 +566,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     picLogoCo.Image = Image.FromFile(logoPath);
             }
         }
-
-        //case "BackupDB": txtBackupDB.Text = value; break;
-        //case "RestoreDB": txtRestoreDB.Text = value; break;
-        //case "GoogleDrivePath": txtGoogleDrivePath.Text = value; break;
-        //case "ProjectPath": txtProjectPath.Text = value; break;
-        //case "BackupGitPath": txtBackupGitPath.Text = value; break;
-        //case "DefaultPrinter": txtDefaultPrinter.Text = value; break;
-        //case "DefaultWarehouse": txtDefaultWarehouse.Text = value; break;
-        //case "DefaultStartDate":
-        //    if (DateTime.TryParse(value, out DateTime startDate))
-        //        dtpStartDate.Value = startDate;
-        //    break;
-        //case "DefaultEndDate":
-        //    if (DateTime.TryParse(value, out DateTime endDate))
-        //        dtpEndDate.Value = endDate;
-        //    break;
         #endregion
 
         /* 
@@ -801,13 +800,13 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
             Dictionary<string, string> newSettings = new Dictionary<string, string>
             {
-                // 🔹 صفحة اعدادات السيرفر كاملة
+                // 🔹 السيرفر
                 ["serverName"] = txtServerName.Text,
                 ["DBName"] = txtDBName.Text,
                 ["maxBackups"] = txtMaxBackups.Text,
                 ["BackupsPath"] = txtBackupsPath.Text,
 
-                // 🔹 صفحة الطباعة كاملة
+                // 🔹 الطباعة
                 ["RollPrinter"] = lblRollPrinter.Text,
                 ["SheetPrinter"] = lblSheetPrinter.Text,
                 ["SheetRows"] = txtSheetRows.Text,
@@ -819,7 +818,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 ["RollLabelWidth"] = txtRollLabelWidth.Text,
                 ["RollLabelHeight"] = txtRollLabelHeight.Text,
 
-                // 🔹 صفحة المعلومات العامة كاملة
+                // 🔹 المعلومات العامة
                 ["CompanyName"] = txtNameCo.Text,
                 ["CompanyPhon"] = txtPhon.Text,
                 ["CompanyAnthrPhon"] = txtAnthrPhon.Text,
@@ -829,17 +828,16 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 ["LogoImagName"] = lblLogoImageName.Text,
                 ["DefaultWarehouseId"] = cbxWarehouseId.SelectedValue?.ToString() ?? "",
 
-                // 🔹 صفحة البيع والشراء - كاملة الآن
-                ["IsSaleByNegativeStock"] = chkIsSaleByNegativeStock.Checked.ToString(),
+                // 🔹 البيع والشراء
+                ["IsSaleByNegativeStock"] = rdoAllowSaleByNegativeStock.Checked.ToString(),
                 ["SalesTax"] = txtSalesTax.Text,
-                ["IsEnablToChangTax"] = chkIsEnablToChangTax.Checked.ToString(),
+                ["IsEnablToChangTax"] = rdoAllowChangTax.Checked.ToString(),
                 ["ReturnSaleMode"] = cbxReturnSaleMode.SelectedValue?.ToString() ?? "",
                 ["SalesPercentage"] = txtSalesPercentage.Text,
                 ["MaxRateDiscount"] = txtMaxRateDiscount.Text,
-                ["IsOpendMaxRateDiscount"] = chkIsOpendMaxRateDiscount.Checked.ToString()
+                ["IsOpendMaxRateDiscount"] = rdoOpendMaxRateDiscount.Checked.ToString()
             };
 
-            // 🔹 تحديث القيم الموجودة أو إضافتها
             foreach (var setting in newSettings)
             {
                 string key = setting.Key;
@@ -865,12 +863,10 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
             File.WriteAllLines(configFilePath, lines);
 
-            // 🔹 أعد تحميل القيم للبرنامج كله
             AppSettings.Load(configFilePath);
-
-            // 🔹 أعد تعبئة الشاشة نفسها
             LoadSettings();
         }
+
         #endregion
 
         #region === التنقل باستخدام Enter بين الحقول ===
