@@ -34,7 +34,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             txtNameCo.SelectAll();
             LoadBackupFiles();
             AttachTextBoxHandlers(this);
-            ApplyPermissionsToControls();
+//            ApplyPermissionsToControls();
             LoadAllUsers();
             DGV_Users.SelectionChanged += DGV_Users_SelectionChanged;
             DGV_Users.RowPrePaint += DGV_Users_RowPrePaint;
@@ -52,41 +52,41 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
 
         #region *********  ApplyPermissions  ******************************
-        private void ApplyPermissionsToControls()
-        {
-            var allControls = GetAllControls(this); 
+        //private void ApplyPermissionsToControls()
+        //{
+        //    var allControls = GetAllControls(this); 
 
-            foreach (Control ctrl in allControls)
-            {
-                string controlName = ctrl.Name;
+        //    foreach (Control ctrl in allControls)
+        //    {
+        //        string controlName = ctrl.Name;
 
-                if (string.IsNullOrWhiteSpace(controlName)) continue;
+        //        if (string.IsNullOrWhiteSpace(controlName)) continue;
 
-                if (UserPermissionsManager.Permissions.TryGetValue(controlName, out var permission))
-                {
-                    ctrl.Visible = permission.CanView;
-                    ctrl.Enabled = permission.CanView;
-                }
-            }
-        }
+        //        if (UserPermissionsManager.Permissions.TryGetValue(controlName, out var permission))
+        //        {
+        //            ctrl.Visible = permission.CanView;
+        //            ctrl.Enabled = permission.CanView;
+        //        }
+        //    }
+        //}
 
-        private List<Control> GetAllControls(Control parent)
-        {
-            List<Control> controls = new List<Control>();
+        //private List<Control> GetAllControls(Control parent)
+        //{
+        //    List<Control> controls = new List<Control>();
 
-            foreach (Control child in parent.Controls)
-            {
-                controls.Add(child);
-                controls.AddRange(GetAllControls(child));
-            }
+        //    foreach (Control child in parent.Controls)
+        //    {
+        //        controls.Add(child);
+        //        controls.AddRange(GetAllControls(child));
+        //    }
 
-            return controls;
-        }
+        //    return controls;
+        //}
 
         #endregion
 
 
-        #region ====== إدارة المستخدمين والصلاحيات ======
+        #region ====== تبويبين اعداد المستخدمين والصلاحيات ======
         private void StyleDGV_Users()
         {/*اريد المستخدم الغير مفعل IsActive=0 يظهر بلون بخلفية مميز*/
             DGV_Users.RowHeadersVisible = false;
@@ -180,8 +180,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             DGV_Permissions.DefaultCellStyle.BackColor = Color.White;
         }
 
-
-        //Times New Roman
         private void LoadAllUsers()
         {
             try
@@ -265,7 +263,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             LoadAllUsers();
         }
 
-
         private void btnDeleteUser_Click(object sender, EventArgs e)
         {
             if (lblID_User.Text == "0")
@@ -311,9 +308,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-        #endregion
-
-        #region ************  LoadUsers **************
+        //
         private void LoadUsers()
         {
             var usersTable = DBServiecs.User_GetAll();
@@ -371,7 +366,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             if (DGV.Columns.Contains("WarehouseID"))
                 DGV.Columns["WarehouseID"].Visible = false;
         }
-
 
         private void CbxUsers_SelectedIndexChanged(object? sender, EventArgs e)
         {
@@ -466,15 +460,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         private bool ConvertToBool(object value)
         {
             return value != null && value != DBNull.Value && Convert.ToBoolean(value);
-        }
-
-
-        private void LoadWarehouses_()
-        {
-            var table = DBServiecs.Warehouse_GetAll();
-            cbxWarehouses.DisplayMember = "WarehouseName";
-            cbxWarehouses.ValueMember = "WarehouseId";
-            cbxWarehouses.DataSource = table;
         }
 
         #endregion
@@ -642,7 +627,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         CompanyLoGoFolder=D:\MizanSoft\MizanLoom\Signee\Signee\bin\Debug
         LogoImagName=Mizan Logo.PNG
 
-        # إعدادات المستودعات
+        ### إعدادات المستودعات
         DefaultWarehouseId=1
         DefaultPrinter=Samsung SCX-3400 Series
         DefaultWarehouse=0
@@ -650,13 +635,11 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         DefaultEndDate=2025-12-31
         DefaultRdoCheck=rdoThisYear
 
-        # ==============================
         # إعدادات البيع والمردودات
         # نظام الفواتير المرتدة فى المبيعات
         # Mode=1 InvoiceOnly عن طريق فاتورة البيع الاصلية فقط
         # Mode=2 FreeMode عن طريق كتابة اى كود صنف بحرية
         # Mode=3 MixedMode عن طريق النظامين أيهما يختار المستخدم
-        # ==============================
         ReturnSaleMode=1
 
         # السماح بالبيع بالرصيد السالب
@@ -674,19 +657,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
          */
         #endregion
 
-        #region حفظ الإعدادات إلى الملف
-        private void btnSave_Click(object sender, EventArgs e)
-        {
 
-            if (string.IsNullOrWhiteSpace(txtServerName.Text) || string.IsNullOrWhiteSpace(txtDBName.Text))
-            {
-                MessageBox.Show("يرجى تحديد السيرفر وقاعدة البيانات.");
-                return;
-            }
-            SaveData();
-
-        }
-        #endregion
 
         #region 🔹 إعداد وضع البيع المرتد (ReturnSaleMode)
 
@@ -811,10 +782,12 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             // إعدادات جديدة عايزين نحفظها
             Dictionary<string, string> newSettings = new Dictionary<string, string>
             {
+                //اعدادت السيرفر
                 ["serverName"] = txtServerName.Text,
                 ["DBName"] = txtDBName.Text,
                 ["maxBackups"] = txtMaxBackups.Text,
                 ["BackupsPath"] = txtBackupsPath.Text,
+                // اعدادت الطباعة
                 ["RollPrinter"] = lblRollPrinter.Text,
                 ["SheetPrinter"] = lblSheetPrinter.Text,
                 ["SheetRows"] = txtSheetRows.Text,
@@ -825,16 +798,19 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 ["SheetMarginLeft"] = txtMarginLeft.Text,
                 ["RollLabelWidth"] = txtRollLabelWidth.Text,
                 ["RollLabelHeight"] = txtRollLabelHeight.Text,
+                // اعدادات عامة
                 ["CompanyName"] = txtNameCo.Text,
                 ["CompanyPhon"] = txtPhon.Text,
                 ["CompanyAnthrPhon"] = txtAnthrPhon.Text,
-                ["SalesTax"] = txtSalesTax.Text,
+                
                 ["CompanyAdreass"] = txtAdreass.Text,
                 ["EmailCo"] = txtCompanyEmail.Text,
                 ["IsSaleByNegativeStock"] = chkIsSaleByNegativeStock.Checked.ToString(),
                 ["CompanyLoGoFolder"] = lblLogoPath.Text,
                 ["LogoImagName"] = lblLogoImageName.Text,
-                ["DefaultWarehouseId"] = cbxWarehouseId.SelectedValue?.ToString() ?? ""
+                ["DefaultWarehouseId"] = cbxWarehouseId.SelectedValue?.ToString() ?? "",
+                // اعدادات البيع والشراء
+                ["SalesTax"] = txtSalesTax.Text
 
             };
 
