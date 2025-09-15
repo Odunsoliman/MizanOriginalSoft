@@ -35,18 +35,18 @@
             lblcountResulte = new Label();
             txtSearch = new TextBox();
             label1 = new Label();
-            tableLayoutPanel3 = new TableLayoutPanel();
-            dateTimePicker1 = new DateTimePicker();
-            dateTimePicker2 = new DateTimePicker();
-            comboBox1 = new ComboBox();
+            btnClearFilters = new Button();
+            tlpDate = new TableLayoutPanel();
+            dtpFrom = new DateTimePicker();
+            dtpTo = new DateTimePicker();
+            cbxUsers = new ComboBox();
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
-            button1 = new Button();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
             tableLayoutPanel2.SuspendLayout();
-            tableLayoutPanel3.SuspendLayout();
+            tlpDate.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -56,7 +56,7 @@
             tableLayoutPanel1.Controls.Add(lblTitel, 0, 0);
             tableLayoutPanel1.Controls.Add(DGV, 0, 3);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 2);
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel3, 0, 1);
+            tableLayoutPanel1.Controls.Add(tlpDate, 0, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -104,7 +104,7 @@
             tableLayoutPanel2.Controls.Add(lblcountResulte, 3, 0);
             tableLayoutPanel2.Controls.Add(txtSearch, 1, 0);
             tableLayoutPanel2.Controls.Add(label1, 0, 0);
-            tableLayoutPanel2.Controls.Add(button1, 2, 0);
+            tableLayoutPanel2.Controls.Add(btnClearFilters, 2, 0);
             tableLayoutPanel2.Location = new Point(13, 99);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
@@ -146,56 +146,70 @@
             label1.Text = "بحث";
             label1.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // tableLayoutPanel3
+            // btnClearFilters
             // 
-            tableLayoutPanel3.ColumnCount = 6;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 22F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 22F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17F));
-            tableLayoutPanel3.Controls.Add(dateTimePicker1, 1, 0);
-            tableLayoutPanel3.Controls.Add(dateTimePicker2, 3, 0);
-            tableLayoutPanel3.Controls.Add(comboBox1, 5, 0);
-            tableLayoutPanel3.Controls.Add(label2, 0, 0);
-            tableLayoutPanel3.Controls.Add(label3, 2, 0);
-            tableLayoutPanel3.Controls.Add(label4, 4, 0);
-            tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(13, 56);
-            tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 1;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new Size(774, 37);
-            tableLayoutPanel3.TabIndex = 3;
+            btnClearFilters.Dock = DockStyle.Fill;
+            btnClearFilters.Location = new Point(314, 3);
+            btnClearFilters.Name = "btnClearFilters";
+            btnClearFilters.Size = new Size(32, 31);
+            btnClearFilters.TabIndex = 4;
+            btnClearFilters.Text = "x";
+            btnClearFilters.UseVisualStyleBackColor = true;
+            btnClearFilters.Click += btnClearFilters_Click;
             // 
-            // dateTimePicker1
+            // tlpDate
             // 
-            dateTimePicker1.Dock = DockStyle.Fill;
-            dateTimePicker1.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            dateTimePicker1.Location = new Point(507, 3);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(164, 26);
-            dateTimePicker1.TabIndex = 0;
+            tlpDate.ColumnCount = 6;
+            tlpDate.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13F));
+            tlpDate.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 22F));
+            tlpDate.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13F));
+            tlpDate.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 22F));
+            tlpDate.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13F));
+            tlpDate.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17F));
+            tlpDate.Controls.Add(dtpFrom, 1, 0);
+            tlpDate.Controls.Add(dtpTo, 3, 0);
+            tlpDate.Controls.Add(cbxUsers, 5, 0);
+            tlpDate.Controls.Add(label2, 0, 0);
+            tlpDate.Controls.Add(label3, 2, 0);
+            tlpDate.Controls.Add(label4, 4, 0);
+            tlpDate.Dock = DockStyle.Fill;
+            tlpDate.Location = new Point(13, 56);
+            tlpDate.Name = "tlpDate";
+            tlpDate.RowCount = 1;
+            tlpDate.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tlpDate.Size = new Size(774, 37);
+            tlpDate.TabIndex = 3;
             // 
-            // dateTimePicker2
+            // dtpFrom
             // 
-            dateTimePicker2.Dock = DockStyle.Fill;
-            dateTimePicker2.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            dateTimePicker2.Location = new Point(237, 3);
-            dateTimePicker2.Name = "dateTimePicker2";
-            dateTimePicker2.Size = new Size(164, 26);
-            dateTimePicker2.TabIndex = 0;
+            dtpFrom.Dock = DockStyle.Fill;
+            dtpFrom.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            dtpFrom.Location = new Point(507, 3);
+            dtpFrom.Name = "dtpFrom";
+            dtpFrom.Size = new Size(164, 26);
+            dtpFrom.TabIndex = 0;
+            dtpFrom.ValueChanged += dtpFrom_ValueChanged;
             // 
-            // comboBox1
+            // dtpTo
             // 
-            comboBox1.Dock = DockStyle.Fill;
-            comboBox1.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(3, 3);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(128, 27);
-            comboBox1.TabIndex = 1;
+            dtpTo.Dock = DockStyle.Fill;
+            dtpTo.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            dtpTo.Location = new Point(237, 3);
+            dtpTo.Name = "dtpTo";
+            dtpTo.Size = new Size(164, 26);
+            dtpTo.TabIndex = 0;
+            dtpTo.ValueChanged += dtpTo_ValueChanged;
+            // 
+            // cbxUsers
+            // 
+            cbxUsers.Dock = DockStyle.Fill;
+            cbxUsers.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            cbxUsers.FormattingEnabled = true;
+            cbxUsers.Location = new Point(3, 3);
+            cbxUsers.Name = "cbxUsers";
+            cbxUsers.Size = new Size(128, 27);
+            cbxUsers.TabIndex = 1;
+            cbxUsers.SelectedIndexChanged += cbxUsers_SelectedIndexChanged;
             // 
             // label2
             // 
@@ -233,16 +247,6 @@
             label4.Text = "محرر الفاتورة : ";
             label4.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // button1
-            // 
-            button1.Dock = DockStyle.Fill;
-            button1.Location = new Point(314, 3);
-            button1.Name = "button1";
-            button1.Size = new Size(32, 31);
-            button1.TabIndex = 4;
-            button1.Text = "x";
-            button1.UseVisualStyleBackColor = true;
-            // 
             // frmGeneralSearch
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -257,8 +261,8 @@
             ((System.ComponentModel.ISupportInitialize)DGV).EndInit();
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
-            tableLayoutPanel3.ResumeLayout(false);
-            tableLayoutPanel3.PerformLayout();
+            tlpDate.ResumeLayout(false);
+            tlpDate.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -271,13 +275,13 @@
         private Label label1;
         private DataGridView DGV;
         private Label lblcountResulte;
-        private TableLayoutPanel tableLayoutPanel3;
-        private DateTimePicker dateTimePicker1;
-        private DateTimePicker dateTimePicker2;
-        private ComboBox comboBox1;
+        private TableLayoutPanel tlpDate;
+        private DateTimePicker dtpFrom;
+        private DateTimePicker dtpTo;
+        private ComboBox cbxUsers;
         private Label label2;
         private Label label3;
         private Label label4;
-        private Button button1;
+        private Button btnClearFilters;
     }
 }
