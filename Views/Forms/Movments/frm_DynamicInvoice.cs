@@ -743,7 +743,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         private string SearchProductOrInvoice()
         {
             // 🟢 في حالة فاتورة مرتجع
-            if (currentInvoiceType == InvoiceType.SaleReturn || currentInvoiceType == InvoiceType.PurchaseReturn)
+            if (currentInvoiceType == InvoiceType.SaleReturn)
             {
                 if (rdoFree.Checked)
                 {
@@ -754,8 +754,24 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 }
                 else if (rdoInvoice.Checked)
                 {
-                    // 🔍 بحث عن فاتورة قديمة
-                    var provider = new GenericSearchProvider(SearchEntityType.Invoices);
+                    // 🔍 بحث عن فاتورة قديمةللمبيعات
+                    var provider = new GenericSearchProvider(SearchEntityType.SaleInvoices);
+                    var result = SearchHelper.ShowSearchDialog(provider);
+                    return result.Code;
+                }
+            }else if (currentInvoiceType == InvoiceType.PurchaseReturn)
+            {
+                if (rdoFree.Checked)
+                {
+                    // 🔍 بحث عن صنف
+                    var provider = new GenericSearchProvider(SearchEntityType.Products);
+                    var result = SearchHelper.ShowSearchDialog(provider);
+                    return result.Code;
+                }
+                else if (rdoInvoice.Checked)
+                {
+                    // 🔍 بحث عن فاتورة قديمة للمشتريات
+                    var provider = new GenericSearchProvider(SearchEntityType.PurchaseInvoices );
                     var result = SearchHelper.ShowSearchDialog(provider);
                     return result.Code;
                 }

@@ -6,7 +6,12 @@
         Accounts,    // البحث في الحسابات
         Products,    // البحث في الأصناف
         Categories,  // البحث في التصنيفات
-        Invoices     // البحث في الفواتير
+        SaleInvoices,     // البحث في الفواتير 
+        ReSaleInvoices,     // البحث في الفواتير 
+        PurchaseInvoices,     // البحث في الفواتير 
+        RePurchaseInvoices,     // البحث في الفواتير 
+        StockInvoices,     // البحث في الفواتير 
+
     }
 
     /// <summary>أنواع الحسابات</summary>
