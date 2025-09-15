@@ -82,7 +82,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             if (!File.Exists(SettingsFilePath)) return;
 
-            string savedRadioButtonName = "";
 
             foreach (var line in File.ReadAllLines(SettingsFilePath))
             {
@@ -94,23 +93,21 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
                 switch (key)
                 {
-                    case "DefaultStartDate":
+                    case "DefaultStartSearchDate":
                         if (DateTime.TryParse(value, out DateTime startDate))
                         {
                             _defaultFromDate = startDate;
                             dtpFrom.Value = startDate;
                         }
                         break;
-                    case "DefaultEndDate":
+                    case "DefaultEndSearchDate":
                         if (DateTime.TryParse(value, out DateTime endDate))
                         {
                             _defaultToDate = endDate;
                             dtpTo.Value = endDate;
                         }
                         break;
-                    case "DefaultRdoCheck":
-                        savedRadioButtonName = value;
-                        break;
+
                 }
             }
         }
