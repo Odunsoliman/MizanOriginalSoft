@@ -43,6 +43,7 @@
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
+            btnClose = new Button();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
             tableLayoutPanel2.SuspendLayout();
@@ -57,16 +58,18 @@
             tableLayoutPanel1.Controls.Add(DGV, 0, 3);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 2);
             tableLayoutPanel1.Controls.Add(tlpDate, 0, 1);
+            tableLayoutPanel1.Controls.Add(btnClose, 0, 4);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.Padding = new Padding(10);
-            tableLayoutPanel1.RowCount = 4;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 70F));
-            tableLayoutPanel1.Size = new Size(800, 450);
+            tableLayoutPanel1.RowCount = 5;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 9.090909F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 9.090909F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 9.090909F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 63.636364F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 9.090909F));
+            tableLayoutPanel1.Size = new Size(882, 450);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // lblTitel
@@ -77,7 +80,7 @@
             lblTitel.ForeColor = Color.FromArgb(0, 0, 192);
             lblTitel.Location = new Point(13, 10);
             lblTitel.Name = "lblTitel";
-            lblTitel.Size = new Size(774, 43);
+            lblTitel.Size = new Size(856, 39);
             lblTitel.TabIndex = 1;
             lblTitel.Text = "label2";
             lblTitel.TextAlign = ContentAlignment.MiddleCenter;
@@ -88,11 +91,11 @@
             DGV.AllowUserToDeleteRows = false;
             DGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DGV.Dock = DockStyle.Fill;
-            DGV.Location = new Point(13, 142);
+            DGV.Location = new Point(13, 130);
             DGV.Name = "DGV";
             DGV.ReadOnly = true;
             DGV.RowHeadersVisible = false;
-            DGV.Size = new Size(774, 295);
+            DGV.Size = new Size(856, 267);
             DGV.TabIndex = 2;
             DGV.CellDoubleClick += DGV_CellDoubleClick;
             // 
@@ -107,11 +110,11 @@
             tableLayoutPanel2.Controls.Add(txtSearch, 1, 0);
             tableLayoutPanel2.Controls.Add(label1, 0, 0);
             tableLayoutPanel2.Controls.Add(btnClearFilters, 2, 0);
-            tableLayoutPanel2.Location = new Point(13, 99);
+            tableLayoutPanel2.Location = new Point(95, 91);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(774, 37);
+            tableLayoutPanel2.Size = new Size(774, 33);
             tableLayoutPanel2.TabIndex = 0;
             // 
             // lblcountResulte
@@ -122,7 +125,7 @@
             lblcountResulte.ForeColor = Color.FromArgb(192, 0, 192);
             lblcountResulte.Location = new Point(3, 0);
             lblcountResulte.Name = "lblcountResulte";
-            lblcountResulte.Size = new Size(305, 37);
+            lblcountResulte.Size = new Size(305, 33);
             lblcountResulte.TabIndex = 3;
             lblcountResulte.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -146,7 +149,7 @@
             label1.ForeColor = Color.FromArgb(192, 0, 192);
             label1.Location = new Point(700, 0);
             label1.Name = "label1";
-            label1.Size = new Size(71, 37);
+            label1.Size = new Size(71, 33);
             label1.TabIndex = 0;
             label1.Text = "بحث";
             label1.TextAlign = ContentAlignment.MiddleRight;
@@ -156,7 +159,7 @@
             btnClearFilters.Dock = DockStyle.Fill;
             btnClearFilters.Location = new Point(314, 3);
             btnClearFilters.Name = "btnClearFilters";
-            btnClearFilters.Size = new Size(32, 31);
+            btnClearFilters.Size = new Size(32, 27);
             btnClearFilters.TabIndex = 4;
             btnClearFilters.Text = "x";
             btnClearFilters.UseVisualStyleBackColor = true;
@@ -178,20 +181,20 @@
             tlpDate.Controls.Add(label3, 2, 0);
             tlpDate.Controls.Add(label4, 4, 0);
             tlpDate.Dock = DockStyle.Fill;
-            tlpDate.Location = new Point(13, 56);
+            tlpDate.Location = new Point(13, 52);
             tlpDate.Name = "tlpDate";
             tlpDate.RowCount = 1;
             tlpDate.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tlpDate.Size = new Size(774, 37);
+            tlpDate.Size = new Size(856, 33);
             tlpDate.TabIndex = 3;
             // 
             // dtpFrom
             // 
             dtpFrom.Dock = DockStyle.Fill;
             dtpFrom.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            dtpFrom.Location = new Point(507, 3);
+            dtpFrom.Location = new Point(560, 3);
             dtpFrom.Name = "dtpFrom";
-            dtpFrom.Size = new Size(164, 26);
+            dtpFrom.Size = new Size(182, 26);
             dtpFrom.TabIndex = 0;
             dtpFrom.ValueChanged += dtpFrom_ValueChanged;
             // 
@@ -199,9 +202,9 @@
             // 
             dtpTo.Dock = DockStyle.Fill;
             dtpTo.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            dtpTo.Location = new Point(237, 3);
+            dtpTo.Location = new Point(261, 3);
             dtpTo.Name = "dtpTo";
-            dtpTo.Size = new Size(164, 26);
+            dtpTo.Size = new Size(182, 26);
             dtpTo.TabIndex = 0;
             dtpTo.ValueChanged += dtpTo_ValueChanged;
             // 
@@ -212,7 +215,7 @@
             cbxUsers.FormattingEnabled = true;
             cbxUsers.Location = new Point(3, 3);
             cbxUsers.Name = "cbxUsers";
-            cbxUsers.Size = new Size(128, 27);
+            cbxUsers.Size = new Size(141, 27);
             cbxUsers.TabIndex = 1;
             cbxUsers.SelectedIndexChanged += cbxUsers_SelectedIndexChanged;
             // 
@@ -221,9 +224,9 @@
             label2.AutoSize = true;
             label2.Dock = DockStyle.Fill;
             label2.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            label2.Location = new Point(677, 0);
+            label2.Location = new Point(748, 0);
             label2.Name = "label2";
-            label2.Size = new Size(94, 37);
+            label2.Size = new Size(105, 33);
             label2.TabIndex = 2;
             label2.Text = "تاريخ البداية : ";
             label2.TextAlign = ContentAlignment.MiddleRight;
@@ -233,9 +236,9 @@
             label3.AutoSize = true;
             label3.Dock = DockStyle.Fill;
             label3.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            label3.Location = new Point(407, 0);
+            label3.Location = new Point(449, 0);
             label3.Name = "label3";
-            label3.Size = new Size(94, 37);
+            label3.Size = new Size(105, 33);
             label3.TabIndex = 2;
             label3.Text = "تاريخ النهاية : ";
             label3.TextAlign = ContentAlignment.MiddleRight;
@@ -245,21 +248,35 @@
             label4.AutoSize = true;
             label4.Dock = DockStyle.Fill;
             label4.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            label4.Location = new Point(137, 0);
+            label4.Location = new Point(150, 0);
             label4.Name = "label4";
-            label4.Size = new Size(94, 37);
+            label4.Size = new Size(105, 33);
             label4.TabIndex = 2;
             label4.Text = "محرر الفاتورة : ";
             label4.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // btnClose
+            // 
+            btnClose.Dock = DockStyle.Right;
+            btnClose.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnClose.ForeColor = Color.Red;
+            btnClose.Location = new Point(13, 403);
+            btnClose.Name = "btnClose";
+            btnClose.Size = new Size(75, 34);
+            btnClose.TabIndex = 4;
+            btnClose.Text = "خروج";
+            btnClose.UseVisualStyleBackColor = true;
             // 
             // frmGeneralSearch
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(882, 450);
+            ControlBox = false;
             Controls.Add(tableLayoutPanel1);
             Name = "frmGeneralSearch";
             RightToLeft = RightToLeft.Yes;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "البحث العام";
             Load += frmGeneralSearch_Load;
             tableLayoutPanel1.ResumeLayout(false);
@@ -289,5 +306,6 @@
         private Label label3;
         private Label label4;
         private Button btnClearFilters;
+        private Button btnClose;
     }
 }

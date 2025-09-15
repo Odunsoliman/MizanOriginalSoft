@@ -605,6 +605,12 @@ namespace MizanOriginalSoft.Views.Reports
             File.WriteAllLines(SettingsFilePath, lines);
         }
 
+        /*
+         
+
+
+         */
+
         #endregion
 
         #region ==== دوال التعامل مع أزرار الراديو والفترات ====
