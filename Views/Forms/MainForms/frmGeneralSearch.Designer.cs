@@ -73,6 +73,8 @@
             // 
             lblTitel.AutoSize = true;
             lblTitel.Dock = DockStyle.Fill;
+            lblTitel.Font = new Font("Times New Roman", 16F, FontStyle.Bold);
+            lblTitel.ForeColor = Color.FromArgb(0, 0, 192);
             lblTitel.Location = new Point(13, 10);
             lblTitel.Name = "lblTitel";
             lblTitel.Size = new Size(774, 43);
@@ -116,11 +118,12 @@
             // 
             lblcountResulte.AutoSize = true;
             lblcountResulte.Dock = DockStyle.Fill;
+            lblcountResulte.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            lblcountResulte.ForeColor = Color.FromArgb(192, 0, 192);
             lblcountResulte.Location = new Point(3, 0);
             lblcountResulte.Name = "lblcountResulte";
             lblcountResulte.Size = new Size(305, 37);
             lblcountResulte.TabIndex = 3;
-            lblcountResulte.Text = "بحث";
             lblcountResulte.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // txtSearch
@@ -139,6 +142,8 @@
             // 
             label1.AutoSize = true;
             label1.Dock = DockStyle.Fill;
+            label1.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            label1.ForeColor = Color.FromArgb(192, 0, 192);
             label1.Location = new Point(700, 0);
             label1.Name = "label1";
             label1.Size = new Size(71, 37);
