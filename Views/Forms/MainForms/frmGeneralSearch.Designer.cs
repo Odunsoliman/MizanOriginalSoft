@@ -256,6 +256,7 @@
             Name = "frmGeneralSearch";
             RightToLeft = RightToLeft.Yes;
             Text = "البحث العام";
+            Load += frmGeneralSearch_Load;
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)DGV).EndInit();
