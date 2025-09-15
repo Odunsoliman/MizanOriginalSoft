@@ -162,6 +162,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 var selected = _provider.GetSelectedItem(DGV.Rows[e.RowIndex]);
                 this.Tag = selected;
                 this.DialogResult = DialogResult.OK;
+                SaveDefaults();
                 this.Close();
             }
         }
