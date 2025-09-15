@@ -61,11 +61,13 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         private void dtpFrom_ValueChanged(object sender, EventArgs e)
         {
             if (dtpFrom.Focused) LoadData();
+            /*لماذا لا يتم تغيير النتائج عند تغيير التاريخ*/
         }
 
         private void dtpTo_ValueChanged(object sender, EventArgs e)
         {
             if (dtpTo.Focused) LoadData();
+            /*لماذا لا يتم تغيير النتائج عند تغيير التاريخ*/
         }
 
         private void btnClearFilters_Click(object sender, EventArgs e)
@@ -111,7 +113,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 }
             }
         }
-
         private void LoadData()
         {
             var data = _provider.GetData(txtSearch.Text.Trim());
@@ -128,9 +129,9 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                         query = query.Where(r => r["User_ID"].ToString() == selectedUserId);
                 }
 
-                // 🔹 فلترة بالتاريخ باستخدام القيم الافتراضية
-                var from = _defaultFromDate.Date;
-                var to = _defaultToDate.Date.AddDays(1).AddTicks(-1);
+                // 🔹 فلترة بالتاريخ من DateTimePicker
+                var from = dtpFrom.Value.Date;
+                var to = dtpTo.Value.Date.AddDays(1).AddTicks(-1);
 
                 query = query.Where(r =>
                 {
@@ -152,6 +153,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             lblcountResulte.Text = $"عدد النتائج: {data.Rows.Count}";
             _provider.ApplyGridFormatting(DGV);
         }
+
 
         private void DGV_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
