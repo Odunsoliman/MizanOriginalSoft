@@ -13,7 +13,6 @@ using MizanOriginalSoft.MainClasses.OriginalClasses;
 
 using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.Views.Forms.MainForms;
-using MizanOriginalSoft.MainClasses.SearchClasses.MizanOriginalSoft.MainClasses.SearchClasses;
 using MizanOriginalSoft.MainClasses.SearchClasses;
 
 namespace MizanOriginalSoft.Views.Forms.Products

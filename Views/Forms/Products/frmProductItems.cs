@@ -2,7 +2,6 @@
 using Microsoft.CodeAnalysis;
 using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
-using MizanOriginalSoft.MainClasses.SearchClasses.MizanOriginalSoft.MainClasses.SearchClasses;
 using MizanOriginalSoft.MainClasses.SearchClasses;
 using MizanOriginalSoft.Views.Forms.MainForms;
 using MizanOriginalSoft.Views.Reports;

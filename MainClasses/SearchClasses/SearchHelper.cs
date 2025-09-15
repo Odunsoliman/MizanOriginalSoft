@@ -7,15 +7,15 @@ namespace MizanOriginalSoft.MainClasses.SearchClasses
     {
         public static (string Code, string Name) ShowSearchDialog(ISearchProvider provider)
         {
-            using (var frm = new frmGeneralSearch(provider))
-            {
-                if (frm.ShowDialog() == DialogResult.OK && frm.Tag is ValueTuple<string, string> tuple)
-                {
-                    return tuple; // ✅ الآن يتم فك الـTuple بشكل صحيح
-                }
+            using var frm = new frmGeneralSearch(provider);
 
-                return (string.Empty, string.Empty);
+            if (frm.ShowDialog() == DialogResult.OK && frm.Tag is object obj)
+            {
+                if (obj is ValueTuple<string, string> tuple)
+                    return tuple;
             }
+
+            return (string.Empty, string.Empty);
         }
     }
 }

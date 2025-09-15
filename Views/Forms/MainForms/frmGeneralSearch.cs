@@ -14,6 +14,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             InitializeComponent();
             _provider = provider ?? throw new ArgumentNullException(nameof(provider));
             Load += frmGeneralSearch_Load;
+            txtSearch.TextChanged += txtSearch_TextChanged;
+            DGV.CellDoubleClick += DGV_CellDoubleClick;
         }
 
         private void frmGeneralSearch_Load(object? sender, EventArgs e)
@@ -22,7 +24,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             LoadData();
         }
 
-        private void txtSearch_TextChanged(object sender, EventArgs e)
+        private void txtSearch_TextChanged(object? sender, EventArgs e)
         {
             LoadData();
         }
@@ -35,96 +37,15 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             _provider.ApplyGridFormatting(DGV);
         }
 
-        private void DGV_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void DGV_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
-            {
-                var selected = _provider.GetSelectedItem(DGV.Rows[e.RowIndex]);
-                this.Tag = selected; // 🟢 تخزين الـTuple
-                this.DialogResult = DialogResult.OK;
-                this.Close();
-            }
-        }
+            
+            if (e.RowIndex < 0) return;
 
-        private void frmGeneralSearch_Load_1(object sender, EventArgs e)
-        {
-
+            var selected = _provider.GetSelectedItem(DGV.Rows[e.RowIndex]);
+            this.Tag = selected;
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
     }
 }
-
-/*النسخة الاخيرة
- 
-هذا الكود الان يتم الفتح بشكل جيد وعند اختيار صف بدبل كليك يتم نقل الحساب كود واسم بشكل جيد 
-ولكن فقط 
-      private void txtSearch_TextChanged(object sender, EventArgs e)
-        {
-            LoadData();
-        }
- لا تعمل رغم ربطها 
- */
-
-
-
-/*
-
-frmGeneralSearch
-- يتم استدعائها من اى مكان بالبرنامج بغرض البحث فى اى مجموعات
-- فى الحسابات او فى الاصناف بانواعها وتصنيفاتها 
-- مطلوب استدعائها باضغط على ctrl+F فى المكان المراد بحث فيه
-- بها الكائنات الاتية txtSearch , lblcountResulte ,lblTitel  , DGV 
-- عند  الفتح يتم تحديد ما الذى ابحث عنه SearchInWate
-- بناء على ذلك يتم تعبئة العنوان بما سيتم البحث فيه فى الليبل lblTitel
-- فتتم تعبئة الجريد به DGV
-- ثم يتم البحث فيه حسب طبيعته من خلال التكست txtSearch
-- يتم تحديث عدد النتائج الظاهرة فى الجريد فى الليبل lblcountResulte
-- بالنقر المزدوج على الصف المختار فى البحث يتم نقل كوده حسب نوعه الى الشاشة التى فتحت منها واغلاق شاشة البحث
-- فى الجريد يكون هناك تنسيقات خاصة لكل نوع بحث  ويكون هناك تنسيقات عامة كالخطوط وترادف الوان الاسطر فى الجريد
-
-  فما السيناريو الذى تقترحه لكي يكون كود محترف ببنية سهلة التطوير والصيانة
-
-
-
-
-
-
-
- الان عندى نوعين من البحث ويمكن الزيادة فى المستقبل
--البحث فى الحسابات حسب الاب المراد :عملاء -موردين -كلاهما معا-الملاك او الشركاء -العاملون الموظفون وهكذا
--والنوع الثانى للبحث داخل جدول الاصناف 
-
-🔹 الخطة المقترحة
-- AccountsSearchProvider →   كلاس  الحسابات
-- ProductsSearchProvider → واخر للتعامل مع الأصناف والقطع
-- ISearchProvider interface للتعامل معهما
-- frmGeneralSearch  مما يجعل شاشة البحث عامة تمامًا.
-- انشاء كلاس جديد لاى نوع بحث مختلف فى المستقبل ويتم التعامل معه بهذا السيناريو
-
-
-
-
-
-// للبحث في الحسابات (عملاء)
-private void btnSearchAccounts_Click(object sender, EventArgs e)
-{
-    var provider = new AccountsSearchProvider(parentAccountType: 1); // نوع الحساب
-    using (var frm = new frmGeneralSearch(provider))
-    {
-        if (frm.ShowDialog() == DialogResult.OK)
-            txtAccountID.Text = frm.Tag.ToString();
-    }
-}
-
-// للبحث في الأصناف
-private void btnSearchProducts_Click(object sender, EventArgs e)
-{
-    var provider = new ProductsSearchProvider();
-    using (var frm = new frmGeneralSearch(provider))
-    {
-        if (frm.ShowDialog() == DialogResult.OK)
-            txtProductID.Text = frm.Tag.ToString();
-    }
-}
-
-
- */

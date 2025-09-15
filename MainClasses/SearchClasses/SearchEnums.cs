@@ -1,10 +1,6 @@
-﻿using System;
-
-namespace MizanOriginalSoft.MainClasses.SearchClasses
+﻿namespace MizanOriginalSoft.MainClasses.SearchClasses
 {
-    /// <summary>
-    /// نوع الكيان الذي سيتم البحث فيه
-    /// </summary>
+    /// <summary>نوع الكيان الذي سيتم البحث فيه</summary>
     public enum SearchEntityType
     {
         Accounts,    // البحث في الحسابات
@@ -13,9 +9,7 @@ namespace MizanOriginalSoft.MainClasses.SearchClasses
         Invoices     // البحث في الفواتير
     }
 
-    /// <summary>
-    /// أنواع الحسابات (للعملاء/الموردين/الشركاء... إلخ)
-    /// </summary>
+    /// <summary>أنواع الحسابات</summary>
     public enum AccountKind
     {
         Customers,   // العملاء
