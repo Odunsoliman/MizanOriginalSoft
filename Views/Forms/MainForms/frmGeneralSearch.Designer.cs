@@ -266,6 +266,7 @@
             btnClose.TabIndex = 4;
             btnClose.Text = "خروج";
             btnClose.UseVisualStyleBackColor = true;
+            btnClose.Click += btnClose_Click;
             // 
             // frmGeneralSearch
             // 

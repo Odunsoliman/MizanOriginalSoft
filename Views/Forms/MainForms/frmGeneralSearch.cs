@@ -147,13 +147,18 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 ? File.ReadAllLines(SettingsFilePath).ToList()
                 : new List<string>();
 
-            UpdateOrAddLine(lines, "DefaultStartSearchDate", dtpFrom .Value.ToString("yyyy-MM-dd"));
-            UpdateOrAddLine(lines, "DefaultEndSearchDate", dtpTo .Value.ToString("yyyy-MM-dd"));
+            UpdateOrAddLine(lines, "DefaultStartSearchDate", dtpFrom.Value.ToString("yyyy-MM-dd"));
+            UpdateOrAddLine(lines, "DefaultEndSearchDate", dtpTo.Value.ToString("yyyy-MM-dd"));
 
             File.WriteAllLines(SettingsFilePath, lines);
         }
 
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            SaveDefaults();
+            Close();
 
+        }
     }
 }
 
