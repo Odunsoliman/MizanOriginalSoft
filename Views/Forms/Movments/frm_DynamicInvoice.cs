@@ -481,11 +481,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #endregion
 
 
-        #region Body  وظائف الجزء الخاص بالاصناف 
 
-
-
-        #endregion
         #region أحداث ووظائف إضافة صنف
 
         // 🔹  إدخال صنف جديد إلى تفاصيل الفاتورة وحفظه في قاعدة البيانات.
@@ -502,96 +498,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             return message;
         }
 
-        // 🔹  تحميل بيانات القطع الخاصة بالصنف (في حال كان المنتج يقبل القص).
-        private void LoadPieceData()
-        {
-            cbxPiece_ID.Visible =
-                (currentInvoiceType == InvoiceType.Sale && isCanCut);
 
-            if (unit_ID == 1) // المنتج يقبل القص
-            {
-                tblProdPieces = DBServiecs.Product_GetOrCreatePieces(ID_Prod);
-                DataRow[] filtered = tblProdPieces.Select("Piece_Length <> 0");
-
-                if (filtered.Length > 0)
-                {
-                    cbxPiece_ID.DataSource = filtered.CopyToDataTable();
-                    cbxPiece_ID.DisplayMember = "Piece_Length";
-                    cbxPiece_ID.ValueMember = "Piece_ID";
-
-                    if (cbxPiece_ID.Visible)
-                    {
-                        cbxPiece_ID.DroppedDown = true;
-                        cbxPiece_ID.Focus();
-                    }
-                    else
-                    {
-                        txtAmount.Visible = true;
-                        txtAmount.Focus();
-                    }
-                }
-                else
-                {
-                    cbxPiece_ID.DataSource = null;
-                    MessageBox.Show("لا توجد أرصدة بهذا الصنف.");
-                    txtSeaarchProd.Focus();
-                    txtSeaarchProd.Text = "";
-                    cbxPiece_ID.Visible = false;
-                    EmptyProdData();
-
-                }
-            }
-            else // المنتج لا يقبل القص
-            {
-                DataTable piece = DBServiecs.Product_GetOrCreate_DefaultPiece(ID_Prod);
-                if (piece.Rows.Count > 0)
-                    lblPieceID.Text = piece.Rows[0]["Piece_ID"].ToString();
-                txtAmount.Visible = true;
-                txtAmount.Focus();
-            }
-        }
-
-        // 🔹 تحميل بيانات منتج حسب كوده.
-        private bool GetProd(string code)
-        {
-            txtAmount.Text = "0";
-
-            tblProd = DBServiecs.Item_GetProductByCode(code, out string msg);
-
-            if (tblProd == null || tblProd.Rows.Count == 0)
-            {
-                MessageBox.Show(msg, "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                EmptyProdData();
-                return false;
-            }
-
-            DataRow row = tblProd.Rows[0];
-
-            // ✅ السعر حسب نوع الفاتورة
-            PriceMove = (currentInvoiceType == InvoiceType.Sale ||
-                               currentInvoiceType == InvoiceType.SaleReturn)
-                ? Convert.ToSingle(row["U_Price"])
-                : Convert.ToSingle(row["B_Price"]);
-
-            lblPriceMove.Text = "سعر : " + PriceMove.ToString("0.00"); // عرض السعر برقمين عشريين
-
-
-            // ✅ البيانات العامة
-            ID_Prod = Convert.ToInt32(row["ID_Product"]);
-            lblProductName.Text = row["ProdName"].ToString();
-            unit_ID = Convert.ToInt32(row["UnitID"]);
-            unit = (row["UnitProd"]?.ToString() ?? "").Trim();
-            lblProductStock.Text = row["ProductStock"].ToString();
-            lblUnit.Text = unit;
-            // الطول الأدنى (للمنتجات القابلة للقص)
-            lblMinLinth.Text = unit_ID == 1 ? row["MinLenth"].ToString() : "";
-            lblLinthText.Text = unit_ID == 1 ? "اقل طول" : unit;
-
-            isCanCut = (unit_ID == 1);
-            cbxPiece_ID.Visible = (currentInvoiceType == InvoiceType.Sale && isCanCut);
-
-            return true;
-        }
 
         // 🔹 حدث إدخال الكمية (Enter في txtAmount)
         private void txtAmount_KeyDown(object sender, KeyEventArgs e)
@@ -671,73 +578,235 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
+        #endregion
 
+        #region *********  txtSeaarchProd_KeyDown   ************
 
-        /* السيناريو واريد مناقشته اولا وتحسين منطقه  وما هى مكوناته قبل الشروع فى كتابة الكود
-    عند النقر على txtSeaarchProd_KeyDown فى حالة if (e.Control && e.KeyCode == Keys.F)
-    public enum InvoiceType
-    {
-        Sale = 1,            // فاتورة بيع
-        SaleReturn = 2,      // فاتورة بيع مرتد
-        Purchase = 3,        // فاتورة شراء
-        PurchaseReturn = 4,  // فاتورة شراء مرتد
-        Inventory = 5,       // إذن تسوية مخزن
-        DeductStock = 6,     // إذن خصم مخزن
-        AddStock = 7         // إذن إضافة مخزن
-    }
-        ------------------------------------------
-        فى حالة البيع 
-        if (e.Control && e.KeyCode == Keys.F)
+        private void txtSeaarchProd_KeyDown(object sender, KeyEventArgs e)
+        {
+            // 🟦 ENTER → تنفيذ
+            if (e.KeyCode == Keys.Enter && !string.IsNullOrWhiteSpace(txtSeaarchProd.Text))
             {
-فتح شاشة البحث واستعراض كل الاصناف واستقبال كود الصنف المختار بانقر المزدوج عليه فيتم كتابة الكود الراجع فى txtSeaarchProd
+                if (IsInvoiceSaved()) return;
+
+                string code = txtSeaarchProd.Text.Trim();
+                HandleSearchByInvoiceType(code);
+
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                return;
             }
-        ------------------------------------------
-        
-        فى حالة البيع المرتد
-        if (e.Control && e.KeyCode == Keys.F)
+
+            // 🟦 CTRL+F → فتح شاشة البحث
+            if (e.Control && e.KeyCode == Keys.F)
             {
-يوجد حالتين
-1-        اما ان يكون الارتجاع من خلال فاتورة البيع بتحديد rdoInvoice
-        فيتم فتح شاشة البحث واستعراض كل فواتير البيع السابقة فقط للبحث فيها
-        وعند النقر علي المزدوج على احد الفواتير يتم استعراضها من خلال شاشة frm_ReturnedInvoice
-2-      اما ان يكون الارتجاع حر من خلال كود الصنف بتحديد rdoFree
-        فتح شاشة البحث واستعراض كل الاصناف واستقبال كود الصنف المختار بانقر المزدوج عليه فيتم كتابة الكود الراجع فى txtSeaarchProd
-
+                var code = SearchProductOrInvoice();
+                if (!string.IsNullOrEmpty(code))
+                    txtSeaarchProd.Text = code;
+                return;
             }
-        ------------------------------------------
-        فى حالة الشراء 
-        if (e.Control && e.KeyCode == Keys.F)
+        }
+
+        private void HandleSearchByInvoiceType(string code)
+        {
+            switch (currentInvoiceType)
             {
-فتح شاشة البحث واستعراض كل الاصناف واستقبال كود الصنف المختار بانقر المزدوج عليه فيتم كتابة الكود الراجع فى txtSeaarchProd
+                case InvoiceType.Sale:
+                    HandleSale(code);
+                    break;
+
+                case InvoiceType.SaleReturn:
+                    HandleSaleReturn(code);
+                    break;
+
+                case InvoiceType.Purchase:
+                    HandlePurchase(code);
+                    break;
+
+                case InvoiceType.PurchaseReturn:
+                    HandlePurchaseReturn(code);
+                    break;
+
+                case InvoiceType.Inventory:
+                    HandleInventory(code);
+                    break;
+
+                case InvoiceType.DeductStock:
+                    HandleInventoryLoss(code);
+                    break;
+
+                case InvoiceType.AddStock:
+                    HandleInventoryAddition(code);
+                    break;
+
+                default:
+                    CustomMessageBox.ShowWarning("نوع الفاتورة غير مدعوم", "خطأ");
+                    break;
             }
-        ------------------------------------------
-        فى حالة الشراء المرتد
-        if (e.Control && e.KeyCode == Keys.F)
+        }
+
+        #region ===== حالات الفواتير =====
+
+        private void HandleSale(string code)
+        {
+            if (!GetProd(code)) return;
+            LoadPieceData();
+        }
+
+        private void HandleSaleReturn(string code)
+        {
+            if (rdoInvoice.Checked)
             {
-يوجد حالتين
-1-        اما ان يكون الارتجاع من خلال فاتورة الشراء الاصلية بتحديد rdoInvoice
-        فيتم فتح شاشة البحث واستعراض كل فواتير الشراء السابقة فقط للبحث فيها
-        وعند النقر علي المزدوج على احد الفواتير يتم استعراضها من خلال شاشة frm_ReturnedInvoice
-        ثم اختيار الاصناف الراجعة من الفاتورة السابقة فيتم ادراجها باسعار حركتها السابقة وكمياتها الى الفاتورة المرتجع الحالية 
-        مع تحديد الصنف فى الفاتورة السابقة انه اصبح مرتجع فلا تتم عليه حركة ارتجاع اخرى
-2-      اما ان يكون الارتجاع حر من خلال كود الصنف بتحديد rdoFree
-        فتح شاشة البحث واستعراض كل الاصناف واستقبال كود الصنف المختار بانقر المزدوج عليه فيتم كتابة الكود الراجع فى txtSeaarchProd
-
+                OpenReturnedInvoiceForm(code); // رقم فاتورة أصلية
             }
-        ------------------------------------------
-        فى حالات المخزنية الاخرى مثل- إذن تسوية مخزن- إذن خصم مخزن- إذن إضافة مخزن
-        if (e.Control && e.KeyCode == Keys.F)
+            else // rdoFree = كود صنف مباشرة
             {
-فتح شاشة البحث واستعراض كل الاصناف واستقبال كود الصنف المختار بانقر المزدوج عليه فيتم كتابة الكود الراجع فى txtSeaarchProd
+                if (!GetProd(code)) return;
+                LoadPieceData();
+                // ⬅️ هنا ممكن تضيف منطق خاص (إدراج قطعة جديدة مباشرة) إذا أردت
             }
-        ------------------------------------------
-        
-        فما ينقص هذا السيناريو منطقيا اولا ثم نناقش الكود بعد ذلك
+        }
+
+        private void HandlePurchase(string code)
+        {
+            if (!GetProd(code)) return;
+            LoadPieceData();
+        }
+
+        private void HandlePurchaseReturn(string code)
+        {
+            if (rdoInvoice.Checked)
+            {
+                OpenReturnedInvoiceForm(code);
+            }
+            else
+            {
+                if (!GetProd(code)) return;
+                LoadPieceData();
+            }
+        }
+
+        private void HandleInventory(string code)
+        {
+            if (!GetProd(code)) return;
+            LoadPieceData();
+        }
+
+        private void HandleInventoryLoss(string code)
+        {
+            if (!GetProd(code)) return;
+            if (unit_ID == 1) // يقبل القص
+            {
+                LoadPieceData();
+            }
+            else
+            {
+                CustomMessageBox.ShowWarning("الصنف غير قابل للقص، تعامل معه من شاشة الجرد.", "تنبيه");
+                ResetSearchBox();
+            }
+        }
+
+        private void HandleInventoryAddition(string code)
+        {
+            if (!GetProd(code)) return;
+            LoadPieceData();
+        }
+
+        #endregion
+
+        #region ===== دوال مساعدة =====
+
+        private void ResetSearchBox()
+        {
+            txtSeaarchProd.Clear();
+            txtSeaarchProd.Focus();
+        }
+
+        private void FocusOnAmount()
+        {
+            txtAmount.Visible = true;
+            txtAmount.Focus();
+            txtAmount.SelectAll();
+        }
+
+        #endregion
+
+        #endregion
 
 
-         */
+        //#region *********  txtSeaarchProd_KeyDown   ************
+
+        //// 🔹 حدث إدخال كود المنتج أو رقم فاتورة مرتجعة
+        //private void txtSeaarchProd_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    // 🟦 ENTER → تنفيذ
+        //    if (e.KeyCode == Keys.Enter && !string.IsNullOrWhiteSpace(txtSeaarchProd.Text))
+        //    {
+
+        //        if (IsInvoiceSaved()) return;
+
+        //        string code = txtSeaarchProd.Text.Trim();
+
+        //        switch (currentInvoiceType)
+        //        {
+        //            case InvoiceType.Sale:
+        //                PrepareSaleProduct(code);
+        //                break;
+
+        //            case InvoiceType.SaleReturn:
+        //            case InvoiceType.PurchaseReturn:
+        //                if (rdoFree.Checked)
+        //                {
+        //                    PrepareSaleProduct(code); // كود صنف
+        //                }
+        //                else if (rdoInvoice.Checked)
+        //                {
+        //                    OpenReturnedInvoiceForm(code); // رقم فاتورة
+        //                }
+        //                break;
+
+        //            case InvoiceType.Purchase:
+        //                PreparePurchaseProduct(code);
+        //                break;
+
+        //            default:
+        //                CustomMessageBox.ShowWarning(
+        //                    "نوع الفاتورة غير مدعوم في هذه العملية", "خطأ"
+        //                );
+        //                break;
+        //        }
+
+        //        e.Handled = true;
+        //        e.SuppressKeyPress = true;
+        //        return;
+        //    }
 
 
+
+
+        //    // 🟦 CTRL + F → فتح شاشة البحث
+        //    if (e.Control && e.KeyCode == Keys.F)
+        //    {
+        //        var code = SearchProductOrInvoice();
+        //        if (!string.IsNullOrEmpty(code))
+        //            txtSeaarchProd.Text = code;
+        //        return;
+        //    }
+
+
+        //    // 🟦 التنقل باستخدام ENTER أو SHIFT+ENTER
+        //    if (e.KeyCode == Keys.Enter && !e.Shift)
+        //    {
+        //        // ENTER → التالي
+        //        // cbxSellerID.Focus();
+        //    }
+        //    else if ((e.KeyCode == Keys.Enter && e.Shift) || e.KeyCode == Keys.Up)
+        //    {
+        //        // SHIFT+ENTER أو ↑ → السابق
+        //        cbxSellerID.Focus();
+        //        e.Handled = true;
+        //    }
+        //}
 
         // 🔹 دالة البحث حسب نوع الفاتورة واختيار المستخدم
         private string SearchProductOrInvoice()
@@ -759,7 +828,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     var result = SearchHelper.ShowSearchDialog(provider);
                     return result.Code;
                 }
-            }else if (currentInvoiceType == InvoiceType.PurchaseReturn)
+            }
+            else if (currentInvoiceType == InvoiceType.PurchaseReturn)
             {
                 if (rdoFree.Checked)
                 {
@@ -771,7 +841,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 else if (rdoInvoice.Checked)
                 {
                     // 🔍 بحث عن فاتورة قديمة للمشتريات
-                    var provider = new GenericSearchProvider(SearchEntityType.PurchaseInvoices );
+                    var provider = new GenericSearchProvider(SearchEntityType.PurchaseInvoices);
                     var result = SearchHelper.ShowSearchDialog(provider);
                     return result.Code;
                 }
@@ -787,102 +857,162 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             return string.Empty;
         }
 
-        // 🔹 حدث إدخال كود المنتج أو رقم فاتورة مرتجعة
-        private void txtSeaarchProd_KeyDown(object sender, KeyEventArgs e)
+        //// 🔹 تحميل بيانات منتج حسب كوده.
+        private bool GetProd(string code)
         {
-            // 🟦 CTRL + F → فتح شاشة البحث
-            if (e.Control && e.KeyCode == Keys.F)
+            txtAmount.Text = "0";
+
+            tblProd = DBServiecs.Item_GetProductByCode(code, out string msg);
+
+            if (tblProd == null || tblProd.Rows.Count == 0)
             {
-                var code = SearchProductOrInvoice();
-                if (!string.IsNullOrEmpty(code))
-                    txtSeaarchProd.Text = code;
-                return;
+                MessageBox.Show(msg, "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                EmptyProdData();
+                return false;
             }
 
-            // 🟦 ENTER → تنفيذ
-            if (e.KeyCode == Keys.Enter && !string.IsNullOrWhiteSpace(txtSeaarchProd.Text))
+            DataRow row = tblProd.Rows[0];
+
+            // ✅ السعر حسب نوع الفاتورة
+            PriceMove = (currentInvoiceType == InvoiceType.Sale ||
+                               currentInvoiceType == InvoiceType.SaleReturn)
+                ? Convert.ToSingle(row["U_Price"])
+                : Convert.ToSingle(row["B_Price"]);
+
+            lblPriceMove.Text = "سعر : " + PriceMove.ToString("0.00"); // عرض السعر برقمين عشريين
+
+
+            // ✅ البيانات العامة
+            ID_Prod = Convert.ToInt32(row["ID_Product"]);
+            lblProductName.Text = row["ProdName"].ToString();
+            unit_ID = Convert.ToInt32(row["UnitID"]);
+            unit = (row["UnitProd"]?.ToString() ?? "").Trim();
+            lblProductStock.Text = row["ProductStock"].ToString();
+            lblUnit.Text = unit;
+            // الطول الأدنى (للمنتجات القابلة للقص)
+            lblMinLinth.Text = unit_ID == 1 ? row["MinLenth"].ToString() : "";
+            lblLinthText.Text = unit_ID == 1 ? "اقل طول" : unit;
+
+            isCanCut = (unit_ID == 1);
+            cbxPiece_ID.Visible = (currentInvoiceType == InvoiceType.Sale && isCanCut);
+
+            return true;
+        }
+
+        // 🔹  تحميل بيانات القطع الخاصة بالصنف (في حال كان المنتج يقبل القص).
+        private void LoadPieceData()
+        {
+            cbxPiece_ID.Visible =
+                (currentInvoiceType == InvoiceType.Sale && isCanCut);
+
+            if (unit_ID == 1) // المنتج يقبل القص
             {
-                if (IsInvoiceSaved()) return;
+                tblProdPieces = DBServiecs.Product_GetOrCreatePieces(ID_Prod);
+                DataRow[] filtered = tblProdPieces.Select("Piece_Length <> 0");
 
-                string code = txtSeaarchProd.Text.Trim();
-
-                switch (currentInvoiceType)
+                if (filtered.Length > 0)
                 {
-                    case InvoiceType.Sale:
-                        PrepareSaleProduct(code);
-                        break;
+                    cbxPiece_ID.DataSource = filtered.CopyToDataTable();
+                    cbxPiece_ID.DisplayMember = "Piece_Length";
+                    cbxPiece_ID.ValueMember = "Piece_ID";
 
-                    case InvoiceType.SaleReturn:
-                    case InvoiceType.PurchaseReturn:
-                        if (rdoFree.Checked)
-                        {
-                            PrepareSaleProduct(code); // كود صنف
-                        }
-                        else if (rdoInvoice.Checked)
-                        {
-                            OpenReturnedInvoiceForm(code); // رقم فاتورة
-                        }
-                        break;
-
-                    case InvoiceType.Purchase:
-                        PreparePurchaseProduct(code);
-                        break;
-
-                    default:
-                        CustomMessageBox.ShowWarning(
-                            "نوع الفاتورة غير مدعوم في هذه العملية", "خطأ"
-                        );
-                        break;
+                    if (cbxPiece_ID.Visible)
+                    {
+                        cbxPiece_ID.DroppedDown = true;
+                        cbxPiece_ID.Focus();
+                    }
+                    else
+                    {
+                        txtAmount.Visible = true;
+                        txtAmount.Focus();
+                    }
                 }
+                else
+                {
+                    cbxPiece_ID.DataSource = null;
+                    MessageBox.Show("لا توجد أرصدة بهذا الصنف.");
+                    txtSeaarchProd.Focus();
+                    txtSeaarchProd.Text = "";
+                    cbxPiece_ID.Visible = false;
+                    EmptyProdData();
 
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-                return;
+                }
             }
-
-            // 🟦 التنقل باستخدام ENTER أو SHIFT+ENTER
-            if (e.KeyCode == Keys.Enter && !e.Shift)
+            else // المنتج لا يقبل القص
             {
-                // ENTER → التالي
-                // cbxSellerID.Focus();
-            }
-            else if ((e.KeyCode == Keys.Enter && e.Shift) || e.KeyCode == Keys.Up)
-            {
-                // SHIFT+ENTER أو ↑ → السابق
-                cbxSellerID.Focus();
-                e.Handled = true;
+                DataTable piece = DBServiecs.Product_GetOrCreate_DefaultPiece(ID_Prod);
+                if (piece.Rows.Count > 0)
+                    lblPieceID.Text = piece.Rows[0]["Piece_ID"].ToString();
+                txtAmount.Visible = true;
+                txtAmount.Focus();
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // تجهيز منتج لفاتورة شراء.
-        private void PreparePurchaseProduct(string code)
+        // فتح فاتورة مرتجعة حسب رقمها.
+        private void OpenReturnedInvoiceForm(string serial)
         {
-            if (!GetProd(code)) return;
-
-            if (PriceMove <= 0)
+            if (!int.TryParse(serial, out int serInv))
             {
-                CustomMessageBox.ShowWarning("يرجى تحديد سعر شراء صالح.", "تنبيه");
+                CustomMessageBox.ShowWarning("الرجاء إدخال رقم فاتورة صالح.", "تنبيه");
                 return;
             }
-            txtAmount.Visible = true;
-            txtAmount.Focus();
-            txtAmount.SelectAll();
+
+            DataTable tblInvoice = DBServiecs.NewInvoice_GetInvoiceByTypeAndCounter(
+                1, serInv, out string? msg
+            );
+
+            if (!string.IsNullOrWhiteSpace(msg))
+            {
+                CustomMessageBox.ShowWarning(msg, "تنبيه");
+                return;
+            }
+
+            if (tblInvoice == null || tblInvoice.Rows.Count == 0)
+            {
+                CustomMessageBox.ShowWarning("لم يتم العثور على الفاتورة.", "تنبيه");
+                return;
+            }
+
+            if (!int.TryParse(tblInvoice.Rows[0]["Inv_ID"]?.ToString(), out int Inv_ID))
+            {
+                CustomMessageBox.ShowWarning("فشل في قراءة رقم الفاتورة.", "خطأ");
+                return;
+            }
+
+            DataTable tblDetails = DBServiecs.NewInvoice_GetInvoiceDetails(Inv_ID);
+
+            if (!int.TryParse(lblInv_ID.Text, out int CurrentInvoiceID))
+            {
+                CustomMessageBox.ShowWarning("رقم الفاتورة الحالي غير صالح.", "خطأ");
+                return;
+            }
+
+            using (frm_ReturnedInvoice returnedForm = new frm_ReturnedInvoice(
+                1, serInv, tblInvoice, tblDetails, CurrentInvoiceID))
+            {
+                if (returnedForm.ShowDialog() == DialogResult.OK)
+                {
+                    LoadReturnedItems(returnedForm.SelectedItems);
+                }
+            }
+
+            DGVStyl();
         }
+
+        //// تجهيز منتج لفاتورة شراء.
+        //private void PreparePurchaseProduct(string code)
+        //{
+        //    if (!GetProd(code)) return;
+
+        //    if (PriceMove <= 0)
+        //    {
+        //        CustomMessageBox.ShowWarning("يرجى تحديد سعر شراء صالح.", "تنبيه");
+        //        return;
+        //    }
+        //    txtAmount.Visible = true;
+        //    txtAmount.Focus();
+        //    txtAmount.SelectAll();
+        //}
 
         // إدراج منتج في فاتورة شراء.
         private void InsertPurchaseRow(float amount)
@@ -974,57 +1104,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             AfterInsertActions();
         }
 
-        // فتح فاتورة مرتجعة حسب رقمها.
-        private void OpenReturnedInvoiceForm(string serial)
-        {
-            if (!int.TryParse(serial, out int serInv))
-            {
-                CustomMessageBox.ShowWarning("الرجاء إدخال رقم فاتورة صالح.", "تنبيه");
-                return;
-            }
-
-            DataTable tblInvoice = DBServiecs.NewInvoice_GetInvoiceByTypeAndCounter(
-                1, serInv, out string? msg
-            );
-
-            if (!string.IsNullOrWhiteSpace(msg))
-            {
-                CustomMessageBox.ShowWarning(msg, "تنبيه");
-                return;
-            }
-
-            if (tblInvoice == null || tblInvoice.Rows.Count == 0)
-            {
-                CustomMessageBox.ShowWarning("لم يتم العثور على الفاتورة.", "تنبيه");
-                return;
-            }
-
-            if (!int.TryParse(tblInvoice.Rows[0]["Inv_ID"]?.ToString(), out int Inv_ID))
-            {
-                CustomMessageBox.ShowWarning("فشل في قراءة رقم الفاتورة.", "خطأ");
-                return;
-            }
-
-            DataTable tblDetails = DBServiecs.NewInvoice_GetInvoiceDetails(Inv_ID);
-
-            if (!int.TryParse(lblInv_ID.Text, out int CurrentInvoiceID))
-            {
-                CustomMessageBox.ShowWarning("رقم الفاتورة الحالي غير صالح.", "خطأ");
-                return;
-            }
-
-            using (frm_ReturnedInvoice returnedForm = new frm_ReturnedInvoice(
-                1, serInv, tblInvoice, tblDetails, CurrentInvoiceID))
-            {
-                if (returnedForm.ShowDialog() == DialogResult.OK)
-                {
-                    LoadReturnedItems(returnedForm.SelectedItems);
-                }
-            }
-
-            DGVStyl();
-        }
-
         // تحميل الأصناف المرتجعة إلى الجدول.
         private void LoadReturnedItems(DataTable returnedItems)
         {
@@ -1041,7 +1120,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-        #endregion
+        //#endregion
 
         #region  تنسيق واحداث  DataGridView
 
@@ -1801,34 +1880,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //*******************************************
         #region Header   وظائف الجزء الاعلى من الفاتورة
 
@@ -1922,82 +1973,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
             EmptyProdData();
         }
-
-
-        //        /*يوجد حالتين حسب نوع الفاتورة
-        // // InvoiceType.PurchaseReturn او  InvoiceType.SaleReturn
-        //وبناء على ذلك نختار احد السطرين
-
-        //        اما الكود الحالى قديم يعمل على مرتجع المبيعات فقط اما الان اريده ان يعمل ايضا على مرتجع المشتريات ايضا
-        // */
-        //        // 🔹 تحديث النصوص لو اخترت "مرتجع"
-        //        private void UpdateLabelsForResale()
-        //        {
-
-        //            // نفّذ حسب القيمة
-        //            switch (returnSaleMode)
-        //            {
-        //                case 1: // InvoiceOnly
-        //                    lblCodeTitel.Text = "رقم فاتورة البيع";
-        //                    lblInvStat.Text = "البيع المرتد يكون عن طريق رقم فاتورة البيع الأصلية";
-        //                    tlpReturnMod.Visible = false;
-        //                    rdoInvoice.Checked = true;
-        //                    break;
-
-        //                case 2: // FreeMode
-        //                    lblCodeTitel.Text = "رقم كود الصنف";
-        //                    lblInvStat.Text = "إرجاع بالكود";
-        //                    tlpReturnMod.Visible = false;
-        //                    rdoFree.Checked = true;
-        //                    break;
-
-        //                case 3: // MixedMode
-        //                    lblCodeTitel.Text = "رقم كود الصنف";
-        //                    lblInvStat.Text = "إرجاع بالكود";
-        //                    tlpReturnMod.Visible = true;
-        //                    rdoFree.Checked = true;
-        //                    break;
-
-        //                default:
-        //                    // fallback لو فيه خطأ بالملف
-        //                    lblCodeTitel.Text = "رقم كود الصنف";
-        //                    lblInvStat.Text = "إرجاع حر";
-        //                    tlpReturnMod.Visible = false;
-        //                    rdoFree.Checked = true;
-        //                    break;
-        //            }
-        //        }
-
-        //        // ✅ تحميل القيم من ملف الإعدادات
-        //        private void LoadSalesPolicies()
-        //        {
-
-        //            allowNegativeStock = AppSettings.GetBool("IsSaleByNegativeStock");
-
-        //            returnSaleMode = AppSettings.GetInt("ReturnSaleMode");
-        //            returnPurchaseMode = AppSettings.GetInt("ReturnPurchasesMode");
-        //        }
-
-        //        private void rdoFree_CheckedChanged(object sender, EventArgs e)
-        //        {
-        //            if (rdoFree.Checked) // تأكد أن الراديو مفعّل
-        //            {
-        //                lblCodeTitel.Text = "رقم كود الصنف";
-        //                lblInvStat.Text = "البيع المرتد  بالكود";
-        //                EmptyProdData();
-        //            }
-        //        }
-
-        //        private void rdoInvoice_CheckedChanged(object sender, EventArgs e)
-        //        {
-        //            if (rdoInvoice.Checked)
-        //            {
-        //                lblCodeTitel.Text = "رقم فاتورة البيع";
-        //                lblInvStat.Text = "البيع المرتد يكون عن طريق رقم فاتورة البيع الأصلية";
-        //                EmptyProdData();
-        //            }
-        //        }
-
 
 
         #region Default Account
@@ -2690,3 +2665,136 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 }
 
 
+/*
+ السيناريو المطلوب الوصول اليه فى الحالة 
+ if (e.KeyCode == Keys.Enter && !string.IsNullOrWhiteSpace(txtSeaarchProd.Text))
+
+   هذا التكست يتعامل مع الرقم الموجود بداخله فى عدة حالات 
+   -----------------------------------------------------------------------------------------
+   lblTypeInvID=1 اولا : اذا كانت الفاتورة مبيعات 
+   -----------------------------------------------------------------------------------------
+   1-يقوم بجلب بيانات الصنف المدرج كوده بالدالة GetProd(code);
+   2-يقوم بجلب قطع هذا الصنف بالدالة  LoadPieceData();
+   وهنا يوجد طريقان اما ان يكون وحدة الصنف 
+        a:  if (unit_ID == 1) // المنتج يقبل القص 
+             فيتم اظهار الكمبوبكس المحمل بالقطع الموجودة لهذا الصنف والانتقال اليها 
+             وفتح القائمة للاختيار منها القطعة المراد القص منها للبيع
+
+        b:  else المنتج غير قابل للقص فينتقل التركيز مباشرة الى تكست الكمية txtAmount بعد تحديد رقم القطعة الافتراضية له
+
+   -----------------------------------------------------------------------------------------
+   lblTypeInvID=2 ثانيا : اذا كانت الفاتورة مبيعات مرتدة
+   -----------------------------------------------------------------------------------------
+   وهنا التصرف مختلف قليلا  وله حالتان
+   1-rdoInvoice.Checked = true; وتعنى ان الرقم الذى كتب يعبر عن رقم فاتورة المبيعات الاصلية
+        فيذهب ويفتحها فى الشاشة frm_ReturnedInvoice
+       ويمرر رقمان من خلال الدالة 
+       a:الرقم الذى كتب وهو مسلسل للفاتورة الاصليةInv_Counter
+           وبه يتم التوصل الى معرف فاتورة المبيعات المراد ارجاع الصنف منها Inv_ID
+           فيتم فتحها على اساسه بتفاصيلها فى الفورم frm_ReturnedInvoice
+
+       b: ويتم تمرير ايضا الرقم المعرف الحالى لفاتورة المبيعات المرتدة والمخزن فى lblInv_ID 
+           والذى سيستخدم لاحقا فى انشاء فاتورة المبيعات المرتدة الحالية
+
+   2-rdoFree.Checked = true; وهذه الحالة الثانية 
+       يعنى ان الرقم الذى كتب هو كود صنف مراد ارجاعه بدون فاتورة اصلية للمبيعات
+
+       فيتم جلب بياناته بواسطة الدالة GetProd(code); وعرضها 
+       ثم يقوم بجلب قطع هذا الصنف بالدالة  LoadPieceData();
+       وهنا توجد حالتان     
+        a:  if (unit_ID == 1) // المنتج يقبل القص 
+               فيتم ادراج قطعة جديدة فى جدول القطع ثم استدعاء رقمها لتحديث طولها من خلال txtAmount و
+               والذى سيتم الانتقال اليه مباشرة ولا يتم اظهار الكمبوبكس
+
+        b:  else المنتج غير قابل للقص فينتقل التركيز مباشرة الى تكست الكمية txtAmount بعد تحديد رقم القطعة الافتراضية له
+
+   -----------------------------------------------------------------------------------------
+   lblTypeInvID=3 ثالثا : اذا كانت الفاتورة مشتريات 
+   -----------------------------------------------------------------------------------------
+       يعنى ان الرقم الذى كتب هو كود صنف مراد شراء كمية منه
+       فيتم جلب بياناته بواسطة الدالة GetProd(code); وعرضها 
+       ثم يقوم بجلب قطع هذا الصنف بالدالة  LoadPieceData();
+       وهنا توجد حالتان     
+        a:  if (unit_ID == 1) // المنتج يقبل القص 
+               فيتم ادراج قطعة جديدة فى جدول القطع ثم استدعاء رقمها لتحديث طولها من خلال txtAmount
+               والذى سيتم الانتقال اليه مباشرة ولا يتم اظهار الكمبوبكس
+
+        b:  else المنتج غير قابل للقص فينتقل التركيز مباشرة الى تكست الكمية txtAmount بعد تحديد رقم القطعة الافتراضية له
+
+   -----------------------------------------------------------------------------------------
+   lblTypeInvID=4 رابعا : اذا كانت الفاتورة مشتريات مرتدة 
+   -----------------------------------------------------------------------------------------
+   وهنا التصرف مختلف قليلا  وله حالتان
+   1-rdoInvoice.Checked = true;هذه الحالة وتعنى ان الرقم الذى كتب يعبر عن رقم فاتورة المشتريات الاصلية
+        فيذهب ويفتحها فى الشاشة frm_ReturnedInvoice
+       ويمرر رقمان من خلال الدالة 
+       a: الرقم الذى كتب وهو مسلسل للفاتورة الاصلية Inv_Counter
+           وبه يتم التوصل الى معرف فاتورة المشتريات المراد ارجاع الصنف منها Inv_ID
+           فيتم فتحها على اساسه بتفاصيلها فى الفورم frm_ReturnedInvoice
+
+       b: ويتم تمرير ايضا الرقم المعرف الحالى لفاتورة المشتريات المرتدة والمخزن فى lblInv_ID 
+           والذى سيستخدم لاحقا فى انشاء فاتورة المشتريات المرتدة الحالية
+
+   2-rdoFree.Checked = true; وهذه الحالة الثانية 
+       يعنى ان الرقم الذى كتب هو كود صنف مراد ارجاعه بدون فاتورة اصلية للمشتريات
+       فيتم جلب بياناته بواسطة الدالة GetProd(code); وعرضها 
+       ثم يقوم بجلب قطع هذا الصنف بالدالة  LoadPieceData();
+       وهنا توجد حالتان     
+        a:  if (unit_ID == 1) // المنتج يقبل القص 
+             فيتم اظهار الكمبوبكس المحمل بالقطع الموجودة لهذا الصنف والانتقال اليها 
+             وفتح القائمة للاختيار منها القطعة المراد الارجاع منها للمورد
+
+        b:  else المنتج غير قابل للقص فينتقل التركيز مباشرة الى تكست الكمية txtAmount بعد تحديد رقم القطعة الافتراضية له
+
+
+   -----------------------------------------------------------------------------------------
+   lblTypeInvID =5 خامسا : اذن تصحيح مخزون صنف عن طريق  جرده وتسجيل كميته الفعلية 
+   -----------------------------------------------------------------------------------------
+       يعنى ان الرقم الذى كتب هو كود صنف مراد جرد كميته ان كان غير قابل للقص او ضبط طوله ان كان قابل للقص
+       فيتم جلب بياناته بواسطة الدالة GetProd(code); وعرضها 
+       ثم يقوم بجلب قطع هذا الصنف بالدالة  LoadPieceData();
+       وهنا توجد حالتان     
+        a:  if (unit_ID == 1) // المنتج يقبل القص 
+             فيتم اظهار الكمبوبكس المحمل بالقطع الموجودة لهذا الصنف والانتقال اليها 
+             وفتح القائمة للاختيار منها القطعة المراد تصحيح طولها بالنقص او الزيادة
+
+        b:  else المنتج غير قابل للقص فينتقل التركيز مباشرة الى تكست الكمية txtAmount بعد تحديد رقم القطعة الافتراضية له
+
+   -----------------------------------------------------------------------------------------
+   lblTypeInvID =6 سادسا : اذن خصم مخزون صنف فى حالة الضياع او الهدر او فساده 
+   -----------------------------------------------------------------------------------------
+       يعنى ان الرقم الذى كتب هو كود صنف مراد  انقاص طوله ان كان قابل للقصكهدر جزئى من الطول الاصلى
+       فيتم جلب بياناته بواسطة الدالة GetProd(code); وعرضها 
+       ثم يقوم بجلب قطع هذا الصنف بالدالة  LoadPieceData();
+       وهنا توجد حالتان     
+        a:  if (unit_ID == 1) // المنتج يقبل القص 
+             فيتم اظهار الكمبوبكس المحمل بالقطع الموجودة لهذا الصنف والانتقال اليها 
+             وفتح القائمة للاختيار منها القطعة المراد انقاص طولها كهدر من الطول الاصلى
+
+        b:  else اظهار رسالة بان هذا الصنف غير قابل للقص ولا يتم التعامل معه هنا ويمكن التعامل معه فى شاشة الجرد
+            ثم يعيد التركيز على txtSeaarchProd ومسح الرقم
+
+
+
+
+   -----------------------------------------------------------------------------------------
+   lblTypeInvID =7 سابعا : اذن اضافة مخزون صنف عموما ليس له مورد 
+   -----------------------------------------------------------------------------------------
+       يعنى ان الرقم الذى كتب هو كود صنف مراد  اضافة طول الى  طوله ان كان قابل للقص كتصحيح جزئى للطول الاصلى
+       فيتم جلب بياناته بواسطة الدالة GetProd(code); وعرضها 
+       ثم يقوم بجلب قطع هذا الصنف بالدالة  LoadPieceData();
+       وهنا توجد حالتان     
+        a:  if (unit_ID == 1) // المنتج يقبل القص 
+             فيتم اظهار الكمبوبكس المحمل بالقطع الموجودة لهذا الصنف والانتقال اليها 
+             وفتح القائمة للاختيار منها القطعة المراد انقاص طولها كهدر من الطول الاصلى
+
+        b:  else اظهار رسالة بان هذا الصنف غير قابل للقص ولا يتم التعامل معه هنا ويمكن التعامل معه فى شاشة الجرد
+            ثم يعيد التركيز على txtSeaarchProd ومسح الرقم
+
+   -----------------------------------------------------------------------------------------
+
+   واخيرا: كيف نعالج كل هذه الامور فيما يخص الحدث انتر في txtSeaarchProd_KeyDown
+   وما ينقص من دوال يمكن اضافتها واخرى يمكن حذفها لكى يكون كود منظم وجيد للتطوير ويغطى كل الحالات          
+
+
+ */
