@@ -116,7 +116,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
 
 
-        // التحقق هل الفاتورة محفوظة نهائيًا (لا يمكن تعديلها)
+        // 🔹 التحقق من حفظ الفاتورة   ***
         private bool IsInvoiceSaved()
         {
             if (!string.IsNullOrWhiteSpace(lblSave.Text))
@@ -607,6 +607,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
+        // 🔹 تحديد وضع الكود
         private void HandleSearchByInvoiceType(string code)
         {
             switch (currentInvoiceType)
@@ -647,6 +648,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #region ===== حالات الفواتير =====
 
+        // 🔹 متابعة حالة البيع
         private void HandleSale(string code)
         {
             if (!GetProd(code)) return;
@@ -899,43 +901,71 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             return true;
         }
 
-        // 🔹  تحميل بيانات القطع الخاصة بالصنف (في حال كان المنتج يقبل القص).
+
+        #region ======== تحميل بيانات القطعة حسب نوع الفاتورة ========
+
         private void LoadPieceData()
         {
-            cbxPiece_ID.Visible =
-                (currentInvoiceType == InvoiceType.Sale && isCanCut);
+            // الحالات اللي يظهر فيها الكومبو ويُفلتر بالأطوال
+            bool showCombo =
+                (currentInvoiceType == InvoiceType.Sale && isCanCut) ||
+                (currentInvoiceType == InvoiceType.Inventory) ||
+                (currentInvoiceType == InvoiceType.AddStock) ||
+                (currentInvoiceType == InvoiceType.DeductStock);
+
+            // حالات الشراء والبيع المرتد => إدراج قطعة جديدة
+            bool forceNewPiece =
+                (currentInvoiceType == InvoiceType.SaleReturn || currentInvoiceType == InvoiceType.Purchase);
 
             if (unit_ID == 1) // المنتج يقبل القص
             {
-                tblProdPieces = DBServiecs.Product_GetOrCreatePieces(ID_Prod);
-                DataRow[] filtered = tblProdPieces.Select("Piece_Length <> 0");
-
-                if (filtered.Length > 0)
+                if (forceNewPiece)
                 {
-                    cbxPiece_ID.DataSource = filtered.CopyToDataTable();
-                    cbxPiece_ID.DisplayMember = "Piece_Length";
-                    cbxPiece_ID.ValueMember = "Piece_ID";
+                    // 📌 إدراج قطعة جديدة بغض النظر عن الموجود
+                    DataTable piece = DBServiecs.Product_InsertNewPiece(ID_Prod);
+                    if (piece.Rows.Count > 0)
+                        lblPieceID.Text = piece.Rows[0]["Piece_ID"].ToString();
 
-                    if (cbxPiece_ID.Visible)
-                    {
-                        cbxPiece_ID.DroppedDown = true;
-                        cbxPiece_ID.Focus();
-                    }
-                    else
-                    {
-                        txtAmount.Visible = true;
-                        txtAmount.Focus();
-                    }
+                    cbxPiece_ID.Visible = false;
+                    txtAmount.Visible = true;
+                    txtAmount.Focus();
                 }
                 else
                 {
-                    cbxPiece_ID.DataSource = null;
-                    MessageBox.Show("لا توجد أرصدة بهذا الصنف.");
-                    txtSeaarchProd.Focus();
-                    txtSeaarchProd.Text = "";
-                    cbxPiece_ID.Visible = false;
-                    EmptyProdData();
+                    // 📌 جلب القطع الموجودة
+                    tblProdPieces = DBServiecs.Product_GetOrCreatePieces(ID_Prod);
 
+                    // فلترة الأطوال الأكبر من الصفر
+                    DataRow[] filtered = tblProdPieces.Select("Piece_Length <> 0");
+
+                    if (filtered.Length > 0)
+                    {
+                        cbxPiece_ID.DataSource = filtered.CopyToDataTable();
+                        cbxPiece_ID.DisplayMember = "Piece_Length";
+                        cbxPiece_ID.ValueMember = "Piece_ID";
+
+                        cbxPiece_ID.Visible = showCombo;
+
+                        if (cbxPiece_ID.Visible)
+                        {
+                            cbxPiece_ID.DroppedDown = true;
+                            cbxPiece_ID.Focus();
+                        }
+                        else
+                        {
+                            txtAmount.Visible = true;
+                            txtAmount.Focus();
+                        }
+                    }
+                    else
+                    {
+                        cbxPiece_ID.DataSource = null;
+                        MessageBox.Show("لا توجد أرصدة بهذا الصنف.");
+                        txtSeaarchProd.Focus();
+                        txtSeaarchProd.Text = "";
+                        cbxPiece_ID.Visible = false;
+                        EmptyProdData();
+                    }
                 }
             }
             else // المنتج لا يقبل القص
@@ -943,10 +973,72 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 DataTable piece = DBServiecs.Product_GetOrCreate_DefaultPiece(ID_Prod);
                 if (piece.Rows.Count > 0)
                     lblPieceID.Text = piece.Rows[0]["Piece_ID"].ToString();
+
+                cbxPiece_ID.Visible = false;
                 txtAmount.Visible = true;
                 txtAmount.Focus();
             }
         }
+
+
+        #endregion
+
+        // 🔹  تحميل بيانات القطع الخاصة بالصنف (في حال كان المنتج يقبل القص).
+        //private void LoadPieceData()
+        //{
+
+        //    /*المفترض هنا هذا الكود سارى فى حالة البيع  والشراء المرتد والجرد والخصم والاضافة فقط 
+        //    ولكن فى الحالات الاخرى لها وضع خاص
+        //    فى البيع المرتد لا يجب اظهار الكمبو بكس ولا الاختيار منه ولا الفلترة على الاطوال الكبر من الصفر 
+        //    وكذالك الشراء  
+        //    ففى الحالتين يتم ادراج قطعة جديدة فى القاعدة ثم احضار رقمها الجديد لاضافة طول له من خلال الكمية
+        //    فكيف تعالج هذه النقطة
+        //     */
+        //    cbxPiece_ID.Visible =
+        //        (currentInvoiceType == InvoiceType.Sale && isCanCut);
+
+        //    if (unit_ID == 1) // المنتج يقبل القص
+        //    {
+        //        tblProdPieces = DBServiecs.Product_GetOrCreatePieces(ID_Prod);
+        //        DataRow[] filtered = tblProdPieces.Select("Piece_Length <> 0");
+
+        //        if (filtered.Length > 0)
+        //        {
+        //            cbxPiece_ID.DataSource = filtered.CopyToDataTable();
+        //            cbxPiece_ID.DisplayMember = "Piece_Length";
+        //            cbxPiece_ID.ValueMember = "Piece_ID";
+
+        //            if (cbxPiece_ID.Visible)
+        //            {
+        //                cbxPiece_ID.DroppedDown = true;
+        //                cbxPiece_ID.Focus();
+        //            }
+        //            else
+        //            {
+        //                txtAmount.Visible = true;
+        //                txtAmount.Focus();
+        //            }
+        //        }
+        //        else
+        //        {
+        //            cbxPiece_ID.DataSource = null;
+        //            MessageBox.Show("لا توجد أرصدة بهذا الصنف.");
+        //            txtSeaarchProd.Focus();
+        //            txtSeaarchProd.Text = "";
+        //            cbxPiece_ID.Visible = false;
+        //            EmptyProdData();
+
+        //        }
+        //    }
+        //    else // المنتج لا يقبل القص
+        //    {
+        //        DataTable piece = DBServiecs.Product_GetOrCreate_DefaultPiece(ID_Prod);
+        //        if (piece.Rows.Count > 0)
+        //            lblPieceID.Text = piece.Rows[0]["Piece_ID"].ToString();
+        //        txtAmount.Visible = true;
+        //        txtAmount.Focus();
+        //    }
+        //}
 
         // فتح فاتورة مرتجعة حسب رقمها.
         private void OpenReturnedInvoiceForm(string serial)
@@ -2157,6 +2249,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             lblClientEmail.Text = accountData["ClientEmail"].ToString();
         }
         #endregion
+
         #region Account Data Display
         private void txtAccName_KeyDown(object sender, KeyEventArgs e)
         {

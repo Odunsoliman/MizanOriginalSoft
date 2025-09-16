@@ -1029,7 +1029,17 @@ namespace MizanOriginalSoft.MainClasses
             }, out _); // تجاهل الرسالة لأنها غير مطلوبة
         }
 
-
+        // ادراج قطعة جديدة
+        public static DataTable Product_InsertNewPiece(int ID_Prod)
+        {
+            return dbHelper.ExecuteSelectQueryFlexible("Product_InsertNewPiece", cmd =>
+            {
+                cmd.Parameters.Add("@ID_Prod", SqlDbType.Int).Value = ID_Prod;
+            }, out _); // تجاهل الرسالة لأنها غير مطلوبة
+        }
+        /*عندى بالفعل فى DBServiecs كلاس
+         * 
+         * اريد الان ضبط LoadPieceData()*/
 
         //  تُرجع القطعة الوحيدة الموجودة أو تنشئها إن لم تكن موجودة.
         public static DataTable Product_GetOrCreate_DefaultPiece(int ID_Prod)
