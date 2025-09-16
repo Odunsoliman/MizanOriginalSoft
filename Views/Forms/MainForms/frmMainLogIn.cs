@@ -713,7 +713,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             TogglePanel(pnlMovement);
         }
-        #region Button Handlers
+
+        // 🔹 فاتورة البيع
         private void btnSales_Click(object? sender, EventArgs e)
         {
             if (sender is Button btn)
@@ -733,7 +734,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             OpenFormInPanel(frm); // فتح الفورم داخل الـ Panel
         }
 
-
+        // 🔹 فاتورة البيع المرتد
         private void btnBackSales_Click(object sender, EventArgs e)
         {
             if (sender is Button btn)
@@ -757,6 +758,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         }
 
+        // 🔹 فاتورة المشتريات
         private void btnPrococh_Click(object? sender, EventArgs e)
         {
             if (sender is Button btn)
@@ -777,6 +779,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         }
 
+        // 🔹 فاتورة المشتريات المرتدة
         private void btnBackPrococh_Click(object? sender, EventArgs e)
         {
             if (sender is Button btn)
@@ -797,28 +800,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         }
 
-        //private void btnInventory_Click(object? sender, EventArgs e)
-        //{
-        //    if (sender is Button btn)
-        //    {
-        //        HighlightTransparentButton(btn); // إبراز الزر
-        //    }
-
-        //    CloseAllFormsExceptMain(); // غلق كل الفورمز المفتوحة ما عدا الرئيسي
-
-        //    // تحديد نوع الفاتورة الجديد باستخدام enum
-        //    InvoiceType type = InvoiceType.Inventory;
-
-        //    // إنشاء الفورم الذكي وتهيئته
-        //    frm_DynamicInvoice frm = new frm_DynamicInvoice();
-        //    frm.InitializeInvoice(type); // هنا نمرر النوع بدلاً من رقم
-
-        //    OpenFormInPanel(frm); // فتح الفورم داخل الـ Panel
-        //}
-
-        #endregion
-
-
+        // 🔹 اذن الجرد العام
         private void btnGardStock_Click(object? sender, EventArgs e)
         {
             if (sender is Button btn)
@@ -838,6 +820,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             OpenFormInPanel(frm); // فتح الفورم داخل الـ Panel
         }
 
+        // 🔹 اذن خصم رصيد صنف
         private void btnDecreaseStock_Click(object? sender, EventArgs e)
         {
             if (sender is Button btn)
@@ -848,7 +831,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             CloseAllFormsExceptMain(); // غلق كل الفورمز المفتوحة ما عدا الرئيسي
 
             // تحديد نوع الفاتورة الجديد باستخدام enum
-            InvoiceType type = InvoiceType.PurchaseReturn;
+            InvoiceType type = InvoiceType.DeductStock ;
 
             // إنشاء الفورم الذكي وتهيئته
             frm_DynamicInvoice frm = new frm_DynamicInvoice();
@@ -857,6 +840,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             OpenFormInPanel(frm); // فتح الفورم داخل الـ Panel
         }
 
+        // 🔹 اذن اضافة رصيد صنف
         private void btnIncreaseStock_Click(object? sender, EventArgs e)
         {
             if (sender is Button btn)
@@ -867,7 +851,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             CloseAllFormsExceptMain(); // غلق كل الفورمز المفتوحة ما عدا الرئيسي
 
             // تحديد نوع الفاتورة الجديد باستخدام enum
-            InvoiceType type = InvoiceType.PurchaseReturn;
+            InvoiceType type = InvoiceType.AddStock ;
 
             // إنشاء الفورم الذكي وتهيئته
             frm_DynamicInvoice frm = new frm_DynamicInvoice();
@@ -876,6 +860,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             OpenFormInPanel(frm); // فتح الفورم داخل الـ Panel
         }
 
+        // 🔹 نقطة بيع الكاشير
         private void btnPOS_Click(object sender, EventArgs e)
         {
             if (sender is Button btn)
