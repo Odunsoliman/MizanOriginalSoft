@@ -1021,13 +1021,14 @@ namespace MizanOriginalSoft.MainClasses
         }
 
         // جلب القطع التابعة لمنتج[]
-        public static DataTable Product_GetOrCreatePieces(int ID_Prod)
+        public static DataTable Product_GetOrCreatePieces(int ID_Prod)//وصل هنا صحيح ID_Prod=10000
         {
             return dbHelper.ExecuteSelectQueryFlexible("Product_GetOrCreatePieces", cmd =>
             {
                 cmd.Parameters.Add("@ID_Prod", SqlDbType.Int).Value = ID_Prod;
             }, out _); // تجاهل الرسالة لأنها غير مطلوبة
         }
+  
 
         // ادراج قطعة جديدة
         public static DataTable Product_InsertNewPiece(int ID_Prod)

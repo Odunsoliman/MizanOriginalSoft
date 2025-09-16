@@ -235,7 +235,7 @@ namespace MizanOriginalSoft.MainClasses
 
                     // تعبئة الجدول من نتائج الإجراء
                     using var adapter = new SqlDataAdapter(cmd);
-                    adapter.Fill(dt);
+                    adapter.Fill(dt);// عاد هنا برقم مختلف 10001
 
                     // قراءة الرسالة إن وُجدت
                     if (expectMessageOutput)

@@ -933,7 +933,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 else
                 {
                     // 📌 جلب القطع الموجودة
-                    tblProdPieces = DBServiecs.Product_GetOrCreatePieces(ID_Prod);
+                    tblProdPieces = DBServiecs.Product_GetOrCreatePieces(ID_Prod);// هنا المشكلةID_Prod=10000 ولكن tblProdPieces جلب معرف مختلف =10001وهو ليس له قطع 
+                    // فاين يكون الخلل
 
                     // فلترة الأطوال الأكبر من الصفر
                     DataRow[] filtered = tblProdPieces.Select("Piece_Length <> 0");
