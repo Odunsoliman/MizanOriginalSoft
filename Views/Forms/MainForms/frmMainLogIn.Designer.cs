@@ -708,6 +708,7 @@
             btnBackPrococh.Text = "المشتريات المرتدة";
             btnBackPrococh.TextAlign = ContentAlignment.MiddleLeft;
             btnBackPrococh.UseVisualStyleBackColor = true;
+            btnBackPrococh.Click += btnBackPrococh_Click;
             // 
             // pnlMovement
             // 
