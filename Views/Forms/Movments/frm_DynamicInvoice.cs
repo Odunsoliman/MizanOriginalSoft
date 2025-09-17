@@ -389,16 +389,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #region ******** cbxPiece_ID events
 
-        // عند تغيير القطعة 
-        private void cbxPiece_ID_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UpdatePieceLabels();
-            //if (cbxPiece_ID.SelectedValue != null)
-            //    lblPieceID.Text = cbxPiece_ID.SelectedValue.ToString();
-            // المفترض فى هذه الليبل يتم كتابة الرقم المختار من القائمة ولكنه يعطيى كلمة سيستم فى البداية مع اظهار الكمبو بكس وفتحها 
-            // ثم يكتب الرقم اذا ذهبت الى الرقم التالى ثم العودة الى الاول ولا يكتب تلقائيا عند فتحها تلقائيا
-        }
-
+        
 
 
 
@@ -2831,10 +2822,18 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;   // ✅ منع الانتقال الافتراضي للسطر التالي
+                txtAmount.Visible=true ;
                 txtAmount.Focus();
                 txtAmount.SelectAll();       // ✅ تحديد كل النص داخل التكست
             }
         }
+
+        // عند تغيير القطعة 
+        private void cbxPiece_ID_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdatePieceLabels();// التحديث التلقائى لليبل
+        }
+
 
     }
 }
