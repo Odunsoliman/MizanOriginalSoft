@@ -1007,11 +1007,12 @@ namespace MizanOriginalSoft.MainClasses
 
 
         //  الحصول على معرف القطعة (Piece_ID) الجديدة بالتحديد.
-        public static int Product_CreateNewPiece(int prodID)
+        public static int Product_CreateNewPiece(int prodID,int UpPiece_ID)
         {
             DataTable dt = dbHelper.ExecuteSelectQueryFlexible("Product_CreateNewPiece", cmd =>
             {
                 cmd.Parameters.Add("@ID_Prod", SqlDbType.Int).Value = prodID;
+                cmd.Parameters.Add("@UpPiece_ID", SqlDbType.Int).Value = UpPiece_ID;
             }, out _); // لا نحتاج إلى رسالة
 
             if (dt.Rows.Count > 0 && dt.Rows[0][0] != DBNull.Value)

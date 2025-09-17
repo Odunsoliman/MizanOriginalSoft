@@ -1952,8 +1952,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // التعامل مع القطعة (قابلة للقص / غير قابلة للقص)
             if (unit_ID == 1) // قابل للقص
             {
-                int newPieceID = DBServiecs.Product_CreateNewPiece(ID_Prod);
-                lblPieceID.Text = newPieceID.ToString();
+                //int newPieceID = DBServiecs.Product_CreateNewPiece(ID_Prod);
+                //lblPieceID.Text = newPieceID.ToString();
             }
             else // غير قابل للقص → جلب القطعة الافتراضية
             {

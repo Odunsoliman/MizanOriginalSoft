@@ -1755,11 +1755,31 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 CustomMessageBox.ShowWarning("انتبه لعدم وجود سعر للصنف", "تحذير");
             }
 
-            // التعامل مع القطعة (قابلة للقص / غير قابلة للقص)
             if (unit_ID == 1) // قابل للقص
             {
-                int newPieceID = DBServiecs.Product_CreateNewPiece(ID_Prod);
+                // تحديد قيمة UpPiece_ID حسب نوع الفاتورة
+                int upPieceID;
+
+                // لو نوع الفاتورة مبيعات أو مرتجع شراء
+                if (currentInvoiceType == InvoiceType.Sale || currentInvoiceType == InvoiceType.PurchaseReturn)
+                {
+                    // في حالة المبيعات أو المشتريات المرتدة → ناخد القيمة من الـ Label
+                    if (!int.TryParse(lblPieceID.Text, out upPieceID))
+                    {
+                        CustomMessageBox.ShowWarning("معرف القطعة غير صالح", "خطأ");
+                        return;
+                    }
+                }
+                else
+                {
+                    // باقي أنواع الفواتير → نثبتها بـ -1
+                    upPieceID = -1;
+                }
+
+                // إنشاء قطعة جديدة
+                int newPieceID = DBServiecs.Product_CreateNewPiece(ID_Prod, upPieceID);
                 lblPieceID.Text = newPieceID.ToString();
+
             }
             else // غير قابل للقص → جلب القطعة الافتراضية
             {
@@ -1774,6 +1794,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                         "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
 
             // التحقق من صلاحية معرف القطعة
             if (isPiece)
