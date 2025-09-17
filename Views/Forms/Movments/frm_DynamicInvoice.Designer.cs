@@ -114,6 +114,7 @@
             rdoInvoice = new RadioButton();
             tableLayoutPanel2 = new TableLayoutPanel();
             lblSellerID = new Label();
+            lblPiece_Length = new Label();
             ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
             tableLayoutPanel9.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
@@ -790,6 +791,7 @@
             tlpPiece.Controls.Add(lblPieceID, 9, 0);
             tlpPiece.Controls.Add(cbxPiece_ID, 3, 0);
             tlpPiece.Controls.Add(lblPriceMove, 4, 0);
+            tlpPiece.Controls.Add(lblPiece_Length, 8, 0);
             tlpPiece.Dock = DockStyle.Fill;
             tlpPiece.Location = new Point(4, 185);
             tlpPiece.Margin = new Padding(4, 2, 4, 2);
@@ -878,6 +880,7 @@
             cbxPiece_ID.TabIndex = 33;
             cbxPiece_ID.Visible = false;
             cbxPiece_ID.SelectedIndexChanged += cbxPiece_ID_SelectedIndexChanged;
+            cbxPiece_ID.KeyDown += cbxPiece_ID_KeyDown;
             // 
             // lblPriceMove
             // 
@@ -1454,6 +1457,16 @@
             lblSellerID.TabIndex = 31;
             lblSellerID.TextAlign = ContentAlignment.MiddleLeft;
             // 
+            // lblPiece_Length
+            // 
+            lblPiece_Length.AutoSize = true;
+            lblPiece_Length.Dock = DockStyle.Fill;
+            lblPiece_Length.Location = new Point(77, 0);
+            lblPiece_Length.Name = "lblPiece_Length";
+            lblPiece_Length.Size = new Size(99, 38);
+            lblPiece_Length.TabIndex = 37;
+            lblPiece_Length.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // frm_DynamicInvoice
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
@@ -1577,5 +1590,6 @@
         private TableLayoutPanel tableLayoutPanel2;
         private Label lblSellerID;
         private Label lblUnit;
+        private Label lblPiece_Length;
     }
 }

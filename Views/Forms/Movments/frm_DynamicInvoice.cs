@@ -391,10 +391,11 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         // عند تغيير القطعة 
         private void cbxPiece_ID_SelectedIndexChanged(object sender, EventArgs e)
-        {//
+        {
             if (cbxPiece_ID.SelectedValue != null)
                 lblPieceID.Text = cbxPiece_ID.SelectedValue.ToString();
-
+            // المفترض فى هذه الليبل يتم كتابة الرقم المختار من القائمة ولكنه يعطيى كلمة سيستم فى البداية مع اظهار الكمبو بكس وفتحها 
+            // ثم يكتب الرقم اذا ذهبت الى الرقم التالى ثم العودة الى الاول ولا يكتب تلقائيا عند فتحها تلقائيا
         }
 
 
@@ -947,12 +948,26 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
                         cbxPiece_ID.Visible = showCombo;
 
+                        //if (cbxPiece_ID.Visible)
+                        //{
+                        //    cbxPiece_ID.DroppedDown = true;
+                        //    cbxPiece_ID.SelectedIndex = 0;   // ✅ تحديد أول عنصر
+                        //    cbxPiece_ID.Focus();
+
+                        //    // ✅ تحديث الليبل يدويًا فورًا
+                        //    if (cbxPiece_ID.SelectedValue != null && cbxPiece_ID.SelectedValue is not DataRowView)
+                        //        lblPieceID.Text = cbxPiece_ID.SelectedValue.ToString();
+                        //    lblPiece_Length .Text =cbxPiece_ID .DisplayMember .ToString ();//هل كتابة هذه القيمة هنا صحيح
+                        //}
                         if (cbxPiece_ID.Visible)
                         {
                             cbxPiece_ID.DroppedDown = true;
-                            cbxPiece_ID.SelectedIndex = 0;   // ✅ تحديد أول عنصر تلقائيًا
+                            cbxPiece_ID.SelectedIndex = 0;   // ✅ تحديد أول عنصر
                             cbxPiece_ID.Focus();
+
+                            UpdatePieceLabels(); // ✅ تحديث الليبلات مباشرة
                         }
+
 
                         else
                         {
@@ -983,6 +998,17 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
+        private void UpdatePieceLabels()
+        {
+            if (cbxPiece_ID.SelectedValue != null && cbxPiece_ID.SelectedValue is not DataRowView)
+            {
+                // الرقم المختار من ValueMember
+                lblPieceID.Text = cbxPiece_ID.SelectedValue.ToString();
+
+                // النص المعروض من DisplayMember
+                lblPiece_Length.Text = cbxPiece_ID.Text;
+            }
+        }
 
         #endregion
 
@@ -2797,7 +2823,18 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         private static float ToFloat(object? value, float defaultVal = 0) =>
             float.TryParse(value?.ToString(), out float result) ? result : defaultVal;
 
-        #endregion 
+        #endregion
+
+        private void cbxPiece_ID_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;   // ✅ منع الانتقال الافتراضي للسطر التالي
+                txtAmount.Focus();
+                txtAmount.SelectAll();       // ✅ تحديد كل النص داخل التكست
+            }
+        }
+
     }
 }
 
