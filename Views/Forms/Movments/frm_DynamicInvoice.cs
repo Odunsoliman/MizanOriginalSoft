@@ -296,6 +296,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         private void frm_DynamicInvoice_Load(object sender, EventArgs e)
         {
             DBServiecs.A_UpdateAllDataBase();   // تحديث أرصدة الأصناف والحسابات
+            cbxPiece_ID.DropDownStyle = ComboBoxStyle.DropDownList;
 
             // ✅ قراءة سياسات البيع والبيع المرتد
             LoadSalesPolicies();
