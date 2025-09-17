@@ -79,7 +79,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         public string SelectedAccID { get; set; } = string.Empty;
 
         // معرفات
-       // private int US;          // كود المستخدم
+        // private int US;          // كود المستخدم
         private int Inv_ID;      // رقم الفاتورة
         private int ID_Prod;
         private int Piece_id = 0;
@@ -143,7 +143,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
             // 🔹 تعيين النوع الحالي
             currentInvoiceType = type;
-            
+
             // 🔹 تحديد العنوان ورقم النوع
             (string arabicTitle, string typeId) = type switch
             {
@@ -269,7 +269,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             newRow["MovType"] = lblTypeInv.Text;
             newRow["Inv_Date"] = DateTime.Now;
             newRow["Seller_ID"] = cbxSellerID.Items.Count > 0 ? cbxSellerID.SelectedValue : DBNull.Value;
-     //       newRow["User_ID"] = US;
+            //       newRow["User_ID"] = US;
             newRow["Acc_ID"] = lblAccID.Text;
             newRow["AccName"] = txtAccName.Text;
 
@@ -318,7 +318,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
                     case 3:
                         currentInvoiceType = InvoiceType.Purchase;
-                    //    UpdateLabelsForPurchase();
+                        //    UpdateLabelsForPurchase();
                         break;
 
                     case 4:
@@ -532,7 +532,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
             // قراءة طول القطعة
             float.TryParse(cbxPiece_ID.Text, out float pieceLength);
-            
+
             // إدراج الصف حسب نوع الفاتورة
             switch (currentInvoiceType)
             {
@@ -950,8 +950,10 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                         if (cbxPiece_ID.Visible)
                         {
                             cbxPiece_ID.DroppedDown = true;
+                            cbxPiece_ID.SelectedIndex = 0;   // ✅ تحديد أول عنصر تلقائيًا
                             cbxPiece_ID.Focus();
                         }
+
                         else
                         {
                             txtAmount.Visible = true;
@@ -1651,7 +1653,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             lblInv_Counter.Text = nextCounter;
             lblInv_ID.Text = nextID.ToString();
 
-            DisplayNewRow((int)currentInvoiceType, CurrentSession.UserID );
+            DisplayNewRow((int)currentInvoiceType, CurrentSession.UserID);
             ToggleControlsBasedOnSaveStatus();
         }
 
@@ -1713,81 +1715,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #endregion
 
-        #region 🔹 العمليات العامة للحفظ
-
-        // التحقق من صحة الفاتورة قبل الحفظ
-        private List<string> ValidateInvoice()
-        {
-            var missing = new List<string>();
-
-            if (string.IsNullOrWhiteSpace(lblInv_ID.Text))
-                missing.Add("رقم الفاتورة");
-
-            if (string.IsNullOrWhiteSpace(lblInv_Counter.Text))
-                missing.Add("الرقم التسلسلي للفاتورة");
-
-            if (cbxSellerID.SelectedValue == null)
-                missing.Add(currentInvoiceType is InvoiceType.Sale or InvoiceType.SaleReturn
-                    ? "البائع"
-                    : "منفذ الشراء / التسوية");
-
-            if (string.IsNullOrWhiteSpace(lblAccID.Text))
-                missing.Add("الحساب");
-
-            if (CurrentSession.WarehouseId <= 0)
-                missing.Add("المخزن");
-
-            return missing;
-        }
-
-        // حفظ مسودة الفاتورة
-        public void SaveDraftInvoice(string? savedText = null)
-        {
-            if (!string.IsNullOrWhiteSpace(lblSave.Text))
-            {
-                MessageBox.Show("الفاتورة محفوظة نهائيًا، لا يمكن التعديل.");
-                return;
-            }
-
-            var missingFields = ValidateInvoice();
-            if (missingFields.Count > 0)
-            {
-                string message = "يرجى استكمال البيانات التالية:\n• " + string.Join("\n• ", missingFields);
-                CustomMessageBox.ShowWarning(message, "بيانات ناقصة");
-                return;
-            }
-
-            // استدعاء الحفظ
-            DBServiecs.NewInvoice_InsertOrUpdate(
-                invID: Convert.ToInt32(lblInv_ID.Text),
-                invCounter: lblInv_Counter.Text,
-                invType_ID: (int)currentInvoiceType,
-                invDate: dtpInv_Date.Value,
-                seller_ID: Convert.ToInt32(cbxSellerID.SelectedValue),
-                user_ID: CurrentSession.UserID ,
-                acc_ID: int.TryParse(lblAccID.Text, out int accId) ? accId : (int?)null,
-                totalValue: ToFloat(lblTotalInv.Text),
-                taxVal: ToFloat(txtTaxVal.Text),
-                totalValueAfterTax: ToFloat(lblTotalValueAfterTax.Text),
-                discount: ToFloat(txtDiscount.Text),
-                valueAdded: ToFloat(txtValueAdded.Text),
-                netTotal: ToFloat(lblNetTotal.Text),
-                payment_Cash: ToFloat(txtPayment_Cash.Text),
-                payment_Electronic: ToFloat(txtPayment_Electronic.Text),
-                payment_Note: txtPayment_Note.Text,
-                remainingOnAcc: ToFloat(lblRemainingOnAcc.Text),
-                noteInvoice: txtNoteInvoice.Text,
-                saved: savedText ?? string.Empty,
-                Warehouse_Id: CurrentSession.WarehouseId,
-                resultMessage: out _ // ✅ استخدم اسم المعامل الصحيح
-            );
-        }
-
-        // دالة مساعدة لتحويل النص إلى رقم عائم
-        private static float ToFloat(object? value, float defaultVal = 0) =>
-            float.TryParse(value?.ToString(), out float result) ? result : defaultVal;
-
-        #endregion
 
         #region عمليات إدخال الصفوف
 
@@ -2456,8 +2383,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #endregion End Heder
 
-
-
         //*******************************************
         #region Foter وظائف اجماليات الفاتورة
         private decimal defaultTax = 0m; // 🟦 نخزن النسبة هنا لاستخدامها لاحقاً
@@ -2750,18 +2675,136 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 MessageBox.Show("يجب حفظ السند أولًا قبل عرض القيد المحاسبي", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-        
-        
+
+
         #endregion
 
+        //*******************************************
+        #region ********** الحفظ النهائى للفاتورة 🔹 العمليات العامة للحفظ
+        /// <summary>حفظ الفاتورة نهائيًا.</summary>
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(lblSave.Text))
+            {
+                CustomMessageBox.ShowInformation("تم حفظ الفاتورة من قبل ولا يمكن تعديلها.", "تنبيه");
+                return;
+            }
 
+            int actualRowCount = DGV.Rows.Cast<DataGridViewRow>()
+                                  .Count(r => !r.IsNewRow && r.Cells["ProductCode"].Value != null);
+
+            if (actualRowCount == 0)
+            {
+                CustomMessageBox.ShowInformation("لا توجد بيانات لحفظ الفاتورة.", "تنبيه");
+                return;
+            }
+
+            int invID = Convert.ToInt32(lblInv_ID.Text);
+            string saveText = GetSaveTextByInvoiceType(currentInvoiceType);
+
+            SaveDraftInvoice(saveText);
+
+            lblSave.Text = saveText;
+            MessageBox.Show("تم الحفظ النهائي للفاتورة.");
+            ToggleControlsBasedOnSaveStatus();
+        }
+
+        /// <summary>الحصول على نص الحفظ المناسب حسب نوع الفاتورة.</summary>
+        private string GetSaveTextByInvoiceType(InvoiceType invoiceType)
+        {
+            return invoiceType switch
+            {
+                InvoiceType.Sale => "تم حفظ فاتورة بيع",
+                InvoiceType.SaleReturn => "تم حفظ فاتورة بيع مرتجع",
+                InvoiceType.Purchase => "تم حفظ فاتورة شراء",
+                InvoiceType.PurchaseReturn => "تم حفظ فاتورة شراء مرتجع",
+                InvoiceType.Inventory => "تم حفظ إذن جرد",
+                InvoiceType.DeductStock => "تم حفظ إذن خصم",
+                InvoiceType.AddStock => "تم حفظ إذن إضافة",
+                _ => "تم حفظ الفاتورة"
+            };
+        }
+
+        // التحقق من صحة الفاتورة قبل الحفظ
+        private List<string> ValidateInvoice()
+        {
+            var missing = new List<string>();
+
+            if (string.IsNullOrWhiteSpace(lblInv_ID.Text))
+                missing.Add("رقم الفاتورة");
+
+            if (string.IsNullOrWhiteSpace(lblInv_Counter.Text))
+                missing.Add("الرقم التسلسلي للفاتورة");
+
+            if (cbxSellerID.SelectedValue == null)
+                missing.Add(currentInvoiceType is InvoiceType.Sale or InvoiceType.SaleReturn
+                    ? "البائع"
+                    : "منفذ الشراء / التسوية");
+
+            if (string.IsNullOrWhiteSpace(lblAccID.Text))
+                missing.Add("الحساب");
+
+            if (CurrentSession.WarehouseId <= 0)
+                missing.Add("المخزن");
+
+            return missing;
+        }
+
+        // حفظ مسودة الفاتورة
+        public void SaveDraftInvoice(string? savedText = null)
+        {
+            if (!string.IsNullOrWhiteSpace(lblSave.Text))
+            {
+                MessageBox.Show("الفاتورة محفوظة نهائيًا، لا يمكن التعديل.");
+                return;
+            }
+
+            var missingFields = ValidateInvoice();
+            if (missingFields.Count > 0)
+            {
+                string message = "يرجى استكمال البيانات التالية:\n• " + string.Join("\n• ", missingFields);
+                CustomMessageBox.ShowWarning(message, "بيانات ناقصة");
+                return;
+            }
+
+            // استدعاء الحفظ
+            DBServiecs.NewInvoice_InsertOrUpdate(
+                invID: Convert.ToInt32(lblInv_ID.Text),
+                invCounter: lblInv_Counter.Text,
+                invType_ID: (int)currentInvoiceType,
+                invDate: dtpInv_Date.Value,
+                seller_ID: Convert.ToInt32(cbxSellerID.SelectedValue),
+                user_ID: CurrentSession.UserID,
+                acc_ID: int.TryParse(lblAccID.Text, out int accId) ? accId : (int?)null,
+                totalValue: ToFloat(lblTotalInv.Text),
+                taxVal: ToFloat(txtTaxVal.Text),
+                totalValueAfterTax: ToFloat(lblTotalValueAfterTax.Text),
+                discount: ToFloat(txtDiscount.Text),
+                valueAdded: ToFloat(txtValueAdded.Text),
+                netTotal: ToFloat(lblNetTotal.Text),
+                payment_Cash: ToFloat(txtPayment_Cash.Text),
+                payment_Electronic: ToFloat(txtPayment_Electronic.Text),
+                payment_Note: txtPayment_Note.Text,
+                remainingOnAcc: ToFloat(lblRemainingOnAcc.Text),
+                noteInvoice: txtNoteInvoice.Text,
+                saved: savedText ?? string.Empty,
+                Warehouse_Id: CurrentSession.WarehouseId,
+                resultMessage: out _ // ✅ استخدم اسم المعامل الصحيح
+            );
+        }
+
+        // دالة مساعدة لتحويل النص إلى رقم عائم
+        private static float ToFloat(object? value, float defaultVal = 0) =>
+            float.TryParse(value?.ToString(), out float result) ? result : defaultVal;
+
+        #endregion 
     }
 }
 
 
-/*
+/* if (e.KeyCode == Keys.Enter && !string.IsNullOrWhiteSpace(txtSeaarchProd.Text))
+
  السيناريو المطلوب الوصول اليه فى الحالة 
- if (e.KeyCode == Keys.Enter && !string.IsNullOrWhiteSpace(txtSeaarchProd.Text))
 
    هذا التكست يتعامل مع الرقم الموجود بداخله فى عدة حالات 
    -----------------------------------------------------------------------------------------
