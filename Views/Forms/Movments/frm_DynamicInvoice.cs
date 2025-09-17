@@ -392,8 +392,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // عند تغيير القطعة 
         private void cbxPiece_ID_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbxPiece_ID.SelectedValue != null)
-                lblPieceID.Text = cbxPiece_ID.SelectedValue.ToString();
+            UpdatePieceLabels();
+            //if (cbxPiece_ID.SelectedValue != null)
+            //    lblPieceID.Text = cbxPiece_ID.SelectedValue.ToString();
             // المفترض فى هذه الليبل يتم كتابة الرقم المختار من القائمة ولكنه يعطيى كلمة سيستم فى البداية مع اظهار الكمبو بكس وفتحها 
             // ثم يكتب الرقم اذا ذهبت الى الرقم التالى ثم العودة الى الاول ولا يكتب تلقائيا عند فتحها تلقائيا
         }

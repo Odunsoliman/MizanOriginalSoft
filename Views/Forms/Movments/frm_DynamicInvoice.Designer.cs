@@ -79,6 +79,7 @@
             lblPieceID = new Label();
             cbxPiece_ID = new ComboBox();
             lblPriceMove = new Label();
+            lblPiece_Length = new Label();
             btnPrent = new Button();
             btnNew = new Button();
             btnLast = new Button();
@@ -114,7 +115,6 @@
             rdoInvoice = new RadioButton();
             tableLayoutPanel2 = new TableLayoutPanel();
             lblSellerID = new Label();
-            lblPiece_Length = new Label();
             ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
             tableLayoutPanel9.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
@@ -895,6 +895,16 @@
             lblPriceMove.TabIndex = 29;
             lblPriceMove.TextAlign = ContentAlignment.MiddleLeft;
             // 
+            // lblPiece_Length
+            // 
+            lblPiece_Length.AutoSize = true;
+            lblPiece_Length.Dock = DockStyle.Fill;
+            lblPiece_Length.Location = new Point(77, 0);
+            lblPiece_Length.Name = "lblPiece_Length";
+            lblPiece_Length.Size = new Size(99, 38);
+            lblPiece_Length.TabIndex = 37;
+            lblPiece_Length.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // btnPrent
             // 
             btnPrent.AutoSizeMode = AutoSizeMode.GrowAndShrink;
@@ -1456,16 +1466,6 @@
             lblSellerID.Size = new Size(70, 37);
             lblSellerID.TabIndex = 31;
             lblSellerID.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // lblPiece_Length
-            // 
-            lblPiece_Length.AutoSize = true;
-            lblPiece_Length.Dock = DockStyle.Fill;
-            lblPiece_Length.Location = new Point(77, 0);
-            lblPiece_Length.Name = "lblPiece_Length";
-            lblPiece_Length.Size = new Size(99, 38);
-            lblPiece_Length.TabIndex = 37;
-            lblPiece_Length.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // frm_DynamicInvoice
             // 
