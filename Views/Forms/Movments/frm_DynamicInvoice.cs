@@ -390,14 +390,32 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #region ******** cbxPiece_ID events
 
-        
+        private void cbxPiece_ID_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;   // ✅ منع الانتقال الافتراضي للسطر التالي
+                txtAmount.Visible = true;
+                txtAmount.Focus();
+                txtAmount.SelectAll();       // ✅ تحديد كل النص داخل التكست
+            }
+        }
+
+        // عند تغيير القطعة 
+        private void cbxPiece_ID_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdatePieceLabels();// التحديث التلقائى لليبل
+        }
 
 
 
 
 
 
-        #endregion 
+
+
+
+        #endregion
 
 
 
@@ -476,22 +494,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
 
-        #region أحداث ووظائف إضافة صنف
-
-        // 🔹  إدخال صنف جديد إلى تفاصيل الفاتورة وحفظه في قاعدة البيانات.
-        public string InvoiceDetails_Insert()
-        {
-            GetVar(); // تحميل المتغيرات الأساسية من الواجهة
-
-            string message = DBServiecs.InvoiceDetails_Insert(
-                (int)currentInvoiceType, Inv_ID, PieceID, PriceMove, Amount,
-                TotalRow, GemDisVal, ComitionVal, NetRow, 0
-            );
-
-            DGVStyl(); // إعادة تهيئة تصميم الجدول
-            return message;
-        }
-
+        #region  *********  txtAmount_KeyDown احداث ******************
 
 
         // 🔹 حدث إدخال الكمية (Enter في txtAmount)
@@ -534,15 +537,19 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     InsertSaleRow(amount, pieceLength);
                     break;
 
+                case InvoiceType.SaleReturn:
+                    InsertReSaleRow(amount);
+                    break;
+
                 case InvoiceType.Purchase:
                     InsertPurchaseRow(amount);
                     break;
 
-                case InvoiceType.Inventory:
-                    InsertInventoryRow(amount);
+                case InvoiceType.PurchaseReturn :
+                    InsertRePurchaseRow(amount);
                     break;
 
-                case InvoiceType.SaleReturn :
+                case InvoiceType.Inventory:
                     InsertInventoryRow(amount);
                     break;
 
@@ -557,6 +564,197 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             GetInvoices();
             NavigateToInvoice(currentIndexBeforeInsert);
             CalculateInvoiceFooter();
+        }
+
+
+        // إدراج منتج في فاتورة بيع.
+        private void InsertSaleRow(float amount, float pieceLength)
+        {
+            if (unit_ID == 1) // منتج يقبل القص
+            {
+                float minLength = float.Parse(lblMinLinth.Text);
+                float remaining = pieceLength - amount;
+
+                if (remaining >= minLength || remaining == 0)
+                {
+                    InsertRow(true);
+                    AfterInsertActions();
+                }
+                else
+                {
+                    DialogResult result = CustomMessageBox.ShowQuestion(
+                        $"لا يجوز أن تكون القطعة المتبقية أقل من الحد الأدنى: {minLength}\nهل تريد المتابعة بالرغم من ذلك؟",
+                        "تنبيه"
+                    );
+
+                    if (result == DialogResult.OK)
+                    {
+                        InsertRow(true);
+                        AfterInsertActions();
+                    }
+                    else
+                    {
+                        txtAmount.Visible = true;
+                        txtAmount.Focus();
+                        txtAmount.SelectAll();
+                    }
+                }
+            }
+            else // منتج لا يقبل القص
+            {
+                if (float.TryParse(lblProductStock.Text, out float stock))
+                {
+                    // تحقق: هل الكمية أكبر من المخزون؟
+                    if (amount > stock)
+                    {
+                        // إذا لا يسمح بالبيع بالسالب → منع العملية
+                        if (!allowNegativeStock)
+                        {
+                            CustomMessageBox.ShowWarning(
+                                "⚠️ الكمية المطلوبة أكبر من الرصيد ولا يسمح بالبيع على المكشوف.",
+                                "تنبيه"
+                            );
+                            txtAmount.Focus();
+                            txtAmount.SelectAll();
+                            return;
+                        }
+                        // إذا يسمح بالسالب → يكمل عادي (لا يفعل شيء هنا)
+                    }
+                }
+
+                // لو فيه حد أدنى (أحيانًا يستخدم للتحويل من وحدة لأخرى)
+                if (float.TryParse(lblMinLinth.Text, out float minLength2))
+                {
+                    txtAmount.Text = (amount * minLength2).ToString();
+                }
+
+                // إدراج الصنف
+                InsertRow(false);
+                AfterInsertActions();
+            }
+
+        }
+
+        // إدراج منتج في فاتورة مبيعات مرتدة.
+        private void InsertReSaleRow(float amount)
+        {
+            InsertRow(unit_ID == 1);
+            AfterInsertActions();
+        }
+
+        // إدراج منتج في فاتورة شراء.
+        private void InsertPurchaseRow(float amount)
+        {
+            if (amount <= 0)
+            {
+                CustomMessageBox.ShowWarning("الرجاء إدخال كمية صحيحة أكبر من الصفر.", "تنبيه");
+                txtAmount.Visible = true;
+                txtAmount.Focus();
+                txtAmount.SelectAll();
+                return;
+            }
+
+            InsertRow(unit_ID == 1);
+            AfterInsertActions();
+            DGVStyl();
+        }
+
+        // إدراج منتج في فاتورة شراء مرتد.
+        private void InsertRePurchaseRow(float amount)
+        {
+            if (amount <= 0)
+            {
+                CustomMessageBox.ShowWarning("الرجاء إدخال كمية صحيحة أكبر من الصفر.", "تنبيه");
+                txtAmount.Visible = true;
+                txtAmount.Focus();
+                txtAmount.SelectAll();
+                return;
+            }
+
+            InsertRow(unit_ID == 1);
+            AfterInsertActions();
+            DGVStyl();
+        }
+
+        // إدراج منتج في فاتورة جرد أو تسوية.
+        private void InsertInventoryRow(float amount)
+        {
+            InsertRow(unit_ID == 1);
+            AfterInsertActions();
+        }
+
+        // إدراج صف جديد في تفاصيل الفاتورة
+        private void InsertRow(bool isPiece)
+        {
+
+            if (unit_ID == 1) // قابل للقص
+            {
+                // تحديد قيمة UpPiece_ID حسب نوع الفاتورة
+                int upPieceID;
+
+                // لو نوع الفاتورة مبيعات أو مرتجع شراء
+                if (currentInvoiceType == InvoiceType.Sale || currentInvoiceType == InvoiceType.PurchaseReturn)
+                {
+                    // في حالة المبيعات أو المشتريات المرتدة → ناخد القيمة من الـ Label
+                    if (!int.TryParse(lblPieceID.Text, out upPieceID))
+                    {
+                        CustomMessageBox.ShowWarning("معرف القطعة غير صالح", "خطأ");
+                        return;
+                    }
+                }
+                else
+                {
+                    // باقي أنواع الفواتير → نثبتها بـ -1
+                    upPieceID = -1;
+                }
+
+                // إنشاء قطعة جديدة
+                int newPieceID = DBServiecs.Product_CreateNewPiece(ID_Prod, upPieceID);
+                lblPieceID.Text = newPieceID.ToString();
+
+            }
+            else // غير قابل للقص → جلب القطعة الافتراضية
+            {
+                DataTable piece = DBServiecs.Product_GetOrCreate_DefaultPiece(ID_Prod);
+                if (piece.Rows.Count > 0)
+                {
+                    lblPieceID.Text = piece.Rows[0]["Piece_ID"].ToString();
+                }
+                else
+                {
+                    MessageBox.Show("لم يتم العثور على قطعة للمنتج المحدد.",
+                        "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+
+            // التحقق من صلاحية معرف القطعة
+            if (isPiece)
+            {
+                if (!int.TryParse(lblPieceID.Text, out Piece_id))
+                {
+                    CustomMessageBox.ShowWarning("معرف القطعة غير صالح", "خطأ");
+                    return;
+                }
+            }
+            else
+            {
+                Piece_id = 0;
+            }
+
+            // إدراج تفاصيل الصف
+            InvoiceDetails_Insert();
+            Piece_id = 0;
+            GetInvoiceDetails();
+        }
+
+        // الإجراءات التي تتم بعد إدراج صف جديد
+        private void AfterInsertActions()
+        {
+            txtSeaarchProd.Focus();
+            txtSeaarchProd.SelectAll();
+            txtAmount.Text = "0";
+            lblGemDisVal.Text = "0";
         }
 
         // 🔹 منع كتابة أي شيء غير الأرقام + التحكم في الفاصلة العشرية
@@ -575,6 +773,21 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 AllowNumbersOnly((TextBox)sender, e);
             }
         }
+
+        // 🔹  إدخال صنف جديد إلى تفاصيل الفاتورة وحفظه في قاعدة البيانات.
+        public string InvoiceDetails_Insert()
+        {
+            GetVar(); // تحميل المتغيرات الأساسية من الواجهة
+
+            string message = DBServiecs.InvoiceDetails_Insert(
+                (int)currentInvoiceType, Inv_ID, PieceID, PriceMove, Amount,
+                TotalRow, GemDisVal, ComitionVal, NetRow, 0
+            );
+
+            DGVStyl(); // إعادة تهيئة تصميم الجدول
+            return message;
+        }
+
 
         #endregion
 
@@ -644,8 +857,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-        #region ===== حالات الفواتير =====
-
         // 🔹 متابعة حالة البيع
         private void HandleSale(string code)
         {
@@ -663,7 +874,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             {
                 if (!GetProd(code)) return;
                 LoadPieceData();
-                // ⬅️ هنا ممكن تضيف منطق خاص (إدراج قطعة جديدة مباشرة) إذا أردت
             }
         }
 
@@ -712,7 +922,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             LoadPieceData();
         }
 
-        #endregion
 
         #region ===== دوال مساعدة =====
 
@@ -721,92 +930,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             txtSeaarchProd.Clear();
             txtSeaarchProd.Focus();
         }
-
-        private void FocusOnAmount()
-        {
-            txtAmount.Visible = true;
-            txtAmount.Focus();
-            txtAmount.SelectAll();
-        }
-
-        #endregion
-
-        #endregion
-
-
-        //#region *********  txtSeaarchProd_KeyDown   ************
-
-        //// 🔹 حدث إدخال كود المنتج أو رقم فاتورة مرتجعة
-        //private void txtSeaarchProd_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //    // 🟦 ENTER → تنفيذ
-        //    if (e.KeyCode == Keys.Enter && !string.IsNullOrWhiteSpace(txtSeaarchProd.Text))
-        //    {
-
-        //        if (IsInvoiceSaved()) return;
-
-        //        string code = txtSeaarchProd.Text.Trim();
-
-        //        switch (currentInvoiceType)
-        //        {
-        //            case InvoiceType.Sale:
-        //                PrepareSaleProduct(code);
-        //                break;
-
-        //            case InvoiceType.SaleReturn:
-        //            case InvoiceType.PurchaseReturn:
-        //                if (rdoFree.Checked)
-        //                {
-        //                    PrepareSaleProduct(code); // كود صنف
-        //                }
-        //                else if (rdoInvoice.Checked)
-        //                {
-        //                    OpenReturnedInvoiceForm(code); // رقم فاتورة
-        //                }
-        //                break;
-
-        //            case InvoiceType.Purchase:
-        //                PreparePurchaseProduct(code);
-        //                break;
-
-        //            default:
-        //                CustomMessageBox.ShowWarning(
-        //                    "نوع الفاتورة غير مدعوم في هذه العملية", "خطأ"
-        //                );
-        //                break;
-        //        }
-
-        //        e.Handled = true;
-        //        e.SuppressKeyPress = true;
-        //        return;
-        //    }
-
-
-
-
-        //    // 🟦 CTRL + F → فتح شاشة البحث
-        //    if (e.Control && e.KeyCode == Keys.F)
-        //    {
-        //        var code = SearchProductOrInvoice();
-        //        if (!string.IsNullOrEmpty(code))
-        //            txtSeaarchProd.Text = code;
-        //        return;
-        //    }
-
-
-        //    // 🟦 التنقل باستخدام ENTER أو SHIFT+ENTER
-        //    if (e.KeyCode == Keys.Enter && !e.Shift)
-        //    {
-        //        // ENTER → التالي
-        //        // cbxSellerID.Focus();
-        //    }
-        //    else if ((e.KeyCode == Keys.Enter && e.Shift) || e.KeyCode == Keys.Up)
-        //    {
-        //        // SHIFT+ENTER أو ↑ → السابق
-        //        cbxSellerID.Focus();
-        //        e.Handled = true;
-        //    }
-        //}
 
         // 🔹 دالة البحث حسب نوع الفاتورة واختيار المستخدم
         private string SearchProductOrInvoice()
@@ -898,6 +1021,12 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
             return true;
         }
+
+        #endregion
+
+        #endregion
+
+
 
         //*****************************
         #region ======== تحميل بيانات القطعة حسب نوع الفاتورة ========
@@ -996,9 +1125,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-        #endregion
-
- 
         // فتح فاتورة مرتجعة حسب رقمها.
         private void OpenReturnedInvoiceForm(string serial)
         {
@@ -1050,96 +1176,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             DGVStyl();
         }
 
-        //// تجهيز منتج لفاتورة شراء.
-        //private void PreparePurchaseProduct(string code)
-        //{
-        //    if (!GetProd(code)) return;
 
-        //    if (PriceMove <= 0)
-        //    {
-        //        CustomMessageBox.ShowWarning("يرجى تحديد سعر شراء صالح.", "تنبيه");
-        //        return;
-        //    }
-        //    txtAmount.Visible = true;
-        //    txtAmount.Focus();
-        //    txtAmount.SelectAll();
-        //}
-
-        // إدراج منتج في فاتورة شراء.
-        private void InsertPurchaseRow(float amount)
-        {
-            if (amount <= 0)
-            {
-                CustomMessageBox.ShowWarning("الرجاء إدخال كمية صحيحة أكبر من الصفر.", "تنبيه");
-                txtAmount.Visible = true;
-                txtAmount.Focus();
-                txtAmount.SelectAll();
-                return;
-            }
-
-            InsertRow(unit_ID == 1);
-            AfterInsertActions();
-            DGVStyl();
-        }
-
-        // إدراج منتج في فاتورة بيع.
-        private void InsertSaleRow(float amount, float pieceLength)
-        {
-            if (unit_ID == 1) // منتج يقبل القص
-            {
-                float minLength = float.Parse(lblMinLinth.Text);
-                float remaining = pieceLength - amount;
-
-                if (remaining >= minLength || remaining == 0)
-                {
-                    InsertRow(true);
-                    AfterInsertActions();
-                }
-                else
-                {
-                    DialogResult result = CustomMessageBox.ShowQuestion(
-                        $"لا يجوز أن تكون القطعة المتبقية أقل من الحد الأدنى: {minLength}\nهل تريد المتابعة بالرغم من ذلك؟",
-                        "تنبيه"
-                    );
-
-                    if (result == DialogResult.OK)
-                    {
-                        InsertRow(true);
-                        AfterInsertActions();
-                    }
-                    else
-                    {
-                        txtAmount.Visible = true;
-                        txtAmount.Focus();
-                        txtAmount.SelectAll();
-                    }
-                }
-            }
-            else // منتج لا يقبل القص
-            {
-                if (float.TryParse(lblProductStock.Text, out float stock))
-                {
-                    if (amount > stock && !allowNegativeStock)
-                    {
-                        CustomMessageBox.ShowWarning(
-                            "الكمية المطلوبة أكبر من الرصيد ولا يسمح بالبيع على المكشوف.",
-                            "تنبيه"
-                        );
-                        txtAmount.Focus();
-                        txtAmount.SelectAll();
-                        return;
-                    }
-                }
-
-                if (float.TryParse(lblMinLinth.Text, out float minLength2))
-                {
-                    txtAmount.Text = (amount * minLength2).ToString();
-                }
-
-                InsertRow(false);
-                AfterInsertActions();
-            }
-        }
 
         // إعداد منتج لعملية بيع.
         private void PrepareSaleProduct(string code)
@@ -1148,12 +1185,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             LoadPieceData();
         }
 
-        // إدراج منتج في فاتورة جرد أو تسوية.
-        private void InsertInventoryRow(float amount)
-        {
-            InsertRow(unit_ID == 1);
-            AfterInsertActions();
-        }
         
         // تحميل الأصناف المرتجعة إلى الجدول.
         private void LoadReturnedItems(DataTable returnedItems)
@@ -1171,7 +1202,10 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-        //#endregion
+        
+        #endregion
+
+
 
         #region  تنسيق واحداث  DataGridView
 
@@ -1442,18 +1476,14 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
 
-        /// <summary>
-        /// الانتقال إلى أول فاتورة
-        /// </summary>
+        // الانتقال إلى أول فاتورة
         private void btnFrist_Click(object sender, EventArgs e)
         {
             if (EnsureInvoicesLoaded())
                 NavigateToInvoice(0);
         }
 
-        /// <summary>
-        /// الانتقال إلى الفاتورة التالية
-        /// </summary>
+        // الانتقال إلى الفاتورة التالية
         private void btnNext_Click(object sender, EventArgs e)
         {
             if (EnsureInvoicesLoaded() && currentInvoiceIndex < tblInv.Rows.Count - 1)
@@ -1462,9 +1492,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 MessageBox.Show("تم الوصول إلى آخر فاتورة.");
         }
 
-        /// <summary>
-        /// الانتقال إلى الفاتورة السابقة
-        /// </summary>
+        // الانتقال إلى الفاتورة السابقة
         private void btnPrevious_Click(object sender, EventArgs e)
         {
             if (EnsureInvoicesLoaded() && currentInvoiceIndex > 0)
@@ -1473,19 +1501,14 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 MessageBox.Show("تم الوصول إلى أول فاتورة.");
         }
 
-        /// <summary>
-        /// الانتقال إلى آخر فاتورة
-        /// </summary>
+        // الانتقال إلى آخر فاتورة
         private void btnLast_Click(object sender, EventArgs e)
         {
             if (EnsureInvoicesLoaded())
                 NavigateToInvoice(tblInv.Rows.Count - 1);
         }
 
-        /// <summary>
-        /// وظيفة التنقل بين الفواتير
-        /// </summary>
-        /// <param name="targetIndex">الفهرس المستهدف للفواتير</param>
+        // وظيفة التنقل بين الفواتير
         private void NavigateToInvoice(int targetIndex)
         {
             if (!EnsureInvoicesLoaded()) return;
@@ -1505,9 +1528,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             lblInfoInvoice.Text = $"فاتورة {targetIndex + 1} من {tblInv.Rows.Count}";
         }
 
-        /// <summary>
-        /// تفعيل/تعطيل أزرار التنقل حسب موقع الفاتورة
-        /// </summary>
+        // تفعيل/تعطيل أزرار التنقل حسب موقع الفاتورة
         private void ToggleNavigationButtons()
         {
             btnFrist.Enabled = currentInvoiceIndex > 0;
@@ -1516,10 +1537,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             btnLast.Enabled = currentInvoiceIndex < tblInv.Rows.Count - 1;
         }
 
-        /// <summary>
-        /// التأكد من تحميل الفواتير
-        /// </summary>
-        /// <returns>True إذا كانت الفواتير متاحة، False خلاف ذلك</returns>
+        // التأكد من تحميل الفواتير
         private bool EnsureInvoicesLoaded()
         {
             if (tblInv == null || tblInv.Rows.Count == 0)
@@ -1534,10 +1552,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             return true;
         }
 
-        /// <summary>
-        /// عرض بيانات الفاتورة الحالية في الواجهة
-        /// </summary>
-        /// <param name="CIndex">فهرس الفاتورة داخل الجدول</param>
+        // عرض بيانات الفاتورة الحالية في الواجهة
         public void DisplayCurentRow(int CIndex)
         {
             if (tblInv == null || tblInv.Rows.Count <= CIndex)
@@ -1591,9 +1606,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             CalculateInvoiceFooter();
         }
 
-        /// <summary>
-        /// فتح فاتورة جديدة
-        /// </summary>
+        // فتح فاتورة جديدة
         private void btnNew_Click(object sender, EventArgs e)
         {
             //     SetDefaultAccount();
@@ -1613,9 +1626,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             ToggleControlsBasedOnSaveStatus();
         }
 
-        /// <summary>
-        /// تجهيز واجهة فاتورة جديدة بقيم افتراضية
-        /// </summary>
+        // تجهيز واجهة فاتورة جديدة بقيم افتراضية
         public void DisplayNewRow(int invType, int userId)
         {
             dtpInv_Date.Value = DateTime.Now;
@@ -1672,98 +1683,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #endregion
 
 
-        #region عمليات إدخال الصفوف
-
-        // إدراج صف جديد في تفاصيل الفاتورة
-        private void InsertRow(bool isPiece)
-        {
-            // التحقق من الكمية
-            if (!TryGetValidAmount(out float amount))
-            {
-                CustomMessageBox.ShowWarning("يرجى إدخال كمية صحيحة للمنتج", "خطأ");
-                txtAmount.Visible = true;
-                txtAmount.Focus();
-                txtAmount.SelectAll();
-                return;
-            }
-
-            // التحقق من السعر
-            if (!TryGetValidPrice(out float priceMove))
-            {
-                CustomMessageBox.ShowWarning("انتبه لعدم وجود سعر للصنف", "تحذير");
-            }
-
-            if (unit_ID == 1) // قابل للقص
-            {
-                // تحديد قيمة UpPiece_ID حسب نوع الفاتورة
-                int upPieceID;
-
-                // لو نوع الفاتورة مبيعات أو مرتجع شراء
-                if (currentInvoiceType == InvoiceType.Sale || currentInvoiceType == InvoiceType.PurchaseReturn)
-                {
-                    // في حالة المبيعات أو المشتريات المرتدة → ناخد القيمة من الـ Label
-                    if (!int.TryParse(lblPieceID.Text, out upPieceID))
-                    {
-                        CustomMessageBox.ShowWarning("معرف القطعة غير صالح", "خطأ");
-                        return;
-                    }
-                }
-                else
-                {
-                    // باقي أنواع الفواتير → نثبتها بـ -1
-                    upPieceID = -1;
-                }
-
-                // إنشاء قطعة جديدة
-                int newPieceID = DBServiecs.Product_CreateNewPiece(ID_Prod, upPieceID);
-                lblPieceID.Text = newPieceID.ToString();
-
-            }
-            else // غير قابل للقص → جلب القطعة الافتراضية
-            {
-                DataTable piece = DBServiecs.Product_GetOrCreate_DefaultPiece(ID_Prod);
-                if (piece.Rows.Count > 0)
-                {
-                    lblPieceID.Text = piece.Rows[0]["Piece_ID"].ToString();
-                }
-                else
-                {
-                    MessageBox.Show("لم يتم العثور على قطعة للمنتج المحدد.",
-                        "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-
-
-            // التحقق من صلاحية معرف القطعة
-            if (isPiece)
-            {
-                if (!int.TryParse(lblPieceID.Text, out Piece_id))
-                {
-                    CustomMessageBox.ShowWarning("معرف القطعة غير صالح", "خطأ");
-                    return;
-                }
-            }
-            else
-            {
-                Piece_id = 0;
-            }
-
-            // إدراج تفاصيل الصف
-            InvoiceDetails_Insert();
-            Piece_id = 0;
-            GetInvoiceDetails();
-        }
-
-        // الإجراءات التي تتم بعد إدراج صف جديد
-        private void AfterInsertActions()
-        {
-            txtSeaarchProd.Focus();
-            txtSeaarchProd.SelectAll();
-            txtAmount.Text = "0";
-            lblGemDisVal.Text = "0";
-        }
-
-        #endregion
 
 
         #region التحكم في تفعيل وتعطيل عناصر النموذج
@@ -2775,24 +2694,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             float.TryParse(value?.ToString(), out float result) ? result : defaultVal;
 
         #endregion
-
-        private void cbxPiece_ID_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.SuppressKeyPress = true;   // ✅ منع الانتقال الافتراضي للسطر التالي
-                txtAmount.Visible=true ;
-                txtAmount.Focus();
-                txtAmount.SelectAll();       // ✅ تحديد كل النص داخل التكست
-            }
-        }
-
-        // عند تغيير القطعة 
-        private void cbxPiece_ID_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UpdatePieceLabels();// التحديث التلقائى لليبل
-        }
-
 
     }
 }
