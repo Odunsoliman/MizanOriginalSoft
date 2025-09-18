@@ -567,7 +567,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
 
 
-        // إدراج منتج في فاتورة بيع.
+        // إدراج منتج في فاتورة بيع.          ***
         private void InsertSaleRow(float amount, float pieceLength)
         {
             if (unit_ID == 1) // منتج يقبل القص
@@ -578,7 +578,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 if (remaining >= minLength || remaining == 0)
                 {
                     InsertRow(true);
-                    AfterInsertActions();
                 }
                 else
                 {
@@ -590,7 +589,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     if (result == DialogResult.OK)
                     {
                         InsertRow(true);
-                        AfterInsertActions();
                     }
                     else
                     {
@@ -630,16 +628,13 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
                 // إدراج الصنف
                 InsertRow(false);
-                AfterInsertActions();
             }
-
         }
 
         // إدراج منتج في فاتورة مبيعات مرتدة.
         private void InsertReSaleRow(float amount)
         {
             InsertRow(unit_ID == 1);
-            AfterInsertActions();
         }
 
         // إدراج منتج في فاتورة شراء.
@@ -655,8 +650,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
 
             InsertRow(unit_ID == 1);
-            AfterInsertActions();
-            DGVStyl();
         }
 
         // إدراج منتج في فاتورة شراء مرتد.
@@ -672,15 +665,12 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
 
             InsertRow(unit_ID == 1);
-            AfterInsertActions();
-            DGVStyl();
         }
 
         // إدراج منتج في فاتورة جرد أو تسوية.
         private void InsertInventoryRow(float amount)
         {
             InsertRow(unit_ID == 1);
-            AfterInsertActions();
         }
 
         // إدراج صف جديد في تفاصيل الفاتورة
@@ -746,6 +736,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             InvoiceDetails_Insert();
             Piece_id = 0;
             GetInvoiceDetails();
+            AfterInsertActions();
+            DGVStyl();
         }
 
         // الإجراءات التي تتم بعد إدراج صف جديد
