@@ -632,11 +632,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-        // إدراج منتج في فاتورة مبيعات مرتدة.
-        private void InsertReSaleRow(float amount)
-        {
-            InsertRow(unit_ID == 1);
-        }
+
 
         // إدراج منتج في فاتورة شراء.
         private void InsertPurchaseRow(float amount)
@@ -1029,6 +1025,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // الحالات اللي يظهر فيها الكومبو ويُفلتر بالأطوال
             bool showCombo =
                 (currentInvoiceType == InvoiceType.Sale && isCanCut) ||
+                (currentInvoiceType == InvoiceType.PurchaseReturn && isCanCut) || // ✅ أضفنا مرتجع الشراء هنا
                 (currentInvoiceType == InvoiceType.Inventory) ||
                 (currentInvoiceType == InvoiceType.AddStock) ||
                 (currentInvoiceType == InvoiceType.DeductStock);
@@ -1053,8 +1050,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 else
                 {
                     // 📌 جلب القطع الموجودة
-                    tblProdPieces = DBServiecs.Product_GetOrCreatePieces(ID_Prod);// هنا المشكلةID_Prod=10000 ولكن tblProdPieces جلب معرف مختلف =10001وهو ليس له قطع 
-                    // فاين يكون الخلل
+                    tblProdPieces = DBServiecs.Product_GetOrCreatePieces(ID_Prod);
 
                     // فلترة الأطوال الأكبر من الصفر
                     DataRow[] filtered = tblProdPieces.Select("Piece_Length <> 0");
@@ -1075,8 +1071,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
                             UpdatePieceLabels(); // ✅ تحديث الليبلات مباشرة
                         }
-
-
                         else
                         {
                             txtAmount.Visible = true;
