@@ -538,7 +538,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     break;
 
                 case InvoiceType.SaleReturn:
-                    InsertReSaleRow(amount);
+ //                   InsertReSaleRow(amount);
+                    InsertRow(unit_ID == 1);
                     break;
 
                 case InvoiceType.Purchase:
