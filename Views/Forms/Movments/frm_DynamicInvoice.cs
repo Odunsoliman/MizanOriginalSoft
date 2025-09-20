@@ -102,23 +102,23 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // معرف الوحدة الحالي
         private int unit_ID;
 
-        // محاولة قراءة كمية صحيحة > 0
-        private bool TryGetValidAmount(out float amount)
-        {
-            return float.TryParse(txtAmount.Text, out amount) && amount > 0;
-        }
+        //// محاولة قراءة كمية صحيحة > 0
+        //private bool TryGetValidAmount(out float amount)
+        //{
+        //    return float.TryParse(txtAmount.Text, out amount) && amount > 0;
+        //}
 
-        // محاولة قراءة سعر صحيح > 0
-        private bool TryGetValidPrice(out float price)
-        {
-            price = PriceMove; // وضع القيمة في out
-            return price > 0;  // إرجاع true إذا كان السعر > 0
-        }
+        //// محاولة قراءة سعر صحيح > 0
+        //private bool TryGetValidPrice(out float price)
+        //{
+        //    price = PriceMove; // وضع القيمة في out
+        //    return price > 0;  // إرجاع true إذا كان السعر > 0
+        //}
 
 
         // 🔹 التحقق من حفظ الفاتورة   ***
         private bool IsInvoiceSaved()
-        {
+        { 
             if (!string.IsNullOrWhiteSpace(lblSave.Text))
             {
                 MessageBox.Show("الفاتورة محفوظة نهائيًا، لا يمكن التعديل.");
@@ -179,59 +179,14 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
             else
             {
+                 
                 lblInfoInvoice.Text = "لا توجد فواتير";
                 PrepareEmptyGridStructure();
                 DGV.DataSource = null;
             }
         }
 
-        public void InitializeInvoice_(InvoiceType type)
-        {
-            // 🔹 تعيين النوع الحالي
-            currentInvoiceType = type;
-
-            // 🔹 تحديد العنوان ورقم النوع
-            (string arabicTitle, string typeId) = type switch
-            {
-                InvoiceType.Sale => ("فاتورة بيع رقم: ", "1"),
-                InvoiceType.SaleReturn => ("فاتورة بيع مرتد رقم: ", "2"),
-                InvoiceType.Purchase => ("فاتورة شراء رقم: ", "3"),
-                InvoiceType.PurchaseReturn => ("فاتورة شراء مرتد رقم: ", "4"),
-                InvoiceType.Inventory => ("إذن تسوية مخزن رقم: ", "5"),
-                InvoiceType.DeductStock => ("إذن خصم مخزن رقم: ", "6"),
-                InvoiceType.AddStock => ("إذن إضافة مخزن رقم: ", "7"),
-                _ => ("فاتورة", "0")
-            };
-
-            // 🔹 تحديث العناوين في الفورم
-            this.Text = arabicTitle;
-            lblTypeInv.Text = arabicTitle;
-            lblTypeInvID.Text = typeId;
-
-            // 🔹 تجهيز الحقول الأساسية
-            FillDefaultAccount();
-            ConfigureAutoCompleteForAccount();
-            FillSellerComboBox();
-            SetupFormByInvoiceType();
-
-            // 🔥 تحميل جميع الفواتير من قاعدة البيانات
-            GetInvoices();
-
-            // 🔥 تحميل تفاصيل أول فاتورة إذا وجدت
-            if (tblInv != null && tblInv.Rows.Count > 0)
-            {
-                currentInvoiceIndex = 0;
-                DisplayCurentRow(currentInvoiceIndex);  // هذا سيستدعي GetInvoiceDetails()
-            }
-            else
-            {
-                lblInfoInvoice.Text = "لا توجد فواتير";
-                PrepareEmptyGridStructure();
-                DGV.DataSource = null;
-            }
-        }
-
-        // جلب تفاصيل الفاتورة (أصنافها + تهيئة الجدول)
+         // جلب تفاصيل الفاتورة (أصنافها + تهيئة الجدول)
         public void GetInvoiceDetails()
         {
             if (string.IsNullOrWhiteSpace(lblInv_ID.Text) || !int.TryParse(lblInv_ID.Text, out Inv_ID))
@@ -323,6 +278,21 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                         break;
 
                     case 4:
+                        currentInvoiceType = InvoiceType.PurchaseReturn;
+                        UpdateLabelsForReturn(); // 🔹 يدعم الشراء المرتد الآن
+                        break;
+
+                    case 5:
+                        currentInvoiceType = InvoiceType.PurchaseReturn;
+                        UpdateLabelsForReturn(); // 🔹 يدعم الشراء المرتد الآن
+                        break;
+
+                    case 6:
+                        currentInvoiceType = InvoiceType.PurchaseReturn;
+                        UpdateLabelsForReturn(); // 🔹 يدعم الشراء المرتد الآن
+                        break;
+
+                    case 7:
                         currentInvoiceType = InvoiceType.PurchaseReturn;
                         UpdateLabelsForReturn(); // 🔹 يدعم الشراء المرتد الآن
                         break;
