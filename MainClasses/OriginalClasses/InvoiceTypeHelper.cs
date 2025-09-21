@@ -19,9 +19,8 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             {
                 return type switch
                 {
-                    InvoiceType.Sale or InvoiceType.SaleReturn => "SalesMen",
-                    InvoiceType.Purchase or InvoiceType.PurchaseReturn => "PurchaseMen",
-                    _ => string.Empty
+                    InvoiceType.Sale or InvoiceType.SaleReturn => "SalesMen", // بائعين
+                    _ => "PurchaseMen"  // أي نوع آخر يرجع موردين
                 };
             }
 
@@ -29,9 +28,13 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             {
                 InvoiceType.Sale or InvoiceType.SaleReturn => "Sale",
                 InvoiceType.Purchase or InvoiceType.PurchaseReturn => "Purchase",
-                InvoiceType.Inventory or InvoiceType.DeductStock or InvoiceType.AddStock => "Inventory",
+                InvoiceType.Inventory => "Inventory",
+                InvoiceType.DeductStock => "Deduct",
+                InvoiceType.AddStock => "Add",
                 _ => string.Empty
             };
         }
+
+
     }
 }
