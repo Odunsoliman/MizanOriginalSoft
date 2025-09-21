@@ -29,8 +29,8 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
                 InvoiceType.Sale or InvoiceType.SaleReturn => "Sale",
                 InvoiceType.Purchase or InvoiceType.PurchaseReturn => "Purchase",
                 InvoiceType.Inventory => "Inventory",
-                InvoiceType.DeductStock => "Deduct",
-                InvoiceType.AddStock => "Add",
+                InvoiceType.DeductStock => "Inventory",
+                InvoiceType.AddStock => "Inventory",
                 _ => string.Empty
             };
         }

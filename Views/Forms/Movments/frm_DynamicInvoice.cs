@@ -1865,9 +1865,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             {
                 InvoiceType.Sale or InvoiceType.SaleReturn => 55,   // عميل نقدي
                 InvoiceType.Purchase or InvoiceType.PurchaseReturn => 56, // مورد نقدي
-                InvoiceType.Inventory => 27,     // حساب جرد المخزون
-                InvoiceType.DeductStock => 28,   // حساب خصم من المخزون
-                InvoiceType.AddStock => 29,      // حساب إضافة إلى المخزون
+                InvoiceType.Inventory => 72,     // حساب جرد المخزون
+                InvoiceType.DeductStock => 73,   // حساب خصم من المخزون
+                InvoiceType.AddStock => 74,      // حساب إضافة إلى المخزون
                 _ => -1
             };
 
