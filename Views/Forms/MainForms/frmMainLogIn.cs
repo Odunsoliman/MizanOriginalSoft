@@ -1,10 +1,10 @@
 ﻿using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
+using MizanOriginalSoft.MainClasses.OriginalClasses.InvoicClasses;
 using MizanOriginalSoft.Views.Forms.Accounts;
 using MizanOriginalSoft.Views.Forms.Movments;
 using MizanOriginalSoft.Views.Forms.Products;
 using MizanOriginalSoft.Views.Reports;
-using MizanOriginalSoft.MainClasses.Enums; // هنا يوجد enum InvoiceType
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

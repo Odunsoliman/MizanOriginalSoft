@@ -1175,8 +1175,8 @@
             tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 3.641476F));
             tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.767725F));
             tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 24.1184254F));
-            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 0.561797738F));
-            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21.0674152F));
+            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 3.37078643F));
+            tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 18.2584267F));
             tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 6.02960634F));
             tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 24.1184254F));
             tlpHader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 3.61776376F));
@@ -1224,7 +1224,7 @@
             lblInfoInvoice.Margin = new Padding(4, 0, 4, 0);
             lblInfoInvoice.Name = "lblInfoInvoice";
             lblInfoInvoice.RightToLeft = RightToLeft.No;
-            lblInfoInvoice.Size = new Size(292, 43);
+            lblInfoInvoice.Size = new Size(252, 43);
             lblInfoInvoice.TabIndex = 31;
             lblInfoInvoice.TextAlign = ContentAlignment.MiddleRight;
             // 
@@ -1247,14 +1247,13 @@
             lblInv_ID.Dock = DockStyle.Fill;
             lblInv_ID.Font = new Font("Times New Roman", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblInv_ID.ForeColor = Color.IndianRed;
-            lblInv_ID.Location = new Point(788, 0);
+            lblInv_ID.Location = new Point(748, 0);
             lblInv_ID.Margin = new Padding(4, 0, 4, 0);
             lblInv_ID.Name = "lblInv_ID";
-            lblInv_ID.Size = new Size(1, 43);
+            lblInv_ID.Size = new Size(40, 43);
             lblInv_ID.TabIndex = 27;
             lblInv_ID.Text = "0";
             lblInv_ID.TextAlign = ContentAlignment.MiddleRight;
-            lblInv_ID.Visible = false;
             // 
             // label10
             // 

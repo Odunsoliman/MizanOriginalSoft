@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
 
-using MizanOriginalSoft.MainClasses.Enums; // هنا يوجد enum InvoiceType
+using MizanOriginalSoft.MainClasses.OriginalClasses.InvoicClasses; // هنا يوجد enum InvoiceType
 
 
 

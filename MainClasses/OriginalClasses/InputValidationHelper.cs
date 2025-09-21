@@ -31,7 +31,6 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             textBox.TextChanged -= TextBox_TextChanged;
             textBox.TextChanged += TextBox_TextChanged;
         }
-
         // دالة مستقلة للتعامل مع TextChanged
         private static void TextBox_TextChanged(object? sender, EventArgs e)
         {

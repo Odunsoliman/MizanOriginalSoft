@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace MizanOriginalSoft.MainClasses.Enums
+namespace MizanOriginalSoft.MainClasses.OriginalClasses.InvoicClasses
 {
-    /// <summary>
-    /// أنواع الفواتير المستخدمة في النظام
-    /// </summary>
     public enum InvoiceType
     {
         Sale = 1,            // فاتورة بيع

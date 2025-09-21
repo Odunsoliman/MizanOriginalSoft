@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
 
-using MizanOriginalSoft.MainClasses.Enums;
+
 using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.Views.Forms.Accounts;
 using MizanOriginalSoft.MainClasses.SearchClasses;
-using MizanOriginalSoft.Views.Forms.MainForms; // هنا يوجد enum InvoiceType
+using MizanOriginalSoft.Views.Forms.MainForms;
+using MizanOriginalSoft.MainClasses.OriginalClasses.InvoicClasses; // هنا يوجد enum InvoiceType
 
 namespace MizanOriginalSoft.Views.Forms.Movments
 {
@@ -39,27 +40,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #endregion
         #region 🔹 المتغيرات العامة
-        // دالة عامة للتحكم في الإدخال
-        private void AllowNumbersOnly(TextBox textBox, KeyPressEventArgs e)
-        {
-            // السماح بمفاتيح التحكم (Backspace, Delete...)
-            if (char.IsControl(e.KeyChar))
-                return;
-
-            // السماح بالأرقام
-            if (char.IsDigit(e.KeyChar))
-                return;
-
-            // السماح بفاصلة عشرية واحدة (.) أو (,)
-            if ((e.KeyChar == '.' || e.KeyChar == ',') && !textBox.Text.Contains(".") && !textBox.Text.Contains(","))
-            {
-                e.KeyChar = '.'; // توحيد الفاصلة للنقطة
-                return;
-            }
-
-            // منع أي شيء آخر
-            e.Handled = true;
-        }
 
         // 📝 DataTable يحتوي كل الفواتير المحملة من قاعدة البيانات
         private DataTable tblInv = new DataTable();
@@ -118,7 +98,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         // 🔹 التحقق من حفظ الفاتورة   ***
         private bool IsInvoiceSaved()
-        { 
+        {
             if (!string.IsNullOrWhiteSpace(lblSave.Text))
             {
                 MessageBox.Show("الفاتورة محفوظة نهائيًا، لا يمكن التعديل.");
@@ -129,7 +109,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #endregion
 
 
-        #region Form Initialization
         private KeyboardLanguageManager langManager;
 
         public frm_DynamicInvoice()
@@ -138,7 +117,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             langManager = new KeyboardLanguageManager(this);
         }
 
-        #region تحميل وتجهيز بيانات الفاتورة
         public void InitializeInvoice(InvoiceType type)
         {
             // 🔹 تعيين النوع الحالي
@@ -179,14 +157,14 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
             else
             {
-                 
+
                 lblInfoInvoice.Text = "لا توجد فواتير";
                 PrepareEmptyGridStructure();
                 DGV.DataSource = null;
             }
         }
 
-         // جلب تفاصيل الفاتورة (أصنافها + تهيئة الجدول)
+        // جلب تفاصيل الفاتورة (أصنافها + تهيئة الجدول)
         public void GetInvoiceDetails()
         {
             if (string.IsNullOrWhiteSpace(lblInv_ID.Text) || !int.TryParse(lblInv_ID.Text, out Inv_ID))
@@ -241,13 +219,12 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             newRow["RemainingOnAcc"] = 0;
             newRow["NoteInvoice"] = "";
             newRow["Saved"] = "";
-             
+
             tblInv.Rows.Add(newRow);
             currentInvoiceIndex = tblInv.Rows.Count - 1;
             lblInfoInvoice.Text = "فاتورة جديدة";
             DisplayCurentRow(currentInvoiceIndex);
         }
-        #endregion
         private void frm_DynamicInvoice_Load(object sender, EventArgs e)
         {
             DBServiecs.A_UpdateAllDataBase();   // تحديث أرصدة الأصناف والحسابات
@@ -308,12 +285,17 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             CalculateInvoiceFooter();
             DGVStyl();          // تنسيق الداتا جريد
             RegisterEvents();   // ربط أحداث إضافية
+                                // هنا هتحدد أي TextBox عايزه يقبل أرقام + فاصلة عشرية
+            AttachDecimalValidation(txtTaxVal, txtDiscount, txtValueAdded, txtPayment_Cash, txtPayment_Electronic);
+
+            // ولو عايز صناديق تانية للأرقام الصحيحة فقط
+            AttachIntegerValidation(txtSeaarchProd);
+             
         }
 
 
 
 
-        #endregion
 
         #region تنقل بين الحقول
         private void RegisterEvents()
@@ -508,7 +490,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     break;
 
                 case InvoiceType.SaleReturn:
- //                   InsertReSaleRow(amount);
+                    //                   InsertReSaleRow(amount);
                     InsertRow(unit_ID == 1);
                     break;
 
@@ -516,7 +498,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     InsertPurchaseRow(amount);
                     break;
 
-                case InvoiceType.PurchaseReturn :
+                case InvoiceType.PurchaseReturn:
                     InsertRePurchaseRow(amount);
                     break;
 
@@ -716,22 +698,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             lblGemDisVal.Text = "0";
         }
 
-        // 🔹 منع كتابة أي شيء غير الأرقام + التحكم في الفاصلة العشرية
-        private void txtAmount_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // لو الوحدة = 2 → يمنع كتابة فاصلة عشرية
-            if (unit_ID == 2)
-            {
-                // يسمح فقط بالأرقام ومفاتيح التحكم
-                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-                    e.Handled = true;
-            }
-            else
-            {
-                // في أي حالة أخرى → استخدم الدالة العامة (أرقام + فاصلة عشرية واحدة)
-                AllowNumbersOnly((TextBox)sender, e);
-            }
-        }
+
 
         // 🔹  إدخال صنف جديد إلى تفاصيل الفاتورة وحفظه في قاعدة البيانات.
         public string InvoiceDetails_Insert()
@@ -1142,7 +1109,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             LoadPieceData();
         }
 
-        
+
         // تحميل الأصناف المرتجعة إلى الجدول.
         private void LoadReturnedItems(DataTable returnedItems)
         {
@@ -1159,7 +1126,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-        
+
         #endregion
 
 
@@ -1511,7 +1478,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         // عرض بيانات الفاتورة الحالية في الواجهة
         public void DisplayCurentRow(int CIndex)
-        { 
+        {
             if (tblInv == null || tblInv.Rows.Count <= CIndex)
                 return;
 
@@ -1594,8 +1561,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             {
                 1 or 2 => "55", // بيع أو مرتجع بيع
                 3 or 4 => "56", // شراء أو مرتجع شراء
-                5=>"72",
-                6=>"73",
+                5 => "72",
+                6 => "73",
                 _ => "74"
             };
 
@@ -2658,6 +2625,78 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         #endregion
 
+        #region  تحميلات افتتاحية  لرأس الفاتورة 
+        //عنوان الفاتورة - رقم النوع 1:7 - المسلسل - معرف الفاتورة - معلومات عنها - التاريخ
+        //رقم واسم الحساب وبياناته المسجلة - االبائع او المشترى - سياسة البيع والمردودات
+        //ادوات البحث للحصول على الحساب
+
+
+        #endregion
+
+
+        // 🔹 منع كتابة أي شيء غير الأرقام + التحكم في الفاصلة العشرية       ***
+        private void txtAmount_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (unit_ID == 2)// فى حالة القطعة
+            {
+                // أرقام صحيحة فقط
+                InputValidationHelper.AllowOnlyNumbers(sender, e);
+            }
+            else//فى حالة غير القطعة
+            {
+                // أرقام + فاصلة عشرية
+                InputValidationHelper.AllowOnlyNumbersAndDecimal(sender, e);
+            }
+        }
+        #region دوال مجمعة بالادخالات 
+        // دالة تربط صناديق نصوص بالأرقام + فاصلة عشرية
+        private void AttachDecimalValidation(params TextBox[] textBoxes)
+        {
+            foreach (var txt in textBoxes)
+            {
+                txt.KeyPress += (s, e) => InputValidationHelper.AllowOnlyNumbersAndDecimal(s, e);
+            }
+        }
+
+        // دالة تربط صناديق نصوص بالأرقام الصحيحة فقط
+        private void AttachIntegerValidation(params TextBox[] textBoxes)
+        {
+            foreach (var txt in textBoxes)
+            {
+                txt.KeyPress += (s, e) => InputValidationHelper.AllowOnlyNumbers(s, e);
+            }
+        }
+
+        #endregion 
+        private void txtTaxVal_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // أرقام + فاصلة عشرية
+            InputValidationHelper.AllowOnlyNumbersAndDecimal(sender, e);
+        }
+
+        private void txtDiscount_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // أرقام + فاصلة عشرية
+            InputValidationHelper.AllowOnlyNumbersAndDecimal(sender, e);
+        }
+
+        private void txtValueAdded_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // أرقام + فاصلة عشرية
+            InputValidationHelper.AllowOnlyNumbersAndDecimal(sender, e);
+        }
+
+        private void txtPayment_Cash_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // أرقام + فاصلة عشرية
+            InputValidationHelper.AllowOnlyNumbersAndDecimal(sender, e);
+        }
+
+        private void txtPayment_Electronic_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // أرقام + فاصلة عشرية
+            InputValidationHelper.AllowOnlyNumbersAndDecimal(sender, e);
+        }
     }
 }
 
