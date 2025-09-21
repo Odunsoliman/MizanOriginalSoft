@@ -1725,6 +1725,14 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         //*******************************************
         #region Header   وظائف الجزء الاعلى من الفاتورة
 
+        // ✅ تحميل القيم من ملف الإعدادات
+        private void LoadSalesPolicies()
+        {
+            allowNegativeStock = AppSettings.GetBool("IsSaleByNegativeStock");
+            returnSaleMode = AppSettings.GetInt("ReturnSaleMode");
+            returnPurchaseMode = AppSettings.GetInt("ReturnPurchasesMode");
+        }
+
         // 🔹 تحديث النصوص لو اخترت "بيع"
         private void UpdateLabelsForSale()
         {
@@ -1781,15 +1789,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-        // ✅ تحميل القيم من ملف الإعدادات
-        private void LoadSalesPolicies()
-        {
-            allowNegativeStock = AppSettings.GetBool("IsSaleByNegativeStock");
-            returnSaleMode = AppSettings.GetInt("ReturnSaleMode");
-            returnPurchaseMode = AppSettings.GetInt("ReturnPurchasesMode");
-        }
-
-        // 🔹 تغيير النصوص لما أختار راديو
+        // 🔹 تغيير النصوص لما أختار راديو rdoFree
         private void rdoFree_CheckedChanged(object sender, EventArgs e)
         {
             if (!rdoFree.Checked) return;
@@ -1801,6 +1801,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             EmptyProdData();
         }
 
+        // 🔹 تغيير النصوص لما أختار راديو rdoInvoice
         private void rdoInvoice_CheckedChanged(object sender, EventArgs e)
         {
             if (!rdoInvoice.Checked) return;
@@ -1818,6 +1819,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
         #region Default Account
+        // 🔹 تعيين الحساب الافتراضى حسب الفاتورة
         private void FillDefaultAccount()
         {
             string invoiceTypeKey = InvoiceTypeHelper.ToAccountTypeString(currentInvoiceType);
@@ -2479,8 +2481,11 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             CalculateRemainingOnAccount();
         }
 
+        #endregion
 
-        // فتح قيد اليومية المرتبط بالفاتورة
+        //*******************************************
+        #region ********** الحفظ النهائى للفاتورة 🔹 العمليات العامة للحفظ
+        // استعراض قيد اليومية المرتبط بالفاتورة بعد الحفظ
         private void btnJournal_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(lblSave.Text))
@@ -2501,12 +2506,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 MessageBox.Show("يجب حفظ السند أولًا قبل عرض القيد المحاسبي", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
-
-        #endregion
-
-        //*******************************************
-        #region ********** الحفظ النهائى للفاتورة 🔹 العمليات العامة للحفظ
         /// <summary>حفظ الفاتورة نهائيًا.</summary>
         private void btnSave_Click(object sender, EventArgs e)
         {
@@ -2634,6 +2633,10 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #endregion
 
 
+
+
+
+       #region دوال مجمعة لضبط الادخالات 
         // 🔹 منع كتابة أي شيء غير الأرقام + التحكم في الفاصلة العشرية       ***
         private void txtAmount_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -2648,7 +2651,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 InputValidationHelper.AllowOnlyNumbersAndDecimal(sender, e);
             }
         }
-        #region دوال مجمعة بالادخالات 
+ 
         // دالة تربط صناديق نصوص بالأرقام + فاصلة عشرية
         private void AttachDecimalValidation(params TextBox[] textBoxes)
         {
@@ -2667,7 +2670,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-        #endregion 
         private void txtTaxVal_KeyPress(object sender, KeyPressEventArgs e)
         {
             // أرقام + فاصلة عشرية
@@ -2697,6 +2699,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // أرقام + فاصلة عشرية
             InputValidationHelper.AllowOnlyNumbersAndDecimal(sender, e);
         }
+        #endregion 
+
     }
 }
 
