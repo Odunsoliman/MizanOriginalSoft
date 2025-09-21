@@ -1863,9 +1863,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             {
                 InvoiceType.Sale or InvoiceType.SaleReturn => 55,   // عميل نقدي
                 InvoiceType.Purchase or InvoiceType.PurchaseReturn => 56, // مورد نقدي
-                InvoiceType.Inventory => 57,     // حساب جرد المخزون
-                InvoiceType.DeductStock => 58,   // حساب خصم من المخزون
-                InvoiceType.AddStock => 59,      // حساب إضافة إلى المخزون
+                InvoiceType.Inventory => 27,     // حساب جرد المخزون
+                InvoiceType.DeductStock => 28,   // حساب خصم من المخزون
+                InvoiceType.AddStock => 29,      // حساب إضافة إلى المخزون
                 _ => -1
             };
 
@@ -1942,10 +1942,10 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // 🔥 حدد الحساب الافتراضي حسب نوع الفاتورة
             int defaultAccID = currentInvoiceType switch
             {
-                InvoiceType.Sale or InvoiceType.SaleReturn => 57, // حساب ادارة البائعين
-                InvoiceType.Purchase or InvoiceType.PurchaseReturn => 61, // حساب  ادارة المشتريات
-                _ => -1 // لا يوجد حساب افتراضي
+                InvoiceType.Sale or InvoiceType.SaleReturn => 57,  // حساب إدارة البائعين
+                not (InvoiceType.Sale or InvoiceType.SaleReturn) => 61, // أي نوع آخر يروح لحساب إدارة المشتريات
             };
+
 
             // 🔍 البحث عن الصف الذي يحتوي على الحساب الافتراضي
             if (defaultAccID != -1)
