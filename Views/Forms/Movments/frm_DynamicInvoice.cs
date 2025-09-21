@@ -1511,7 +1511,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
         // عرض بيانات الفاتورة الحالية في الواجهة
         public void DisplayCurentRow(int CIndex)
-        {
+        { 
             if (tblInv == null || tblInv.Rows.Count <= CIndex)
                 return;
 
@@ -1861,10 +1861,14 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // 🔥 تحديد الحساب الافتراضي حسب نوع الفاتورة
             int defaultAccID = currentInvoiceType switch
             {
-                InvoiceType.Sale or InvoiceType.SaleReturn => 55, // عميل نقدي
+                InvoiceType.Sale or InvoiceType.SaleReturn => 55,   // عميل نقدي
                 InvoiceType.Purchase or InvoiceType.PurchaseReturn => 56, // مورد نقدي
+                InvoiceType.Inventory => 57,     // حساب جرد المخزون
+                InvoiceType.DeductStock => 58,   // حساب خصم من المخزون
+                InvoiceType.AddStock => 59,      // حساب إضافة إلى المخزون
                 _ => -1
             };
+
 
             if (defaultAccID != -1)
             {

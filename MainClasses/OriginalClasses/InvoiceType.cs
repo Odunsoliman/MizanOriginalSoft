@@ -11,8 +11,8 @@ namespace MizanOriginalSoft.MainClasses.Enums
         SaleReturn = 2,      // فاتورة بيع مرتد
         Purchase = 3,        // فاتورة شراء
         PurchaseReturn = 4,  // فاتورة شراء مرتد
-        Inventory = 5,       // إذن تسوية مخزن
-        DeductStock = 6,     // إذن خصم مخزن
-        AddStock = 7         // إذن إضافة مخزن
+        Inventory = 5,       // إذن جرد اصناف مخزن
+        DeductStock = 6,     // إذن خصم من ارصدة المخزون للاصناف
+        AddStock = 7         // إذن إضافة ارصدة مخزون للاصناف
     }
 }
