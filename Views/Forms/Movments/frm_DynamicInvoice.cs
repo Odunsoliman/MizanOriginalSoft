@@ -241,7 +241,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             newRow["RemainingOnAcc"] = 0;
             newRow["NoteInvoice"] = "";
             newRow["Saved"] = "";
-
+             
             tblInv.Rows.Add(newRow);
             currentInvoiceIndex = tblInv.Rows.Count - 1;
             lblInfoInvoice.Text = "فاتورة جديدة";
