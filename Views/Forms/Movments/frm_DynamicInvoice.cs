@@ -110,7 +110,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
         private KeyboardLanguageManager langManager;
-
+        /*هل الترتيب للاحداث والدوال هنا منطقى ام هو السبب فى ذلك*/
         public frm_DynamicInvoice()
         {
             InitializeComponent();
@@ -121,7 +121,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
             // 🔹 تعيين النوع الحالي
             currentInvoiceType = type;
-
+            ConfigureAutoCompleteForAccount();
             // 🔹 تحديد العنوان ورقم النوع
             (string arabicTitle, string typeId) = type switch
             {
@@ -142,7 +142,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
             // 🔹 تجهيز الحقول الأساسية
             FillDefaultAccount();
-            ConfigureAutoCompleteForAccount();
+            
             FillSellerComboBox();
             SetupFormByInvoiceType();
 
@@ -246,32 +246,32 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
                     case 2:
                         currentInvoiceType = InvoiceType.SaleReturn;
-                        UpdateLabelsForReturn(); // 🔹 بدل الدالة القديمة
+                        UpdateLabelsForReturn(); 
                         break;
 
                     case 3:
                         currentInvoiceType = InvoiceType.Purchase;
-                        //    UpdateLabelsForPurchase();
+                        UpdateLabelsForPurchase();
                         break;
 
                     case 4:
                         currentInvoiceType = InvoiceType.PurchaseReturn;
-                        UpdateLabelsForReturn(); // 🔹 يدعم الشراء المرتد الآن
+                        UpdateLabelsForReturn(); 
                         break;
 
                     case 5:
-                        currentInvoiceType = InvoiceType.PurchaseReturn;
-                        UpdateLabelsForReturn(); // 🔹 يدعم الشراء المرتد الآن
+                        currentInvoiceType = InvoiceType.Inventory ;
+                        UpdateLabelsForInventory ();
                         break;
 
                     case 6:
-                        currentInvoiceType = InvoiceType.PurchaseReturn;
-                        UpdateLabelsForReturn(); // 🔹 يدعم الشراء المرتد الآن
+                        currentInvoiceType = InvoiceType.DeductStock ;
+                        UpdateLabelsForDeduct(); 
                         break;
 
                     case 7:
-                        currentInvoiceType = InvoiceType.PurchaseReturn;
-                        UpdateLabelsForReturn(); // 🔹 يدعم الشراء المرتد الآن
+                        currentInvoiceType = InvoiceType.AddStock ;
+                        UpdateLabelsForAddStock (); 
                         break;
 
                     default:
@@ -619,8 +619,36 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // إدراج منتج في فاتورة جرد أو تسوية.
         private void InsertInventoryRow(float amount)
         {
+            if (currentInvoiceType == InvoiceType.Inventory)
+            {
+                if (isGardDone) // يعني = true
+                {
+                    DialogResult result = CustomMessageBox .ShowQuestion (
+                        "هذا الصنف تم جرده من قبل فى عملية الجرد المفتوحة.\nهل تريد إعادة جرده مرة أخرى؟",
+                        "تنبيه"
+                    );
+
+                    if (result == DialogResult.Yes)
+                    {
+                        // حذف السطر السابق من جدول الجرد
+                        if (int.TryParse(lblPieceID.Text, out int pieceID))
+                        {
+                            DBServiecs.Product_DeleteLastRowInventry(pieceID);
+                        }
+
+                        // تنفيذ الإدراج الجديد
+                        InsertRow(unit_ID == 1);
+                    }
+
+                    return; // وقف التنفيذ بعد المعالجة (سواء Yes أو No)
+                }
+            }
+
+            // ✅ في كل الحالات الأخرى (فاتورة جرد جديدة أو غير جرد)
             InsertRow(unit_ID == 1);
         }
+
+
 
         // إدراج صف جديد في تفاصيل الفاتورة
         private void InsertRow(bool isPiece)
@@ -907,6 +935,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
 
         //// 🔹 تحميل بيانات منتج حسب كوده.
+       private  bool isGardDone = false ;
         private bool GetProd(string code)
         {
             txtAmount.Text = "0";
@@ -941,7 +970,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // الطول الأدنى (للمنتجات القابلة للقص)
             lblMinLinth.Text = unit_ID == 1 ? row["MinLenth"].ToString() : "";
             lblLinthText.Text = unit_ID == 1 ? "اقل طول" : unit;
-
+            isGardDone = row["IsGardDone"] != DBNull.Value && Convert.ToBoolean(row["IsGardDone"]);
             isCanCut = (unit_ID == 1);
             cbxPiece_ID.Visible = (currentInvoiceType == InvoiceType.Sale && isCanCut);
 
@@ -1498,7 +1527,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             cbxSellerID.SelectedValue = row["Seller_ID"] != DBNull.Value
                 ? Convert.ToInt32(row["Seller_ID"])
                 : -1;
-
+            /*هو يدخل الحدث عندما يصل الى هنا lblAccID وهو محمل برقم وايضا الجدول غير فارغ */
             // 🔹 المستخدم والحساب
             lblAccID.Text = row["Acc_ID"].ToString();
             txtAccName.Text = row["AccName"].ToString();
@@ -1789,6 +1818,31 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
+        // 🔹 تحديث النصوص لو اخترت "مشريات"
+        private void UpdateLabelsForPurchase()
+        {
+
+        }
+
+        // 🔹 تحديث النصوص لو اخترت "جرد"
+        private void UpdateLabelsForInventory()
+        {
+
+        }
+
+        // 🔹 تحديث النصوص لو اخترت "خصم رصيد"
+        private void UpdateLabelsForDeduct()
+        {
+
+        }
+
+        // 🔹 تحديث النصوص لو اخترت "اضافة رصيد"
+        private void UpdateLabelsForAddStock()
+        {
+
+        }
+
+
         // 🔹 تغيير النصوص لما أختار راديو rdoFree
         private void rdoFree_CheckedChanged(object sender, EventArgs e)
         {
@@ -1819,52 +1873,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
         #region Default Account
-        // 🔹 تعيين الحساب الافتراضى حسب الفاتورة
-        private void FillDefaultAccount()
-        {
-            string invoiceTypeKey = InvoiceTypeHelper.ToAccountTypeString(currentInvoiceType);
-
-            if (string.IsNullOrEmpty(invoiceTypeKey))
-                return;
-
-            DataTable dt = DBServiecs.NewInvoice_GetAcc(invoiceTypeKey);
-
-            // 🔥 تحديد الحساب الافتراضي حسب نوع الفاتورة
-            int defaultAccID = currentInvoiceType switch
-            {
-                InvoiceType.Sale or InvoiceType.SaleReturn => 55,   // عميل نقدي
-                InvoiceType.Purchase or InvoiceType.PurchaseReturn => 56, // مورد نقدي
-                InvoiceType.Inventory => 72,     // حساب جرد المخزون
-                InvoiceType.DeductStock => 73,   // حساب خصم من المخزون
-                InvoiceType.AddStock => 74,      // حساب إضافة إلى المخزون
-                _ => -1
-            };
-
-
-            if (defaultAccID != -1)
-            {
-                // 🔍 البحث عن الحساب في الجدول
-                DataRow[] rows = dt.Select($"AccID = {defaultAccID}");
-                if (rows.Length > 0)
-                {
-                    lblAccID.Text = rows[0]["AccID"].ToString();
-                    txtAccName.Text = rows[0]["AccName"].ToString();
-                    return;
-                }
-            }
-
-            // 📌 لو الحساب الافتراضي غير موجود نرجع لأول صف
-            if (dt.Rows.Count > 0)
-            {
-                lblAccID.Text = dt.Rows[0]["AccID"].ToString();
-                txtAccName.Text = dt.Rows[0]["AccName"].ToString();
-            }
-            else
-            {
-                lblAccID.Text = "0";
-                txtAccName.Text = string.Empty;
-            }
-        }
         #endregion
 
         #region AutoComplete Configuration
@@ -1945,50 +1953,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
         #region Form Setup by Invoice Type
-        private void SetupFormByInvoiceType()
-        {
-            switch (currentInvoiceType)
-            {
-                case InvoiceType.Inventory:
-                case InvoiceType.DeductStock:
-                case InvoiceType.AddStock:
-                    // تعطيل أو تمكين بعض الحقول الخاصة بالمبيعات/المشتريات
-                    txtAccName.Enabled = false;
-                    break;
-
-                default:
-                    txtAccName.Enabled = true;
-                    break;
-            }
-
-            // إعداد DataGridView أو أي عناصر أخرى
-        }
         #endregion
 
         #region تحديث بيانات الحساب عند تغيير رقم الحساب
-
-        /// <summary>
-        /// تحميل بيانات الحساب عند تغيير قيمة lblAccID.
-        /// </summary>
-        private void lblAccID_TextChanged(object sender, EventArgs e)
-        {
-            string accountID = lblAccID.Text.Trim();
-
-            if (!string.IsNullOrEmpty(accountID) && tblAcc != null)
-            {
-                DataRow[] accountData = tblAcc.Select($"AccID = '{accountID}'");
-                if (accountData.Length > 0)
-                {
-                    LoadDefaultAccount();
-                    LoadAccountData(accountData[0]);
-                }
-                else
-                {
-                    CustomMessageBox.ShowWarning("لا يوجد حساب مرتبط برقم الحساب المحدد.", "خطأ");
-
-                }
-            }
-        }
 
 
         /// <summary>
@@ -2628,15 +2595,101 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         //عنوان الفاتورة - رقم النوع 1:7 - المسلسل - معرف الفاتورة - معلومات عنها - التاريخ
         //رقم واسم الحساب وبياناته المسجلة - االبائع او المشترى - سياسة البيع والمردودات
         //ادوات البحث للحصول على الحساب
+        // 🔹 تعيين الحساب الافتراضى حسب الفاتورة
+        private void FillDefaultAccount()
+        {
+            string invoiceTypeKey = InvoiceTypeHelper.ToAccountTypeString(currentInvoiceType);
+
+            if (string.IsNullOrEmpty(invoiceTypeKey))
+                return;
+
+            DataTable dt = DBServiecs.NewInvoice_GetAcc(invoiceTypeKey);
+
+            // 🔥 تحديد الحساب الافتراضي حسب نوع الفاتورة
+            int defaultAccID = currentInvoiceType switch
+            {
+                InvoiceType.Sale or InvoiceType.SaleReturn => 55,   // عميل نقدي
+                InvoiceType.Purchase or InvoiceType.PurchaseReturn => 56, // مورد نقدي
+                InvoiceType.Inventory => 72,     // حساب جرد المخزون
+                InvoiceType.DeductStock => 73,   // حساب خصم من المخزون
+                InvoiceType.AddStock => 74,      // حساب إضافة إلى المخزون
+                _ => -1
+            };
+
+
+            if (defaultAccID != -1)
+            {
+                // 🔍 البحث عن الحساب في الجدول
+                DataRow[] rows = dt.Select($"AccID = {defaultAccID}");
+                if (rows.Length > 0)
+                {
+                    lblAccID.Text = rows[0]["AccID"].ToString();
+                    txtAccName.Text = rows[0]["AccName"].ToString();
+                    return;
+                }
+            }
+
+            // 📌 لو الحساب الافتراضي غير موجود نرجع لأول صف
+            if (dt.Rows.Count > 0)
+            {
+                lblAccID.Text = dt.Rows[0]["AccID"].ToString();
+                txtAccName.Text = dt.Rows[0]["AccName"].ToString();
+            }
+            else
+            {
+                lblAccID.Text = "0";
+                txtAccName.Text = string.Empty;
+            }
+        }
+
+        // تحميل بيانات الحساب عند تغيير قيمة lblAccID.
+        private void lblAccID_TextChanged(object sender, EventArgs e)
+        {
+            string accountID = lblAccID.Text.Trim();
+            /* اريد معرفة منطق هذا الكود وقد لاحظت انه دائما وفى كل الحالات يتجاوز الشرط ولا يدخله ابدا فما فائدته*/
+            if (!string.IsNullOrEmpty(accountID) && tblAcc != null)
+            {
+                DataRow[] accountData = tblAcc.Select($"AccID = '{accountID}'");
+                if (accountData.Length > 0)
+                {
+                    LoadDefaultAccount();
+                    LoadAccountData(accountData[0]);
+                }
+                else
+                {
+                    CustomMessageBox.ShowWarning("لا يوجد حساب مرتبط برقم الحساب المحدد.", "خطأ");
+
+                }
+            }
+        }
+
+        private void SetupFormByInvoiceType()
+        {
+            switch (currentInvoiceType)
+            {
+                case InvoiceType.Inventory:
+                case InvoiceType.DeductStock:
+                case InvoiceType.AddStock:
+                    // تعطيل أو تمكين بعض الحقول الخاصة بالمبيعات/المشتريات
+                    txtAccName.Enabled = false;
+                    break;
+
+                default:
+                    txtAccName.Enabled = true;
+                    break;
+            }
+
+            // إعداد DataGridView أو أي عناصر أخرى
+        }
 
 
         #endregion
 
 
 
+ 
 
-
-       #region دوال مجمعة لضبط الادخالات 
+        #region دوال مجمعة لضبط الادخالات 
         // 🔹 منع كتابة أي شيء غير الأرقام + التحكم في الفاصلة العشرية       ***
         private void txtAmount_KeyPress(object sender, KeyPressEventArgs e)
         {

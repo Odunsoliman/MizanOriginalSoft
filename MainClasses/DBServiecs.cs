@@ -1039,9 +1039,24 @@ namespace MizanOriginalSoft.MainClasses
                 cmd.Parameters.Add("@ID_Prod", SqlDbType.Int).Value = ID_Prod;
             }, out _); // تجاهل الرسالة لأنها غير مطلوبة
         }
-        /*عندى بالفعل فى DBServiecs كلاس
-         * 
-         * اريد الان ضبط LoadPieceData()*/
+
+        //حذف اخر سطر جرد لقطعة معينة
+        public static string Product_DeleteLastRowInventry(int PieceID_fk )
+        {
+            // تنفيذ الإجراء المخزن مع تمكين انتظار الرسائل المرجعية
+            string result = dbHelper.ExecuteNonQueryWithLogging("Product_DeleteLastRowInventry", cmd =>
+            {
+                cmd.Parameters.Add("@PieceID_fk", SqlDbType.Int).Value = PieceID_fk ;
+            }, expectMessageOutput: false);
+
+            if (!string.IsNullOrEmpty(result))
+            {
+                return result;
+            }
+
+            return "تم حذف السطر بنجاح";
+        }
+
 
         //  تُرجع القطعة الوحيدة الموجودة أو تنشئها إن لم تكن موجودة.
         public static DataTable Product_GetOrCreate_DefaultPiece(int ID_Prod)
