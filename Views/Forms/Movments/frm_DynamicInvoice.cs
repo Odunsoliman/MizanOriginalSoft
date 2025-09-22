@@ -1980,7 +1980,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 if (accountData.Length > 0)
                 {
                     LoadDefaultAccount();
-                    //   LoadAccountData(accountData[0]);
+                    LoadAccountData(accountData[0]);
                 }
                 else
                 {
