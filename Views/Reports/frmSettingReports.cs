@@ -10,6 +10,7 @@ using System.Linq;
 using System.Windows.Forms;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
 
 namespace MizanOriginalSoft.Views.Reports
 {
@@ -315,43 +316,6 @@ namespace MizanOriginalSoft.Views.Reports
             }
         }
 
-        #endregion
-
-        #region ==== دوال أزرار التقرير ====
-
-        // تجهيز معلمات التقرير وطلب عرضه عند الضغط على زر "انتقال".
-        private void btnGo_Click(object sender, EventArgs e)
-        {
-            string selectedValue = cbxPrinters.SelectedItem?.ToString() ?? "";
-
-            string printMode = selectedValue switch
-            {
-                "معاينة" => "Preview",
-                "تصدير إلى Excel" => "Excel",
-                "تصدير إلى PDF" => "PDF",
-                _ => "Printer"
-            };
-
-            if (string.IsNullOrEmpty(_repCodeName))
-            {
-                MessageBox.Show("اسم التقرير غير محدد، يرجى المحاولة لاحقاً.", "خطأ",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            var parameters = new Dictionary<string, object>
-            {
-                ["ReportCodeName"] = _repCodeName,
-                ["BranchID"] = cbxWarehouse.SelectedValue ?? DBNull.Value,
-                ["StartDate"] = dtpStart.Value,
-                ["EndDate"] = dtpEnd.Value,
-                ["PrintMode"] = printMode,
-                ["PrinterName"] = (printMode == "Printer") ? selectedValue : ""
-            };
-
-            ReportsManager.ShowReport(parameters);
-        }
-
         // حفظ الإعدادات وإغلاق النموذج عند الضغط على زر الحفظ والإغلاق.
         private void btnSaveAndClose_Click(object sender, EventArgs e)
         {
@@ -363,102 +327,17 @@ namespace MizanOriginalSoft.Views.Reports
         #region ==== ضبط أحداث واجهة المستخدم ====
 
 
-        #endregion
-
-        private void lblAmountOfDay_Click(object sender, EventArgs e)
+      
+        private void btnPrint_Click(object sender, EventArgs e)
         {
-
+           // ReportsManager.ShowReport(parameters);
         }
+        
+        
+        #endregion
     }
 }
 
 
-/*
- ===============================
-ملف شرح كود frmSettingReports.cs
-===============================
 
-1. الهدف:
-   - هذا النموذج مسؤول عن إعدادات عرض التقارير.
-   - يتيح اختيار الطابعة، الفرع (المستودع)، فترة التاريخ، ونوع الطباعة (معاينة، تصدير، طباعة).
-
-2. أهم المتغيرات:
-   - _repCodeName: اسم التقرير البرمجي.
-   - _repDisplayName: اسم التقرير المعروض للمستخدم.
-   - _reportId: رقم تعريف التقرير.
-   - SettingsFilePath: مسار ملف الإعدادات النصي.
-   - _parameters: معلمات التقرير الممررة للنموذج.
-
-3. تحميل الإعدادات (LoadDefaults):
-   - يقرأ الملف النصي settingsFilePath.
-   - يعين القيم المحفوظة مثل الطابعة، الفرع، تواريخ البداية والنهاية، وزر الراديو المحدد.
-   - إذا لم توجد قيمة لزر الراديو يتم اختيار "rdoAllPeriod" افتراضياً.
-
-4. حفظ الإعدادات (SaveDefaults):
-   - يحفظ الإعدادات الحالية في نفس الملف النصي.
-   - يتم تحديث أو إضافة السطور حسب المفاتيح والقيم الحالية.
-
-5. قراءة قيمة معينة من الملف (ReadSettingValue):
-   - تستخدم للبحث عن مفتاح معين وإرجاع القيمة المرتبطة به.
-
-6. التعامل مع أزرار الراديو (RadioButtons):
-   - كل زر يمثل فترة زمنية معينة (اليوم، الشهر، السنة، كل الفترة، إلخ).
-   - عند اختيار زر معين يتم تعيين تواريخ البداية والنهاية تلقائياً.
-   - الدوال SetPeriodForAll، SetPeriodForToday، SetPeriodForPreviousDay، إلخ.
-
-7. تحميل الطابعات (LoadPrinters):
-   - يعرض كل الطابعات المثبتة بالإضافة إلى خيارات خاصة (معاينة، تصدير Excel، تصدير PDF).
-
-8. تحميل المستودعات (LoadWarehouses):
-   - يجلب قائمة المستودعات من قاعدة البيانات ويضيف خيار "كل الفروع" برقم 0.
-
-9. حفظ وتشغيل التقرير (btnSaveAndClose_Click, btnGo_Click):
-   - حفظ الإعدادات عند الإغلاق.
-   - تجهيز معلمات التقرير وطلب عرضه/طباعته حسب الخيارات المحددة.
-
-10. ملاحظات إضافية:
-    - تم تقسيم الكود إلى مناطق #region لتسهيل التنظيم.
-    - معالجات الأحداث مركزة في SetupEventHandlers().
-    - يدعم الملف النصي تخزين الإعدادات بشكل بسيط (مفتاح=قيمة).
-    - رسائل التنبيه تظهر عند وجود مشاكل في قراءة التواريخ أو غيرها.
-
-===============================
-يمكنك تعديل هذا الملف لتوثيق أي تحديثات مستقبلية بسهولة.
-===============================
-
- */
-
-
-
-/*
- * لقد ابتعدت عن هذا السيناريو
- * 
- * 
- السيناريو المعتمد فى التقارير
-1- التقرير الذى اريده من اي شاشة يتم تمريره الى هذه الشاشة الريسية فى استدعاء اى تقرير كان فى البرنامج 
-    ويكون ذلك بتمرير للشاشة ثلاث متغيرات وهى string repCodeName, string repDisplayName, int currentReportId
-2- عند فتح الشاشة يتم تحميل القيم الافتراضية من ملف تكست والتى يتم تغيريها عند علق الشاشة لتصبح افتراضية للمرة القادمة يحفظ فى 
-    هذا الملف التكست هذه القيم دون التأثير على باقى القيم المختلفة التى احتاجها فى باقى شاشات البرنامج
-3- يتم تحميل لستة بالفروع ليتم اختيار الفرع المراد عرض التقرير له
-4- يتم تحميل لستة بالطابعات المثبتة فى الجهاز لاختيار المستخدم ايها سوف يطبع عليها فى حال الطباعة المباشرةويضاف اليها
-    ثلاث اسطر 
-            - سطر معاينة
-            - سطر تصدير الى الاكسيل
-            - سطر تصدير الى بى دي اف
-5- بعد ضبط الفترة الزمنية والفرع وطريقة الطباعة يتم اختيار التقرير من خلال كلاس خاص 
-    يخزن به جميع الدوال الخاصة بعرض التقارير المختلفة والتمرير اليه كل 
-    المتغيرات التى اتخذت فى الشاشة فى قاموس به ويتم اختيار فقط من هذه المتغيرات الممرة ما يخص التقرير المراد من متغيرات خاصة به 
-    حسب تصميم كل تقرير
-            -اسم التقرير البرمجى الذى يبدأ ب rep_
-                مع وجود دالة تضع اسم للداتا سيت باسم نفس التقرير مع استبدال المقدمة للاسم من rep_ الى ds_
-            - الفترة الزمنية من الى 
-            - طريقة الطباعة هل على طابعة مثبتة تم اختيارها ام معاينة ام تصدير لاكسيل ام الى بى دي اف
-            - الفرع المراد بيانات التقرير عليه واذا كانت قيمته الممرة =0 فهذا يعنى كل الفروع مجتمعة
-ويتم بعد ذلك ارسال الى اداة ريبورت فيور فى حالى المعاينة
-او الطباعة المباشرة على الطابعة المختارة
-او التصدير المباشر الى اكسيل
-او الى بى دى اف
-
-اريد ضبط هذا السيناريو فى الشاشة والكلاسات التى يمكن استخدامها والغاء كل ما سبق
- */
 

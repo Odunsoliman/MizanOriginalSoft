@@ -50,7 +50,6 @@
             lblTitel = new Label();
             cbxWarehouse = new ComboBox();
             tlpDateRight = new TableLayoutPanel();
-            btnGo = new Button();
             btnSaveAndClose = new Button();
             btnPrint = new Button();
             tlpButtons = new TableLayoutPanel();
@@ -123,7 +122,6 @@
             lblAmountOfDay.TabIndex = 15;
             lblAmountOfDay.Text = "0";
             lblAmountOfDay.TextAlign = ContentAlignment.MiddleCenter;
-            lblAmountOfDay.Click += lblAmountOfDay_Click;
             // 
             // lblAllPeriod
             // 
@@ -374,18 +372,6 @@
             tlpDateRight.Size = new Size(974, 100);
             tlpDateRight.TabIndex = 25;
             // 
-            // btnGo
-            // 
-            btnGo.Dock = DockStyle.Fill;
-            btnGo.Font = new Font("Times New Roman", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnGo.Location = new Point(723, 5);
-            btnGo.Name = "btnGo";
-            btnGo.Size = new Size(348, 46);
-            btnGo.TabIndex = 1;
-            btnGo.Text = "معاينة";
-            btnGo.UseVisualStyleBackColor = true;
-            btnGo.Click += btnGo_Click;
-            // 
             // btnSaveAndClose
             // 
             btnSaveAndClose.Dock = DockStyle.Fill;
@@ -400,14 +386,14 @@
             // 
             // btnPrint
             // 
-            btnPrint.Dock = DockStyle.Fill;
             btnPrint.Font = new Font("Times New Roman", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnPrint.Location = new Point(365, 5);
+            btnPrint.Location = new Point(723, 5);
             btnPrint.Name = "btnPrint";
             btnPrint.Size = new Size(348, 46);
             btnPrint.TabIndex = 1;
             btnPrint.Text = "طباعة";
             btnPrint.UseVisualStyleBackColor = true;
+            btnPrint.Click += btnPrint_Click;
             // 
             // tlpButtons
             // 
@@ -418,9 +404,8 @@
             tlpButtons.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
             tlpButtons.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 4F));
             tlpButtons.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33333F));
-            tlpButtons.Controls.Add(btnGo, 0, 0);
             tlpButtons.Controls.Add(btnSaveAndClose, 4, 0);
-            tlpButtons.Controls.Add(btnPrint, 2, 0);
+            tlpButtons.Controls.Add(btnPrint, 0, 0);
             tlpButtons.Dock = DockStyle.Fill;
             tlpButtons.Location = new Point(3, 547);
             tlpButtons.Name = "tlpButtons";
@@ -522,7 +507,6 @@
         private TableLayoutPanel tableLayoutPanel3;
         private ComboBox cbxWarehouse;
         private TableLayoutPanel tlpDateRight;
-        private Button btnGo;
         private Button btnSaveAndClose;
         private Button btnPrint;
         private TableLayoutPanel tlpButtons;
