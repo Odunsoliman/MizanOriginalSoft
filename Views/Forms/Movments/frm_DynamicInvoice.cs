@@ -628,7 +628,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                         "تنبيه"
                     );
 
-                    if (result == DialogResult.Yes)
+                    if (result == DialogResult.OK )
                     {
                         // حذف السطر السابق من جدول الجرد
                         if (int.TryParse(lblPieceID.Text, out int pieceID))
