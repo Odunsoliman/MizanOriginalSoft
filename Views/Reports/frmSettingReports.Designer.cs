@@ -195,6 +195,7 @@
             rdoPreviousYear.TabIndex = 6;
             rdoPreviousYear.Text = "عام سابق";
             rdoPreviousYear.UseVisualStyleBackColor = true;
+            rdoPreviousYear.CheckedChanged += rdoPreviousYear_CheckedChanged;
             // 
             // rdoPreviousDay
             // 
@@ -208,6 +209,7 @@
             rdoPreviousDay.TabIndex = 4;
             rdoPreviousDay.Text = "يوم سابق";
             rdoPreviousDay.UseVisualStyleBackColor = true;
+            rdoPreviousDay.CheckedChanged += rdoPreviousDay_CheckedChanged;
             // 
             // rdoThisYear
             // 
@@ -221,6 +223,7 @@
             rdoThisYear.TabIndex = 2;
             rdoThisYear.Text = "هذا العام";
             rdoThisYear.UseVisualStyleBackColor = true;
+            rdoThisYear.CheckedChanged += rdoThisYear_CheckedChanged;
             // 
             // rdoToDay
             // 
@@ -236,6 +239,7 @@
             rdoToDay.TabStop = true;
             rdoToDay.Text = "اليوم";
             rdoToDay.UseVisualStyleBackColor = true;
+            rdoToDay.CheckedChanged += rdoToDay_CheckedChanged;
             // 
             // rdoPreviousMonth
             // 
@@ -249,6 +253,7 @@
             rdoPreviousMonth.TabIndex = 1;
             rdoPreviousMonth.Text = "شهر سابق";
             rdoPreviousMonth.UseVisualStyleBackColor = true;
+            rdoPreviousMonth.CheckedChanged += rdoPreviousMonth_CheckedChanged;
             // 
             // rdoThisMonth
             // 
@@ -262,6 +267,7 @@
             rdoThisMonth.TabIndex = 5;
             rdoThisMonth.Text = "هذا الشهر";
             rdoThisMonth.UseVisualStyleBackColor = true;
+            rdoThisMonth.CheckedChanged += rdoThisMonth_CheckedChanged;
             // 
             // rdoAllPeriod
             // 
@@ -276,6 +282,7 @@
             rdoAllPeriod.Text = "كل الفترة";
             rdoAllPeriod.UseVisualStyleBackColor = true;
             rdoAllPeriod.Visible = false;
+            rdoAllPeriod.CheckedChanged += rdoAllPeriod_CheckedChanged;
             // 
             // tableLayoutPanel2
             // 

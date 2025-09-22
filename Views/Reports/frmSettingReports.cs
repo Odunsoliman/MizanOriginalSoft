@@ -65,30 +65,52 @@ namespace MizanOriginalSoft.Views.Reports
         {
             try
             {
-                // الطابعة الافتراضية
+                // ✅ الطابعة الافتراضية
                 string? printer = AppSettings.GetString("DefaultPrinter");
                 if (!string.IsNullOrEmpty(printer) && cbxPrinters.Items.Contains(printer))
                     cbxPrinters.SelectedItem = printer;
 
-                // المستودع الافتراضي
+                // ✅ المستودع الافتراضي
                 string? wh = AppSettings.GetString("DefaultWarehouseId");
                 if (!string.IsNullOrEmpty(wh))
                     cbxWarehouse.SelectedValue = wh;
 
-                // الراديو الافتراضي
-                string? rdoName = AppSettings.GetString("DefaultRdoCheck");
+                // ✅ زر الراديو الافتراضي
+                string? rdoName = AppSettings.GetString("DefaultRdoCheck", "rdoAllPeriod");
                 RadioButton? rdo = this.Controls.Find(rdoName!, true).FirstOrDefault() as RadioButton;
 
                 if (rdo != null)
+                {
                     rdo.Checked = true;
 
-                // التواريخ الافتراضية
-                dtpStart.Value = AppSettings.GetDateTime("StartAccountsDate", DateTime.Today);
-                dtpEnd.Value = AppSettings.GetDateTime("EndAccountsDate", DateTime.Today);
+                    // 📌 نستدعي الدالة العامة لتطبيق نفس منطق الراديو (تحديد التواريخ + الحفظ)
+                    rdo_CheckedChanged(rdo, EventArgs.Empty);
+                }
+                else
+                {
+                    // fallback في حالة ما اتلاقاش الراديو (نحط الافتراضي)
+                    rdoAllPeriod.Checked = true;
+                    rdo_CheckedChanged(rdoAllPeriod, EventArgs.Empty);
+                }
 
+                // ✅ تحميل التواريخ إذا لم يتم ضبطها من الراديو
+                if (dtpStart.Value == DateTime.MinValue)
+                    dtpStart.Value = AppSettings.GetDateTime("StartAccountsDate", DateTime.Today);
+
+                if (dtpEnd.Value == DateTime.MinValue)
+                    dtpEnd.Value = AppSettings.GetDateTime("EndAccountsDate", DateTime.Today);
+
+                // ✅ حساب عدد الأيام
                 CalculateDaysBetweenDates();
             }
-            catch { }
+            catch
+            {
+                // في حالة أي خطأ: نبدأ بالقيم الافتراضية
+                rdoAllPeriod.Checked = true;
+                dtpStart.Value = DateTime.Today;
+                dtpEnd.Value = DateTime.Today;
+                CalculateDaysBetweenDates();
+            }
         }
 
         private void SetSelectedRadioButton(string radioButtonName)
@@ -164,13 +186,16 @@ namespace MizanOriginalSoft.Views.Reports
         }
 
         // حفظ صامت للراديو + ضبط التواريخ
+        // حفظ صامت للراديو + ضبط التواريخ
         private void rdo_CheckedChanged(object sender, EventArgs e)
         {
             RadioButton rdo = (RadioButton)sender;
-            if (!rdo.Checked) return;
+            if (!rdo.Checked) return; // نتأكد أن الراديو تم تفعيله فعلاً
 
+            // ✅ حفظ اسم الراديو في ملف الإعدادات
             AppSettings.SaveOrUpdate("DefaultRdoCheck", rdo.Name);
 
+            // ✅ تحديد الفترة الزمنية بناءً على الراديو المختار
             if (rdo == rdoAllPeriod) SetPeriodForAll();
             else if (rdo == rdoToDay) SetPeriodForToday();
             else if (rdo == rdoPreviousDay) SetPeriodForPreviousDay();
@@ -179,6 +204,7 @@ namespace MizanOriginalSoft.Views.Reports
             else if (rdo == rdoThisYear) SetPeriodForCurrentYear();
             else if (rdo == rdoPreviousYear) SetPeriodForPreviousYear();
 
+            // ✅ تحديث الفرق بين التواريخ
             CalculateDaysBetweenDates();
         }
 
@@ -258,6 +284,47 @@ namespace MizanOriginalSoft.Views.Reports
         }
 
         #endregion
+        /*ما الذى ينقص فالهدف هو 
+         عندما يتم اختيار فترة زمنية عن طريق الريديو بوتن فيكون فى لحظة الخيار يحفظ ما تم اختياره فى ملف الاعداد عن طريق كلاس اب سيتينج 
+        وفى المرة القادمة لفتح الشاشة يجد المستخدم القيم الاخيرة التى كان عليها الاختيار فيكمل فى عمله على اساسها 
+        اما الان عند الاختيار لا يتم الحفظ الصامت 
+         */
+
+
+        private void rdoToDay_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rdoThisMonth_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rdoThisYear_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rdoPreviousDay_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rdoPreviousMonth_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rdoPreviousYear_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rdoAllPeriod_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
 
 
 
@@ -327,14 +394,15 @@ namespace MizanOriginalSoft.Views.Reports
         #region ==== ضبط أحداث واجهة المستخدم ====
 
 
-      
+
         private void btnPrint_Click(object sender, EventArgs e)
         {
-           // ReportsManager.ShowReport(parameters);
+            // ReportsManager.ShowReport(parameters);
         }
-        
-        
+
+
         #endregion
+
     }
 }
 

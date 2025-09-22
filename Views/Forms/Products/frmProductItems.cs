@@ -1559,6 +1559,7 @@ namespace MizanOriginalSoft.Views.Forms.Products
                 else
                 {
                     reportParameters["EntityID"] = GetCurrentEntityID() ?? (object)DBNull.Value;
+                    return;
                 }
 
                 using frmSettingReports previewForm = new frmSettingReports(reportParameters);
