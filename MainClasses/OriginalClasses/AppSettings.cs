@@ -19,7 +19,6 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
 
             if (!File.Exists(filePath))
                 throw new FileNotFoundException($"❌ ملف الإعدادات غير موجود: {filePath}");//
-        //    System.IO.FileNotFoundException: '❌ ملف الإعدادات غير موجود: config.txt'
 
             foreach (var rawLine in File.ReadAllLines(filePath))
             {
@@ -89,5 +88,53 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             EnsureLoaded();
             return new(settings);
         }
+
+        public static void SaveOrUpdate(string key, string value)
+        {
+            EnsureLoaded();
+
+            var lines = File.ReadAllLines(settingsFilePath).ToList();
+            bool updated = false;
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                string line = lines[i].Trim();
+
+                // تجاهل التعليقات والسطور الفارغة
+                if (string.IsNullOrWhiteSpace(line) ||
+                    line.StartsWith("#") || line.StartsWith("//") || line.StartsWith(";"))
+                    continue;
+
+                int equalIndex = line.IndexOf('=');
+                if (equalIndex <= 0) continue;
+
+                string currentKey = line.Substring(0, equalIndex).Trim();
+
+                if (string.Equals(currentKey, key, StringComparison.OrdinalIgnoreCase))
+                {
+                    string prefix = lines[i].Substring(0, equalIndex + 1); // نحافظ على spacing
+                    string oldValue = line.Substring(equalIndex + 1).Trim();
+
+                    if (oldValue != value) // فقط إذا تغيّر
+                    {
+                        lines[i] = prefix + " " + value;
+                        File.WriteAllLines(settingsFilePath, lines);
+                        settings[key] = value; // تحديث الكاش
+                    }
+
+                    updated = true;
+                    break;
+                }
+            }
+
+            // لو المفتاح غير موجود → إضافته
+            if (!updated)
+            {
+                lines.Add($"{key}={value}");
+                File.WriteAllLines(settingsFilePath, lines);
+                settings[key] = value;
+            }
+        }
+
     }
 }

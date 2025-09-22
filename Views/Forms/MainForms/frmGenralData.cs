@@ -457,7 +457,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         #endregion
 
-        #region تحميل الإعدادات من الملف
 
         #region تحميل الإعدادات من الملف
         private void LoadSettings()
@@ -575,93 +574,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
         #endregion
 
-        /* 
-         * اريد تحديث التحميل للبيانات بما تم اضافته فى ملف التكست
-         واسماء الكائنات نفس اسماء المفاتيح مسبوقة ب txt او مسبوقة ب chk لو كانت سؤال
 
-        بيانات الملف المسبوق عنوانها # واحدة هى اعدادت مسموح للمستخدم التحكم بها من خلال الشاشة
-        والبيانات التى عنوانها مسبوق ب ثلاث ### تعنى انها تخص المطور فقط وليس لها ادوات تحكم على الشاشة
-
-        # اسم السيرفر الحالى وقاعدة البيانات
-        serverName=DESKTOP-EE70K28\SQLEXPRESS
-        DBName=MizanOriginalDB
-        
-        ### اسماء الاجراءات المخزنة للباك اب والريستور
-        BackupDB=Original_BackupDatabase
-        RestoreDB=Original_RestoreDatabase
-
-        # إعدادات النسخ الاحتياطي
-        maxBackups=10
-        BackupsPath=D:\MizanOriginalSoft\DataBaseApp\BakUpDB
-
-        ### إعدادات رفع السحابي
-        ### 📌 المسار المحلي لمجلد Google Drive على جهازك لرفع النسخ الاحتياطية تلقائيًا إلى السحابة
-        GoogleDrivePath=G:\
-        ### 📌 مسار مشروع البرنامج الذي سيتم رفعه على Git عند الإغلاق للمزامنة مع المستودع
-        ProjectPath=D:\MizanOriginalSoft
-        ### 📌 مسار مجلد مخصص لنسخ القواعد التي سيتم رفعها على Git (يمكن تركه فارغ إذا لم تستخدم هذه الميزة)
-        BackupGitPath=
-
-        # إعدادات الطباعة
-        RollPrinter=Samsung SCX-3400 Series
-        SheetPrinter=Samsung SCX-3400 Series
-
-        # إعدادات تخطيط الورق (Sheet Printing)
-        SheetRows=6
-        SheetCols=10
-        SheetMarginTop=23
-        SheetMarginBottom=24
-        SheetMarginRight=24
-        SheetMarginLeft=24
-
-        # إعدادات طباعة الرول (Roll Printing)
-        RollLabelWidth=50
-        RollLabelHeight=25
-
-        # بيانات الشركة
-        CompanyName=Sondos 4 kids
-        CompanyPhon=00010205060225
-        CompanyAnthrPhon=010201201205000
-        CompanyAdreass=5ش عبد الخالق ثروت العتبة وسط البلد القاهرة
-        EmailCo=Sondos 4 kids@gmail.com
-
-        # إعدادات الضرائب
-        SalesTax=14
-        IsEnablToChangTax=True
-
-        # إعدادات الشعار (Logo)
-        CompanyLoGoFolder=D:\MizanSoft\MizanLoom\Signee\Signee\bin\Debug
-        LogoImagName=Mizan Logo.PNG
-
-        ### إعدادات المستودعات
-        DefaultWarehouseId=1
-        DefaultPrinter=Samsung SCX-3400 Series
-        DefaultWarehouse=0
-        DefaultStartDate=2025-01-01
-        DefaultEndDate=2025-12-31
-        DefaultRdoCheck=rdoThisYear
-
-        # إعدادات البيع والمردودات
-        # نظام الفواتير المرتدة فى المبيعات
-        # Mode=1 InvoiceOnly عن طريق فاتورة البيع الاصلية فقط
-        # Mode=2 FreeMode عن طريق كتابة اى كود صنف بحرية
-        # Mode=3 MixedMode عن طريق النظامين أيهما يختار المستخدم
-        ReturnSaleMode=1
-
-        # السماح بالبيع بالرصيد السالب
-        IsSaleByNegativeStock=True
-
-        # هامش سعر البيع
-        SalesPercentage=35
-
-        # هامش سعر الاوكازيون
-        MaxRateDiscount=15
-        IsOpendMaxRateDiscount=0
-
-
-
-         */
-        #endregion
 
 
 
@@ -713,16 +626,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
 
         #region ***********  حفظ الإعدادات بصمت بدون رسالة بمجرد اى تغيير فى الاعدادات  ********
-
-        /*
-            🔹 هذا الكود يراقب جميع الكنترولات (TextBox, CheckBox, ComboBox, Label, RadioButton)
-               ويقوم بالحفظ التلقائي في ملف الإعدادات فور حدوث أي تغيير.
-
-            🔹 الملف يحتفظ بالتعليقات (#...) كما هي، ولا يتم تعديل إلا الأسطر الخاصة بالمفاتيح.
-            🔹 صيغة القيم:
-                keyName=Value
-            🔹 لا يوجد مسافات أو تعليقات في نفس السطر.
-        */
 
         private void AttachControlHandlers(Control parent)
         {

@@ -8,6 +8,8 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using MizanOriginalSoft.MainClasses.OriginalClasses;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MizanOriginalSoft.Views.Reports
 {
@@ -19,9 +21,6 @@ namespace MizanOriginalSoft.Views.Reports
         private readonly string _repCodeName;
         private readonly string _repDisplayName;
         private readonly int _reportId;
-
-        // مسار ملف الإعدادات
-        private readonly string SettingsFilePath = @"serverConnectionSettings.txt";
 
         // معلمات التقرير المرسلة للنموذج
         private readonly Dictionary<string, object> _parameters;
@@ -61,118 +60,36 @@ namespace MizanOriginalSoft.Views.Reports
         #endregion
 
         #region ==== دوال قراءة وكتابة ملف الإعدادات ====
-
-        /// <summary>
-        /// قراءة قيمة إعداد من ملف الإعدادات حسب المفتاح.
-        /// ترجع سلسلة فارغة إذا لم يوجد المفتاح أو الملف.
-        /// </summary>
-        private string ReadSettingValue(string key)
-        {
-            if (!File.Exists(SettingsFilePath))
-                return string.Empty;
-
-            foreach (var line in File.ReadAllLines(SettingsFilePath))
-            {
-                var parts = line.Split('=');
-                if (parts.Length == 2 && parts[0].Trim() == key)
-                    return parts[1].Trim();
-            }
-
-            return string.Empty;
-        }
-
-        /// <summary>
-        /// تحديث أو إضافة سطر في قائمة الإعدادات حسب المفتاح والقيمة.
-        /// </summary>
-        private void UpdateOrAddLine(List<string> lines, string key, string value)
-        {
-            string prefix = key + "=";
-            int index = lines.FindIndex(line => line.StartsWith(prefix));
-            string newLine = $"{key}={value}";
-
-            if (index >= 0)
-                lines[index] = newLine;
-            else
-                lines.Add(newLine);
-        }
-
-        /// <summary>
-        /// تحميل الإعدادات من ملف النص وتعيين القيم في الواجهة.
-        /// </summary>
         private void LoadDefaults()
         {
-            if (!File.Exists(SettingsFilePath)) return;
-
-            string savedRadioButtonName = "";
-
-            foreach (var line in File.ReadAllLines(SettingsFilePath))
+            try
             {
-                var parts = line.Split('=');
-                if (parts.Length != 2) continue;
+                // الطابعة الافتراضية
+                string? printer = AppSettings.GetString("DefaultPrinter");
+                if (!string.IsNullOrEmpty(printer) && cbxPrinters.Items.Contains(printer))
+                    cbxPrinters.SelectedItem = printer;
 
-                string key = parts[0].Trim();
-                string value = parts[1].Trim();
+                // المستودع الافتراضي
+                string? wh = AppSettings.GetString("DefaultWarehouseId");
+                if (!string.IsNullOrEmpty(wh))
+                    cbxWarehouse.SelectedValue = wh;
 
-                switch (key)
-                {
-                    case "DefaultPrinter":
-                        cbxPrinters.SelectedItem = value;
-                        break;
-                    case "DefaultWarehouse":
-                        if (int.TryParse(value, out int warehouseId))
-                            cbxWarehouse.SelectedValue = warehouseId;
-                        break;
-                    case "DefaultStartDate":
-                        if (DateTime.TryParse(value, out DateTime startDate))
-                            dtpStart.Value = startDate;
-                        break;
-                    case "DefaultEndDate":
-                        if (DateTime.TryParse(value, out DateTime endDate))
-                            dtpEnd.Value = endDate;
-                        break;
-                    case "DefaultRdoCheck":
-                        savedRadioButtonName = value;
-                        break;
-                }
+                // الراديو الافتراضي
+                string? rdoName = AppSettings.GetString("DefaultRdoCheck");
+                RadioButton? rdo = this.Controls.Find(rdoName!, true).FirstOrDefault() as RadioButton;
+
+                if (rdo != null)
+                    rdo.Checked = true;
+
+                // التواريخ الافتراضية
+                dtpStart.Value = AppSettings.GetDateTime("StartAccountsDate", DateTime.Today);
+                dtpEnd.Value = AppSettings.GetDateTime("EndAccountsDate", DateTime.Today);
+
+                CalculateDaysBetweenDates();
             }
-
-            if (!string.IsNullOrEmpty(savedRadioButtonName))
-                SetSelectedRadioButton(savedRadioButtonName);
-            else
-                SetSelectedRadioButton("rdoAllPeriod");
+            catch { }
         }
 
-        /// <summary>
-        /// حفظ الإعدادات الحالية في ملف الإعدادات مع تحديث السطور دون حذف باقي المحتويات.
-        /// </summary>
-        private void SaveDefaults()
-        {
-            var lines = File.Exists(SettingsFilePath)
-                ? File.ReadAllLines(SettingsFilePath).ToList()
-                : new List<string>();
-
-            UpdateOrAddLine(lines, "DefaultPrinter", cbxPrinters.SelectedItem?.ToString() ?? "");
-            UpdateOrAddLine(lines, "DefaultWarehouse", cbxWarehouse.SelectedValue?.ToString() ?? "");
-            UpdateOrAddLine(lines, "DefaultStartDate", dtpStart.Value.ToString("yyyy-MM-dd"));
-            UpdateOrAddLine(lines, "DefaultEndDate", dtpEnd.Value.ToString("yyyy-MM-dd"));
-            UpdateOrAddLine(lines, "DefaultRdoCheck", GetSelectedRadioButtonName());
-
-            File.WriteAllLines(SettingsFilePath, lines);
-        }
-
-        /*
-         
-
-
-         */
-
-        #endregion
-
-        #region ==== دوال التعامل مع أزرار الراديو والفترات ====
-
-        /// <summary>
-        /// تعيين زر الراديو المختار بناءً على الاسم المحفوظ.
-        /// </summary>
         private void SetSelectedRadioButton(string radioButtonName)
         {
             switch (radioButtonName)
@@ -188,9 +105,7 @@ namespace MizanOriginalSoft.Views.Reports
             }
         }
 
-        /// <summary>
-        /// الحصول على اسم زر الراديو المختار حالياً.
-        /// </summary>
+        // الحصول على اسم زر الراديو المختار حالياً.
         private string GetSelectedRadioButtonName()
         {
             if (rdoAllPeriod.Checked) return "rdoAllPeriod";
@@ -204,83 +119,150 @@ namespace MizanOriginalSoft.Views.Reports
             return "rdoAllPeriod";
         }
 
-        /// <summary>
-        /// عند تغيير حالة زر الراديو الخاص بـ "كل الفترة"، يتم تعيين التواريخ من ملف الإعدادات.
-        /// </summary>
-        private void btnAllPeriod_Click(object sender, EventArgs e)
+        private void SaveDataSilently()
         {
-            rdoAllPeriod.Checked = true;
-            lblAllPeriod.Text = "كل الفترة";
-
-            // جلب تواريخ البداية والنهاية من ملف الإعدادات
-            string startDateStr = ReadSettingValue("StartAccountsDate");
-            string endDateStr = ReadSettingValue("EndAccountsDate");
-
-            if (!string.IsNullOrEmpty(startDateStr) && DateTime.TryParse(startDateStr, out DateTime startDate))
-                dtpStart.Value = startDate;
-            else
-            {
-                dtpStart.Value = DateTime.Today;
-                MessageBox.Show("تاريخ بداية الحسابات غير محدد أو غير صالح، تم استخدام تاريخ اليوم بدلاً منه.", "تحذير", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-
-            if (!string.IsNullOrEmpty(endDateStr) && DateTime.TryParse(endDateStr, out DateTime endDate))
-                dtpEnd.Value = endDate;
-            else
-            {
-                dtpEnd.Value = DateTime.Today;
-                MessageBox.Show("تاريخ نهاية الحسابات غير محدد أو غير صالح، تم استخدام تاريخ اليوم بدلاً منه.", "تحذير", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            // ✅ الحفظ بصمت عند التغيير فقط
+            AppSettings.SaveOrUpdate("DefaultPrinter", cbxPrinters.SelectedItem?.ToString() ?? "");
+            AppSettings.SaveOrUpdate("DefaultWarehouseId", cbxWarehouse.SelectedValue?.ToString() ?? "");
+            AppSettings.SaveOrUpdate("DefaultStartDate", dtpStart.Value.ToString("yyyy-MM-dd"));
+            AppSettings.SaveOrUpdate("DefaultEndDate", dtpEnd.Value.ToString("yyyy-MM-dd"));
+            AppSettings.SaveOrUpdate("DefaultRdoCheck", GetSelectedRadioButtonName());
         }
 
-        /// <summary>
-        /// تعيين فترة "كل الفترة" عند تحديد زر الراديو المعني (يتم استدعاؤه تلقائياً عند CheckedChanged).
-        /// يعيد تعيين التواريخ حسب الملف مع معالجة الأخطاء.
-        /// </summary>
-        private void SetPeriodForAll()
-        {
-            if (!rdoAllPeriod.Checked) return;
-
-            try
-            {
-                string startDateStr = ReadSettingValue("StartAccountsDate");
-                string endDateStr = ReadSettingValue("EndAccountsDate");
-
-                if (!string.IsNullOrEmpty(startDateStr) && DateTime.TryParse(startDateStr, out DateTime startDate))
-                    dtpStart.Value = startDate;
-                else
-                {
-                    dtpStart.Value = DateTime.Today;
-                    MessageBox.Show("تاريخ بداية الحسابات غير محدد أو غير صالح، تم استخدام تاريخ اليوم بدلاً منه.", "تحذير", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-
-                if (!string.IsNullOrEmpty(endDateStr) && DateTime.TryParse(endDateStr, out DateTime endDate))
-                    dtpEnd.Value = endDate;
-                else
-                {
-                    dtpEnd.Value = new DateTime(DateTime.Now.Year, 12, 31);
-                    MessageBox.Show("تاريخ نهاية الحسابات غير محدد أو غير صالح، تم استخدام نهاية السنة الحالية بدلاً منه.", "تحذير", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                dtpStart.Value = DateTime.Today;
-                dtpEnd.Value = new DateTime(DateTime.Now.Year, 12, 31);
-                MessageBox.Show($"حدث خطأ أثناء جلب تواريخ الحسابات.\nتم استخدام التواريخ الافتراضية بدلاً منها.\n\n{ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        // باقي دوال تعيين الفترات الزمنية لأزرار الراديو الأخرى (تواريخ اليوم، الشهر، السنة، سابق، لاحق...) 
-        // مثل SetPeriodForToday، SetPeriodForPreviousDay، SetPeriodForCurrentMonth، SetPeriodForPreviousMonth، SetPeriodForCurrentYear، SetPeriodForPreviousYear
-        // يمكنك إضافتها بنفس النمط المذكور أعلاه.
 
         #endregion
 
-        #region ==== دوال تحميل الطابعات والمستودعات وحساب الأيام ====
+        #region ==== تحميل وحفظ الإعدادات مع الراديو والفترات ====
+        private void SetupEventHandlers()
+        {
+            dtpStart.ValueChanged += (s, e) => CalculateDaysBetweenDates();
+            dtpEnd.ValueChanged += (s, e) => CalculateDaysBetweenDates();
 
-        /// <summary>
-        /// تحميل أسماء الطابعات المثبتة وإضافة خيارات المعاينة والتصدير.
-        /// </summary>
+            rdoAllPeriod.CheckedChanged += (s, e) => SetPeriodForAll();
+            rdoToDay.CheckedChanged += (s, e) => SetPeriodForToday();
+            rdoPreviousDay.CheckedChanged += (s, e) => SetPeriodForPreviousDay();
+            rdoPreviousMonth.CheckedChanged += (s, e) => SetPeriodForPreviousMonth();
+            rdoThisMonth.CheckedChanged += (s, e) => SetPeriodForCurrentMonth();
+            rdoThisYear.CheckedChanged += (s, e) => SetPeriodForCurrentYear();
+            rdoPreviousYear.CheckedChanged += (s, e) => SetPeriodForPreviousYear();
+        }
+
+        // حفظ صامت للطابعة
+        private void cbxPrinters_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbxPrinters.SelectedItem != null)
+            AppSettings.SaveOrUpdate("DefaultPrinter", cbxPrinters.SelectedItem?.ToString() ?? "");
+
+        }
+
+        // حفظ صامت للمستودع
+        private void cbxWarehouse_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbxWarehouse.SelectedValue != null)
+                AppSettings.SaveOrUpdate("DefaultWarehouseId", cbxWarehouse.SelectedValue?.ToString() ?? "");
+        }
+
+        // حفظ صامت للراديو + ضبط التواريخ
+        private void rdo_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rdo = (RadioButton)sender;
+            if (!rdo.Checked) return;
+
+            AppSettings.SaveOrUpdate("DefaultRdoCheck", rdo.Name);
+
+            if (rdo == rdoAllPeriod) SetPeriodForAll();
+            else if (rdo == rdoToDay) SetPeriodForToday();
+            else if (rdo == rdoPreviousDay) SetPeriodForPreviousDay();
+            else if (rdo == rdoThisMonth) SetPeriodForCurrentMonth();
+            else if (rdo == rdoPreviousMonth) SetPeriodForPreviousMonth();
+            else if (rdo == rdoThisYear) SetPeriodForCurrentYear();
+            else if (rdo == rdoPreviousYear) SetPeriodForPreviousYear();
+
+            CalculateDaysBetweenDates();
+        }
+
+        // عند تغيير التاريخ يدويًا
+        private void dtpStart_ValueChanged(object sender, EventArgs e)
+        {
+            AppSettings.SaveOrUpdate("StartAccountsDate", dtpStart.Value.ToString("yyyy-MM-dd"));
+            CalculateDaysBetweenDates();
+        }
+
+        private void dtpEnd_ValueChanged(object sender, EventArgs e)
+        {
+            AppSettings.SaveOrUpdate("EndAccountsDate", dtpEnd.Value.ToString("yyyy-MM-dd"));
+            CalculateDaysBetweenDates();
+        }
+
+        private void CalculateDaysBetweenDates()
+        {
+            TimeSpan span = dtpEnd.Value.Date - dtpStart.Value.Date;
+            lblAmountOfDay.Text = $"{span.Days + 1} يوم";
+        }
+
+        private void SetPeriodForAll()
+        {
+            dtpStart.Value = AppSettings.GetDateTime("StartAccountsDate", DateTime.Today);
+            dtpEnd.Value = AppSettings.GetDateTime("EndAccountsDate", DateTime.Today);
+            lblAllPeriod.Text = "كل الفترة";
+        }
+
+        private void SetPeriodForToday()
+        {
+            dtpStart.Value = DateTime.Today;
+            dtpEnd.Value = DateTime.Today;
+            lblAllPeriod.Text = "";
+        }
+
+        private void SetPeriodForPreviousDay()
+        {
+            DateTime yesterday = DateTime.Today.AddDays(-1);
+            dtpStart.Value = yesterday;
+            dtpEnd.Value = yesterday;
+            lblAllPeriod.Text = "";
+        }
+
+        private void SetPeriodForCurrentMonth()
+        {
+            DateTime today = DateTime.Today;
+            dtpStart.Value = new DateTime(today.Year, today.Month, 1);
+            dtpEnd.Value = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
+            lblAllPeriod.Text = "";
+        }
+
+        private void SetPeriodForPreviousMonth()
+        {
+            DateTime firstDayOfLastMonth = DateTime.Today.AddMonths(-1);
+            firstDayOfLastMonth = new DateTime(firstDayOfLastMonth.Year, firstDayOfLastMonth.Month, 1);
+
+            dtpStart.Value = firstDayOfLastMonth;
+            dtpEnd.Value = new DateTime(firstDayOfLastMonth.Year, firstDayOfLastMonth.Month,
+                                       DateTime.DaysInMonth(firstDayOfLastMonth.Year, firstDayOfLastMonth.Month));
+            lblAllPeriod.Text = "";
+        }
+
+        private void SetPeriodForCurrentYear()
+        {
+            dtpStart.Value = new DateTime(DateTime.Now.Year, 1, 1);
+            dtpEnd.Value = new DateTime(DateTime.Now.Year, 12, 31);
+            lblAllPeriod.Text = "";
+        }
+
+        private void SetPeriodForPreviousYear()
+        {
+            int lastYear = DateTime.Now.Year - 1;
+            dtpStart.Value = new DateTime(lastYear, 1, 1);
+            dtpEnd.Value = new DateTime(lastYear, 12, 31);
+            lblAllPeriod.Text = "";
+        }
+
+        #endregion
+
+
+
+        #region ==== دوال تحميل الطابعات والمستودعات  ====
+
+        // تحميل أسماء الطابعات المثبتة وإضافة خيارات المعاينة والتصدير.
         private void LoadPrinters()
         {
             cbxPrinters.Items.Clear();
@@ -296,9 +278,7 @@ namespace MizanOriginalSoft.Views.Reports
                 cbxPrinters.SelectedIndex = 0;
         }
 
-        /// <summary>
-        /// تحميل قائمة المستودعات من قاعدة البيانات مع إضافة خيار "كل الفروع".
-        /// </summary>
+        // تحميل قائمة المستودعات من قاعدة البيانات مع إضافة خيار "كل الفروع".
         private void LoadWarehouses()
         {
             try
@@ -335,22 +315,11 @@ namespace MizanOriginalSoft.Views.Reports
             }
         }
 
-        /// <summary>
-        /// حساب عدد الأيام بين تاريخ البداية والنهاية وعرضها في تسمية.
-        /// </summary>
-        private void CalculateDaysBetweenDates()
-        {
-            TimeSpan span = dtpEnd.Value.Date - dtpStart.Value.Date;
-            lblAmountOfDay.Text = $"{span.Days + 1} يوم";
-        }
-
         #endregion
 
         #region ==== دوال أزرار التقرير ====
 
-        /// <summary>
-        /// تجهيز معلمات التقرير وطلب عرضه عند الضغط على زر "انتقال".
-        /// </summary>
+        // تجهيز معلمات التقرير وطلب عرضه عند الضغط على زر "انتقال".
         private void btnGo_Click(object sender, EventArgs e)
         {
             string selectedValue = cbxPrinters.SelectedItem?.ToString() ?? "";
@@ -383,12 +352,9 @@ namespace MizanOriginalSoft.Views.Reports
             ReportsManager.ShowReport(parameters);
         }
 
-        /// <summary>
-        /// حفظ الإعدادات وإغلاق النموذج عند الضغط على زر الحفظ والإغلاق.
-        /// </summary>
+        // حفظ الإعدادات وإغلاق النموذج عند الضغط على زر الحفظ والإغلاق.
         private void btnSaveAndClose_Click(object sender, EventArgs e)
         {
-            SaveDefaults();
             Close();
         }
 
@@ -396,87 +362,6 @@ namespace MizanOriginalSoft.Views.Reports
 
         #region ==== ضبط أحداث واجهة المستخدم ====
 
-        /// <summary>
-        /// ربط معالجات الأحداث للعناصر الرئيسية في النموذج.
-        /// </summary>
-        private void SetupEventHandlers()
-        {
-            dtpStart.ValueChanged += (s, e) => CalculateDaysBetweenDates();
-            dtpEnd.ValueChanged += (s, e) => CalculateDaysBetweenDates();
-
-            rdoAllPeriod.CheckedChanged += (s, e) => SetPeriodForAll();
-            rdoToDay.CheckedChanged += (s, e) => SetPeriodForToday();
-            rdoPreviousDay.CheckedChanged += (s, e) => SetPeriodForPreviousDay();
-            rdoPreviousMonth.CheckedChanged += (s, e) => SetPeriodForPreviousMonth();
-            rdoThisMonth.CheckedChanged += (s, e) => SetPeriodForCurrentMonth();
-            rdoThisYear.CheckedChanged += (s, e) => SetPeriodForCurrentYear();
-            rdoPreviousYear.CheckedChanged += (s, e) => SetPeriodForPreviousYear();
-        }
-
-        #endregion
-
-        #region ==== دوال الفترات الزمنية الأخرى (مثال) ====
-
-        private void SetPeriodForToday()
-        {
-            if (!rdoToDay.Checked) return;
-
-            dtpStart.Value = DateTime.Today;
-            dtpEnd.Value = DateTime.Today;
-            lblAllPeriod.Text = "";
-        }
-
-        private void SetPeriodForPreviousDay()
-        {
-            if (!rdoPreviousDay.Checked) return;
-
-            DateTime yesterday = DateTime.Today.AddDays(-1);
-            dtpStart.Value = yesterday;
-            dtpEnd.Value = yesterday;
-            lblAllPeriod.Text = "";
-        }
-
-        private void SetPeriodForCurrentMonth()
-        {
-            if (!rdoThisMonth.Checked) return;
-
-            DateTime today = DateTime.Today;
-            dtpStart.Value = new DateTime(today.Year, today.Month, 1);
-            dtpEnd.Value = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
-            lblAllPeriod.Text = "";
-        }
-
-        private void SetPeriodForPreviousMonth()
-        {
-            if (!rdoPreviousMonth.Checked) return;
-
-            DateTime firstDayOfLastMonth = DateTime.Today.AddMonths(-1);
-            firstDayOfLastMonth = new DateTime(firstDayOfLastMonth.Year, firstDayOfLastMonth.Month, 1);
-
-            dtpStart.Value = firstDayOfLastMonth;
-            dtpEnd.Value = new DateTime(firstDayOfLastMonth.Year, firstDayOfLastMonth.Month,
-                                       DateTime.DaysInMonth(firstDayOfLastMonth.Year, firstDayOfLastMonth.Month));
-            lblAllPeriod.Text = "";
-        }
-
-        private void SetPeriodForCurrentYear()
-        {
-            if (!rdoThisYear.Checked) return;
-
-            dtpStart.Value = new DateTime(DateTime.Now.Year, 1, 1);
-            dtpEnd.Value = new DateTime(DateTime.Now.Year, 12, 31);
-            lblAllPeriod.Text = "";
-        }
-
-        private void SetPeriodForPreviousYear()
-        {
-            if (!rdoPreviousYear.Checked) return;
-
-            int lastYear = DateTime.Now.Year - 1;
-            dtpStart.Value = new DateTime(lastYear, 1, 1);
-            dtpEnd.Value = new DateTime(lastYear, 12, 31);
-            lblAllPeriod.Text = "";
-        }
 
         #endregion
     }
