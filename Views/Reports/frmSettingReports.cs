@@ -151,7 +151,7 @@ namespace MizanOriginalSoft.Views.Reports
         private void cbxPrinters_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbxPrinters.SelectedItem != null)
-            AppSettings.SaveOrUpdate("DefaultPrinter", cbxPrinters.SelectedItem?.ToString() ?? "");
+                AppSettings.SaveOrUpdate("DefaultPrinter", cbxPrinters.SelectedItem?.ToString() ?? "");
 
         }
 
@@ -364,6 +364,11 @@ namespace MizanOriginalSoft.Views.Reports
 
 
         #endregion
+
+        private void lblAmountOfDay_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

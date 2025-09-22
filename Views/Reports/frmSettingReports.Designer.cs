@@ -47,6 +47,7 @@
             rdoAllPeriod = new RadioButton();
             tableLayoutPanel2 = new TableLayoutPanel();
             tableLayoutPanel3 = new TableLayoutPanel();
+            lblTitel = new Label();
             cbxWarehouse = new ComboBox();
             tlpDateRight = new TableLayoutPanel();
             btnGo = new Button();
@@ -54,9 +55,7 @@
             btnPrint = new Button();
             tlpButtons = new TableLayoutPanel();
             tableLayoutPanel1 = new TableLayoutPanel();
-            lblTitel = new Label();
             tableLayoutPanel5 = new TableLayoutPanel();
-            tableLayoutPanel6 = new TableLayoutPanel();
             dataGridView1 = new DataGridView();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
@@ -64,7 +63,6 @@
             tlpButtons.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
-            tableLayoutPanel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -73,9 +71,9 @@
             label5.AutoSize = true;
             label5.Dock = DockStyle.Fill;
             label5.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label5.Location = new Point(219, 0);
+            label5.Location = new Point(249, 66);
             label5.Name = "label5";
-            label5.Size = new Size(68, 48);
+            label5.Size = new Size(57, 34);
             label5.TabIndex = 14;
             label5.Text = "الطابعة";
             label5.TextAlign = ContentAlignment.MiddleRight;
@@ -86,9 +84,9 @@
             cbxPrinters.Dock = DockStyle.Fill;
             cbxPrinters.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
             cbxPrinters.FormattingEnabled = true;
-            cbxPrinters.Location = new Point(3, 3);
+            cbxPrinters.Location = new Point(3, 69);
             cbxPrinters.Name = "cbxPrinters";
-            cbxPrinters.Size = new Size(210, 27);
+            cbxPrinters.Size = new Size(240, 27);
             cbxPrinters.TabIndex = 16;
             // 
             // label2
@@ -96,9 +94,9 @@
             label2.AutoSize = true;
             label2.Dock = DockStyle.Fill;
             label2.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(999, 0);
+            label2.Location = new Point(249, 0);
             label2.Name = "label2";
-            label2.Size = new Size(68, 48);
+            label2.Size = new Size(57, 33);
             label2.TabIndex = 14;
             label2.Text = "الفرع";
             label2.TextAlign = ContentAlignment.MiddleRight;
@@ -109,31 +107,31 @@
             btnAllPeriod.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnAllPeriod.Location = new Point(983, 3);
             btnAllPeriod.Name = "btnAllPeriod";
-            btnAllPeriod.Size = new Size(90, 109);
+            btnAllPeriod.Size = new Size(90, 100);
             btnAllPeriod.TabIndex = 9;
             btnAllPeriod.Text = "كل الفترة";
             btnAllPeriod.UseVisualStyleBackColor = true;
             // 
             // lblAmountOfDay
             // 
-            lblAmountOfDay.Dock = DockStyle.Left;
+            lblAmountOfDay.Dock = DockStyle.Fill;
             lblAmountOfDay.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblAmountOfDay.ForeColor = Color.Blue;
-            lblAmountOfDay.Location = new Point(198, 36);
+            lblAmountOfDay.Location = new Point(783, 66);
             lblAmountOfDay.Name = "lblAmountOfDay";
-            lblAmountOfDay.Size = new Size(188, 36);
+            lblAmountOfDay.Size = new Size(140, 34);
             lblAmountOfDay.TabIndex = 15;
             lblAmountOfDay.Text = "0";
             lblAmountOfDay.TextAlign = ContentAlignment.MiddleCenter;
+            lblAmountOfDay.Click += lblAmountOfDay_Click;
             // 
             // lblAllPeriod
             // 
-            lblAllPeriod.Dock = DockStyle.Left;
             lblAllPeriod.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblAllPeriod.ForeColor = Color.Blue;
-            lblAllPeriod.Location = new Point(198, 0);
+            lblAllPeriod.Location = new Point(929, 66);
             lblAllPeriod.Name = "lblAllPeriod";
-            lblAllPeriod.Size = new Size(188, 36);
+            lblAllPeriod.Size = new Size(42, 34);
             lblAllPeriod.TabIndex = 14;
             lblAllPeriod.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -143,10 +141,10 @@
             dtpEnd.Dock = DockStyle.Fill;
             dtpEnd.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             dtpEnd.Format = DateTimePickerFormat.Custom;
-            dtpEnd.Location = new Point(3, 57);
+            dtpEnd.Location = new Point(783, 36);
             dtpEnd.Name = "dtpEnd";
             dtpEnd.RightToLeftLayout = true;
-            dtpEnd.Size = new Size(153, 29);
+            dtpEnd.Size = new Size(140, 29);
             dtpEnd.TabIndex = 8;
             // 
             // lbl
@@ -155,9 +153,9 @@
             lbl.Dock = DockStyle.Fill;
             lbl.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbl.ForeColor = Color.Blue;
-            lbl.Location = new Point(162, 54);
+            lbl.Location = new Point(929, 33);
             lbl.Name = "lbl";
-            lbl.Size = new Size(28, 55);
+            lbl.Size = new Size(42, 33);
             lbl.TabIndex = 7;
             lbl.Text = "الى";
             lbl.TextAlign = ContentAlignment.TopRight;
@@ -168,10 +166,10 @@
             dtpStart.Dock = DockStyle.Fill;
             dtpStart.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             dtpStart.Format = DateTimePickerFormat.Custom;
-            dtpStart.Location = new Point(3, 3);
+            dtpStart.Location = new Point(783, 3);
             dtpStart.Name = "dtpStart";
             dtpStart.RightToLeftLayout = true;
-            dtpStart.Size = new Size(153, 29);
+            dtpStart.Size = new Size(140, 29);
             dtpStart.TabIndex = 6;
             // 
             // label1
@@ -180,9 +178,9 @@
             label1.Dock = DockStyle.Fill;
             label1.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.Blue;
-            label1.Location = new Point(162, 0);
+            label1.Location = new Point(929, 0);
             label1.Name = "label1";
-            label1.Size = new Size(28, 54);
+            label1.Size = new Size(42, 33);
             label1.TabIndex = 5;
             label1.Text = "من";
             label1.TextAlign = ContentAlignment.MiddleRight;
@@ -192,7 +190,7 @@
             rdoPreviousYear.AutoSize = true;
             rdoPreviousYear.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             rdoPreviousYear.ForeColor = Color.Blue;
-            rdoPreviousYear.Location = new Point(461, 75);
+            rdoPreviousYear.Location = new Point(513, 69);
             rdoPreviousYear.Name = "rdoPreviousYear";
             rdoPreviousYear.RightToLeft = RightToLeft.Yes;
             rdoPreviousYear.Size = new Size(87, 26);
@@ -205,7 +203,7 @@
             rdoPreviousDay.AutoSize = true;
             rdoPreviousDay.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             rdoPreviousDay.ForeColor = Color.Blue;
-            rdoPreviousDay.Location = new Point(461, 3);
+            rdoPreviousDay.Location = new Point(513, 3);
             rdoPreviousDay.Name = "rdoPreviousDay";
             rdoPreviousDay.RightToLeft = RightToLeft.Yes;
             rdoPreviousDay.Size = new Size(87, 26);
@@ -218,7 +216,7 @@
             rdoThisYear.AutoSize = true;
             rdoThisYear.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             rdoThisYear.ForeColor = Color.Blue;
-            rdoThisYear.Location = new Point(631, 75);
+            rdoThisYear.Location = new Point(669, 69);
             rdoThisYear.Name = "rdoThisYear";
             rdoThisYear.RightToLeft = RightToLeft.Yes;
             rdoThisYear.Size = new Size(79, 26);
@@ -232,7 +230,7 @@
             rdoToDay.Checked = true;
             rdoToDay.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             rdoToDay.ForeColor = Color.Blue;
-            rdoToDay.Location = new Point(653, 3);
+            rdoToDay.Location = new Point(691, 3);
             rdoToDay.Name = "rdoToDay";
             rdoToDay.RightToLeft = RightToLeft.Yes;
             rdoToDay.Size = new Size(57, 26);
@@ -246,7 +244,7 @@
             rdoPreviousMonth.AutoSize = true;
             rdoPreviousMonth.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             rdoPreviousMonth.ForeColor = Color.Blue;
-            rdoPreviousMonth.Location = new Point(453, 39);
+            rdoPreviousMonth.Location = new Point(505, 36);
             rdoPreviousMonth.Name = "rdoPreviousMonth";
             rdoPreviousMonth.RightToLeft = RightToLeft.Yes;
             rdoPreviousMonth.Size = new Size(95, 26);
@@ -259,7 +257,7 @@
             rdoThisMonth.AutoSize = true;
             rdoThisMonth.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             rdoThisMonth.ForeColor = Color.Blue;
-            rdoThisMonth.Location = new Point(630, 39);
+            rdoThisMonth.Location = new Point(668, 36);
             rdoThisMonth.Name = "rdoThisMonth";
             rdoThisMonth.RightToLeft = RightToLeft.Yes;
             rdoThisMonth.Size = new Size(80, 23);
@@ -272,10 +270,10 @@
             rdoAllPeriod.AutoSize = true;
             rdoAllPeriod.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             rdoAllPeriod.ForeColor = Color.Blue;
-            rdoAllPeriod.Location = new Point(716, 75);
+            rdoAllPeriod.Location = new Point(754, 69);
             rdoAllPeriod.Name = "rdoAllPeriod";
             rdoAllPeriod.RightToLeft = RightToLeft.Yes;
-            rdoAllPeriod.Size = new Size(56, 26);
+            rdoAllPeriod.Size = new Size(23, 26);
             rdoAllPeriod.TabIndex = 0;
             rdoAllPeriod.Text = "كل الفترة";
             rdoAllPeriod.UseVisualStyleBackColor = true;
@@ -298,17 +296,13 @@
             // tableLayoutPanel3
             // 
             tableLayoutPanel3.BackColor = Color.LightGray;
-            tableLayoutPanel3.ColumnCount = 5;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 7F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 46F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 7F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tableLayoutPanel3.Controls.Add(lblTitel, 2, 0);
-            tableLayoutPanel3.Controls.Add(label5, 3, 0);
-            tableLayoutPanel3.Controls.Add(cbxPrinters, 4, 0);
-            tableLayoutPanel3.Controls.Add(label2, 0, 0);
-            tableLayoutPanel3.Controls.Add(cbxWarehouse, 1, 0);
+            tableLayoutPanel3.ColumnCount = 1;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel3.Controls.Add(lblTitel, 0, 0);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(3, 3);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -317,33 +311,59 @@
             tableLayoutPanel3.Size = new Size(1070, 48);
             tableLayoutPanel3.TabIndex = 26;
             // 
+            // lblTitel
+            // 
+            lblTitel.AutoSize = true;
+            lblTitel.BackColor = Color.Transparent;
+            lblTitel.Dock = DockStyle.Fill;
+            lblTitel.Font = new Font("Times New Roman", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitel.ForeColor = Color.Purple;
+            lblTitel.Location = new Point(3, 0);
+            lblTitel.Name = "lblTitel";
+            lblTitel.Size = new Size(1064, 48);
+            lblTitel.TabIndex = 29;
+            lblTitel.Text = "برجاء تحديد عوامل فترة التقرير";
+            lblTitel.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // cbxWarehouse
             // 
             cbxWarehouse.BackColor = Color.Khaki;
             cbxWarehouse.Dock = DockStyle.Fill;
             cbxWarehouse.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
             cbxWarehouse.FormattingEnabled = true;
-            cbxWarehouse.Location = new Point(785, 3);
+            cbxWarehouse.Location = new Point(3, 3);
             cbxWarehouse.Name = "cbxWarehouse";
-            cbxWarehouse.Size = new Size(208, 27);
+            cbxWarehouse.Size = new Size(240, 27);
             cbxWarehouse.TabIndex = 16;
             // 
             // tlpDateRight
             // 
-            tlpDateRight.ColumnCount = 4;
-            tlpDateRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8F));
-            tlpDateRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21F));
-            tlpDateRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21F));
-            tlpDateRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tlpDateRight.Controls.Add(lblAllPeriod, 3, 0);
-            tlpDateRight.Controls.Add(lblAmountOfDay, 3, 1);
-            tlpDateRight.Controls.Add(rdoPreviousYear, 2, 2);
-            tlpDateRight.Controls.Add(rdoPreviousDay, 2, 0);
-            tlpDateRight.Controls.Add(rdoThisYear, 1, 2);
-            tlpDateRight.Controls.Add(rdoToDay, 1, 0);
-            tlpDateRight.Controls.Add(rdoPreviousMonth, 2, 1);
-            tlpDateRight.Controls.Add(rdoThisMonth, 1, 1);
-            tlpDateRight.Controls.Add(rdoAllPeriod, 0, 2);
+            tlpDateRight.ColumnCount = 8;
+            tlpDateRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5F));
+            tlpDateRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15F));
+            tlpDateRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 3F));
+            tlpDateRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15.2258062F));
+            tlpDateRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.8064518F));
+            tlpDateRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.4229975F));
+            tlpDateRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 6.46817255F));
+            tlpDateRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.0513344F));
+            tlpDateRight.Controls.Add(label1, 0, 0);
+            tlpDateRight.Controls.Add(cbxWarehouse, 7, 0);
+            tlpDateRight.Controls.Add(label2, 6, 0);
+            tlpDateRight.Controls.Add(cbxPrinters, 7, 2);
+            tlpDateRight.Controls.Add(label5, 6, 2);
+            tlpDateRight.Controls.Add(lbl, 0, 1);
+            tlpDateRight.Controls.Add(dtpEnd, 1, 1);
+            tlpDateRight.Controls.Add(rdoPreviousYear, 4, 2);
+            tlpDateRight.Controls.Add(dtpStart, 1, 0);
+            tlpDateRight.Controls.Add(rdoPreviousDay, 4, 0);
+            tlpDateRight.Controls.Add(rdoThisYear, 3, 2);
+            tlpDateRight.Controls.Add(rdoToDay, 3, 0);
+            tlpDateRight.Controls.Add(rdoPreviousMonth, 4, 1);
+            tlpDateRight.Controls.Add(rdoThisMonth, 3, 1);
+            tlpDateRight.Controls.Add(rdoAllPeriod, 2, 2);
+            tlpDateRight.Controls.Add(lblAmountOfDay, 1, 2);
+            tlpDateRight.Controls.Add(lblAllPeriod, 0, 2);
             tlpDateRight.Dock = DockStyle.Fill;
             tlpDateRight.Location = new Point(3, 3);
             tlpDateRight.Name = "tlpDateRight";
@@ -351,7 +371,7 @@
             tlpDateRight.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
             tlpDateRight.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
             tlpDateRight.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-            tlpDateRight.Size = new Size(775, 109);
+            tlpDateRight.Size = new Size(974, 100);
             tlpDateRight.TabIndex = 25;
             // 
             // btnGo
@@ -423,60 +443,27 @@
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 4;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 60F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 18.4818478F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 61.38614F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanel1.Size = new Size(1082, 606);
             tableLayoutPanel1.TabIndex = 1;
             // 
-            // lblTitel
-            // 
-            lblTitel.AutoSize = true;
-            lblTitel.BackColor = Color.Transparent;
-            lblTitel.Dock = DockStyle.Fill;
-            lblTitel.Font = new Font("Times New Roman", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitel.ForeColor = Color.Purple;
-            lblTitel.Location = new Point(293, 0);
-            lblTitel.Name = "lblTitel";
-            lblTitel.Size = new Size(486, 48);
-            lblTitel.TabIndex = 29;
-            lblTitel.Text = "برجاء تحديد عوامل فترة التقرير";
-            lblTitel.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // tableLayoutPanel5
             // 
-            tableLayoutPanel5.ColumnCount = 3;
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8.921933F));
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 18.4944229F));
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 72.58364F));
+            tableLayoutPanel5.ColumnCount = 2;
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 9F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 91F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel5.Controls.Add(btnAllPeriod, 0, 0);
-            tableLayoutPanel5.Controls.Add(tlpDateRight, 2, 0);
-            tableLayoutPanel5.Controls.Add(tableLayoutPanel6, 1, 0);
+            tableLayoutPanel5.Controls.Add(tlpDateRight, 1, 0);
             tableLayoutPanel5.Dock = DockStyle.Fill;
             tableLayoutPanel5.Location = new Point(3, 63);
             tableLayoutPanel5.Name = "tableLayoutPanel5";
             tableLayoutPanel5.RowCount = 1;
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel5.Size = new Size(1076, 115);
+            tableLayoutPanel5.Size = new Size(1076, 106);
             tableLayoutPanel5.TabIndex = 30;
-            // 
-            // tableLayoutPanel6
-            // 
-            tableLayoutPanel6.ColumnCount = 2;
-            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 18.1347141F));
-            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 81.86529F));
-            tableLayoutPanel6.Controls.Add(label1, 0, 0);
-            tableLayoutPanel6.Controls.Add(lbl, 0, 1);
-            tableLayoutPanel6.Controls.Add(dtpEnd, 1, 1);
-            tableLayoutPanel6.Controls.Add(dtpStart, 1, 0);
-            tableLayoutPanel6.Dock = DockStyle.Fill;
-            tableLayoutPanel6.Location = new Point(784, 3);
-            tableLayoutPanel6.Name = "tableLayoutPanel6";
-            tableLayoutPanel6.RowCount = 2;
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel6.Size = new Size(193, 109);
-            tableLayoutPanel6.TabIndex = 10;
             // 
             // dataGridView1
             // 
@@ -484,10 +471,10 @@
             dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(3, 184);
+            dataGridView1.Location = new Point(3, 175);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
-            dataGridView1.Size = new Size(1076, 357);
+            dataGridView1.Size = new Size(1076, 366);
             dataGridView1.TabIndex = 31;
             // 
             // frmSettingReports
@@ -508,8 +495,6 @@
             tlpButtons.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel5.ResumeLayout(false);
-            tableLayoutPanel6.ResumeLayout(false);
-            tableLayoutPanel6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
         }
@@ -544,7 +529,6 @@
         private TableLayoutPanel tableLayoutPanel1;
         private Label lblTitel;
         private TableLayoutPanel tableLayoutPanel5;
-        private TableLayoutPanel tableLayoutPanel6;
         private DataGridView dataGridView1;
     }
 }
