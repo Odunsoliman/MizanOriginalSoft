@@ -732,7 +732,7 @@
             pnlMovement.MinimumSize = new Size(0, 34);
             pnlMovement.Name = "pnlMovement";
             pnlMovement.Padding = new Padding(3, 2, 3, 2);
-            pnlMovement.Size = new Size(134, 338);
+            pnlMovement.Size = new Size(134, 34);
             pnlMovement.TabIndex = 1;
             // 
             // btnPOS
@@ -849,13 +849,13 @@
             pnlReports.Controls.Add(DGV);
             pnlReports.Controls.Add(btn_MainReports);
             pnlReports.Dock = DockStyle.Top;
-            pnlReports.Location = new Point(0, 467);
+            pnlReports.Location = new Point(0, 163);
             pnlReports.Margin = new Padding(3, 2, 3, 2);
             pnlReports.MaximumSize = new Size(0, 400);
             pnlReports.MinimumSize = new Size(0, 34);
             pnlReports.Name = "pnlReports";
             pnlReports.Padding = new Padding(4);
-            pnlReports.Size = new Size(134, 34);
+            pnlReports.Size = new Size(134, 258);
             pnlReports.TabIndex = 3;
             // 
             // DGV
@@ -869,7 +869,7 @@
             DGV.Name = "DGV";
             DGV.ReadOnly = true;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DGV.Size = new Size(126, 0);
+            DGV.Size = new Size(126, 221);
             DGV.TabIndex = 2;
             DGV.DoubleClick += DGV_DoubleClick;
             // 
@@ -940,7 +940,7 @@
             pnlBills.Controls.Add(btnCashOut);
             pnlBills.Controls.Add(btn_MainBill);
             pnlBills.Dock = DockStyle.Top;
-            pnlBills.Location = new Point(0, 433);
+            pnlBills.Location = new Point(0, 129);
             pnlBills.Margin = new Padding(3, 2, 3, 2);
             pnlBills.MaximumSize = new Size(0, 338);
             pnlBills.MinimumSize = new Size(0, 34);

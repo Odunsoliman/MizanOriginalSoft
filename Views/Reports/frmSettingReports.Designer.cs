@@ -54,14 +54,14 @@
             tlpButtons = new TableLayoutPanel();
             tableLayoutPanel1 = new TableLayoutPanel();
             tableLayoutPanel5 = new TableLayoutPanel();
-            dataGridView1 = new DataGridView();
+            DGV = new DataGridView();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             tlpDateRight.SuspendLayout();
             tlpButtons.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
             SuspendLayout();
             // 
             // label5
@@ -185,7 +185,7 @@
             rdoPreviousYear.TabIndex = 6;
             rdoPreviousYear.Text = "عام سابق";
             rdoPreviousYear.UseVisualStyleBackColor = true;
-            rdoPreviousYear.CheckedChanged += rdoPreviousYear_CheckedChanged;
+            //rdoPreviousYear.CheckedChanged += rdoPreviousYear_CheckedChanged;
             // 
             // rdoPreviousDay
             // 
@@ -199,7 +199,7 @@
             rdoPreviousDay.TabIndex = 4;
             rdoPreviousDay.Text = "يوم سابق";
             rdoPreviousDay.UseVisualStyleBackColor = true;
-            rdoPreviousDay.CheckedChanged += rdoPreviousDay_CheckedChanged;
+//            rdoPreviousDay.CheckedChanged += rdoPreviousDay_CheckedChanged;
             // 
             // rdoThisYear
             // 
@@ -213,7 +213,7 @@
             rdoThisYear.TabIndex = 2;
             rdoThisYear.Text = "هذا العام";
             rdoThisYear.UseVisualStyleBackColor = true;
-            rdoThisYear.CheckedChanged += rdoThisYear_CheckedChanged;
+            //rdoThisYear.CheckedChanged += rdoThisYear_CheckedChanged;
             // 
             // rdoToDay
             // 
@@ -229,7 +229,7 @@
             rdoToDay.TabStop = true;
             rdoToDay.Text = "اليوم";
             rdoToDay.UseVisualStyleBackColor = true;
-            rdoToDay.CheckedChanged += rdoToDay_CheckedChanged;
+            //rdoToDay.CheckedChanged += rdoToDay_CheckedChanged;
             // 
             // rdoPreviousMonth
             // 
@@ -243,7 +243,7 @@
             rdoPreviousMonth.TabIndex = 1;
             rdoPreviousMonth.Text = "شهر سابق";
             rdoPreviousMonth.UseVisualStyleBackColor = true;
-            rdoPreviousMonth.CheckedChanged += rdoPreviousMonth_CheckedChanged;
+            //rdoPreviousMonth.CheckedChanged += rdoPreviousMonth_CheckedChanged;
             // 
             // rdoThisMonth
             // 
@@ -257,7 +257,7 @@
             rdoThisMonth.TabIndex = 5;
             rdoThisMonth.Text = "هذا الشهر";
             rdoThisMonth.UseVisualStyleBackColor = true;
-            rdoThisMonth.CheckedChanged += rdoThisMonth_CheckedChanged;
+            //rdoThisMonth.CheckedChanged += rdoThisMonth_CheckedChanged;
             // 
             // rdoAllPeriod
             // 
@@ -272,7 +272,7 @@
             rdoAllPeriod.Text = "كل الفترة";
             rdoAllPeriod.UseVisualStyleBackColor = true;
             rdoAllPeriod.Visible = false;
-            rdoAllPeriod.CheckedChanged += rdoAllPeriod_CheckedChanged;
+            //rdoAllPeriod.CheckedChanged += rdoAllPeriod_CheckedChanged;
             // 
             // tableLayoutPanel2
             // 
@@ -419,7 +419,7 @@
             tableLayoutPanel1.Controls.Add(tlpButtons, 0, 3);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 0);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel5, 0, 1);
-            tableLayoutPanel1.Controls.Add(dataGridView1, 0, 2);
+            tableLayoutPanel1.Controls.Add(DGV, 0, 2);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -447,17 +447,17 @@
             tableLayoutPanel5.Size = new Size(1076, 106);
             tableLayoutPanel5.TabIndex = 30;
             // 
-            // dataGridView1
+            // DGV
             // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(3, 175);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.Size = new Size(1076, 366);
-            dataGridView1.TabIndex = 31;
+            DGV.AllowUserToAddRows = false;
+            DGV.AllowUserToDeleteRows = false;
+            DGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            DGV.Dock = DockStyle.Fill;
+            DGV.Location = new Point(3, 175);
+            DGV.Name = "DGV";
+            DGV.ReadOnly = true;
+            DGV.Size = new Size(1076, 366);
+            DGV.TabIndex = 31;
             // 
             // frmSettingReports
             // 
@@ -477,7 +477,7 @@
             tlpButtons.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DGV).EndInit();
             ResumeLayout(false);
         }
 
@@ -510,5 +510,6 @@
         private Label lblTitel;
         private TableLayoutPanel tableLayoutPanel5;
         private DataGridView dataGridView1;
+        private DataGridView DGV;
     }
 }

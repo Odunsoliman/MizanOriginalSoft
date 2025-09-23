@@ -50,6 +50,7 @@ namespace MizanOriginalSoft.Views.Reports
 
 
       */
+
         #region ==== المتغيرات ====
 
         // معلمات التقرير
@@ -63,6 +64,15 @@ namespace MizanOriginalSoft.Views.Reports
         #endregion
 
         #region ==== المُنشئ ====
+        /*السيناريو المطلوب هنا 
+  يوجد فى الشاشة DGV جريد يتم عرض البيانات المطلوبة والتى يتم احضارها للتقرير المعنى ReportCodeName وهم حوالى 40 تقرير 
+ سيتم اخفاء كل الاعمدة كخطوة اولى ثم اظهار المطلوب فقط باسماء الاعمدة المطلوب عرضها فى الجريد قبل طباعتها 
+ فاريد فكرة ديناميكية قابلة للتطوير  بحيث يتم عرض الاعمدة المطلوبة بالاعراض المطلوبة الكبير منها واصغير لكل تقرير حسب طبيعته 
+ فما الفكرة
+  */
+
+
+    
 
         public frmSettingReports(Dictionary<string, object> parameters)
         {
@@ -80,19 +90,147 @@ namespace MizanOriginalSoft.Views.Reports
 
             SetupEventHandlers();
         }
+ 
+        // الفكرة الجديدة===================================
 
-        #endregion
+  
+        //// كلاس مساعد لتعريف خصائص الأعمدة
+        //public class ColumnConfig
+        //{
+        //    public string ColumnName { get; }
+        //    public string HeaderText { get; }
+        //    public int Width { get; }
+        //    public int DisplayIndex { get; }
 
-        #region ==== أحداث النموذج ====
+        //    public ColumnConfig(string columnName, string headerText, int width, int displayIndex)
+        //    {
+        //        ColumnName = columnName;
+        //        HeaderText = headerText;
+        //        Width = width;
+        //        DisplayIndex = displayIndex;
+        //    }
+        //}
+
+
+        private void ApplyReportSettings(string reportCodeName)
+        {
+            // إخفاء كل الأعمدة أولاً
+            foreach (DataGridViewColumn col in DGV.Columns)
+            {
+                col.Visible = false;
+            }
+
+            // جلب إعدادات الأعمدة من ReportsManager
+            var columns = ReportsManager.GetColumnSettings(reportCodeName);
+
+            foreach (var config in columns)
+            {
+                if (DGV.Columns.Contains(config.ColumnName))
+                {
+                    var col = DGV.Columns[config.ColumnName];
+                    col.Visible = true;
+                    col.HeaderText = config.HeaderText;
+                    col.Width = config.Width;
+                    col.DisplayIndex = config.DisplayIndex;
+                }
+            }
+        }
+
+        private void dgvMainStyle()
+        {
+            // خط افتراضي لكل الخلايا
+            DGV.DefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Bold);
+
+            // تلوين الصفوف (تبادلية)
+            DGV.RowsDefaultCellStyle.BackColor = Color.White;
+            DGV.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
+
+            // جعل الأعمدة تملأ الجريد
+            DGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            // إخفاء عناوين الصفوف (RowHeaders)
+            DGV.RowHeadersVisible = false;
+
+            // تنسيق عناوين الأعمدة
+            DGV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Bold);
+
+            // جعل الجريد للعرض فقط (لا تعديل ولا إضافة)
+            DGV.ReadOnly = true;
+            DGV.AllowUserToAddRows = false;
+            DGV.AllowUserToDeleteRows = false;
+            DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            // تحسين الشكل
+            DGV.EnableHeadersVisualStyles = false;
+            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.LightSteelBlue;
+            DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+        }
+
 
         private void frmSettingReports_Load(object sender, EventArgs e)
         {
             LoadPrinters();
             LoadWarehouses();
             LoadDefaults();
+
+            // جلب البيانات من ReportsManager
+            DataTable dt = ReportsManager.GetReportData(_repCodeName, _parameters);
+            DGV.DataSource = dt;
+
+            // تنسيقات عامة للجريد
+            dgvMainStyle();
+
+            // تطبيق إعدادات الأعمدة الخاصة بالتقرير
+            ApplyReportSettings(_repCodeName);
         }
 
+
+
         #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         #region ==== دوال قراءة وكتابة ملف الإعدادات ====
         private void rdo_CheckedChanged(object? sender, EventArgs e)
@@ -353,41 +491,6 @@ namespace MizanOriginalSoft.Views.Reports
         اما الان عند الاختيار لا يتم الحفظ الصامت 
          */
 
-
-        private void rdoToDay_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void rdoThisMonth_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void rdoThisYear_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void rdoPreviousDay_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void rdoPreviousMonth_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void rdoPreviousYear_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void rdoAllPeriod_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
 
 
 
