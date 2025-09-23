@@ -1329,11 +1329,11 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
             if (confirm == DialogResult.Yes)
             {
-                UpdateDefaultWarehouseId(selectedWarehouseId);
+                UpdateThisVersionWarehouseId(selectedWarehouseId);
             }
         }
 
-        private void UpdateDefaultWarehouseId(int newId)
+        private void UpdateThisVersionWarehouseId(int newId)
         {
             try
             {
@@ -1349,16 +1349,16 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
                 for (int i = 0; i < lines.Count; i++)
                 {
-                    if (lines[i].StartsWith("DefaultWarehouseId=", StringComparison.OrdinalIgnoreCase))
+                    if (lines[i].StartsWith("ThisVersionIsForWarehouseId=", StringComparison.OrdinalIgnoreCase))
                     {
-                        lines[i] = $"DefaultWarehouseId={newId}";
+                        lines[i] = $"ThisVersionIsForWarehouseId={newId}";
                         found = true;
                         break;
                     }
                 }
 
                 if (!found)
-                    lines.Add($"DefaultWarehouseId={newId}");
+                    lines.Add($"ThisVersionIsForWarehouseId={newId}");
 
                 File.WriteAllLines(filePath, lines, Encoding.UTF8);
 

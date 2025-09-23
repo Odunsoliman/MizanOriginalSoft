@@ -64,11 +64,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         private void LoadAppInfo()
         {
             try
-            { /*
-               قمت هنا بتغيير اسم المفتاح فى ملف التكست الى ThisVersionIsForWarehouseId
-                ولكن الدالة  var dt = DBServiecs.Warehouse_GetAll(); تحضر من القاعدة اسم العمود WarehouseId
-                فاريد عند قرائة ThisVersionIsForWarehouseId من ملف التكست مساوات قيمته الرقمية ب WarehouseId حتى يحضر اسم الفرع بشكل صحيح
-               */
+            { 
                 string filePath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
                 CurrentSession.LoadServerSettings(filePath);
 
