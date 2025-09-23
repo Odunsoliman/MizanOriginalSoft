@@ -454,6 +454,11 @@ namespace MizanOriginalSoft.Views.Reports
         }
 
         #endregion
+
+        private void btnAllPeriod_Click(object sender, EventArgs e)
+        {
+            rdoAllPeriod .Checked = true;
+        }
     }
 }
 

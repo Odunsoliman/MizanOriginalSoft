@@ -110,6 +110,7 @@
             btnAllPeriod.TabIndex = 9;
             btnAllPeriod.Text = "كل الفترة";
             btnAllPeriod.UseVisualStyleBackColor = true;
+            btnAllPeriod.Click += btnAllPeriod_Click;
             // 
             // lblAmountOfDay
             // 
