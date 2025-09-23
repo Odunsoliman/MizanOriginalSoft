@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace MizanOriginalSoft.MainClasses.OriginalClasses
 {
@@ -18,13 +19,12 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             settingsFilePath = filePath;
 
             if (!File.Exists(filePath))
-                throw new FileNotFoundException($"❌ ملف الإعدادات غير موجود: {filePath}");//
+                throw new FileNotFoundException($"❌ ملف الإعدادات غير موجود: {filePath}");
 
             foreach (var rawLine in File.ReadAllLines(filePath))
             {
                 string line = rawLine.Trim();
 
-                // تجاهل السطور الفارغة أو التعليقات
                 if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#") || line.StartsWith("//") || line.StartsWith(";"))
                     continue;
 
@@ -48,7 +48,14 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
                 throw new InvalidOperationException("⚠️ لم يتم تحميل ملف الإعدادات. استخدم AppSettings.Load() أولاً.");
         }
 
-        // 📌 الدوال المساعدة لقراءة القيم
+        // 📌 إعادة تحميل (Refresh) الإعدادات بعد الحفظ
+        public static void ReloadSettings()
+        {
+            if (File.Exists(settingsFilePath))
+                Load(settingsFilePath);
+        }
+
+        // 📌 دوال القراءة
         public static string? GetString(string key, string? defaultValue = null)
         {
             EnsureLoaded();
@@ -89,6 +96,7 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             return new(settings);
         }
 
+        // 📌 الحفظ مع التحديث التلقائي
         public static void SaveOrUpdate(string key, string value)
         {
             EnsureLoaded();
@@ -100,7 +108,6 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
             {
                 string line = lines[i].Trim();
 
-                // تجاهل التعليقات والسطور الفارغة
                 if (string.IsNullOrWhiteSpace(line) ||
                     line.StartsWith("#") || line.StartsWith("//") || line.StartsWith(";"))
                     continue;
@@ -112,14 +119,13 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
 
                 if (string.Equals(currentKey, key, StringComparison.OrdinalIgnoreCase))
                 {
-                    string prefix = lines[i].Substring(0, equalIndex + 1); // نحافظ على spacing
+                    string prefix = lines[i].Substring(0, equalIndex + 1);
                     string oldValue = line.Substring(equalIndex + 1).Trim();
 
-                    if (oldValue != value) // فقط إذا تغيّر
+                    if (oldValue != value)
                     {
                         lines[i] = prefix + " " + value;
                         File.WriteAllLines(settingsFilePath, lines);
-                        settings[key] = value; // تحديث الكاش
                     }
 
                     updated = true;
@@ -127,14 +133,14 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
                 }
             }
 
-            // لو المفتاح غير موجود → إضافته
             if (!updated)
             {
                 lines.Add($"{key}={value}");
                 File.WriteAllLines(settingsFilePath, lines);
-                settings[key] = value;
             }
-        }
 
+            // 📌 تحديث الكاش وإعادة التحميل
+            ReloadSettings();
+        }
     }
 }

@@ -95,6 +95,25 @@ namespace MizanOriginalSoft.Views.Reports
         #endregion
 
         #region ==== دوال قراءة وكتابة ملف الإعدادات ====
+        private void rdo_CheckedChanged(object? sender, EventArgs e)
+        {
+            if (sender is not RadioButton rdo) return;
+            if (!rdo.Checked) return;
+
+            // 🔹 نحفظ اسم الراديو في الإعدادات
+            AppSettings.SaveOrUpdate("DefaultRdoCheck", rdo.Name);
+
+            // 🔹 نغير التاريخ حسب الاختيار
+            if (rdo == rdoAllPeriod) SetPeriodForAll();
+            else if (rdo == rdoToDay) SetPeriodForToday();
+            else if (rdo == rdoPreviousDay) SetPeriodForPreviousDay();
+            else if (rdo == rdoThisMonth) SetPeriodForCurrentMonth();
+            else if (rdo == rdoPreviousMonth) SetPeriodForPreviousMonth();
+            else if (rdo == rdoThisYear) SetPeriodForCurrentYear();
+            else if (rdo == rdoPreviousYear) SetPeriodForPreviousYear();
+
+            CalculateDaysBetweenDates();
+        }
 
         private void LoadDefaults()
         {
@@ -204,7 +223,7 @@ namespace MizanOriginalSoft.Views.Reports
 
 
         // 🔹 حفظ صامت للراديو + تحديد الفترة
-        private void rdo_CheckedChanged(object? sender, EventArgs e)
+        private void rdo_CheckedChanged_(object? sender, EventArgs e)
         {
             if (sender is not RadioButton rdo)
                 return; // لو null أو مش RadioButton نخرج بأمان
