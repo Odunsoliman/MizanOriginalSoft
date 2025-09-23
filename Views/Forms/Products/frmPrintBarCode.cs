@@ -807,7 +807,7 @@ namespace Signee.Views.Forms.Products
                 }
             }
         }
-        bool check;
+//        bool check;
         private void btnDeleteSelected_Click(object sender, EventArgs e)
         {
             // 1. التحقق من وجود صفوف محددة للحذف

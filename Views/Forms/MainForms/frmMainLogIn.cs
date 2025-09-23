@@ -735,7 +735,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
 
         // 🔹 فاتورة البيع المرتد
-        private void btnBackSales_Click(object sender, EventArgs e)
+        private void btnBackSales_Click(object? sender, EventArgs e)
         {
             if (sender is Button btn)
             {

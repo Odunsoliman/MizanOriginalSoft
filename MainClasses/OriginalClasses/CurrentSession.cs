@@ -25,7 +25,71 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
         public static string? BackupGitPath { get; set; }
 
         // ⬅️ تحميل الإعدادات من الملف
+        public static int DefaultWarehouseId { get; set; }   // الفرع الافتراضي (للاستخدامات الأخرى)
+
         public static void LoadServerSettings(string filePath)
+        {
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException("ملف الإعدادات غير موجود", filePath);
+
+            foreach (var line in File.ReadAllLines(filePath))
+            {
+                if (string.IsNullOrWhiteSpace(line) || line.TrimStart().StartsWith("#"))
+                    continue;
+
+                var parts = line.Split('=', 2);
+                if (parts.Length != 2)
+                    continue;
+
+                string key = parts[0].Trim();
+                string value = parts[1].Trim();
+
+                switch (key.ToLower())
+                {
+                    case "thisversionisforwarehouseid":
+                        if (int.TryParse(value, out int versionWarehouseId))
+                            WarehouseId = versionWarehouseId;
+                        break;
+
+                    case "defaultwarehouseid":
+                        if (int.TryParse(value, out int defaultId))
+                            DefaultWarehouseId = defaultId;
+                        break;
+
+                    case "companyname":
+                        CompanyName = value;
+                        break;
+
+                    case "expirydate":
+                        if (DateTime.TryParse(value, out DateTime exp))
+                            ExpiryDate = exp;
+                        break;
+
+                    case "enddate":
+                        if (DateTime.TryParse(value, out DateTime end))
+                            EndDate = end;
+                        break;
+
+                    case "backupspath":
+                        BackupsPath = value;
+                        break;
+
+                    case "backupdb":
+                        BackupDB = value;
+                        break;
+
+                    case "googledrivepath":
+                        GoogleDrivePath = value;
+                        break;
+
+                    case "backupgitpath":
+                        BackupGitPath = value;
+                        break;
+                }
+            }
+        }
+
+        public static void LoadServerSettings_(string filePath)
         {
             if (!File.Exists(filePath))
                 throw new FileNotFoundException("ملف الإعدادات غير موجود", filePath);
