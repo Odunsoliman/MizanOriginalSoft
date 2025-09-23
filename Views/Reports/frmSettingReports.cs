@@ -271,6 +271,22 @@ namespace MizanOriginalSoft.Views.Reports
         // ==== تواريخ الفترات ====
         private void SetPeriodForAll()
         {
+            // ✅ البداية من المفتاح FixedGeneralStartDate (أو fallback لو مش موجود)
+            dtpStart.Value = AppSettings.GetDateTime("FixedGeneralStartDate", DateTime.Today);
+
+            // ✅ النهاية = آخر يوم في السنة الحالية
+            int currentYear = DateTime.Today.Year;
+            dtpEnd.Value = new DateTime(currentYear, 12, 31);
+
+            lblAllPeriod.Text = "كل الفترة";
+        }
+
+        private void SetPeriodForAll_()
+        {
+            /*
+             اريد عند اختيار كل الفترة ان يقرأ البداية من مفتاح FixedGeneralStartDate كبداية 
+            اما نهاية تكون تاريخ اخر يوم فى السنة الحالية 31-12-السنة الحالية
+             */
             dtpStart.Value = AppSettings.GetDateTime("StartAccountsDate", DateTime.Today);
             dtpEnd.Value = AppSettings.GetDateTime("EndAccountsDate", DateTime.Today);
             lblAllPeriod.Text = "كل الفترة";
