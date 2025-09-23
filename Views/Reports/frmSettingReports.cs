@@ -438,7 +438,7 @@ namespace MizanOriginalSoft.Views.Reports
         // حفظ الإعدادات وإغلاق النموذج عند الضغط على زر الحفظ والإغلاق.
         private void btnSaveAndClose_Click(object sender, EventArgs e)
         {
-            SaveDataSilently();
+            //SaveDataSilently();
             Close();
         }
 
