@@ -33,7 +33,6 @@
             label2 = new Label();
             btnAllPeriod = new Button();
             lblAmountOfDay = new Label();
-            lblAllPeriod = new Label();
             dtpEnd = new DateTimePicker();
             lbl = new Label();
             dtpStart = new DateTimePicker();
@@ -123,16 +122,6 @@
             lblAmountOfDay.TabIndex = 15;
             lblAmountOfDay.Text = "0";
             lblAmountOfDay.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // lblAllPeriod
-            // 
-            lblAllPeriod.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblAllPeriod.ForeColor = Color.Blue;
-            lblAllPeriod.Location = new Point(929, 66);
-            lblAllPeriod.Name = "lblAllPeriod";
-            lblAllPeriod.Size = new Size(42, 34);
-            lblAllPeriod.TabIndex = 14;
-            lblAllPeriod.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // dtpEnd
             // 
@@ -370,7 +359,6 @@
             tlpDateRight.Controls.Add(rdoThisMonth, 3, 1);
             tlpDateRight.Controls.Add(rdoAllPeriod, 2, 2);
             tlpDateRight.Controls.Add(lblAmountOfDay, 1, 2);
-            tlpDateRight.Controls.Add(lblAllPeriod, 0, 2);
             tlpDateRight.Dock = DockStyle.Fill;
             tlpDateRight.Location = new Point(3, 3);
             tlpDateRight.Name = "tlpDateRight";
@@ -500,7 +488,6 @@
         private Label label2;
         private Button btnAllPeriod;
         private Label lblAmountOfDay;
-        private Label lblAllPeriod;
         private DateTimePicker dtpEnd;
         private Label lbl;
         private DateTimePicker dtpStart;

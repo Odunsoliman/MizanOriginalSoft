@@ -278,7 +278,6 @@ namespace MizanOriginalSoft.Views.Reports
             int currentYear = DateTime.Today.Year;
             dtpEnd.Value = new DateTime(currentYear, 12, 31);
 
-            lblAllPeriod.Text = "كل الفترة";
         }
 
         private void SetPeriodForAll_()
@@ -289,14 +288,12 @@ namespace MizanOriginalSoft.Views.Reports
              */
             dtpStart.Value = AppSettings.GetDateTime("StartAccountsDate", DateTime.Today);
             dtpEnd.Value = AppSettings.GetDateTime("EndAccountsDate", DateTime.Today);
-            lblAllPeriod.Text = "كل الفترة";
         }
 
         private void SetPeriodForToday()
         {
             dtpStart.Value = DateTime.Today;
             dtpEnd.Value = DateTime.Today;
-            lblAllPeriod.Text = "";
         }
 
         private void SetPeriodForPreviousDay()
@@ -304,7 +301,6 @@ namespace MizanOriginalSoft.Views.Reports
             DateTime yesterday = DateTime.Today.AddDays(-1);
             dtpStart.Value = yesterday;
             dtpEnd.Value = yesterday;
-            lblAllPeriod.Text = "";
         }
 
         private void SetPeriodForCurrentMonth()
@@ -312,7 +308,6 @@ namespace MizanOriginalSoft.Views.Reports
             DateTime today = DateTime.Today;
             dtpStart.Value = new DateTime(today.Year, today.Month, 1);
             dtpEnd.Value = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month));
-            lblAllPeriod.Text = "";
         }
 
         private void SetPeriodForPreviousMonth()
@@ -323,14 +318,12 @@ namespace MizanOriginalSoft.Views.Reports
             dtpStart.Value = firstDayOfLastMonth;
             dtpEnd.Value = new DateTime(firstDayOfLastMonth.Year, firstDayOfLastMonth.Month,
                                        DateTime.DaysInMonth(firstDayOfLastMonth.Year, firstDayOfLastMonth.Month));
-            lblAllPeriod.Text = "";
         }
 
         private void SetPeriodForCurrentYear()
         {
             dtpStart.Value = new DateTime(DateTime.Now.Year, 1, 1);
             dtpEnd.Value = new DateTime(DateTime.Now.Year, 12, 31);
-            lblAllPeriod.Text = "";
         }
 
         private void SetPeriodForPreviousYear()
@@ -338,7 +331,6 @@ namespace MizanOriginalSoft.Views.Reports
             int lastYear = DateTime.Now.Year - 1;
             dtpStart.Value = new DateTime(lastYear, 1, 1);
             dtpEnd.Value = new DateTime(lastYear, 12, 31);
-            lblAllPeriod.Text = "";
         }
 
         #endregion
