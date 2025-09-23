@@ -757,7 +757,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 ["EmailCo"] = txtCompanyEmail.Text,
                 ["CompanyLoGoFolder"] = lblLogoPath.Text,
                 ["LogoImagName"] = lblLogoImageName.Text,
-                ["DefaultWarehouseId"] = cbxWarehouseId.SelectedValue?.ToString() ?? "",
+                ["ThisVersionIsForWarehouseId"] = cbxWarehouseId.SelectedValue?.ToString() ?? "",
 
                 // 🔹 البيع والشراء
                 ["IsSaleByNegativeStock"] = rdoAllowSaleByNegativeStock.Checked.ToString(),
