@@ -208,8 +208,13 @@ namespace MizanOriginalSoft.Views.Reports
         // 🔹 حفظ صامت للطابعة
         private void cbxPrinters_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            if (cbxPrinters.SelectedItem != null)
-                AppSettings.SaveOrUpdate("DefaultPrinter", cbxPrinters.SelectedItem?.ToString() ?? "");
+            //if (cbxPrinters.SelectedItem != null)
+            //    AppSettings.SaveOrUpdate("DefaultPrinter", cbxPrinters.SelectedItem?.ToString() ?? "");
+            if (cbxPrinters.SelectedValue != null && cbxPrinters.SelectedValue is int PrId)
+            {
+                AppSettings.SaveOrUpdate("DefaultPrinter", PrId.ToString());
+            }
+
         }
 
         // 🔹 حفظ صامت للمستودع
