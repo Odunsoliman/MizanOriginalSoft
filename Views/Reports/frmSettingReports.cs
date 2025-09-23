@@ -16,6 +16,40 @@ namespace MizanOriginalSoft.Views.Reports
 {
     public partial class frmSettingReports : Form
     {
+
+        /* 
+        السيناريو المطلوب فى الشاشة
+        1-تحديد الفرع المطلوب عرض بياناته 
+        2-و تحديد الطابعة التى سيتم استخدامها فى الطباعة 
+        3-وتحديد بداية ونهاية الفترة الزمنية
+        4- وايضا استقبال البرامترات الخاصة بكل تقرير 
+            a-اسمه البرمجى ReportCodeName
+            b- والاسم الظاهر للمستخدم ReportDisplayName
+            c- ورقمه المعرف ReportID
+        ثم عرض البيانات المطلوبة فى جريد باسم DGV
+        تصفيتها وفلترتها داخلها لكل تقرير مراد داخلها كمعاينة لما سيتم طباعته
+        عن طريق ادوات الشاشة التى تحدد تاريخ البداية والنهاية فى اداتين التاريخ والوقت
+        ويمكن تغييرها عن طريق 7 ريديو بوتن بشكل سلت 
+        او بالكتابة فيها مباشرة التواريخ قبل الضغط على مفتاح الطباعة
+        وبعد الانتهاء من عرض البيانات المطلوبة بالشكل المطلوب داخل الجريد يتم طباعتها
+        عن طريق الضغط على مفتاح الطباعة btnPrint بعد استكمال البارمترات المطلوبه للتقرير المراد
+        اى ان الهدف الاساسى تحديد البرامترات  اللازمة سواء الممرة لهده الشاشة او المحددة من خلالها قبل الطباعة الفعلية
+
+        والنقطة الفنية الان المراد ضبطها ان يتم حفظ الفترة الزمنية الذى قام المستخدم بتحديدها
+        وهى تاريخ البداية والنهاية والريديو بوتن الذى حدده فى هذه الجلسة 
+        حتى اذا عاد الى الجلسة التالية وجدها اختيارات افتراضية فلا يعيد اختيارها فى كل مرة الا اذا اراد
+        ولذلك تم اضافة مفاتيح فى ملف التكست الرئيسى بهذه المعاملات يتم حفظ فيها اخر اختيارات له فى الشاشة 
+        ثم يقرأها فى الجلسة التالية وتحديدها كوضع افتراضى من خلال كلاس AppSettings
+        الذى يقرأ كل مفاتيح البرنامج الاساسية عند فتح البرنامج مرة واحدة
+
+        فالمراد فى هذه النقطة ان يتم حفظ اى متغيرات يقوم بها المستخدم فى هذه الشاشة بشكل صامت
+        ثم يعيد قراة هذه المتغيرات فى نفس الكلاس مرة اخرى عند غلق الشاشة
+         حتى اذا فتح الشاشة بتقرير اخر يجد اخر تحديدات تم العمل عليها محددة بشكل افتراضى
+
+        والان بهذا الكود 
+
+
+      */
         #region ==== المتغيرات ====
 
         // معلمات التقرير
@@ -61,6 +95,7 @@ namespace MizanOriginalSoft.Views.Reports
         #endregion
 
         #region ==== دوال قراءة وكتابة ملف الإعدادات ====
+
         private void LoadDefaults()
         {
             try
@@ -82,30 +117,26 @@ namespace MizanOriginalSoft.Views.Reports
                 if (rdo != null)
                 {
                     rdo.Checked = true;
-
-                    // 📌 نستدعي الدالة العامة لتطبيق نفس منطق الراديو (تحديد التواريخ + الحفظ)
-                    rdo_CheckedChanged(rdo, EventArgs.Empty);
+                    rdo_CheckedChanged(rdo, EventArgs.Empty); // نستدعي الدالة العامة لتطبيق المنطق
                 }
                 else
                 {
-                    // fallback في حالة ما اتلاقاش الراديو (نحط الافتراضي)
                     rdoAllPeriod.Checked = true;
                     rdo_CheckedChanged(rdoAllPeriod, EventArgs.Empty);
                 }
 
-                // ✅ تحميل التواريخ إذا لم يتم ضبطها من الراديو
+                // ✅ تحميل التواريخ (لو لم تضبط بالراديو)
                 if (dtpStart.Value == DateTime.MinValue)
                     dtpStart.Value = AppSettings.GetDateTime("StartAccountsDate", DateTime.Today);
 
                 if (dtpEnd.Value == DateTime.MinValue)
                     dtpEnd.Value = AppSettings.GetDateTime("EndAccountsDate", DateTime.Today);
 
-                // ✅ حساب عدد الأيام
                 CalculateDaysBetweenDates();
             }
-            catch
+            catch//System.FormatException: 'The input string 'System.Data.DataRowView' was not in a correct format.'
             {
-                // في حالة أي خطأ: نبدأ بالقيم الافتراضية
+                // fallback: لو حصل خطأ
                 rdoAllPeriod.Checked = true;
                 dtpStart.Value = DateTime.Today;
                 dtpEnd.Value = DateTime.Today;
@@ -113,89 +144,78 @@ namespace MizanOriginalSoft.Views.Reports
             }
         }
 
-        private void SetSelectedRadioButton(string radioButtonName)
-        {
-            switch (radioButtonName)
-            {
-                case "rdoAllPeriod": rdoAllPeriod.Checked = true; break;
-                case "rdoToDay": rdoToDay.Checked = true; break;
-                case "rdoPreviousDay": rdoPreviousDay.Checked = true; break;
-                case "rdoPreviousMonth": rdoPreviousMonth.Checked = true; break;
-                case "rdoThisMonth": rdoThisMonth.Checked = true; break;
-                case "rdoThisYear": rdoThisYear.Checked = true; break;
-                case "rdoPreviousYear": rdoPreviousYear.Checked = true; break;
-                default: rdoAllPeriod.Checked = true; break;
-            }
-        }
-
-        // الحصول على اسم زر الراديو المختار حالياً.
+        // 🔹 إرجاع اسم الراديو المختار حالياً
         private string GetSelectedRadioButtonName()
         {
-            if (rdoAllPeriod.Checked) return "rdoAllPeriod";
-            if (rdoToDay.Checked) return "rdoToDay";
-            if (rdoPreviousDay.Checked) return "rdoPreviousDay";
-            if (rdoPreviousMonth.Checked) return "rdoPreviousMonth";
-            if (rdoThisMonth.Checked) return "rdoThisMonth";
-            if (rdoThisYear.Checked) return "rdoThisYear";
-            if (rdoPreviousYear.Checked) return "rdoPreviousYear";
-
-            return "rdoAllPeriod";
+            return Controls.OfType<RadioButton>()
+                           .FirstOrDefault(r => r.Checked)?.Name ?? "rdoAllPeriod";
         }
 
+        // 🔹 الحفظ الصامت لكل الإعدادات
         private void SaveDataSilently()
         {
-            // ✅ الحفظ بصمت عند التغيير فقط
             AppSettings.SaveOrUpdate("DefaultPrinter", cbxPrinters.SelectedItem?.ToString() ?? "");
             AppSettings.SaveOrUpdate("DefaultWarehouseId", cbxWarehouse.SelectedValue?.ToString() ?? "");
-            AppSettings.SaveOrUpdate("DefaultStartDate", dtpStart.Value.ToString("yyyy-MM-dd"));
-            AppSettings.SaveOrUpdate("DefaultEndDate", dtpEnd.Value.ToString("yyyy-MM-dd"));
+            AppSettings.SaveOrUpdate("StartAccountsDate", dtpStart.Value.ToString("yyyy-MM-dd"));
+            AppSettings.SaveOrUpdate("EndAccountsDate", dtpEnd.Value.ToString("yyyy-MM-dd"));
             AppSettings.SaveOrUpdate("DefaultRdoCheck", GetSelectedRadioButtonName());
         }
 
-
         #endregion
 
+
         #region ==== تحميل وحفظ الإعدادات مع الراديو والفترات ====
+
         private void SetupEventHandlers()
         {
-            dtpStart.ValueChanged += (s, e) => CalculateDaysBetweenDates();
-            dtpEnd.ValueChanged += (s, e) => CalculateDaysBetweenDates();
+            // التواريخ
+            dtpStart.ValueChanged += dtpStart_ValueChanged;
+            dtpEnd.ValueChanged += dtpEnd_ValueChanged;
 
-            rdoAllPeriod.CheckedChanged += (s, e) => SetPeriodForAll();
-            rdoToDay.CheckedChanged += (s, e) => SetPeriodForToday();
-            rdoPreviousDay.CheckedChanged += (s, e) => SetPeriodForPreviousDay();
-            rdoPreviousMonth.CheckedChanged += (s, e) => SetPeriodForPreviousMonth();
-            rdoThisMonth.CheckedChanged += (s, e) => SetPeriodForCurrentMonth();
-            rdoThisYear.CheckedChanged += (s, e) => SetPeriodForCurrentYear();
-            rdoPreviousYear.CheckedChanged += (s, e) => SetPeriodForPreviousYear();
+            // جميع الراديوهات تمر على نفس الدالة العامة
+            rdoAllPeriod.CheckedChanged += rdo_CheckedChanged;
+            rdoToDay.CheckedChanged += rdo_CheckedChanged;
+            rdoPreviousDay.CheckedChanged += rdo_CheckedChanged;
+            rdoPreviousMonth.CheckedChanged += rdo_CheckedChanged;
+            rdoThisMonth.CheckedChanged += rdo_CheckedChanged;
+            rdoThisYear.CheckedChanged += rdo_CheckedChanged;
+            rdoPreviousYear.CheckedChanged += rdo_CheckedChanged;
+
+            // الكمبو بوكس
+            cbxPrinters.SelectedIndexChanged += cbxPrinters_SelectedIndexChanged;
+            cbxWarehouse.SelectedIndexChanged += cbxWarehouse_SelectedIndexChanged;
         }
 
-        // حفظ صامت للطابعة
-        private void cbxPrinters_SelectedIndexChanged(object sender, EventArgs e)
+        // 🔹 حفظ صامت للطابعة
+        private void cbxPrinters_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (cbxPrinters.SelectedItem != null)
                 AppSettings.SaveOrUpdate("DefaultPrinter", cbxPrinters.SelectedItem?.ToString() ?? "");
-
         }
 
-        // حفظ صامت للمستودع
-        private void cbxWarehouse_SelectedIndexChanged(object sender, EventArgs e)
+        // 🔹 حفظ صامت للمستودع
+        private void cbxWarehouse_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            if (cbxWarehouse.SelectedValue != null)
-                AppSettings.SaveOrUpdate("DefaultWarehouseId", cbxWarehouse.SelectedValue?.ToString() ?? "");
+            if (cbxWarehouse.SelectedValue != null && cbxWarehouse.SelectedValue is int whId)
+            {
+                AppSettings.SaveOrUpdate("DefaultWarehouseId", whId.ToString());
+            }
         }
 
-        // حفظ صامت للراديو + ضبط التواريخ
-        // حفظ صامت للراديو + ضبط التواريخ
-        private void rdo_CheckedChanged(object sender, EventArgs e)
-        {
-            RadioButton rdo = (RadioButton)sender;
-            if (!rdo.Checked) return; // نتأكد أن الراديو تم تفعيله فعلاً
 
-            // ✅ حفظ اسم الراديو في ملف الإعدادات
+        // 🔹 حفظ صامت للراديو + تحديد الفترة
+        private void rdo_CheckedChanged(object? sender, EventArgs e)
+        {
+            if (sender is not RadioButton rdo)
+                return; // لو null أو مش RadioButton نخرج بأمان
+
+            if (!rdo.Checked)
+                return; // لازم يكون مفعّل فعلاً
+
+            // ✅ حفظ اسم الراديو
             AppSettings.SaveOrUpdate("DefaultRdoCheck", rdo.Name);
 
-            // ✅ تحديد الفترة الزمنية بناءً على الراديو المختار
+            // ✅ تحديد الفترة
             if (rdo == rdoAllPeriod) SetPeriodForAll();
             else if (rdo == rdoToDay) SetPeriodForToday();
             else if (rdo == rdoPreviousDay) SetPeriodForPreviousDay();
@@ -208,25 +228,28 @@ namespace MizanOriginalSoft.Views.Reports
             CalculateDaysBetweenDates();
         }
 
-        // عند تغيير التاريخ يدويًا
-        private void dtpStart_ValueChanged(object sender, EventArgs e)
+
+        // 🔹 عند تغيير التاريخ يدويًا
+        private void dtpStart_ValueChanged(object? sender, EventArgs e)
         {
             AppSettings.SaveOrUpdate("StartAccountsDate", dtpStart.Value.ToString("yyyy-MM-dd"));
             CalculateDaysBetweenDates();
         }
 
-        private void dtpEnd_ValueChanged(object sender, EventArgs e)
+        private void dtpEnd_ValueChanged(object? sender, EventArgs e)
         {
             AppSettings.SaveOrUpdate("EndAccountsDate", dtpEnd.Value.ToString("yyyy-MM-dd"));
             CalculateDaysBetweenDates();
         }
 
+        // 🔹 حساب عدد الأيام
         private void CalculateDaysBetweenDates()
         {
             TimeSpan span = dtpEnd.Value.Date - dtpStart.Value.Date;
             lblAmountOfDay.Text = $"{span.Days + 1} يوم";
         }
 
+        // ==== تواريخ الفترات ====
         private void SetPeriodForAll()
         {
             dtpStart.Value = AppSettings.GetDateTime("StartAccountsDate", DateTime.Today);
@@ -284,6 +307,7 @@ namespace MizanOriginalSoft.Views.Reports
         }
 
         #endregion
+
         /*ما الذى ينقص فالهدف هو 
          عندما يتم اختيار فترة زمنية عن طريق الريديو بوتن فيكون فى لحظة الخيار يحفظ ما تم اختياره فى ملف الاعداد عن طريق كلاس اب سيتينج 
         وفى المرة القادمة لفتح الشاشة يجد المستخدم القيم الاخيرة التى كان عليها الاختيار فيكمل فى عمله على اساسها 
@@ -355,6 +379,7 @@ namespace MizanOriginalSoft.Views.Reports
 
                 if (dt != null && dt.Rows.Count > 0)
                 {
+                    // ➕ إضافة خيار "كل الفروع"
                     DataRow allBranchesRow = dt.NewRow();
                     allBranchesRow["WarehouseId"] = 0;
                     allBranchesRow["WarehouseName"] = "كل الفروع";
@@ -363,12 +388,20 @@ namespace MizanOriginalSoft.Views.Reports
                     cbxWarehouse.DataSource = dt;
                     cbxWarehouse.DisplayMember = "WarehouseName";
                     cbxWarehouse.ValueMember = "WarehouseId";
-
                     cbxWarehouse.DropDownStyle = ComboBoxStyle.DropDownList;
                     cbxWarehouse.Enabled = true;
 
-                    if (cbxWarehouse.Items.Count > 0)
-                        cbxWarehouse.SelectedIndex = 0;
+                    // 📌 جلب آخر فرع محفوظ
+                    int savedWhId = AppSettings.GetInt("DefaultWarehouseId", 0);
+
+                    if (savedWhId > 0 && dt.AsEnumerable().Any(r => r.Field<int>("WarehouseId") == savedWhId))
+                    {
+                        cbxWarehouse.SelectedValue = savedWhId;
+                    }
+                    else
+                    {
+                        cbxWarehouse.SelectedIndex = 0; // الافتراضي "كل الفروع"
+                    }
                 }
                 else
                 {
@@ -386,6 +419,7 @@ namespace MizanOriginalSoft.Views.Reports
         // حفظ الإعدادات وإغلاق النموذج عند الضغط على زر الحفظ والإغلاق.
         private void btnSaveAndClose_Click(object sender, EventArgs e)
         {
+            SaveDataSilently();
             Close();
         }
 
@@ -400,9 +434,7 @@ namespace MizanOriginalSoft.Views.Reports
             // ReportsManager.ShowReport(parameters);
         }
 
-
         #endregion
-
     }
 }
 

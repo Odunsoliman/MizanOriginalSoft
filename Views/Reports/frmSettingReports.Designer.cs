@@ -340,6 +340,7 @@
             cbxWarehouse.Name = "cbxWarehouse";
             cbxWarehouse.Size = new Size(240, 27);
             cbxWarehouse.TabIndex = 16;
+            cbxWarehouse.SelectedIndexChanged += cbxWarehouse_SelectedIndexChanged;
             // 
             // tlpDateRight
             // 

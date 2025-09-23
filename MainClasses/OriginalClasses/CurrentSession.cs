@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace MizanOriginalSoft.MainClasses.OriginalClasses
 {
@@ -46,35 +43,52 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
                     case "companyname":
                         CompanyName = value;
                         break;
+
                     case "expirydate":
                         if (DateTime.TryParseExact(value, "dd-MM-yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime exp))
                             ExpiryDate = exp;
                         break;
+
                     case "enddate":
                         if (DateTime.TryParseExact(value, "dd-MM-yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime end))
                             EndDate = end;
                         break;
+
+                    // ✅ دعم المفتاح القديم
                     case "defaultwarehouseid":
-                        if (int.TryParse(value, out int warehouseId))
-                            WarehouseId = warehouseId;
+                        if (int.TryParse(value, out int oldWhId))
+                            WarehouseId = oldWhId;
                         break;
+
+                    // ✅ دعم المفتاح الجديد
+                    case "thisversionisforwarehouseid":
+                        if (int.TryParse(value, out int newWhId))
+                            WarehouseId = newWhId;
+                        break;
+
                     case "backupspath":
                         BackupsPath = value;
                         break;
+
                     case "backupdb":
                         BackupDB = value;
                         break;
+
                     case "googledrivepath":
                         GoogleDrivePath = value;
                         break;
+
                     case "backupgitpath":
                         BackupGitPath = value;
                         break;
                 }
             }
         }
-        /*
- اريد معرفة مدى تطابق قرائة الملف مع البيانات المسجلة فيه
+    }
+}
+
+/*
+اريد معرفة مدى تطابق قرائة الملف مع البيانات المسجلة فيه
 
 وهى كما يلى 
 
@@ -168,6 +182,4 @@ DefaultRdoCheck=rdoThisYear
 ReturnSaleMode=
 IsSaleByNegativeStock=False
 
- */
-    }
-}
+*/
