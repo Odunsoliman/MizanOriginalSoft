@@ -392,7 +392,6 @@ namespace MizanOriginalSoft.Views.Reports
 
 
         #region ==== دوال تحميل الطابعات والمستودعات  ====
-
         // تحميل أسماء الطابعات المثبتة وإضافة خيارات المعاينة والتصدير.
         private void LoadPrinters()
         {
@@ -405,9 +404,19 @@ namespace MizanOriginalSoft.Views.Reports
             cbxPrinters.Items.Add("تصدير إلى Excel");
             cbxPrinters.Items.Add("تصدير إلى PDF");
 
-            if (cbxPrinters.Items.Count > 0)
-                cbxPrinters.SelectedIndex = 0;
+            // 🔹 قراءة القيمة المحفوظة مسبقًا من AppSettings
+            string? savedPrinter = AppSettings.GetString("DefaultPrinter", string.Empty);
+
+            if (!string.IsNullOrEmpty(savedPrinter) && cbxPrinters.Items.Contains(savedPrinter))
+            {
+                cbxPrinters.SelectedItem = savedPrinter;
+            }
+            else if (cbxPrinters.Items.Count > 0)
+            {
+                cbxPrinters.SelectedIndex = 0; // fallback
+            }
         }
+
 
         // تحميل قائمة المستودعات من قاعدة البيانات مع إضافة خيار "كل الفروع".
         private void LoadWarehouses()
