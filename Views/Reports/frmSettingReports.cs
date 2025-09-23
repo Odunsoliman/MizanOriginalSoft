@@ -205,21 +205,28 @@ namespace MizanOriginalSoft.Views.Reports
             cbxWarehouse.SelectedIndexChanged += cbxWarehouse_SelectedIndexChanged;
         }
 
-        // 🔹 حفظ صامت للطابعة
+        // 🔹 حفظ صامت للطابعة الافتراضية
         private void cbxPrinters_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            //if (cbxPrinters.SelectedItem != null)
-            //    AppSettings.SaveOrUpdate("DefaultPrinter", cbxPrinters.SelectedItem?.ToString() ?? "");
-            if (cbxPrinters.SelectedValue != null && cbxPrinters.SelectedValue is int PrId)
+            string? selectedPrinter = null;
+
+            if (cbxPrinters.SelectedItem != null)
             {
-                AppSettings.SaveOrUpdate("DefaultPrinter", PrId.ToString());
+                selectedPrinter = cbxPrinters.SelectedItem.ToString();
             }
 
+            if (!string.IsNullOrEmpty(selectedPrinter))
+            {
+                AppSettings.SaveOrUpdate("DefaultPrinter", selectedPrinter);
+            }
         }
+
+
 
         // 🔹 حفظ صامت للمستودع
         private void cbxWarehouse_SelectedIndexChanged(object? sender, EventArgs e)
         {
+            // وهنا يتم الحفظ بشكل طبيعى
             if (cbxWarehouse.SelectedValue != null && cbxWarehouse.SelectedValue is int whId)
             {
                 AppSettings.SaveOrUpdate("DefaultWarehouseId", whId.ToString());
