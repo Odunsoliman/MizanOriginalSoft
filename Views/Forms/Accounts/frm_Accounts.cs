@@ -68,7 +68,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             }
 
-            treeViewAccounts.ExpandAll();
+          //  treeViewAccounts.ExpandAll();
+            // بدلاً من ExpandAll، نغلق كل العقد
+            treeViewAccounts.CollapseAll();
         }
 
         // دالة مساعدة لإيجاد الأب حسب FullPath
