@@ -108,6 +108,81 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             return fullPath.Split(new string[] { "→" }, StringSplitOptions.None).Length - 1;
         }
 
+        #region ********** Search Tree Node ***********
+
+        private List<TreeNode> matchedNodes = new List<TreeNode>();
+        private int currentMatchIndex = -1;
+
+        private void txtSearchTree_TextChanged(object sender, EventArgs e)
+        {
+            string searchText = txtSearchTree.Text.Trim().ToLower();
+
+            matchedNodes.Clear();
+            currentMatchIndex = -1;
+
+            // إعادة تعيين الألوان وإغلاق كل الفروع
+            ResetNodeColorsAndCollapse(treeViewAccounts .Nodes);
+            
+            if (string.IsNullOrEmpty(searchText))
+                return;
+
+            // البحث وتلوين النتائج وفتح الفروع التي تحتوي نتائج
+            SearchAndHighlightNodes(treeViewAccounts .Nodes, searchText);
+
+            // اختيار أول نتيجة
+            if (matchedNodes.Count > 0)
+            {
+                currentMatchIndex = 0;
+                var node = matchedNodes[0];
+                treeViewAccounts .SelectedNode = node;
+                node.EnsureVisible();
+            }
+        }
+        private void ResetNodeColorsAndCollapse(TreeNodeCollection nodes)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                node.BackColor = treeViewAccounts .BackColor;
+                node.ForeColor = treeViewAccounts .ForeColor;
+                node.Collapse(); // إغلاق الفروع
+
+                if (node.Nodes.Count > 0)
+                    ResetNodeColorsAndCollapse(node.Nodes);
+            }
+        }
+
+        private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Text.ToLower().Contains(searchText))
+                {
+                    node.BackColor = Color.Yellow;
+                    node.ForeColor = Color.Black;
+                    matchedNodes.Add(node);
+
+                    // فتح العقدة الأصلية
+                    ExpandParentNodes(node);
+                }
+
+                if (node.Nodes.Count > 0)
+                {
+                    SearchAndHighlightNodes(node.Nodes, searchText);
+                }
+            }
+        }
+
+        private void ExpandParentNodes(TreeNode node)
+        {
+            TreeNode? parent = node.Parent;
+            while (parent != null)
+            {
+                parent.Expand();
+                parent = parent.Parent;
+            }
+        }
+
+        #endregion 
 
     }
 }
