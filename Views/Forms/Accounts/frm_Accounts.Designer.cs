@@ -65,8 +65,6 @@
             label15 = new Label();
             lblSelectedTreeNod = new Label();
             label4 = new Label();
-            rdoByNodeAndHisChild = new RadioButton();
-            rdoByNode = new RadioButton();
             panelList = new TableLayoutPanel();
             treeViewAccounts = new TreeView();
             txtToTop = new TextBox();
@@ -172,7 +170,7 @@
             // 
             txtSearchTree.Dock = DockStyle.Fill;
             txtSearchTree.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold);
-            txtSearchTree.Location = new Point(5, 82);
+            txtSearchTree.Location = new Point(5, 87);
             txtSearchTree.Name = "txtSearchTree";
             txtSearchTree.Size = new Size(179, 29);
             txtSearchTree.TabIndex = 5;
@@ -629,7 +627,7 @@
             label15.ForeColor = Color.Red;
             label15.Location = new Point(5, 2);
             label15.Name = "label15";
-            label15.Size = new Size(179, 45);
+            label15.Size = new Size(179, 48);
             label15.TabIndex = 42;
             label15.Text = "شجرة الحسابات العامة";
             label15.TextAlign = ContentAlignment.MiddleCenter;
@@ -640,9 +638,9 @@
             lblSelectedTreeNod.Dock = DockStyle.Fill;
             lblSelectedTreeNod.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblSelectedTreeNod.ForeColor = Color.FromArgb(192, 0, 0);
-            lblSelectedTreeNod.Location = new Point(5, 124);
+            lblSelectedTreeNod.Location = new Point(5, 132);
             lblSelectedTreeNod.Name = "lblSelectedTreeNod";
-            lblSelectedTreeNod.Size = new Size(179, 32);
+            lblSelectedTreeNod.Size = new Size(179, 34);
             lblSelectedTreeNod.TabIndex = 41;
             lblSelectedTreeNod.Text = "الكل";
             lblSelectedTreeNod.TextAlign = ContentAlignment.MiddleRight;
@@ -652,42 +650,12 @@
             label4.BackColor = Color.Transparent;
             label4.Dock = DockStyle.Fill;
             label4.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.Location = new Point(5, 47);
+            label4.Location = new Point(5, 50);
             label4.Name = "label4";
-            label4.Size = new Size(179, 32);
+            label4.Size = new Size(179, 34);
             label4.TabIndex = 6;
             label4.Text = "بحث";
             label4.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // rdoByNodeAndHisChild
-            // 
-            rdoByNodeAndHisChild.AutoSize = true;
-            rdoByNodeAndHisChild.Checked = true;
-            rdoByNodeAndHisChild.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            rdoByNodeAndHisChild.ForeColor = Color.FromArgb(192, 64, 0);
-            rdoByNodeAndHisChild.Location = new Point(14, 590);
-            rdoByNodeAndHisChild.Name = "rdoByNodeAndHisChild";
-            rdoByNodeAndHisChild.RightToLeft = RightToLeft.Yes;
-            rdoByNodeAndHisChild.Size = new Size(170, 23);
-            rdoByNodeAndHisChild.TabIndex = 0;
-            rdoByNodeAndHisChild.TabStop = true;
-            rdoByNodeAndHisChild.Text = "التصنيف وتصنيفاته الفرعية";
-            rdoByNodeAndHisChild.TextAlign = ContentAlignment.BottomCenter;
-            rdoByNodeAndHisChild.UseVisualStyleBackColor = true;
-            // 
-            // rdoByNode
-            // 
-            rdoByNode.AutoSize = true;
-            rdoByNode.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            rdoByNode.ForeColor = Color.Blue;
-            rdoByNode.Location = new Point(91, 622);
-            rdoByNode.Name = "rdoByNode";
-            rdoByNode.RightToLeft = RightToLeft.Yes;
-            rdoByNode.Size = new Size(93, 23);
-            rdoByNode.TabIndex = 0;
-            rdoByNode.Text = "التصنيف فقط";
-            rdoByNode.TextAlign = ContentAlignment.BottomCenter;
-            rdoByNode.UseVisualStyleBackColor = true;
             // 
             // panelList
             // 
@@ -697,22 +665,20 @@
             panelList.Controls.Add(label15, 0, 0);
             panelList.Controls.Add(lblSelectedTreeNod, 0, 3);
             panelList.Controls.Add(label4, 0, 1);
-            panelList.Controls.Add(rdoByNodeAndHisChild, 0, 5);
             panelList.Controls.Add(treeViewAccounts, 0, 4);
             panelList.Controls.Add(txtSearchTree, 0, 2);
-            panelList.Controls.Add(rdoByNode, 0, 6);
             panelList.Dock = DockStyle.Fill;
             panelList.Location = new Point(926, 3);
             panelList.Name = "panelList";
             panelList.Padding = new Padding(2);
-            panelList.RowCount = 7;
-            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
-            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
-            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
-            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
-            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 66F));
-            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
-            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
+            panelList.RowCount = 5;
+            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 7.44680834F));
+            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 5.319149F));
+            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 7.44680834F));
+            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 5.319149F));
+            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 74.46809F));
+            panelList.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            panelList.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             panelList.Size = new Size(189, 658);
             panelList.TabIndex = 2;
             // 
@@ -723,11 +689,11 @@
             treeViewAccounts.Dock = DockStyle.Fill;
             treeViewAccounts.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             treeViewAccounts.LineColor = Color.Aqua;
-            treeViewAccounts.Location = new Point(5, 159);
+            treeViewAccounts.Location = new Point(5, 169);
             treeViewAccounts.Name = "treeViewAccounts";
             treeViewAccounts.RightToLeft = RightToLeft.Yes;
             treeViewAccounts.RightToLeftLayout = true;
-            treeViewAccounts.Size = new Size(179, 425);
+            treeViewAccounts.Size = new Size(179, 484);
             treeViewAccounts.TabIndex = 4;
             // 
             // txtToTop
@@ -1767,8 +1733,6 @@
         private Label label15;
         private Label lblSelectedTreeNod;
         private Label label4;
-        private RadioButton rdoByNodeAndHisChild;
-        private RadioButton rdoByNode;
         private TableLayoutPanel panelList;
         private TreeView treeViewAccounts;
         private TextBox txtToTop;
