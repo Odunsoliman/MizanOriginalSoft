@@ -45,6 +45,7 @@
             pnlAccounts = new Panel();
             btn_Accounts = new Button();
             pnlMoreSetting = new Panel();
+            btnAccounts = new Button();
             btnGenralData = new Button();
             lblCoSeprator = new Label();
             btnProdSetting_ = new Button();
@@ -317,7 +318,7 @@
             pnlSetting.MinimumSize = new Size(0, 34);
             pnlSetting.Name = "pnlSetting";
             pnlSetting.Padding = new Padding(3, 2, 3, 2);
-            pnlSetting.Size = new Size(134, 95);
+            pnlSetting.Size = new Size(134, 375);
             pnlSetting.TabIndex = 1;
             // 
             // pnlAccounts
@@ -337,7 +338,7 @@
             pnlAccounts.Controls.Add(btnCustomers);
             pnlAccounts.Controls.Add(btn_Accounts);
             pnlAccounts.Dock = DockStyle.Top;
-            pnlAccounts.Location = new Point(3, 65);
+            pnlAccounts.Location = new Point(3, 181);
             pnlAccounts.Margin = new Padding(3, 2, 3, 2);
             pnlAccounts.MaximumSize = new Size(0, 308);
             pnlAccounts.MinimumSize = new Size(0, 34);
@@ -364,6 +365,7 @@
             // pnlMoreSetting
             // 
             pnlMoreSetting.BackColor = Color.Transparent;
+            pnlMoreSetting.Controls.Add(btnAccounts);
             pnlMoreSetting.Controls.Add(btnGenralData);
             pnlMoreSetting.Controls.Add(lblCoSeprator);
             pnlMoreSetting.Controls.Add(btnProdSetting_);
@@ -375,8 +377,27 @@
             pnlMoreSetting.MinimumSize = new Size(0, 34);
             pnlMoreSetting.Name = "pnlMoreSetting";
             pnlMoreSetting.Padding = new Padding(3, 2, 3, 2);
-            pnlMoreSetting.Size = new Size(128, 34);
+            pnlMoreSetting.Size = new Size(128, 150);
             pnlMoreSetting.TabIndex = 5;
+            // 
+            // btnAccounts
+            // 
+            btnAccounts.Dock = DockStyle.Top;
+            btnAccounts.FlatAppearance.BorderSize = 0;
+            btnAccounts.FlatStyle = FlatStyle.Flat;
+            btnAccounts.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            btnAccounts.Location = new Point(3, 90);
+            btnAccounts.Margin = new Padding(3, 2, 3, 2);
+            btnAccounts.MaximumSize = new Size(0, 29);
+            btnAccounts.MinimumSize = new Size(0, 29);
+            btnAccounts.Name = "btnAccounts";
+            btnAccounts.Padding = new Padding(0, 0, 22, 0);
+            btnAccounts.Size = new Size(122, 29);
+            btnAccounts.TabIndex = 9;
+            btnAccounts.Text = "شجرة الحسابات";
+            btnAccounts.TextAlign = ContentAlignment.MiddleLeft;
+            btnAccounts.UseVisualStyleBackColor = true;
+            btnAccounts.Click += btnAccounts_Click;
             // 
             // btnGenralData
             // 
@@ -726,7 +747,7 @@
             pnlMovement.Controls.Add(btnSales);
             pnlMovement.Controls.Add(btn_MainMove);
             pnlMovement.Dock = DockStyle.Top;
-            pnlMovement.Location = new Point(0, 95);
+            pnlMovement.Location = new Point(0, 375);
             pnlMovement.Margin = new Padding(3, 2, 3, 2);
             pnlMovement.MaximumSize = new Size(0, 338);
             pnlMovement.MinimumSize = new Size(0, 34);
@@ -849,7 +870,7 @@
             pnlReports.Controls.Add(DGV);
             pnlReports.Controls.Add(btn_MainReports);
             pnlReports.Dock = DockStyle.Top;
-            pnlReports.Location = new Point(0, 163);
+            pnlReports.Location = new Point(0, 443);
             pnlReports.Margin = new Padding(3, 2, 3, 2);
             pnlReports.MaximumSize = new Size(0, 400);
             pnlReports.MinimumSize = new Size(0, 34);
@@ -940,7 +961,7 @@
             pnlBills.Controls.Add(btnCashOut);
             pnlBills.Controls.Add(btn_MainBill);
             pnlBills.Dock = DockStyle.Top;
-            pnlBills.Location = new Point(0, 129);
+            pnlBills.Location = new Point(0, 409);
             pnlBills.Margin = new Padding(3, 2, 3, 2);
             pnlBills.MaximumSize = new Size(0, 338);
             pnlBills.MinimumSize = new Size(0, 34);
@@ -1327,5 +1348,6 @@
         private DataGridView DGV;
         private Button btnPOS;
         private Label label1;
+        private Button btnAccounts;
     }
 }

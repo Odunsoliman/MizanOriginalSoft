@@ -118,15 +118,7 @@
             rdoMadeen = new RadioButton();
             tabControlAccount = new TabControl();
             tabPage1 = new TabPage();
-            btnNotCat = new Button();
-            btnList_DOWN = new Button();
-            btnList_UP = new Button();
-            lstSubAccTop = new ListBox();
-            tableLayoutPanel10 = new TableLayoutPanel();
             tsmAccTop = new ToolStripMenuItem();
-            btnChangeCat = new Button();
-            btnModifyCategory = new Button();
-            label12 = new Label();
             tlpHome = new TableLayoutPanel();
             tableLayoutPanel5 = new TableLayoutPanel();
             contextMenuStrip1 = new ContextMenuStrip(components);
@@ -134,16 +126,14 @@
             lblAccTopID = new Label();
             lblTitel = new Label();
             tlpBody = new TableLayoutPanel();
-            tlp1 = new TableLayoutPanel();
-            tableLayoutPanel12 = new TableLayoutPanel();
-            btnAddCategory = new Button();
-            tlpTopLst = new TableLayoutPanel();
-            btnClearLstSubAccTop = new Button();
-            lblSubAccTop = new Label();
-            label11 = new Label();
-            cbxChangeCat = new ComboBox();
-            btnDeleteCategory = new Button();
-            tableLayoutPanel19 = new TableLayoutPanel();
+            panelList = new TableLayoutPanel();
+            label15 = new Label();
+            lblSelectedTreeNod = new Label();
+            label4 = new Label();
+            rdoByNodeAndHisChild = new RadioButton();
+            treeViewAccounts = new TreeView();
+            txtSearchTree = new TextBox();
+            rdoByNode = new RadioButton();
             tableLayoutPanel16.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel11.SuspendLayout();
@@ -171,15 +161,11 @@
             tableLayoutPanel8.SuspendLayout();
             tabControlAccount.SuspendLayout();
             tabPage1.SuspendLayout();
-            tableLayoutPanel10.SuspendLayout();
             tlpHome.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             tlpBody.SuspendLayout();
-            tlp1.SuspendLayout();
-            tableLayoutPanel12.SuspendLayout();
-            tlpTopLst.SuspendLayout();
-            tableLayoutPanel19.SuspendLayout();
+            panelList.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel16
@@ -1456,80 +1442,6 @@
             tabPage1.Text = "الحسابات";
             tabPage1.UseVisualStyleBackColor = true;
             // 
-            // btnNotCat
-            // 
-            btnNotCat.BackColor = Color.FromArgb(255, 192, 192);
-            btnNotCat.Dock = DockStyle.Fill;
-            btnNotCat.Font = new Font("Times New Roman", 8F, FontStyle.Bold);
-            btnNotCat.Location = new Point(4, 158);
-            btnNotCat.Margin = new Padding(4);
-            btnNotCat.Name = "btnNotCat";
-            btnNotCat.Size = new Size(12, 58);
-            btnNotCat.TabIndex = 88;
-            btnNotCat.TabStop = false;
-            btnNotCat.Text = "؟";
-            btnNotCat.UseVisualStyleBackColor = false;
-            // 
-            // btnList_DOWN
-            // 
-            btnList_DOWN.BackColor = Color.FromArgb(255, 192, 192);
-            btnList_DOWN.Dock = DockStyle.Fill;
-            btnList_DOWN.Font = new Font("Times New Roman", 8F, FontStyle.Bold);
-            btnList_DOWN.Location = new Point(4, 92);
-            btnList_DOWN.Margin = new Padding(4);
-            btnList_DOWN.Name = "btnList_DOWN";
-            btnList_DOWN.Size = new Size(12, 58);
-            btnList_DOWN.TabIndex = 86;
-            btnList_DOWN.TabStop = false;
-            btnList_DOWN.Text = "▼";
-            btnList_DOWN.UseVisualStyleBackColor = false;
-            // 
-            // btnList_UP
-            // 
-            btnList_UP.BackColor = Color.FromArgb(255, 192, 192);
-            btnList_UP.Dock = DockStyle.Fill;
-            btnList_UP.Font = new Font("Times New Roman", 8F, FontStyle.Bold);
-            btnList_UP.Location = new Point(4, 26);
-            btnList_UP.Margin = new Padding(4);
-            btnList_UP.Name = "btnList_UP";
-            btnList_UP.Size = new Size(12, 58);
-            btnList_UP.TabIndex = 85;
-            btnList_UP.TabStop = false;
-            btnList_UP.Text = "▲";
-            btnList_UP.UseVisualStyleBackColor = false;
-            // 
-            // lstSubAccTop
-            // 
-            lstSubAccTop.Dock = DockStyle.Fill;
-            lstSubAccTop.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
-            lstSubAccTop.ForeColor = SystemColors.MenuHighlight;
-            lstSubAccTop.FormattingEnabled = true;
-            lstSubAccTop.ItemHeight = 22;
-            lstSubAccTop.Location = new Point(30, 4);
-            lstSubAccTop.Margin = new Padding(4);
-            lstSubAccTop.Name = "lstSubAccTop";
-            lstSubAccTop.Size = new Size(135, 218);
-            lstSubAccTop.TabIndex = 79;
-            lstSubAccTop.TabStop = false;
-            // 
-            // tableLayoutPanel10
-            // 
-            tableLayoutPanel10.ColumnCount = 1;
-            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel10.Controls.Add(btnNotCat, 0, 3);
-            tableLayoutPanel10.Controls.Add(btnList_DOWN, 0, 2);
-            tableLayoutPanel10.Controls.Add(btnList_UP, 0, 1);
-            tableLayoutPanel10.Dock = DockStyle.Fill;
-            tableLayoutPanel10.Location = new Point(3, 3);
-            tableLayoutPanel10.Name = "tableLayoutPanel10";
-            tableLayoutPanel10.RowCount = 4;
-            tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
-            tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
-            tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
-            tableLayoutPanel10.Size = new Size(20, 220);
-            tableLayoutPanel10.TabIndex = 2;
-            // 
             // tsmAccTop
             // 
             tsmAccTop.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -1537,48 +1449,6 @@
             tsmAccTop.Name = "tsmAccTop";
             tsmAccTop.Size = new Size(238, 26);
             tsmAccTop.Text = "تعديل خصائص حساب عام";
-            // 
-            // btnChangeCat
-            // 
-            btnChangeCat.BackColor = Color.PeachPuff;
-            btnChangeCat.Dock = DockStyle.Fill;
-            btnChangeCat.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnChangeCat.Location = new Point(4, 427);
-            btnChangeCat.Margin = new Padding(4);
-            btnChangeCat.Name = "btnChangeCat";
-            btnChangeCat.Size = new Size(167, 29);
-            btnChangeCat.TabIndex = 85;
-            btnChangeCat.TabStop = false;
-            btnChangeCat.Text = "نقل الاصناف الى..";
-            btnChangeCat.UseVisualStyleBackColor = false;
-            // 
-            // btnModifyCategory
-            // 
-            btnModifyCategory.BackColor = Color.PeachPuff;
-            btnModifyCategory.Dock = DockStyle.Fill;
-            btnModifyCategory.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnModifyCategory.Location = new Point(4, 464);
-            btnModifyCategory.Margin = new Padding(4);
-            btnModifyCategory.Name = "btnModifyCategory";
-            btnModifyCategory.Size = new Size(167, 29);
-            btnModifyCategory.TabIndex = 84;
-            btnModifyCategory.TabStop = false;
-            btnModifyCategory.Text = "تعديل تصنيف";
-            btnModifyCategory.UseVisualStyleBackColor = false;
-            // 
-            // label12
-            // 
-            label12.AutoSize = true;
-            label12.Dock = DockStyle.Fill;
-            label12.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label12.ForeColor = Color.FromArgb(0, 0, 192);
-            label12.Location = new Point(4, 0);
-            label12.Margin = new Padding(4, 0, 4, 0);
-            label12.Name = "label12";
-            label12.Size = new Size(167, 37);
-            label12.TabIndex = 78;
-            label12.Text = "رقم التصنيف";
-            label12.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // tlpHome
             // 
@@ -1673,7 +1543,7 @@
             tlpBody.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.5F));
             tlpBody.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 0.5F));
             tlpBody.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 82F));
-            tlpBody.Controls.Add(tlp1, 0, 0);
+            tlpBody.Controls.Add(panelList, 0, 0);
             tlpBody.Controls.Add(tabControlAccount, 2, 0);
             tlpBody.Dock = DockStyle.Fill;
             tlpBody.Location = new Point(3, 50);
@@ -1683,161 +1553,124 @@
             tlpBody.Size = new Size(1118, 664);
             tlpBody.TabIndex = 5;
             // 
-            // tlp1
+            // panelList
             // 
-            tlp1.BackColor = Color.SeaShell;
-            tlp1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-            tlp1.ColumnCount = 1;
-            tlp1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tlp1.Controls.Add(tableLayoutPanel12, 0, 0);
-            tlp1.Dock = DockStyle.Fill;
-            tlp1.Location = new Point(926, 3);
-            tlp1.Name = "tlp1";
-            tlp1.RowCount = 1;
-            tlp1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tlp1.Size = new Size(189, 658);
-            tlp1.TabIndex = 0;
+            panelList.BackColor = Color.FromArgb(235, 255, 235);
+            panelList.ColumnCount = 1;
+            panelList.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            panelList.Controls.Add(label15, 0, 0);
+            panelList.Controls.Add(lblSelectedTreeNod, 0, 3);
+            panelList.Controls.Add(label4, 0, 1);
+            panelList.Controls.Add(rdoByNodeAndHisChild, 0, 5);
+            panelList.Controls.Add(treeViewAccounts, 0, 4);
+            panelList.Controls.Add(txtSearchTree, 0, 2);
+            panelList.Controls.Add(rdoByNode, 0, 6);
+            panelList.Dock = DockStyle.Fill;
+            panelList.Location = new Point(926, 3);
+            panelList.Name = "panelList";
+            panelList.Padding = new Padding(2);
+            panelList.RowCount = 7;
+            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
+            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
+            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
+            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
+            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 66F));
+            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
+            panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
+            panelList.Size = new Size(189, 658);
+            panelList.TabIndex = 2;
             // 
-            // tableLayoutPanel12
+            // label15
             // 
-            tableLayoutPanel12.ColumnCount = 1;
-            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel12.Controls.Add(btnAddCategory, 0, 0);
-            tableLayoutPanel12.Controls.Add(tlpTopLst, 0, 1);
-            tableLayoutPanel12.Dock = DockStyle.Fill;
-            tableLayoutPanel12.Location = new Point(4, 4);
-            tableLayoutPanel12.Name = "tableLayoutPanel12";
-            tableLayoutPanel12.RowCount = 3;
-            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8F));
-            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 84F));
-            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8F));
-            tableLayoutPanel12.Size = new Size(181, 650);
-            tableLayoutPanel12.TabIndex = 3;
+            label15.BackColor = Color.Transparent;
+            label15.Dock = DockStyle.Fill;
+            label15.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label15.ForeColor = Color.Red;
+            label15.Location = new Point(5, 2);
+            label15.Name = "label15";
+            label15.Size = new Size(179, 45);
+            label15.TabIndex = 42;
+            label15.Text = "شجرة الحسابات العامة";
+            label15.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // btnAddCategory
+            // lblSelectedTreeNod
             // 
-            btnAddCategory.BackColor = Color.Khaki;
-            btnAddCategory.Dock = DockStyle.Fill;
-            btnAddCategory.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnAddCategory.Location = new Point(4, 4);
-            btnAddCategory.Margin = new Padding(4);
-            btnAddCategory.Name = "btnAddCategory";
-            btnAddCategory.Size = new Size(173, 44);
-            btnAddCategory.TabIndex = 81;
-            btnAddCategory.TabStop = false;
-            btnAddCategory.Text = "اضافة تصنيف";
-            btnAddCategory.UseVisualStyleBackColor = false;
+            lblSelectedTreeNod.BackColor = Color.Transparent;
+            lblSelectedTreeNod.Dock = DockStyle.Fill;
+            lblSelectedTreeNod.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblSelectedTreeNod.ForeColor = Color.FromArgb(192, 0, 0);
+            lblSelectedTreeNod.Location = new Point(5, 124);
+            lblSelectedTreeNod.Name = "lblSelectedTreeNod";
+            lblSelectedTreeNod.Size = new Size(179, 32);
+            lblSelectedTreeNod.TabIndex = 41;
+            lblSelectedTreeNod.Text = "الكل";
+            lblSelectedTreeNod.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // tlpTopLst
+            // label4
             // 
-            tlpTopLst.BackColor = Color.Transparent;
-            tlpTopLst.ColumnCount = 1;
-            tlpTopLst.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tlpTopLst.Controls.Add(btnChangeCat, 0, 6);
-            tlpTopLst.Controls.Add(btnModifyCategory, 0, 7);
-            tlpTopLst.Controls.Add(label12, 0, 0);
-            tlpTopLst.Controls.Add(btnClearLstSubAccTop, 0, 2);
-            tlpTopLst.Controls.Add(lblSubAccTop, 0, 1);
-            tlpTopLst.Controls.Add(label11, 0, 4);
-            tlpTopLst.Controls.Add(cbxChangeCat, 0, 5);
-            tlpTopLst.Controls.Add(btnDeleteCategory, 0, 8);
-            tlpTopLst.Controls.Add(tableLayoutPanel19, 0, 3);
-            tlpTopLst.Dock = DockStyle.Fill;
-            tlpTopLst.Location = new Point(3, 55);
-            tlpTopLst.Name = "tlpTopLst";
-            tlpTopLst.RowCount = 9;
-            tlpTopLst.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
-            tlpTopLst.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
-            tlpTopLst.RowStyles.Add(new RowStyle(SizeType.Percent, 8F));
-            tlpTopLst.RowStyles.Add(new RowStyle(SizeType.Percent, 43F));
-            tlpTopLst.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
-            tlpTopLst.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
-            tlpTopLst.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
-            tlpTopLst.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
-            tlpTopLst.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
-            tlpTopLst.Size = new Size(175, 540);
-            tlpTopLst.TabIndex = 82;
+            label4.BackColor = Color.Transparent;
+            label4.Dock = DockStyle.Fill;
+            label4.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label4.Location = new Point(5, 47);
+            label4.Name = "label4";
+            label4.Size = new Size(179, 32);
+            label4.TabIndex = 6;
+            label4.Text = "بحث";
+            label4.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // btnClearLstSubAccTop
+            // rdoByNodeAndHisChild
             // 
-            btnClearLstSubAccTop.BackColor = Color.FromArgb(192, 255, 192);
-            btnClearLstSubAccTop.Dock = DockStyle.Fill;
-            btnClearLstSubAccTop.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnClearLstSubAccTop.Location = new Point(4, 78);
-            btnClearLstSubAccTop.Margin = new Padding(4);
-            btnClearLstSubAccTop.Name = "btnClearLstSubAccTop";
-            btnClearLstSubAccTop.Size = new Size(167, 35);
-            btnClearLstSubAccTop.TabIndex = 80;
-            btnClearLstSubAccTop.TabStop = false;
-            btnClearLstSubAccTop.Text = "كل التصنيفات";
-            btnClearLstSubAccTop.UseVisualStyleBackColor = false;
+            rdoByNodeAndHisChild.AutoSize = true;
+            rdoByNodeAndHisChild.Checked = true;
+            rdoByNodeAndHisChild.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            rdoByNodeAndHisChild.ForeColor = Color.FromArgb(192, 64, 0);
+            rdoByNodeAndHisChild.Location = new Point(14, 590);
+            rdoByNodeAndHisChild.Name = "rdoByNodeAndHisChild";
+            rdoByNodeAndHisChild.RightToLeft = RightToLeft.Yes;
+            rdoByNodeAndHisChild.Size = new Size(170, 23);
+            rdoByNodeAndHisChild.TabIndex = 0;
+            rdoByNodeAndHisChild.TabStop = true;
+            rdoByNodeAndHisChild.Text = "التصنيف وتصنيفاته الفرعية";
+            rdoByNodeAndHisChild.TextAlign = ContentAlignment.BottomCenter;
+            rdoByNodeAndHisChild.UseVisualStyleBackColor = true;
             // 
-            // lblSubAccTop
+            // treeViewAccounts
             // 
-            lblSubAccTop.AutoSize = true;
-            lblSubAccTop.Dock = DockStyle.Fill;
-            lblSubAccTop.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblSubAccTop.ForeColor = SystemColors.MenuHighlight;
-            lblSubAccTop.Location = new Point(4, 37);
-            lblSubAccTop.Margin = new Padding(4, 0, 4, 0);
-            lblSubAccTop.Name = "lblSubAccTop";
-            lblSubAccTop.Size = new Size(167, 37);
-            lblSubAccTop.TabIndex = 77;
-            lblSubAccTop.Text = "0";
-            lblSubAccTop.TextAlign = ContentAlignment.TopCenter;
+            treeViewAccounts.BackColor = Color.FromArgb(235, 255, 235);
+            treeViewAccounts.BorderStyle = BorderStyle.None;
+            treeViewAccounts.Dock = DockStyle.Fill;
+            treeViewAccounts.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            treeViewAccounts.LineColor = Color.Aqua;
+            treeViewAccounts.Location = new Point(5, 159);
+            treeViewAccounts.Name = "treeViewAccounts";
+            treeViewAccounts.RightToLeft = RightToLeft.Yes;
+            treeViewAccounts.RightToLeftLayout = true;
+            treeViewAccounts.Size = new Size(179, 425);
+            treeViewAccounts.TabIndex = 4;
             // 
-            // label11
+            // txtSearchTree
             // 
-            label11.AutoSize = true;
-            label11.Dock = DockStyle.Fill;
-            label11.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label11.ForeColor = Color.FromArgb(0, 0, 192);
-            label11.Location = new Point(4, 349);
-            label11.Margin = new Padding(4, 0, 4, 0);
-            label11.Name = "label11";
-            label11.Size = new Size(167, 37);
-            label11.TabIndex = 82;
-            label11.Text = "نقل الى تصنيف";
-            label11.TextAlign = ContentAlignment.MiddleCenter;
+            txtSearchTree.Dock = DockStyle.Fill;
+            txtSearchTree.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold);
+            txtSearchTree.Location = new Point(5, 82);
+            txtSearchTree.Name = "txtSearchTree";
+            txtSearchTree.Size = new Size(179, 29);
+            txtSearchTree.TabIndex = 5;
+            txtSearchTree.TextAlign = HorizontalAlignment.Center;
             // 
-            // cbxChangeCat
+            // rdoByNode
             // 
-            cbxChangeCat.Dock = DockStyle.Fill;
-            cbxChangeCat.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            cbxChangeCat.FormattingEnabled = true;
-            cbxChangeCat.Location = new Point(3, 389);
-            cbxChangeCat.Name = "cbxChangeCat";
-            cbxChangeCat.Size = new Size(169, 27);
-            cbxChangeCat.TabIndex = 81;
-            // 
-            // btnDeleteCategory
-            // 
-            btnDeleteCategory.BackColor = Color.FromArgb(255, 192, 192);
-            btnDeleteCategory.Dock = DockStyle.Fill;
-            btnDeleteCategory.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnDeleteCategory.Location = new Point(4, 501);
-            btnDeleteCategory.Margin = new Padding(4);
-            btnDeleteCategory.Name = "btnDeleteCategory";
-            btnDeleteCategory.Size = new Size(167, 35);
-            btnDeleteCategory.TabIndex = 83;
-            btnDeleteCategory.TabStop = false;
-            btnDeleteCategory.Text = "حذف تصنيف";
-            btnDeleteCategory.UseVisualStyleBackColor = false;
-            // 
-            // tableLayoutPanel19
-            // 
-            tableLayoutPanel19.ColumnCount = 2;
-            tableLayoutPanel19.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 85F));
-            tableLayoutPanel19.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15F));
-            tableLayoutPanel19.Controls.Add(lstSubAccTop, 0, 0);
-            tableLayoutPanel19.Controls.Add(tableLayoutPanel10, 1, 0);
-            tableLayoutPanel19.Dock = DockStyle.Fill;
-            tableLayoutPanel19.Location = new Point(3, 120);
-            tableLayoutPanel19.Name = "tableLayoutPanel19";
-            tableLayoutPanel19.RowCount = 1;
-            tableLayoutPanel19.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel19.Size = new Size(169, 226);
-            tableLayoutPanel19.TabIndex = 86;
+            rdoByNode.AutoSize = true;
+            rdoByNode.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            rdoByNode.ForeColor = Color.Blue;
+            rdoByNode.Location = new Point(91, 622);
+            rdoByNode.Name = "rdoByNode";
+            rdoByNode.RightToLeft = RightToLeft.Yes;
+            rdoByNode.Size = new Size(93, 23);
+            rdoByNode.TabIndex = 0;
+            rdoByNode.Text = "التصنيف فقط";
+            rdoByNode.TextAlign = ContentAlignment.BottomCenter;
+            rdoByNode.UseVisualStyleBackColor = true;
             // 
             // Accounts
             // 
@@ -1848,6 +1681,7 @@
             Name = "Accounts";
             RightToLeft = RightToLeft.Yes;
             Text = "شجرة الحسابات";
+            Load += Accounts_Load;
             tableLayoutPanel16.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel11.ResumeLayout(false);
@@ -1886,17 +1720,13 @@
             tableLayoutPanel8.PerformLayout();
             tabControlAccount.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
-            tableLayoutPanel10.ResumeLayout(false);
             tlpHome.ResumeLayout(false);
             tableLayoutPanel5.ResumeLayout(false);
             tableLayoutPanel5.PerformLayout();
             contextMenuStrip1.ResumeLayout(false);
             tlpBody.ResumeLayout(false);
-            tlp1.ResumeLayout(false);
-            tableLayoutPanel12.ResumeLayout(false);
-            tlpTopLst.ResumeLayout(false);
-            tlpTopLst.PerformLayout();
-            tableLayoutPanel19.ResumeLayout(false);
+            panelList.ResumeLayout(false);
+            panelList.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -1990,15 +1820,7 @@
         private RadioButton rdoMadeen;
         private TabControl tabControlAccount;
         private TabPage tabPage1;
-        private Button btnNotCat;
-        private Button btnList_DOWN;
-        private Button btnList_UP;
-        private ListBox lstSubAccTop;
-        private TableLayoutPanel tableLayoutPanel10;
         private ToolStripMenuItem tsmAccTop;
-        private Button btnChangeCat;
-        private Button btnModifyCategory;
-        private Label label12;
         private TableLayoutPanel tlpHome;
         private TableLayoutPanel tableLayoutPanel5;
         private ContextMenuStrip contextMenuStrip1;
@@ -2006,15 +1828,13 @@
         private Label lblAccTopID;
         private Label lblTitel;
         private TableLayoutPanel tlpBody;
-        private TableLayoutPanel tlp1;
-        private TableLayoutPanel tableLayoutPanel12;
-        private Button btnAddCategory;
-        private TableLayoutPanel tlpTopLst;
-        private Button btnClearLstSubAccTop;
-        private Label lblSubAccTop;
-        private Label label11;
-        private ComboBox cbxChangeCat;
-        private Button btnDeleteCategory;
-        private TableLayoutPanel tableLayoutPanel19;
+        private TableLayoutPanel panelList;
+        private Label label15;
+        private Label lblSelectedTreeNod;
+        private Label label4;
+        private RadioButton rdoByNodeAndHisChild;
+        private TreeView treeViewAccounts;
+        private TextBox txtSearchTree;
+        private RadioButton rdoByNode;
     }
 }

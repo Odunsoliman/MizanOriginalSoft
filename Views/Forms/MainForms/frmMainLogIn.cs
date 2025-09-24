@@ -64,7 +64,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         private void LoadAppInfo()
         {
             try
-            { 
+            {
                 string filePath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
                 CurrentSession.LoadServerSettings(filePath);
 
@@ -583,6 +583,19 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         }
 
+        //الاعدادات - شجرة الحسابات
+        private void btnAccounts_Click(object sender, EventArgs e)
+        {
+
+            if (sender is Button btn)
+            {
+                HighlightTransparentButton(btn);
+            }
+
+            CloseAllFormsExceptMain();
+            frm_Accounts frm = new frm_Accounts();
+            OpenFormInPanel(frm);
+        }
         #endregion 
 
         #region  ******   اعدادالحسابات  *****************************
@@ -811,7 +824,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             CloseAllFormsExceptMain(); // غلق كل الفورمز المفتوحة ما عدا الرئيسي
 
             // تحديد نوع الفاتورة الجديد باستخدام enum
-            InvoiceType type = InvoiceType.Inventory ;
+            InvoiceType type = InvoiceType.Inventory;
 
             // إنشاء الفورم الذكي وتهيئته
             frm_DynamicInvoice frm = new frm_DynamicInvoice();
@@ -831,7 +844,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             CloseAllFormsExceptMain(); // غلق كل الفورمز المفتوحة ما عدا الرئيسي
 
             // تحديد نوع الفاتورة الجديد باستخدام enum
-            InvoiceType type = InvoiceType.DeductStock ;
+            InvoiceType type = InvoiceType.DeductStock;
 
             // إنشاء الفورم الذكي وتهيئته
             frm_DynamicInvoice frm = new frm_DynamicInvoice();
@@ -851,7 +864,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             CloseAllFormsExceptMain(); // غلق كل الفورمز المفتوحة ما عدا الرئيسي
 
             // تحديد نوع الفاتورة الجديد باستخدام enum
-            InvoiceType type = InvoiceType.AddStock ;
+            InvoiceType type = InvoiceType.AddStock;
 
             // إنشاء الفورم الذكي وتهيئته
             frm_DynamicInvoice frm = new frm_DynamicInvoice();
@@ -1475,5 +1488,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             using frmSettingReports previewForm = new frmSettingReports(reportParameters);
             previewForm.ShowDialog();
         }
+
+
     }
 }

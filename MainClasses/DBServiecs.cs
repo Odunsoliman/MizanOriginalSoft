@@ -1681,7 +1681,15 @@ END
 
         #endregion
 
+        #region 
+        // جلب جميع  شجرة الحسابات ###
+        public static DataTable Acc_GetChart()//@@
+        {
+            DataTable? result = dbHelper.ExecuteSelectQuery("Acc_GetChart");
+            return result ?? new DataTable();
+        }
 
+        #endregion 
         #region @@@@ Cheque Batches @@@@
 
         //// جلب الحافظات حسب النوع

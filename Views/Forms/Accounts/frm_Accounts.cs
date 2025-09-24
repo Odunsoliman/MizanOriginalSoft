@@ -1,22 +1,27 @@
 ﻿using MizanOriginalSoft.MainClasses;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MizanOriginalSoft.Views.Forms.Accounts
 {
-    public partial class Accounts : Form
+    public partial class frm_Accounts : Form
     {
-        public Accounts()
+        public frm_Accounts()
         {
             InitializeComponent();
         }
 
-        private void Accounts_Load(object sender, EventArgs e)
+        private void frm_Accounts_Load(object sender, EventArgs e)
         {
             LoadAccountsTree();
         }
-
 
         //اريد نسخة منقحة
         private void LoadAccountsTree()
@@ -100,16 +105,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         {
             return fullPath.Split(new string[] { "→" }, StringSplitOptions.None).Length - 1;
         }
-
-
-
-
-
-
-
-
-
-
 
 
     }
