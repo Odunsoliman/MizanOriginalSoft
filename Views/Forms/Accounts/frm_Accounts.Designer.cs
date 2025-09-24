@@ -175,6 +175,7 @@
             txtSearchTree.Size = new Size(179, 29);
             txtSearchTree.TabIndex = 5;
             txtSearchTree.TextAlign = HorizontalAlignment.Center;
+            txtSearchTree.TextChanged += txtSearchTree_TextChanged;
             // 
             // tableLayoutPanel13
             // 
