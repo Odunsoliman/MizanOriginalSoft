@@ -1691,7 +1691,6 @@ END
         }
 
         // إضافة حساب جديد
-        // إضافة حساب جديد
         public static string Acc_AddAccount(string AccName, int? ParentAccID, int? CreateByUserID, bool? IsHasChildren)
         {
             return dbHelper.ExecuteNonQueryWithLogging("Acc_AddAccount", command =>
@@ -1710,15 +1709,157 @@ END
             {
                 command.Parameters.Add("@AccID", SqlDbType.Int).Value = (object?)AccID ?? DBNull.Value;
 
-                //// باراميتر المخرجات لاستقبال رسالة السبب
-                //var outputParam = new SqlParameter("@OutputMsg", SqlDbType.NVarChar, 500)
-                //{
-                //    Direction = ParameterDirection.Output
-                //};
-                //command.Parameters.Add(outputParam);
+                // باراميتر المخرجات لاستقبال رسالة السبب
+                var outputParam = new SqlParameter("@OutputMsg", SqlDbType.NVarChar, 500)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                command.Parameters.Add(outputParam);
 
             }, expectMessageOutput: true); // ✅ نخليها true عشان نستقبل الرسالة
         }
+
+        /*هذه الرسالة تعود عند التنفيذ
+         * 
+         * 
+         * 
+         * هذا الزر فى الشاشة
+         *      private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (treeViewAccounts.SelectedNode?.Tag is DataRow row)
+            {
+                int accID = Convert.ToInt32(row["AccID"]);
+                string? accName = row["AccName"].ToString();
+
+                DialogResult confirm = MessageBox.Show(
+                    $"هل أنت متأكد أنك تريد حذف الحساب: {accName} (ID={accID})؟",
+                    "تأكيد الحذف",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (confirm == DialogResult.No) return;
+
+                string resultMsg = DBServiecs.Acc_DeleteAccount(accID);
+
+                MessageBox.Show(resultMsg, "نتيجة الحذف");
+
+                // لو تم الحذف فعلاً → نرجع للأب
+                if (resultMsg.StartsWith("✅ تم حذف"))
+                {
+                    int? parentAccID = row["ParentAccID"] != DBNull.Value ? Convert.ToInt32(row["ParentAccID"]) : (int?)null;
+
+                    LoadAccountsTree();
+
+                    if (parentAccID.HasValue)
+                        HighlightAndExpandNode(parentAccID.Value);
+                }
+            }
+        }
+
+        ===================================================================
+         هذه الدالة لا يمكن تعديلها لانها فىdbHelper ويكب تكيف الكل عليها
+              public static string ExecuteNonQueryWithLogging(
+            string procedureName,
+            Action<SqlCommand> setParams,
+            string? logProcedureName = null,
+            Action<SqlCommand>? logParams = null,
+            bool expectMessageOutput = false)
+        {
+            try
+            {
+                EnsureConnectionOpen();
+                string result = "تم التنفيذ.";
+
+                using (SqlCommand cmd = CreateCommand(procedureName))
+                {
+                    if (expectMessageOutput)
+                    {
+                        var msgParam = new SqlParameter("@Message", SqlDbType.NVarChar, 500)
+                        {
+                            Direction = ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(msgParam);
+                    }
+
+                    setParams?.Invoke(cmd);
+                    cmd.ExecuteNonQuery();
+
+                    if (expectMessageOutput)
+                        result = cmd.Parameters["@Message"].Value?.ToString() ?? result;
+                }
+
+                if (!string.IsNullOrEmpty(logProcedureName) && logParams != null)
+                {
+                    using (SqlCommand logCmd = CreateCommand(logProcedureName))
+                    {
+                        logParams(logCmd);
+                        logCmd.ExecuteNonQuery();
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("خطأ أثناء التنفيذ: " + ex.Message);
+                return "فشل في التنفيذ.";
+            }
+            finally
+            {
+                EnsureConnectionClosed();
+            }
+        }
+
+================================================================
+        وهذا الاجراء 
+        ALTER PROCEDURE [dbo].[Acc_DeleteAccount]
+    @AccID INT,
+    @OutputMsg NVARCHAR(500) OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @ParentAccID INT;
+    DECLARE @IsEnerAcc BIT;
+
+    -- الحصول على رقم الأب و قيمة IsEnerAcc
+    SELECT 
+        @ParentAccID = ParentAccID,
+        @IsEnerAcc = IsEnerAcc
+    FROM Accounts
+    WHERE AccID = @AccID;
+
+    -- التحقق إذا كان الحساب جذري
+    IF @ParentAccID IS NULL AND @AccID <= 5
+    BEGIN
+        SET @OutputMsg = N'❌ لا يمكن حذف الحساب الجذري الأساسي.';
+        RETURN;
+    END
+
+    -- التحقق إذا كان الحساب إدخال
+    IF @IsEnerAcc = 1
+    BEGIN
+        SET @OutputMsg = N'❌ لا يمكن حذف هذا الحساب لأنه حساب إدخال (IsEnerAcc=1).';
+        RETURN;
+    END
+
+    -- التحقق إذا كان للحساب أبناء
+    IF EXISTS (SELECT 1 FROM Accounts WHERE ParentAccID = @AccID)
+    BEGIN
+        SET @OutputMsg = N'❌ لا يمكن حذف الحساب لأنه يحتوي على حسابات فرعية.';
+        RETURN;
+    END
+
+    -- الحذف
+    DELETE FROM Accounts WHERE AccID = @AccID;
+
+    SET @OutputMsg = N'✅ تم حذف الحساب بنجاح (AccID=' + CAST(@AccID AS NVARCHAR) + N').';
+
+         
+         */
+
+
+
 
         #endregion
         #region @@@@ Cheque Batches @@@@
@@ -1950,3 +2091,4 @@ END
 
     }
 }
+
