@@ -1045,6 +1045,7 @@
             btnSave.TabStop = false;
             btnSave.Text = "حفــظ";
             btnSave.UseVisualStyleBackColor = false;
+            btnSave.Visible = false;
             // 
             // btnNew
             // 
@@ -1059,6 +1060,7 @@
             btnNew.TabStop = false;
             btnNew.Text = "جديد";
             btnNew.UseVisualStyleBackColor = false;
+            btnNew.Visible = false;
             // 
             // tlpFixedAssets
             // 
@@ -1529,6 +1531,7 @@
             // 
             chkIsHasChildren.AutoSize = true;
             chkIsHasChildren.Dock = DockStyle.Left;
+            chkIsHasChildren.Enabled = false;
             chkIsHasChildren.Location = new Point(288, 77);
             chkIsHasChildren.Name = "chkIsHasChildren";
             chkIsHasChildren.Size = new Size(15, 32);
@@ -1566,6 +1569,7 @@
             // txtAccName
             // 
             txtAccName.Dock = DockStyle.Fill;
+            txtAccName.Enabled = false;
             txtAccName.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             txtAccName.ForeColor = Color.FromArgb(0, 0, 192);
             txtAccName.Location = new Point(4, 4);
