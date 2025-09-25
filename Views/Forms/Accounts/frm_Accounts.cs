@@ -39,6 +39,11 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
                 string fullPath = row["FullPath"] as string ?? string.Empty;
                 string accName = row["AccName"] as string ?? string.Empty;
+                string parentAccID = row["ParentAccID"] as string ?? string.Empty;
+                string balance = row["Balance"] as string ?? string.Empty;
+                string balanceState = row["BalanceState"] as string ?? string.Empty;
+                string isHidden = row["IsHidden"] as string ?? string.Empty;
+                string dateOfJoin = row["DateOfJoin"] as string ?? string.Empty;
 
                 if (string.IsNullOrWhiteSpace(fullPath) || string.IsNullOrWhiteSpace(accName))
                     continue;
@@ -204,6 +209,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             return string.Join(" → ", parts); // يمكنك تغيير السهم أو الفاصل حسب رغبتك
         }
 
+
+        private int parentAccID = 0;
+        private bool IsHasChildren=false;
         // حدث اختيار العقدة
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
@@ -215,6 +223,16 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 {
                     string? accID = row["AccID"].ToString();
                     string? accName = row["AccName"].ToString();
+                    int? parentAccID = row["ParentAccID"] == DBNull.Value
+                        ? (int?)null
+                        : Convert.ToInt32(row["ParentAccID"]);
+
+
+                    string balance = row["Balance"] as string ?? string.Empty;
+                    string balanceState = row["BalanceState"] as string ?? string.Empty;
+                    bool isHidden = Convert.ToBoolean(row["IsHidden"]);
+                    IsHasChildren = Convert.ToBoolean(row["IsHasChildren"]);
+                    string dateOfJoin = row["DateOfJoin"] as string ?? string.Empty;
 
                     // عرض رقم الحساب واسم الحساب
                     lblSelectedTreeNod.Text = accID + " - " + accName;
@@ -222,6 +240,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     // عرض المسار الكامل بالاسماء فقط
                     lblPathNode.Text = GetFullPathFromNode(node);
                     lblParentAccID.Text = accName;
+                    chkIsHasChildren.Checked = IsHasChildren;
                 }
             }
         }
