@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             txtSearchTree = new TextBox();
             tableLayoutPanel13 = new TableLayoutPanel();
             label7 = new Label();
@@ -84,7 +84,7 @@
             tlpShowMainData = new TableLayoutPanel();
             lblLastLine = new Label();
             lblNameLine = new Label();
-            lblFirstLine = new Label();
+            lblPathNode = new Label();
             tabControlAccount = new TabControl();
             tabPage2 = new TabPage();
             tableLayoutPanel11 = new TableLayoutPanel();
@@ -244,8 +244,8 @@
             DGV.ReadOnly = true;
             DGV.RowHeadersVisible = false;
             DGV.RowHeadersWidth = 51;
-            dataGridViewCellStyle1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DGV.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DGV.RowsDefaultCellStyle = dataGridViewCellStyle2;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DGV.Size = new Size(457, 436);
             DGV.TabIndex = 72;
@@ -902,7 +902,7 @@
             tlpShowMainData.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tlpShowMainData.Controls.Add(lblLastLine, 0, 2);
             tlpShowMainData.Controls.Add(lblNameLine, 0, 1);
-            tlpShowMainData.Controls.Add(lblFirstLine, 0, 0);
+            tlpShowMainData.Controls.Add(lblPathNode, 0, 0);
             tlpShowMainData.Dock = DockStyle.Top;
             tlpShowMainData.Location = new Point(3, 91);
             tlpShowMainData.Name = "tlpShowMainData";
@@ -941,19 +941,19 @@
             lblNameLine.Text = "-";
             lblNameLine.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // lblFirstLine
+            // lblPathNode
             // 
-            lblFirstLine.AutoSize = true;
-            lblFirstLine.Dock = DockStyle.Fill;
-            lblFirstLine.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblFirstLine.ForeColor = SystemColors.ActiveCaption;
-            lblFirstLine.Location = new Point(4, 0);
-            lblFirstLine.Margin = new Padding(4, 0, 4, 0);
-            lblFirstLine.Name = "lblFirstLine";
-            lblFirstLine.Size = new Size(360, 27);
-            lblFirstLine.TabIndex = 59;
-            lblFirstLine.Text = "-";
-            lblFirstLine.TextAlign = ContentAlignment.MiddleLeft;
+            lblPathNode.AutoSize = true;
+            lblPathNode.Dock = DockStyle.Fill;
+            lblPathNode.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblPathNode.ForeColor = SystemColors.ActiveCaption;
+            lblPathNode.Location = new Point(4, 0);
+            lblPathNode.Margin = new Padding(4, 0, 4, 0);
+            lblPathNode.Name = "lblPathNode";
+            lblPathNode.Size = new Size(360, 27);
+            lblPathNode.TabIndex = 59;
+            lblPathNode.Text = "-";
+            lblPathNode.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // tabControlAccount
             // 
@@ -1754,7 +1754,7 @@
         private TableLayoutPanel tlpShowMainData;
         private Label lblLastLine;
         private Label lblNameLine;
-        private Label lblFirstLine;
+        private Label lblPathNode;
         private TabControl tabControlAccount;
         private TabPage tabPage2;
         private TableLayoutPanel tableLayoutPanel11;

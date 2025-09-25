@@ -22,7 +22,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         {
             LoadAccountsTree();
         }
-
+        #region !!!!!!! بناء الشجرة  !!!!!!!
         //اريد نسخة منقحة
         private void LoadAccountsTree()
         {
@@ -108,7 +108,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             return fullPath.Split(new string[] { "→" }, StringSplitOptions.None).Length - 1;
         }
 
-        #region ********** Search Tree Node ***********
+        #endregion 
+
+        #region !!!!!! بحث فى الشجرة  !!!!!!!!
 
         private List<TreeNode> matchedNodes = new List<TreeNode>();
         private int currentMatchIndex = -1;
@@ -192,6 +194,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 {
                     string? accID = row["AccID"].ToString();
                     string? accName = row["AccName"].ToString();
+                    string? accPath = row["FullPath"].ToString();
+
 
                     lblSelectedTreeNod.Text = accID + " - " + accName;
                 }
