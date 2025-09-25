@@ -352,7 +352,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
                 // 🟢 إعادة تحميل الشجرة
                 LoadAccountsTree();
-
+                txtSearchTree.Text = AccName;
                 // 🟢 البحث عن العقدة بنفس الـ ID
                 TreeNode? node = FindNodeByAccID(treeViewAccounts.Nodes, currentNodeId);
 
@@ -364,7 +364,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
                 // 🟢 فتح وتحديد العقدة الأب
                 HighlightAndExpandNode(currentNodeId);
-                txtSearchTree .Text = AccName;
+                txtAccName.Clear();
+                chkIsHasChildren.Checked = false;
             }
             else
             {
@@ -417,10 +418,41 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void btnNew_Click(object sender, EventArgs e)
         {
-            txtAccName .Clear();
-            chkIsHasChildren .Checked = false ;
+            txtAccName.Clear();
+            chkIsHasChildren.Checked = false;
         }
 
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (treeViewAccounts.SelectedNode?.Tag is DataRow row)
+            {
+                int accID = Convert.ToInt32(row["AccID"]);
+                string? accName = row["AccName"].ToString();
+
+                DialogResult confirm = MessageBox.Show(
+                    $"هل أنت متأكد أنك تريد حذف الحساب: {accName} (ID={accID})؟",
+                    "تأكيد الحذف",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (confirm == DialogResult.No) return;
+
+                string resultMsg = DBServiecs.Acc_DeleteAccount(accID);
+
+                MessageBox.Show(resultMsg, "نتيجة الحذف");
+
+                // لو تم الحذف فعلاً → نرجع للأب
+                if (resultMsg.StartsWith("✅ تم حذف"))
+                {
+                    int? parentAccID = row["ParentAccID"] != DBNull.Value ? Convert.ToInt32(row["ParentAccID"]) : (int?)null;
+
+                    LoadAccountsTree();
+
+                    if (parentAccID.HasValue)
+                        HighlightAndExpandNode(parentAccID.Value);
+                }
+            }
+        }
 
     }
 }

@@ -1704,13 +1704,23 @@ END
             }, expectMessageOutput: false); // ✅ الإجراء لا يحتوي على @Message
         }
 
+        public static string Acc_DeleteAccount(int? AccID)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("Acc_DeleteAccount", command =>
+            {
+                command.Parameters.Add("@AccID", SqlDbType.Int).Value = (object?)AccID ?? DBNull.Value;
 
+                //// باراميتر المخرجات لاستقبال رسالة السبب
+                //var outputParam = new SqlParameter("@OutputMsg", SqlDbType.NVarChar, 500)
+                //{
+                //    Direction = ParameterDirection.Output
+                //};
+                //command.Parameters.Add(outputParam);
 
-  
+            }, expectMessageOutput: true); // ✅ نخليها true عشان نستقبل الرسالة
+        }
 
-
-
-        #endregion 
+        #endregion
         #region @@@@ Cheque Batches @@@@
 
         //// جلب الحافظات حسب النوع
