@@ -102,11 +102,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
 
-        // دالة لحساب المستوى من FullPath
-        private int GetLevelFromFullPath(string fullPath)
-        {
-            return fullPath.Split(new string[] { "→" }, StringSplitOptions.None).Length - 1;
-        }
+
 
         #endregion 
 
@@ -185,22 +181,50 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         #endregion
+        // دالة لحساب المستوى من FullPath
+        private int GetLevelFromFullPath(string fullPath)
+        {
+            return fullPath.Split(new string[] { "→" }, StringSplitOptions.None).Length - 1;
+        }
+        private string GetFullPathFromNode(TreeNode node)
+        {
+            if (node == null)
+                return string.Empty;
+
+            List<string> parts = new List<string>();
+            TreeNode? current = node;
+
+            while (current != null)
+            {
+                parts.Insert(0, current.Text); // نضيف من البداية لتكون من الأصل إلى الفرع
+                current = current.Parent;
+            }
+
+            return string.Join("→", parts);
+        }
 
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
             if (treeViewAccounts.SelectedNode != null)
             {
-                if (treeViewAccounts.SelectedNode.Tag is DataRow row)
+                TreeNode node = treeViewAccounts.SelectedNode;
+
+                if (node.Tag is DataRow row)
                 {
                     string? accID = row["AccID"].ToString();
                     string? accName = row["AccName"].ToString();
-                    string? accPath = row["FullPath"].ToString();
-
 
                     lblSelectedTreeNod.Text = accID + " - " + accName;
+
+                    // بناء المسار من شجرة العقد
+                    string fullPath = GetFullPathFromNode(node);
+
+                    // عرض المستوى المستنتج من المسار المبني
+                    lblPathNode.Text = GetLevelFromFullPath(fullPath).ToString();
                 }
             }
         }
+
 
     }
 }
