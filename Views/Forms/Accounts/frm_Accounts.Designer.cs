@@ -128,10 +128,10 @@
             label2 = new Label();
             txtAccName = new TextBox();
             label6 = new Label();
+            label8 = new Label();
             panel2 = new Panel();
             tlpBody = new TableLayoutPanel();
             tlpHome = new TableLayoutPanel();
-            label8 = new Label();
             tableLayoutPanel13.SuspendLayout();
             contextMenuDGV.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
@@ -1589,6 +1589,20 @@
             label6.Text = "الاب";
             label6.TextAlign = ContentAlignment.MiddleRight;
             // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Dock = DockStyle.Fill;
+            label8.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label8.ForeColor = Color.FromArgb(0, 0, 192);
+            label8.Location = new Point(310, 74);
+            label8.Margin = new Padding(4, 0, 4, 0);
+            label8.Name = "label8";
+            label8.Size = new Size(123, 38);
+            label8.TabIndex = 54;
+            label8.Text = "حساب له فروع";
+            label8.TextAlign = ContentAlignment.MiddleRight;
+            // 
             // panel2
             // 
             panel2.BackColor = SystemColors.ActiveBorder;
@@ -1629,20 +1643,6 @@
             tlpHome.RowStyles.Add(new RowStyle(SizeType.Absolute, 9F));
             tlpHome.Size = new Size(1124, 726);
             tlpHome.TabIndex = 5;
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Dock = DockStyle.Fill;
-            label8.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.ForeColor = Color.FromArgb(0, 0, 192);
-            label8.Location = new Point(310, 74);
-            label8.Margin = new Padding(4, 0, 4, 0);
-            label8.Name = "label8";
-            label8.Size = new Size(123, 38);
-            label8.TabIndex = 54;
-            label8.Text = "حساب له فروع";
-            label8.TextAlign = ContentAlignment.MiddleRight;
             // 
             // frm_Accounts
             // 

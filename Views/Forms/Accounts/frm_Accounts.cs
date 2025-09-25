@@ -211,7 +211,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
 
         private int parentAccID = 0;
-        private bool IsHasChildren=false;
+        private bool isHasChildren=false;
+        private bool isHasDetails = false;
         // حدث اختيار العقدة
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
@@ -227,37 +228,64 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                         ? (int?)null
                         : Convert.ToInt32(row["ParentAccID"]);
 
-
-                    string balance = row["Balance"] as string ?? string.Empty;
-                    string balanceState = row["BalanceState"] as string ?? string.Empty;
+                    string balance = row["Balance"].ToString() ?? string.Empty;
+                    string balanceState = row["BalanceState"].ToString() ?? string.Empty;
                     bool isHidden = Convert.ToBoolean(row["IsHidden"]);
-                    IsHasChildren = Convert.ToBoolean(row["IsHasChildren"]);
-                    string dateOfJoin = row["DateOfJoin"] as string ?? string.Empty;
+                    isHasChildren = Convert.ToBoolean(row["IsHasChildren"]);
+                    isHasDetails = row.Field<bool?>("IsHasDetails") ?? false;
+
+                    string dateOfJoin = row["DateOfJoin"].ToString() ?? string.Empty;
 
                     // عرض رقم الحساب واسم الحساب
                     lblSelectedTreeNod.Text = accID + " - " + accName;
 
                     // عرض المسار الكامل بالاسماء فقط
                     lblPathNode.Text = GetFullPathFromNode(node);
-                    
-                    txtAccName.Enabled = IsHasChildren;
 
-                    if (!IsHasChildren) // لو غير مسموح
+                    txtAccName.Enabled = isHasChildren;
+
+                    if (!isHasChildren) // لو غير مسموح
                     {
                         txtAccName.Clear();
                         lblParentAccName.Text = "لا يمكن اضافة حسابات فرعية هنا فهذا حساب نهائى";
                         chkIsHasChildren.Enabled = false;
-                        btnDetails .Enabled = false;
-
+                        btnDetails.Visible = false;
+                        btnNew.Visible = false;
+                        btnSave.Visible = false;
                     }
                     else // لو مسموح
                     {
                         lblParentAccName.Text = accName;
                         chkIsHasChildren.Enabled = true;
-                        btnDetails.Enabled = true;
-
+                        btnNew.Visible = true;
+                        btnSave.Visible = true;
                     }
 
+                    // 🔹 تحقق إذا أي من الآباء (الجدود) هو 12
+                    bool hasFixedAssetParent = false;
+                    TreeNode? current = node;
+                    while (current != null)
+                    {
+                        if (current.Tag is DataRow parentRow)
+                        {
+                            if (Convert.ToInt32(parentRow["AccID"]) == 12)
+                            {
+                                hasFixedAssetParent = true;
+                                break;
+                            }
+                        }
+                        current = current.Parent;
+                    }
+
+                    if (isHasDetails)
+                    {
+                        btnDetails.Visible = true;
+                        btnDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
+                    }
+                    else
+                    {
+                        btnDetails.Visible = false;
+                    }
                 }
             }
         }
