@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             txtSearchTree = new TextBox();
             tableLayoutPanel13 = new TableLayoutPanel();
             label7 = new Label();
@@ -124,7 +124,7 @@
             btnDetails = new Button();
             tableLayoutPanel6 = new TableLayoutPanel();
             chkIsHasChildren = new CheckBox();
-            lblParentAccID = new Label();
+            lblParentAccName = new Label();
             label2 = new Label();
             txtAccName = new TextBox();
             label6 = new Label();
@@ -244,8 +244,8 @@
             DGV.ReadOnly = true;
             DGV.RowHeadersVisible = false;
             DGV.RowHeadersWidth = 51;
-            dataGridViewCellStyle1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DGV.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DGV.RowsDefaultCellStyle = dataGridViewCellStyle2;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DGV.Size = new Size(457, 436);
             DGV.TabIndex = 72;
@@ -1510,7 +1510,7 @@
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
             tableLayoutPanel6.Controls.Add(chkIsHasChildren, 1, 2);
-            tableLayoutPanel6.Controls.Add(lblParentAccID, 1, 1);
+            tableLayoutPanel6.Controls.Add(lblParentAccName, 1, 1);
             tableLayoutPanel6.Controls.Add(label2, 0, 0);
             tableLayoutPanel6.Controls.Add(txtAccName, 1, 0);
             tableLayoutPanel6.Controls.Add(label6, 0, 1);
@@ -1536,20 +1536,19 @@
             chkIsHasChildren.TabIndex = 89;
             chkIsHasChildren.UseVisualStyleBackColor = true;
             // 
-            // lblParentAccID
+            // lblParentAccName
             // 
-            lblParentAccID.AutoSize = true;
-            lblParentAccID.Dock = DockStyle.Fill;
-            lblParentAccID.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblParentAccID.ForeColor = Color.Fuchsia;
-            lblParentAccID.Location = new Point(4, 37);
-            lblParentAccID.Margin = new Padding(4, 0, 4, 0);
-            lblParentAccID.Name = "lblParentAccID";
-            lblParentAccID.Padding = new Padding(0, 0, 10, 0);
-            lblParentAccID.Size = new Size(298, 37);
-            lblParentAccID.TabIndex = 55;
-            lblParentAccID.Text = "المسار";
-            lblParentAccID.TextAlign = ContentAlignment.MiddleLeft;
+            lblParentAccName.AutoSize = true;
+            lblParentAccName.Dock = DockStyle.Fill;
+            lblParentAccName.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblParentAccName.ForeColor = Color.Fuchsia;
+            lblParentAccName.Location = new Point(4, 37);
+            lblParentAccName.Margin = new Padding(4, 0, 4, 0);
+            lblParentAccName.Name = "lblParentAccName";
+            lblParentAccName.Padding = new Padding(0, 0, 10, 0);
+            lblParentAccName.Size = new Size(298, 37);
+            lblParentAccName.TabIndex = 55;
+            lblParentAccName.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // label2
             // 
@@ -1807,7 +1806,7 @@
         private Label label6;
         private Label label8;
         private CheckBox chkIsHasChildren;
-        private Label lblParentAccID;
+        private Label lblParentAccName;
         private Button btnDetails;
     }
 }

@@ -239,12 +239,19 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
                     // عرض المسار الكامل بالاسماء فقط
                     lblPathNode.Text = GetFullPathFromNode(node);
-                    lblParentAccID.Text = accName;
                     chkIsHasChildren.Checked = IsHasChildren;
-                    txtAccName .Enabled = IsHasChildren;
-                    /*
-                     
-                     */
+                    txtAccName.Enabled = IsHasChildren;
+
+                    if (!IsHasChildren) // لو غير مسموح
+                    {
+                        txtAccName.Clear();
+                        lblParentAccName.Text = "لا يمكن اضافة حسابات فرعية هنا فهذا حساب نهائى";
+                    }
+                    else // لو مسموح
+                    {
+                        lblParentAccName.Text = accName;
+                    }
+
                 }
             }
         }
