@@ -282,13 +282,35 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
                     if (isHasDetails)
                     {
-                        tlpData .Visible = true;
+                        tlpData.Visible = true;
                         btnDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
+
+                        // إعادة ضبط نسب الصفوف
+                        tlpData.RowStyles[0].SizeType = SizeType.Percent;
+                        tlpData.RowStyles[0].Height = 10; // الصف الأول ثابت 10%
+
+                        if (btnDetails.Text == "بيانات شخصية")
+                        {
+                            tlpData.RowStyles[1].SizeType = SizeType.Percent;
+                            tlpData.RowStyles[1].Height = 90;
+
+                            tlpData.RowStyles[2].SizeType = SizeType.Percent;
+                            tlpData.RowStyles[2].Height = 0;
+                        }
+                        else // "بيانات الأصل الثابت"
+                        {
+                            tlpData.RowStyles[1].SizeType = SizeType.Percent;
+                            tlpData.RowStyles[1].Height = 0;
+
+                            tlpData.RowStyles[2].SizeType = SizeType.Percent;
+                            tlpData.RowStyles[2].Height = 90;
+                        }
                     }
                     else
                     {
                         tlpData.Visible = false;
                     }
+
                 }
             }
         }
@@ -297,6 +319,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         {
             // إذا كانت مخفية يظهرها، وإذا كانت ظاهرة يخفيها
             tlpPhon.Visible = !tlpPhon.Visible;
+
         }
 
     }
