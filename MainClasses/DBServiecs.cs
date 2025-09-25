@@ -1681,13 +1681,43 @@ END
 
         #endregion
 
-        #region 
+        #region ********   شجرة الحسابات  ************
+
         // جلب جميع  شجرة الحسابات ###
         public static DataTable Acc_GetChart()//@@
         {
             DataTable? result = dbHelper.ExecuteSelectQuery("Acc_GetChart");
             return result ?? new DataTable();
         }
+      
+        // إضافة حساب جديد
+        public static string Acc_AddAccount(string AccName, int? ParentAccID, int? CreateByUserID, bool? IsHasChildren)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("Acc_AddAccount", command =>
+            {
+                command.Parameters.Add("@AccName", SqlDbType.NVarChar).Value = AccName;
+
+                // ✅ التعامل مع NULL في ParentAccID
+                if (ParentAccID.HasValue)
+                    command.Parameters.Add("@ParentAccID", SqlDbType.Int).Value = ParentAccID.Value;
+                else
+                    command.Parameters.Add("@ParentAccID", SqlDbType.Int).Value = DBNull.Value;
+
+                // ✅ التعامل مع NULL في CreateByUserID
+                if (CreateByUserID.HasValue)
+                    command.Parameters.Add("@CreateByUserID", SqlDbType.Int).Value = CreateByUserID.Value;
+                else
+                    command.Parameters.Add("@CreateByUserID", SqlDbType.Int).Value = DBNull.Value;
+
+                // ✅ التعامل مع NULL في IsHasChildren
+                if (IsHasChildren.HasValue)
+                    command.Parameters.Add("@IsHasChildren", SqlDbType.Bit).Value = IsHasChildren.Value;
+                else
+                    command.Parameters.Add("@IsHasChildren", SqlDbType.Bit).Value = DBNull.Value;
+
+            }, expectMessageOutput: true);
+        }
+
 
         #endregion 
         #region @@@@ Cheque Batches @@@@

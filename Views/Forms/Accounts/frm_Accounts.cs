@@ -186,6 +186,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         {
             return fullPath.Split(new string[] { "→" }, StringSplitOptions.None).Length - 1;
         }
+        // دالة لبناء المسار الكامل من شجرة العقد
         private string GetFullPathFromNode(TreeNode node)
         {
             if (node == null)
@@ -200,9 +201,10 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 current = current.Parent;
             }
 
-            return string.Join("→", parts);
+            return string.Join(" → ", parts); // يمكنك تغيير السهم أو الفاصل حسب رغبتك
         }
 
+        // حدث اختيار العقدة
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
             if (treeViewAccounts.SelectedNode != null)
@@ -214,17 +216,20 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     string? accID = row["AccID"].ToString();
                     string? accName = row["AccName"].ToString();
 
+                    // عرض رقم الحساب واسم الحساب
                     lblSelectedTreeNod.Text = accID + " - " + accName;
 
-                    // بناء المسار من شجرة العقد
-                    string fullPath = GetFullPathFromNode(node);
-
-                    // عرض المستوى المستنتج من المسار المبني
-                    lblPathNode.Text = GetLevelFromFullPath(fullPath).ToString();
+                    // عرض المسار الكامل بالاسماء فقط
+                    lblPathNode.Text = GetFullPathFromNode(node);
                 }
             }
         }
 
+        private void btnDetails_Click(object sender, EventArgs e)
+        {
+            // إذا كانت مخفية يظهرها، وإذا كانت ظاهرة يخفيها
+            tlpPhon.Visible = !tlpPhon.Visible;
+        }
 
     }
 }
