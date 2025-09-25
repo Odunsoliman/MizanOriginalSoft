@@ -186,8 +186,17 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            lblSelectedTreeNod .Text = treeViewAccounts.SelectedNode.Text+treeViewAccounts .SelectedNode .Tag ;
+            if (treeViewAccounts.SelectedNode != null)
+            {
+                if (treeViewAccounts.SelectedNode.Tag is DataRow row)
+                {
+                    string? accID = row["AccID"].ToString();
+                    string? accName = row["AccName"].ToString();
 
+                    lblSelectedTreeNod.Text = accID + " - " + accName;
+                }
+            }
         }
+
     }
 }
