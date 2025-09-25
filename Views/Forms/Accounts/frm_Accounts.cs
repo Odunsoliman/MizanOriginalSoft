@@ -221,6 +221,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
                     // عرض المسار الكامل بالاسماء فقط
                     lblPathNode.Text = GetFullPathFromNode(node);
+                    lblParentAccID.Text = accName;
                 }
             }
         }

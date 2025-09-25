@@ -92,19 +92,6 @@
             tableLayoutPanel16 = new TableLayoutPanel();
             btnSave = new Button();
             btnNew = new Button();
-            tableLayoutPanel18 = new TableLayoutPanel();
-            tlpData = new TableLayoutPanel();
-            tlpPhon = new TableLayoutPanel();
-            txtClientAddress = new TextBox();
-            txtClientEmail = new TextBox();
-            label17 = new Label();
-            label1 = new Label();
-            txtAntherPhon = new TextBox();
-            txtAccNote = new TextBox();
-            txtFirstPhon = new TextBox();
-            label5 = new Label();
-            label3 = new Label();
-            lbl = new Label();
             tlpFixedAssets = new TableLayoutPanel();
             txtFixedAssetsValue = new TextBox();
             label13 = new Label();
@@ -119,11 +106,25 @@
             label14 = new Label();
             lblMonthlyInstallment = new Label();
             rdoIsEndedFixedAssets_Yes = new RadioButton();
+            tableLayoutPanel18 = new TableLayoutPanel();
             panel1 = new Panel();
             tableLayoutPanel4 = new TableLayoutPanel();
+            tlpData = new TableLayoutPanel();
+            tlpPhon = new TableLayoutPanel();
+            txtClientAddress = new TextBox();
+            txtClientEmail = new TextBox();
+            label17 = new Label();
+            label1 = new Label();
+            txtAntherPhon = new TextBox();
+            txtAccNote = new TextBox();
+            txtFirstPhon = new TextBox();
+            label5 = new Label();
+            label3 = new Label();
+            lbl = new Label();
+            btnDetails = new Button();
             tableLayoutPanel6 = new TableLayoutPanel();
             chkIsHasChildren = new CheckBox();
-            label9 = new Label();
+            lblParentAccID = new Label();
             label2 = new Label();
             txtAccName = new TextBox();
             label6 = new Label();
@@ -131,7 +132,6 @@
             panel2 = new Panel();
             tlpBody = new TableLayoutPanel();
             tlpHome = new TableLayoutPanel();
-            btnDetails = new Button();
             tableLayoutPanel13.SuspendLayout();
             contextMenuDGV.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
@@ -157,10 +157,10 @@
             tableLayoutPanel11.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel16.SuspendLayout();
-            tlpData.SuspendLayout();
-            tlpPhon.SuspendLayout();
             tlpFixedAssets.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
+            tlpData.SuspendLayout();
+            tlpPhon.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
             tlpBody.SuspendLayout();
             tlpHome.SuspendLayout();
@@ -1060,196 +1060,6 @@
             btnNew.Text = "جديد";
             btnNew.UseVisualStyleBackColor = false;
             // 
-            // tableLayoutPanel18
-            // 
-            tableLayoutPanel18.ColumnCount = 1;
-            tableLayoutPanel18.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel18.Location = new Point(3, 161);
-            tableLayoutPanel18.Name = "tableLayoutPanel18";
-            tableLayoutPanel18.RowCount = 2;
-            tableLayoutPanel18.RowStyles.Add(new RowStyle(SizeType.Percent, 32.43968F));
-            tableLayoutPanel18.RowStyles.Add(new RowStyle(SizeType.Percent, 67.56032F));
-            tableLayoutPanel18.Size = new Size(437, 373);
-            tableLayoutPanel18.TabIndex = 95;
-            // 
-            // tlpData
-            // 
-            tlpData.ColumnCount = 1;
-            tlpData.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tlpData.Controls.Add(tlpPhon, 0, 1);
-            tlpData.Controls.Add(btnDetails, 0, 0);
-            tlpData.Dock = DockStyle.Fill;
-            tlpData.Location = new Point(3, 161);
-            tlpData.Name = "tlpData";
-            tlpData.RowCount = 2;
-            tlpData.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tlpData.RowStyles.Add(new RowStyle(SizeType.Percent, 90F));
-            tlpData.Size = new Size(437, 373);
-            tlpData.TabIndex = 95;
-            // 
-            // tlpPhon
-            // 
-            tlpPhon.AutoSize = true;
-            tlpPhon.BackColor = Color.Transparent;
-            tlpPhon.ColumnCount = 2;
-            tlpPhon.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-            tlpPhon.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
-            tlpPhon.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tlpPhon.Controls.Add(txtClientAddress, 1, 5);
-            tlpPhon.Controls.Add(txtClientEmail, 1, 4);
-            tlpPhon.Controls.Add(label17, 0, 5);
-            tlpPhon.Controls.Add(label1, 0, 4);
-            tlpPhon.Controls.Add(txtAntherPhon, 1, 2);
-            tlpPhon.Controls.Add(txtAccNote, 1, 3);
-            tlpPhon.Controls.Add(txtFirstPhon, 1, 1);
-            tlpPhon.Controls.Add(label5, 0, 3);
-            tlpPhon.Controls.Add(label3, 0, 1);
-            tlpPhon.Controls.Add(lbl, 0, 2);
-            tlpPhon.Dock = DockStyle.Top;
-            tlpPhon.Location = new Point(3, 40);
-            tlpPhon.Name = "tlpPhon";
-            tlpPhon.RowCount = 6;
-            tlpPhon.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
-            tlpPhon.RowStyles.Add(new RowStyle(SizeType.Percent, 16.6666679F));
-            tlpPhon.RowStyles.Add(new RowStyle(SizeType.Percent, 16.6666679F));
-            tlpPhon.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333244F));
-            tlpPhon.RowStyles.Add(new RowStyle(SizeType.Percent, 16.6666679F));
-            tlpPhon.RowStyles.Add(new RowStyle(SizeType.Percent, 16.6666679F));
-            tlpPhon.Size = new Size(431, 241);
-            tlpPhon.TabIndex = 2;
-            tlpPhon.Visible = false;
-            // 
-            // txtClientAddress
-            // 
-            txtClientAddress.Dock = DockStyle.Fill;
-            txtClientAddress.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtClientAddress.ForeColor = Color.FromArgb(0, 0, 192);
-            txtClientAddress.Location = new Point(4, 207);
-            txtClientAddress.Margin = new Padding(4);
-            txtClientAddress.Name = "txtClientAddress";
-            txtClientAddress.Size = new Size(294, 29);
-            txtClientAddress.TabIndex = 72;
-            txtClientAddress.TextAlign = HorizontalAlignment.Center;
-            // 
-            // txtClientEmail
-            // 
-            txtClientEmail.Dock = DockStyle.Fill;
-            txtClientEmail.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtClientEmail.ForeColor = Color.FromArgb(0, 0, 192);
-            txtClientEmail.Location = new Point(4, 170);
-            txtClientEmail.Margin = new Padding(4);
-            txtClientEmail.Name = "txtClientEmail";
-            txtClientEmail.Size = new Size(294, 29);
-            txtClientEmail.TabIndex = 71;
-            txtClientEmail.TextAlign = HorizontalAlignment.Center;
-            // 
-            // label17
-            // 
-            label17.AutoSize = true;
-            label17.Dock = DockStyle.Right;
-            label17.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label17.ForeColor = Color.FromArgb(0, 0, 192);
-            label17.Location = new Point(306, 203);
-            label17.Margin = new Padding(4, 0, 4, 0);
-            label17.Name = "label17";
-            label17.Size = new Size(42, 38);
-            label17.TabIndex = 70;
-            label17.Text = "عنوان";
-            label17.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Right;
-            label1.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.ForeColor = Color.FromArgb(0, 0, 192);
-            label1.Location = new Point(306, 166);
-            label1.Margin = new Padding(4, 0, 4, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(78, 37);
-            label1.TabIndex = 68;
-            label1.Text = "بريد الكترونى";
-            label1.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // txtAntherPhon
-            // 
-            txtAntherPhon.Dock = DockStyle.Fill;
-            txtAntherPhon.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtAntherPhon.ForeColor = Color.FromArgb(0, 0, 192);
-            txtAntherPhon.Location = new Point(4, 60);
-            txtAntherPhon.Margin = new Padding(4);
-            txtAntherPhon.Name = "txtAntherPhon";
-            txtAntherPhon.Size = new Size(294, 29);
-            txtAntherPhon.TabIndex = 49;
-            txtAntherPhon.TextAlign = HorizontalAlignment.Center;
-            // 
-            // txtAccNote
-            // 
-            txtAccNote.Dock = DockStyle.Fill;
-            txtAccNote.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtAccNote.ForeColor = Color.FromArgb(0, 0, 192);
-            txtAccNote.Location = new Point(4, 97);
-            txtAccNote.Margin = new Padding(4);
-            txtAccNote.Multiline = true;
-            txtAccNote.Name = "txtAccNote";
-            txtAccNote.Size = new Size(294, 65);
-            txtAccNote.TabIndex = 50;
-            txtAccNote.TextAlign = HorizontalAlignment.Center;
-            // 
-            // txtFirstPhon
-            // 
-            txtFirstPhon.Dock = DockStyle.Fill;
-            txtFirstPhon.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtFirstPhon.ForeColor = Color.FromArgb(0, 0, 192);
-            txtFirstPhon.Location = new Point(4, 23);
-            txtFirstPhon.Margin = new Padding(4);
-            txtFirstPhon.Name = "txtFirstPhon";
-            txtFirstPhon.Size = new Size(294, 29);
-            txtFirstPhon.TabIndex = 48;
-            txtFirstPhon.TextAlign = HorizontalAlignment.Center;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Dock = DockStyle.Right;
-            label5.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label5.ForeColor = Color.FromArgb(0, 0, 192);
-            label5.Location = new Point(306, 93);
-            label5.Margin = new Padding(4, 0, 4, 0);
-            label5.Name = "label5";
-            label5.Size = new Size(39, 73);
-            label5.TabIndex = 67;
-            label5.Text = "مذكرة";
-            label5.TextAlign = ContentAlignment.TopRight;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Dock = DockStyle.Right;
-            label3.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.ForeColor = Color.FromArgb(0, 0, 192);
-            label3.Location = new Point(306, 19);
-            label3.Margin = new Padding(4, 0, 4, 0);
-            label3.Name = "label3";
-            label3.Size = new Size(44, 37);
-            label3.TabIndex = 65;
-            label3.Text = "الهاتف";
-            label3.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // lbl
-            // 
-            lbl.AutoSize = true;
-            lbl.Dock = DockStyle.Right;
-            lbl.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lbl.ForeColor = Color.FromArgb(0, 0, 192);
-            lbl.Location = new Point(306, 56);
-            lbl.Margin = new Padding(4, 0, 4, 0);
-            lbl.Name = "lbl";
-            lbl.Size = new Size(60, 37);
-            lbl.TabIndex = 66;
-            lbl.Text = "هاتف آخر";
-            lbl.TextAlign = ContentAlignment.MiddleRight;
-            // 
             // tlpFixedAssets
             // 
             tlpFixedAssets.AutoSize = true;
@@ -1465,6 +1275,18 @@
             rdoIsEndedFixedAssets_Yes.Text = "منتهى/كهنة";
             rdoIsEndedFixedAssets_Yes.UseVisualStyleBackColor = true;
             // 
+            // tableLayoutPanel18
+            // 
+            tableLayoutPanel18.ColumnCount = 1;
+            tableLayoutPanel18.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel18.Location = new Point(3, 161);
+            tableLayoutPanel18.Name = "tableLayoutPanel18";
+            tableLayoutPanel18.RowCount = 2;
+            tableLayoutPanel18.RowStyles.Add(new RowStyle(SizeType.Percent, 32.43968F));
+            tableLayoutPanel18.RowStyles.Add(new RowStyle(SizeType.Percent, 67.56032F));
+            tableLayoutPanel18.Size = new Size(437, 373);
+            tableLayoutPanel18.TabIndex = 95;
+            // 
             // panel1
             // 
             panel1.BackColor = SystemColors.ActiveBorder;
@@ -1493,13 +1315,202 @@
             tableLayoutPanel4.Size = new Size(443, 598);
             tableLayoutPanel4.TabIndex = 1;
             // 
+            // tlpData
+            // 
+            tlpData.ColumnCount = 1;
+            tlpData.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tlpData.Controls.Add(tlpPhon, 0, 1);
+            tlpData.Controls.Add(btnDetails, 0, 0);
+            tlpData.Dock = DockStyle.Fill;
+            tlpData.Location = new Point(3, 161);
+            tlpData.Name = "tlpData";
+            tlpData.RowCount = 2;
+            tlpData.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            tlpData.RowStyles.Add(new RowStyle(SizeType.Percent, 90F));
+            tlpData.Size = new Size(437, 373);
+            tlpData.TabIndex = 95;
+            // 
+            // tlpPhon
+            // 
+            tlpPhon.AutoSize = true;
+            tlpPhon.BackColor = Color.Transparent;
+            tlpPhon.ColumnCount = 2;
+            tlpPhon.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+            tlpPhon.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
+            tlpPhon.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tlpPhon.Controls.Add(txtClientAddress, 1, 5);
+            tlpPhon.Controls.Add(txtClientEmail, 1, 4);
+            tlpPhon.Controls.Add(label17, 0, 5);
+            tlpPhon.Controls.Add(label1, 0, 4);
+            tlpPhon.Controls.Add(txtAntherPhon, 1, 2);
+            tlpPhon.Controls.Add(txtAccNote, 1, 3);
+            tlpPhon.Controls.Add(txtFirstPhon, 1, 1);
+            tlpPhon.Controls.Add(label5, 0, 3);
+            tlpPhon.Controls.Add(label3, 0, 1);
+            tlpPhon.Controls.Add(lbl, 0, 2);
+            tlpPhon.Dock = DockStyle.Top;
+            tlpPhon.Location = new Point(3, 40);
+            tlpPhon.Name = "tlpPhon";
+            tlpPhon.RowCount = 6;
+            tlpPhon.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
+            tlpPhon.RowStyles.Add(new RowStyle(SizeType.Percent, 16.6666679F));
+            tlpPhon.RowStyles.Add(new RowStyle(SizeType.Percent, 16.6666679F));
+            tlpPhon.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333244F));
+            tlpPhon.RowStyles.Add(new RowStyle(SizeType.Percent, 16.6666679F));
+            tlpPhon.RowStyles.Add(new RowStyle(SizeType.Percent, 16.6666679F));
+            tlpPhon.Size = new Size(431, 241);
+            tlpPhon.TabIndex = 2;
+            tlpPhon.Visible = false;
+            // 
+            // txtClientAddress
+            // 
+            txtClientAddress.Dock = DockStyle.Fill;
+            txtClientAddress.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtClientAddress.ForeColor = Color.FromArgb(0, 0, 192);
+            txtClientAddress.Location = new Point(4, 207);
+            txtClientAddress.Margin = new Padding(4);
+            txtClientAddress.Name = "txtClientAddress";
+            txtClientAddress.Size = new Size(294, 29);
+            txtClientAddress.TabIndex = 72;
+            txtClientAddress.TextAlign = HorizontalAlignment.Center;
+            // 
+            // txtClientEmail
+            // 
+            txtClientEmail.Dock = DockStyle.Fill;
+            txtClientEmail.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtClientEmail.ForeColor = Color.FromArgb(0, 0, 192);
+            txtClientEmail.Location = new Point(4, 170);
+            txtClientEmail.Margin = new Padding(4);
+            txtClientEmail.Name = "txtClientEmail";
+            txtClientEmail.Size = new Size(294, 29);
+            txtClientEmail.TabIndex = 71;
+            txtClientEmail.TextAlign = HorizontalAlignment.Center;
+            // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Dock = DockStyle.Right;
+            label17.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label17.ForeColor = Color.FromArgb(0, 0, 192);
+            label17.Location = new Point(306, 203);
+            label17.Margin = new Padding(4, 0, 4, 0);
+            label17.Name = "label17";
+            label17.Size = new Size(42, 38);
+            label17.TabIndex = 70;
+            label17.Text = "عنوان";
+            label17.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Dock = DockStyle.Right;
+            label1.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.ForeColor = Color.FromArgb(0, 0, 192);
+            label1.Location = new Point(306, 166);
+            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(78, 37);
+            label1.TabIndex = 68;
+            label1.Text = "بريد الكترونى";
+            label1.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // txtAntherPhon
+            // 
+            txtAntherPhon.Dock = DockStyle.Fill;
+            txtAntherPhon.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtAntherPhon.ForeColor = Color.FromArgb(0, 0, 192);
+            txtAntherPhon.Location = new Point(4, 60);
+            txtAntherPhon.Margin = new Padding(4);
+            txtAntherPhon.Name = "txtAntherPhon";
+            txtAntherPhon.Size = new Size(294, 29);
+            txtAntherPhon.TabIndex = 49;
+            txtAntherPhon.TextAlign = HorizontalAlignment.Center;
+            // 
+            // txtAccNote
+            // 
+            txtAccNote.Dock = DockStyle.Fill;
+            txtAccNote.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtAccNote.ForeColor = Color.FromArgb(0, 0, 192);
+            txtAccNote.Location = new Point(4, 97);
+            txtAccNote.Margin = new Padding(4);
+            txtAccNote.Multiline = true;
+            txtAccNote.Name = "txtAccNote";
+            txtAccNote.Size = new Size(294, 65);
+            txtAccNote.TabIndex = 50;
+            txtAccNote.TextAlign = HorizontalAlignment.Center;
+            // 
+            // txtFirstPhon
+            // 
+            txtFirstPhon.Dock = DockStyle.Fill;
+            txtFirstPhon.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtFirstPhon.ForeColor = Color.FromArgb(0, 0, 192);
+            txtFirstPhon.Location = new Point(4, 23);
+            txtFirstPhon.Margin = new Padding(4);
+            txtFirstPhon.Name = "txtFirstPhon";
+            txtFirstPhon.Size = new Size(294, 29);
+            txtFirstPhon.TabIndex = 48;
+            txtFirstPhon.TextAlign = HorizontalAlignment.Center;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Dock = DockStyle.Right;
+            label5.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label5.ForeColor = Color.FromArgb(0, 0, 192);
+            label5.Location = new Point(306, 93);
+            label5.Margin = new Padding(4, 0, 4, 0);
+            label5.Name = "label5";
+            label5.Size = new Size(39, 73);
+            label5.TabIndex = 67;
+            label5.Text = "مذكرة";
+            label5.TextAlign = ContentAlignment.TopRight;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Dock = DockStyle.Right;
+            label3.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.ForeColor = Color.FromArgb(0, 0, 192);
+            label3.Location = new Point(306, 19);
+            label3.Margin = new Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(44, 37);
+            label3.TabIndex = 65;
+            label3.Text = "الهاتف";
+            label3.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // lbl
+            // 
+            lbl.AutoSize = true;
+            lbl.Dock = DockStyle.Right;
+            lbl.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbl.ForeColor = Color.FromArgb(0, 0, 192);
+            lbl.Location = new Point(306, 56);
+            lbl.Margin = new Padding(4, 0, 4, 0);
+            lbl.Name = "lbl";
+            lbl.Size = new Size(60, 37);
+            lbl.TabIndex = 66;
+            lbl.Text = "هاتف آخر";
+            lbl.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // btnDetails
+            // 
+            btnDetails.Dock = DockStyle.Left;
+            btnDetails.Location = new Point(302, 3);
+            btnDetails.Name = "btnDetails";
+            btnDetails.Size = new Size(132, 31);
+            btnDetails.TabIndex = 3;
+            btnDetails.Text = "بيانات شخصية";
+            btnDetails.UseVisualStyleBackColor = true;
+            btnDetails.Click += btnDetails_Click;
+            // 
             // tableLayoutPanel6
             // 
             tableLayoutPanel6.ColumnCount = 2;
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
             tableLayoutPanel6.Controls.Add(chkIsHasChildren, 1, 2);
-            tableLayoutPanel6.Controls.Add(label9, 1, 1);
+            tableLayoutPanel6.Controls.Add(lblParentAccID, 1, 1);
             tableLayoutPanel6.Controls.Add(label2, 0, 0);
             tableLayoutPanel6.Controls.Add(txtAccName, 1, 0);
             tableLayoutPanel6.Controls.Add(label6, 0, 1);
@@ -1526,20 +1537,20 @@
             chkIsHasChildren.UseVisualStyleBackColor = true;
             chkIsHasChildren.Visible = false;
             // 
-            // label9
+            // lblParentAccID
             // 
-            label9.AutoSize = true;
-            label9.Dock = DockStyle.Fill;
-            label9.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label9.ForeColor = Color.Fuchsia;
-            label9.Location = new Point(4, 37);
-            label9.Margin = new Padding(4, 0, 4, 0);
-            label9.Name = "label9";
-            label9.Padding = new Padding(0, 0, 10, 0);
-            label9.Size = new Size(298, 37);
-            label9.TabIndex = 55;
-            label9.Text = "المسار";
-            label9.TextAlign = ContentAlignment.MiddleLeft;
+            lblParentAccID.AutoSize = true;
+            lblParentAccID.Dock = DockStyle.Fill;
+            lblParentAccID.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblParentAccID.ForeColor = Color.Fuchsia;
+            lblParentAccID.Location = new Point(4, 37);
+            lblParentAccID.Margin = new Padding(4, 0, 4, 0);
+            lblParentAccID.Name = "lblParentAccID";
+            lblParentAccID.Padding = new Padding(0, 0, 10, 0);
+            lblParentAccID.Size = new Size(298, 37);
+            lblParentAccID.TabIndex = 55;
+            lblParentAccID.Text = "المسار";
+            lblParentAccID.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // label2
             // 
@@ -1578,7 +1589,7 @@
             label6.Name = "label6";
             label6.Size = new Size(123, 37);
             label6.TabIndex = 54;
-            label6.Text = "المسار";
+            label6.Text = "الاب";
             label6.TextAlign = ContentAlignment.MiddleRight;
             // 
             // label8
@@ -1636,17 +1647,6 @@
             tlpHome.Size = new Size(1124, 726);
             tlpHome.TabIndex = 5;
             // 
-            // btnDetails
-            // 
-            btnDetails.Dock = DockStyle.Left;
-            btnDetails.Location = new Point(302, 3);
-            btnDetails.Name = "btnDetails";
-            btnDetails.Size = new Size(132, 31);
-            btnDetails.TabIndex = 3;
-            btnDetails.Text = "بيانات شخصية";
-            btnDetails.UseVisualStyleBackColor = true;
-            btnDetails.Click += btnDetails_Click;
-            // 
             // frm_Accounts
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1692,13 +1692,13 @@
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             tableLayoutPanel16.ResumeLayout(false);
+            tlpFixedAssets.ResumeLayout(false);
+            tlpFixedAssets.PerformLayout();
+            tableLayoutPanel4.ResumeLayout(false);
             tlpData.ResumeLayout(false);
             tlpData.PerformLayout();
             tlpPhon.ResumeLayout(false);
             tlpPhon.PerformLayout();
-            tlpFixedAssets.ResumeLayout(false);
-            tlpFixedAssets.PerformLayout();
-            tableLayoutPanel4.ResumeLayout(false);
             tableLayoutPanel6.ResumeLayout(false);
             tableLayoutPanel6.PerformLayout();
             tlpBody.ResumeLayout(false);
@@ -1808,7 +1808,7 @@
         private Label label6;
         private Label label8;
         private CheckBox chkIsHasChildren;
-        private Label label9;
+        private Label lblParentAccID;
         private Button btnDetails;
     }
 }
