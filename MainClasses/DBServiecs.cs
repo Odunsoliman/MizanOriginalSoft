@@ -1689,34 +1689,25 @@ END
             DataTable? result = dbHelper.ExecuteSelectQuery("Acc_GetChart");
             return result ?? new DataTable();
         }
-      
+
+        // إضافة حساب جديد
         // إضافة حساب جديد
         public static string Acc_AddAccount(string AccName, int? ParentAccID, int? CreateByUserID, bool? IsHasChildren)
         {
             return dbHelper.ExecuteNonQueryWithLogging("Acc_AddAccount", command =>
             {
                 command.Parameters.Add("@AccName", SqlDbType.NVarChar).Value = AccName;
+                command.Parameters.Add("@ParentAccID", SqlDbType.Int).Value = (object?)ParentAccID ?? DBNull.Value;
+                command.Parameters.Add("@CreateByUserID", SqlDbType.Int).Value = (object?)CreateByUserID ?? DBNull.Value;
+                command.Parameters.Add("@IsHasChildren", SqlDbType.Bit).Value = (object?)IsHasChildren ?? DBNull.Value;
 
-                // ✅ التعامل مع NULL في ParentAccID
-                if (ParentAccID.HasValue)
-                    command.Parameters.Add("@ParentAccID", SqlDbType.Int).Value = ParentAccID.Value;
-                else
-                    command.Parameters.Add("@ParentAccID", SqlDbType.Int).Value = DBNull.Value;
-
-                // ✅ التعامل مع NULL في CreateByUserID
-                if (CreateByUserID.HasValue)
-                    command.Parameters.Add("@CreateByUserID", SqlDbType.Int).Value = CreateByUserID.Value;
-                else
-                    command.Parameters.Add("@CreateByUserID", SqlDbType.Int).Value = DBNull.Value;
-
-                // ✅ التعامل مع NULL في IsHasChildren
-                if (IsHasChildren.HasValue)
-                    command.Parameters.Add("@IsHasChildren", SqlDbType.Bit).Value = IsHasChildren.Value;
-                else
-                    command.Parameters.Add("@IsHasChildren", SqlDbType.Bit).Value = DBNull.Value;
-
-            }, expectMessageOutput: true);
+            }, expectMessageOutput: false); // ✅ الإجراء لا يحتوي على @Message
         }
+
+
+
+  
+
 
 
         #endregion 

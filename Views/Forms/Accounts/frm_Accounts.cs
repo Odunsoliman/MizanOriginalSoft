@@ -1,4 +1,5 @@
 ﻿using MizanOriginalSoft.MainClasses;
+using MizanOriginalSoft.MainClasses.OriginalClasses;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -211,8 +212,11 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
 
         private int parentAccID = 0;
-        private bool isHasChildren=false;
+        private bool isHasChildren = false;
         private bool isHasDetails = false;
+        // حقل على مستوى الفورم لتخزين الحساب المحدد
+        private DataRow? selectedRow = null;
+
         // حدث اختيار العقدة
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
@@ -222,6 +226,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
                 if (node.Tag is DataRow row)
                 {
+                    selectedRow = row; // ✅ خزناها هنا
+
                     string? accID = row["AccID"].ToString();
                     string? accName = row["AccName"].ToString();
                     int? parentAccID = row["ParentAccID"] == DBNull.Value
@@ -239,26 +245,26 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     // عرض رقم الحساب واسم الحساب
                     lblSelectedTreeNod.Text = accID + " - " + accName;
 
-                    // عرض المسار الكامل بالاسماء فقط
+                    // عرض المسار الكامل بالأسماء
                     lblPathNode.Text = GetFullPathFromNode(node);
 
                     txtAccName.Enabled = isHasChildren;
 
-                    if (!isHasChildren) // لو غير مسموح
+                    if (!isHasChildren) // لو مش مسموح إضافة حسابات فرعية
                     {
                         txtAccName.Clear();
                         lblParentAccName.Text = "لا يمكن اضافة حسابات فرعية هنا فهذا حساب نهائى";
-                        lblParentAccName.ForeColor  = Color .Red ;
+                        lblParentAccName.ForeColor = Color.Red;
 
                         chkIsHasChildren.Enabled = false;
-                        tlpData .Visible = false;
+                        tlpData.Visible = false;
                         btnNew.Visible = false;
                         btnSave.Visible = false;
                     }
-                    else // لو مسموح
+                    else // مسموح
                     {
                         lblParentAccName.Text = accName;
-                        lblParentAccName.ForeColor = Color.Gray ;
+                        lblParentAccName.ForeColor = Color.Gray;
                         chkIsHasChildren.Enabled = true;
                         btnNew.Visible = true;
                         btnSave.Visible = true;
@@ -310,9 +316,70 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     {
                         tlpData.Visible = false;
                     }
-
                 }
             }
+        }
+
+        // زر الحفظ
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            if (selectedRow == null)
+            {
+                MessageBox.Show("من فضلك اختر حساب من الشجرة أولاً");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtAccName.Text))
+            {
+                MessageBox.Show("من فضلك أدخل اسم الحساب الجديد");
+                return;
+            }
+
+            string AccName = txtAccName.Text.Trim();
+            bool IsHasChildren = chkIsHasChildren.Checked;
+            int ParentAccID = Convert.ToInt32(selectedRow["AccID"]);
+            int CreateByUserID = CurrentSession.UserID;
+
+            // 🟢 استدعاء الإجراء
+            string result = DBServiecs.Acc_AddAccount(AccName, ParentAccID, CreateByUserID, IsHasChildren);
+
+            if (result.StartsWith("تم")) // يعني نجحت العملية
+            {
+                MessageBox.Show("تم حفظ الحساب بنجاح ✅");
+
+                // 🟢 حفظ الـ ID بتاع العقدة المحددة
+                int currentNodeId = ParentAccID;
+
+                // 🟢 إعادة تحميل الشجرة
+                LoadAccountsTree();
+
+                // 🟢 البحث عن العقدة بنفس الـ ID
+                TreeNode? node = FindNodeByAccID(treeViewAccounts.Nodes, currentNodeId);
+
+                if (node != null)
+                {
+                    treeViewAccounts.SelectedNode = node;
+                    node.EnsureVisible(); // يخليها تبان حتى لو داخل فرع مغلق
+                }
+            }
+            else
+            {
+                MessageBox.Show("فشل في الحفظ ❌\n" + result);
+            }
+        }
+        //📌 دالة البحث عن العقدة بالـ AccID
+        private TreeNode? FindNodeByAccID(TreeNodeCollection nodes, int accID)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Tag is DataRow row && Convert.ToInt32(row["AccID"]) == accID)
+                    return node;
+
+                TreeNode? found = FindNodeByAccID(node.Nodes, accID);
+                if (found != null)
+                    return found;
+            }
+            return null;
         }
 
         private void btnDetails_Click(object sender, EventArgs e)
@@ -321,6 +388,13 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             tlpPhon.Visible = !tlpPhon.Visible;
 
         }
+
+        private void btnNew_Click(object sender, EventArgs e)
+        {
+            txtAccName .Clear();
+            chkIsHasChildren .Checked = false ;
+        }
+
 
     }
 }
