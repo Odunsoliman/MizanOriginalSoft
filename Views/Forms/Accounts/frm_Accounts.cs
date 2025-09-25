@@ -249,7 +249,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                         txtAccName.Clear();
                         lblParentAccName.Text = "لا يمكن اضافة حسابات فرعية هنا فهذا حساب نهائى";
                         chkIsHasChildren.Enabled = false;
-                        btnDetails.Visible = false;
+                        tlpData .Visible = false;
                         btnNew.Visible = false;
                         btnSave.Visible = false;
                     }
@@ -279,12 +279,12 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
                     if (isHasDetails)
                     {
-                        btnDetails.Visible = true;
+                        tlpData .Visible = true;
                         btnDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
                     }
                     else
                     {
-                        btnDetails.Visible = false;
+                        tlpData.Visible = false;
                     }
                 }
             }
