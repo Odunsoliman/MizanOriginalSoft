@@ -361,6 +361,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     treeViewAccounts.SelectedNode = node;
                     node.EnsureVisible(); // يخليها تبان حتى لو داخل فرع مغلق
                 }
+
+                // 🟢 فتح وتحديد العقدة الأب
+                HighlightAndExpandNode(currentNodeId);
             }
             else
             {
@@ -380,6 +383,28 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     return found;
             }
             return null;
+        }
+
+        //📌 مثال على الاستخدام بعد البحث
+        private void HighlightAndExpandNode(int accID)
+        {
+            TreeNode? node = FindNodeByAccID(treeViewAccounts.Nodes, accID);
+
+            if (node != null)
+            {
+                // تحديد العقدة
+                treeViewAccounts.SelectedNode = node;
+
+                // تغيير لون الخلفية (لتوضيح)
+                node.BackColor = Color.LightBlue;
+                node.ForeColor = Color.DarkRed;
+
+                // فتح العقدة لرؤية الإضافات
+                node.Expand();
+
+                // 📌 إذا أردت فتح كل الآباء حتى تصل للعقدة
+                node.EnsureVisible();
+            }
         }
 
         private void btnDetails_Click(object sender, EventArgs e)
