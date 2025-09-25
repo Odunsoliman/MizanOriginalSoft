@@ -1703,26 +1703,28 @@ END
             }, expectMessageOutput: false); // ✅ الإجراء لا يحتوي على @Message
         }
 
+        //وظيفة حذف حساب
         public static string Acc_DeleteAccount(int? AccID)
         {
             return dbHelper.ExecuteNonQueryWithLogging("Acc_DeleteAccount", command =>
             {
                 command.Parameters.Add("@AccID", SqlDbType.Int).Value = (object?)AccID ?? DBNull.Value;
 
-                // باراميتر المخرجات لاستقبال رسالة السبب
+                // لاحظ هنا لازم تخلي expectMessageOutput = false
                 var outputParam = new SqlParameter("@OutputMsg", SqlDbType.NVarChar, 500)
                 {
                     Direction = ParameterDirection.Output
                 };
                 command.Parameters.Add(outputParam);
 
-            }, expectMessageOutput: true); // ✅ نخليها true عشان نستقبل الرسالة
+            }, expectMessageOutput: false); // ❌ عشان ما يضيفش @Message
         }
+
 
         /*هذه الرسالة تعود عند التنفيذ
          * 
-         * 
-         * 
+         * Microsoft.Data.SqlClient.SqlException: 'Procedure or function Acc_DeleteAccount has too many arguments specified.'
+         * فاين الخلل
          * هذا الزر فى الشاشة
          *      private void btnDelete_Click(object sender, EventArgs e)
         {
