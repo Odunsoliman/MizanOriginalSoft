@@ -24,7 +24,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             LoadAccountsTree();
         }
         #region !!!!!!! بناء الشجرة  !!!!!!!
-        //اريد نسخة منقحة
         private void LoadAccountsTree()
         {
             treeViewAccounts.Nodes.Clear();
@@ -34,25 +33,20 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             foreach (DataRow row in dt.Rows)
             {
-                // تجاهل الصفوف التي تحتوي على قيم غير صالحة
+                // تجاهل الصفوف غير الصالحة
                 if (row["FullPath"] == DBNull.Value || row["AccName"] == DBNull.Value || row["AccID"] == DBNull.Value)
                     continue;
 
                 string fullPath = row["FullPath"] as string ?? string.Empty;
                 string accName = row["AccName"] as string ?? string.Empty;
-                string parentAccID = row["ParentAccID"] as string ?? string.Empty;
-                string balance = row["Balance"] as string ?? string.Empty;
-                string balanceState = row["BalanceState"] as string ?? string.Empty;
-                string isHidden = row["IsHidden"] as string ?? string.Empty;
-                string dateOfJoin = row["DateOfJoin"] as string ?? string.Empty;
 
                 if (string.IsNullOrWhiteSpace(fullPath) || string.IsNullOrWhiteSpace(accName))
                     continue;
 
                 int level = GetLevelFromFullPath(fullPath);
-                TreeNode node = new TreeNode(accName)
+                TreeNode node = new TreeNode($"{row["AccID"]} - {accName}") // 🔹 نعرض رقم الحساب مع الاسم
                 {
-                    Tag = row // حفظ كل البيانات لاستخدامها لاحقاً
+                    Tag = row // حفظ البيانات
                 };
 
                 if (level == 0)
@@ -62,31 +56,26 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 else
                 {
                     TreeNode? parentNode = FindParentNode(treeViewAccounts.Nodes, fullPath, level - 1);
-                    if (parentNode is not null) // التحقق باستخدام is not null
-                    {
+                    if (parentNode is not null)
                         parentNode.Nodes.Add(node);
-                    }
                     else
-                    {
                         treeViewAccounts.Nodes.Add(node); // fallback
-                    }
                 }
-
             }
 
-            //  treeViewAccounts.ExpandAll();
-            // بدلاً من ExpandAll، نغلق كل العقد
-            treeViewAccounts.CollapseAll();
+            // ترتيب الشجرة بعد البناء
+            SortTreeNodes(treeViewAccounts.Nodes);
+
+            treeViewAccounts.CollapseAll(); // نغلق كل العقد افتراضيًا
         }
 
-        // دالة مساعدة لإيجاد الأب حسب FullPath
+        // دالة مساعدة لإيجاد الأب
         private TreeNode? FindParentNode(TreeNodeCollection nodes, string fullPath, int targetLevel)
         {
             foreach (TreeNode node in nodes)
             {
                 if (node.Tag is DataRow row)
                 {
-                    // تحقق من أن القيمة صالحة
                     if (row["FullPath"] == DBNull.Value)
                         continue;
 
@@ -107,10 +96,29 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             return null;
         }
 
+        // 🔹 دالة ترتيب العقد حسب AccID تصاعديًا (Recursive)
+        private void SortTreeNodes(TreeNodeCollection nodes)
+        {
+            // تحويل العقد إلى List للترتيب
+            List<TreeNode> nodeList = nodes.Cast<TreeNode>()
+                                           .OrderBy(n =>
+                                           {
+                                               if (n.Tag is DataRow row && int.TryParse(row["AccID"].ToString(), out int accID))
+                                                   return accID;
+                                               return int.MaxValue; // fallback
+                                           })
+                                           .ToList();
 
-
-
-        #endregion 
+            // إعادة الترتيب
+            nodes.Clear();
+            foreach (TreeNode node in nodeList)
+            {
+                nodes.Add(node);
+                // ترتيب الأبناء كمان
+                SortTreeNodes(node.Nodes);
+            }
+        }
+        #endregion
 
         #region !!!!!! بحث فى الشجرة  !!!!!!!!
 
@@ -438,11 +446,12 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 if (confirm == DialogResult.No) return;
 
                 string resultMsg = DBServiecs.Acc_DeleteAccount(accID);
-
+                // الرسالة الراجعة تم التنفيذ
+                // فلا يقوم باجراءات تحميل الشجرة وتحديد الاب
                 MessageBox.Show(resultMsg, "نتيجة الحذف");
 
                 // لو تم الحذف فعلاً → نرجع للأب
-                if (resultMsg.StartsWith("✅ تم حذف"))
+                if (!resultMsg.StartsWith("❌")) // يعني مش فشل
                 {
                     int? parentAccID = row["ParentAccID"] != DBNull.Value ? Convert.ToInt32(row["ParentAccID"]) : (int?)null;
 
@@ -451,6 +460,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     if (parentAccID.HasValue)
                         HighlightAndExpandNode(parentAccID.Value);
                 }
+
             }
         }
 
