@@ -327,6 +327,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     }
                 }
             }
+            LoadReportsForSelectedAccount();
         }
 
         //📌 دالة البحث عن العقدة بالـ AccID
