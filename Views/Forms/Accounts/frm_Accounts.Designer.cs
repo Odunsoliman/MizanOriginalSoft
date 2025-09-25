@@ -1543,7 +1543,7 @@
             lblParentAccName.AutoSize = true;
             lblParentAccName.Dock = DockStyle.Fill;
             lblParentAccName.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblParentAccName.ForeColor = Color.Fuchsia;
+            lblParentAccName.ForeColor = Color.Gray;
             lblParentAccName.Location = new Point(4, 37);
             lblParentAccName.Margin = new Padding(4, 0, 4, 0);
             lblParentAccName.Name = "lblParentAccName";

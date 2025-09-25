@@ -248,6 +248,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     {
                         txtAccName.Clear();
                         lblParentAccName.Text = "لا يمكن اضافة حسابات فرعية هنا فهذا حساب نهائى";
+                        lblParentAccName.ForeColor  = Color .Red ;
+
                         chkIsHasChildren.Enabled = false;
                         tlpData .Visible = false;
                         btnNew.Visible = false;
@@ -256,6 +258,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     else // لو مسموح
                     {
                         lblParentAccName.Text = accName;
+                        lblParentAccName.ForeColor = Color.Gray ;
                         chkIsHasChildren.Enabled = true;
                         btnNew.Visible = true;
                         btnSave.Visible = true;
