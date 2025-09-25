@@ -364,6 +364,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
                 // 🟢 فتح وتحديد العقدة الأب
                 HighlightAndExpandNode(currentNodeId);
+                txtSearchTree .Text = AccName;
             }
             else
             {
