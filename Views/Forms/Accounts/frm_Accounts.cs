@@ -186,7 +186,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            lblSelectedTreeNod .Text = treeViewAccounts.SelectedNode.Text;
+            lblSelectedTreeNod .Text = treeViewAccounts.SelectedNode.Text+treeViewAccounts .SelectedNode .Tag ;
 
         }
     }
