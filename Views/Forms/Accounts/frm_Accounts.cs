@@ -44,9 +44,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     continue;
 
                 int level = GetLevelFromFullPath(fullPath);
-                TreeNode node = new TreeNode($"{row["AccID"]} - {accName}") // 🔹 نعرض رقم الحساب مع الاسم
+                TreeNode node = new TreeNode(accName) // ✅ عرض الاسم فقط
                 {
-                    Tag = row // حفظ البيانات
+                    Tag = row
                 };
 
                 if (level == 0)
@@ -99,23 +99,20 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // 🔹 دالة ترتيب العقد حسب AccID تصاعديًا (Recursive)
         private void SortTreeNodes(TreeNodeCollection nodes)
         {
-            // تحويل العقد إلى List للترتيب
             List<TreeNode> nodeList = nodes.Cast<TreeNode>()
                                            .OrderBy(n =>
                                            {
                                                if (n.Tag is DataRow row && int.TryParse(row["AccID"].ToString(), out int accID))
                                                    return accID;
-                                               return int.MaxValue; // fallback
+                                               return int.MaxValue;
                                            })
                                            .ToList();
 
-            // إعادة الترتيب
             nodes.Clear();
             foreach (TreeNode node in nodeList)
             {
                 nodes.Add(node);
-                // ترتيب الأبناء كمان
-                SortTreeNodes(node.Nodes);
+                SortTreeNodes(node.Nodes); // ترتيب الأبناء كمان
             }
         }
         #endregion
