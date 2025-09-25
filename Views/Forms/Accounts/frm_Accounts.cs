@@ -68,7 +68,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             }
 
-          //  treeViewAccounts.ExpandAll();
+            //  treeViewAccounts.ExpandAll();
             // بدلاً من ExpandAll، نغلق كل العقد
             treeViewAccounts.CollapseAll();
         }
@@ -121,20 +121,20 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             currentMatchIndex = -1;
 
             // إعادة تعيين الألوان وإغلاق كل الفروع
-            ResetNodeColorsAndCollapse(treeViewAccounts .Nodes);
-            
+            ResetNodeColorsAndCollapse(treeViewAccounts.Nodes);
+
             if (string.IsNullOrEmpty(searchText))
                 return;
 
             // البحث وتلوين النتائج وفتح الفروع التي تحتوي نتائج
-            SearchAndHighlightNodes(treeViewAccounts .Nodes, searchText);
+            SearchAndHighlightNodes(treeViewAccounts.Nodes, searchText);
 
             // اختيار أول نتيجة
             if (matchedNodes.Count > 0)
             {
                 currentMatchIndex = 0;
                 var node = matchedNodes[0];
-                treeViewAccounts .SelectedNode = node;
+                treeViewAccounts.SelectedNode = node;
                 node.EnsureVisible();
             }
         }
@@ -142,8 +142,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         {
             foreach (TreeNode node in nodes)
             {
-                node.BackColor = treeViewAccounts .BackColor;
-                node.ForeColor = treeViewAccounts .ForeColor;
+                node.BackColor = treeViewAccounts.BackColor;
+                node.ForeColor = treeViewAccounts.ForeColor;
                 node.Collapse(); // إغلاق الفروع
 
                 if (node.Nodes.Count > 0)
@@ -182,7 +182,12 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        #endregion 
+        #endregion
 
+        private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            lblSelectedTreeNod .Text = treeViewAccounts.SelectedNode.Text;
+
+        }
     }
 }
