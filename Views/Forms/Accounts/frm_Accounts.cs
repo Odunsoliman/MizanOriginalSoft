@@ -1,5 +1,6 @@
 ﻿using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
+using MizanOriginalSoft.Views.Reports;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,6 +23,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         private void frm_Accounts_Load(object sender, EventArgs e)
         {
             LoadAccountsTree();
+            SetupMenuStrip();
         }
         #region !!!!!!! بناء الشجرة  !!!!!!!
         private void LoadAccountsTree()
@@ -192,6 +194,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         #endregion
+
+        #region !!!!!!  عرض الحسابات  !!!!!!!!
         // دالة لحساب المستوى من FullPath
         private int GetLevelFromFullPath(string fullPath)
         {
@@ -325,6 +329,93 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
+        //📌 دالة البحث عن العقدة بالـ AccID
+        private TreeNode? FindNodeByAccID(TreeNodeCollection nodes, int accID)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Tag is DataRow row && Convert.ToInt32(row["AccID"]) == accID)
+                    return node;
+
+                TreeNode? found = FindNodeByAccID(node.Nodes, accID);
+                if (found != null)
+                    return found;
+            }
+            return null;
+        }
+
+        //📌 مثال على الاستخدام بعد البحث
+        private void HighlightAndExpandNode(int accID)
+        {
+            TreeNode? node = FindNodeByAccID(treeViewAccounts.Nodes, accID);
+
+            if (node != null)
+            {
+                // تحديد العقدة
+                treeViewAccounts.SelectedNode = node;
+
+                // تغيير لون الخلفية (لتوضيح)
+                node.BackColor = Color.LightBlue;
+                node.ForeColor = Color.DarkRed;
+
+                // فتح العقدة لرؤية الإضافات
+                node.Expand();
+
+                // 📌 إذا أردت فتح كل الآباء حتى تصل للعقدة
+                node.EnsureVisible();
+            }
+        }
+
+        #endregion
+
+        #region !!!!!!!!  ازرار الشاشة !!!!!!!!!
+        private void btnDetails_Click(object sender, EventArgs e)
+        {
+            // إذا كانت مخفية يظهرها، وإذا كانت ظاهرة يخفيها
+            tlpPhon.Visible = !tlpPhon.Visible;
+
+        }
+
+        private void btnNew_Click(object sender, EventArgs e)
+        {
+            txtAccName.Clear();
+            chkIsHasChildren.Checked = false;
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (treeViewAccounts.SelectedNode?.Tag is DataRow row)
+            {
+                int accID = Convert.ToInt32(row["AccID"]);
+                string? accName = row["AccName"].ToString();
+
+                DialogResult confirm = MessageBox.Show(
+                    $"هل أنت متأكد أنك تريد حذف الحساب: {accName} (ID={accID})؟",
+                    "تأكيد الحذف",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (confirm == DialogResult.No) return;
+
+                string resultMsg = DBServiecs.Acc_DeleteAccount(accID);
+                // الرسالة الراجعة تم التنفيذ
+                // فلا يقوم باجراءات تحميل الشجرة وتحديد الاب
+                MessageBox.Show(resultMsg, "نتيجة الحذف");
+
+                // لو تم الحذف فعلاً → نرجع للأب
+                if (!resultMsg.StartsWith("❌")) // يعني مش فشل
+                {
+                    int? parentAccID = row["ParentAccID"] != DBNull.Value ? Convert.ToInt32(row["ParentAccID"]) : (int?)null;
+
+                    LoadAccountsTree();
+
+                    if (parentAccID.HasValue)
+                        HighlightAndExpandNode(parentAccID.Value);
+                }
+
+            }
+        }
+
         // زر الحفظ
         private void btnSave_Click(object sender, EventArgs e)
         {
@@ -377,89 +468,172 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 MessageBox.Show("فشل في الحفظ ❌\n" + result);
             }
         }
-        //📌 دالة البحث عن العقدة بالـ AccID
-        private TreeNode? FindNodeByAccID(TreeNodeCollection nodes, int accID)
+
+
+        #endregion
+
+        #region !!!!!!!! إعداد قوائم التقارير  !!!!!!!!!!
+
+        // قوائم التقارير
+        private ToolStripMenuItem tsmiCategoryReports = new();
+        private ToolStripMenuItem tsmiGroupedReports = new();
+
+        // شريط القوائم داخل Panel
+        private MenuStrip? menuStrip1;
+
+        // تهيئة MenuStrip داخل Panel
+        private void SetupMenuStrip()
         {
-            foreach (TreeNode node in nodes)
+            // إزالة أي شريط موجود مسبقًا
+            if (menuStrip1 != null && pnlMenuContainer.Controls.Contains(menuStrip1))
+                pnlMenuContainer.Controls.Remove(menuStrip1);
+
+            MenuStrip mainMenu = new MenuStrip
             {
-                if (node.Tag is DataRow row && Convert.ToInt32(row["AccID"]) == accID)
-                    return node;
+                Dock = DockStyle.Fill,
+                BackColor = Color.LightSteelBlue,
+                Font = new Font("Times New Roman", 14, FontStyle.Regular),
+                RightToLeft = RightToLeft.Yes
+            };
 
-                TreeNode? found = FindNodeByAccID(node.Nodes, accID);
-                if (found != null)
-                    return found;
-            }
-            return null;
+            // لتفعيل محاذاة من اليمين لليسار عند ظهور القوائم المنسدلة:
+            mainMenu.LayoutStyle = ToolStripLayoutStyle.Flow; // أو HorizontalStackWithOverflow
+
+
+            // إنشاء عناصر القوائم
+            tsmiCategoryReports = new ToolStripMenuItem("تقارير الصنف المحدد ▼");
+            tsmiGroupedReports = new ToolStripMenuItem("تقارير مجمعة للأصناف المحددة ▼");
+
+            mainMenu.Items.Add(tsmiCategoryReports);
+            mainMenu.Items.Add(tsmiGroupedReports);
+
+            pnlMenuContainer.Controls.Add(mainMenu);
+            mainMenu.Location = new Point(10, 5);
+
+            menuStrip1 = mainMenu; // حفظ المرجع
         }
 
-        //📌 مثال على الاستخدام بعد البحث
-        private void HighlightAndExpandNode(int accID)
+        // تحميل القوائم بناءً على الحساب المحدد
+        private void LoadReportsForSelectedAccount()
         {
-            TreeNode? node = FindNodeByAccID(treeViewAccounts.Nodes, accID);
+            int? topAccID = GetCurrentEntityID();
+            if (topAccID.HasValue)
+                LoadReports(topAccID.Value);
+        }
 
-            if (node != null)
+        // تحميل البيانات من قاعدة البيانات ووضعها في القوائم
+        private void LoadReports(int topAcc)
+        {
+            try
             {
-                // تحديد العقدة
-                treeViewAccounts.SelectedNode = node;
+                DataTable dt = DBServiecs.Reports_GetByTopAcc(topAcc, false);
+                if (dt == null || dt.Rows.Count == 0)
+                {
+                    tsmiCategoryReports.DropDownItems.Clear();
+                    tsmiGroupedReports.DropDownItems.Clear();
+                    tsmiCategoryReports.DropDownItems.Add(new ToolStripMenuItem("لا توجد تقارير متاحة") { Enabled = false });
+                    tsmiGroupedReports.DropDownItems.Add(new ToolStripMenuItem("لا توجد تقارير متاحة") { Enabled = false });
+                    return;
+                }
 
-                // تغيير لون الخلفية (لتوضيح)
-                node.BackColor = Color.LightBlue;
-                node.ForeColor = Color.DarkRed;
+                // تقارير فردية
+                DataRow[] singleReports = dt.Select("IsGrouped = 0");
+                LoadMenuItems(tsmiCategoryReports, singleReports);
 
-                // فتح العقدة لرؤية الإضافات
-                node.Expand();
-
-                // 📌 إذا أردت فتح كل الآباء حتى تصل للعقدة
-                node.EnsureVisible();
+                // تقارير مجمعة
+                DataRow[] groupedReports = dt.Select("IsGrouped = 1");
+                LoadMenuItems(tsmiGroupedReports, groupedReports);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("خطأ أثناء تحميل التقارير: " + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void btnDetails_Click(object sender, EventArgs e)
+        // تعبئة القائمة بعناصر من DataRow[] مع ترتيب الاسم تصاعديًا
+        private void LoadMenuItems(ToolStripMenuItem parentMenu, DataRow[] rows)
         {
-            // إذا كانت مخفية يظهرها، وإذا كانت ظاهرة يخفيها
-            tlpPhon.Visible = !tlpPhon.Visible;
+            parentMenu.DropDownItems.Clear();
 
+            if (rows.Length == 0)
+            {
+                ToolStripMenuItem emptyItem = new("لا توجد تقارير متاحة") { Enabled = false };
+                parentMenu.DropDownItems.Add(emptyItem);
+                return;
+            }
+
+            // ترتيب الصفوف حسب اسم التقرير
+            var sortedRows = rows.OrderBy(r => r["ReportDisplayName"]?.ToString()).ToArray();
+
+            foreach (DataRow row in sortedRows)
+            {
+                string displayName = row["ReportDisplayName"]?.ToString() ?? "تقرير بدون اسم";
+                string codeName = row["ReportCodeName"]?.ToString() ?? "";
+                int reportId = Convert.ToInt32(row["ReportID"]);
+
+                // تجهيز القاموس من البداية
+                Dictionary<string, object> tagData = new()
+        {
+            { "ReportCodeName", codeName },
+            { "ReportDisplayName", displayName },
+            { "ReportID", reportId },
+            { "IsGrouped", Convert.ToBoolean(row["IsGrouped"]) }
+        };
+
+                ToolStripMenuItem menuItem = new(displayName)
+                {
+                    Tag = tagData
+                };
+                menuItem.Click += ReportMenuItem_Click;
+
+                parentMenu.DropDownItems.Add(menuItem);
+            }
         }
 
-        private void btnNew_Click(object sender, EventArgs e)
+        // معرف المستخدم الحالي
+        int ID_user;
+
+        // حدث النقر على أي تقرير
+        private void ReportMenuItem_Click(object? sender, EventArgs e)
         {
-            txtAccName.Clear();
-            chkIsHasChildren.Checked = false;
+            if (sender is not ToolStripMenuItem clickedItem || clickedItem.Tag is not Dictionary<string, object> tagData)
+            {
+                MessageBox.Show("بيانات التقرير غير صحيحة.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                Dictionary<string, object> reportParameters = new(tagData)
+        {
+            { "UserID", ID_user }
+        };
+
+                using frmSettingReports previewForm = new frmSettingReports(reportParameters);
+                previewForm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"حدث خطأ أثناء فتح شاشة إعداد التقرير: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private void btnDelete_Click(object sender, EventArgs e)
+        // جلب كود الحساب الحالي من الشجرة
+        private int? GetCurrentEntityID()
         {
             if (treeViewAccounts.SelectedNode?.Tag is DataRow row)
             {
-                int accID = Convert.ToInt32(row["AccID"]);
-                string? accName = row["AccName"].ToString();
-
-                DialogResult confirm = MessageBox.Show(
-                    $"هل أنت متأكد أنك تريد حذف الحساب: {accName} (ID={accID})؟",
-                    "تأكيد الحذف",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Warning);
-
-                if (confirm == DialogResult.No) return;
-
-                string resultMsg = DBServiecs.Acc_DeleteAccount(accID);
-                // الرسالة الراجعة تم التنفيذ
-                // فلا يقوم باجراءات تحميل الشجرة وتحديد الاب
-                MessageBox.Show(resultMsg, "نتيجة الحذف");
-
-                // لو تم الحذف فعلاً → نرجع للأب
-                if (!resultMsg.StartsWith("❌")) // يعني مش فشل
-                {
-                    int? parentAccID = row["ParentAccID"] != DBNull.Value ? Convert.ToInt32(row["ParentAccID"]) : (int?)null;
-
-                    LoadAccountsTree();
-
-                    if (parentAccID.HasValue)
-                        HighlightAndExpandNode(parentAccID.Value);
-                }
-
+                if (row["AccID"] != DBNull.Value && int.TryParse(row["AccID"].ToString(), out int id))
+                    return id;
             }
+
+            MessageBox.Show("⚠️ يجب اختيار الحساب قبل عرض التقرير.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return null;
         }
+
+        #endregion
+
+
 
     }
 }
