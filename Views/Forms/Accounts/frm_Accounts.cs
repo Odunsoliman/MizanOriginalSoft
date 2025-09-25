@@ -241,6 +241,10 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     lblPathNode.Text = GetFullPathFromNode(node);
                     lblParentAccID.Text = accName;
                     chkIsHasChildren.Checked = IsHasChildren;
+                    txtAccName .Enabled = IsHasChildren;
+                    /*
+                     
+                     */
                 }
             }
         }
