@@ -1691,16 +1691,14 @@ END
         }
 
         // إضافة حساب جديد
-        public static string Acc_AddAccount(string AccName, int? ParentAccID, int? CreateByUserID, bool? IsHasChildren)
+        public static string Acc_AddAccount(string AccName, int? ParentAccID, int? CreateByUserID)
         {
             return dbHelper.ExecuteNonQueryWithLogging("Acc_AddAccount", command =>
             {
                 command.Parameters.Add("@AccName", SqlDbType.NVarChar).Value = AccName;
                 command.Parameters.Add("@ParentAccID", SqlDbType.Int).Value = (object?)ParentAccID ?? DBNull.Value;
                 command.Parameters.Add("@CreateByUserID", SqlDbType.Int).Value = (object?)CreateByUserID ?? DBNull.Value;
-                command.Parameters.Add("@IsHasChildren", SqlDbType.Bit).Value = (object?)IsHasChildren ?? DBNull.Value;
-
-            }, expectMessageOutput: false); // ✅ الإجراء لا يحتوي على @Message
+            }, expectMessageOutput: false);
         }
 
         // وظيفة حذف حساب
@@ -1730,23 +1728,21 @@ END
         }
 
         // تحديث بيانات حساب
-        public static string Acc_UpdateAccount(int? accID, string accName, bool isHasChildren, bool isHidden)
+        public static string Acc_UpdateAccount(int? accID, string accName, bool isHidden)
         {
             return dbHelper.ExecuteNonQueryWithLogging("Acc_UpdateAccount", command =>
             {
                 command.Parameters.Add("@AccID", SqlDbType.Int).Value = (object?)accID ?? DBNull.Value;
                 command.Parameters.Add("@AccName", SqlDbType.NVarChar, 200).Value = (object?)accName ?? DBNull.Value;
-                command.Parameters.Add("@IsHasChildren", SqlDbType.Bit).Value = isHasChildren;
                 command.Parameters.Add("@IsHidden", SqlDbType.Bit).Value = isHidden;
 
-                // ✅ نضيفه يدوي
                 var outputParam = new SqlParameter("@OutputMsg", SqlDbType.NVarChar, 500)
                 {
                     Direction = ParameterDirection.Output
                 };
                 command.Parameters.Add(outputParam);
 
-            }, expectMessageOutput: false); // ❌ خليها false عشان ما يضيفش @Message تلقائي
+            }, expectMessageOutput: false);
         }
 
         // 

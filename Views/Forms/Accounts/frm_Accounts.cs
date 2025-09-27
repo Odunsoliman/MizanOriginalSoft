@@ -433,12 +433,11 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
 
             string AccName = txtAccName.Text.Trim();
-            bool IsHasChildren = chkIsHasChildren.Checked;
             int ParentAccID = Convert.ToInt32(selectedRow["AccID"]);
             int CreateByUserID = CurrentSession.UserID;
 
             // 🟢 استدعاء الإجراء
-            string result = DBServiecs.Acc_AddAccount(AccName, ParentAccID, CreateByUserID, IsHasChildren);
+            string result = DBServiecs.Acc_AddAccount(AccName, ParentAccID, CreateByUserID);
 
             if (result.StartsWith("تم")) // يعني نجحت العملية
             {

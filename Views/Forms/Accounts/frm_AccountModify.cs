@@ -107,7 +107,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             string resultMsg = DBServiecs.Acc_UpdateAccount(
                 _accID,
                 txtAccName.Text,                  // اسم الحساب
-                chkIsHasChildren.Checked,         // هل له أبناء
                 chkIsHidden.Checked               // هل الحساب مخفي
             );
 
