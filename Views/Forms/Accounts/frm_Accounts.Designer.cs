@@ -112,11 +112,11 @@
             lbl = new Label();
             btnDetails = new Button();
             tableLayoutPanel6 = new TableLayoutPanel();
-            chkIsHasChildren = new CheckBox();
             lblParentAccName = new Label();
             label2 = new Label();
             txtAccName = new TextBox();
             label6 = new Label();
+            chkIsHasChildren = new CheckBox();
             lblIsHasChildren = new Label();
             panel2 = new Panel();
             tlpBody = new TableLayoutPanel();
@@ -1347,17 +1347,6 @@
             tableLayoutPanel6.Size = new Size(437, 112);
             tableLayoutPanel6.TabIndex = 93;
             // 
-            // chkIsHasChildren
-            // 
-            chkIsHasChildren.AutoSize = true;
-            chkIsHasChildren.Enabled = false;
-            chkIsHasChildren.Location = new Point(419, 77);
-            chkIsHasChildren.Name = "chkIsHasChildren";
-            chkIsHasChildren.Size = new Size(15, 14);
-            chkIsHasChildren.TabIndex = 89;
-            chkIsHasChildren.UseVisualStyleBackColor = true;
-            chkIsHasChildren.Visible = false;
-            // 
             // lblParentAccName
             // 
             lblParentAccName.AutoSize = true;
@@ -1413,6 +1402,17 @@
             label6.TabIndex = 54;
             label6.Text = "الاب";
             label6.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // chkIsHasChildren
+            // 
+            chkIsHasChildren.AutoSize = true;
+            chkIsHasChildren.Enabled = false;
+            chkIsHasChildren.Location = new Point(419, 77);
+            chkIsHasChildren.Name = "chkIsHasChildren";
+            chkIsHasChildren.Size = new Size(15, 14);
+            chkIsHasChildren.TabIndex = 89;
+            chkIsHasChildren.UseVisualStyleBackColor = true;
+            chkIsHasChildren.Visible = false;
             // 
             // lblIsHasChildren
             // 
