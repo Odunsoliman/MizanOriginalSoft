@@ -194,37 +194,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         #endregion
-        /*
-         يوجد الان تعارض بين اسلوب البحث من خلال الشجرة الذى يقوم بفتح كل العقد المتشابهة فى جزء من السم الذى يمكن ان يتواجد فى الاصول والغصوم معا اثنا البحث 
-        فاصبح التعارض بين ذلك وبين الدالة الجديدة فما الحل هل يمكن تعطيل الدالة اذا دخل المؤشر الى تكست البحت وتفعيلها عند مغادرته حتى لا يحدث التعارض
-                //وظيفة غلق العقدة الاساسية العير مفعلة
-        private void treeViewAccounts_BeforeExpand(object sender, TreeViewCancelEventArgs e)
-        {
-            if (e.Node!.Tag is DataRow row)
-            {
-                if (row.Table.Columns.Contains("AccID") && int.TryParse(row["AccID"]?.ToString(), out int accID))
-                {
-                    int? parentAccID = (row.Table.Columns.Contains("ParentAccID") && row["ParentAccID"] != DBNull.Value)
-                        ? Convert.ToInt32(row["ParentAccID"])
-                        : (int?)null;
-
-                    // إذا الحساب جذري أساسي من 1 إلى 5
-                    if (parentAccID == null && accID >= 1 && accID <= 5)
-                    {
-                        // أغلق كل الجذور الأخرى، لا تمنع التوسع
-                        foreach (TreeNode rootNode in treeViewAccounts.Nodes)
-                        {
-                            if (rootNode != e.Node)
-                                rootNode.Collapse();
-                        }
-                    }
-                }
-            }
-        }
-
-         */
-
-
+   
         #region !!!!!!  عرض الحسابات  !!!!!!!!
         // دالة لحساب المستوى من FullPath
         private int GetLevelFromFullPath(string fullPath)
@@ -400,9 +370,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-
-
-
         //📌 دالة البحث عن العقدة بالـ AccID
         private TreeNode? FindNodeByAccID(TreeNodeCollection nodes, int accID)
         {
@@ -438,6 +405,15 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 // 📌 إذا أردت فتح كل الآباء حتى تصل للعقدة
                 node.EnsureVisible();
             }
+        }
+        //تعطيل وتفعيل اغلاق القوائم التلقائى
+        private void txtSearchTree_Leave(object sender, EventArgs e)
+        {
+            isSearchActive = false; // إعادة تفعيل التعامل مع BeforeExpand
+        }
+        private void txtSearchTree_Enter(object sender, EventArgs e)
+        {
+            isSearchActive = true; // تعطيل التعامل مع BeforeExpand
         }
 
         #endregion
@@ -539,6 +515,34 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             else
             {
                 MessageBox.Show("فشل في الحفظ ❌\n" + result);
+            }
+        }
+
+        // زر تعديل حساب
+        private void btnModify_Click(object sender, EventArgs e)
+        {
+            if (treeViewAccounts.SelectedNode?.Tag is DataRow row)
+            {
+                int accID = Convert.ToInt32(row["AccID"]);
+
+                using (frm_AccountModify frm = new frm_AccountModify(accID))
+                {
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        // ✅ تم التعديل بنجاح
+                        // نعيد تحميل الشجرة
+                        LoadAccountsTree();
+
+                        // نرجع ونحدد على الحساب اللي اتعدل
+
+                        // الوقوف على نفس الحساب المعدل
+                        HighlightAndExpandNode(frm.UpdatedAccID);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("يرجى اختيار حساب أولاً", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -707,43 +711,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         #endregion
 
 
-        private void btnModify_Click(object sender, EventArgs e)
-        {
-            if (treeViewAccounts.SelectedNode?.Tag is DataRow row)
-            {
-                int accID = Convert.ToInt32(row["AccID"]);
-
-                using (frm_AccountModify frm = new frm_AccountModify(accID))
-                {
-                    if (frm.ShowDialog() == DialogResult.OK)
-                    {
-                        // ✅ تم التعديل بنجاح
-                        // نعيد تحميل الشجرة
-                        LoadAccountsTree();
-
-                        // نرجع ونحدد على الحساب اللي اتعدل
-
-                        // الوقوف على نفس الحساب المعدل
-                        HighlightAndExpandNode(frm.UpdatedAccID);
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("يرجى اختيار حساب أولاً", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void txtSearchTree_Leave(object sender, EventArgs e)
-        {
-            isSearchActive = false; // إعادة تفعيل التعامل مع BeforeExpand
-        }
-
-
-        private void txtSearchTree_Enter(object sender, EventArgs e)
-        {
-            isSearchActive = true; // تعطيل التعامل مع BeforeExpand
-        }
-
+        
     }
 }
