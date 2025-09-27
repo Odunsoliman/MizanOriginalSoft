@@ -256,6 +256,19 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             // عرض المسار الكامل بالأسماء
             lblPathNode.Text = GetFullPathFromNode(node);
+            int accIDInt = Convert.ToInt32(accID);
+
+            //// إذا الحساب جذري أساسي من 1 إلى 5
+            //if (parentAccID == null && accIDInt >= 1 && accIDInt <= 5)
+            //{
+            //    foreach (TreeNode rootNode in treeViewAccounts.Nodes)
+            //    {
+            //        if (rootNode != node)
+            //        {
+            //            rootNode.Collapse(true); // إغلاق جميع فروع الشجرة الأخرى
+            //        }
+            //    }
+            //}
 
             // التحقق من إمكانية إضافة حساب فرعي
             bool canAddChild = !(isEnerAcc && !isHasChildren);
@@ -338,6 +351,62 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             LoadReportsForSelectedAccount();
         }
+        private void treeViewAccounts_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+        {
+            if (e.Node!.Tag is DataRow row)
+            {
+                if (row.Table.Columns.Contains("AccID") && int.TryParse(row["AccID"]?.ToString(), out int accID))
+                {
+                    int? parentAccID = (row.Table.Columns.Contains("ParentAccID") && row["ParentAccID"] != DBNull.Value)
+                        ? Convert.ToInt32(row["ParentAccID"])
+                        : (int?)null;
+
+                    // إذا الحساب جذري أساسي من 1 إلى 5
+                    if (parentAccID == null && accID >= 1 && accID <= 5)
+                    {
+                        // أغلق كل الجذور الأخرى، لا تمنع التوسع
+                        foreach (TreeNode rootNode in treeViewAccounts.Nodes)
+                        {
+                            if (rootNode != e.Node)
+                                rootNode.Collapse();
+                        }
+                    }
+                }
+            }
+        }
+
+        private void treeViewAccounts_BeforeExpand_(object sender, TreeViewCancelEventArgs e)
+        {
+            var row = e.Node!.Tag as DataRow;//Dereference of a possibly null reference.
+            if (row != null)
+            {
+                if (row.Table.Columns.Contains("AccID") && int.TryParse(row["AccID"]?.ToString(), out int accID))
+                {
+                    int? parentAccID = (row.Table.Columns.Contains("ParentAccID") && row["ParentAccID"] != DBNull.Value)
+                        ? Convert.ToInt32(row["ParentAccID"])
+                        : (int?)null;
+
+                    // إذا الحساب جذري أساسي من 1 إلى 5
+                    if (parentAccID == null && accID >= 1 && accID <= 5)
+                    {
+                        e.Cancel = true;
+                        this.BeginInvoke((Action)(() =>
+                        {
+                            foreach (TreeNode rootNode in treeViewAccounts.Nodes)
+                            {
+                                if (rootNode != e.Node)
+                                    rootNode.Collapse();
+                            }
+                            e.Node.Expand();
+                        }));
+                    }
+                }
+            }
+        }
+
+
+
+
 
         //📌 دالة البحث عن العقدة بالـ AccID
         private TreeNode? FindNodeByAccID(TreeNodeCollection nodes, int accID)
