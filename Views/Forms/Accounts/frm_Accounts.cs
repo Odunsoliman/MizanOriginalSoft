@@ -194,6 +194,36 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         #endregion
+        /*
+         يوجد الان تعارض بين اسلوب البحث من خلال الشجرة الذى يقوم بفتح كل العقد المتشابهة فى جزء من السم الذى يمكن ان يتواجد فى الاصول والغصوم معا اثنا البحث 
+        فاصبح التعارض بين ذلك وبين الدالة الجديدة فما الحل هل يمكن تعطيل الدالة اذا دخل المؤشر الى تكست البحت وتفعيلها عند مغادرته حتى لا يحدث التعارض
+                //وظيفة غلق العقدة الاساسية العير مفعلة
+        private void treeViewAccounts_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+        {
+            if (e.Node!.Tag is DataRow row)
+            {
+                if (row.Table.Columns.Contains("AccID") && int.TryParse(row["AccID"]?.ToString(), out int accID))
+                {
+                    int? parentAccID = (row.Table.Columns.Contains("ParentAccID") && row["ParentAccID"] != DBNull.Value)
+                        ? Convert.ToInt32(row["ParentAccID"])
+                        : (int?)null;
+
+                    // إذا الحساب جذري أساسي من 1 إلى 5
+                    if (parentAccID == null && accID >= 1 && accID <= 5)
+                    {
+                        // أغلق كل الجذور الأخرى، لا تمنع التوسع
+                        foreach (TreeNode rootNode in treeViewAccounts.Nodes)
+                        {
+                            if (rootNode != e.Node)
+                                rootNode.Collapse();
+                        }
+                    }
+                }
+            }
+        }
+
+         */
+
 
         #region !!!!!!  عرض الحسابات  !!!!!!!!
         // دالة لحساب المستوى من FullPath
@@ -258,18 +288,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             lblPathNode.Text = GetFullPathFromNode(node);
             int accIDInt = Convert.ToInt32(accID);
 
-            //// إذا الحساب جذري أساسي من 1 إلى 5
-            //if (parentAccID == null && accIDInt >= 1 && accIDInt <= 5)
-            //{
-            //    foreach (TreeNode rootNode in treeViewAccounts.Nodes)
-            //    {
-            //        if (rootNode != node)
-            //        {
-            //            rootNode.Collapse(true); // إغلاق جميع فروع الشجرة الأخرى
-            //        }
-            //    }
-            //}
-
             // التحقق من إمكانية إضافة حساب فرعي
             bool canAddChild = !(isEnerAcc && !isHasChildren);
             txtAccName.Enabled = canAddChild;
@@ -281,7 +299,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 lblParentAccName.ForeColor = Color.Red;
 
                 chkIsHasChildren.Enabled = false;
-                
+
                 tlpData.Visible = false;
                 btnNew.Visible = false;
                 btnSave.Visible = false;
@@ -291,7 +309,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 lblParentAccName.Text = accName;
                 lblParentAccName.ForeColor = Color.Gray;
                 chkIsHasChildren.Enabled = true;
-                
+
                 btnNew.Visible = true;
                 btnSave.Visible = true;
             }
@@ -304,8 +322,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             {
                 lblIsHasChildren.Text = "هذا الحساب مازال ليس له فروع ";
             }
-                // 🔹 تحقق إذا أي من الآباء (الجدود) هو 12 (الأصول الثابتة)
-                bool hasFixedAssetParent = false;
+            // 🔹 تحقق إذا أي من الآباء (الجدود) هو 12 (الأصول الثابتة)
+            bool hasFixedAssetParent = false;
             TreeNode? current = node;
             while (current != null)
             {
@@ -351,8 +369,15 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             LoadReportsForSelectedAccount();
         }
+
+        private bool isSearchActive = false;// هذا المغيير للتعطيل المؤقت عند البحث
+
+        //وظيفة غلق العقدة الاساسية العير مفعلة
         private void treeViewAccounts_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
+            if (isSearchActive)
+                return; // أثناء البحث لا نفعل أي غلق للعقد الأخرى
+
             if (e.Node!.Tag is DataRow row)
             {
                 if (row.Table.Columns.Contains("AccID") && int.TryParse(row["AccID"]?.ToString(), out int accID))
@@ -364,7 +389,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     // إذا الحساب جذري أساسي من 1 إلى 5
                     if (parentAccID == null && accID >= 1 && accID <= 5)
                     {
-                        // أغلق كل الجذور الأخرى، لا تمنع التوسع
+                        // أغلق كل الجذور الأخرى
                         foreach (TreeNode rootNode in treeViewAccounts.Nodes)
                         {
                             if (rootNode != e.Node)
@@ -374,36 +399,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 }
             }
         }
-
-        private void treeViewAccounts_BeforeExpand_(object sender, TreeViewCancelEventArgs e)
-        {
-            var row = e.Node!.Tag as DataRow;//Dereference of a possibly null reference.
-            if (row != null)
-            {
-                if (row.Table.Columns.Contains("AccID") && int.TryParse(row["AccID"]?.ToString(), out int accID))
-                {
-                    int? parentAccID = (row.Table.Columns.Contains("ParentAccID") && row["ParentAccID"] != DBNull.Value)
-                        ? Convert.ToInt32(row["ParentAccID"])
-                        : (int?)null;
-
-                    // إذا الحساب جذري أساسي من 1 إلى 5
-                    if (parentAccID == null && accID >= 1 && accID <= 5)
-                    {
-                        e.Cancel = true;
-                        this.BeginInvoke((Action)(() =>
-                        {
-                            foreach (TreeNode rootNode in treeViewAccounts.Nodes)
-                            {
-                                if (rootNode != e.Node)
-                                    rootNode.Collapse();
-                            }
-                            e.Node.Expand();
-                        }));
-                    }
-                }
-            }
-        }
-
 
 
 
@@ -739,6 +734,16 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
+        private void txtSearchTree_Leave(object sender, EventArgs e)
+        {
+            isSearchActive = false; // إعادة تفعيل التعامل مع BeforeExpand
+        }
+
+
+        private void txtSearchTree_Enter(object sender, EventArgs e)
+        {
+            isSearchActive = true; // تعطيل التعامل مع BeforeExpand
+        }
 
     }
 }
