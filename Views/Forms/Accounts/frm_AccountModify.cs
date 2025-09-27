@@ -132,24 +132,3 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
     }
 }
-
-/*
-, AH.FullPath AS AccountPath   -- ✅ المسار كامل         lbl
-, A.AccType         lbl
-, A.NormalBalance   lbl 
-, A.IsEnerAcc       lbl  يكتب فيه حسب القيمة الواردة -حساب داخلى او يترك فارغ
-, U.UserName AS CreateByUserName   -- ✅ اسم المستخدم بدلاً من رقمه     lbl
-
-
-
-
-        , A.ParentAccID      فى متغير 
-        , A.Balance                          lbl
-        , A.BalanceState                    lbl
-        , A.DateOfJoin                      lbl            
-        , A.IsHasDetails          chk
-
-
-
-اريد تعديل بعض البيانات ستكون فى متغيرات لا داعى لظهورها على الشاشة
- */

@@ -229,104 +229,103 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // حدث اختيار العقدة
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (treeViewAccounts.SelectedNode != null)
+            if (treeViewAccounts.SelectedNode == null) return;
+
+            TreeNode node = treeViewAccounts.SelectedNode;
+
+            if (node.Tag is not DataRow row) return;
+
+            selectedRow = row; // خزنا الصف المحدد
+
+            string? accID = row["AccID"].ToString();
+            string? accName = row["AccName"].ToString();
+            int? parentAccID = row["ParentAccID"] == DBNull.Value ? (int?)null : Convert.ToInt32(row["ParentAccID"]);
+
+            bool isHasChildren = Convert.ToBoolean(row["IsHasChildren"]);
+            bool isHasDetails = row.Field<bool?>("IsHasDetails") ?? false;
+            bool isEnerAcc = row.Field<bool?>("IsEnerAcc") ?? false;
+
+            bool isHidden = Convert.ToBoolean(row["IsHidden"]);
+
+            string balance = row["Balance"].ToString() ?? string.Empty;
+            string balanceState = row["BalanceState"].ToString() ?? string.Empty;
+            string dateOfJoin = row["DateOfJoin"].ToString() ?? string.Empty;
+
+            // عرض رقم الحساب واسم الحساب
+            lblSelectedTreeNod.Text = accID + " - " + accName;
+
+            // عرض المسار الكامل بالأسماء
+            lblPathNode.Text = GetFullPathFromNode(node);
+
+            // التحقق من إمكانية إضافة حساب فرعي
+            bool canAddChild = !(isEnerAcc && !isHasChildren);
+            txtAccName.Enabled = canAddChild;
+
+            if (!canAddChild)
             {
-                TreeNode node = treeViewAccounts.SelectedNode;
+                txtAccName.Clear();
+                lblParentAccName.Text = "لا يمكن اضافة حسابات فرعية هنا فهذا حساب نهائى";
+                lblParentAccName.ForeColor = Color.Red;
 
-                if (node.Tag is DataRow row)
+                chkIsHasChildren.Enabled = false;
+                tlpData.Visible = false;
+                btnNew.Visible = false;
+                btnSave.Visible = false;
+            }
+            else
+            {
+                lblParentAccName.Text = accName;
+                lblParentAccName.ForeColor = Color.Gray;
+                chkIsHasChildren.Enabled = true;
+                btnNew.Visible = true;
+                btnSave.Visible = true;
+            }
+
+            // 🔹 تحقق إذا أي من الآباء (الجدود) هو 12 (الأصول الثابتة)
+            bool hasFixedAssetParent = false;
+            TreeNode? current = node;
+            while (current != null)
+            {
+                if (current.Tag is DataRow parentRow && Convert.ToInt32(parentRow["AccID"]) == 12)
                 {
-                    selectedRow = row; // ✅ خزناها هنا
+                    hasFixedAssetParent = true;
+                    break;
+                }
+                current = current.Parent;
+            }
 
-                    string? accID = row["AccID"].ToString();
-                    string? accName = row["AccName"].ToString();
-                    int? parentAccID = row["ParentAccID"] == DBNull.Value
-                        ? (int?)null
-                        : Convert.ToInt32(row["ParentAccID"]);
+            // التعامل مع البيانات التفصيلية
+            if (isHasDetails)
+            {
+                tlpData.Visible = true;
+                btnDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
 
-                    string balance = row["Balance"].ToString() ?? string.Empty;
-                    string balanceState = row["BalanceState"].ToString() ?? string.Empty;
-                    bool isHidden = Convert.ToBoolean(row["IsHidden"]);
-                    isHasChildren = Convert.ToBoolean(row["IsHasChildren"]);
-                    isHasDetails = row.Field<bool?>("IsHasDetails") ?? false;
+                // إعادة ضبط نسب الصفوف
+                tlpData.RowStyles[0].SizeType = SizeType.Percent;
+                tlpData.RowStyles[0].Height = 10; // الصف الأول ثابت 10%
 
-                    string dateOfJoin = row["DateOfJoin"].ToString() ?? string.Empty;
+                if (btnDetails.Text == "بيانات شخصية")
+                {
+                    tlpData.RowStyles[1].SizeType = SizeType.Percent;
+                    tlpData.RowStyles[1].Height = 90;
 
-                    // عرض رقم الحساب واسم الحساب
-                    lblSelectedTreeNod.Text = accID + " - " + accName;
+                    tlpData.RowStyles[2].SizeType = SizeType.Percent;
+                    tlpData.RowStyles[2].Height = 0;
+                }
+                else // بيانات الأصل الثابت
+                {
+                    tlpData.RowStyles[1].SizeType = SizeType.Percent;
+                    tlpData.RowStyles[1].Height = 0;
 
-                    // عرض المسار الكامل بالأسماء
-                    lblPathNode.Text = GetFullPathFromNode(node);
-
-                    txtAccName.Enabled = isHasChildren;
-
-                    if (!isHasChildren) // لو مش مسموح إضافة حسابات فرعية
-                    {
-                        txtAccName.Clear();
-                        lblParentAccName.Text = "لا يمكن اضافة حسابات فرعية هنا فهذا حساب نهائى";
-                        lblParentAccName.ForeColor = Color.Red;
-
-                        chkIsHasChildren.Enabled = false;
-                        tlpData.Visible = false;
-                        btnNew.Visible = false;
-                        btnSave.Visible = false;
-                    }
-                    else // مسموح
-                    {
-                        lblParentAccName.Text = accName;
-                        lblParentAccName.ForeColor = Color.Gray;
-                        chkIsHasChildren.Enabled = true;
-                        btnNew.Visible = true;
-                        btnSave.Visible = true;
-                    }
-
-                    // 🔹 تحقق إذا أي من الآباء (الجدود) هو 12
-                    bool hasFixedAssetParent = false;
-                    TreeNode? current = node;
-                    while (current != null)
-                    {
-                        if (current.Tag is DataRow parentRow)
-                        {
-                            if (Convert.ToInt32(parentRow["AccID"]) == 12)
-                            {
-                                hasFixedAssetParent = true;
-                                break;
-                            }
-                        }
-                        current = current.Parent;
-                    }
-
-                    if (isHasDetails)
-                    {
-                        tlpData.Visible = true;
-                        btnDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
-
-                        // إعادة ضبط نسب الصفوف
-                        tlpData.RowStyles[0].SizeType = SizeType.Percent;
-                        tlpData.RowStyles[0].Height = 10; // الصف الأول ثابت 10%
-
-                        if (btnDetails.Text == "بيانات شخصية")
-                        {
-                            tlpData.RowStyles[1].SizeType = SizeType.Percent;
-                            tlpData.RowStyles[1].Height = 90;
-
-                            tlpData.RowStyles[2].SizeType = SizeType.Percent;
-                            tlpData.RowStyles[2].Height = 0;
-                        }
-                        else // "بيانات الأصل الثابت"
-                        {
-                            tlpData.RowStyles[1].SizeType = SizeType.Percent;
-                            tlpData.RowStyles[1].Height = 0;
-
-                            tlpData.RowStyles[2].SizeType = SizeType.Percent;
-                            tlpData.RowStyles[2].Height = 90;
-                        }
-                    }
-                    else
-                    {
-                        tlpData.Visible = false;
-                    }
+                    tlpData.RowStyles[2].SizeType = SizeType.Percent;
+                    tlpData.RowStyles[2].Height = 90;
                 }
             }
+            else
+            {
+                tlpData.Visible = false;
+            }
+
             LoadReportsForSelectedAccount();
         }
 
