@@ -1703,7 +1703,7 @@ END
             }, expectMessageOutput: false); // ✅ الإجراء لا يحتوي على @Message
         }
 
-        //وظيفة حذف حساب
+        // وظيفة حذف حساب
         public static string Acc_DeleteAccount(int? AccID)
         {
             return dbHelper.ExecuteNonQueryWithLogging("Acc_DeleteAccount", command =>
@@ -1719,6 +1719,7 @@ END
 
             }, expectMessageOutput: false); // ❌ عشان ما يضيفش @Message
         }
+        
         // جلب حساب ###
         public static DataTable Acc_GetData(int accID)
         {
@@ -1728,6 +1729,7 @@ END
             }) ?? new DataTable();
         }
 
+        // تحديث بيانات حساب
         public static string Acc_UpdateAccount(int? accID, string accName, bool isHasChildren, bool isHidden)
         {
             return dbHelper.ExecuteNonQueryWithLogging("Acc_UpdateAccount", command =>
@@ -1747,7 +1749,7 @@ END
             }, expectMessageOutput: false); // ❌ خليها false عشان ما يضيفش @Message تلقائي
         }
 
-
+        // 
         #endregion
         #region @@@@ Cheque Batches @@@@
 
