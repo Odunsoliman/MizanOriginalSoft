@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             txtSearchTree = new TextBox();
             tableLayoutPanel13 = new TableLayoutPanel();
             label7 = new Label();
@@ -117,7 +117,7 @@
             label2 = new Label();
             txtAccName = new TextBox();
             label6 = new Label();
-            label8 = new Label();
+            lblIsHasChildren = new Label();
             panel2 = new Panel();
             tlpBody = new TableLayoutPanel();
             tlpHome = new TableLayoutPanel();
@@ -233,8 +233,8 @@
             DGV.ReadOnly = true;
             DGV.RowHeadersVisible = false;
             DGV.RowHeadersWidth = 51;
-            dataGridViewCellStyle1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DGV.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DGV.RowsDefaultCellStyle = dataGridViewCellStyle2;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DGV.Size = new Size(457, 436);
             DGV.TabIndex = 72;
@@ -1336,7 +1336,7 @@
             tableLayoutPanel6.Controls.Add(label2, 0, 0);
             tableLayoutPanel6.Controls.Add(txtAccName, 1, 0);
             tableLayoutPanel6.Controls.Add(label6, 0, 1);
-            tableLayoutPanel6.Controls.Add(label8, 0, 2);
+            tableLayoutPanel6.Controls.Add(lblIsHasChildren, 0, 2);
             tableLayoutPanel6.Dock = DockStyle.Fill;
             tableLayoutPanel6.Location = new Point(3, 32);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
@@ -1413,19 +1413,19 @@
             label6.Text = "الاب";
             label6.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // label8
+            // lblIsHasChildren
             // 
-            label8.AutoSize = true;
-            label8.Dock = DockStyle.Fill;
-            label8.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.ForeColor = Color.FromArgb(0, 0, 192);
-            label8.Location = new Point(310, 74);
-            label8.Margin = new Padding(4, 0, 4, 0);
-            label8.Name = "label8";
-            label8.Size = new Size(123, 38);
-            label8.TabIndex = 54;
-            label8.Text = "حساب له فروع";
-            label8.TextAlign = ContentAlignment.MiddleRight;
+            lblIsHasChildren.AutoSize = true;
+            lblIsHasChildren.Dock = DockStyle.Fill;
+            lblIsHasChildren.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblIsHasChildren.ForeColor = Color.FromArgb(0, 0, 192);
+            lblIsHasChildren.Location = new Point(310, 74);
+            lblIsHasChildren.Margin = new Padding(4, 0, 4, 0);
+            lblIsHasChildren.Name = "lblIsHasChildren";
+            lblIsHasChildren.Size = new Size(123, 38);
+            lblIsHasChildren.TabIndex = 54;
+            lblIsHasChildren.Text = "حساب له فروع";
+            lblIsHasChildren.TextAlign = ContentAlignment.MiddleRight;
             // 
             // panel2
             // 
@@ -1617,7 +1617,7 @@
         private CheckBox chkIsHasChildren;
         private Label lblParentAccName;
         private Button btnDetails;
-        private Label label8;
+        private Label lblIsHasChildren;
         private TableLayoutPanel tlpFixAssets;
     }
 }

@@ -268,6 +268,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 lblParentAccName.ForeColor = Color.Red;
 
                 chkIsHasChildren.Enabled = false;
+                lblIsHasChildren.Text = "";
                 tlpData.Visible = false;
                 btnNew.Visible = false;
                 btnSave.Visible = false;
@@ -277,6 +278,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 lblParentAccName.Text = accName;
                 lblParentAccName.ForeColor = Color.Gray;
                 chkIsHasChildren.Enabled = true;
+                lblIsHasChildren.Text = "هذا الحساب مازال ليس له فروع ";
                 btnNew.Visible = true;
                 btnSave.Visible = true;
             }
