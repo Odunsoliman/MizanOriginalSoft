@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             txtSearchTree = new TextBox();
             tableLayoutPanel13 = new TableLayoutPanel();
             label7 = new Label();
@@ -233,8 +233,8 @@
             DGV.ReadOnly = true;
             DGV.RowHeadersVisible = false;
             DGV.RowHeadersWidth = 51;
-            dataGridViewCellStyle2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DGV.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DGV.RowsDefaultCellStyle = dataGridViewCellStyle1;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DGV.Size = new Size(457, 436);
             DGV.TabIndex = 72;
@@ -1331,12 +1331,12 @@
             tableLayoutPanel6.ColumnCount = 2;
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
-            tableLayoutPanel6.Controls.Add(chkIsHasChildren, 1, 2);
             tableLayoutPanel6.Controls.Add(lblParentAccName, 1, 1);
             tableLayoutPanel6.Controls.Add(label2, 0, 0);
             tableLayoutPanel6.Controls.Add(txtAccName, 1, 0);
             tableLayoutPanel6.Controls.Add(label6, 0, 1);
-            tableLayoutPanel6.Controls.Add(lblIsHasChildren, 0, 2);
+            tableLayoutPanel6.Controls.Add(chkIsHasChildren, 0, 2);
+            tableLayoutPanel6.Controls.Add(lblIsHasChildren, 1, 2);
             tableLayoutPanel6.Dock = DockStyle.Fill;
             tableLayoutPanel6.Location = new Point(3, 32);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
@@ -1350,13 +1350,13 @@
             // chkIsHasChildren
             // 
             chkIsHasChildren.AutoSize = true;
-            chkIsHasChildren.Dock = DockStyle.Left;
             chkIsHasChildren.Enabled = false;
-            chkIsHasChildren.Location = new Point(288, 77);
+            chkIsHasChildren.Location = new Point(419, 77);
             chkIsHasChildren.Name = "chkIsHasChildren";
-            chkIsHasChildren.Size = new Size(15, 32);
+            chkIsHasChildren.Size = new Size(15, 14);
             chkIsHasChildren.TabIndex = 89;
             chkIsHasChildren.UseVisualStyleBackColor = true;
+            chkIsHasChildren.Visible = false;
             // 
             // lblParentAccName
             // 
@@ -1370,6 +1370,7 @@
             lblParentAccName.Padding = new Padding(0, 0, 10, 0);
             lblParentAccName.Size = new Size(298, 37);
             lblParentAccName.TabIndex = 55;
+            lblParentAccName.Text = "اسم الاب";
             lblParentAccName.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // label2
@@ -1415,17 +1416,16 @@
             // 
             // lblIsHasChildren
             // 
-            lblIsHasChildren.AutoSize = true;
             lblIsHasChildren.Dock = DockStyle.Fill;
             lblIsHasChildren.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblIsHasChildren.ForeColor = Color.FromArgb(0, 0, 192);
-            lblIsHasChildren.Location = new Point(310, 74);
+            lblIsHasChildren.ForeColor = Color.Gray;
+            lblIsHasChildren.Location = new Point(4, 74);
             lblIsHasChildren.Margin = new Padding(4, 0, 4, 0);
             lblIsHasChildren.Name = "lblIsHasChildren";
-            lblIsHasChildren.Size = new Size(123, 38);
+            lblIsHasChildren.Size = new Size(298, 38);
             lblIsHasChildren.TabIndex = 54;
             lblIsHasChildren.Text = "حساب له فروع";
-            lblIsHasChildren.TextAlign = ContentAlignment.MiddleRight;
+            lblIsHasChildren.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // panel2
             // 
