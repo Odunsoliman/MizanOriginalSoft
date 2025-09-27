@@ -268,7 +268,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 lblParentAccName.ForeColor = Color.Red;
 
                 chkIsHasChildren.Enabled = false;
-                lblIsHasChildren.Text = "";
+                
                 tlpData.Visible = false;
                 btnNew.Visible = false;
                 btnSave.Visible = false;
@@ -278,13 +278,21 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 lblParentAccName.Text = accName;
                 lblParentAccName.ForeColor = Color.Gray;
                 chkIsHasChildren.Enabled = true;
-                lblIsHasChildren.Text = "هذا الحساب مازال ليس له فروع ";
+                
                 btnNew.Visible = true;
                 btnSave.Visible = true;
             }
 
-            // 🔹 تحقق إذا أي من الآباء (الجدود) هو 12 (الأصول الثابتة)
-            bool hasFixedAssetParent = false;
+            if (isHasChildren)
+            {
+                lblIsHasChildren.Text = "";
+            }
+            else
+            {
+                lblIsHasChildren.Text = "هذا الحساب مازال ليس له فروع ";
+            }
+                // 🔹 تحقق إذا أي من الآباء (الجدود) هو 12 (الأصول الثابتة)
+                bool hasFixedAssetParent = false;
             TreeNode? current = node;
             while (current != null)
             {
