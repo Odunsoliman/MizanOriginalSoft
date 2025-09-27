@@ -381,6 +381,7 @@
             btnModify.TabIndex = 83;
             btnModify.Text = "تعديل";
             btnModify.UseVisualStyleBackColor = false;
+            btnModify.Click += btnModify_Click;
             // 
             // btnDelete
             // 

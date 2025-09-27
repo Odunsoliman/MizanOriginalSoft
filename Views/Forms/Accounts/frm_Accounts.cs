@@ -635,6 +635,33 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         #endregion
 
 
+        private void btnModify_Click(object sender, EventArgs e)
+        {
+            if (treeViewAccounts.SelectedNode?.Tag is DataRow row)
+            {
+                int accID = Convert.ToInt32(row["AccID"]);
+
+                using (frm_AccountModify frm = new frm_AccountModify(accID))
+                {
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        // ✅ تم التعديل بنجاح
+                        // نعيد تحميل الشجرة
+                        LoadAccountsTree();
+
+                        // نرجع ونحدد على الحساب اللي اتعدل
+
+                        // الوقوف على نفس الحساب المعدل
+                        HighlightAndExpandNode(frm.UpdatedAccID);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("يرجى اختيار حساب أولاً", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
 
     }
 }
