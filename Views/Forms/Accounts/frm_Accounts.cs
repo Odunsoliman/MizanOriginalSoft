@@ -125,7 +125,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             DataTable dt = DBServiecs.Acc_GetLeafChildren(parentAccID); // هذه الدالة ترجع كل الأبناء
             DGV.DataSource = dt.DefaultView;
             DGVStyl();
-            
+
         }
 
         private void DGVStyl()
@@ -145,7 +145,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 else
                     col.Visible = false;
             }
-            
+
             // تعيين خط عام
             Font generalFont = new Font("Times New Roman", 14, FontStyle.Bold);
             DGV.DefaultCellStyle.Font = generalFont;
@@ -260,7 +260,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         #endregion
-   
+
         #region !!!!!!  عرض الحسابات  !!!!!!!!
         // دالة لحساب المستوى من FullPath
         private int GetLevelFromFullPath(string fullPath)
@@ -285,12 +285,15 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             return string.Join(" → ", parts); // يمكنك تغيير السهم أو الفاصل حسب رغبتك
         }
 
+ 
 
         private int parentAccID = 0;
         private bool isHasChildren = false;
         private bool isHasDetails = false;
         // حقل على مستوى الفورم لتخزين الحساب المحدد
         private DataRow? selectedRow = null;
+        private TreeNode? activeNode; // العقدة النشطة (المميزة بالأحمر)
+
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
             // إذا لم يتم تحديد أي عقدة، اخرج من الدالة
@@ -301,7 +304,32 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // التأكد أن الـ Tag يحتوي على DataRow
             if (selectedNode.Tag is not DataRow row) return;
 
-            // 🔹 استخراج معرف الحساب وخصائصه بشكل آمن
+            // ==========================
+            // 1) تمييز العقدة بالأحمر + خط أكبر
+            // ==========================
+
+            // أعد العقدة القديمة لشكلها الطبيعي
+            if (activeNode != null)
+            {
+                activeNode.NodeFont = new Font(treeViewAccounts.Font, FontStyle.Regular);
+                activeNode.ForeColor = Color.Black;
+            }
+
+            // حدد العقدة الجديدة
+            activeNode = selectedNode;
+
+            // عدل مظهرها (أحمر + حجم أكبر + Bold)
+            activeNode.NodeFont = new Font(treeViewAccounts.Font.FontFamily,
+                                           treeViewAccounts.Font.Size + 1,
+                                           FontStyle.Bold);
+            activeNode.ForeColor = Color.Red;
+
+            // إعادة رسم الشجرة لتطبيق التغييرات
+            treeViewAccounts.Refresh();
+
+            // ==========================
+            // 2) استخراج بيانات الحساب
+            // ==========================
             int currentAccID = row.Field<int>("AccID");
             string accName = row["AccName"]?.ToString() ?? string.Empty;
             int? parentAccID = row["ParentAccID"] == DBNull.Value ? (int?)null : Convert.ToInt32(row["ParentAccID"]);
@@ -314,7 +342,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             string balanceState = row["BalanceState"]?.ToString() ?? string.Empty;
             string dateOfJoin = row["DateOfJoin"]?.ToString() ?? string.Empty;
 
-            // 🔹 تحديث الـ DGV حسب وجود أبناء
+            // ==========================
+            // 3) تحديث الـ DGV
+            // ==========================
             if (hasChildren)
             {
                 LoadChildrenInDGV(currentAccID);
@@ -324,14 +354,18 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 DGV.DataSource = null;
             }
 
-            // 🔹 حفظ الصف المحدد
+            // حفظ الصف المحدد
             selectedRow = row;
 
-            // 🔹 تحديث التسمية للعرض
+            // ==========================
+            // 4) تحديث التسميات
+            // ==========================
             lblSelectedTreeNod.Text = $"{currentAccID} - {accName}";
             lblPathNode.Text = GetFullPathFromNode(selectedNode);
 
-            // 🔹 التحقق من إمكانية إضافة حساب فرعي
+            // ==========================
+            // 5) التحقق من إمكانية إضافة حساب فرعي
+            // ==========================
             bool canAddChild = !(isEnerAcc && !hasChildren);
             txtAccName.Enabled = canAddChild;
 
@@ -359,7 +393,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             lblIsHasChildren.Text = hasChildren ? "" : "هذا الحساب مازال ليس له فروع";
 
-            // 🔹 التحقق من وجود أي من الآباء معرفه 12 (الأصول الثابتة)
+            // ==========================
+            // 6) التحقق من إذا كان الأب (أو أجداده) = 12 (أصول ثابتة)
+            // ==========================
             bool hasFixedAssetParent = false;
             TreeNode? currentNode = selectedNode;
             while (currentNode != null)
@@ -372,15 +408,17 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 currentNode = currentNode.Parent;
             }
 
-            // 🔹 التعامل مع البيانات التفصيلية
+            // ==========================
+            // 7) التعامل مع البيانات التفصيلية
+            // ==========================
             if (hasDetails)
             {
                 tlpData.Visible = true;
                 btnDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
 
-                // إعادة ضبط نسب الصفوف
+                // الصف الأول ثابت 10%
                 tlpData.RowStyles[0].SizeType = SizeType.Percent;
-                tlpData.RowStyles[0].Height = 10; // الصف الأول ثابت 10%
+                tlpData.RowStyles[0].Height = 10;
 
                 if (btnDetails.Text == "بيانات شخصية")
                 {
@@ -404,11 +442,13 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 tlpData.Visible = false;
             }
 
-            // 🔹 تحميل التقارير الخاصة بالحساب المحدد
+            // ==========================
+            // 8) تحميل التقارير الخاصة بالحساب المحدد
+            // ==========================
             LoadReportsForSelectedAccount();
         }
 
-  
+
         private bool isSearchActive = false;// هذا المغيير للتعطيل المؤقت عند البحث
 
         //وظيفة غلق العقدة الاساسية العير مفعلة
@@ -778,8 +818,5 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         #endregion
-
- 
-
     }
 }
