@@ -89,8 +89,8 @@
             tableLayoutPanel3 = new TableLayoutPanel();
             tableLayoutPanel14 = new TableLayoutPanel();
             tlpShowMainData = new TableLayoutPanel();
-            lblLastLine = new Label();
-            lblNameLine = new Label();
+            lblTotalBalnceState = new Label();
+            lblNameNod = new Label();
             lblPathNode = new Label();
             label8 = new Label();
             tabControlAccount = new TabControl();
@@ -1021,8 +1021,8 @@
             // 
             tlpShowMainData.ColumnCount = 1;
             tlpShowMainData.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tlpShowMainData.Controls.Add(lblLastLine, 0, 2);
-            tlpShowMainData.Controls.Add(lblNameLine, 0, 1);
+            tlpShowMainData.Controls.Add(lblTotalBalnceState, 0, 2);
+            tlpShowMainData.Controls.Add(lblNameNod, 0, 1);
             tlpShowMainData.Controls.Add(lblPathNode, 0, 0);
             tlpShowMainData.Dock = DockStyle.Top;
             tlpShowMainData.Location = new Point(3, 44);
@@ -1034,33 +1034,33 @@
             tlpShowMainData.Size = new Size(357, 82);
             tlpShowMainData.TabIndex = 97;
             // 
-            // lblLastLine
+            // lblTotalBalnceState
             // 
-            lblLastLine.AutoSize = true;
-            lblLastLine.Dock = DockStyle.Fill;
-            lblLastLine.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblLastLine.ForeColor = SystemColors.ActiveCaption;
-            lblLastLine.Location = new Point(4, 54);
-            lblLastLine.Margin = new Padding(4, 0, 4, 0);
-            lblLastLine.Name = "lblLastLine";
-            lblLastLine.Size = new Size(349, 28);
-            lblLastLine.TabIndex = 61;
-            lblLastLine.Text = "-";
-            lblLastLine.TextAlign = ContentAlignment.MiddleLeft;
+            lblTotalBalnceState.AutoSize = true;
+            lblTotalBalnceState.Dock = DockStyle.Fill;
+            lblTotalBalnceState.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTotalBalnceState.ForeColor = SystemColors.ActiveCaption;
+            lblTotalBalnceState.Location = new Point(4, 54);
+            lblTotalBalnceState.Margin = new Padding(4, 0, 4, 0);
+            lblTotalBalnceState.Name = "lblTotalBalnceState";
+            lblTotalBalnceState.Size = new Size(349, 28);
+            lblTotalBalnceState.TabIndex = 61;
+            lblTotalBalnceState.Text = "-";
+            lblTotalBalnceState.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // lblNameLine
+            // lblNameNod
             // 
-            lblNameLine.AutoSize = true;
-            lblNameLine.Dock = DockStyle.Fill;
-            lblNameLine.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblNameLine.ForeColor = Color.FromArgb(0, 0, 192);
-            lblNameLine.Location = new Point(4, 27);
-            lblNameLine.Margin = new Padding(4, 0, 4, 0);
-            lblNameLine.Name = "lblNameLine";
-            lblNameLine.Size = new Size(349, 27);
-            lblNameLine.TabIndex = 60;
-            lblNameLine.Text = "-";
-            lblNameLine.TextAlign = ContentAlignment.MiddleLeft;
+            lblNameNod.AutoSize = true;
+            lblNameNod.Dock = DockStyle.Fill;
+            lblNameNod.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblNameNod.ForeColor = Color.FromArgb(0, 0, 192);
+            lblNameNod.Location = new Point(4, 27);
+            lblNameNod.Margin = new Padding(4, 0, 4, 0);
+            lblNameNod.Name = "lblNameNod";
+            lblNameNod.Size = new Size(349, 27);
+            lblNameNod.TabIndex = 60;
+            lblNameNod.Text = "-";
+            lblNameNod.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblPathNode
             // 
@@ -1722,8 +1722,8 @@
         private RadioButton rdoDaeen;
         private RadioButton rdoMadeen;
         private TableLayoutPanel tlpShowMainData;
-        private Label lblLastLine;
-        private Label lblNameLine;
+        private Label lblTotalBalnceState;
+        private Label lblNameNod;
         private Label lblPathNode;
         private TabControl tabControlAccount;
         private TabPage tabPage2;

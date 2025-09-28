@@ -367,7 +367,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // ==========================
             lblSelectedTreeNod.Text = $"{currentAccID} - {accName}";
             lblPathNode.Text = GetFullPathFromNode(selectedNode);
-
+            lblNameNod.Text = $"{accName}";
             // ==========================
             // 5) التحقق من إمكانية إضافة حساب فرعي
             // ==========================
