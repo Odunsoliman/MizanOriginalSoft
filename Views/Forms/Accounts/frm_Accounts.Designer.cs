@@ -745,7 +745,7 @@
             btnAddDetails.TabIndex = 87;
             btnAddDetails.Text = "اضافة";
             btnAddDetails.UseVisualStyleBackColor = false;
-            btnAddDetails.Click += btnNextDetail_Click;
+            btnAddDetails.Click += btnAddDetail_Click;
             // 
             // btnDeleteDetail
             // 
@@ -758,7 +758,7 @@
             btnDeleteDetail.Name = "btnDeleteDetail";
             btnDeleteDetail.Size = new Size(78, 30);
             btnDeleteDetail.TabIndex = 86;
-            btnDeleteDetail.Text = "تعديل";
+            btnDeleteDetail.Text = "حذف";
             btnDeleteDetail.UseVisualStyleBackColor = false;
             btnDeleteDetail.Click += btnDeleteDetail_Click;
             // 

@@ -43,9 +43,9 @@
             txtAddress = new TextBox();
             txtNotes = new TextBox();
             tableLayoutPanel3 = new TableLayoutPanel();
-            lblTitel = new Label();
             btnCancel = new Button();
             btnSave = new Button();
+            lblTitel = new Label();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
@@ -236,17 +236,6 @@
             tableLayoutPanel3.Size = new Size(532, 37);
             tableLayoutPanel3.TabIndex = 1;
             // 
-            // lblTitel
-            // 
-            lblTitel.AutoSize = true;
-            lblTitel.Dock = DockStyle.Fill;
-            lblTitel.Location = new Point(3, 0);
-            lblTitel.Name = "lblTitel";
-            lblTitel.Size = new Size(532, 43);
-            lblTitel.TabIndex = 2;
-            lblTitel.Text = "اضافة تفاصيل الى الحساب";
-            lblTitel.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // btnCancel
             // 
             btnCancel.Dock = DockStyle.Fill;
@@ -268,6 +257,17 @@
             btnSave.Text = "حفظ";
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
+            // 
+            // lblTitel
+            // 
+            lblTitel.AutoSize = true;
+            lblTitel.Dock = DockStyle.Fill;
+            lblTitel.Location = new Point(3, 0);
+            lblTitel.Name = "lblTitel";
+            lblTitel.Size = new Size(532, 43);
+            lblTitel.TabIndex = 2;
+            lblTitel.Text = "اضافة تفاصيل الى الحساب";
+            lblTitel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // frm_AccountDetailAdd
             // 
