@@ -1690,7 +1690,7 @@ END
             return result ?? new DataTable();
         }
 
-
+        // احضار الابناء الذين ليس لهم ابناء اخر
         public static DataTable Acc_GetLeafChildren(int ParentAccID)
         {
             DataTable? result = dbHelper.ExecuteSelectQuery("Acc_GetLeafChildren", command =>
@@ -1700,7 +1700,6 @@ END
 
             return result ?? new DataTable();
         }
-
 
         // إضافة حساب جديد
         public static string Acc_AddAccount(string AccName, int? ParentAccID, int? CreateByUserID)
@@ -1757,8 +1756,6 @@ END
             }, expectMessageOutput: false);
         }
 
-
-
         // إضافة أو تعديل تفاصيل الحساب
         public static string Acc_SaveDetails(int? DetailID, int AccID, string? ContactName,
                                              string? Phone, string? Mobile, string? Email,
@@ -1776,7 +1773,6 @@ END
                 command.Parameters.Add("@Notes", SqlDbType.NVarChar).Value = (object?)Notes ?? DBNull.Value;
             }, expectMessageOutput: true); // ✅ هنا true عشان نقرأ رسالة Msg الراجعة من الإجراء
         }
-
 
         // حذف تفاصيل
         public static string Acc_DeleteDetails(int DetailID)
@@ -1814,6 +1810,7 @@ END
         }
 
         #endregion
+
         #region @@@@ Cheque Batches @@@@
 
         //// جلب الحافظات حسب النوع

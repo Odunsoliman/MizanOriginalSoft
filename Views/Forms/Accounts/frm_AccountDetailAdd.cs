@@ -63,6 +63,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             txtEmail.Text = row["Email"]?.ToString() ?? string.Empty;
             txtAddress.Text = row["Address"]?.ToString() ?? string.Empty;
             txtNotes.Text = row["Notes"]?.ToString() ?? string.Empty;
+
         }
 
         /// <summary>

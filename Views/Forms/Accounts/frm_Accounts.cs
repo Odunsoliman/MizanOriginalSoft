@@ -934,23 +934,39 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // زر التنقل بين التفاصيل
         private void btnNextDetail_Click(object sender, EventArgs e)
         {
-            if (dtDetails.Rows.Count == 0) return;
+            if (DGV.Rows.Count == 0) return;
 
-            currentDetailIndex++;
-            if (currentDetailIndex >= dtDetails.Rows.Count)
-                currentDetailIndex = 0; // يبدأ من الأول تاني
+            int nextIndex = 0;
 
-            ShowDetail(currentDetailIndex);
+            // لو فيه صف محدد حالياً → روح للصف اللي بعده
+            if (DGV.CurrentRow != null)
+            {
+                nextIndex = DGV.CurrentRow.Index + 1;
+
+                // لو وصلنا آخر صف → نرجع لأول صف
+                if (nextIndex >= DGV.Rows.Count)
+                    nextIndex = 0;
+            }
+
+            // تحديد الصف الجديد
+            DGV.ClearSelection();
+            DGV.Rows[nextIndex].Selected = true;
+            DGV.CurrentCell = DGV.Rows[nextIndex].Cells[0]; // خليه يركز على أول خلية مثلاً
+
+            // لو عندك دالة ShowDetail() بتعرض التفاصيل بناءً على السطر الحالي → استدعيها
+            ShowDetail(nextIndex);
         }
 
         // زر الإضافة
         private void btnAddDetail_Click(object sender, EventArgs e)
         {
-            // لازم يكون فيه صف متعلم في الجريد الخاص بالتفاصيل
-            if (dtDetails.Rows.Count == 0 || currentDetailIndex < 0) return;
+            if (DGV.CurrentRow == null) return; // لو مفيش صف مختار
 
-            DataRow row = dtDetails.Rows[currentDetailIndex];
-            int accID = Convert.ToInt32(row["AccID"]); // ← هنا بياخد الكود من الجريد مش من الشجرة
+            DataRowView? rowView = DGV.CurrentRow.DataBoundItem as DataRowView;
+            if (rowView == null) return;
+
+            DataRow row = rowView.Row;
+            int accID = Convert.ToInt32(row["AccID"]); // الكود من الصف المختار
 
             using (frm_AccountDetailAdd frm = new frm_AccountDetailAdd(accID))
             {
@@ -967,15 +983,37 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         // زر التعديل
+        // زر التعديل
         private void btnModifyDetail_Click(object sender, EventArgs e)
         {
-            if (dtDetails.Rows.Count == 0 || currentDetailIndex < 0) return;
+            if (DGV.CurrentRow == null || DGV.Rows.Count == 0)
+            {
+                MessageBox.Show("⚠️ لا يوجد سجل لتعديله.", "تنبيه",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            DataRow row = dtDetails.Rows[currentDetailIndex];
+            DataRowView? rowView = DGV.CurrentRow.DataBoundItem as DataRowView;
+            if (rowView == null)
+            {
+                MessageBox.Show("⚠️ لا يوجد بيانات صالحة للتعديل.", "تنبيه",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DataRow row = rowView.Row;
+
+            if (!row.Table.Columns.Contains("DetailID"))
+            {
+                MessageBox.Show("⚠️ العمود DetailID غير موجود في البيانات.", "خطأ",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             int accID = Convert.ToInt32(row["AccID"]);
             int detailID = Convert.ToInt32(row["DetailID"]);
 
-            using (frm_AccountDetailAdd frm = new frm_AccountDetailAdd(accID, detailID)) // تعديل باستخدام نفس الشاشة
+            using (frm_AccountDetailAdd frm = new frm_AccountDetailAdd(accID, detailID)) // نفس الشاشة للـ Edit
             {
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
@@ -989,42 +1027,75 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
+
         // زر الحذف
         private void btnDeleteDetail_Click(object sender, EventArgs e)
         {
-            if (dtDetails.Rows.Count == 0 || currentDetailIndex < 0) return;
-
-            DataRow row = dtDetails.Rows[currentDetailIndex];
-            int detailID = Convert.ToInt32(row["DetailID"]);
-            int accID = Convert.ToInt32(row["AccID"]);
-
-            var result = MessageBox.Show("هل تريد حذف هذا التفصيل؟",
-                                         "تأكيد الحذف",
-                                         MessageBoxButtons.YesNo,
-                                         MessageBoxIcon.Warning);
-
-            if (result == DialogResult.Yes)
+            try
             {
-                string resultMsg = DBServiecs.Acc_DeleteDetails(detailID);
-
-                if (!resultMsg.StartsWith("❌"))
+                // التحقق أولاً أن فيه بيانات في الجدول
+                if (DGV.Rows.Count == 0)
                 {
-                    MessageBox.Show(resultMsg, "تم الحذف", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    // إعادة تحميل تفاصيل الحساب لنفس الحساب
-                    Acc_GetDetails(accID);
-
-                    // الوقوف على نفس الحساب
-                    HighlightAndExpandNode(accID);
-                    HighlightRowByAccID(accID);
+                    MessageBox.Show("⚠️ لا يوجد أي تفاصيل للحذف.", "تنبيه",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
-                else
+
+                // التحقق من أن فيه صف محدد
+                if (DGV.CurrentRow == null)
                 {
-                    MessageBox.Show(resultMsg, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("⚠️ يرجى اختيار السجل المراد حذفه أولاً.", "تنبيه",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // الحصول على الصف المحدد
+                DataRowView? rowView = DGV.CurrentRow.DataBoundItem as DataRowView;
+                if (rowView == null)
+                {
+                    MessageBox.Show("⚠️ لا يمكن قراءة السجل المحدد.", "خطأ",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                DataRow row = rowView.Row;
+                int detailID = Convert.ToInt32(row["DetailID"]);
+                int accID = Convert.ToInt32(row["AccID"]);
+
+                // تأكيد الحذف
+                var result = MessageBox.Show("هل تريد حذف هذا التفصيل؟",
+                                             "تأكيد الحذف",
+                                             MessageBoxButtons.YesNo,
+                                             MessageBoxIcon.Warning);
+
+                if (result == DialogResult.Yes)
+                {
+                    string resultMsg = DBServiecs.Acc_DeleteDetails(detailID);
+
+                    if (!resultMsg.StartsWith("❌"))
+                    {
+                        MessageBox.Show(resultMsg, "تم الحذف",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // إعادة تحميل تفاصيل الحساب لنفس الحساب
+                        Acc_GetDetails(accID);
+
+                        // الوقوف على نفس الحساب في الشجرة والجريد
+                        HighlightAndExpandNode(accID);
+                        HighlightRowByAccID(accID);
+                    }
+                    else
+                    {
+                        MessageBox.Show(resultMsg, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"❌ حدث خطأ أثناء الحذف: {ex.Message}", "خطأ",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
 
         #endregion
 
