@@ -1690,6 +1690,18 @@ END
             return result ?? new DataTable();
         }
 
+
+        public static DataTable Acc_GetLeafChildren(int ParentAccID)
+        {
+            DataTable? result = dbHelper.ExecuteSelectQuery("Acc_GetLeafChildren", command =>
+            {
+                command.Parameters.Add("@ParentAccID", SqlDbType.Int).Value = ParentAccID;
+            });
+
+            return result ?? new DataTable();
+        }
+
+
         // إضافة حساب جديد
         public static string Acc_AddAccount(string AccName, int? ParentAccID, int? CreateByUserID)
         {

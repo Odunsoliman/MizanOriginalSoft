@@ -33,9 +33,13 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             DataTable dt = DBServiecs.Acc_GetChart() ?? new DataTable();
             if (dt.Rows.Count == 0) return;
 
-            foreach (DataRow row in dt.Rows)
+            // فلترة الحسابات التي لها أبناء فقط للشجرة
+            var parentRows = dt.AsEnumerable()
+                               .Where(r => r.Field<bool>("IsHasChildren") == true)
+                               .ToList();
+
+            foreach (DataRow row in parentRows)
             {
-                // تجاهل الصفوف غير الصالحة
                 if (row["FullPath"] == DBNull.Value || row["AccName"] == DBNull.Value || row["AccID"] == DBNull.Value)
                     continue;
 
@@ -46,7 +50,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     continue;
 
                 int level = GetLevelFromFullPath(fullPath);
-                TreeNode node = new TreeNode(accName) // ✅ عرض الاسم فقط
+                TreeNode node = new TreeNode(accName)
                 {
                     Tag = row
                 };
@@ -65,10 +69,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 }
             }
 
-            // ترتيب الشجرة بعد البناء
             SortTreeNodes(treeViewAccounts.Nodes);
-
-            treeViewAccounts.CollapseAll(); // نغلق كل العقد افتراضيًا
+            treeViewAccounts.CollapseAll();
         }
 
         // دالة مساعدة لإيجاد الأب
@@ -117,6 +119,22 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 SortTreeNodes(node.Nodes); // ترتيب الأبناء كمان
             }
         }
+        // اين يتم استدعاء الدالة LoadChildrenInDGV
+        private void LoadChildrenInDGV(int parentAccID)
+        {
+            DataTable dt = DBServiecs.Acc_GetLeafChildren(parentAccID); // هذه الدالة ترجع كل الأبناء
+            DGV.DataSource = dt.DefaultView;
+
+            // إظهار الأعمدة المطلوبة فقط
+            foreach (DataGridViewColumn col in DGV.Columns)
+            {
+                if (col.Name == "AccName" || col.Name == "Balance" || col.Name == "BalanceState")
+                    col.Visible = true;
+                else
+                    col.Visible = false;
+            }
+        }
+
         #endregion
 
         #region !!!!!! بحث فى الشجرة  !!!!!!!!
@@ -225,41 +243,48 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         private bool isHasDetails = false;
         // حقل على مستوى الفورم لتخزين الحساب المحدد
         private DataRow? selectedRow = null;
-
-        // حدث اختيار العقدة
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            // إذا لم يتم تحديد أي عقدة، اخرج من الدالة
             if (treeViewAccounts.SelectedNode == null) return;
 
-            TreeNode node = treeViewAccounts.SelectedNode;
+            TreeNode selectedNode = treeViewAccounts.SelectedNode;
 
-            if (node.Tag is not DataRow row) return;
+            // التأكد أن الـ Tag يحتوي على DataRow
+            if (selectedNode.Tag is not DataRow row) return;
 
-            selectedRow = row; // خزنا الصف المحدد
-
-            string? accID = row["AccID"].ToString();
-            string? accName = row["AccName"].ToString();
+            // 🔹 استخراج معرف الحساب وخصائصه بشكل آمن
+            int currentAccID = row.Field<int>("AccID");
+            string accName = row["AccName"]?.ToString() ?? string.Empty;
             int? parentAccID = row["ParentAccID"] == DBNull.Value ? (int?)null : Convert.ToInt32(row["ParentAccID"]);
-
-            bool isHasChildren = Convert.ToBoolean(row["IsHasChildren"]);
-            bool isHasDetails = row.Field<bool?>("IsHasDetails") ?? false;
+            bool hasChildren = row.Field<bool?>("IsHasChildren") ?? false;
+            bool hasDetails = row.Field<bool?>("IsHasDetails") ?? false;
             bool isEnerAcc = row.Field<bool?>("IsEnerAcc") ?? false;
+            bool isHidden = row.Field<bool?>("IsHidden") ?? false;
 
-            bool isHidden = Convert.ToBoolean(row["IsHidden"]);
+            string balance = row["Balance"]?.ToString() ?? string.Empty;
+            string balanceState = row["BalanceState"]?.ToString() ?? string.Empty;
+            string dateOfJoin = row["DateOfJoin"]?.ToString() ?? string.Empty;
 
-            string balance = row["Balance"].ToString() ?? string.Empty;
-            string balanceState = row["BalanceState"].ToString() ?? string.Empty;
-            string dateOfJoin = row["DateOfJoin"].ToString() ?? string.Empty;
+            // 🔹 تحديث الـ DGV حسب وجود أبناء
+            if (hasChildren)
+            {
+                LoadChildrenInDGV(currentAccID);
+            }
+            else
+            {
+                DGV.DataSource = null;
+            }
 
-            // عرض رقم الحساب واسم الحساب
-            lblSelectedTreeNod.Text = accID + " - " + accName;
+            // 🔹 حفظ الصف المحدد
+            selectedRow = row;
 
-            // عرض المسار الكامل بالأسماء
-            lblPathNode.Text = GetFullPathFromNode(node);
-            int accIDInt = Convert.ToInt32(accID);
+            // 🔹 تحديث التسمية للعرض
+            lblSelectedTreeNod.Text = $"{currentAccID} - {accName}";
+            lblPathNode.Text = GetFullPathFromNode(selectedNode);
 
-            // التحقق من إمكانية إضافة حساب فرعي
-            bool canAddChild = !(isEnerAcc && !isHasChildren);
+            // 🔹 التحقق من إمكانية إضافة حساب فرعي
+            bool canAddChild = !(isEnerAcc && !hasChildren);
             txtAccName.Enabled = canAddChild;
 
             if (!canAddChild)
@@ -284,29 +309,23 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 btnSave.Visible = true;
             }
 
-            if (isHasChildren)
-            {
-                lblIsHasChildren.Text = "";
-            }
-            else
-            {
-                lblIsHasChildren.Text = "هذا الحساب مازال ليس له فروع ";
-            }
-            // 🔹 تحقق إذا أي من الآباء (الجدود) هو 12 (الأصول الثابتة)
+            lblIsHasChildren.Text = hasChildren ? "" : "هذا الحساب مازال ليس له فروع";
+
+            // 🔹 التحقق من وجود أي من الآباء معرفه 12 (الأصول الثابتة)
             bool hasFixedAssetParent = false;
-            TreeNode? current = node;
-            while (current != null)
+            TreeNode? currentNode = selectedNode;
+            while (currentNode != null)
             {
-                if (current.Tag is DataRow parentRow && Convert.ToInt32(parentRow["AccID"]) == 12)
+                if (currentNode.Tag is DataRow parentRow && Convert.ToInt32(parentRow["AccID"]) == 12)
                 {
                     hasFixedAssetParent = true;
                     break;
                 }
-                current = current.Parent;
+                currentNode = currentNode.Parent;
             }
 
-            // التعامل مع البيانات التفصيلية
-            if (isHasDetails)
+            // 🔹 التعامل مع البيانات التفصيلية
+            if (hasDetails)
             {
                 tlpData.Visible = true;
                 btnDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
@@ -337,8 +356,139 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 tlpData.Visible = false;
             }
 
+            // 🔹 تحميل التقارير الخاصة بالحساب المحدد
             LoadReportsForSelectedAccount();
         }
+
+        // حدث اختيار العقدة
+        //private void treeViewAccounts_AfterSelect__(object sender, TreeViewEventArgs e)
+        //{
+        //    if (treeViewAccounts.SelectedNode == null) return;
+
+        //    TreeNode node = treeViewAccounts.SelectedNode;
+
+            
+        //    if (e.Node?.Tag is not DataRow row) return;
+
+        //    int parentAccID = row.Field<int>("AccID");
+
+        //    // إذا الحساب له أبناء فقط (IsHasChildren = true)
+        //    bool isHasChildren = row.Field<bool>("IsHasChildren");
+        //    if (isHasChildren)
+        //    {
+        //        LoadChildrenInDGV(parentAccID);
+        //    }
+        //    else
+        //    {
+        //        // إذا الحساب ليس له أبناء، فرغ الـ DGV
+        //        DGV.DataSource = null;
+        //    }
+        //    /*اين الخطأ*/
+
+        //    selectedRow = row; // خزنا الصف المحدد
+
+        //    string? accID = row["AccID"].ToString();
+        //    string? accName = row["AccName"].ToString();
+        //    int? parentAccID = row["ParentAccID"] == DBNull.Value ? (int?)null : Convert.ToInt32(row["ParentAccID"]);
+
+        //    bool isHasChildren = Convert.ToBoolean(row["IsHasChildren"]);
+        //    bool isHasDetails = row.Field<bool?>("IsHasDetails") ?? false;
+        //    bool isEnerAcc = row.Field<bool?>("IsEnerAcc") ?? false;
+
+        //    bool isHidden = Convert.ToBoolean(row["IsHidden"]);
+
+        //    string balance = row["Balance"].ToString() ?? string.Empty;
+        //    string balanceState = row["BalanceState"].ToString() ?? string.Empty;
+        //    string dateOfJoin = row["DateOfJoin"].ToString() ?? string.Empty;
+
+        //    // عرض رقم الحساب واسم الحساب
+        //    lblSelectedTreeNod.Text = accID + " - " + accName;
+
+        //    // عرض المسار الكامل بالأسماء
+        //    lblPathNode.Text = GetFullPathFromNode(node);
+        //    int accIDInt = Convert.ToInt32(accID);
+
+        //    // التحقق من إمكانية إضافة حساب فرعي
+        //    bool canAddChild = !(isEnerAcc && !isHasChildren);
+        //    txtAccName.Enabled = canAddChild;
+
+        //    if (!canAddChild)
+        //    {
+        //        txtAccName.Clear();
+        //        lblParentAccName.Text = "لا يمكن اضافة حسابات فرعية هنا فهذا حساب نهائى";
+        //        lblParentAccName.ForeColor = Color.Red;
+
+        //        chkIsHasChildren.Enabled = false;
+
+        //        tlpData.Visible = false;
+        //        btnNew.Visible = false;
+        //        btnSave.Visible = false;
+        //    }
+        //    else
+        //    {
+        //        lblParentAccName.Text = accName;
+        //        lblParentAccName.ForeColor = Color.Gray;
+        //        chkIsHasChildren.Enabled = true;
+
+        //        btnNew.Visible = true;
+        //        btnSave.Visible = true;
+        //    }
+
+        //    if (isHasChildren)
+        //    {
+        //        lblIsHasChildren.Text = "";
+        //    }
+        //    else
+        //    {
+        //        lblIsHasChildren.Text = "هذا الحساب مازال ليس له فروع ";
+        //    }
+        //    // 🔹 تحقق إذا أي من الآباء (الجدود) هو 12 (الأصول الثابتة)
+        //    bool hasFixedAssetParent = false;
+        //    TreeNode? current = node;
+        //    while (current != null)
+        //    {
+        //        if (current.Tag is DataRow parentRow && Convert.ToInt32(parentRow["AccID"]) == 12)
+        //        {
+        //            hasFixedAssetParent = true;
+        //            break;
+        //        }
+        //        current = current.Parent;
+        //    }
+
+        //    // التعامل مع البيانات التفصيلية
+        //    if (isHasDetails)
+        //    {
+        //        tlpData.Visible = true;
+        //        btnDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
+
+        //        // إعادة ضبط نسب الصفوف
+        //        tlpData.RowStyles[0].SizeType = SizeType.Percent;
+        //        tlpData.RowStyles[0].Height = 10; // الصف الأول ثابت 10%
+
+        //        if (btnDetails.Text == "بيانات شخصية")
+        //        {
+        //            tlpData.RowStyles[1].SizeType = SizeType.Percent;
+        //            tlpData.RowStyles[1].Height = 90;
+
+        //            tlpData.RowStyles[2].SizeType = SizeType.Percent;
+        //            tlpData.RowStyles[2].Height = 0;
+        //        }
+        //        else // بيانات الأصل الثابت
+        //        {
+        //            tlpData.RowStyles[1].SizeType = SizeType.Percent;
+        //            tlpData.RowStyles[1].Height = 0;
+
+        //            tlpData.RowStyles[2].SizeType = SizeType.Percent;
+        //            tlpData.RowStyles[2].Height = 90;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        tlpData.Visible = false;
+        //    }
+
+        //    LoadReportsForSelectedAccount();
+        //}
 
         private bool isSearchActive = false;// هذا المغيير للتعطيل المؤقت عند البحث
 
