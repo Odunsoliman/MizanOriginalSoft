@@ -853,12 +853,25 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     Convert.ToInt32(row.Cells["AccID"].Value) == accID)
                 {
                     row.Selected = true;
-                    DGV.CurrentCell = row.Cells[0]; // ينقل المؤشر لأول خلية في الصف
-                    DGV.FirstDisplayedScrollingRowIndex = row.Index; // يضمن ظهور الصف
+
+                    // 🔹 إيجاد أول عمود ظاهر
+                    DataGridViewColumn? firstVisibleColumn = DGV.Columns
+                        .Cast<DataGridViewColumn>()
+                        .FirstOrDefault(c => c.Visible);
+
+                    if (firstVisibleColumn != null)
+                    {
+                        row.Cells[firstVisibleColumn.Index].Selected = true;
+                        DGV.CurrentCell = row.Cells[firstVisibleColumn.Index];
+                    }
+
+                    // 🔹 يضمن ظهور الصف في الشاشة
+                    DGV.FirstDisplayedScrollingRowIndex = row.Index;
                     break;
                 }
             }
         }
+
 
         DataTable dtDetails = new DataTable();
         int currentDetailIndex = -1;
@@ -934,27 +947,21 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // زر التنقل بين التفاصيل
         private void btnNextDetail_Click(object sender, EventArgs e)
         {
-            if (DGV.Rows.Count == 0) return;
-
-            int nextIndex = 0;
-
-            // لو فيه صف محدد حالياً → روح للصف اللي بعده
-            if (DGV.CurrentRow != null)
+            if (dtDetails == null || dtDetails.Rows.Count == 0)
             {
-                nextIndex = DGV.CurrentRow.Index + 1;
-
-                // لو وصلنا آخر صف → نرجع لأول صف
-                if (nextIndex >= DGV.Rows.Count)
-                    nextIndex = 0;
+                MessageBox.Show("لا توجد تفاصيل لعرضها", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
 
-            // تحديد الصف الجديد
-            DGV.ClearSelection();
-            DGV.Rows[nextIndex].Selected = true;
-            DGV.CurrentCell = DGV.Rows[nextIndex].Cells[0]; // خليه يركز على أول خلية مثلاً
+            // التحرك للسجل التالي
+            currentDetailIndex++;
 
-            // لو عندك دالة ShowDetail() بتعرض التفاصيل بناءً على السطر الحالي → استدعيها
-            ShowDetail(nextIndex);
+            // في حالة الوصول لآخر سجل → ارجع لأول واحد
+            if (currentDetailIndex >= dtDetails.Rows.Count)
+                currentDetailIndex = 0;
+
+            // عرض التفاصيل على الليبلز
+            ShowDetail(currentDetailIndex);
         }
 
         // زر الإضافة
@@ -1114,8 +1121,114 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
+        private void btnTestInput_Click(object sender, EventArgs e)
+        {
+            string userInput;
+
+            // استدعاء الرسالة
+            DialogResult result = CustomMessageBox.ShowStringInputBox(out userInput,
+                                                     "من فضلك أدخل اسم الحساب:",
+                                                     "إدخال نص");
+
+            if (result == DialogResult.OK)
+            {
+                MessageBox.Show("النص المدخل هو: " + userInput,
+                                "تم الإدخال",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("تم إلغاء الإدخال",
+                                "إلغاء",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+            }
+        }
+
+
+        private void AddChildren()
+        {
+            // 1️⃣ التأكد أن فيه صف محدد في الجريد
+            if (DGV.CurrentRow == null)
+            {
+                MessageBox.Show("يجب اختيار حساب من الجدول لإضافة حساب فرعي له.",
+                                "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DataRowView? rowView = DGV.CurrentRow.DataBoundItem as DataRowView;
+            if (rowView == null) return;
+
+            DataRow row = rowView.Row;
+            int ParentAccID = Convert.ToInt32(row["AccID"]); // الأب من الجريد
+
+            // 2️⃣ إدخال اسم الحساب الجديد
+            string userInput;
+            DialogResult inputResult = CustomMessageBox.ShowStringInputBox(
+                out userInput,
+                "من فضلك أدخل اسم الحساب:",
+                "إضافة حساب فرعي"
+            );
+
+            if (inputResult != DialogResult.OK || string.IsNullOrWhiteSpace(userInput))
+            {
+                MessageBox.Show("تم إلغاء الإضافة أو لم يتم إدخال اسم صالح.",
+                                "إلغاء", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            string AccName = userInput.Trim();
+            int CreateByUserID = CurrentSession.UserID;
+
+            // 3️⃣ استدعاء الإجراء المخزن لإضافة الحساب
+            string result = DBServiecs.Acc_AddAccount(AccName, ParentAccID, CreateByUserID);
+
+            // 4️⃣ التحقق من النتيجة
+            if (result.StartsWith("تم")) // العملية نجحت
+            {
+                MessageBox.Show("تم حفظ الحساب بنجاح ✅",
+                                "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // 🟢 إعادة تحميل الشجرة
+                LoadAccountsTree();
+
+                // 🟢 البحث عن العقدة الأب (ParentAccID)
+                TreeNode? parentNode = FindNodeByAccID(treeViewAccounts.Nodes, ParentAccID);
+
+                if (parentNode != null)
+                {
+                    // فتح الأب
+                    parentNode.Expand();
+
+                    // البحث عن العقدة المضافة باسمها الجديد تحت الأب
+                    TreeNode? newNode = parentNode.Nodes
+                                                  .Cast<TreeNode>()
+                                                  .FirstOrDefault(n => n.Text == AccName);
+
+                    if (newNode != null)
+                    {
+                        treeViewAccounts.SelectedNode = newNode;
+                        newNode.EnsureVisible(); // يخليها تظهر
+                    }
+                }
+
+                // 🟢 تحديث عرض الجريد
+                HighlightAndExpandNode(ParentAccID);
+                HighlightRowByAccID(ParentAccID);
+            }
+            else
+            {
+                MessageBox.Show("فشل في الحفظ ❌\n" + result,
+                                "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnStripAddChildren_Click(object sender, EventArgs e)
+        {
+            AddChildren();
+        }
+
         #endregion
-
-
     }
 }

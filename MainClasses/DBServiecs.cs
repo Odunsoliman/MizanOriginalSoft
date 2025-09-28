@@ -1771,7 +1771,7 @@ END
                 command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = (object?)Email ?? DBNull.Value;
                 command.Parameters.Add("@Address", SqlDbType.NVarChar).Value = (object?)Address ?? DBNull.Value;
                 command.Parameters.Add("@Notes", SqlDbType.NVarChar).Value = (object?)Notes ?? DBNull.Value;
-            }, expectMessageOutput: true); // ✅ هنا true عشان نقرأ رسالة Msg الراجعة من الإجراء
+            }, expectMessageOutput: false ); // ✅ هنا true عشان نقرأ رسالة Msg الراجعة من الإجراء
         }
 
         // حذف تفاصيل

@@ -34,7 +34,7 @@
             tableLayoutPanel13 = new TableLayoutPanel();
             label7 = new Label();
             txtSearch = new TextBox();
-            btnStripChangeCat = new ToolStripMenuItem();
+            btnStripAddChildren = new ToolStripMenuItem();
             contextMenuDGV = new ContextMenuStrip(components);
             DGV = new DataGridView();
             tableLayoutPanel7 = new TableLayoutPanel();
@@ -219,15 +219,16 @@
             txtSearch.TabStop = false;
             txtSearch.TextAlign = HorizontalAlignment.Center;
             // 
-            // btnStripChangeCat
+            // btnStripAddChildren
             // 
-            btnStripChangeCat.Name = "btnStripChangeCat";
-            btnStripChangeCat.Size = new Size(229, 22);
-            btnStripChangeCat.Text = "تغير التصنيف الى حساب خارجى";
+            btnStripAddChildren.Name = "btnStripAddChildren";
+            btnStripAddChildren.Size = new Size(229, 22);
+            btnStripAddChildren.Text = "تغير التصنيف الى حساب خارجى";
+            btnStripAddChildren.Click += btnStripAddChildren_Click;
             // 
             // contextMenuDGV
             // 
-            contextMenuDGV.Items.AddRange(new ToolStripItem[] { btnStripChangeCat });
+            contextMenuDGV.Items.AddRange(new ToolStripItem[] { btnStripAddChildren });
             contextMenuDGV.Name = "contextMenuDGV";
             contextMenuDGV.RightToLeft = RightToLeft.Yes;
             contextMenuDGV.Size = new Size(230, 26);
@@ -1673,7 +1674,7 @@
         private TableLayoutPanel tableLayoutPanel13;
         private Label label7;
         private TextBox txtSearch;
-        private ToolStripMenuItem btnStripChangeCat;
+        private ToolStripMenuItem btnStripAddChildren;
         private ContextMenuStrip contextMenuDGV;
         private DataGridView DGV;
         private TableLayoutPanel tableLayoutPanel7;
