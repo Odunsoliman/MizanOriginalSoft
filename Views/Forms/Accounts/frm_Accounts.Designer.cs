@@ -1053,7 +1053,7 @@
             lblNameNod.AutoSize = true;
             lblNameNod.Dock = DockStyle.Fill;
             lblNameNod.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblNameNod.ForeColor = Color.FromArgb(0, 0, 192);
+            lblNameNod.ForeColor = Color.Red;
             lblNameNod.Location = new Point(4, 27);
             lblNameNod.Margin = new Padding(4, 0, 4, 0);
             lblNameNod.Name = "lblNameNod";
