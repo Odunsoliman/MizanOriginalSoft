@@ -837,5 +837,195 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             TextRenderer.DrawText(e.Graphics, e.Node!.Text, nodeFont, e.Bounds, foreColor);
 
         }
+
+        #region !!!!!! تفاصيل الحساب (الأبناء) !!!!!!! 
+        /// <summary>
+        /// يحدد الصف داخل الـ DGV بناءً على رقم الحساب AccID.
+        /// </summary>
+        private void HighlightRowByAccID(int accID)
+        {
+            if (DGV == null || DGV.Rows.Count == 0)
+                return;
+
+            foreach (DataGridViewRow row in DGV.Rows)
+            {
+                if (row.Cells["AccID"].Value != null &&
+                    Convert.ToInt32(row.Cells["AccID"].Value) == accID)
+                {
+                    row.Selected = true;
+                    DGV.CurrentCell = row.Cells[0]; // ينقل المؤشر لأول خلية في الصف
+                    DGV.FirstDisplayedScrollingRowIndex = row.Index; // يضمن ظهور الصف
+                    break;
+                }
+            }
+        }
+
+        DataTable dtDetails = new DataTable();
+        int currentDetailIndex = -1;
+
+        // تحميل تفاصيل الحساب لرقم معين
+        private void Acc_GetDetails(int accID)
+        {
+            dtDetails = DBServiecs.Acc_GetDetails(accID);
+            currentDetailIndex = dtDetails.Rows.Count > 0 ? 0 : -1;
+
+            if (currentDetailIndex >= 0)
+                ShowDetail(currentDetailIndex);
+            else
+                ClearDetailFields();
+        }
+
+        // عرض سجل تفصيلي معين
+        private void ShowDetail(int index)
+        {
+            if (dtDetails.Rows.Count == 0 || index < 0 || index >= dtDetails.Rows.Count)
+                return;
+
+            DataRow row = dtDetails.Rows[index];
+
+            int detailID = Convert.ToInt32(row["DetailID"]); // لو محتاجه لعمليات أخرى
+            lblContactName.Text = row["ContactName"].ToString();
+
+            string phone = row["Phone"]?.ToString() ?? "";
+            string mobile = row["Mobile"]?.ToString() ?? "";
+
+            if (!string.IsNullOrEmpty(phone) && !string.IsNullOrEmpty(mobile))
+                lblPhonAndAnther.Text = $"هواتف: {mobile} + {phone}";
+            else if (!string.IsNullOrEmpty(mobile))
+                lblPhonAndAnther.Text = $"هاتف: {mobile}";
+            else if (!string.IsNullOrEmpty(phone))
+                lblPhonAndAnther.Text = $"هاتف: {phone}";
+            else
+                lblPhonAndAnther.Text = "";
+
+            lblClientEmail.Text = row["Email"].ToString();
+            lblClientAddress.Text = row["Address"].ToString();
+            lblAccDetailNote.Text = row["Notes"].ToString();
+            DateTime? createdDate = row["CreatedDate"] == DBNull.Value
+                ? (DateTime?)null
+                : Convert.ToDateTime(row["CreatedDate"]);
+
+            DateTime? modifiedDate = row["ModifiedDate"] == DBNull.Value
+                ? (DateTime?)null
+                : Convert.ToDateTime(row["ModifiedDate"]);
+
+            string createdText = createdDate.HasValue
+                ? $"تاريخ الإنشاء: {createdDate:yyyy/MM/dd HH:mm}"
+                : "تاريخ الإنشاء: غير متوفر";
+
+            string modifiedText = modifiedDate.HasValue
+                ? $"تاريخ التعديل: {modifiedDate:yyyy/MM/dd HH:mm}"
+                : "تاريخ التعديل: غير متوفر";
+
+            lblCreateAndModifyDate.Text = $"{createdText}\n{modifiedText}";
+
+        }
+
+        // تنظيف الحقول عند عدم وجود بيانات
+        private void ClearDetailFields()
+        {
+            lblContactName.Text = "";
+            lblPhonAndAnther.Text = "";
+            lblClientEmail.Text = "";
+            lblClientAddress.Text = "";
+            lblAccDetailNote.Text = "";
+            lblCreateAndModifyDate.Text = "";
+        }
+        // زر التنقل بين التفاصيل
+        private void btnNextDetail_Click(object sender, EventArgs e)
+        {
+            if (dtDetails.Rows.Count == 0) return;
+
+            currentDetailIndex++;
+            if (currentDetailIndex >= dtDetails.Rows.Count)
+                currentDetailIndex = 0; // يبدأ من الأول تاني
+
+            ShowDetail(currentDetailIndex);
+        }
+
+        // زر الإضافة
+        private void btnAddDetail_Click(object sender, EventArgs e)
+        {
+            if (treeViewAccounts.SelectedNode?.Tag is not DataRow row) return;
+
+            int accID = Convert.ToInt32(row["AccID"]);
+
+            using (frm_AccountDetailAdd frm = new frm_AccountDetailAdd(accID))
+            {
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    // بعد الإضافة → إعادة تحميل البيانات
+                    Acc_GetDetails(accID);
+
+                    // الوقوف على نفس الحساب
+                    HighlightAndExpandNode(accID);
+                    HighlightRowByAccID(accID);
+                }
+            }
+        }
+
+        // زر التعديل
+        private void btnModifyDetail_Click(object sender, EventArgs e)
+        {
+            if (dtDetails.Rows.Count == 0 || currentDetailIndex < 0) return;
+
+            DataRow row = dtDetails.Rows[currentDetailIndex];
+            int accID = Convert.ToInt32(row["AccID"]);
+            int detailID = Convert.ToInt32(row["DetailID"]);
+
+            using (frm_AccountDetailAdd frm = new frm_AccountDetailAdd(accID, detailID)) // تعديل باستخدام نفس الشاشة
+            {
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    // بعد التعديل → إعادة تحميل البيانات
+                    Acc_GetDetails(accID);
+
+                    // الوقوف على نفس الحساب في الشجرة والجريد
+                    HighlightAndExpandNode(accID);
+                    HighlightRowByAccID(accID);
+                }
+            }
+        }
+
+        // زر الحذف
+        private void btnDeleteDetail_Click(object sender, EventArgs e)
+        {
+            if (dtDetails.Rows.Count == 0 || currentDetailIndex < 0) return;
+
+            DataRow row = dtDetails.Rows[currentDetailIndex];
+            int detailID = Convert.ToInt32(row["DetailID"]);
+            int accID = Convert.ToInt32(row["AccID"]);
+
+            var result = MessageBox.Show("هل تريد حذف هذا التفصيل؟",
+                                         "تأكيد الحذف",
+                                         MessageBoxButtons.YesNo,
+                                         MessageBoxIcon.Warning);
+
+            if (result == DialogResult.Yes)
+            {
+                string resultMsg = DBServiecs.Acc_DeleteDetails(detailID);
+
+                if (!resultMsg.StartsWith("❌"))
+                {
+                    MessageBox.Show(resultMsg, "تم الحذف", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // إعادة تحميل تفاصيل الحساب لنفس الحساب
+                    Acc_GetDetails(accID);
+
+                    // الوقوف على نفس الحساب
+                    HighlightAndExpandNode(accID);
+                    HighlightRowByAccID(accID);
+                }
+                else
+                {
+                    MessageBox.Show(resultMsg, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+
+        #endregion
+
+
     }
 }

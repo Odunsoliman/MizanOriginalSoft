@@ -1757,7 +1757,62 @@ END
             }, expectMessageOutput: false);
         }
 
-        // 
+
+
+        // إضافة أو تعديل تفاصيل الحساب
+        public static string Acc_SaveDetails(int? DetailID, int AccID, string? ContactName,
+                                             string? Phone, string? Mobile, string? Email,
+                                             string? Address, string? Notes)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("Acc_SaveDetails", command =>
+            {
+                command.Parameters.Add("@DetailID", SqlDbType.Int).Value = (object?)DetailID ?? DBNull.Value;
+                command.Parameters.Add("@AccID", SqlDbType.Int).Value = AccID;
+                command.Parameters.Add("@ContactName", SqlDbType.NVarChar).Value = (object?)ContactName ?? DBNull.Value;
+                command.Parameters.Add("@Phone", SqlDbType.NVarChar).Value = (object?)Phone ?? DBNull.Value;
+                command.Parameters.Add("@Mobile", SqlDbType.NVarChar).Value = (object?)Mobile ?? DBNull.Value;
+                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = (object?)Email ?? DBNull.Value;
+                command.Parameters.Add("@Address", SqlDbType.NVarChar).Value = (object?)Address ?? DBNull.Value;
+                command.Parameters.Add("@Notes", SqlDbType.NVarChar).Value = (object?)Notes ?? DBNull.Value;
+            }, expectMessageOutput: true); // ✅ هنا true عشان نقرأ رسالة Msg الراجعة من الإجراء
+        }
+
+
+        // حذف تفاصيل
+        public static string Acc_DeleteDetails(int DetailID)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("Acc_DeleteDetails", command =>
+            {
+                command.Parameters.Add("@DetailID", SqlDbType.Int).Value = DetailID;
+            }, expectMessageOutput: false);
+        }
+
+        // جلب جميع التفاصيل لحساب معين
+        public static DataTable Acc_GetDetails(int AccID)
+        {
+            DataTable? result = dbHelper.ExecuteSelectQuery("Acc_GetDetails", command =>
+            {
+                command.Parameters.Add("@AccID", SqlDbType.Int).Value = AccID;
+            });
+            return result ?? new DataTable();
+        }
+
+        // تحديث تفاصيل
+        public static string Acc_UpdateDetails(int DetailID, string? ContactName, string? Phone,
+                                               string? Mobile, string? Email, string? Address, string? Notes)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("Acc_UpdateDetails", command =>
+            {
+                command.Parameters.Add("@DetailID", SqlDbType.Int).Value = DetailID;
+                command.Parameters.Add("@ContactName", SqlDbType.NVarChar).Value = (object?)ContactName ?? DBNull.Value;
+                command.Parameters.Add("@Phone", SqlDbType.NVarChar).Value = (object?)Phone ?? DBNull.Value;
+                command.Parameters.Add("@Mobile", SqlDbType.NVarChar).Value = (object?)Mobile ?? DBNull.Value;
+                command.Parameters.Add("@Email", SqlDbType.NVarChar).Value = (object?)Email ?? DBNull.Value;
+                command.Parameters.Add("@Address", SqlDbType.NVarChar).Value = (object?)Address ?? DBNull.Value;
+                command.Parameters.Add("@Notes", SqlDbType.NVarChar).Value = (object?)Notes ?? DBNull.Value;
+            }, expectMessageOutput: false);
+        }
+
         #endregion
         #region @@@@ Cheque Batches @@@@
 
