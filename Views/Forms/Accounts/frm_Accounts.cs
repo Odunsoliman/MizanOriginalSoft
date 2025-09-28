@@ -24,6 +24,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         {
             LoadAccountsTree();
             SetupMenuStrip();
+            // ضبط ارتفاع السطر بحيث يكفي لو الخط كبر
+            treeViewAccounts.ItemHeight = treeViewAccounts.Font.Height + 6;
         }
         #region !!!!!!! بناء الشجرة  !!!!!!!
         private void LoadAccountsTree()
@@ -320,7 +322,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             
             // عدل مظهرها (أحمر + حجم أكبر + Bold)
             activeNode.NodeFont = new Font(treeViewAccounts.Font.FontFamily,
-                                           treeViewAccounts.Font.Size + 1,
+                                           treeViewAccounts.Font.Size + 1,//لماذا عندما يكبر الخط تختفى بعض حروفه الاخيرة
                                            FontStyle.Bold);
             activeNode.ForeColor = Color.Red;
 
