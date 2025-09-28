@@ -960,14 +960,31 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // زر الإضافة
         private void btnAddDetail_Click(object sender, EventArgs e)
         {
-            if (DGV.CurrentRow == null) return; // لو مفيش صف مختار
+            // التحقق أولاً من اختيار صف
+            if (DGV.CurrentRow == null)
+            {
+                MessageBox.Show("يجب تحديد حساب من الجدول قبل إضافة تفاصيل.",
+                                "تنبيه",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                return;
+            }
 
+            // الحصول على الصف المحدد
             DataRowView? rowView = DGV.CurrentRow.DataBoundItem as DataRowView;
-            if (rowView == null) return;
+            if (rowView == null)
+            {
+                MessageBox.Show("لم يتم العثور على بيانات صالحة للصف المحدد.",
+                                "خطأ",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                return;
+            }
 
             DataRow row = rowView.Row;
-            int accID = Convert.ToInt32(row["AccID"]); // الكود من الصف المختار
+            int accID = Convert.ToInt32(row["AccID"]); // جلب معرف الحساب
 
+            // فتح شاشة إضافة التفاصيل وتمرير accID
             using (frm_AccountDetailAdd frm = new frm_AccountDetailAdd(accID))
             {
                 if (frm.ShowDialog() == DialogResult.OK)
