@@ -842,9 +842,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         #endregion
 
         #region !!!!!! تفاصيل الحساب (الأبناء) !!!!!!! 
-        /// <summary>
-        /// يحدد الصف داخل الـ DGV بناءً على رقم الحساب AccID.
-        /// </summary>
+
+        // يحدد الصف داخل الـ DGV بناءً على رقم الحساب AccID.
         private void HighlightRowByAccID(int accID)
         {
             if (DGV == null || DGV.Rows.Count == 0)
@@ -876,20 +875,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
 
-        DataTable dtDetails = new DataTable();
-        int currentDetailIndex = -1;
 
-        // تحميل تفاصيل الحساب لرقم معين
-        private void Acc_GetDetails(int accID)
-        {
-            dtDetails = DBServiecs.Acc_GetDetails(accID);
-            currentDetailIndex = dtDetails.Rows.Count > 0 ? 0 : -1;
-
-            if (currentDetailIndex >= 0)
-                ShowDetail(currentDetailIndex);
-            else
-                ClearDetailFields();
-        }
 
         // عرض سجل تفصيلي معين
         private void ShowDetail(int index)
@@ -947,6 +933,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             lblAccDetailNote.Text = "";
             lblCreateAndModifyDate.Text = "";
         }
+ 
         // زر التنقل بين التفاصيل
         private void btnNextDetail_Click(object sender, EventArgs e)
         {
@@ -1009,42 +996,41 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        // زر التعديل
+        DataTable dtDetails = new DataTable();
+        int currentDetailIndex = -1;
+
+        // تحميل تفاصيل الحساب لرقم معين
+        private void Acc_GetDetails(int accID)
+        {
+            dtDetails = DBServiecs.Acc_GetDetails(accID);
+            currentDetailIndex = dtDetails.Rows.Count > 0 ? 0 : -1;
+
+            if (currentDetailIndex >= 0)
+                ShowDetail(currentDetailIndex);
+            else
+                ClearDetailFields();
+        }
+
         // زر التعديل
         private void btnModifyDetail_Click(object sender, EventArgs e)
         {
-            if (DGV.CurrentRow == null || DGV.Rows.Count == 0)
+            if (dtDetails == null || dtDetails.Rows.Count == 0 || currentDetailIndex < 0)
             {
-                MessageBox.Show("⚠️ لا يوجد سجل لتعديله.", "تنبيه",
+                MessageBox.Show("⚠️ لا يوجد تفاصيل لتعديلها.", "تنبيه",
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            DataRowView? rowView = DGV.CurrentRow.DataBoundItem as DataRowView;
-            if (rowView == null)
-            {
-                MessageBox.Show("⚠️ لا يوجد بيانات صالحة للتعديل.", "تنبيه",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            DataRow row = rowView.Row;
-
-            if (!row.Table.Columns.Contains("DetailID"))
-            {
-                MessageBox.Show("⚠️ العمود DetailID غير موجود في البيانات.", "خطأ",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            DataRow row = dtDetails.Rows[currentDetailIndex]; // من جدول التفاصيل مش الجريد
 
             int accID = Convert.ToInt32(row["AccID"]);
             int detailID = Convert.ToInt32(row["DetailID"]);
 
-            using (frm_AccountDetailAdd frm = new frm_AccountDetailAdd(accID, detailID)) // نفس الشاشة للـ Edit
+            using (frm_AccountDetailAdd frm = new frm_AccountDetailAdd(accID, detailID))
             {
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
-                    // بعد التعديل → إعادة تحميل البيانات
+                    // بعد التعديل → إعادة تحميل التفاصيل
                     Acc_GetDetails(accID);
 
                     // الوقوف على نفس الحساب في الشجرة والجريد
@@ -1123,32 +1109,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private void btnTestInput_Click(object sender, EventArgs e)
-        {
-            string userInput;
-
-            // استدعاء الرسالة
-            DialogResult result = CustomMessageBox.ShowStringInputBox(out userInput,
-                                                     "من فضلك أدخل اسم الحساب:",
-                                                     "إدخال نص");
-
-            if (result == DialogResult.OK)
-            {
-                MessageBox.Show("النص المدخل هو: " + userInput,
-                                "تم الإدخال",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("تم إلغاء الإدخال",
-                                "إلغاء",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
-            }
-        }
-
 
         private void AddChildren()
         {
