@@ -320,7 +320,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             
             // عدل مظهرها (أحمر + حجم أكبر + Bold)
             activeNode.NodeFont = new Font(treeViewAccounts.Font.FontFamily,
-                                           treeViewAccounts.Font.Size + 2,
+                                           treeViewAccounts.Font.Size + 1,
                                            FontStyle.Bold);
             activeNode.ForeColor = Color.Red;
 
