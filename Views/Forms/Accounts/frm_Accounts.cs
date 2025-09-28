@@ -124,8 +124,20 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         {
             DataTable dt = DBServiecs.Acc_GetLeafChildren(parentAccID); // هذه الدالة ترجع كل الأبناء
             DGV.DataSource = dt.DefaultView;
+            DGVStyl();
+            
+        }
 
-            // إظهار الأعمدة المطلوبة فقط
+        private void DGVStyl()
+        {
+            // إعدادات عامة
+            DGV.ReadOnly = true;
+            DGV.AllowUserToAddRows = false;
+            DGV.AllowUserToDeleteRows = false;
+            DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            DGV.MultiSelect = false;
+            DGV.RowHeadersVisible = false;
+
             foreach (DataGridViewColumn col in DGV.Columns)
             {
                 if (col.Name == "AccName" || col.Name == "Balance" || col.Name == "BalanceState")
@@ -133,6 +145,42 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 else
                     col.Visible = false;
             }
+            
+            // تعيين خط عام
+            Font generalFont = new Font("Times New Roman", 14, FontStyle.Bold);
+            DGV.DefaultCellStyle.Font = generalFont;
+
+            // تنسيق رؤوس الأعمدة
+            DGV.ColumnHeadersDefaultCellStyle.Font = generalFont;
+            DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.Blue;
+            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGray;
+            DGV.ColumnHeadersHeight = 60;
+            DGV.EnableHeadersVisualStyles = false;
+
+            // تنسيق الأعمدة وتحديد أسماء المستخدم
+            foreach (DataGridViewColumn col in DGV.Columns)
+            {
+                col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+                switch (col.Name)
+                {
+                    case "Balance":
+                        col.HeaderText = "الرصيد";
+                        col.FillWeight = 15;
+                        break;
+                    case "BalanceState":
+                        col.HeaderText = "--";
+                        col.FillWeight = 15;
+                        break;
+                    case "AccName":
+                        col.HeaderText = "اسم الحساب";
+                        col.FillWeight = 20;
+                        break;
+                }
+            }
+
+            DGV.ClearSelection(); // إلغاء التحديد الافتراضي
         }
 
         #endregion
@@ -360,136 +408,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             LoadReportsForSelectedAccount();
         }
 
-        // حدث اختيار العقدة
-        //private void treeViewAccounts_AfterSelect__(object sender, TreeViewEventArgs e)
-        //{
-        //    if (treeViewAccounts.SelectedNode == null) return;
-
-        //    TreeNode node = treeViewAccounts.SelectedNode;
-
-            
-        //    if (e.Node?.Tag is not DataRow row) return;
-
-        //    int parentAccID = row.Field<int>("AccID");
-
-        //    // إذا الحساب له أبناء فقط (IsHasChildren = true)
-        //    bool isHasChildren = row.Field<bool>("IsHasChildren");
-        //    if (isHasChildren)
-        //    {
-        //        LoadChildrenInDGV(parentAccID);
-        //    }
-        //    else
-        //    {
-        //        // إذا الحساب ليس له أبناء، فرغ الـ DGV
-        //        DGV.DataSource = null;
-        //    }
-        //    /*اين الخطأ*/
-
-        //    selectedRow = row; // خزنا الصف المحدد
-
-        //    string? accID = row["AccID"].ToString();
-        //    string? accName = row["AccName"].ToString();
-        //    int? parentAccID = row["ParentAccID"] == DBNull.Value ? (int?)null : Convert.ToInt32(row["ParentAccID"]);
-
-        //    bool isHasChildren = Convert.ToBoolean(row["IsHasChildren"]);
-        //    bool isHasDetails = row.Field<bool?>("IsHasDetails") ?? false;
-        //    bool isEnerAcc = row.Field<bool?>("IsEnerAcc") ?? false;
-
-        //    bool isHidden = Convert.ToBoolean(row["IsHidden"]);
-
-        //    string balance = row["Balance"].ToString() ?? string.Empty;
-        //    string balanceState = row["BalanceState"].ToString() ?? string.Empty;
-        //    string dateOfJoin = row["DateOfJoin"].ToString() ?? string.Empty;
-
-        //    // عرض رقم الحساب واسم الحساب
-        //    lblSelectedTreeNod.Text = accID + " - " + accName;
-
-        //    // عرض المسار الكامل بالأسماء
-        //    lblPathNode.Text = GetFullPathFromNode(node);
-        //    int accIDInt = Convert.ToInt32(accID);
-
-        //    // التحقق من إمكانية إضافة حساب فرعي
-        //    bool canAddChild = !(isEnerAcc && !isHasChildren);
-        //    txtAccName.Enabled = canAddChild;
-
-        //    if (!canAddChild)
-        //    {
-        //        txtAccName.Clear();
-        //        lblParentAccName.Text = "لا يمكن اضافة حسابات فرعية هنا فهذا حساب نهائى";
-        //        lblParentAccName.ForeColor = Color.Red;
-
-        //        chkIsHasChildren.Enabled = false;
-
-        //        tlpData.Visible = false;
-        //        btnNew.Visible = false;
-        //        btnSave.Visible = false;
-        //    }
-        //    else
-        //    {
-        //        lblParentAccName.Text = accName;
-        //        lblParentAccName.ForeColor = Color.Gray;
-        //        chkIsHasChildren.Enabled = true;
-
-        //        btnNew.Visible = true;
-        //        btnSave.Visible = true;
-        //    }
-
-        //    if (isHasChildren)
-        //    {
-        //        lblIsHasChildren.Text = "";
-        //    }
-        //    else
-        //    {
-        //        lblIsHasChildren.Text = "هذا الحساب مازال ليس له فروع ";
-        //    }
-        //    // 🔹 تحقق إذا أي من الآباء (الجدود) هو 12 (الأصول الثابتة)
-        //    bool hasFixedAssetParent = false;
-        //    TreeNode? current = node;
-        //    while (current != null)
-        //    {
-        //        if (current.Tag is DataRow parentRow && Convert.ToInt32(parentRow["AccID"]) == 12)
-        //        {
-        //            hasFixedAssetParent = true;
-        //            break;
-        //        }
-        //        current = current.Parent;
-        //    }
-
-        //    // التعامل مع البيانات التفصيلية
-        //    if (isHasDetails)
-        //    {
-        //        tlpData.Visible = true;
-        //        btnDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
-
-        //        // إعادة ضبط نسب الصفوف
-        //        tlpData.RowStyles[0].SizeType = SizeType.Percent;
-        //        tlpData.RowStyles[0].Height = 10; // الصف الأول ثابت 10%
-
-        //        if (btnDetails.Text == "بيانات شخصية")
-        //        {
-        //            tlpData.RowStyles[1].SizeType = SizeType.Percent;
-        //            tlpData.RowStyles[1].Height = 90;
-
-        //            tlpData.RowStyles[2].SizeType = SizeType.Percent;
-        //            tlpData.RowStyles[2].Height = 0;
-        //        }
-        //        else // بيانات الأصل الثابت
-        //        {
-        //            tlpData.RowStyles[1].SizeType = SizeType.Percent;
-        //            tlpData.RowStyles[1].Height = 0;
-
-        //            tlpData.RowStyles[2].SizeType = SizeType.Percent;
-        //            tlpData.RowStyles[2].Height = 90;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        tlpData.Visible = false;
-        //    }
-
-        //    LoadReportsForSelectedAccount();
-        //}
-
+  
         private bool isSearchActive = false;// هذا المغيير للتعطيل المؤقت عند البحث
 
         //وظيفة غلق العقدة الاساسية العير مفعلة
@@ -860,7 +779,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         #endregion
 
+ 
 
-        
     }
 }
