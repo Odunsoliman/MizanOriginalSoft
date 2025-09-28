@@ -946,9 +946,11 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // زر الإضافة
         private void btnAddDetail_Click(object sender, EventArgs e)
         {
-            if (treeViewAccounts.SelectedNode?.Tag is not DataRow row) return;
+            // لازم يكون فيه صف متعلم في الجريد الخاص بالتفاصيل
+            if (dtDetails.Rows.Count == 0 || currentDetailIndex < 0) return;
 
-            int accID = Convert.ToInt32(row["AccID"]);
+            DataRow row = dtDetails.Rows[currentDetailIndex];
+            int accID = Convert.ToInt32(row["AccID"]); // ← هنا بياخد الكود من الجريد مش من الشجرة
 
             using (frm_AccountDetailAdd frm = new frm_AccountDetailAdd(accID))
             {
@@ -957,7 +959,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     // بعد الإضافة → إعادة تحميل البيانات
                     Acc_GetDetails(accID);
 
-                    // الوقوف على نفس الحساب
+                    // الوقوف على نفس الحساب في الشجرة والجريد
                     HighlightAndExpandNode(accID);
                     HighlightRowByAccID(accID);
                 }
