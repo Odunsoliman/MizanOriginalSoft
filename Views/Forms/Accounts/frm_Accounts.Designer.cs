@@ -252,6 +252,7 @@
             DGV.Size = new Size(467, 362);
             DGV.TabIndex = 72;
             DGV.TabStop = false;
+            DGV.SelectionChanged += DGV_SelectionChanged;
             // 
             // tableLayoutPanel7
             // 

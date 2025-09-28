@@ -29,6 +29,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             treeViewAccounts.DrawMode = TreeViewDrawMode.OwnerDrawText;
             treeViewAccounts.DrawNode += treeViewAccounts_DrawNode;// TreeViewAccounts_DrawNode
         }
+
         #region !!!!!!! بناء الشجرة  !!!!!!!
         private void LoadAccountsTree()
         {
@@ -524,9 +525,26 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         {
             isSearchActive = false; // إعادة تفعيل التعامل مع BeforeExpand
         }
+
+        // تابع التعطيل
         private void txtSearchTree_Enter(object sender, EventArgs e)
         {
             isSearchActive = true; // تعطيل التعامل مع BeforeExpand
+        }
+
+        // وظيفة ضبط عدم قص السم فى الشجرة 
+        private void treeViewAccounts_DrawNode(object? sender, DrawTreeNodeEventArgs e)
+        {
+            e.DrawDefault = false;
+
+            Font nodeFont = e.Node == activeNode
+                ? new Font("Times New Roman", 13, FontStyle.Bold)
+                : new Font("Times New Roman", 12, FontStyle.Bold);
+
+            Color foreColor = e.Node == activeNode ? Color.Red : Color.Black;
+
+            TextRenderer.DrawText(e.Graphics, e.Node!.Text, nodeFont, e.Bounds, foreColor);
+
         }
 
         #endregion
@@ -822,21 +840,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         #endregion
-
-
-        private void treeViewAccounts_DrawNode(object? sender, DrawTreeNodeEventArgs e)
-        {
-            e.DrawDefault = false;
-
-            Font nodeFont = e.Node == activeNode
-                ? new Font("Times New Roman", 13, FontStyle.Bold)
-                : new Font("Times New Roman", 12, FontStyle.Bold);
-
-            Color foreColor = e.Node == activeNode ? Color.Red : Color.Black;
-
-            TextRenderer.DrawText(e.Graphics, e.Node!.Text, nodeFont, e.Bounds, foreColor);
-
-        }
 
         #region !!!!!! تفاصيل الحساب (الأبناء) !!!!!!! 
         /// <summary>
@@ -1230,5 +1233,32 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         #endregion
+
+
+
+
+
+        private void DGV_SelectionChanged(object sender, EventArgs e)
+        {
+            if (DGV.CurrentRow == null) return;
+
+            // جلب الصف المحدد
+            DataRowView? rowView = DGV.CurrentRow.DataBoundItem as DataRowView;
+            if (rowView == null) return;
+
+            DataRow row = rowView.Row;
+
+            // استخراج accID من العمود
+            if (row["AccID"] != DBNull.Value)
+            {
+                int accID = Convert.ToInt32(row["AccID"]);
+
+                // استدعاء تحميل التفاصيل
+                Acc_GetDetails(accID);
+            }
+        }
+
+
+
     }
 }
