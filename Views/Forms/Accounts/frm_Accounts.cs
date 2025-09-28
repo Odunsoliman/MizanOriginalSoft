@@ -25,7 +25,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             LoadAccountsTree();
             SetupMenuStrip();
             // ضبط ارتفاع السطر بحيث يكفي لو الخط كبر
-            treeViewAccounts.ItemHeight = treeViewAccounts.Font.Height + 6;
+            treeViewAccounts.ItemHeight = treeViewAccounts.Font.Height  + 12;
         }
         #region !!!!!!! بناء الشجرة  !!!!!!!
         private void LoadAccountsTree()
