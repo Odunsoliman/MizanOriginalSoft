@@ -25,7 +25,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             LoadAccountsTree();
             SetupMenuStrip();
             // ضبط ارتفاع السطر بحيث يكفي لو الخط كبر
-            treeViewAccounts.ItemHeight = treeViewAccounts.Font.Height  + 12;
+            treeViewAccounts.ItemHeight = treeViewAccounts.Font.Height + 12;
+            treeViewAccounts.DrawMode = TreeViewDrawMode.OwnerDrawText;
+            treeViewAccounts.DrawNode += treeViewAccounts_DrawNode;// TreeViewAccounts_DrawNode
         }
         #region !!!!!!! بناء الشجرة  !!!!!!!
         private void LoadAccountsTree()
@@ -287,7 +289,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             return string.Join(" → ", parts); // يمكنك تغيير السهم أو الفاصل حسب رغبتك
         }
 
- 
+
 
         private int parentAccID = 0;
         private bool isHasChildren = false;
@@ -319,7 +321,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             // حدد العقدة الجديدة
             activeNode = selectedNode;
-            
+
             // عدل مظهرها (أحمر + حجم أكبر + Bold)
             activeNode.NodeFont = new Font(treeViewAccounts.Font.FontFamily,
                                            treeViewAccounts.Font.Size + 1,//لماذا عندما يكبر الخط تختفى بعض حروفه الاخيرة
@@ -820,5 +822,20 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         #endregion
+
+
+        private void treeViewAccounts_DrawNode(object? sender, DrawTreeNodeEventArgs e)
+        {
+            e.DrawDefault = false;
+
+            Font nodeFont = e.Node == activeNode
+                ? new Font("Times New Roman", 13, FontStyle.Bold)
+                : new Font("Times New Roman", 12, FontStyle.Bold);
+
+            Color foreColor = e.Node == activeNode ? Color.Red : Color.Black;
+
+            TextRenderer.DrawText(e.Graphics, e.Node!.Text, nodeFont, e.Bounds, foreColor);
+
+        }
     }
 }

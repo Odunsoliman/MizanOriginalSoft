@@ -767,6 +767,7 @@
             treeViewAccounts.Size = new Size(207, 419);
             treeViewAccounts.TabIndex = 4;
             treeViewAccounts.BeforeExpand += treeViewAccounts_BeforeExpand;
+            treeViewAccounts.DrawNode += treeViewAccounts_DrawNode;
             treeViewAccounts.AfterSelect += treeViewAccounts_AfterSelect;
             // 
             // txtToTop
