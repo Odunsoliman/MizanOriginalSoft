@@ -311,16 +311,16 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // أعد العقدة القديمة لشكلها الطبيعي
             if (activeNode != null)
             {
-                activeNode.NodeFont = new Font(treeViewAccounts.Font, FontStyle.Regular);
+                activeNode.NodeFont = new Font("Times New Roman", 12, FontStyle.Bold);
                 activeNode.ForeColor = Color.Black;
             }
 
             // حدد العقدة الجديدة
             activeNode = selectedNode;
-
+            
             // عدل مظهرها (أحمر + حجم أكبر + Bold)
             activeNode.NodeFont = new Font(treeViewAccounts.Font.FontFamily,
-                                           treeViewAccounts.Font.Size + 1,
+                                           treeViewAccounts.Font.Size + 2,
                                            FontStyle.Bold);
             activeNode.ForeColor = Color.Red;
 
