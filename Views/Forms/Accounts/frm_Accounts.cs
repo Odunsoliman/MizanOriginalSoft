@@ -640,8 +640,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
                 // 🟢 فتح وتحديد العقدة الأب
                 HighlightAndExpandNode(currentNodeId);
-                txtAccName.Clear();
-                chkIsHasChildren.Checked = false;
+                //txtAccName.Clear();
+                //chkIsHasChildren.Checked = false;
             }
             else
             {
