@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             txtSearchTree = new TextBox();
             tableLayoutPanel13 = new TableLayoutPanel();
             label7 = new Label();
@@ -68,7 +68,7 @@
             lblClientEmail = new Label();
             lblClientAddress = new Label();
             lblAccDetailNote = new Label();
-            tableLayoutPanel12 = new TableLayoutPanel();
+            tlpBtnExec = new TableLayoutPanel();
             btnAddDetails = new Button();
             btnDeleteDetail = new Button();
             btnModifyDetail = new Button();
@@ -125,7 +125,7 @@
             tlpDetailsData.SuspendLayout();
             tlpAssetsData.SuspendLayout();
             tlpMainData.SuspendLayout();
-            tableLayoutPanel12.SuspendLayout();
+            tlpBtnExec.SuspendLayout();
             tableLayoutPanel15.SuspendLayout();
             panelList.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
@@ -227,8 +227,8 @@
             DGV.ReadOnly = true;
             DGV.RowHeadersVisible = false;
             DGV.RowHeadersWidth = 51;
-            dataGridViewCellStyle1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DGV.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DGV.RowsDefaultCellStyle = dataGridViewCellStyle2;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DGV.Size = new Size(467, 367);
             DGV.TabIndex = 72;
@@ -598,7 +598,7 @@
             tlpMainData.Controls.Add(lblClientEmail, 0, 2);
             tlpMainData.Controls.Add(lblClientAddress, 0, 3);
             tlpMainData.Controls.Add(lblAccDetailNote, 0, 4);
-            tlpMainData.Controls.Add(tableLayoutPanel12, 0, 6);
+            tlpMainData.Controls.Add(tlpBtnExec, 0, 6);
             tlpMainData.Dock = DockStyle.Top;
             tlpMainData.Location = new Point(3, 3);
             tlpMainData.Name = "tlpMainData";
@@ -697,24 +697,24 @@
             lblAccDetailNote.Text = "-";
             lblAccDetailNote.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // tableLayoutPanel12
+            // tlpBtnExec
             // 
-            tableLayoutPanel12.ColumnCount = 4;
-            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.0006237F));
-            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.0006275F));
-            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.0006237F));
-            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 24.9981289F));
-            tableLayoutPanel12.Controls.Add(btnAddDetails, 3, 0);
-            tableLayoutPanel12.Controls.Add(btnDeleteDetail, 2, 0);
-            tableLayoutPanel12.Controls.Add(btnModifyDetail, 1, 0);
-            tableLayoutPanel12.Controls.Add(btnNextDetail, 0, 0);
-            tableLayoutPanel12.Dock = DockStyle.Fill;
-            tableLayoutPanel12.Location = new Point(3, 249);
-            tableLayoutPanel12.Name = "tableLayoutPanel12";
-            tableLayoutPanel12.RowCount = 1;
-            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel12.Size = new Size(345, 40);
-            tableLayoutPanel12.TabIndex = 71;
+            tlpBtnExec.ColumnCount = 4;
+            tlpBtnExec.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.0006237F));
+            tlpBtnExec.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.0006275F));
+            tlpBtnExec.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.0006237F));
+            tlpBtnExec.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 24.9981289F));
+            tlpBtnExec.Controls.Add(btnAddDetails, 3, 0);
+            tlpBtnExec.Controls.Add(btnDeleteDetail, 2, 0);
+            tlpBtnExec.Controls.Add(btnModifyDetail, 1, 0);
+            tlpBtnExec.Controls.Add(btnNextDetail, 0, 0);
+            tlpBtnExec.Dock = DockStyle.Fill;
+            tlpBtnExec.Location = new Point(3, 249);
+            tlpBtnExec.Name = "tlpBtnExec";
+            tlpBtnExec.RowCount = 1;
+            tlpBtnExec.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tlpBtnExec.Size = new Size(345, 40);
+            tlpBtnExec.TabIndex = 71;
             // 
             // btnAddDetails
             // 
@@ -1387,7 +1387,7 @@
             tlpAssetsData.PerformLayout();
             tlpMainData.ResumeLayout(false);
             tlpMainData.PerformLayout();
-            tableLayoutPanel12.ResumeLayout(false);
+            tlpBtnExec.ResumeLayout(false);
             tableLayoutPanel15.ResumeLayout(false);
             panelList.ResumeLayout(false);
             panelList.PerformLayout();
@@ -1491,7 +1491,7 @@
         private Button btnModifyAcc;
         private Button btnDeleteAcc;
         private Label lblAccDataDetails;
-        private TableLayoutPanel tableLayoutPanel12;
+        private TableLayoutPanel tlpBtnExec;
         private Button btnModifyDetail;
         private Button btnNextDetail;
         private Button btnDeleteDetail;

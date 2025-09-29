@@ -405,6 +405,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             if (hasDetailsObj == DBNull.Value || Convert.ToInt32(hasDetailsObj) == 0)
             {
                 lblAccDataDetails.Text = "";
+                tlpBtnExec.Enabled = false;
             }
             else if (Convert.ToInt32(hasDetailsObj) == 1)
             {
@@ -425,6 +426,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 lblAccDataDetails.Text = hasFixedAssetParent
                     ? "بيانات الأصل الثابت"
                     : "بيانات شخصية";
+                tlpBtnExec.Enabled=true ;
             }
 
             // ==========================
