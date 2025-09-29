@@ -1682,7 +1682,9 @@ END
         #endregion
 
         #region ********   شجرة الحسابات  ************
-
+        //==========================================
+        //  1 حسابات الشجرة الاساسية
+        //==========================================
         // جلب جميع  شجرة الحسابات ###
         public static DataTable Acc_GetChart()//@@
         {
@@ -1756,6 +1758,9 @@ END
             }, expectMessageOutput: false);
         }
 
+        //========================================
+        //  2-   تفاصيل الحساب الشخصية
+        //========================================
         // إضافة أو تعديل تفاصيل الحساب
         public static string Acc_SaveDetails(int? DetailID, int AccID, string? ContactName,
                                              string? Phone, string? Mobile, string? Email,
@@ -1808,6 +1813,98 @@ END
                 command.Parameters.Add("@Notes", SqlDbType.NVarChar).Value = (object?)Notes ?? DBNull.Value;
             }, expectMessageOutput: false);
         }
+
+
+        //========================================
+        //  3 بيانات الاصول الثابتة 
+        //========================================
+        //جلب جميع البيانات التفصيلية عن الاصول الثابتة
+        public static DataTable Acc_AssetsGetAll()
+        {
+            DataTable? result = dbHelper.ExecuteSelectQuery("Acc_AssetsGetAll", command =>
+            {
+ 
+            });
+            return result ?? new DataTable();
+        }
+
+
+        // جلب جميع تفاصيل حساب اصول ثابتة
+        public static DataTable Acc_AssetsGetByAccountID(int AccID)
+        {
+            DataTable? result = dbHelper.ExecuteSelectQuery("Acc_AssetsGetByAccountID", command =>
+            {
+                command.Parameters.Add("@AccID", SqlDbType.Int).Value = AccID;
+            });
+            return result ?? new DataTable();
+        }
+
+        // ✅ تحديث أو إدراج تفاصيل بيانات أصل ثابت
+        public static string Acc_AssetsSave(
+            int accID,
+            int? responsiblePersonID = null,
+            int? locationID = null,
+            DateTime? purchaseDate = null,
+            decimal? purchaseValue = null,
+            int? usefulLifeMonths = null,
+            decimal? residualValue = null,
+            string? notes = null)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("Acc_AssetsSave", command =>
+            {
+                // 🔹 المعاملات المطلوبة
+                command.Parameters.Add("@AccID", SqlDbType.Int).Value = accID;
+
+                // 🔹 المعاملات الاختيارية
+                command.Parameters.Add("@ResponsiblePersonID", SqlDbType.Int).Value = (object?)responsiblePersonID ?? DBNull.Value;
+                command.Parameters.Add("@LocationID", SqlDbType.Int).Value = (object?)locationID ?? DBNull.Value;
+                command.Parameters.Add("@PurchaseDate", SqlDbType.Date).Value = (object?)purchaseDate ?? DBNull.Value;
+                command.Parameters.Add("@PurchaseValue", SqlDbType.Decimal).Value = (object?)purchaseValue ?? DBNull.Value;
+                command.Parameters.Add("@UsefulLifeMonths", SqlDbType.Int).Value = (object?)usefulLifeMonths ?? DBNull.Value;
+                command.Parameters.Add("@ResidualValue", SqlDbType.Decimal).Value = (object?)residualValue ?? DBNull.Value;
+                command.Parameters.Add("@Notes", SqlDbType.NVarChar, 500).Value = (object?)notes ?? DBNull.Value;
+
+                // 🔹 معامل الإخراج
+                var outputParam = new SqlParameter("@OutputMsg", SqlDbType.NVarChar, 500)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                command.Parameters.Add(outputParam);
+
+            }, expectMessageOutput: true); // ✅ علشان يرجع الرسالة من @OutputMsg
+        }
+
+        // ✅ حذف تفاصيل اصل
+        public static string Acc_AssetsDelete(int AccID)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("Acc_AssetsDelete", command =>
+            {
+                command.Parameters.Add("@AccID", SqlDbType.Int).Value = AccID;
+            }, expectMessageOutput: false);
+        }
+
+        // ✅ تحديث جميع الأصول الثابتة بالقيمة الدفترية الحالية مع إرجاع عدد الصفوف المحدثة
+        public static int Acc_AssetsUpdateDepreciation()
+        {
+            int rowsAffected = 0;
+
+            dbHelper.ExecuteNonQueryWithLogging("Acc_AssetsUpdateDepreciation", command =>
+            {
+                var outputParam = new SqlParameter("@RowsAffected", SqlDbType.Int)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                command.Parameters.Add(outputParam);
+
+                // ✅ بعد التنفيذ تقدر تاخد القيمة
+                command.ExecuteNonQuery();
+                rowsAffected = (int)(command.Parameters["@RowsAffected"].Value ?? 0);
+
+            }, expectMessageOutput: false);
+
+            return rowsAffected;
+        }
+
 
         #endregion
 

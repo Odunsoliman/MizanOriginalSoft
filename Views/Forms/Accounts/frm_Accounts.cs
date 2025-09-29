@@ -325,7 +325,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             // عدل مظهرها (أحمر + حجم أكبر + Bold)
             activeNode.NodeFont = new Font(treeViewAccounts.Font.FontFamily,
-                                           treeViewAccounts.Font.Size + 1,//لماذا عندما يكبر الخط تختفى بعض حروفه الاخيرة
+                                           treeViewAccounts.Font.Size + 1,
                                            FontStyle.Bold);
             activeNode.ForeColor = Color.Red;
 
@@ -400,35 +400,37 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // ==========================
             // 6) التحقق من إذا كان الأب (أو أجداده) = 12 (أصول ثابتة)
             // ==========================
-            bool hasFixedAssetParent = false;
-            TreeNode? currentNode = selectedNode;
+            object hasDetailsObj = row["IsHasDetails"];
 
-            while (currentNode != null)
+            if (hasDetailsObj == DBNull.Value || Convert.ToInt32(hasDetailsObj) == 0)
             {
-                if (currentNode.Tag is DataRow parentRow && Convert.ToInt32(parentRow["AccID"]) == 12)
+                lblAccDataDetails.Text = "";
+            }
+            else if (Convert.ToInt32(hasDetailsObj) == 1)
+            {
+                bool hasFixedAssetParent = false;
+                TreeNode? currentNode = selectedNode;
+
+                while (currentNode != null)
                 {
-                    hasFixedAssetParent = true;
-                    break;
+                    if (currentNode.Tag is DataRow parentRow &&
+                        Convert.ToInt32(parentRow["AccID"]) == 12)
+                    {
+                        hasFixedAssetParent = true;
+                        break;
+                    }
+                    currentNode = currentNode.Parent;
                 }
-                currentNode = currentNode.Parent;
+
+                lblAccDataDetails.Text = hasFixedAssetParent
+                    ? "بيانات الأصل الثابت"
+                    : "بيانات شخصية";
             }
 
-            // استخدام المتغير لتجنب التحذير
-            if (hasFixedAssetParent)
-            {
-                lblAccDataDetails.Text = "بيانات الاصل الثابت";
-                //      MessageBox.Show("هذا الحساب له أب أصول ثابتة!");
-            }
-            else
-            {
-                lblAccDataDetails.Text = "بيانات شخصية";
-            }
-
-
-                // ==========================
-                // 7) تحميل التقارير الخاصة بالحساب المحدد
-                // ==========================
-                LoadReportsForSelectedAccount();
+            // ==========================
+            // 7) تحميل التقارير الخاصة بالحساب المحدد
+            // ==========================
+            LoadReportsForSelectedAccount();
         }
 
 

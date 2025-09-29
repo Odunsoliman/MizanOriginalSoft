@@ -404,7 +404,7 @@ namespace MizanOriginalSoft.MainClasses
             }
         }
 
-
+        /*هل من الافضل استخدام هذه الدالة بدل ExecuteNonQueryWithLogging*/
 
 
 
