@@ -382,7 +382,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
                 chkIsHasChildren.Enabled = false;
 
-                tlpData.Visible = false;
                 btnNew.Visible = false;
                 btnSave.Visible = false;
             }
@@ -403,6 +402,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // ==========================
             bool hasFixedAssetParent = false;
             TreeNode? currentNode = selectedNode;
+
             while (currentNode != null)
             {
                 if (currentNode.Tag is DataRow parentRow && Convert.ToInt32(parentRow["AccID"]) == 12)
@@ -413,44 +413,22 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 currentNode = currentNode.Parent;
             }
 
-            // ==========================
-            // 7) التعامل مع البيانات التفصيلية
-            // ==========================
-            if (hasDetails)
+            // استخدام المتغير لتجنب التحذير
+            if (hasFixedAssetParent)
             {
-                tlpData.Visible = true;
-                btnDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
-
-                // الصف الأول ثابت 10%
-                tlpData.RowStyles[0].SizeType = SizeType.Percent;
-                tlpData.RowStyles[0].Height = 10;
-
-                if (btnDetails.Text == "بيانات شخصية")
-                {
-                    tlpData.RowStyles[1].SizeType = SizeType.Percent;
-                    tlpData.RowStyles[1].Height = 90;
-
-                    tlpData.RowStyles[2].SizeType = SizeType.Percent;
-                    tlpData.RowStyles[2].Height = 0;
-                }
-                else // بيانات الأصل الثابت
-                {
-                    tlpData.RowStyles[1].SizeType = SizeType.Percent;
-                    tlpData.RowStyles[1].Height = 0;
-
-                    tlpData.RowStyles[2].SizeType = SizeType.Percent;
-                    tlpData.RowStyles[2].Height = 90;
-                }
+                lblAccDataDetails.Text = "بيانات الاصل الثابت";
+                //      MessageBox.Show("هذا الحساب له أب أصول ثابتة!");
             }
             else
             {
-                tlpData.Visible = false;
+                lblAccDataDetails.Text = "بيانات شخصية";
             }
 
-            // ==========================
-            // 8) تحميل التقارير الخاصة بالحساب المحدد
-            // ==========================
-            LoadReportsForSelectedAccount();
+
+                // ==========================
+                // 7) تحميل التقارير الخاصة بالحساب المحدد
+                // ==========================
+                LoadReportsForSelectedAccount();
         }
 
 
@@ -532,7 +510,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             isSearchActive = true; // تعطيل التعامل مع BeforeExpand
         }
 
-        // وظيفة ضبط عدم قص السم فى الشجرة 
+        // وظيفة ضبط عدم قص الاسم فى الشجرة عند التكبير 
         private void treeViewAccounts_DrawNode(object? sender, DrawTreeNodeEventArgs e)
         {
             e.DrawDefault = false;
@@ -550,12 +528,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         #endregion
 
         #region !!!!!!!!  ازرار الشاشة !!!!!!!!!
-        private void btnDetails_Click(object sender, EventArgs e)
-        {
-            // إذا كانت مخفية يظهرها، وإذا كانت ظاهرة يخفيها
-            tlpPhon.Visible = !tlpPhon.Visible;
 
-        }
 
         private void btnNew_Click(object sender, EventArgs e)
         {
