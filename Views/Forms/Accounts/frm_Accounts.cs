@@ -181,15 +181,31 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             LoadReportsForSelectedAccount();
         }
 
+        // ==========================
+        // وظيفة: التحكم في سلوك توسيع العقد في شجرة الحسابات
+        // الهدف: عند محاولة توسيع عقدة جذرية أساسية (TreeAccCode = 1 إلى 5)،
+        //        يتم إغلاق جميع الجذور الأخرى تلقائيًا.
+        // سبب ذلك: لتجنب فتح أكثر من جذر رئيسي في نفس الوقت، مما يحافظ
+        //        على ترتيب ووضوح الشجرة.
+        // ملاحظات:
+        // 1) إذا كان المستخدم يقوم بالبحث (isSearchActive = true)،
+        //    لا يتم غلق أي عقد أخرى حتى لا يتداخل البحث مع التوسيع.
+        // 2) تتحقق الدالة أولًا من أن العقدة المراد توسيعها ليست null.
+        // 3) ثم تتأكد أن العقدة تحتوي على بيانات من نوع DataRow.
+        // 4) تستخدم TreeAccCode لتحديد ما إذا كانت العقدة جذرية أساسية (1–5).
+        // 5) إذا تحقق الشرط، يتم المرور على جميع الجذور في الشجرة
+        //    وإغلاقها باستثناء العقدة التي تم توسيعها.
+        // ==========================
         private void treeViewAccounts_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            if (isSearchActive) return;
+            if (isSearchActive) return; // أثناء البحث، لا نقوم بأي غلق
 
             if (e.Node?.Tag is DataRow row)
             {
-                int treeCode = row.Field<int>("TreeAccCode");
+                int treeCode = row.Field<int>("TreeAccCode"); // رقم الحساب الشجري
                 if (row["ParentAccID"] == DBNull.Value && treeCode >= 1 && treeCode <= 5)
                 {
+                    // أغلق كل الجذور الأخرى
                     foreach (TreeNode rootNode in treeViewAccounts.Nodes)
                     {
                         if (rootNode != e.Node)
@@ -198,6 +214,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 }
             }
         }
+
+
 
         private void treeViewAccounts_DrawNode(object? sender, DrawTreeNodeEventArgs e)
         {
@@ -932,7 +950,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 }
             }
         }
-
+        //هذا القديم
         //📌 دالة البحث عن العقدة بالـ AccID
         private TreeNode? FindNodeByAccID(TreeNodeCollection nodes, int accID)
         {
@@ -969,33 +987,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 node.EnsureVisible();
             }
         }
-        //تعطيل وتفعيل اغلاق القوائم التلقائى
-        private void txtSearchTree_Leave_(object sender, EventArgs e)
-        {
-            isSearchActive = false; // إعادة تفعيل التعامل مع BeforeExpand
-        }
+ 
 
-        // تابع التعطيل
-        private void txtSearchTree_Enter_(object sender, EventArgs e)
-        {
-            isSearchActive = true; // تعطيل التعامل مع BeforeExpand
-        }
-
-        // وظيفة ضبط عدم قص الاسم فى الشجرة عند التكبير 
-        private void treeViewAccounts_DrawNode_(object? sender, DrawTreeNodeEventArgs e)
-        {
-            e.DrawDefault = false;
-
-            Font nodeFont = e.Node == activeNode
-                ? new Font("Times New Roman", 13, FontStyle.Bold)
-                : new Font("Times New Roman", 12, FontStyle.Bold);
-
-            Color foreColor = e.Node == activeNode ? Color.Red : Color.Black;
-
-            TextRenderer.DrawText(e.Graphics, e.Node!.Text, nodeFont, e.Bounds, foreColor);
-
-        }
-
+        
         #endregion
 
         #region !!!!!!!!  ازرار الشاشة !!!!!!!!!
