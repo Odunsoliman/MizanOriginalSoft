@@ -13,61 +13,64 @@ using System.Windows.Forms;
 
 namespace MizanOriginalSoft.Views.Forms.Accounts
 {
+   
+
     public partial class frm_Accounts : Form
     {
+
         public frm_Accounts()
         {
             InitializeComponent();
         }
-
         private void frm_Accounts_Load(object sender, EventArgs e)
         {
             LoadAccountsTree();
             SetupMenuStrip();
-            // ضبط ارتفاع السطر بحيث يكفي لو الخط كبر
+
             treeViewAccounts.ItemHeight = treeViewAccounts.Font.Height + 12;
             treeViewAccounts.DrawMode = TreeViewDrawMode.OwnerDrawText;
-            treeViewAccounts.DrawNode += treeViewAccounts_DrawNode;// TreeViewAccounts_DrawNode
+            treeViewAccounts.DrawNode += treeViewAccounts_DrawNode;
         }
 
-        #region !!!!!!! بناء الشجرة  !!!!!!!
+        #region Build Tree
+
         private void LoadAccountsTree()
         {
             treeViewAccounts.Nodes.Clear();
             DataTable dt = DBServiecs.Acc_GetChart() ?? new DataTable();
             if (dt.Rows.Count == 0) return;
 
-            // إنشاء قاموس لتخزين كل العقد المؤقتة
+            // Dictionary لتخزين العقد أثناء البناء
             Dictionary<string, TreeNode> nodeDict = new Dictionary<string, TreeNode>();
 
-            foreach (DataRow row in dt.Rows)
+            // عرض الحسابات التي لها فروع فقط
+            var parentRows = dt.AsEnumerable()
+                               .Where(r => r.Field<bool>("IsHasChildren"))
+                               .ToList();
+
+            foreach (DataRow row in parentRows)
             {
                 string accName = row["AccName"] as string ?? string.Empty;
                 if (string.IsNullOrWhiteSpace(accName)) continue;
 
-                string? treeCode = row["TreeAccCode"].ToString();
-                string? parentCode = row["ParentAccID"] != DBNull.Value ? row["ParentAccID"].ToString() : null;
+                string treeCode = row["TreeAccCode"].ToString();
+                string parentCode = row["ParentAccID"] != DBNull.Value ? row["ParentAccID"].ToString() : null;
 
                 TreeNode node = new TreeNode(accName) { Tag = row };
                 nodeDict[treeCode] = node;
 
                 if (string.IsNullOrEmpty(parentCode))
-                {
                     treeViewAccounts.Nodes.Add(node); // الجذر
-                }
-                else if (nodeDict.TryGetValue(parentCode, out TreeNode? parentNode))
-                {
+                else if (nodeDict.TryGetValue(parentCode, out TreeNode parentNode))
                     parentNode.Nodes.Add(node);
-                }
                 else
-                {
-                    treeViewAccounts.Nodes.Add(node); // fallback إذا الأب غير موجود
-                }
+                    treeViewAccounts.Nodes.Add(node); // fallback
             }
 
             SortTreeNodes(treeViewAccounts.Nodes);
             treeViewAccounts.CollapseAll();
         }
+
         private void SortTreeNodes(TreeNodeCollection nodes)
         {
             List<TreeNode> nodeList = nodes.Cast<TreeNode>()
@@ -87,53 +90,360 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
+        #endregion
+
+        #region TreeView Events
+
+        private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if (treeViewAccounts.SelectedNode == null) return;
+            TreeNode selectedNode = treeViewAccounts.SelectedNode;
+            if (selectedNode.Tag is not DataRow row) return;
+
+            // تمييز العقدة النشطة
+            if (activeNode != null)
+            {
+                activeNode.NodeFont = new Font("Times New Roman", 12, FontStyle.Bold);
+                activeNode.ForeColor = Color.Black;
+            }
+
+            activeNode = selectedNode;
+            activeNode.NodeFont = new Font(treeViewAccounts.Font.FontFamily,
+                                           treeViewAccounts.Font.Size + 1,
+                                           FontStyle.Bold);
+            activeNode.ForeColor = Color.Red;
+            treeViewAccounts.Refresh();
+
+            // بيانات الحساب
+            int treeAccCode = row.Field<int>("TreeAccCode");
+            int accID = row.Field<int>("AccID");
+            string accName = row["AccName"]?.ToString() ?? string.Empty;
+            bool hasChildren = row.Field<bool?>("IsHasChildren") ?? false;
+            bool hasDetails = row.Field<bool?>("IsHasDetails") ?? false;
+            bool isEnerAcc = row.Field<bool?>("IsEnerAcc") ?? false;
+
+            // تحديث DGV
+            if (hasChildren)
+                LoadChildrenInDGV(treeAccCode); // بناء على TreeAccCode
+            else
+                DGV.DataSource = null;
+
+            selectedRow = row;
+
+            // تحديث التسميات
+            lblSelectedTreeNod.Text = $"{treeAccCode} - {accName}";
+            lblPathNode.Text = GetFullPathFromNode(selectedNode);
+            lblNameNod.Text = accName;
+
+            // التحقق من إمكانية إضافة حساب فرعي
+            bool canAddChild = !(isEnerAcc && !hasChildren);
+            txtAccName.Enabled = canAddChild;
+            if (!canAddChild)
+            {
+                txtAccName.Clear();
+                lblParentAccName.Text = "لا يمكن اضافة حسابات فرعية هنا فهذا حساب نهائى";
+                lblParentAccName.ForeColor = Color.Red;
+                chkIsHasChildren.Enabled = false;
+            }
+            else
+            {
+                lblParentAccName.Text = accName;
+                lblParentAccName.ForeColor = Color.Gray;
+                chkIsHasChildren.Enabled = true;
+            }
+
+            lblIsHasChildren.Text = hasChildren ? "" : "هذا الحساب مازال ليس له فروع";
+
+            // التحقق من الأصول الثابتة
+            if (!hasDetails)
+            {
+                lblAccDataDetails.Text = "";
+                tlpBtnExec.Enabled = false;
+            }
+            else
+            {
+                bool hasFixedAssetParent = false;
+                TreeNode? currentNode = selectedNode;
+                while (currentNode != null)
+                {
+                    if (currentNode.Tag is DataRow parentRow &&
+                        Convert.ToInt32(parentRow["TreeAccCode"]) == 12)
+                    {
+                        hasFixedAssetParent = true;
+                        break;
+                    }
+                    currentNode = currentNode.Parent;
+                }
+                lblAccDataDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
+                tlpBtnExec.Enabled = true;
+            }
+
+            LoadReportsForSelectedAccount();
+        }
+
+        private void treeViewAccounts_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+        {
+            if (isSearchActive) return;
+
+            if (e.Node?.Tag is DataRow row)
+            {
+                int treeCode = row.Field<int>("TreeAccCode");
+                if (row["ParentAccID"] == DBNull.Value && treeCode >= 1 && treeCode <= 5)
+                {
+                    foreach (TreeNode rootNode in treeViewAccounts.Nodes)
+                    {
+                        if (rootNode != e.Node)
+                            rootNode.Collapse();
+                    }
+                }
+            }
+        }
+
+        private void treeViewAccounts_DrawNode(object? sender, DrawTreeNodeEventArgs e)
+        {
+            e.DrawDefault = false;
+            Font nodeFont = e.Node == activeNode
+                ? new Font("Times New Roman", 13, FontStyle.Bold)
+                : new Font("Times New Roman", 12, FontStyle.Bold);
+            Color foreColor = e.Node == activeNode ? Color.Red : Color.Black;
+            TextRenderer.DrawText(e.Graphics, e.Node!.Text, nodeFont, e.Bounds, foreColor);
+        }
+
+        #endregion
+
+        #region Search
+
+        private List<TreeNode> matchedNodes = new List<TreeNode>();
+        private int currentMatchIndex = -1;
+
+        private void txtSearchTree_TextChanged(object sender, EventArgs e)
+        {
+            string searchText = txtSearchTree.Text.Trim().ToLower();
+            matchedNodes.Clear();
+            currentMatchIndex = -1;
+            ResetNodeColorsAndCollapse(treeViewAccounts.Nodes);
+
+            if (string.IsNullOrEmpty(searchText)) return;
+
+            SearchAndHighlightNodes(treeViewAccounts.Nodes, searchText);
+            if (matchedNodes.Count > 0)
+            {
+                currentMatchIndex = 0;
+                var node = matchedNodes[0];
+                treeViewAccounts.SelectedNode = node;
+                node.EnsureVisible();
+            }
+        }
+
+        private void ResetNodeColorsAndCollapse(TreeNodeCollection nodes)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                node.BackColor = treeViewAccounts.BackColor;
+                node.ForeColor = treeViewAccounts.ForeColor;
+                node.Collapse();
+                if (node.Nodes.Count > 0)
+                    ResetNodeColorsAndCollapse(node.Nodes);
+            }
+        }
+
+        private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Text.ToLower().Contains(searchText))
+                {
+                    node.BackColor = Color.Yellow;
+                    node.ForeColor = Color.Black;
+                    matchedNodes.Add(node);
+                    ExpandParentNodes(node);
+                }
+
+                if (node.Nodes.Count > 0)
+                    SearchAndHighlightNodes(node.Nodes, searchText);
+            }
+        }
+
+        private void ExpandParentNodes(TreeNode node)
+        {
+            TreeNode? parent = node.Parent;
+            while (parent != null)
+            {
+                parent.Expand();
+                parent = parent.Parent;
+            }
+        }
+
+        private void txtSearchTree_Enter(object sender, EventArgs e) => isSearchActive = true;
+        private void txtSearchTree_Leave(object sender, EventArgs e) => isSearchActive = false;
+
+        #endregion
+
+        #region DGV & Utilities
+
+        private void LoadChildrenInDGV(int parentTreeAccCode)
+        {
+            DataTable dt = DBServiecs.Acc_GetLeafChildren(parentTreeAccCode);
+            DGV.DataSource = dt.DefaultView;
+            DGVStyl();
+        }
+
+        private void DGVStyl()
+        {
+            DGV.ReadOnly = true;
+            DGV.AllowUserToAddRows = false;
+            DGV.AllowUserToDeleteRows = false;
+            DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            DGV.MultiSelect = false;
+            DGV.RowHeadersVisible = false;
+
+            foreach (DataGridViewColumn col in DGV.Columns)
+            {
+                col.Visible = col.Name == "AccName" || col.Name == "Balance" || col.Name == "BalanceState";
+                col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+                switch (col.Name)
+                {
+                    case "Balance":
+                        col.HeaderText = "الرصيد";
+                        col.FillWeight = 15;
+                        break;
+                    case "BalanceState":
+                        col.HeaderText = "--";
+                        col.FillWeight = 15;
+                        break;
+                    case "AccName":
+                        col.HeaderText = "اسم الحساب";
+                        col.FillWeight = 20;
+                        break;
+                }
+            }
+
+            Font generalFont = new Font("Times New Roman", 14, FontStyle.Bold);
+            DGV.DefaultCellStyle.Font = generalFont;
+            DGV.ColumnHeadersDefaultCellStyle.Font = generalFont;
+            DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.Blue;
+            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGray;
+            DGV.ColumnHeadersHeight = 60;
+            DGV.EnableHeadersVisualStyles = false;
+
+            DGV.ClearSelection();
+        }
+
+        private int GetLevelFromFullPath(string fullPath)
+            => fullPath.Split(new string[] { "→" }, StringSplitOptions.None).Length - 1;
+
+        private string GetFullPathFromNode(TreeNode node)
+        {
+            if (node == null) return string.Empty;
+            List<string> parts = new List<string>();
+            TreeNode? current = node;
+            while (current != null)
+            {
+                parts.Insert(0, current.Text);
+                current = current.Parent;
+            }
+            return string.Join(" → ", parts);
+        }
+
+        #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        #region !!!!!!! بناء الشجرة  !!!!!!!
         private void LoadAccountsTree_()
         {
             treeViewAccounts.Nodes.Clear();
-
             DataTable dt = DBServiecs.Acc_GetChart() ?? new DataTable();
             if (dt.Rows.Count == 0) return;
 
+            // إنشاء قاموس لتخزين العقد
+            Dictionary<string, TreeNode> nodeDict = new Dictionary<string, TreeNode>();
+
             // فلترة الحسابات التي لها أبناء فقط للشجرة
             var parentRows = dt.AsEnumerable()
-                               .Where(r => r.Field<bool>("IsHasChildren") == true)
+                               .Where(r => r.Field<bool>("IsHasChildren"))
                                .ToList();
 
             foreach (DataRow row in parentRows)
             {
-                if (row["FullPath"] == DBNull.Value || row["AccName"] == DBNull.Value || row["AccID"] == DBNull.Value)
-                    continue;
-
-                string fullPath = row["FullPath"] as string ?? string.Empty;
                 string accName = row["AccName"] as string ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(accName)) continue;
 
-                if (string.IsNullOrWhiteSpace(fullPath) || string.IsNullOrWhiteSpace(accName))
-                    continue;
+                string treeCode = row["TreeAccCode"].ToString();
+                string parentCode = row["ParentAccID"] != DBNull.Value ? row["ParentAccID"].ToString() : null;
 
-                int level = GetLevelFromFullPath(fullPath);
-                TreeNode node = new TreeNode(accName)
+                TreeNode node = new TreeNode(accName) { Tag = row };
+                nodeDict[treeCode] = node;
+
+                if (string.IsNullOrEmpty(parentCode))
                 {
-                    Tag = row
-                };
-
-                if (level == 0)
+                    treeViewAccounts.Nodes.Add(node); // الجذر
+                }
+                else if (nodeDict.TryGetValue(parentCode, out TreeNode parentNode))
                 {
-                    treeViewAccounts.Nodes.Add(node);
+                    parentNode.Nodes.Add(node);
                 }
                 else
                 {
-                    TreeNode? parentNode = FindParentNode(treeViewAccounts.Nodes, fullPath, level - 1);
-                    if (parentNode is not null)
-                        parentNode.Nodes.Add(node);
-                    else
-                        treeViewAccounts.Nodes.Add(node); // fallback
+                    treeViewAccounts.Nodes.Add(node); // fallback
                 }
             }
 
             SortTreeNodes(treeViewAccounts.Nodes);
             treeViewAccounts.CollapseAll();
         }
+        private void SortTreeNodes_(TreeNodeCollection nodes)
+        {
+            List<TreeNode> nodeList = nodes.Cast<TreeNode>()
+                                           .OrderBy(n =>
+                                           {
+                                               if (n.Tag is DataRow row)
+                                                   return row["TreeAccCode"].ToString();
+                                               return string.Empty;
+                                           })
+                                           .ToList();
 
+            nodes.Clear();
+            foreach (TreeNode node in nodeList)
+            {
+                nodes.Add(node);
+                SortTreeNodes(node.Nodes); // ترتيب الأبناء
+            }
+        }
+
+ 
         // دالة مساعدة لإيجاد الأب
         private TreeNode? FindParentNode(TreeNodeCollection nodes, string fullPath, int targetLevel)
         {
@@ -161,27 +471,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             return null;
         }
 
-        // 🔹 دالة ترتيب العقد حسب AccID تصاعديًا (Recursive)
-        private void SortTreeNodes_(TreeNodeCollection nodes)
-        {
-            List<TreeNode> nodeList = nodes.Cast<TreeNode>()
-                                           .OrderBy(n =>
-                                           {
-                                               if (n.Tag is DataRow row && int.TryParse(row["AccID"].ToString(), out int accID))
-                                                   return accID;
-                                               return int.MaxValue;
-                                           })
-                                           .ToList();
 
-            nodes.Clear();
-            foreach (TreeNode node in nodeList)
-            {
-                nodes.Add(node);
-                SortTreeNodes(node.Nodes); // ترتيب الأبناء كمان
-            }
-        }
         // اين يتم استدعاء الدالة LoadChildrenInDGV
-        private void LoadChildrenInDGV(int parentAccID)
+        private void LoadChildrenInDGV_(int parentAccID)
         {
             DataTable dt = DBServiecs.Acc_GetLeafChildren(parentAccID); // هذه الدالة ترجع كل الأبناء
             DGV.DataSource = dt.DefaultView;
@@ -189,7 +481,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         }
 
-        private void DGVStyl()
+        private void DGVStyl_()
         {
             // إعدادات عامة
             DGV.ReadOnly = true;
@@ -248,10 +540,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         #region !!!!!! بحث فى الشجرة  !!!!!!!!
 
-        private List<TreeNode> matchedNodes = new List<TreeNode>();
-        private int currentMatchIndex = -1;
 
-        private void txtSearchTree_TextChanged(object sender, EventArgs e)
+        private void txtSearchTree_TextChanged_(object sender, EventArgs e)
         {
             string searchText = txtSearchTree.Text.Trim().ToLower();
 
@@ -276,7 +566,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 node.EnsureVisible();
             }
         }
-        private void ResetNodeColorsAndCollapse(TreeNodeCollection nodes)
+        private void ResetNodeColorsAndCollapse_(TreeNodeCollection nodes)
         {
             foreach (TreeNode node in nodes)
             {
@@ -289,7 +579,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)
+        private void SearchAndHighlightNodes_(TreeNodeCollection nodes, string searchText)
         {
             foreach (TreeNode node in nodes)
             {
@@ -310,7 +600,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        private void ExpandParentNodes(TreeNode node)
+        private void ExpandParentNodes_(TreeNode node)
         {
             TreeNode? parent = node.Parent;
             while (parent != null)
@@ -324,12 +614,12 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         #region !!!!!!  عرض الحسابات  !!!!!!!!
         // دالة لحساب المستوى من FullPath
-        private int GetLevelFromFullPath(string fullPath)
+        private int GetLevelFromFullPath_(string fullPath)
         {
             return fullPath.Split(new string[] { "→" }, StringSplitOptions.None).Length - 1;
         }
         // دالة لبناء المسار الكامل من شجرة العقد
-        private string GetFullPathFromNode(TreeNode node)
+        private string GetFullPathFromNode_(TreeNode node)
         {
             if (node == null)
                 return string.Empty;
@@ -355,7 +645,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         private DataRow? selectedRow = null;
         private TreeNode? activeNode; // العقدة النشطة (المميزة بالأحمر)
 
-        private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
+        private void treeViewAccounts_AfterSelect_(object sender, TreeViewEventArgs e)
         {
             // إذا لم يتم تحديد أي عقدة، اخرج من الدالة
             if (treeViewAccounts.SelectedNode == null) return;
@@ -479,7 +769,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             LoadReportsForSelectedAccount();
         }
 
-        private void treeViewAccounts_AfterSelect_(object sender, TreeViewEventArgs e)
+        private void treeViewAccounts_AfterSelect__(object sender, TreeViewEventArgs e)
         {
             // إذا لم يتم تحديد أي عقدة، اخرج من الدالة
             if (treeViewAccounts.SelectedNode == null) return;
@@ -616,7 +906,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         private bool isSearchActive = false;// هذا المغيير للتعطيل المؤقت عند البحث
 
         //وظيفة غلق العقدة الاساسية العير مفعلة
-        private void treeViewAccounts_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+        private void treeViewAccounts_BeforeExpand_(object sender, TreeViewCancelEventArgs e)
         {
             if (isSearchActive)
                 return; // أثناء البحث لا نفعل أي غلق للعقد الأخرى
@@ -680,19 +970,19 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
         //تعطيل وتفعيل اغلاق القوائم التلقائى
-        private void txtSearchTree_Leave(object sender, EventArgs e)
+        private void txtSearchTree_Leave_(object sender, EventArgs e)
         {
             isSearchActive = false; // إعادة تفعيل التعامل مع BeforeExpand
         }
 
         // تابع التعطيل
-        private void txtSearchTree_Enter(object sender, EventArgs e)
+        private void txtSearchTree_Enter_(object sender, EventArgs e)
         {
             isSearchActive = true; // تعطيل التعامل مع BeforeExpand
         }
 
         // وظيفة ضبط عدم قص الاسم فى الشجرة عند التكبير 
-        private void treeViewAccounts_DrawNode(object? sender, DrawTreeNodeEventArgs e)
+        private void treeViewAccounts_DrawNode_(object? sender, DrawTreeNodeEventArgs e)
         {
             e.DrawDefault = false;
 
