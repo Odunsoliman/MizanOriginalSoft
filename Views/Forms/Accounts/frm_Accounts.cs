@@ -571,24 +571,31 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        // زر الحفظ
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        // زر اضافة حساب الى الشجرة
         private void txtAccName_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter) // لو ضغط Enter
+            if (e.KeyCode == Keys.Enter)
             {
-                if (!string.IsNullOrWhiteSpace(txtAccName.Text)) // والتكست مش فاضي
+                if (!string.IsNullOrWhiteSpace(txtAccName.Text))
                 {
-                    Addchiled(); // نفذ الدالة
-                    e.Handled = true;  // يمنع الحدث الافتراضي (زي الصوت)
-                    e.SuppressKeyPress = true; // يمنع إدخال سطر جديد في التكست بوكس
+                    // نفذ الإضافة
+                    Addchiled();
+
+                    // أضف الاسم الجديد في قائمة الجلسة
+                    lstAccAdded.Items.Add(txtAccName.Text);
+
+                    // امسح التكست عشان يبقى جاهز لاسم جديد
+                    txtAccName.Clear();
+
+                    // رجّع الفوكس للتكست
+                    txtAccName.Focus();
+
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
                 }
             }
         }
+
 
         // دالة الاضافة الى اشجرة
         private void Addchiled()

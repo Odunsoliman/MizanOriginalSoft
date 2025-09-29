@@ -97,8 +97,6 @@
             tabPage2 = new TabPage();
             tableLayoutPanel11 = new TableLayoutPanel();
             tableLayoutPanel1 = new TableLayoutPanel();
-            tableLayoutPanel18 = new TableLayoutPanel();
-            panel1 = new Panel();
             tableLayoutPanel4 = new TableLayoutPanel();
             tableLayoutPanel6 = new TableLayoutPanel();
             lblParentAccName = new Label();
@@ -110,6 +108,7 @@
             panel2 = new Panel();
             tlpBody = new TableLayoutPanel();
             tlpHome = new TableLayoutPanel();
+            lstAccAdded = new ListBox();
             tableLayoutPanel13.SuspendLayout();
             contextMenuDGV.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
@@ -1111,40 +1110,18 @@
             // 
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel18, 0, 3);
-            tableLayoutPanel1.Controls.Add(panel1, 0, 2);
+            tableLayoutPanel1.Controls.Add(lstAccAdded, 0, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(3, 3);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 5;
+            tableLayoutPanel1.RowCount = 3;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 6F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 5F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 64F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 34F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 60F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.Size = new Size(429, 598);
             tableLayoutPanel1.TabIndex = 2;
-            // 
-            // tableLayoutPanel18
-            // 
-            tableLayoutPanel18.ColumnCount = 1;
-            tableLayoutPanel18.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel18.Location = new Point(3, 161);
-            tableLayoutPanel18.Name = "tableLayoutPanel18";
-            tableLayoutPanel18.RowCount = 2;
-            tableLayoutPanel18.RowStyles.Add(new RowStyle(SizeType.Percent, 32.43968F));
-            tableLayoutPanel18.RowStyles.Add(new RowStyle(SizeType.Percent, 67.56032F));
-            tableLayoutPanel18.Size = new Size(423, 373);
-            tableLayoutPanel18.TabIndex = 95;
-            // 
-            // panel1
-            // 
-            panel1.BackColor = SystemColors.ActiveBorder;
-            panel1.Dock = DockStyle.Fill;
-            panel1.Location = new Point(3, 156);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(423, 1);
-            panel1.TabIndex = 94;
             // 
             // tableLayoutPanel4
             // 
@@ -1307,6 +1284,16 @@
             tlpHome.Size = new Size(1124, 726);
             tlpHome.TabIndex = 5;
             // 
+            // lstAccAdded
+            // 
+            lstAccAdded.Dock = DockStyle.Left;
+            lstAccAdded.FormattingEnabled = true;
+            lstAccAdded.ItemHeight = 15;
+            lstAccAdded.Location = new Point(212, 38);
+            lstAccAdded.Name = "lstAccAdded";
+            lstAccAdded.Size = new Size(214, 197);
+            lstAccAdded.TabIndex = 1;
+            // 
             // frm_Accounts
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1417,8 +1404,6 @@
         private TabPage tabPage2;
         private TableLayoutPanel tableLayoutPanel11;
         private TableLayoutPanel tableLayoutPanel1;
-        private TableLayoutPanel tableLayoutPanel18;
-        private Panel panel1;
         private TableLayoutPanel tableLayoutPanel4;
         private Panel panel2;
         private TableLayoutPanel tlpBody;
@@ -1441,5 +1426,6 @@
         private Label lblContactName;
         private Label lblCreateAndModifyDate;
         private Button btnAddDetails;
+        private ListBox lstAccAdded;
     }
 }
