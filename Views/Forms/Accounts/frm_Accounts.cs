@@ -637,7 +637,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 // 🟢 تحديث الجريد لإظهار الحساب الجديد
                 LoadChildrenInDGV(parentAccID);
 
-                txtAccName.Clear();
+
             }
             else
             {
