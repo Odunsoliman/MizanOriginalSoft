@@ -34,6 +34,62 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         private void LoadAccountsTree()
         {
             treeViewAccounts.Nodes.Clear();
+            DataTable dt = DBServiecs.Acc_GetChart() ?? new DataTable();
+            if (dt.Rows.Count == 0) return;
+
+            // إنشاء قاموس لتخزين كل العقد المؤقتة
+            Dictionary<string, TreeNode> nodeDict = new Dictionary<string, TreeNode>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                string accName = row["AccName"] as string ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(accName)) continue;
+
+                string? treeCode = row["TreeAccCode"].ToString();
+                string? parentCode = row["ParentAccID"] != DBNull.Value ? row["ParentAccID"].ToString() : null;
+
+                TreeNode node = new TreeNode(accName) { Tag = row };
+                nodeDict[treeCode] = node;
+
+                if (string.IsNullOrEmpty(parentCode))
+                {
+                    treeViewAccounts.Nodes.Add(node); // الجذر
+                }
+                else if (nodeDict.TryGetValue(parentCode, out TreeNode? parentNode))
+                {
+                    parentNode.Nodes.Add(node);
+                }
+                else
+                {
+                    treeViewAccounts.Nodes.Add(node); // fallback إذا الأب غير موجود
+                }
+            }
+
+            SortTreeNodes(treeViewAccounts.Nodes);
+            treeViewAccounts.CollapseAll();
+        }
+        private void SortTreeNodes(TreeNodeCollection nodes)
+        {
+            List<TreeNode> nodeList = nodes.Cast<TreeNode>()
+                                           .OrderBy(n =>
+                                           {
+                                               if (n.Tag is DataRow row)
+                                                   return row["TreeAccCode"].ToString();
+                                               return string.Empty;
+                                           })
+                                           .ToList();
+
+            nodes.Clear();
+            foreach (TreeNode node in nodeList)
+            {
+                nodes.Add(node);
+                SortTreeNodes(node.Nodes); // ترتيب الأبناء
+            }
+        }
+
+        private void LoadAccountsTree_()
+        {
+            treeViewAccounts.Nodes.Clear();
 
             DataTable dt = DBServiecs.Acc_GetChart() ?? new DataTable();
             if (dt.Rows.Count == 0) return;
@@ -106,7 +162,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         // 🔹 دالة ترتيب العقد حسب AccID تصاعديًا (Recursive)
-        private void SortTreeNodes(TreeNodeCollection nodes)
+        private void SortTreeNodes_(TreeNodeCollection nodes)
         {
             List<TreeNode> nodeList = nodes.Cast<TreeNode>()
                                            .OrderBy(n =>
