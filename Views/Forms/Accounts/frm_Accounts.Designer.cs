@@ -198,7 +198,7 @@
             // btnStripAddChildren
             // 
             btnStripAddChildren.Name = "btnStripAddChildren";
-            btnStripAddChildren.Size = new Size(180, 22);
+            btnStripAddChildren.Size = new Size(168, 22);
             btnStripAddChildren.Text = "اضافة حساب فرعى";
             btnStripAddChildren.Click += btnStripAddChildren_Click;
             // 
@@ -207,7 +207,7 @@
             contextMenuDGV.Items.AddRange(new ToolStripItem[] { btnStripAddChildren });
             contextMenuDGV.Name = "contextMenuDGV";
             contextMenuDGV.RightToLeft = RightToLeft.Yes;
-            contextMenuDGV.Size = new Size(181, 48);
+            contextMenuDGV.Size = new Size(169, 26);
             // 
             // DGV
             // 

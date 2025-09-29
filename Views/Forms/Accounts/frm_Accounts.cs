@@ -312,6 +312,130 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // ==========================
             // 1) تمييز العقدة بالأحمر + خط أكبر
             // ==========================
+            if (activeNode != null)
+            {
+                activeNode.NodeFont = new Font("Times New Roman", 12, FontStyle.Bold);
+                activeNode.ForeColor = Color.Black;
+            }
+
+            activeNode = selectedNode;
+
+            activeNode.NodeFont = new Font(treeViewAccounts.Font.FontFamily,
+                                           treeViewAccounts.Font.Size + 1,
+                                           FontStyle.Bold);
+            activeNode.ForeColor = Color.Red;
+            treeViewAccounts.Refresh();
+
+            // ==========================
+            // 2) استخراج بيانات الحساب
+            // ==========================
+            int currentTreeAccCode = row.Field<int>("TreeAccCode");   // الترقيم الشجري الجديد
+            int currentAccID = row.Field<int>("AccID");               // المفتاح الأصلي (للحركات)
+            string accName = row["AccName"]?.ToString() ?? string.Empty;
+            int? parentAccID = row["ParentAccID"] == DBNull.Value ? (int?)null : Convert.ToInt32(row["ParentAccID"]);
+            bool hasChildren = row.Field<bool?>("IsHasChildren") ?? false;
+            bool hasDetails = row.Field<bool?>("IsHasDetails") ?? false;
+            bool isEnerAcc = row.Field<bool?>("IsEnerAcc") ?? false;
+            bool isHidden = row.Field<bool?>("IsHidden") ?? false;
+
+            string balance = row["Balance"]?.ToString() ?? string.Empty;
+            string balanceState = row["BalanceState"]?.ToString() ?? string.Empty;
+            string dateOfJoin = row["DateOfJoin"]?.ToString() ?? string.Empty;
+
+            // ==========================
+            // 3) تحديث الـ DGV
+            // ==========================
+            if (hasChildren)
+            {
+                LoadChildrenInDGV(currentTreeAccCode);  // التغيير هنا ليبنى على TreeAccCode
+            }
+            else
+            {
+                DGV.DataSource = null;
+            }
+
+            selectedRow = row;
+
+            // ==========================
+            // 4) تحديث التسميات
+            // ==========================
+            lblSelectedTreeNod.Text = $"{currentTreeAccCode} - {accName}";  // بدل AccID بـ TreeAccCode
+            lblPathNode.Text = GetFullPathFromNode(selectedNode);
+            lblNameNod.Text = $"{accName}";
+
+            // ==========================
+            // 5) التحقق من إمكانية إضافة حساب فرعي
+            // ==========================
+            bool canAddChild = !(isEnerAcc && !hasChildren);
+            txtAccName.Enabled = canAddChild;
+
+            if (!canAddChild)
+            {
+                txtAccName.Clear();
+                lblParentAccName.Text = "لا يمكن اضافة حسابات فرعية هنا فهذا حساب نهائى";
+                lblParentAccName.ForeColor = Color.Red;
+                chkIsHasChildren.Enabled = false;
+            }
+            else
+            {
+                lblParentAccName.Text = accName;
+                lblParentAccName.ForeColor = Color.Gray;
+                chkIsHasChildren.Enabled = true;
+            }
+
+            lblIsHasChildren.Text = hasChildren ? "" : "هذا الحساب مازال ليس له فروع";
+
+            // ==========================
+            // 6) التحقق من إذا كان الأب (أو أجداده) = 12 (أصول ثابتة)
+            // ==========================
+            object hasDetailsObj = row["IsHasDetails"];
+
+            if (hasDetailsObj == DBNull.Value || Convert.ToInt32(hasDetailsObj) == 0)
+            {
+                lblAccDataDetails.Text = "";
+                tlpBtnExec.Enabled = false;
+            }
+            else if (Convert.ToInt32(hasDetailsObj) == 1)
+            {
+                bool hasFixedAssetParent = false;
+                TreeNode? currentNode = selectedNode;
+
+                while (currentNode != null)
+                {
+                    if (currentNode.Tag is DataRow parentRow &&
+                        Convert.ToInt32(parentRow["TreeAccCode"]) == 12)  // التحقق على TreeAccCode
+                    {
+                        hasFixedAssetParent = true;
+                        break;
+                    }
+                    currentNode = currentNode.Parent;
+                }
+
+                lblAccDataDetails.Text = hasFixedAssetParent
+                    ? "بيانات الأصل الثابت"
+                    : "بيانات شخصية";
+                tlpBtnExec.Enabled = true;
+            }
+
+            // ==========================
+            // 7) تحميل التقارير الخاصة بالحساب المحدد
+            // ==========================
+            LoadReportsForSelectedAccount();
+        }
+
+        private void treeViewAccounts_AfterSelect_(object sender, TreeViewEventArgs e)
+        {
+            // إذا لم يتم تحديد أي عقدة، اخرج من الدالة
+            if (treeViewAccounts.SelectedNode == null) return;
+
+            TreeNode selectedNode = treeViewAccounts.SelectedNode;
+
+            // التأكد أن الـ Tag يحتوي على DataRow
+            if (selectedNode.Tag is not DataRow row) return;
+
+            // ==========================
+            // 1) تمييز العقدة بالأحمر + خط أكبر
+            // ==========================
 
             // أعد العقدة القديمة لشكلها الطبيعي
             if (activeNode != null)
