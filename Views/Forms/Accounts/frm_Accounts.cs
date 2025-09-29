@@ -382,8 +382,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
                 chkIsHasChildren.Enabled = false;
 
-                btnNew.Visible = false;
-                btnSave.Visible = false;
+
             }
             else
             {
@@ -391,8 +390,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 lblParentAccName.ForeColor = Color.Gray;
                 chkIsHasChildren.Enabled = true;
 
-                btnNew.Visible = true;
-                btnSave.Visible = true;
             }
 
             lblIsHasChildren.Text = hasChildren ? "" : "هذا الحساب مازال ليس له فروع";
@@ -426,7 +423,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 lblAccDataDetails.Text = hasFixedAssetParent
                     ? "بيانات الأصل الثابت"
                     : "بيانات شخصية";
-                tlpBtnExec.Enabled=true ;
+                tlpBtnExec.Enabled = true;
             }
 
             // ==========================
@@ -577,6 +574,25 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // زر الحفظ
         private void btnSave_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void txtAccName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) // لو ضغط Enter
+            {
+                if (!string.IsNullOrWhiteSpace(txtAccName.Text)) // والتكست مش فاضي
+                {
+                    Addchiled(); // نفذ الدالة
+                    e.Handled = true;  // يمنع الحدث الافتراضي (زي الصوت)
+                    e.SuppressKeyPress = true; // يمنع إدخال سطر جديد في التكست بوكس
+                }
+            }
+        }
+
+        // دالة الاضافة الى اشجرة
+        private void Addchiled()
+        {
             if (selectedRow == null)
             {
                 MessageBox.Show("من فضلك اختر حساب من الشجرة أولاً");
@@ -625,7 +641,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 MessageBox.Show("فشل في الحفظ ❌\n" + result);
             }
         }
-
         // زر تعديل حساب
         private void btnModify_Click(object sender, EventArgs e)
         {
@@ -910,7 +925,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             lblAccDetailNote.Text = "";
             lblCreateAndModifyDate.Text = "";
         }
- 
+
         // زر التنقل بين التفاصيل
         private void btnNextDetail_Click(object sender, EventArgs e)
         {
@@ -1201,8 +1216,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 Acc_GetDetails(accID);
             }
         }
-
-
 
     }
 }

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             txtSearchTree = new TextBox();
             tableLayoutPanel13 = new TableLayoutPanel();
             label7 = new Label();
@@ -100,9 +100,6 @@
             tableLayoutPanel18 = new TableLayoutPanel();
             panel1 = new Panel();
             tableLayoutPanel4 = new TableLayoutPanel();
-            tableLayoutPanel16 = new TableLayoutPanel();
-            btnSave = new Button();
-            btnNew = new Button();
             tableLayoutPanel6 = new TableLayoutPanel();
             lblParentAccName = new Label();
             label2 = new Label();
@@ -139,7 +136,6 @@
             tableLayoutPanel11.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
-            tableLayoutPanel16.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
             tlpBody.SuspendLayout();
             tlpHome.SuspendLayout();
@@ -227,8 +223,8 @@
             DGV.ReadOnly = true;
             DGV.RowHeadersVisible = false;
             DGV.RowHeadersWidth = 51;
-            dataGridViewCellStyle2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DGV.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DGV.RowsDefaultCellStyle = dataGridViewCellStyle1;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DGV.Size = new Size(467, 367);
             DGV.TabIndex = 72;
@@ -1154,7 +1150,6 @@
             // 
             tableLayoutPanel4.ColumnCount = 1;
             tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel4.Controls.Add(tableLayoutPanel16, 0, 4);
             tableLayoutPanel4.Controls.Add(tableLayoutPanel6, 0, 1);
             tableLayoutPanel4.Controls.Add(panel2, 0, 2);
             tableLayoutPanel4.Dock = DockStyle.Fill;
@@ -1168,55 +1163,6 @@
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanel4.Size = new Size(429, 598);
             tableLayoutPanel4.TabIndex = 1;
-            // 
-            // tableLayoutPanel16
-            // 
-            tableLayoutPanel16.ColumnCount = 2;
-            tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel16.Controls.Add(btnSave, 1, 0);
-            tableLayoutPanel16.Controls.Add(btnNew, 0, 0);
-            tableLayoutPanel16.Dock = DockStyle.Fill;
-            tableLayoutPanel16.Location = new Point(3, 540);
-            tableLayoutPanel16.Name = "tableLayoutPanel16";
-            tableLayoutPanel16.RowCount = 1;
-            tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel16.Size = new Size(423, 55);
-            tableLayoutPanel16.TabIndex = 92;
-            // 
-            // btnSave
-            // 
-            btnSave.BackColor = Color.Teal;
-            btnSave.Dock = DockStyle.Fill;
-            btnSave.Font = new Font("Times New Roman", 16F, FontStyle.Bold);
-            btnSave.ForeColor = Color.Yellow;
-            btnSave.Location = new Point(4, 4);
-            btnSave.Margin = new Padding(4);
-            btnSave.Name = "btnSave";
-            btnSave.Size = new Size(204, 47);
-            btnSave.TabIndex = 83;
-            btnSave.TabStop = false;
-            btnSave.Text = "حفــظ";
-            btnSave.UseVisualStyleBackColor = false;
-            btnSave.Visible = false;
-            btnSave.Click += btnSave_Click;
-            // 
-            // btnNew
-            // 
-            btnNew.BackColor = Color.Yellow;
-            btnNew.Dock = DockStyle.Fill;
-            btnNew.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnNew.Location = new Point(216, 4);
-            btnNew.Margin = new Padding(4);
-            btnNew.Name = "btnNew";
-            btnNew.Size = new Size(203, 47);
-            btnNew.TabIndex = 73;
-            btnNew.TabStop = false;
-            btnNew.Text = "جديد";
-            btnNew.UseVisualStyleBackColor = false;
-            btnNew.Visible = false;
-            btnNew.Click += btnNew_Click;
             // 
             // tableLayoutPanel6
             // 
@@ -1280,6 +1226,7 @@
             txtAccName.Size = new Size(289, 29);
             txtAccName.TabIndex = 47;
             txtAccName.TextAlign = HorizontalAlignment.Center;
+            txtAccName.KeyDown += txtAccName_KeyDown;
             // 
             // label6
             // 
@@ -1405,7 +1352,6 @@
             tableLayoutPanel11.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel4.ResumeLayout(false);
-            tableLayoutPanel16.ResumeLayout(false);
             tableLayoutPanel6.ResumeLayout(false);
             tableLayoutPanel6.PerformLayout();
             tlpBody.ResumeLayout(false);
@@ -1471,9 +1417,6 @@
         private TabPage tabPage2;
         private TableLayoutPanel tableLayoutPanel11;
         private TableLayoutPanel tableLayoutPanel1;
-        private TableLayoutPanel tableLayoutPanel16;
-        private Button btnSave;
-        private Button btnNew;
         private TableLayoutPanel tableLayoutPanel18;
         private Panel panel1;
         private TableLayoutPanel tableLayoutPanel4;
