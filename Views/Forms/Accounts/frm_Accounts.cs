@@ -612,42 +612,39 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 return;
             }
 
-            string AccName = txtAccName.Text.Trim();
-            int ParentAccID = Convert.ToInt32(selectedRow["AccID"]);
-            int CreateByUserID = CurrentSession.UserID;
+            string accName = txtAccName.Text.Trim();
+            int parentAccID = Convert.ToInt32(selectedRow["AccID"]);
+            int createByUserID = CurrentSession.UserID;
 
             // 🟢 استدعاء الإجراء
-            string result = DBServiecs.Acc_AddAccount(AccName, ParentAccID, CreateByUserID);
+            string result = DBServiecs.Acc_AddAccount(accName, parentAccID, createByUserID);
 
             if (result.StartsWith("تم")) // يعني نجحت العملية
             {
                 MessageBox.Show("تم حفظ الحساب بنجاح ✅");
 
-                // 🟢 حفظ الـ ID بتاع العقدة المحددة
-                int currentNodeId = ParentAccID;
-
                 // 🟢 إعادة تحميل الشجرة
                 LoadAccountsTree();
-                txtSearchTree.Text = AccName;
-                // 🟢 البحث عن العقدة بنفس الـ ID
-                TreeNode? node = FindNodeByAccID(treeViewAccounts.Nodes, currentNodeId);
 
-                if (node != null)
+                // 🟢 البحث عن الأب المباشر وتحديده
+                TreeNode? parentNode = FindNodeByAccID(treeViewAccounts.Nodes, parentAccID);
+                if (parentNode != null)
                 {
-                    treeViewAccounts.SelectedNode = node;
-                    node.EnsureVisible(); // يخليها تبان حتى لو داخل فرع مغلق
+                    treeViewAccounts.SelectedNode = parentNode;
+                    parentNode.EnsureVisible();
                 }
 
-                // 🟢 فتح وتحديد العقدة الأب
-                HighlightAndExpandNode(currentNodeId);
-                //txtAccName.Clear();
-                //chkIsHasChildren.Checked = false;
+                // 🟢 تحديث الجريد لإظهار الحساب الجديد
+                LoadChildrenInDGV(parentAccID);
+
+                txtAccName.Clear();
             }
             else
             {
                 MessageBox.Show("فشل في الحفظ ❌\n" + result);
             }
         }
+
         // زر تعديل حساب
         private void btnModify_Click(object sender, EventArgs e)
         {
@@ -1223,6 +1220,5 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 Acc_GetDetails(accID);
             }
         }
-
     }
 }

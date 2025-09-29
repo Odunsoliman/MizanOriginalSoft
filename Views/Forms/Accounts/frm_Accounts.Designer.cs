@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             txtSearchTree = new TextBox();
             tableLayoutPanel13 = new TableLayoutPanel();
             label7 = new Label();
@@ -97,6 +97,7 @@
             tabPage2 = new TabPage();
             tableLayoutPanel11 = new TableLayoutPanel();
             tableLayoutPanel1 = new TableLayoutPanel();
+            lstAccAdded = new ListBox();
             tableLayoutPanel4 = new TableLayoutPanel();
             tableLayoutPanel6 = new TableLayoutPanel();
             lblParentAccName = new Label();
@@ -108,7 +109,6 @@
             panel2 = new Panel();
             tlpBody = new TableLayoutPanel();
             tlpHome = new TableLayoutPanel();
-            lstAccAdded = new ListBox();
             tableLayoutPanel13.SuspendLayout();
             contextMenuDGV.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
@@ -222,8 +222,8 @@
             DGV.ReadOnly = true;
             DGV.RowHeadersVisible = false;
             DGV.RowHeadersWidth = 51;
-            dataGridViewCellStyle1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DGV.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DGV.RowsDefaultCellStyle = dataGridViewCellStyle2;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DGV.Size = new Size(467, 367);
             DGV.TabIndex = 72;
@@ -1114,6 +1114,7 @@
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(3, 3);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.Padding = new Padding(20);
             tableLayoutPanel1.RowCount = 3;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 6F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 34F));
@@ -1122,6 +1123,17 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.Size = new Size(429, 598);
             tableLayoutPanel1.TabIndex = 2;
+            // 
+            // lstAccAdded
+            // 
+            lstAccAdded.BorderStyle = BorderStyle.None;
+            lstAccAdded.Dock = DockStyle.Left;
+            lstAccAdded.FormattingEnabled = true;
+            lstAccAdded.ItemHeight = 15;
+            lstAccAdded.Location = new Point(192, 56);
+            lstAccAdded.Name = "lstAccAdded";
+            lstAccAdded.Size = new Size(214, 183);
+            lstAccAdded.TabIndex = 1;
             // 
             // tableLayoutPanel4
             // 
@@ -1283,16 +1295,6 @@
             tlpHome.RowStyles.Add(new RowStyle(SizeType.Absolute, 9F));
             tlpHome.Size = new Size(1124, 726);
             tlpHome.TabIndex = 5;
-            // 
-            // lstAccAdded
-            // 
-            lstAccAdded.Dock = DockStyle.Left;
-            lstAccAdded.FormattingEnabled = true;
-            lstAccAdded.ItemHeight = 15;
-            lstAccAdded.Location = new Point(212, 38);
-            lstAccAdded.Name = "lstAccAdded";
-            lstAccAdded.Size = new Size(214, 197);
-            lstAccAdded.TabIndex = 1;
             // 
             // frm_Accounts
             // 
