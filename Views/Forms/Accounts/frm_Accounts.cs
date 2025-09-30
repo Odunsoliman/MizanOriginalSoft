@@ -157,6 +157,111 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         #endregion
 
+        #region TreeView Search & Highlight
+
+        private List<TreeNode> matchedNodes = new List<TreeNode>();
+        private int currentMatchIndex = -1;
+        private bool isSearchActive = false;
+
+        // ==========================
+        // عند دخول أو خروج مربع البحث
+        // ==========================
+        private void txtSearchTree_Enter(object sender, EventArgs e) => isSearchActive = true;
+        private void txtSearchTree_Leave(object sender, EventArgs e) => isSearchActive = false;
+
+        // ==========================
+        // التغير في نص البحث
+        // ==========================
+        private void txtSearchTree_TextChanged(object sender, EventArgs e)
+        {
+            string searchText = txtSearchTree.Text.Trim().ToLower();
+
+            matchedNodes.Clear();
+            currentMatchIndex = -1;
+
+            // إعادة ضبط ألوان كل العقد
+            ResetNodeColors(treeViewAccounts.Nodes);
+
+            if (string.IsNullOrEmpty(searchText)) return;
+
+            // البحث وتلوين جميع العقد المتطابقة
+            SearchAndHighlightNodes(treeViewAccounts.Nodes, searchText);
+        }
+
+        // ==========================
+        // إعادة ضبط ألوان كل العقد
+        // ==========================
+        private void ResetNodeColors(TreeNodeCollection nodes)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                node.BackColor = treeViewAccounts.BackColor;
+                node.ForeColor = treeViewAccounts.ForeColor;
+
+                if (node.Nodes.Count > 0)
+                    ResetNodeColors(node.Nodes);
+            }
+        }
+
+        // ==========================
+        // البحث وتلوين جميع العقد المتطابقة
+        // ==========================
+        private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Text.ToLower().Contains(searchText))
+                {
+                    node.BackColor = Color.Yellow;
+                    node.ForeColor = Color.Black;
+                    matchedNodes.Add(node);
+                    ExpandParentNodes(node); // فتح جميع الآباء
+                }
+
+                if (node.Nodes.Count > 0)
+                    SearchAndHighlightNodes(node.Nodes, searchText);
+            }
+        }
+
+        // ==========================
+        // فتح جميع الآباء للعقدة المحددة
+        // ==========================
+        private void ExpandParentNodes(TreeNode node)
+        {
+            TreeNode? parent = node.Parent;
+            while (parent != null)
+            {
+                parent.Expand();
+                parent = parent.Parent;
+            }
+        }
+        private void treeViewAccounts_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        {
+            // استخدام لون الخلفية الخاص بالعقدة
+            Color backColor = e.Node.BackColor;
+            Color foreColor = e.Node.ForeColor;
+
+            // رسم الخلفية أولًا
+            using (Brush bgBrush = new SolidBrush(backColor))
+            {
+                e.Graphics.FillRectangle(bgBrush, e.Bounds);
+            }
+
+            // تحديد الخط
+            Font nodeFont = e.Node == activeNode
+                ? new Font("Times New Roman", 13, FontStyle.Bold)
+                : new Font("Times New Roman", 12, FontStyle.Bold);
+
+            // رسم النص
+            TextRenderer.DrawText(e.Graphics, e.Node.Text, nodeFont, e.Bounds, foreColor, TextFormatFlags.GlyphOverhangPadding);
+
+            e.DrawDefault = false;
+        }
+
+        #endregion
+
+
+
         #region !!!!!!!!!!! TreeView Events  الاحداث التفاعلية للشجرة !!!!!!!!!
 
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
@@ -300,7 +405,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        private void treeViewAccounts_DrawNode(object? sender, DrawTreeNodeEventArgs e)
+        private void treeViewAccounts_DrawNode_(object? sender, DrawTreeNodeEventArgs e)
         {
             e.DrawDefault = false;
             Font nodeFont = e.Node == activeNode
@@ -310,9 +415,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             TextRenderer.DrawText(e.Graphics, e.Node!.Text, nodeFont, e.Bounds, foreColor);
         }
 
-        private List<TreeNode> matchedNodes = new List<TreeNode>();
-        private int currentMatchIndex = -1;
-        private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)
+        private List<TreeNode> matchedNodes_ = new List<TreeNode>();
+        private int currentMatchIndex_ = -1;
+        private void SearchAndHighlightNodes_(TreeNodeCollection nodes, string searchText)
         {
             foreach (TreeNode node in nodes)
             {
@@ -367,7 +472,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         //    }
         //}
 
-        private void txtSearchTree_TextChanged(object sender, EventArgs e)
+        private void txtSearchTree_TextChanged_(object sender, EventArgs e)
         {
             string searchText = txtSearchTree.Text.Trim().ToLower();
 
@@ -376,7 +481,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             currentMatchIndex = -1;
 
             // إعادة ضبط ألوان العقد وتغلق العقدة
-            ResetNodeColorsAndCollapse(treeViewAccounts.Nodes);
+            ResetNodeColorsAndCollapse_(treeViewAccounts.Nodes);
 
             // إذا النص فارغ لا نفعل شيء
             if (string.IsNullOrEmpty(searchText)) return;
@@ -414,11 +519,24 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         //}
 
-        private bool isSearchActive = false;// هذا المغيير للتعطيل المؤقت عند البحث
+        private bool isSearchActive_ = false;// هذا المغيير للتعطيل المؤقت عند البحث
 
-        private void txtSearchTree_Enter(object sender, EventArgs e) => isSearchActive = true;
-        private void txtSearchTree_Leave(object sender, EventArgs e) => isSearchActive = false;
-        private void ResetNodeColorsAndCollapse(TreeNodeCollection nodes)
+        private void txtSearchTree_Enter_(object sender, EventArgs e) => isSearchActive = true;
+        private void txtSearchTree_Leave_(object sender, EventArgs e) => isSearchActive = false;
+
+        private void ResetNodeColors_(TreeNodeCollection nodes)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                node.BackColor = treeViewAccounts.BackColor;
+                node.ForeColor = treeViewAccounts.ForeColor;
+
+                if (node.Nodes.Count > 0)
+                    ResetNodeColors(node.Nodes);
+            }
+        }
+
+        private void ResetNodeColorsAndCollapse_(TreeNodeCollection nodes)
         {
             foreach (TreeNode node in nodes)
             {
@@ -426,11 +544,11 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 node.ForeColor = treeViewAccounts.ForeColor;
                 node.Collapse();
                 if (node.Nodes.Count > 0)
-                    ResetNodeColorsAndCollapse(node.Nodes);
+                    ResetNodeColorsAndCollapse_(node.Nodes);
             }
         }
 
-        private void ExpandParentNodes(TreeNode node)
+        private void ExpandParentNodes_(TreeNode node)
         {
             TreeNode? parent = node.Parent;
             while (parent != null)
