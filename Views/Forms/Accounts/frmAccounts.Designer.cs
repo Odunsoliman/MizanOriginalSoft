@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             tlpBody = new TableLayoutPanel();
             panelList = new TableLayoutPanel();
             tableLayoutPanel15 = new TableLayoutPanel();
@@ -274,6 +274,8 @@
             txtSearchTree.TabIndex = 5;
             txtSearchTree.TextAlign = HorizontalAlignment.Center;
             txtSearchTree.TextChanged += txtSearchTree_TextChanged;
+            txtSearchTree.Enter += txtSearchTree_Enter;
+            txtSearchTree.Leave += txtSearchTree_Leave;
             // 
             // tabControlAccount
             // 
@@ -495,8 +497,8 @@
             DGV.ReadOnly = true;
             DGV.RowHeadersVisible = false;
             DGV.RowHeadersWidth = 51;
-            dataGridViewCellStyle1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DGV.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DGV.RowsDefaultCellStyle = dataGridViewCellStyle2;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DGV.Size = new Size(467, 367);
             DGV.TabIndex = 72;

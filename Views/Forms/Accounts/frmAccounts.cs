@@ -101,6 +101,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         /*اريد عند فتح عقدة جذرية رقمها فى TreeAccCode بين 1 الى 5 يتم اغلاق الجذر الاخرى حتى لا تكبر الشجرة ويكون هناك تركيز على العقدة الحالية*/
         private void treeViewAccounts_AfterExpand(object sender, TreeViewEventArgs e)
         {
+            if (_isSearching) return; // لا نغلق العقد عند البحث
             if (e?.Node == null) return;
 
             // إغلاق الجذور الأخرى إذا كانت العقدة المفتوحة من الجذور 1-5
@@ -338,11 +339,14 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         #region !!!!! منطقة البحث  !!!!!!!!!!
         private bool _isSearching = false;
 
+        // دخول وخروج مربع البحث
+        private void txtSearchTree_Enter(object sender, EventArgs e) => _isSearching = true;
+        private void txtSearchTree_Leave(object sender, EventArgs e) => _isSearching = false;
         private void txtSearchTree_TextChanged(object sender, EventArgs e)
         {
             if (_isSearching) return;
 
-            _isSearching = true;
+          
 
             try
             {
@@ -443,7 +447,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             return foundInCurrent || foundInChildren;
         }
-        #endregion 
+        #endregion
+
+ 
     }
 }
 
