@@ -98,7 +98,56 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             LoadChildAccountsToGrid(e.Node);
             DGVStyle();
         }
+        /*اريد عند فتح عقدة جذرية رقمها فى TreeAccCode بين 1 الى 5 يتم اغلاق الجذر الاخرى حتى لا تكبر الشجرة ويكون هناك تركيز على العقدة الحالية*/
+        private void treeViewAccounts_AfterExpand(object sender, TreeViewEventArgs e)
+        {
+            if (e?.Node == null) return;
 
+            // إغلاق الجذور الأخرى إذا كانت العقدة المفتوحة من الجذور 1-5
+            if (IsRootNodeInRange(e.Node))
+            {
+                CollapseOtherRootNodes(e.Node);
+            }
+        }
+
+        private bool IsRootNodeInRange(TreeNode node)
+        {
+            if (node?.Tag is DataRow row)
+            {
+                int treeAccCode = row.Field<int>("TreeAccCode");
+                int? parentAccID = row.Field<int?>("ParentAccID");
+
+                // التحقق إذا كانت عقدة جذرية (ليس لها والد) ورقمها بين 1-5
+                return !parentAccID.HasValue && treeAccCode >= 1 && treeAccCode <= 5;
+            }
+            return false;
+        }
+
+        private void CollapseOtherRootNodes(TreeNode currentNode)
+        {
+            foreach (TreeNode rootNode in treeViewAccounts.Nodes)
+            {
+                if (rootNode != currentNode && IsRootNodeInRange(rootNode))
+                {
+                    rootNode.Collapse();
+                }
+            }
+        }
+
+        //private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
+        //{
+        //    if (e?.Node == null) return;
+
+        //    // إعادة تعيين التنسيق السابق
+        //    _lastSelectedNode?.ForeColor = treeViewAccounts.ForeColor;
+
+        //    // تطبيق التنسيق الجديد
+        //    e.Node.ForeColor = Color.Red;
+        //    _lastSelectedNode = e.Node;
+
+        //    LoadChildAccountsToGrid(e.Node);
+        //    DGVStyle();
+        //}
         #endregion
 
 
