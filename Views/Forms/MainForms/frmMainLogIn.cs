@@ -593,7 +593,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
 
             CloseAllFormsExceptMain();
-            frm_Accounts frm = new frm_Accounts();
+            frmAccounts frm = new frmAccounts();
             OpenFormInPanel(frm);
         }
         #endregion 

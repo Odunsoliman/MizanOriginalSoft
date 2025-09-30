@@ -171,7 +171,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // ==========================
         // رسم العقدة بالكامل
         // ==========================
-        private void treeViewAccounts_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        private void treeViewAccounts_DrawNode(object sender, DrawTreeNodeEventArgs e)// الحل الاول تلوين جزئى
         {
             // استخدام الخلفية المباشرة من العقدة
             using (Brush bgBrush = new SolidBrush(e.Node.BackColor))
