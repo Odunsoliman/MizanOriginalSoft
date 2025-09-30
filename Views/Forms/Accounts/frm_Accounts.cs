@@ -157,22 +157,165 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         #endregion
 
+
         #region TreeView Search & Highlight
 
         private List<TreeNode> matchedNodes = new List<TreeNode>();
-        private int currentMatchIndex = -1;
         private bool isSearchActive = false;
 
-        // ==========================
-        // عند دخول أو خروج مربع البحث
-        // ==========================
+        // دخول وخروج مربع البحث
         private void txtSearchTree_Enter(object sender, EventArgs e) => isSearchActive = true;
         private void txtSearchTree_Leave(object sender, EventArgs e) => isSearchActive = false;
 
         // ==========================
-        // التغير في نص البحث
+        // نص البحث تغير
         // ==========================
         private void txtSearchTree_TextChanged(object sender, EventArgs e)
+        {
+            string searchText = txtSearchTree.Text.Trim().ToLower();
+
+            matchedNodes.Clear();
+
+            // إعادة ضبط ألوان العقد وإغلاقها
+            ResetNodeColorsAndCollapse(treeViewAccounts.Nodes);
+
+            if (string.IsNullOrEmpty(searchText)) return;
+
+            // البحث وتلوين كل العقد المطابقة
+            SearchAndHighlightNodes(treeViewAccounts.Nodes, searchText);
+        }
+
+        // ==========================
+        // إعادة ضبط ألوان العقد وإغلاقها
+        // ==========================
+        private void ResetNodeColorsAndCollapse(TreeNodeCollection nodes)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                node.BackColor = treeViewAccounts.BackColor;
+                node.ForeColor = treeViewAccounts.ForeColor;
+
+                if (node.Nodes.Count > 0)
+                    ResetNodeColorsAndCollapse(node.Nodes);
+
+                node.Collapse(); // إغلاق كل العقد
+            }
+        }
+
+        // ==========================
+        // البحث وتلوين العقدة بالكامل وفتح الآباء فقط للعقد المطابقة
+        // ==========================
+        private bool SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)
+        {
+            bool anyMatchInThisLevel = false;
+
+            foreach (TreeNode node in nodes)
+            {
+                bool isMatch = node.Text.ToLower().Contains(searchText);
+                bool anyMatchInChildren = node.Nodes.Count > 0 ? SearchAndHighlightNodes(node.Nodes, searchText) : false;
+
+                if (isMatch)
+                {
+                    node.BackColor = Color.Yellow;
+                    node.ForeColor = Color.Black;
+                    matchedNodes.Add(node);
+                }
+                else
+                {
+                    node.BackColor = treeViewAccounts.BackColor;
+                    node.ForeColor = treeViewAccounts.ForeColor;
+                }
+
+                // إذا العقدة أو أي من أبنائها تطابق البحث، افتحها
+                if (isMatch || anyMatchInChildren)
+                {
+                    node.Expand();
+                    anyMatchInThisLevel = true;
+                }
+                else
+                {
+                    node.Collapse(); // لا تطابق ولا يوجد أطفال متطابقين -> أغلقها
+                }
+            }
+
+            return anyMatchInThisLevel;
+        }
+
+        // ==========================
+        // رسم العقدة بالكامل
+        // ==========================
+        private void treeViewAccounts_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        {
+            // تحديد الخط للعقدة النشطة أو العادية
+            Font nodeFont = e.Node == activeNode
+                ? new Font("Times New Roman", 13, FontStyle.Bold)
+                : new Font("Times New Roman", 12, FontStyle.Bold);
+
+            // قياس حجم النص
+            Size textSize = TextRenderer.MeasureText(e.Node.Text, nodeFont);
+
+            // إنشاء مستطيل خلفية مناسب فقط للنص
+            Rectangle textRect = new Rectangle(e.Bounds.X, e.Bounds.Y, textSize.Width, textSize.Height);
+
+            // رسم الخلفية حسب BackColor الخاص بالعقدة
+            using (Brush bgBrush = new SolidBrush(e.Node.BackColor))
+            {
+                e.Graphics.FillRectangle(bgBrush, textRect);
+            }
+
+            // رسم النص
+            TextRenderer.DrawText(e.Graphics, e.Node.Text, nodeFont, textRect, e.Node.ForeColor, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+
+            e.DrawDefault = false;
+        }
+
+        private void treeViewAccounts_DrawNode___(object sender, DrawTreeNodeEventArgs e)
+        {
+            // خلفية العقدة
+            Color backColor = e.Node.BackColor;
+            Color foreColor = e.Node.ForeColor;
+
+            using (Brush bgBrush = new SolidBrush(backColor))
+            {
+                e.Graphics.FillRectangle(bgBrush, e.Bounds);
+            }
+
+            Font nodeFont = e.Node == activeNode
+                ? new Font("Times New Roman", 13, FontStyle.Bold)
+                : new Font("Times New Roman", 12, FontStyle.Bold);
+
+            TextRenderer.DrawText(e.Graphics, e.Node.Text, nodeFont, e.Bounds, foreColor, TextFormatFlags.GlyphOverhangPadding);
+
+            e.DrawDefault = false;
+        }
+
+        #endregion
+
+
+
+
+
+
+
+
+
+
+        #region TreeView Search & Highlight
+
+        private List<TreeNode> matchedNodes__ = new List<TreeNode>();
+        private int currentMatchIndex = -1;
+        private bool isSearchActive__ = false;
+
+        // ==========================
+        // عند دخول أو خروج مربع البحث
+        // ==========================
+        private void txtSearchTree_Enter__(object sender, EventArgs e) => isSearchActive = true;
+        private void txtSearchTree_Leave__(object sender, EventArgs e) => isSearchActive = false;
+
+        // ==========================
+        // التغير في نص البحث
+        // ==========================
+        private void txtSearchTree_TextChanged__(object sender, EventArgs e)
         {
             string searchText = txtSearchTree.Text.Trim().ToLower();
 
@@ -206,7 +349,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // ==========================
         // البحث وتلوين جميع العقد المتطابقة
         // ==========================
-        private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)
+        private void SearchAndHighlightNodes__(TreeNodeCollection nodes, string searchText)
         {
             foreach (TreeNode node in nodes)
             {
@@ -235,7 +378,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 parent = parent.Parent;
             }
         }
-        private void treeViewAccounts_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        private void treeViewAccounts_DrawNode__(object sender, DrawTreeNodeEventArgs e)
         {
             // استخدام لون الخلفية الخاص بالعقدة
             Color backColor = e.Node.BackColor;
