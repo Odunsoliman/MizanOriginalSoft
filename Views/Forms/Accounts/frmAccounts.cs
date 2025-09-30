@@ -68,8 +68,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                                            .OrderBy(n =>
                                            {
                                                if (n.Tag is DataRow row)
-                                                   return row["TreeAccCode"].ToString();
-                                               return string.Empty;
+                                                   return row.Field<int>("TreeAccCode"); // كـ int
+                                               return 0;
                                            })
                                            .ToList();
 
@@ -91,22 +91,29 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             if (selectedNode?.Tag == null || _allAccountsData == null) return;
 
             DataRow selectedRow = selectedNode.Tag as DataRow;
-            string parentTreeCode = selectedRow["TreeAccCode"].ToString();
+            int parentTreeCode = selectedRow.Field<int>("TreeAccCode"); // مباشرة كـ int
 
             // فلترة الأبناء الذين ليس لهم أبناء (ورقيات)
-            var childAccounts = _allAccountsData.AsEnumerable()
+            var filteredRows = _allAccountsData.AsEnumerable()
                 .Where(r =>
-                    r.Field<string>("ParentAccID")?.ToString() == parentTreeCode &&
-                    !r.Field<bool>("IsHasChildren"))
-                .CopyToDataTable();
+                    r.Field<int?>("ParentAccID") == parentTreeCode &&
+                    !r.Field<bool>("IsHasChildren"));
 
-            DGV .DataSource = childAccounts;
+            // التحقق من وجود بيانات قبل إنشاء DataTable
+            if (filteredRows.Any())
+            {
+                DataTable childAccounts = filteredRows.CopyToDataTable();
+                DGV.DataSource = childAccounts;
+            }
+            else
+            {
+                DGV.DataSource = null; // لا توجد بيانات
+            }
 
             // إخفاء الأعمدة غير الضرورية إذا لزم الأمر
             if (DGV.Columns.Contains("TreeView"))
                 DGV.Columns["TreeView"].Visible = false;
         }
-
         /*
          الدالة DataTable dt = DBServiecs.Acc_GetChart() ?? new DataTable();
          احضرت كل الشجرة بما فيهم أباء وأبناء ولكن تم عرض فقط الآباء في الشجرة وهذا مطلوب

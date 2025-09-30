@@ -261,6 +261,7 @@
             treeViewAccounts.RightToLeftLayout = true;
             treeViewAccounts.Size = new Size(207, 420);
             treeViewAccounts.TabIndex = 4;
+            treeViewAccounts.AfterSelect += treeViewAccounts_AfterSelect;
             // 
             // txtSearchTree
             // 
