@@ -134,20 +134,58 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        //private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
-        //{
-        //    if (e?.Node == null) return;
 
-        //    // إعادة تعيين التنسيق السابق
-        //    _lastSelectedNode?.ForeColor = treeViewAccounts.ForeColor;
+        private void treeViewAccounts_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        {
+            // إذا كان e هو null، لا نستطيع فعل أي شيء
+            if (e == null) return;
 
-        //    // تطبيق التنسيق الجديد
-        //    e.Node.ForeColor = Color.Red;
-        //    _lastSelectedNode = e.Node;
+            // إذا كان Node هو null، نستخدم الرسم الافتراضي
+            if (e.Node == null)
+            {
+                e.DrawDefault = true;
+                return;
+            }
 
-        //    LoadChildAccountsToGrid(e.Node);
-        //    DGVStyle();
-        //}
+            bool isRootNode = IsRootNode(e.Node);
+
+            if (isRootNode)
+            {
+                Rectangle expandedBounds = new Rectangle(
+                    e.Bounds.X,
+                    e.Bounds.Y,
+                    e.Bounds.Width,
+                    e.Bounds.Height + 15
+                );
+
+                e.Graphics.FillRectangle(Brushes.White, expandedBounds);
+
+                TextRenderer.DrawText(e.Graphics, e.Node.Text, e.Node.NodeFont ?? treeViewAccounts.Font,
+                                    e.Bounds, e.Node.ForeColor, TextFormatFlags.VerticalCenter);
+
+                if ((e.State & TreeNodeStates.Selected) != 0)
+                {
+                    using (Pen selectPen = new Pen(Color.Red, 2))
+                    {
+                        e.Graphics.DrawRectangle(selectPen, e.Bounds);
+                    }
+                }
+            }
+            else
+            {
+                e.DrawDefault = true;
+            }
+        }
+
+        private bool IsRootNode(TreeNode? node)
+        {
+            if (node?.Tag is DataRow row)
+            {
+                int? parentAccID = row.Field<int?>("ParentAccID");
+                return !parentAccID.HasValue;
+            }
+            return false;
+        }
         #endregion
 
 
