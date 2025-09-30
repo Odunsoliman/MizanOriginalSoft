@@ -278,31 +278,27 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             LoadReportsForSelectedAccount();
         }
 
-        // الهدف: عند محاولة توسيع عقدة جذرية أساسية (TreeAccCode = 1 إلى 5)،
-        //        يتم إغلاق جميع الجذور الأخرى تلقائيًا.
         private void treeViewAccounts_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            if (isSearchActive) return; // إذا البحث مفعل، لا نغلق العقد الأخرى
+            if (isSearchActive) return; // لا نغلق العقد عند البحث
 
-            // مسح مربع البحث عند توسعة أي عقدة
-            txtSearchTree.Clear();
+            txtSearchTree.Clear(); // مسح البحث عند التوسيع العادي
 
             if (e.Node?.Tag is DataRow row)
             {
                 int treeCode = row.Field<int>("TreeAccCode");
 
-                // إذا العقدة من الأصول الخمسة الأساسية (أصول، خصوم، حقوق ملكية، إيرادات، مصروفات)
+                // إغلاق الجذور الأساسية 1:5 إلا الأصل الحالي
                 if (row["ParentAccID"] == DBNull.Value && treeCode >= 1 && treeCode <= 5)
                 {
                     foreach (TreeNode rootNode in treeViewAccounts.Nodes)
                     {
                         if (rootNode != e.Node)
-                            rootNode.Collapse();  // أغلق الباقي
+                            rootNode.Collapse();
                     }
                 }
             }
         }
-
 
         private void treeViewAccounts_DrawNode(object? sender, DrawTreeNodeEventArgs e)
         {
@@ -314,32 +310,114 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             TextRenderer.DrawText(e.Graphics, e.Node!.Text, nodeFont, e.Bounds, foreColor);
         }
 
-        #endregion
-
-        #region !!!!!!!!  Search البحث فى الشجرة  !!!!!!!!
-
         private List<TreeNode> matchedNodes = new List<TreeNode>();
         private int currentMatchIndex = -1;
+        private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Text.ToLower().Contains(searchText))
+                {
+                    // تلوين العقدة المتطابقة
+                    node.BackColor = Color.Yellow;
+                    node.ForeColor = Color.Black;
+
+                    // إضافة العقدة لقائمة المطابقات إذا أردنا الرجوع لها لاحقًا
+                    matchedNodes.Add(node);
+
+                    // فتح جميع الآباء لهذه العقدة
+                    ExpandParentNodes(node);
+                }
+                else
+                {
+                    // إعادة اللون الافتراضي
+                    node.BackColor = treeViewAccounts.BackColor;
+                    node.ForeColor = treeViewAccounts.ForeColor;
+                }
+
+                // البحث في الأبناء
+                if (node.Nodes.Count > 0)
+                    SearchAndHighlightNodes(node.Nodes, searchText);
+            }
+        }
+
+        //private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)
+        //{
+        //    foreach (TreeNode node in nodes)
+        //    {
+        //        // التحقق من النص
+        //        if (node.Text.ToLower().Contains(searchText))
+        //        {
+        //            node.BackColor = Color.Yellow;
+        //            node.ForeColor = Color.Black;
+        //            matchedNodes.Add(node);
+
+        //            // فتح كل الآباء
+        //            ExpandParentNodes(node);
+        //        }
+        //        else
+        //        {
+        //            node.BackColor = treeViewAccounts.BackColor;
+        //            node.ForeColor = treeViewAccounts.ForeColor;
+        //        }
+
+        //        // البحث في الأبناء
+        //        if (node.Nodes.Count > 0)
+        //            SearchAndHighlightNodes(node.Nodes, searchText);
+        //    }
+        //}
 
         private void txtSearchTree_TextChanged(object sender, EventArgs e)
         {
             string searchText = txtSearchTree.Text.Trim().ToLower();
+
+            // مسح كل النتائج السابقة
             matchedNodes.Clear();
             currentMatchIndex = -1;
+
+            // إعادة ضبط ألوان العقد وتغلق العقدة
             ResetNodeColorsAndCollapse(treeViewAccounts.Nodes);
 
+            // إذا النص فارغ لا نفعل شيء
             if (string.IsNullOrEmpty(searchText)) return;
 
+            // البحث وتلوين العقد المتطابقة وفتح الآباء فقط
             SearchAndHighlightNodes(treeViewAccounts.Nodes, searchText);
-            if (matchedNodes.Count > 0)
-            {
-                currentMatchIndex = 0;
-                var node = matchedNodes[0];
-                treeViewAccounts.SelectedNode = node;
-                node.EnsureVisible();
-            }
         }
 
+        //private void txtSearchTree_TextChanged(object sender, EventArgs e)
+        //{/*اريد تعديل فى اسلوب البحث داخل الشجرة
+        //  اولا يجب تفعيل وضع البحث عند الدخول وتعطيله عند الخروج
+        //    ثانيا اريد هاى ليت اصفر على السماء كلها المتشابهة خلال الشجرة وليس تحديد اول اسم 
+        //    وفتح كل العقد التى بها تشابهات خلال الشجرة جميعا 
+        //    ويكون الوضع تفاعلى فادا تم التراجع عن حرف غير موجود فى المتشابهات يتم ازالة الهاى ليت
+        //    ثالثا اعادة ضبط التعليقا فيما لا يتجاوز السطر الواحد بلغة عربية بدون اقواس ولا احرف انجليزية
+        //    رابعا عند ايجاد الاسم المراد وتم الانتقال الى عقدته ومحاولة فتحه يفتح داخل الاصل الذى يتبعه وغلق باقى العقد الجذرية بين 1:5 
+        //    التى هو ليس تحتها
+        //    هذا فيما يخص البحث دون خلل باقى الوظاءف الاخرى
+        //  */
+        //    string searchText = txtSearchTree.Text.Trim().ToLower();
+        //    matchedNodes.Clear();
+        //    currentMatchIndex = -1;
+        //    ResetNodeColorsAndCollapse(treeViewAccounts.Nodes);
+
+        //    if (string.IsNullOrEmpty(searchText)) return;
+
+        //    SearchAndHighlightNodes(treeViewAccounts.Nodes, searchText);
+        //    if (matchedNodes.Count > 0)
+        //    {
+        //        currentMatchIndex = 0;
+        //        var node = matchedNodes[0];
+        //        treeViewAccounts.SelectedNode = node;
+        //        node.EnsureVisible();
+        //    }
+
+        //}
+
+        private bool isSearchActive = false;// هذا المغيير للتعطيل المؤقت عند البحث
+
+        private void txtSearchTree_Enter(object sender, EventArgs e) => isSearchActive = true;
+        private void txtSearchTree_Leave(object sender, EventArgs e) => isSearchActive = false;
         private void ResetNodeColorsAndCollapse(TreeNodeCollection nodes)
         {
             foreach (TreeNode node in nodes)
@@ -349,23 +427,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 node.Collapse();
                 if (node.Nodes.Count > 0)
                     ResetNodeColorsAndCollapse(node.Nodes);
-            }
-        }
-
-        private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)
-        {
-            foreach (TreeNode node in nodes)
-            {
-                if (node.Text.ToLower().Contains(searchText))
-                {
-                    node.BackColor = Color.Yellow;
-                    node.ForeColor = Color.Black;
-                    matchedNodes.Add(node);
-                    ExpandParentNodes(node);
-                }
-
-                if (node.Nodes.Count > 0)
-                    SearchAndHighlightNodes(node.Nodes, searchText);
             }
         }
 
@@ -379,8 +440,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        private void txtSearchTree_Enter(object sender, EventArgs e) => isSearchActive = true;
-        private void txtSearchTree_Leave(object sender, EventArgs e) => isSearchActive = false;
 
         #endregion
 
@@ -452,37 +511,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             return string.Join(" → ", parts);
         }
 
-        #endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        #region !!!!!!  عرض الحسابات  !!!!!!!!
-
         private int parentAccID = 0;
         private bool isHasChildren = false;
         private bool isHasDetails = false;
@@ -490,8 +518,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         private DataRow? selectedRow = null;
         private TreeNode? activeNode; // العقدة النشطة (المميزة بالأحمر)
 
-        private bool isSearchActive = false;// هذا المغيير للتعطيل المؤقت عند البحث
-
+        
         //📌 دالة البحث عن العقدة بالـ AccID
         private TreeNode? FindNodeByAccID(TreeNodeCollection nodes, int accID)
         {
