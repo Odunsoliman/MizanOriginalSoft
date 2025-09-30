@@ -204,16 +204,17 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             if (DGV.Columns.Contains("BalanceWithState"))
             {
-                DGV.Columns["BalanceWithState"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                DGV.Columns["BalanceWithState"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter ;
             }
 
-            DGV.Columns["AccName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            DGV.Columns["ParentName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            DGV.Columns["AccName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft ;
+            DGV.Columns["ParentName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
 
             DGV.BorderStyle = BorderStyle.None;
             DGV.EnableHeadersVisualStyles = false;
-            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.DarkBlue;
+            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.Gray;
             DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            DGV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             DGV.GridColor = Color.Gray;
         }
     }

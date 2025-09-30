@@ -1489,6 +1489,16 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             previewForm.ShowDialog();
         }
 
+        private void btnAccounts_Old_Click(object sender, EventArgs e)
+        {
+            if (sender is Button btn)
+            {
+                HighlightTransparentButton(btn);
+            }
 
+            CloseAllFormsExceptMain();
+            frm_Accounts frm = new frm_Accounts();
+            OpenFormInPanel(frm);
+        }
     }
 }
