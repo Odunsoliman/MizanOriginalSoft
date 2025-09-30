@@ -87,12 +87,12 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             DGVStyle();
         }
 
-        private void LoadChildAccountsToGrid(TreeNode selectedNode)
+        private void LoadChildAccountsToGrid_(TreeNode selectedNode)
         {
             if (selectedNode?.Tag == null || _allAccountsData == null) return;
 
             DataRow? selectedRow = selectedNode.Tag as DataRow;
-            int? parentTreeCode = selectedRow.Field<int>("TreeAccCode");
+            int? parentTreeCode = selectedRow.Field<int>("TreeAccCode");//تحذير 8604
 
             var filteredRows = _allAccountsData.AsEnumerable()
                 .Where(r =>
@@ -109,13 +109,26 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     childAccounts.Columns.Add("ParentName", typeof(string));
                 }
 
-                // تعبئة اسم الأب من FullPath (آخر جزء بعد السهم)
+                // إضافة عمود جديد للرصيد المدمج
+                if (!childAccounts.Columns.Contains("BalanceWithState"))
+                {
+                    childAccounts.Columns.Add("BalanceWithState", typeof(string));
+                }
+
+                // تعبئة البيانات
                 foreach (DataRow row in childAccounts.Rows)
                 {
+                    // اسم الأب من FullPath
                     string fullPath = row.Field<string>("FullPath") ?? "";
                     string[] pathParts = fullPath.Split(new string[] { " → " }, StringSplitOptions.None);
                     string parentName = pathParts.Length > 1 ? pathParts[pathParts.Length - 2] : "---";
                     row["ParentName"] = parentName;
+
+                    // الرصيد المدمج مع الحالة
+                    decimal balance = row.Field<decimal>("Balance");
+                    string balanceState = row.Field<string>("BalanceState") ?? "";
+                    string balanceWithState = FormatBalanceWithState(balance, balanceState);
+                    row["BalanceWithState"] = balanceWithState;
                 }
 
                 DGV.DataSource = childAccounts;
@@ -123,6 +136,107 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             else
             {
                 DGV.DataSource = null;
+            }
+        }
+        private void LoadChildAccountsToGrid(TreeNode selectedNode)
+        {
+            if (selectedNode?.Tag == null || _allAccountsData == null) return;
+
+            DataRow? selectedRow = selectedNode.Tag as DataRow;
+
+            // استخدام دالة مساعدة لقراءة القيمة بشكل آمن
+            int? parentTreeCode = GetSafeIntValue(selectedRow, "TreeAccCode");
+            if (!parentTreeCode.HasValue) return;
+
+            var filteredRows = _allAccountsData.AsEnumerable()
+                .Where(r =>
+                {
+                    int? parentAccID = GetSafeIntValue(r, "ParentAccID");
+                    bool isHasChildren = GetSafeBoolValue(r, "IsHasChildren");
+
+                    return parentAccID == parentTreeCode && !isHasChildren;
+                });
+
+            if (filteredRows.Any())
+            {
+                DataTable childAccounts = filteredRows.CopyToDataTable();
+
+                // إضافة الأعمدة الجديدة
+                if (!childAccounts.Columns.Contains("ParentName"))
+                    childAccounts.Columns.Add("ParentName", typeof(string));
+                if (!childAccounts.Columns.Contains("BalanceWithState"))
+                    childAccounts.Columns.Add("BalanceWithState", typeof(string));
+
+                // تعبئة البيانات
+                foreach (DataRow row in childAccounts.Rows)
+                {
+                    // اسم الأب من FullPath
+                    string fullPath = GetSafeStringValue(row, "FullPath");
+                    string[] pathParts = fullPath.Split(new string[] { " → " }, StringSplitOptions.None);
+                    string parentName = pathParts.Length > 1 ? pathParts[pathParts.Length - 2] : "---";
+                    row["ParentName"] = parentName;
+
+                    // الرصيد المدمج مع الحالة
+                    decimal balance = GetSafeDecimalValue(row, "Balance");
+                    string balanceState = GetSafeStringValue(row, "BalanceState");
+                    string balanceWithState = FormatBalanceWithState(balance, balanceState);
+                    row["BalanceWithState"] = balanceWithState;
+                }
+
+                DGV.DataSource = childAccounts;
+            }
+            else
+            {
+                DGV.DataSource = null;
+            }
+        }
+
+        // الدوال المساعدة لقراءة القيم بشكل آمن
+        private int? GetSafeIntValue(DataRow row, string columnName)
+        {
+            if (row == null || row.IsNull(columnName)) return null;
+            try { return row.Field<int>(columnName); }
+            catch { return null; }
+        }
+
+        private bool GetSafeBoolValue(DataRow row, string columnName)
+        {
+            if (row == null || row.IsNull(columnName)) return false;
+            try { return row.Field<bool>(columnName); }
+            catch { return false; }
+        }
+
+        private decimal GetSafeDecimalValue(DataRow row, string columnName)
+        {
+            if (row == null || row.IsNull(columnName)) return 0;
+            try { return row.Field<decimal>(columnName); }
+            catch { return 0; }
+        }
+
+        private string GetSafeStringValue(DataRow row, string columnName)
+        {
+            if (row == null || row.IsNull(columnName)) return string.Empty;
+            try { return row.Field<string>(columnName) ?? string.Empty; }
+            catch { return string.Empty; }
+        }
+        // دالة لتنسيق الرصيد مع الحالة
+        private string FormatBalanceWithState(decimal balance, string balanceState)
+        {
+            if (balance == 0)
+                return string.Empty; // إخفاء إذا كان صفر
+
+            string formattedBalance = balance.ToString("N2");
+
+            switch (balanceState?.ToLower())
+            {
+                case "مدين":
+                case "debit":
+                    return $"{formattedBalance} مدين";
+                case "دائن":
+                case "credit":
+                    return $"{formattedBalance} دائن";
+                default:
+                    return formattedBalance; // إذا لم تكن الحالة معروفة
             }
         }
 
@@ -136,8 +250,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 column.Visible = false;
             }
 
-            // إظهار الأعمدة المطلوبة بالترتيب: اسم الحساب - اسم الأب - الرصيد - الحالة
-            string[] columnOrder = { "AccName", "ParentName", "Balance", "BalanceState" };
+            // إظهار الأعمدة المطلوبة بالترتيب: اسم الحساب - اسم الأب - الرصيد المدمج
+            string[] columnOrder = { "AccName", "ParentName", "BalanceWithState" };
 
             foreach (string columnName in columnOrder)
             {
@@ -150,23 +264,20 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // ترتيب الأعمدة
             DGV.Columns["AccName"].DisplayIndex = 0;
             DGV.Columns["ParentName"].DisplayIndex = 1;
-            DGV.Columns["Balance"].DisplayIndex = 2;
-            DGV.Columns["BalanceState"].DisplayIndex = 3;
+            DGV.Columns["BalanceWithState"].DisplayIndex = 2;
 
             // عناوين الأعمدة
             DGV.Columns["AccName"].HeaderText = "اسم الحساب";
             DGV.Columns["ParentName"].HeaderText = "اسم الأب";
-            DGV.Columns["Balance"].HeaderText = "الرصيد";
-            DGV.Columns["BalanceState"].HeaderText = "--";
+            DGV.Columns["BalanceWithState"].HeaderText = "الرصيد";
 
-            // نسب العرض 2:1:1:1
+            // نسب العرض 2:1:1
             int totalWidth = DGV.ClientRectangle.Width;
-            DGV.Columns["AccName"].Width = (int)(totalWidth * 0.4);   // 40%
-            DGV.Columns["ParentName"].Width = (int)(totalWidth * 0.3); // 20%
-            DGV.Columns["Balance"].Width = (int)(totalWidth * 0.2);   // 20%
-            DGV.Columns["BalanceState"].Width = (int)(totalWidth * 0.2); // 20%
+            DGV.Columns["AccName"].Width = (int)(totalWidth * 0.5);   // 50%
+            DGV.Columns["ParentName"].Width = (int)(totalWidth * 0.25); // 25%
+            DGV.Columns["BalanceWithState"].Width = (int)(totalWidth * 0.25); // 25%
 
-            // باقي الإعدادات تبقى كما هي...
+            // باقي الإعدادات
             DGV.Font = new Font("Times New Roman", 12, FontStyle.Bold);
             DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Bold);
             DGV.RowHeadersVisible = false;
@@ -177,12 +288,25 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             DGV.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
             DGV.RowsDefaultCellStyle.BackColor = Color.White;
 
-            // تنسيق الرصيد
-            if (DGV.Columns.Contains("Balance"))
+            // تنسيق عمود الرصيد المدمج
+            if (DGV.Columns.Contains("BalanceWithState"))
             {
-                DGV.Columns["Balance"].DefaultCellStyle.Format = "N2";
-                DGV.Columns["Balance"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                DGV.Columns["BalanceWithState"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
             }
+
+            // تنسيق عمود اسم الحساب واسم الأب
+            DGV.Columns["AccName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            DGV.Columns["ParentName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+            // تحسين المظهر
+            DGV.BorderStyle = BorderStyle.None;
+            DGV.EnableHeadersVisualStyles = false;
+            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.DarkBlue;
+            DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            DGV.GridColor = Color.Gray;
         }
+    
+    
+    
     }
 }
