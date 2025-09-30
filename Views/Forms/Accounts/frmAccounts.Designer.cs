@@ -273,6 +273,7 @@
             txtSearchTree.Size = new Size(207, 29);
             txtSearchTree.TabIndex = 5;
             txtSearchTree.TextAlign = HorizontalAlignment.Center;
+            txtSearchTree.TextChanged += txtSearchTree_TextChanged;
             // 
             // tabControlAccount
             // 

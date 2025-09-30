@@ -333,6 +333,117 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             DGV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             DGV.GridColor = Color.Gray;
         }
+
+
+        #region !!!!! منطقة البحث  !!!!!!!!!!
+        private bool _isSearching = false;
+
+        private void txtSearchTree_TextChanged(object sender, EventArgs e)
+        {
+            if (_isSearching) return;
+
+            _isSearching = true;
+
+            try
+            {
+                string searchText = txtSearchTree.Text.Trim();
+
+                // إلغاء التحديد السابق والهايلايت
+                ClearAllHighlights();
+
+                if (string.IsNullOrWhiteSpace(searchText))
+                {
+                    treeViewAccounts.CollapseAll();
+                    return;
+                }
+
+                // البحث في جميع العقد
+                SearchAndHighlightNodes(searchText);
+            }
+            finally
+            {
+                _isSearching = false;
+            }
+        }
+
+        private void ClearAllHighlights()
+        {
+            foreach (TreeNode node in treeViewAccounts.Nodes)
+            {
+                ClearNodeHighlight(node);
+            }
+        }
+
+        private void ClearNodeHighlight(TreeNode node)
+        {
+            node.BackColor = treeViewAccounts.BackColor;
+            node.ForeColor = treeViewAccounts.ForeColor;
+
+            foreach (TreeNode child in node.Nodes)
+            {
+                ClearNodeHighlight(child);
+            }
+        }
+
+        private void SearchAndHighlightNodes(string searchText)
+        {
+            bool foundAny = false;
+
+            foreach (TreeNode rootNode in treeViewAccounts.Nodes)
+            {
+                bool foundInBranch = SearchInNodeAndChildren(rootNode, searchText);
+                if (foundInBranch)
+                {
+                    foundAny = true;
+                    rootNode.Expand(); // فتح العقدة التي تحتوي على نتائج
+                }
+                else
+                {
+                    rootNode.Collapse(); // طي العقدة التي لا تحتوي على نتائج
+                }
+            }
+
+            // إذا لم يتم العثور على أي نتائج، نفتح جميع العقد لعرض الشجرة كاملة
+            if (!foundAny)
+            {
+                treeViewAccounts.ExpandAll();
+            }
+        }
+
+        private bool SearchInNodeAndChildren(TreeNode node, string searchText)
+        {
+            if (node?.Text == null) return false;
+
+            bool foundInCurrent = false;
+            bool foundInChildren = false;
+
+            // البحث في العقدة الحالية
+            if (node.Text.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                node.BackColor = Color.Yellow;
+                node.ForeColor = Color.Black;
+                foundInCurrent = true;
+            }
+            else
+            {
+                node.BackColor = treeViewAccounts.BackColor;
+                node.ForeColor = treeViewAccounts.ForeColor;
+            }
+
+            // البحث في الأبناء
+            foreach (TreeNode childNode in node.Nodes)
+            {
+                bool foundInChild = SearchInNodeAndChildren(childNode, searchText);
+                if (foundInChild)
+                {
+                    foundInChildren = true;
+                    node.Expand(); // فتح العقدة الأم إذا وجد نتائج في الأبناء
+                }
+            }
+
+            return foundInCurrent || foundInChildren;
+        }
+        #endregion 
     }
 }
 
