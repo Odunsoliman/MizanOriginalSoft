@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace MizanOriginalSoft.Views.Forms.Accounts
 {
-   
+
 
     public partial class frm_Accounts : Form
     {
@@ -33,7 +33,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         #region !!!!!!!!!! Build Tree  بناء الشجرة !!!!!!!!!!
-
+        // 🔹 تحميل شجرة الحسابات (تظهر فقط الحسابات التي لها أبناء، العقد التي لم تعد لها أبناء تنتقل تلقائيًا إلى الـ DGV)
         private void LoadAccountsTree()
         {
             treeViewAccounts.Nodes.Clear();
@@ -60,7 +60,45 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 nodeDict[treeCode] = node;
 
                 if (string.IsNullOrEmpty(parentCode))
+                    treeViewAccounts.Nodes.Add(node); // عقدة الجذر
+                else if (nodeDict.TryGetValue(parentCode, out TreeNode parentNode))
+                    parentNode.Nodes.Add(node); // إضافة العقدة للوالد
+                else
+                    treeViewAccounts.Nodes.Add(node); // fallback في حالة عدم وجود والد
+            }
+
+            SortTreeNodes(treeViewAccounts.Nodes); // ترتيب العقد تصاعديًا حسب AccID
+            treeViewAccounts.CollapseAll();        // طي جميع الفروع
+        }
+
+        private void LoadAccountsTree_()
+        {
+            treeViewAccounts.Nodes.Clear();
+            DataTable dt = DBServiecs.Acc_GetChart() ?? new DataTable();
+            if (dt.Rows.Count == 0) return;
+
+            // Dictionary لتخزين العقد أثناء البناء
+            Dictionary<string, TreeNode> nodeDict = new Dictionary<string, TreeNode>();
+
+            // عرض الحسابات التي لها فروع فقط
+            var parentRows = dt.AsEnumerable()
+                               .Where(r => r.Field<bool>("IsHasChildren"))
+                               .ToList();
+
+            foreach (DataRow row in parentRows)
+            {
+                string accName = row["AccName"] as string ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(accName)) continue;
+
+                string treeCode = row["TreeAccCode"].ToString();
+                string parentCode = row["ParentAccID"] != DBNull.Value ? row["ParentAccID"].ToString() : null;
+
+                TreeNode node = new TreeNode(accName) { Tag = row };
+                nodeDict[treeCode] = node;
+
+                if (string.IsNullOrEmpty(parentCode))
                     treeViewAccounts.Nodes.Add(node); // الجذر
+                /*System.NullReferenceException: 'Object reference not set to an instance of an object.'*/
                 else if (nodeDict.TryGetValue(parentCode, out TreeNode parentNode))
                     parentNode.Nodes.Add(node);
                 else
@@ -244,18 +282,22 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         //        يتم إغلاق جميع الجذور الأخرى تلقائيًا.
         private void treeViewAccounts_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            if (isSearchActive) return; // أثناء البحث، لا نقوم بأي غلق
+            if (isSearchActive) return; // إذا البحث مفعل، لا نغلق العقد الأخرى
+
+            // مسح مربع البحث عند توسعة أي عقدة
+            txtSearchTree.Clear();
 
             if (e.Node?.Tag is DataRow row)
             {
-                int treeCode = row.Field<int>("TreeAccCode"); // رقم الحساب الشجري
+                int treeCode = row.Field<int>("TreeAccCode");
+
+                // إذا العقدة من الأصول الخمسة الأساسية (أصول، خصوم، حقوق ملكية، إيرادات، مصروفات)
                 if (row["ParentAccID"] == DBNull.Value && treeCode >= 1 && treeCode <= 5)
                 {
-                    // أغلق كل الجذور الأخرى
                     foreach (TreeNode rootNode in treeViewAccounts.Nodes)
                     {
                         if (rootNode != e.Node)
-                            rootNode.Collapse();
+                            rootNode.Collapse();  // أغلق الباقي
                     }
                 }
             }
@@ -438,79 +480,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
 
 
-        #region !!!!!! بحث فى الشجرة  !!!!!!!!
-
-
-        private void txtSearchTree_TextChanged_(object sender, EventArgs e)
-        {
-            string searchText = txtSearchTree.Text.Trim().ToLower();
-
-            matchedNodes.Clear();
-            currentMatchIndex = -1;
-
-            // إعادة تعيين الألوان وإغلاق كل الفروع
-            ResetNodeColorsAndCollapse(treeViewAccounts.Nodes);
-
-            if (string.IsNullOrEmpty(searchText))
-                return;
-
-            // البحث وتلوين النتائج وفتح الفروع التي تحتوي نتائج
-            SearchAndHighlightNodes(treeViewAccounts.Nodes, searchText);
-
-            // اختيار أول نتيجة
-            if (matchedNodes.Count > 0)
-            {
-                currentMatchIndex = 0;
-                var node = matchedNodes[0];
-                treeViewAccounts.SelectedNode = node;
-                node.EnsureVisible();
-            }
-        }
-        private void ResetNodeColorsAndCollapse_(TreeNodeCollection nodes)
-        {
-            foreach (TreeNode node in nodes)
-            {
-                node.BackColor = treeViewAccounts.BackColor;
-                node.ForeColor = treeViewAccounts.ForeColor;
-                node.Collapse(); // إغلاق الفروع
-
-                if (node.Nodes.Count > 0)
-                    ResetNodeColorsAndCollapse(node.Nodes);
-            }
-        }
-
-        private void SearchAndHighlightNodes_(TreeNodeCollection nodes, string searchText)
-        {
-            foreach (TreeNode node in nodes)
-            {
-                if (node.Text.ToLower().Contains(searchText))
-                {
-                    node.BackColor = Color.Yellow;
-                    node.ForeColor = Color.Black;
-                    matchedNodes.Add(node);
-
-                    // فتح العقدة الأصلية
-                    ExpandParentNodes(node);
-                }
-
-                if (node.Nodes.Count > 0)
-                {
-                    SearchAndHighlightNodes(node.Nodes, searchText);
-                }
-            }
-        }
-
-        private void ExpandParentNodes_(TreeNode node)
-        {
-            TreeNode? parent = node.Parent;
-            while (parent != null)
-            {
-                parent.Expand();
-                parent = parent.Parent;
-            }
-        }
-
-        #endregion
 
         #region !!!!!!  عرض الحسابات  !!!!!!!!
 
@@ -559,9 +528,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 node.EnsureVisible();
             }
         }
- 
 
-        
+
+
         #endregion
 
         #region !!!!!!!!  ازرار الشاشة !!!!!!!!!
@@ -1572,6 +1541,71 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 // استدعاء تحميل التفاصيل
                 Acc_GetDetails(accID);
             }
+        }
+        // 🔹 حذف حساب من الـ DGV فقط وتحديث أبناء الأب دون إعادة تحميل الشجرة
+        private void btnDeleteAcc_Click(object sender, EventArgs e)
+        {
+            // 1) تأكد من وجود صف محدد في الـ DGV وليس الشجرة
+            if (DGV.CurrentRow?.DataBoundItem is not DataRowView rowView) return;
+
+            DataRow row = rowView.Row;
+            int accID = Convert.ToInt32(row["AccID"]);
+            string accName = row["AccName"]?.ToString() ?? "";
+
+            // 2) تأكيد الحذف
+            DialogResult confirm = MessageBox.Show(
+                $"هل أنت متأكد أنك تريد حذف الحساب: {accName} (ID={accID})؟",
+                "تأكيد الحذف",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+            if (confirm == DialogResult.No) return;
+
+            // 3) تنفيذ الحذف من قاعدة البيانات
+            string resultMsg = DBServiecs.Acc_DeleteAccount(accID);
+            MessageBox.Show(resultMsg, "نتيجة الحذف");
+
+            // 4) إذا تم الحذف بنجاح
+            if (!resultMsg.StartsWith("❌"))
+            {
+                // 4a) احصل على معرف الأب لتحديث أبنائه
+                int? parentAccID = null;
+                if (treeViewAccounts.SelectedNode?.Tag is DataRow parentRow)
+                {
+                    parentAccID = parentRow.Field<int?>("TreeAccCode"); // أو "AccID" حسب ما تستخدمه في LoadChildrenInDGV
+                }
+
+                if (parentAccID.HasValue)
+                {
+                    // 4b) إعادة تحميل أبناء الأب فقط في الـ DGV
+                    LoadChildrenInDGV(parentAccID.Value);
+
+                    // 4c) تحديد الصف الذي يسبق المحذوف (إذا وجد)
+                    int prevIndex = DGV.Rows.Cast<DataGridViewRow>()
+                                             .ToList()
+                                             .FindLastIndex(r => Convert.ToInt32(r.Cells["AccID"].Value) < accID);
+
+                    // إذا لم يوجد صف أقل، اختر أول صف مرئي
+                    if (prevIndex < 0)
+                        prevIndex = DGV.Rows.Cast<DataGridViewRow>()
+                                            .ToList()
+                                            .FindIndex(r => r.Visible);
+
+                    // 4d) تعيين الصف الحالي بأمان
+                    if (prevIndex >= 0 && DGV.Rows[prevIndex].Visible)
+                    {
+                        DGV.ClearSelection();
+                        DGV.Rows[prevIndex].Selected = true;
+                        DGV.CurrentCell = DGV.Rows[prevIndex].Cells
+                                           .Cast<DataGridViewCell>()
+                                           .FirstOrDefault(c => c.Visible) ?? DGV.Rows[prevIndex].Cells[0];
+                    }
+                }
+            }
+        }
+
+        private void btnModifyAcc_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

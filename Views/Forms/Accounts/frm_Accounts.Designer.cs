@@ -52,7 +52,6 @@
             tableLayoutPanel17 = new TableLayoutPanel();
             pnlMenuContainer = new Panel();
             btnModify = new Button();
-            btnDelete = new Button();
             label16 = new Label();
             tlpDetailsData = new TableLayoutPanel();
             tlpAssetsData = new TableLayoutPanel();
@@ -281,7 +280,7 @@
             btnModifyAcc.TabIndex = 83;
             btnModifyAcc.Text = "تعديل حساب";
             btnModifyAcc.UseVisualStyleBackColor = false;
-            btnModifyAcc.Click += btnModify_Click;
+            btnModifyAcc.Click += btnModifyAcc_Click;
             // 
             // btnDeleteAcc
             // 
@@ -296,7 +295,7 @@
             btnDeleteAcc.TabStop = false;
             btnDeleteAcc.Text = "حذف حساب";
             btnDeleteAcc.UseVisualStyleBackColor = false;
-            btnDeleteAcc.Click += btnDelete_Click;
+            btnDeleteAcc.Click += btnDeleteAcc_Click;
             // 
             // tableLayoutPanel8
             // 
@@ -448,21 +447,6 @@
             btnModify.Text = "تعديل";
             btnModify.UseVisualStyleBackColor = false;
             btnModify.Click += btnModify_Click;
-            // 
-            // btnDelete
-            // 
-            btnDelete.BackColor = Color.FromArgb(255, 192, 192);
-            btnDelete.Dock = DockStyle.Fill;
-            btnDelete.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnDelete.Location = new Point(108, 4);
-            btnDelete.Margin = new Padding(4);
-            btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(95, 39);
-            btnDelete.TabIndex = 89;
-            btnDelete.TabStop = false;
-            btnDelete.Text = "حذف فرع";
-            btnDelete.UseVisualStyleBackColor = false;
-            btnDelete.Click += btnDelete_Click;
             // 
             // label16
             // 
@@ -779,7 +763,6 @@
             tableLayoutPanel15.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel15.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel15.Controls.Add(btnModify, 1, 0);
-            tableLayoutPanel15.Controls.Add(btnDelete, 0, 0);
             tableLayoutPanel15.Dock = DockStyle.Fill;
             tableLayoutPanel15.Location = new Point(5, 588);
             tableLayoutPanel15.Name = "tableLayoutPanel15";
@@ -1364,7 +1347,6 @@
         private TableLayoutPanel tableLayoutPanel17;
         private Panel pnlMenuContainer;
         private Button btnModify;
-        private Button btnDelete;
         private Label label16;
         private TableLayoutPanel tlpDetailsData;
         private TableLayoutPanel tlpAssetsData;
