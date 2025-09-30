@@ -79,20 +79,18 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         #region !!!!!!! AfterSelect  بعد تحديد عقدة !!!!!!!!!!!!!!
 
+
         private TreeNode? _lastSelectedNode = null;
+        private Font? _originalFont = null;
+        private Font? _selectedFont = null;
 
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
             // إعادة تعيين التنسيق السابق
-            if (_lastSelectedNode != null)
-            {
-  //              _lastSelectedNode.BackColor = treeViewAccounts.BackColor;
-                _lastSelectedNode.ForeColor = treeViewAccounts.ForeColor;
-            }
+            ResetPreviousSelection();
 
             // تطبيق التنسيق الجديد
-            e.Node.BackColor = Color.LightYellow;
-            e.Node.ForeColor = Color.Red;
+            ApplySelectionStyle(e.Node);
 
             // حفظ العقدة المحددة حالياً
             _lastSelectedNode = e.Node;
@@ -100,6 +98,58 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             LoadChildAccountsToGrid(e.Node);
             DGVStyle();
         }
+
+        private void ResetPreviousSelection()
+        {
+            if (_lastSelectedNode != null)
+            {
+                _lastSelectedNode.BackColor = treeViewAccounts.BackColor;
+                _lastSelectedNode.ForeColor = treeViewAccounts.ForeColor;
+                _lastSelectedNode.NodeFont = _originalFont;
+            }
+        }
+
+        private void ApplySelectionStyle(TreeNode node)
+        {
+            if (_originalFont == null)
+                _originalFont = treeViewAccounts.Font;
+
+            if (_selectedFont == null)
+                _selectedFont = new Font(_originalFont.FontFamily, _originalFont.Size + 1, FontStyle.Bold);
+
+            node.BackColor = Color.LightYellow;
+            node.ForeColor = Color.Red;
+            node.NodeFont = _selectedFont;
+        }
+
+        // تنظيف الموارد عند إغلاق النموذج
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            _selectedFont?.Dispose();
+            base.OnFormClosed(e);
+        }
+        // الحل البسيط  =============================================
+        //private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
+        //{
+
+
+        // إعادة تعيين التنسيق السابق
+        //          if (_lastSelectedNode != null)
+        //          {
+        ////              _lastSelectedNode.BackColor = treeViewAccounts.BackColor;
+        //              _lastSelectedNode.ForeColor = treeViewAccounts.ForeColor;
+        //          }
+
+        //          // تطبيق التنسيق الجديد
+        //          e.Node.BackColor = Color.LightYellow;
+        //          e.Node.ForeColor = Color.Red;
+
+        //          // حفظ العقدة المحددة حالياً
+        //          _lastSelectedNode = e.Node;
+
+        //          LoadChildAccountsToGrid(e.Node);
+        //          DGVStyle();
+        //      }
 
         //الحل لاضافة تأثير=================================================================
         //   private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
