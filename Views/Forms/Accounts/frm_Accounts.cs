@@ -21,6 +21,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         public frm_Accounts()
         {
             InitializeComponent();
+
+            // في constructor الفورم أو دالة التهيئة
+            treeViewAccounts.DrawMode = TreeViewDrawMode.OwnerDrawText;
         }
         private void frm_Accounts_Load(object sender, EventArgs e)
         {
@@ -168,27 +171,47 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // ==========================
         // رسم العقدة بالكامل
         // ==========================
-        // إلغاء الـ Custom Drawing واستخدام السلوك الافتراضي مع تحسينات بسيطة
+
+
         private void treeViewAccounts_DrawNode(object sender, DrawTreeNodeEventArgs e)
         {
-            // فقط للعقدة النشطة
-            if (e.Node == activeNode)
+            // هذا سيرسم الخلفية تلقائياً ويعتني بالتحديد
+            if ((e.State & TreeNodeStates.Selected) != 0)
             {
-                using (Font boldFont = new Font("Times New Roman", 13, FontStyle.Bold))
-                using (Brush redBrush = new SolidBrush(Color.Red))
-                using (Brush bgBrush = new SolidBrush(e.Node.BackColor))
-                {
-                    e.Graphics.FillRectangle(bgBrush, e.Bounds);
-                    TextRenderer.DrawText(e.Graphics, e.Node.Text, boldFont, e.Bounds,
-                        Color.Red, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
-                }
-                e.DrawDefault = false;
+                e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds);
+                TextRenderer.DrawText(e.Graphics, e.Node.Text, e.Node.NodeFont ?? treeViewAccounts.Font,
+                    e.Bounds, SystemColors.HighlightText,
+                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
             }
             else
             {
-                e.DrawDefault = true; // دع النظام يرسم العقد العادية
+                e.Graphics.FillRectangle(new SolidBrush(e.Node.BackColor), e.Bounds);
+                TextRenderer.DrawText(e.Graphics, e.Node.Text, e.Node.NodeFont ?? treeViewAccounts.Font,
+                    e.Bounds, e.Node.ForeColor,
+                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
             }
         }
+        //// إلغاء الـ Custom Drawing واستخدام السلوك الافتراضي مع تحسينات بسيطة
+        //private void treeViewAccounts_DrawNode(object sender, DrawTreeNodeEventArgs e)// الحل الرابع يبحث جيدا لكنه لا يلون خلفية العقدة
+        //{
+        //    // فقط للعقدة النشطة
+        //    if (e.Node == activeNode)
+        //    {
+        //        using (Font boldFont = new Font("Times New Roman", 13, FontStyle.Bold))
+        //        using (Brush redBrush = new SolidBrush(Color.Red))
+        //        using (Brush bgBrush = new SolidBrush(e.Node.BackColor))
+        //        {
+        //            e.Graphics.FillRectangle(bgBrush, e.Bounds);
+        //            TextRenderer.DrawText(e.Graphics, e.Node.Text, boldFont, e.Bounds,
+        //                Color.Red, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+        //        }
+        //        e.DrawDefault = false;
+        //    }
+        //    else
+        //    {
+        //        e.DrawDefault = true; // دع النظام يرسم العقد العادية
+        //    }
+        //}
         //private void treeViewAccounts_DrawNode(object sender, DrawTreeNodeEventArgs e)
         //{
         //    // تحديد الخط
