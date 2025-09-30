@@ -205,7 +205,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // ==========================
         // البحث وتلوين العقدة بالكامل وفتح الآباء فقط للعقد المطابقة
         // ==========================
-        //private bool SearchAndHighlightNodes____(TreeNodeCollection nodes, string searchText)
+        //private bool SearchAndHighlightNodes_(TreeNodeCollection nodes, string searchText)
         //{
         //    bool anyMatchInThisLevel = false;
 
@@ -466,7 +466,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private List<TreeNode> matchedNodes_ = new List<TreeNode>();
         private int currentMatchIndex_ = -1;
-        private void _SearchAndHighlightNodes_(TreeNodeCollection nodes, string searchText)
+        private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)
         {
             foreach (TreeNode node in nodes)
             {
@@ -495,7 +495,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)
+        private void SearchAndHighlightNodes__(TreeNodeCollection nodes, string searchText)
         {
             foreach (TreeNode node in nodes)
             {
