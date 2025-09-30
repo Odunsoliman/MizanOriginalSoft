@@ -81,7 +81,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             ResetAllNodesStyle();
 
             // تطبيق التنسيق على العقدة المحددة
-            e.Node.BackColor = SystemColors.Highlight;
+      //      e.Node.BackColor = SystemColors.Highlight; لا اريد تلوين الخلفية
             e.Node.ForeColor = Color.Red;
             e.Node.NodeFont = new Font(treeViewAccounts.Font.FontFamily, treeViewAccounts.Font.Size + 1, FontStyle.Bold);
 
