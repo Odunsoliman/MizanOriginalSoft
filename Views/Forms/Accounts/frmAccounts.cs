@@ -75,39 +75,81 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 SortTreeNodes(node.Nodes);
             }
         }
+
+
+        #region !!!!!!! AfterSelect  بعد تحديد عقدة !!!!!!!!!!!!!!
+
+        private TreeNode? _lastSelectedNode = null;
+
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            // إعادة تعيين جميع العقد
-            ResetAllNodesStyle();
+            // إعادة تعيين التنسيق السابق
+            if (_lastSelectedNode != null)
+            {
+  //              _lastSelectedNode.BackColor = treeViewAccounts.BackColor;
+                _lastSelectedNode.ForeColor = treeViewAccounts.ForeColor;
+            }
 
-            // تطبيق التنسيق على العقدة المحددة
-      //      e.Node.BackColor = SystemColors.Highlight; لا اريد تلوين الخلفية
+            // تطبيق التنسيق الجديد
+            e.Node.BackColor = Color.LightYellow;
             e.Node.ForeColor = Color.Red;
-            e.Node.NodeFont = new Font(treeViewAccounts.Font.FontFamily, treeViewAccounts.Font.Size + 1, FontStyle.Bold);
+
+            // حفظ العقدة المحددة حالياً
+            _lastSelectedNode = e.Node;
 
             LoadChildAccountsToGrid(e.Node);
             DGVStyle();
         }
 
-        private void ResetAllNodesStyle()
-        {
-            foreach (TreeNode node in treeViewAccounts.Nodes)
-            {
-                ResetNodeStyle(node);
-            }
-        }
+        //الحل لاضافة تأثير=================================================================
+        //   private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
+        //   {
+        //       // إعادة تعيين جميع العقد
+        //       ResetAllNodesStyle();
 
-        private void ResetNodeStyle(TreeNode node)
-        {
-            node.BackColor = treeViewAccounts.BackColor;
-            node.ForeColor = treeViewAccounts.ForeColor;
-            node.NodeFont = treeViewAccounts.Font;
+        //       // تطبيق التنسيق على العقدة المحددة
+        // //      e.Node.BackColor = SystemColors.Highlight; لا اريد تلوين الخلفية
+        //       e.Node.ForeColor = Color.Red;
+        //       e.Node.NodeFont = new Font(treeViewAccounts.Font.FontFamily, treeViewAccounts.Font.Size + 1, FontStyle.Bold);
 
-            foreach (TreeNode childNode in node.Nodes)
-            {
-                ResetNodeStyle(childNode);
-            }
-        }
+        //       LoadChildAccountsToGrid(e.Node);
+        //       DGVStyle();
+        //   }
+
+        //   private void ResetAllNodesStyle()
+        //   {
+        //       foreach (TreeNode node in treeViewAccounts.Nodes)
+        //       {
+        //           ResetNodeStyle(node);
+        //       }
+        //   }
+
+        //   private void ResetNodeStyle(TreeNode node)
+        //   {
+        ////       node.BackColor = treeViewAccounts.BackColor;
+        //       node.ForeColor = treeViewAccounts.ForeColor;
+        //       node.NodeFont = treeViewAccounts.Font;
+
+        //       foreach (TreeNode childNode in node.Nodes)
+        //       {
+        //           ResetNodeStyle(childNode);
+        //       }
+        //   }
+
+
+
+        #endregion
+
+
+
+
+
+
+
+
+
+
+
         private void LoadChildAccountsToGrid(TreeNode? selectedNode)
         {
             if (selectedNode?.Tag == null || _allAccountsData == null) return;
