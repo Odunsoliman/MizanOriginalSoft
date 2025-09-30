@@ -75,13 +75,39 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 SortTreeNodes(node.Nodes);
             }
         }
-
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            // إعادة تعيين جميع العقد
+            ResetAllNodesStyle();
+
+            // تطبيق التنسيق على العقدة المحددة
+            e.Node.BackColor = SystemColors.Highlight;
+            e.Node.ForeColor = Color.Red;
+            e.Node.NodeFont = new Font(treeViewAccounts.Font.FontFamily, treeViewAccounts.Font.Size + 1, FontStyle.Bold);
+
             LoadChildAccountsToGrid(e.Node);
             DGVStyle();
         }
 
+        private void ResetAllNodesStyle()
+        {
+            foreach (TreeNode node in treeViewAccounts.Nodes)
+            {
+                ResetNodeStyle(node);
+            }
+        }
+
+        private void ResetNodeStyle(TreeNode node)
+        {
+            node.BackColor = treeViewAccounts.BackColor;
+            node.ForeColor = treeViewAccounts.ForeColor;
+            node.NodeFont = treeViewAccounts.Font;
+
+            foreach (TreeNode childNode in node.Nodes)
+            {
+                ResetNodeStyle(childNode);
+            }
+        }
         private void LoadChildAccountsToGrid(TreeNode? selectedNode)
         {
             if (selectedNode?.Tag == null || _allAccountsData == null) return;
