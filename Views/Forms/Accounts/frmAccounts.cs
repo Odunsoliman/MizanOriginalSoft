@@ -92,7 +92,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             if (selectedNode?.Tag == null || _allAccountsData == null) return;
 
             DataRow? selectedRow = selectedNode.Tag as DataRow;
-            int parentTreeCode = selectedRow.Field<int>("TreeAccCode");
+            int? parentTreeCode = selectedRow.Field<int>("TreeAccCode");
 
             var filteredRows = _allAccountsData.AsEnumerable()
                 .Where(r =>
@@ -157,12 +157,12 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             DGV.Columns["AccName"].HeaderText = "اسم الحساب";
             DGV.Columns["ParentName"].HeaderText = "اسم الأب";
             DGV.Columns["Balance"].HeaderText = "الرصيد";
-            DGV.Columns["BalanceState"].HeaderText = "الحالة";
+            DGV.Columns["BalanceState"].HeaderText = "--";
 
             // نسب العرض 2:1:1:1
             int totalWidth = DGV.ClientRectangle.Width;
             DGV.Columns["AccName"].Width = (int)(totalWidth * 0.4);   // 40%
-            DGV.Columns["ParentName"].Width = (int)(totalWidth * 0.2); // 20%
+            DGV.Columns["ParentName"].Width = (int)(totalWidth * 0.3); // 20%
             DGV.Columns["Balance"].Width = (int)(totalWidth * 0.2);   // 20%
             DGV.Columns["BalanceState"].Width = (int)(totalWidth * 0.2); // 20%
 
