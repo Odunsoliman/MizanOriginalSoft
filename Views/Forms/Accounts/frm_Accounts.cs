@@ -172,8 +172,36 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // رسم العقدة بالكامل
         // ==========================
 
+        private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                bool isMatch = node.Text.ToLower().Contains(searchText);
 
-        private void treeViewAccounts_DrawNode(object sender, DrawTreeNodeEventArgs e)
+                if (isMatch)
+                {
+                    // تأكد من تعيين الألوان بشكل صريح
+                    node.BackColor = Color.Yellow;
+                    node.ForeColor = Color.Black;
+                    matchedNodes.Add(node);
+                    ExpandParentNodes(node);
+                }
+                else
+                {
+                    // إعادة الضبط بشكل صريح
+                    node.BackColor = treeViewAccounts.BackColor;
+                    node.ForeColor = treeViewAccounts.ForeColor;
+                }
+
+                // البحث في الأبناء
+                if (node.Nodes.Count > 0)
+                    SearchAndHighlightNodes(node.Nodes, searchText);
+
+                // إعادة رسم العقدة لتطبيق التغييرات
+                treeViewAccounts.Invalidate(new Rectangle(node.Bounds.Location, node.Bounds.Size));
+            }
+        }
+        private void treeViewAccounts_DrawNode(object sender, DrawTreeNodeEventArgs e)//الحل الثالث تلوين جزئى وليس كل العقدة
         {
             // هذا سيرسم الخلفية تلقائياً ويعتني بالتحديد
             if ((e.State & TreeNodeStates.Selected) != 0)
@@ -402,7 +430,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)
+        private void SearchAndHighlightNodes_(TreeNodeCollection nodes, string searchText)
         {
             foreach (TreeNode node in nodes)
             {
