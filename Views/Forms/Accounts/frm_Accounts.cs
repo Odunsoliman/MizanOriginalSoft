@@ -71,44 +71,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             treeViewAccounts.CollapseAll();        // طي جميع الفروع
         }
 
-        private void LoadAccountsTree_()
-        {
-            treeViewAccounts.Nodes.Clear();
-            DataTable dt = DBServiecs.Acc_GetChart() ?? new DataTable();
-            if (dt.Rows.Count == 0) return;
-
-            // Dictionary لتخزين العقد أثناء البناء
-            Dictionary<string, TreeNode> nodeDict = new Dictionary<string, TreeNode>();
-
-            // عرض الحسابات التي لها فروع فقط
-            var parentRows = dt.AsEnumerable()
-                               .Where(r => r.Field<bool>("IsHasChildren"))
-                               .ToList();
-
-            foreach (DataRow row in parentRows)
-            {
-                string accName = row["AccName"] as string ?? string.Empty;
-                if (string.IsNullOrWhiteSpace(accName)) continue;
-
-                string treeCode = row["TreeAccCode"].ToString();
-                string parentCode = row["ParentAccID"] != DBNull.Value ? row["ParentAccID"].ToString() : null;
-
-                TreeNode node = new TreeNode(accName) { Tag = row };
-                nodeDict[treeCode] = node;
-
-                if (string.IsNullOrEmpty(parentCode))
-                    treeViewAccounts.Nodes.Add(node); // الجذر
-                /*System.NullReferenceException: 'Object reference not set to an instance of an object.'*/
-                else if (nodeDict.TryGetValue(parentCode, out TreeNode parentNode))
-                    parentNode.Nodes.Add(node);
-                else
-                    treeViewAccounts.Nodes.Add(node); // fallback
-            }
-
-            SortTreeNodes(treeViewAccounts.Nodes);
-            treeViewAccounts.CollapseAll();
-        }
-
         private void SortTreeNodes(TreeNodeCollection nodes)
         {
             List<TreeNode> nodeList = nodes.Cast<TreeNode>()
@@ -202,81 +164,50 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        // ==========================
-        // البحث وتلوين العقدة بالكامل وفتح الآباء فقط للعقد المطابقة
-        // ==========================
-        //private bool SearchAndHighlightNodes_(TreeNodeCollection nodes, string searchText)
-        //{
-        //    bool anyMatchInThisLevel = false;
-
-        //    foreach (TreeNode node in nodes)
-        //    {
-        //        bool isMatch = node.Text.ToLower().Contains(searchText);
-        //        bool anyMatchInChildren = node.Nodes.Count > 0 ? SearchAndHighlightNodes(node.Nodes, searchText) : false;
-
-        //        if (isMatch)
-        //        {
-        //            node.BackColor = Color.Yellow;
-        //            node.ForeColor = Color.Black;
-        //            matchedNodes.Add(node);
-        //        }
-        //        else
-        //        {
-        //            node.BackColor = treeViewAccounts.BackColor;
-        //            node.ForeColor = treeViewAccounts.ForeColor;
-        //        }
-
-        //        // إذا العقدة أو أي من أبنائها تطابق البحث، افتحها
-        //        if (isMatch || anyMatchInChildren)
-        //        {
-        //            node.Expand();
-        //            anyMatchInThisLevel = true;
-        //        }
-        //        else
-        //        {
-        //            node.Collapse(); // لا تطابق ولا يوجد أطفال متطابقين -> أغلقها
-        //        }
-        //    }
-
-        //    return anyMatchInThisLevel;
-        //}
 
         // ==========================
         // رسم العقدة بالكامل
         // ==========================
-
+        // إلغاء الـ Custom Drawing واستخدام السلوك الافتراضي مع تحسينات بسيطة
         private void treeViewAccounts_DrawNode(object sender, DrawTreeNodeEventArgs e)
         {
-            // تحديد الخط
-            Font nodeFont = e.Node == activeNode
-                ? new Font("Times New Roman", 13, FontStyle.Bold)
-                : new Font("Times New Roman", 12, FontStyle.Bold);
-
-            // رسم الخلفية لكل العقدة بالكامل
-            using (Brush bgBrush = new SolidBrush(e.Node.BackColor))
+            // فقط للعقدة النشطة
+            if (e.Node == activeNode)
             {
-                e.Graphics.FillRectangle(bgBrush, e.Bounds);
+                using (Font boldFont = new Font("Times New Roman", 13, FontStyle.Bold))
+                using (Brush redBrush = new SolidBrush(Color.Red))
+                using (Brush bgBrush = new SolidBrush(e.Node.BackColor))
+                {
+                    e.Graphics.FillRectangle(bgBrush, e.Bounds);
+                    TextRenderer.DrawText(e.Graphics, e.Node.Text, boldFont, e.Bounds,
+                        Color.Red, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+                }
+                e.DrawDefault = false;
             }
-
-            // رسم النص بالكامل داخل نفس المستطيل
-            TextRenderer.DrawText(e.Graphics, e.Node.Text, nodeFont, e.Bounds, e.Node.ForeColor,
-                TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine);
-
-            e.DrawDefault = false;
+            else
+            {
+                e.DrawDefault = true; // دع النظام يرسم العقد العادية
+            }
         }
+        //private void treeViewAccounts_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        //{
+        //    // تحديد الخط
+        //    Font nodeFont = e.Node == activeNode
+        //        ? new Font("Times New Roman", 13, FontStyle.Bold)
+        //        : new Font("Times New Roman", 12, FontStyle.Bold);
 
-        #endregion
+        //    // رسم الخلفية لكل العقدة بالكامل
+        //    using (Brush bgBrush = new SolidBrush(e.Node.BackColor))
+        //    {
+        //        e.Graphics.FillRectangle(bgBrush, e.Bounds);
+        //    }
 
+        //    // رسم النص بالكامل داخل نفس المستطيل
+        //    TextRenderer.DrawText(e.Graphics, e.Node.Text, nodeFont, e.Bounds, e.Node.ForeColor,
+        //        TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine);
 
-
-
-
-
-
-
-
-
-        #region TreeView Search & Highlight
+        //    e.DrawDefault = false;
+        //}
 
 
         // ==========================
@@ -307,12 +238,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
   
-        #endregion
-
-
-
-        #region !!!!!!!!!!! TreeView Events  الاحداث التفاعلية للشجرة !!!!!!!!!
-
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
             // ==========================
@@ -454,18 +379,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        private void treeViewAccounts_DrawNode_(object? sender, DrawTreeNodeEventArgs e)
-        {
-            e.DrawDefault = false;
-            Font nodeFont = e.Node == activeNode
-                ? new Font("Times New Roman", 13, FontStyle.Bold)
-                : new Font("Times New Roman", 12, FontStyle.Bold);
-            Color foreColor = e.Node == activeNode ? Color.Red : Color.Black;
-            TextRenderer.DrawText(e.Graphics, e.Node!.Text, nodeFont, e.Bounds, foreColor);
-        }
-
-        private List<TreeNode> matchedNodes_ = new List<TreeNode>();
-        private int currentMatchIndex_ = -1;
         private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)
         {
             foreach (TreeNode node in nodes)
@@ -495,66 +408,14 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        private void SearchAndHighlightNodes__(TreeNodeCollection nodes, string searchText)
-        {
-            foreach (TreeNode node in nodes)
-            {
-                // التحقق من النص
-                if (node.Text.ToLower().Contains(searchText))
-                {
-                    node.BackColor = Color.Yellow;
-                    node.ForeColor = Color.Black;
-                    matchedNodes.Add(node);
-
-                    // فتح كل الآباء
-                    ExpandParentNodes(node);
-                }
-                else
-                {
-                    node.BackColor = treeViewAccounts.BackColor;
-                    node.ForeColor = treeViewAccounts.ForeColor;
-                }
-
-                // البحث في الأبناء
-                if (node.Nodes.Count > 0)
-                    SearchAndHighlightNodes(node.Nodes, searchText);
-            }
-        }
-
-
-
-        //private void txtSearchTree_TextChanged(object sender, EventArgs e)
-        //{/*اريد تعديل فى اسلوب البحث داخل الشجرة
-        //  اولا يجب تفعيل وضع البحث عند الدخول وتعطيله عند الخروج
-        //    ثانيا اريد هاى ليت اصفر على السماء كلها المتشابهة خلال الشجرة وليس تحديد اول اسم 
-        //    وفتح كل العقد التى بها تشابهات خلال الشجرة جميعا 
-        //    ويكون الوضع تفاعلى فادا تم التراجع عن حرف غير موجود فى المتشابهات يتم ازالة الهاى ليت
-        //    ثالثا اعادة ضبط التعليقا فيما لا يتجاوز السطر الواحد بلغة عربية بدون اقواس ولا احرف انجليزية
-        //    رابعا عند ايجاد الاسم المراد وتم الانتقال الى عقدته ومحاولة فتحه يفتح داخل الاصل الذى يتبعه وغلق باقى العقد الجذرية بين 1:5 
-        //    التى هو ليس تحتها
-        //    هذا فيما يخص البحث دون خلل باقى الوظاءف الاخرى
-        //  */
-        //    string searchText = txtSearchTree.Text.Trim().ToLower();
-        //    matchedNodes.Clear();
-        //    currentMatchIndex = -1;
-        //    ResetNodeColorsAndCollapse(treeViewAccounts.Nodes);
-
-        //    if (string.IsNullOrEmpty(searchText)) return;
-
-        //    SearchAndHighlightNodes(treeViewAccounts.Nodes, searchText);
-        //    if (matchedNodes.Count > 0)
-        //    {
-        //        currentMatchIndex = 0;
-        //        var node = matchedNodes[0];
-        //        treeViewAccounts.SelectedNode = node;
-        //        node.EnsureVisible();
-        //    }
-
-        //}
-
+  
 
         #endregion
 
+ 
+        
+        
+        
         #region !!!!!!! DGV & Utilities تنسيقات و الجريد !!!!!!!!!!
 
         private void LoadChildrenInDGV(int parentTreeAccCode)
