@@ -171,8 +171,27 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // ==========================
         // رسم العقدة بالكامل
         // ==========================
+        private void treeViewAccounts_DrawNode(object sender, DrawTreeNodeEventArgs e)
+        {
+            // استخدام الخلفية المباشرة من العقدة
+            using (Brush bgBrush = new SolidBrush(e.Node.BackColor))
+            {
+                e.Graphics.FillRectangle(bgBrush, e.Bounds);
+            }
 
-        private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)
+            // تحديد الخط
+            Font nodeFont = e.Node == activeNode
+                ? new Font("Times New Roman", 13, FontStyle.Bold)
+                : new Font("Times New Roman", 12, FontStyle.Bold);
+
+            // رسم النص
+            TextRenderer.DrawText(e.Graphics, e.Node.Text, nodeFont, e.Bounds, e.Node.ForeColor,
+                TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine);
+
+            // لا تستخدم e.DrawDefault = false إذا كنت تريد السلوك الافتراضي جزئياً
+            e.DrawDefault = false;
+        }
+        private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)// الحل الثانى تلوين جزئى
         {
             foreach (TreeNode node in nodes)
             {
@@ -201,7 +220,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 treeViewAccounts.Invalidate(new Rectangle(node.Bounds.Location, node.Bounds.Size));
             }
         }
-        private void treeViewAccounts_DrawNode(object sender, DrawTreeNodeEventArgs e)//الحل الثالث تلوين جزئى وليس كل العقدة
+        private void treeViewAccounts_DrawNode_(object sender, DrawTreeNodeEventArgs e)//الحل الثالث تلوين جزئى وليس كل العقدة
         {
             // هذا سيرسم الخلفية تلقائياً ويعتني بالتحديد
             if ((e.State & TreeNodeStates.Selected) != 0)
