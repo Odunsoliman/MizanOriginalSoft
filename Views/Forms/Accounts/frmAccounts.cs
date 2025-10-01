@@ -422,7 +422,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             if (rdoMadeen.Checked) return balance > 0;     // مدين
             if (rdoDaeen.Checked) return balance < 0;      // دائن
             if (rdoEqual.Checked) return balance == 0;     // متساوي
-
+            DGVStyle();
             return true;
         }
 
