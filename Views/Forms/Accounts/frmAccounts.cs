@@ -349,6 +349,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     DGV.DataSource = null;
                 }
             }
+            DGVStyle();
         }
 
 
