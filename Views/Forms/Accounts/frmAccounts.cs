@@ -1,4 +1,5 @@
 ﻿using MizanOriginalSoft.MainClasses;
+using MizanOriginalSoft.MainClasses.OriginalClasses;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -443,8 +444,181 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             return foundInCurrent || foundInChildren;
         }
         #endregion
+        #region !!!!!!!!  Add Account  !!!!!!!!
 
- 
+        private void btnAccAccount_Click(object sender, EventArgs e)
+        {
+            AddChildrenFromTree();
+        }
+
+        private void btnStripAddChildren_Click(object sender, EventArgs e)
+        {
+            AddChildrenFromDGV();
+        }
+
+        private void AddChildrenFromTree()
+        {
+            if (treeViewAccounts.SelectedNode?.Tag is not DataRow selectedRow)
+            {
+                MessageBox.Show("يجب اختيار عقدة من الشجرة لإضافة حساب فرعي لها.", "تنبيه",
+                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string userInput;
+            DialogResult inputResult = CustomMessageBox.ShowStringInputBox(out userInput,
+                "من فضلك أدخل اسم الحساب:", "إضافة حساب فرعي");
+
+            if (inputResult != DialogResult.OK || string.IsNullOrWhiteSpace(userInput))
+            {
+                MessageBox.Show("تم إلغاء الإضافة أو لم يتم إدخال اسم صالح.", "إلغاء",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            string accName = userInput.Trim();
+            int parentTreeAccCode = selectedRow.Field<int>("TreeAccCode");
+            int createByUserID = CurrentSession.UserID;
+
+            string result = DBServiecs.Acc_AddAccount(accName, parentTreeAccCode, createByUserID);
+
+            if (result.StartsWith("تم"))
+            {
+                MessageBox.Show("تم حفظ الحساب بنجاح ✅", "نجاح",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // حفظ العقدة المحددة حالياً
+                TreeNode? selectedNode = treeViewAccounts.SelectedNode;
+                int selectedTreeCode = selectedRow.Field<int>("TreeAccCode");
+
+                // إعادة تحميل الشجرة
+                LoadAccountsTree();
+
+                // البحث عن العقدة الأصلية وفتحها
+                TreeNode? parentNode = FindTreeNodeByTreeCode(selectedTreeCode);
+                if (parentNode != null)
+                {
+                    parentNode.Expand();
+                    treeViewAccounts.SelectedNode = parentNode;
+
+                    // تحميل الأبناء في الجريد
+                    LoadChildAccountsToGrid(parentNode);
+                }
+            }
+            else
+            {
+                MessageBox.Show("فشل في الحفظ ❌\n" + result, "خطأ",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void AddChildrenFromDGV()
+        {
+            if (DGV.CurrentRow?.DataBoundItem is not DataRowView rowView)
+            {
+                MessageBox.Show("يجب اختيار حساب من الجدول لإضافة حساب فرعي له.", "تنبيه",
+                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DataRow row = rowView.Row;
+            int parentTreeAccCode = row.Field<int>("TreeAccCode");
+
+            string userInput;
+            DialogResult inputResult = CustomMessageBox.ShowStringInputBox(out userInput,
+                "من فضلك أدخل اسم الحساب:", "إضافة حساب فرعي");
+
+            if (inputResult != DialogResult.OK || string.IsNullOrWhiteSpace(userInput))
+            {
+                MessageBox.Show("تم إلغاء الإضافة أو لم يتم إدخال اسم صالح.", "إلغاء",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            string accName = userInput.Trim();
+            int createByUserID = CurrentSession.UserID;
+
+            string result = DBServiecs.Acc_AddAccount(accName, parentTreeAccCode, createByUserID);
+
+            if (result.StartsWith("تم"))
+            {
+                MessageBox.Show("تم حفظ الحساب بنجاح ✅", "نجاح",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // حفظ المعلومات قبل إعادة التحميل
+                int selectedTreeCode = parentTreeAccCode;
+
+                // إعادة تحميل الشجرة
+                LoadAccountsTree();
+
+                // البحث عن العقدة الأصلية وتحديدها
+                TreeNode? parentNode = FindTreeNodeByTreeCode(selectedTreeCode);
+                if (parentNode != null)
+                {
+                    treeViewAccounts.SelectedNode = parentNode;
+                    parentNode.Expand();
+
+                    // تحميل الأبناء الجدد في الجريد
+                    LoadChildAccountsToGrid(parentNode);
+
+                    // تمرير التركيز إلى الجريد
+                    DGV.Focus();
+                }
+            }
+            else
+            {
+                MessageBox.Show("فشل في الحفظ ❌\n" + result, "خطأ",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void RefreshAfterAddition(int parentTreeCode)
+        {
+            // إعادة تحميل الشجرة
+            LoadAccountsTree();
+
+            // البحث عن العقدة الأصلية وتحديدها
+            TreeNode? parentNode = FindTreeNodeByTreeCode(parentTreeCode);
+            if (parentNode != null)
+            {
+                treeViewAccounts.SelectedNode = parentNode;
+                parentNode.Expand();
+                LoadChildAccountsToGrid(parentNode);
+                DGV.Focus();
+            }
+        }
+        private TreeNode? FindTreeNodeByTreeCode(int treeCode)
+        {
+            foreach (TreeNode node in treeViewAccounts.Nodes)
+            {
+                TreeNode? foundNode = FindTreeNodeRecursive(node, treeCode);
+                if (foundNode != null)
+                    return foundNode;
+            }
+            return null;
+        }
+
+        private TreeNode? FindTreeNodeRecursive(TreeNode currentNode, int treeCode)
+        {
+            // التحقق المبدئي
+            if (currentNode == null) return null;
+
+            if (currentNode.Tag is DataRow row && row.Field<int>("TreeAccCode") == treeCode)
+                return currentNode;
+
+            // استخدام for بدلاً من foreach لتجنب التحذير
+            for (int i = 0; i < currentNode.Nodes.Count; i++)
+            {
+                TreeNode? foundNode = FindTreeNodeRecursive(currentNode.Nodes[i], treeCode);
+                if (foundNode != null)
+                    return foundNode;
+            }
+
+            return null;
+        }
+
+        #endregion
+
+
     }
 }
 

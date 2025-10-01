@@ -1704,12 +1704,12 @@ END
         }
 
         // إضافة حساب جديد
-        public static string Acc_AddAccount(string AccName, int? ParentAccID, int? CreateByUserID)
+        public static string Acc_AddAccount(string AccName, int? ParentTreeAccCode, int? CreateByUserID)
         {
             return dbHelper.ExecuteNonQueryWithLogging("Acc_AddAccount", command =>
             {
                 command.Parameters.Add("@AccName", SqlDbType.NVarChar).Value = AccName;
-                command.Parameters.Add("@ParentAccID", SqlDbType.Int).Value = (object?)ParentAccID ?? DBNull.Value;
+                command.Parameters.Add("@ParentTreeAccCode", SqlDbType.Int).Value = (object?)ParentTreeAccCode ?? DBNull.Value;
                 command.Parameters.Add("@CreateByUserID", SqlDbType.Int).Value = (object?)CreateByUserID ?? DBNull.Value;
             }, expectMessageOutput: false);
         }

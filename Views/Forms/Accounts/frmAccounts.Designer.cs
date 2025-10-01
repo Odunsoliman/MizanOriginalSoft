@@ -29,10 +29,11 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             tlpBody = new TableLayoutPanel();
             panelList = new TableLayoutPanel();
             tableLayoutPanel15 = new TableLayoutPanel();
+            btnAccAccount = new Button();
             btnModify = new Button();
             label15 = new Label();
             lblSelectedTreeNod = new Label();
@@ -187,6 +188,7 @@
             tableLayoutPanel15.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel15.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel15.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel15.Controls.Add(btnAccAccount, 0, 0);
             tableLayoutPanel15.Controls.Add(btnModify, 1, 0);
             tableLayoutPanel15.Dock = DockStyle.Fill;
             tableLayoutPanel15.Location = new Point(5, 588);
@@ -195,6 +197,21 @@
             tableLayoutPanel15.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel15.Size = new Size(207, 47);
             tableLayoutPanel15.TabIndex = 98;
+            // 
+            // btnAccAccount
+            // 
+            btnAccAccount.BackColor = Color.Teal;
+            btnAccAccount.Dock = DockStyle.Fill;
+            btnAccAccount.Font = new Font("Times New Roman", 16F, FontStyle.Bold);
+            btnAccAccount.ForeColor = Color.Yellow;
+            btnAccAccount.Location = new Point(108, 4);
+            btnAccAccount.Margin = new Padding(4);
+            btnAccAccount.Name = "btnAccAccount";
+            btnAccAccount.Size = new Size(95, 39);
+            btnAccAccount.TabIndex = 84;
+            btnAccAccount.Text = "اضافة حــ";
+            btnAccAccount.UseVisualStyleBackColor = false;
+            btnAccAccount.Click += btnAccAccount_Click;
             // 
             // btnModify
             // 
@@ -497,8 +514,8 @@
             DGV.ReadOnly = true;
             DGV.RowHeadersVisible = false;
             DGV.RowHeadersWidth = 51;
-            dataGridViewCellStyle2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DGV.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DGV.RowsDefaultCellStyle = dataGridViewCellStyle1;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DGV.Size = new Size(467, 367);
             DGV.TabIndex = 72;
@@ -516,6 +533,7 @@
             btnStripAddChildren.Name = "btnStripAddChildren";
             btnStripAddChildren.Size = new Size(168, 22);
             btnStripAddChildren.Text = "اضافة حساب فرعى";
+            btnStripAddChildren.Click += btnStripAddChildren_Click;
             // 
             // tableLayoutPanel13
             // 
@@ -1400,5 +1418,6 @@
         private Label lblAccTopID;
         private Label lblTitel;
         private TableLayoutPanel tlpHome;
+        private Button btnAccAccount;
     }
 }
