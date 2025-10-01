@@ -194,18 +194,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 //            LoadReportsForSelectedAccount();
         }
 
-        private string GetFullPathFromNode(TreeNode node)
-        {
-            if (node == null) return string.Empty;
-            List<string> parts = new List<string>();
-            TreeNode? current = node;
-            while (current != null)
-            {
-                parts.Insert(0, current.Text);
-                current = current.Parent;
-            }
-            return string.Join(" → ", parts);
-        }
+
         private bool IsRootNodeInRange(TreeNode node)
         {
             if (node?.Tag is DataRow row)
