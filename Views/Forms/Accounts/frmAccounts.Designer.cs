@@ -621,8 +621,8 @@
             tlpDetailsData.Location = new Point(3, 178);
             tlpDetailsData.Name = "tlpDetailsData";
             tlpDetailsData.RowCount = 2;
-            tlpDetailsData.RowStyles.Add(new RowStyle(SizeType.Percent, 62.20238F));
-            tlpDetailsData.RowStyles.Add(new RowStyle(SizeType.Percent, 37.79762F));
+            tlpDetailsData.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tlpDetailsData.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tlpDetailsData.Size = new Size(353, 336);
             tlpDetailsData.TabIndex = 92;
             // 
@@ -637,7 +637,7 @@
             tlpAssetsData.Controls.Add(lblFixedAssetsAge, 0, 2);
             tlpAssetsData.Controls.Add(lblFixedAssetsEndDate, 0, 0);
             tlpAssetsData.Dock = DockStyle.Top;
-            tlpAssetsData.Location = new Point(3, 212);
+            tlpAssetsData.Location = new Point(3, 171);
             tlpAssetsData.Name = "tlpAssetsData";
             tlpAssetsData.RowCount = 6;
             tlpAssetsData.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
@@ -646,7 +646,7 @@
             tlpAssetsData.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             tlpAssetsData.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             tlpAssetsData.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-            tlpAssetsData.Size = new Size(347, 117);
+            tlpAssetsData.Size = new Size(347, 158);
             tlpAssetsData.TabIndex = 99;
             // 
             // lblIsEndedFixedAssets_FixedAssetsEndDate
@@ -654,7 +654,7 @@
             lblIsEndedFixedAssets_FixedAssetsEndDate.AutoSize = true;
             lblIsEndedFixedAssets_FixedAssetsEndDate.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblIsEndedFixedAssets_FixedAssetsEndDate.ForeColor = Color.FromArgb(0, 0, 192);
-            lblIsEndedFixedAssets_FixedAssetsEndDate.Location = new Point(329, 76);
+            lblIsEndedFixedAssets_FixedAssetsEndDate.Location = new Point(329, 100);
             lblIsEndedFixedAssets_FixedAssetsEndDate.Margin = new Padding(4, 0, 4, 0);
             lblIsEndedFixedAssets_FixedAssetsEndDate.Name = "lblIsEndedFixedAssets_FixedAssetsEndDate";
             lblIsEndedFixedAssets_FixedAssetsEndDate.Size = new Size(14, 19);
@@ -668,10 +668,10 @@
             lblAnnuallyInstallment_MonthlyInstallment.Dock = DockStyle.Fill;
             lblAnnuallyInstallment_MonthlyInstallment.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblAnnuallyInstallment_MonthlyInstallment.ForeColor = Color.FromArgb(0, 0, 192);
-            lblAnnuallyInstallment_MonthlyInstallment.Location = new Point(4, 57);
+            lblAnnuallyInstallment_MonthlyInstallment.Location = new Point(4, 73);
             lblAnnuallyInstallment_MonthlyInstallment.Margin = new Padding(4, 0, 4, 0);
             lblAnnuallyInstallment_MonthlyInstallment.Name = "lblAnnuallyInstallment_MonthlyInstallment";
-            lblAnnuallyInstallment_MonthlyInstallment.Size = new Size(339, 19);
+            lblAnnuallyInstallment_MonthlyInstallment.Size = new Size(339, 27);
             lblAnnuallyInstallment_MonthlyInstallment.TabIndex = 67;
             lblAnnuallyInstallment_MonthlyInstallment.Text = "-";
             lblAnnuallyInstallment_MonthlyInstallment.TextAlign = ContentAlignment.MiddleLeft;
@@ -685,7 +685,7 @@
             lblAssetsValue_DepreciationRateAnnually.Location = new Point(4, 19);
             lblAssetsValue_DepreciationRateAnnually.Margin = new Padding(4, 0, 4, 0);
             lblAssetsValue_DepreciationRateAnnually.Name = "lblAssetsValue_DepreciationRateAnnually";
-            lblAssetsValue_DepreciationRateAnnually.Size = new Size(339, 19);
+            lblAssetsValue_DepreciationRateAnnually.Size = new Size(339, 27);
             lblAssetsValue_DepreciationRateAnnually.TabIndex = 65;
             lblAssetsValue_DepreciationRateAnnually.Text = "-";
             lblAssetsValue_DepreciationRateAnnually.TextAlign = ContentAlignment.MiddleLeft;
@@ -696,10 +696,10 @@
             lblFixedAssetsAge.Dock = DockStyle.Fill;
             lblFixedAssetsAge.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblFixedAssetsAge.ForeColor = Color.FromArgb(0, 0, 192);
-            lblFixedAssetsAge.Location = new Point(4, 38);
+            lblFixedAssetsAge.Location = new Point(4, 46);
             lblFixedAssetsAge.Margin = new Padding(4, 0, 4, 0);
             lblFixedAssetsAge.Name = "lblFixedAssetsAge";
-            lblFixedAssetsAge.Size = new Size(339, 19);
+            lblFixedAssetsAge.Size = new Size(339, 27);
             lblFixedAssetsAge.TabIndex = 66;
             lblFixedAssetsAge.Text = "-";
             lblFixedAssetsAge.TextAlign = ContentAlignment.MiddleLeft;
@@ -707,11 +707,11 @@
             // lblFixedAssetsEndDate
             // 
             lblFixedAssetsEndDate.AutoSize = true;
-            lblFixedAssetsEndDate.Location = new Point(306, 0);
+            lblFixedAssetsEndDate.Location = new Point(284, 0);
             lblFixedAssetsEndDate.Name = "lblFixedAssetsEndDate";
-            lblFixedAssetsEndDate.Size = new Size(38, 15);
+            lblFixedAssetsEndDate.Size = new Size(60, 15);
             lblFixedAssetsEndDate.TabIndex = 69;
-            lblFixedAssetsEndDate.Text = "label4";
+            lblFixedAssetsEndDate.Text = "اصول ثابتة";
             lblFixedAssetsEndDate.Visible = false;
             // 
             // tlpMainData
@@ -725,6 +725,7 @@
             tlpMainData.Controls.Add(lblClientEmail, 0, 2);
             tlpMainData.Controls.Add(lblClientAddress, 0, 3);
             tlpMainData.Controls.Add(lblAccDetailNote, 0, 4);
+            tlpMainData.Dock = DockStyle.Top;
             tlpMainData.Location = new Point(3, 3);
             tlpMainData.Name = "tlpMainData";
             tlpMainData.RowCount = 6;
@@ -735,7 +736,7 @@
             tlpMainData.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666111F));
             tlpMainData.RowStyles.Add(new RowStyle(SizeType.Percent, 16.66944F));
             tlpMainData.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tlpMainData.Size = new Size(347, 163);
+            tlpMainData.Size = new Size(347, 162);
             tlpMainData.TabIndex = 96;
             // 
             // lblCreateAndModifyDate
@@ -744,10 +745,10 @@
             lblCreateAndModifyDate.Dock = DockStyle.Fill;
             lblCreateAndModifyDate.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblCreateAndModifyDate.ForeColor = Color.FromArgb(0, 0, 192);
-            lblCreateAndModifyDate.Location = new Point(4, 135);
+            lblCreateAndModifyDate.Location = new Point(4, 130);
             lblCreateAndModifyDate.Margin = new Padding(4, 0, 4, 0);
             lblCreateAndModifyDate.Name = "lblCreateAndModifyDate";
-            lblCreateAndModifyDate.Size = new Size(339, 28);
+            lblCreateAndModifyDate.Size = new Size(339, 32);
             lblCreateAndModifyDate.TabIndex = 73;
             lblCreateAndModifyDate.Text = "-";
             lblCreateAndModifyDate.TextAlign = ContentAlignment.MiddleLeft;
@@ -761,9 +762,9 @@
             lblContactName.Location = new Point(4, 0);
             lblContactName.Margin = new Padding(4, 0, 4, 0);
             lblContactName.Name = "lblContactName";
-            lblContactName.Size = new Size(339, 27);
+            lblContactName.Size = new Size(339, 26);
             lblContactName.TabIndex = 72;
-            lblContactName.Text = "-";
+            lblContactName.Text = "بيانات ش";
             lblContactName.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblPhonAndAnther
@@ -772,10 +773,10 @@
             lblPhonAndAnther.Dock = DockStyle.Fill;
             lblPhonAndAnther.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblPhonAndAnther.ForeColor = Color.FromArgb(0, 0, 192);
-            lblPhonAndAnther.Location = new Point(4, 27);
+            lblPhonAndAnther.Location = new Point(4, 26);
             lblPhonAndAnther.Margin = new Padding(4, 0, 4, 0);
             lblPhonAndAnther.Name = "lblPhonAndAnther";
-            lblPhonAndAnther.Size = new Size(339, 27);
+            lblPhonAndAnther.Size = new Size(339, 26);
             lblPhonAndAnther.TabIndex = 65;
             lblPhonAndAnther.Text = "-";
             lblPhonAndAnther.TextAlign = ContentAlignment.MiddleLeft;
@@ -785,7 +786,7 @@
             lblClientEmail.AutoSize = true;
             lblClientEmail.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblClientEmail.ForeColor = Color.FromArgb(0, 0, 192);
-            lblClientEmail.Location = new Point(329, 54);
+            lblClientEmail.Location = new Point(329, 52);
             lblClientEmail.Margin = new Padding(4, 0, 4, 0);
             lblClientEmail.Name = "lblClientEmail";
             lblClientEmail.Size = new Size(14, 19);
@@ -799,10 +800,10 @@
             lblClientAddress.Dock = DockStyle.Fill;
             lblClientAddress.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblClientAddress.ForeColor = Color.FromArgb(0, 0, 192);
-            lblClientAddress.Location = new Point(4, 81);
+            lblClientAddress.Location = new Point(4, 78);
             lblClientAddress.Margin = new Padding(4, 0, 4, 0);
             lblClientAddress.Name = "lblClientAddress";
-            lblClientAddress.Size = new Size(339, 27);
+            lblClientAddress.Size = new Size(339, 26);
             lblClientAddress.TabIndex = 70;
             lblClientAddress.Text = "-";
             lblClientAddress.TextAlign = ContentAlignment.MiddleLeft;
@@ -813,10 +814,10 @@
             lblAccDetailNote.Dock = DockStyle.Fill;
             lblAccDetailNote.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblAccDetailNote.ForeColor = Color.FromArgb(0, 0, 192);
-            lblAccDetailNote.Location = new Point(4, 108);
+            lblAccDetailNote.Location = new Point(4, 104);
             lblAccDetailNote.Margin = new Padding(4, 0, 4, 0);
             lblAccDetailNote.Name = "lblAccDetailNote";
-            lblAccDetailNote.Size = new Size(339, 27);
+            lblAccDetailNote.Size = new Size(339, 26);
             lblAccDetailNote.TabIndex = 67;
             lblAccDetailNote.Text = "-";
             lblAccDetailNote.TextAlign = ContentAlignment.MiddleLeft;
