@@ -138,6 +138,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             lblNameNod.Text = accName;                                   // اسم الحساب فقط
             lblAccID_Tree.Text = accID.ToString();
             lblAccID_DGV.Text = string.Empty;
+            DGV.ClearSelection();
             // ==========================
             // 5) التحقق من إمكانية إضافة حساب فرعي
             // ==========================
