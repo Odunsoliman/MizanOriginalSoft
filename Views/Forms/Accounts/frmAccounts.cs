@@ -123,6 +123,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             int treeAccCode = row.Field<int>("TreeAccCode");      // الترقيم الشجري الجديد
             int accID = row.Field<int>("AccID");                  // المفتاح الأساسي فقط
             string accName = row["AccName"]?.ToString() ?? string.Empty;
+            string accPath = row["AccName"]?.ToString() ?? string.Empty;
+
             bool hasChildren = row.Field<bool?>("IsHasChildren") ?? false;
             bool hasDetails = row.Field<bool?>("IsHasDetails") ?? false;
             bool isEnerAcc = row.Field<bool?>("IsEnerAcc") ?? false;
@@ -191,9 +193,19 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // ==========================
 //            LoadReportsForSelectedAccount();
         }
-        /*اريد عند فتح عقدة جذرية رقمها فى TreeAccCode بين 1 الى 5 يتم اغلاق الجذر الاخرى حتى لا تكبر الشجرة ويكون هناك تركيز على العقدة الحالية*/
 
-
+        private string GetFullPathFromNode(TreeNode node)
+        {
+            if (node == null) return string.Empty;
+            List<string> parts = new List<string>();
+            TreeNode? current = node;
+            while (current != null)
+            {
+                parts.Insert(0, current.Text);
+                current = current.Parent;
+            }
+            return string.Join(" → ", parts);
+        }
         private bool IsRootNodeInRange(TreeNode node)
         {
             if (node?.Tag is DataRow row)
