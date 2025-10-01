@@ -64,7 +64,6 @@
             lblCountAndTotals = new Label();
             pnlMenuContainer = new Panel();
             tableLayoutPanel14 = new TableLayoutPanel();
-            label16 = new Label();
             tlpDetailsData = new TableLayoutPanel();
             tlpAssetsData = new TableLayoutPanel();
             lblIsEndedFixedAssets_FixedAssetsEndDate = new Label();
@@ -88,6 +87,11 @@
             lblTotalBalnceState = new Label();
             lblNameNod = new Label();
             lblPathNode = new Label();
+            tableLayoutPanel12 = new TableLayoutPanel();
+            lblAccID_Tree = new Label();
+            label16 = new Label();
+            tableLayoutPanel16 = new TableLayoutPanel();
+            lblAccID_DGV = new Label();
             lblAccDataDetails = new Label();
             tabPage2 = new TabPage();
             tableLayoutPanel11 = new TableLayoutPanel();
@@ -130,6 +134,8 @@
             tlpMainData.SuspendLayout();
             tlpBtnExec.SuspendLayout();
             tlpShowMainData.SuspendLayout();
+            tableLayoutPanel12.SuspendLayout();
+            tableLayoutPanel16.SuspendLayout();
             tabPage2.SuspendLayout();
             tableLayoutPanel11.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
@@ -520,6 +526,7 @@
             DGV.Size = new Size(467, 367);
             DGV.TabIndex = 72;
             DGV.TabStop = false;
+            DGV.SelectionChanged += DGV_SelectionChanged;
             // 
             // contextMenuDGV
             // 
@@ -616,10 +623,10 @@
             // 
             tableLayoutPanel14.ColumnCount = 1;
             tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel14.Controls.Add(label16, 0, 0);
             tableLayoutPanel14.Controls.Add(tlpDetailsData, 0, 3);
             tableLayoutPanel14.Controls.Add(tlpShowMainData, 0, 1);
-            tableLayoutPanel14.Controls.Add(lblAccDataDetails, 0, 2);
+            tableLayoutPanel14.Controls.Add(tableLayoutPanel12, 0, 0);
+            tableLayoutPanel14.Controls.Add(tableLayoutPanel16, 0, 2);
             tableLayoutPanel14.Dock = DockStyle.Fill;
             tableLayoutPanel14.Location = new Point(3, 3);
             tableLayoutPanel14.Name = "tableLayoutPanel14";
@@ -631,20 +638,6 @@
             tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel14.Size = new Size(363, 590);
             tableLayoutPanel14.TabIndex = 76;
-            // 
-            // label16
-            // 
-            label16.AutoSize = true;
-            label16.Dock = DockStyle.Left;
-            label16.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
-            label16.ForeColor = Color.FromArgb(192, 0, 192);
-            label16.Location = new Point(250, 0);
-            label16.Margin = new Padding(4, 0, 4, 0);
-            label16.Name = "label16";
-            label16.Size = new Size(109, 41);
-            label16.TabIndex = 74;
-            label16.Text = "البيانات الرئيسية";
-            label16.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // tlpDetailsData
             // 
@@ -994,16 +987,84 @@
             lblPathNode.Text = "-";
             lblPathNode.TextAlign = ContentAlignment.MiddleLeft;
             // 
+            // tableLayoutPanel12
+            // 
+            tableLayoutPanel12.ColumnCount = 2;
+            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel12.Controls.Add(lblAccID_Tree, 1, 0);
+            tableLayoutPanel12.Controls.Add(label16, 0, 0);
+            tableLayoutPanel12.Dock = DockStyle.Fill;
+            tableLayoutPanel12.Location = new Point(3, 3);
+            tableLayoutPanel12.Name = "tableLayoutPanel12";
+            tableLayoutPanel12.RowCount = 1;
+            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel12.Size = new Size(357, 35);
+            tableLayoutPanel12.TabIndex = 98;
+            // 
+            // lblAccID_Tree
+            // 
+            lblAccID_Tree.Dock = DockStyle.Right;
+            lblAccID_Tree.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
+            lblAccID_Tree.ForeColor = Color.FromArgb(255, 192, 255);
+            lblAccID_Tree.Location = new Point(4, 0);
+            lblAccID_Tree.Margin = new Padding(4, 0, 4, 0);
+            lblAccID_Tree.Name = "lblAccID_Tree";
+            lblAccID_Tree.Size = new Size(105, 35);
+            lblAccID_Tree.TabIndex = 74;
+            lblAccID_Tree.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Dock = DockStyle.Left;
+            label16.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
+            label16.ForeColor = Color.FromArgb(192, 0, 192);
+            label16.Location = new Point(244, 0);
+            label16.Margin = new Padding(4, 0, 4, 0);
+            label16.Name = "label16";
+            label16.Size = new Size(109, 35);
+            label16.TabIndex = 74;
+            label16.Text = "البيانات الرئيسية";
+            label16.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // tableLayoutPanel16
+            // 
+            tableLayoutPanel16.ColumnCount = 2;
+            tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel16.Controls.Add(lblAccID_DGV, 1, 0);
+            tableLayoutPanel16.Controls.Add(lblAccDataDetails, 0, 0);
+            tableLayoutPanel16.Dock = DockStyle.Fill;
+            tableLayoutPanel16.Location = new Point(3, 162);
+            tableLayoutPanel16.Name = "tableLayoutPanel16";
+            tableLayoutPanel16.RowCount = 1;
+            tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel16.Size = new Size(357, 35);
+            tableLayoutPanel16.TabIndex = 98;
+            // 
+            // lblAccID_DGV
+            // 
+            lblAccID_DGV.Dock = DockStyle.Right;
+            lblAccID_DGV.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
+            lblAccID_DGV.ForeColor = Color.FromArgb(255, 192, 255);
+            lblAccID_DGV.Location = new Point(4, 0);
+            lblAccID_DGV.Margin = new Padding(4, 0, 4, 0);
+            lblAccID_DGV.Name = "lblAccID_DGV";
+            lblAccID_DGV.Size = new Size(105, 35);
+            lblAccID_DGV.TabIndex = 74;
+            lblAccID_DGV.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // lblAccDataDetails
             // 
             lblAccDataDetails.AutoSize = true;
             lblAccDataDetails.Dock = DockStyle.Left;
             lblAccDataDetails.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold | FontStyle.Underline);
             lblAccDataDetails.ForeColor = Color.FromArgb(192, 0, 192);
-            lblAccDataDetails.Location = new Point(254, 159);
+            lblAccDataDetails.Location = new Point(248, 0);
             lblAccDataDetails.Margin = new Padding(4, 0, 4, 0);
             lblAccDataDetails.Name = "lblAccDataDetails";
-            lblAccDataDetails.Size = new Size(105, 41);
+            lblAccDataDetails.Size = new Size(105, 35);
             lblAccDataDetails.TabIndex = 74;
             lblAccDataDetails.Text = "بيانات الحسابات";
             lblAccDataDetails.TextAlign = ContentAlignment.MiddleCenter;
@@ -1316,7 +1377,6 @@
             tableLayoutPanel9.ResumeLayout(false);
             tableLayoutPanel9.PerformLayout();
             tableLayoutPanel14.ResumeLayout(false);
-            tableLayoutPanel14.PerformLayout();
             tlpDetailsData.ResumeLayout(false);
             tlpAssetsData.ResumeLayout(false);
             tlpAssetsData.PerformLayout();
@@ -1325,6 +1385,10 @@
             tlpBtnExec.ResumeLayout(false);
             tlpShowMainData.ResumeLayout(false);
             tlpShowMainData.PerformLayout();
+            tableLayoutPanel12.ResumeLayout(false);
+            tableLayoutPanel12.PerformLayout();
+            tableLayoutPanel16.ResumeLayout(false);
+            tableLayoutPanel16.PerformLayout();
             tabPage2.ResumeLayout(false);
             tableLayoutPanel11.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
@@ -1419,5 +1483,9 @@
         private Label lblTitel;
         private TableLayoutPanel tlpHome;
         private Button btnAccAccount;
+        private TableLayoutPanel tableLayoutPanel12;
+        private Label lblAccID_Tree;
+        private TableLayoutPanel tableLayoutPanel16;
+        private Label lblAccID_DGV;
     }
 }

@@ -134,9 +134,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // 4) تحديث التسميات في الواجهة
             // ==========================
             lblSelectedTreeNod.Text = $"{treeAccCode} - {accName}";      // عرض TreeAccCode بدل AccID
-            lblPathNode.Text =accPath;// GetFullPathFromNode(selectedNode);        // المسار الكامل من الجذر إلى العقدة
+            lblPathNode.Text = accPath;// GetFullPathFromNode(selectedNode);        // المسار الكامل من الجذر إلى العقدة
             lblNameNod.Text = accName;                                   // اسم الحساب فقط
-
+            lblAccID_Tree.Text = accID.ToString();
             // ==========================
             // 5) التحقق من إمكانية إضافة حساب فرعي
             // ==========================
@@ -191,7 +191,18 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // ==========================
             // 7) تحميل التقارير الخاصة بالحساب المحدد
             // ==========================
-//            LoadReportsForSelectedAccount();
+            //            LoadReportsForSelectedAccount();
+        }
+        private void DGV_SelectionChanged(object sender, EventArgs e)
+        {
+            if (DGV.CurrentRow != null && DGV.CurrentRow.Cells["AccID"].Value != null)
+            {
+                lblAccID_DGV.Text = DGV.CurrentRow.Cells["AccID"].Value.ToString();
+            }
+            else
+            {
+                lblAccID_DGV.Text = string.Empty; // في حالة ما فيش صف محدد
+            }
         }
 
 
@@ -712,6 +723,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         #endregion
 
 
+ 
     }
 }
 
