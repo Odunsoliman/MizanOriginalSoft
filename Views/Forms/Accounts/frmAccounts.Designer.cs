@@ -636,7 +636,7 @@
             tlpAssetsData.Controls.Add(lblAssetsValue_DepreciationRateAnnually, 0, 1);
             tlpAssetsData.Controls.Add(lblFixedAssetsAge, 0, 2);
             tlpAssetsData.Controls.Add(lblFixedAssetsEndDate, 0, 0);
-            tlpAssetsData.Dock = DockStyle.Top;
+            tlpAssetsData.Dock = DockStyle.Fill;
             tlpAssetsData.Location = new Point(3, 171);
             tlpAssetsData.Name = "tlpAssetsData";
             tlpAssetsData.RowCount = 6;
@@ -646,7 +646,7 @@
             tlpAssetsData.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             tlpAssetsData.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             tlpAssetsData.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-            tlpAssetsData.Size = new Size(347, 158);
+            tlpAssetsData.Size = new Size(347, 162);
             tlpAssetsData.TabIndex = 99;
             // 
             // lblIsEndedFixedAssets_FixedAssetsEndDate
@@ -654,7 +654,7 @@
             lblIsEndedFixedAssets_FixedAssetsEndDate.AutoSize = true;
             lblIsEndedFixedAssets_FixedAssetsEndDate.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblIsEndedFixedAssets_FixedAssetsEndDate.ForeColor = Color.FromArgb(0, 0, 192);
-            lblIsEndedFixedAssets_FixedAssetsEndDate.Location = new Point(329, 100);
+            lblIsEndedFixedAssets_FixedAssetsEndDate.Location = new Point(329, 103);
             lblIsEndedFixedAssets_FixedAssetsEndDate.Margin = new Padding(4, 0, 4, 0);
             lblIsEndedFixedAssets_FixedAssetsEndDate.Name = "lblIsEndedFixedAssets_FixedAssetsEndDate";
             lblIsEndedFixedAssets_FixedAssetsEndDate.Size = new Size(14, 19);
@@ -668,10 +668,10 @@
             lblAnnuallyInstallment_MonthlyInstallment.Dock = DockStyle.Fill;
             lblAnnuallyInstallment_MonthlyInstallment.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblAnnuallyInstallment_MonthlyInstallment.ForeColor = Color.FromArgb(0, 0, 192);
-            lblAnnuallyInstallment_MonthlyInstallment.Location = new Point(4, 73);
+            lblAnnuallyInstallment_MonthlyInstallment.Location = new Point(4, 75);
             lblAnnuallyInstallment_MonthlyInstallment.Margin = new Padding(4, 0, 4, 0);
             lblAnnuallyInstallment_MonthlyInstallment.Name = "lblAnnuallyInstallment_MonthlyInstallment";
-            lblAnnuallyInstallment_MonthlyInstallment.Size = new Size(339, 27);
+            lblAnnuallyInstallment_MonthlyInstallment.Size = new Size(339, 28);
             lblAnnuallyInstallment_MonthlyInstallment.TabIndex = 67;
             lblAnnuallyInstallment_MonthlyInstallment.Text = "-";
             lblAnnuallyInstallment_MonthlyInstallment.TextAlign = ContentAlignment.MiddleLeft;
@@ -685,7 +685,7 @@
             lblAssetsValue_DepreciationRateAnnually.Location = new Point(4, 19);
             lblAssetsValue_DepreciationRateAnnually.Margin = new Padding(4, 0, 4, 0);
             lblAssetsValue_DepreciationRateAnnually.Name = "lblAssetsValue_DepreciationRateAnnually";
-            lblAssetsValue_DepreciationRateAnnually.Size = new Size(339, 27);
+            lblAssetsValue_DepreciationRateAnnually.Size = new Size(339, 28);
             lblAssetsValue_DepreciationRateAnnually.TabIndex = 65;
             lblAssetsValue_DepreciationRateAnnually.Text = "-";
             lblAssetsValue_DepreciationRateAnnually.TextAlign = ContentAlignment.MiddleLeft;
@@ -696,10 +696,10 @@
             lblFixedAssetsAge.Dock = DockStyle.Fill;
             lblFixedAssetsAge.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblFixedAssetsAge.ForeColor = Color.FromArgb(0, 0, 192);
-            lblFixedAssetsAge.Location = new Point(4, 46);
+            lblFixedAssetsAge.Location = new Point(4, 47);
             lblFixedAssetsAge.Margin = new Padding(4, 0, 4, 0);
             lblFixedAssetsAge.Name = "lblFixedAssetsAge";
-            lblFixedAssetsAge.Size = new Size(339, 27);
+            lblFixedAssetsAge.Size = new Size(339, 28);
             lblFixedAssetsAge.TabIndex = 66;
             lblFixedAssetsAge.Text = "-";
             lblFixedAssetsAge.TextAlign = ContentAlignment.MiddleLeft;
@@ -725,7 +725,7 @@
             tlpMainData.Controls.Add(lblClientEmail, 0, 2);
             tlpMainData.Controls.Add(lblClientAddress, 0, 3);
             tlpMainData.Controls.Add(lblAccDetailNote, 0, 4);
-            tlpMainData.Dock = DockStyle.Top;
+            tlpMainData.Dock = DockStyle.Fill;
             tlpMainData.Location = new Point(3, 3);
             tlpMainData.Name = "tlpMainData";
             tlpMainData.RowCount = 6;
