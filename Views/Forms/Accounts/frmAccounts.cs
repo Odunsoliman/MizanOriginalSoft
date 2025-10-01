@@ -137,6 +137,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             lblPathNode.Text = accPath;// GetFullPathFromNode(selectedNode);        // المسار الكامل من الجذر إلى العقدة
             lblNameNod.Text = accName;                                   // اسم الحساب فقط
             lblAccID_Tree.Text = accID.ToString();
+            lblAccID_DGV.Text = string.Empty;
             // ==========================
             // 5) التحقق من إمكانية إضافة حساب فرعي
             // ==========================
