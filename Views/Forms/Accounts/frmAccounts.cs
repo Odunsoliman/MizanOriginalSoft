@@ -506,8 +506,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     int countAccounts = dt.Rows.Count;
-                    decimal totalBalance = dt.AsEnumerable()
-                        .Sum(r => r.Field<decimal?>("Balance") ?? 0);
+                    float  totalBalance = dt.AsEnumerable()
+                        .Sum(r => r.Field<float ?>("Balance") ?? 0);//الحقل نوعه 
 
                     string balanceState;
                     if (totalBalance > 0)
