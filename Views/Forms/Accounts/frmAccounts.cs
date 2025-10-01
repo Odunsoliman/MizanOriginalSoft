@@ -305,6 +305,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         {
             // نعيد تطبيق الفلترة عند تغيير أي راديو
             ApplyFilters();
+            DGVStyle();
         }
 
         private void txtSearch_TextChanged(object? sender, EventArgs? e)
