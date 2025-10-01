@@ -307,25 +307,26 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
             else
             {
-                // ✅ البحث في الحسابات النهائية فقط (IsHasChildren = false)
+                // ✅ البحث في الحسابات النهائية فقط (IsHasChildren = false) + فلترة الراديو
                 var filteredRows = _allAccountsData.AsEnumerable()
                     .Where(r =>
                     {
-                        bool isLeaf = !(r.Field<bool?>("IsHasChildren") ?? false); // حساب نهائي فقط
+                        bool isLeaf = !(r.Field<bool?>("IsHasChildren") ?? false);
                         if (!isLeaf) return false;
 
                         string accName = GetSafeStringValue(r, "AccName");
                         string accCode = r["TreeAccCode"]?.ToString() ?? "";
 
-                        return accName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                               accCode.Contains(searchText);
+                        bool matchesText = accName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                                           accCode.Contains(searchText);
+
+                        return matchesText && MatchRadioFilter(r); // ← إضافة فلترة الراديو
                     });
 
                 if (filteredRows.Any())
                 {
                     DataTable searchResult = filteredRows.CopyToDataTable();
 
-                    // إضافة الأعمدة المساعدة لو مش موجودة
                     if (!searchResult.Columns.Contains("ParentName"))
                         searchResult.Columns.Add("ParentName", typeof(string));
                     if (!searchResult.Columns.Contains("BalanceWithState"))
@@ -356,10 +357,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             DGV.ClearSelection();
         }
 
-
-
-
-
         private void LoadChildAccountsToGrid(TreeNode? selectedNode)
         {
             if (selectedNode?.Tag == null || _allAccountsData == null) return;
@@ -372,7 +369,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 {
                     int? parentAccID = r.Field<int?>("ParentAccID");
                     bool isHasChildren = r.Field<bool>("IsHasChildren");
-                    return parentAccID == parentTreeCode && !isHasChildren;
+                    return parentAccID == parentTreeCode && !isHasChildren && MatchRadioFilter(r);
                 });
 
             if (filteredRows.Any())
@@ -405,6 +402,17 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
+        private bool MatchRadioFilter(DataRow r)
+        {
+            decimal balance = GetSafeDecimalValue(r, "Balance");
+
+            if (rdoAll.Checked) return true;               // الكل
+            if (rdoMadeen.Checked) return balance > 0;     // مدين
+            if (rdoDaeen.Checked) return balance < 0;      // دائن
+            if (rdoEqual.Checked) return balance == 0;     // متساوي
+
+            return true;
+        }
 
 
         private string GetSafeStringValue(DataRow row, string columnName)
@@ -500,6 +508,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // ===============================
             // ✅ حساب عدد الحسابات والإجمالي
             // ===============================
+      
             try
             {
                 var dt = DGV.DataSource as DataTable;
