@@ -22,6 +22,11 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         private void frmAccounts_Load(object sender, EventArgs e)
         {
             LoadAccountsTree();
+            rdoAll.CheckedChanged += RadioFilter_CheckedChanged;
+            rdoMadeen.CheckedChanged += RadioFilter_CheckedChanged;
+            rdoDaeen.CheckedChanged += RadioFilter_CheckedChanged;
+            rdoEqual.CheckedChanged += RadioFilter_CheckedChanged;
+
         }
 
         private void LoadAccountsTree()
@@ -296,7 +301,13 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // ==========================
             //            LoadReportsForSelectedAccount();
         }
-        private void txtSearch_TextChanged(object sender, EventArgs e)
+        private void RadioFilter_CheckedChanged(object? sender, EventArgs e)
+        {
+            // نعيد تطبيق الفلترة عند تغيير أي راديو
+            ApplyFilters();
+        }
+
+        private void txtSearch_TextChanged(object? sender, EventArgs? e)
         {
             string searchText = txtSearch.Text.Trim();
 
@@ -412,6 +423,22 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             if (rdoEqual.Checked) return balance == 0;     // متساوي
 
             return true;
+        }
+
+        private void ApplyFilters()
+        {
+            string searchText = txtSearch.Text.Trim();
+
+            if (string.IsNullOrEmpty(searchText))
+            {
+                // ✅ لو مفيش نص في البحث → نعرض أبناء العقدة الحالية
+                LoadChildAccountsToGrid(treeViewAccounts.SelectedNode);
+            }
+            else
+            {
+                // ✅ تنفيذ البحث بنفس المنطق
+                txtSearch_TextChanged(null, null);
+            }
         }
 
 
