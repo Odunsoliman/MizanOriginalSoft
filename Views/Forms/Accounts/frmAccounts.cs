@@ -139,28 +139,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             lblAccID_Tree.Text = accID.ToString();
             lblAccID_DGV.Text = string.Empty;
             DGV.ClearSelection();
-            // ==========================
-            // 5) التحقق من إمكانية إضافة حساب فرعي
-            // ==========================
-            bool canAddChild = !(isEnerAcc && !hasChildren);             // الحساب النهائي لا يمكن إضافة أبناء
-            txtAccName.Enabled = canAddChild;
-
-            if (!canAddChild)
-            {
-                txtAccName.Clear();
-                lblParentAccName.Text = "لا يمكن اضافة حسابات فرعية هنا فهذا حساب نهائى";
-                lblParentAccName.ForeColor = Color.Red;
-                chkIsHasChildren.Enabled = false;
-            }
-            else
-            {
-                lblParentAccName.Text = accName;
-                lblParentAccName.ForeColor = Color.Gray;
-                chkIsHasChildren.Enabled = true;
-            }
-
-            lblIsHasChildren.Text = hasChildren ? "" : "هذا الحساب مازال ليس له فروع";
-
+            
             // ==========================
             // 6) التحقق من الأصول الثابتة (Parent = 12)
             // ==========================

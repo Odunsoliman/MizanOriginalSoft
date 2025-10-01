@@ -93,19 +93,6 @@
             tableLayoutPanel16 = new TableLayoutPanel();
             lblAccID_DGV = new Label();
             lblAccDataDetails = new Label();
-            tabPage2 = new TabPage();
-            tableLayoutPanel11 = new TableLayoutPanel();
-            tableLayoutPanel1 = new TableLayoutPanel();
-            lstAccAdded = new ListBox();
-            tableLayoutPanel4 = new TableLayoutPanel();
-            tableLayoutPanel6 = new TableLayoutPanel();
-            lblParentAccName = new Label();
-            label2 = new Label();
-            txtAccName = new TextBox();
-            label6 = new Label();
-            chkIsHasChildren = new CheckBox();
-            lblIsHasChildren = new Label();
-            panel2 = new Panel();
             tableLayoutPanel5 = new TableLayoutPanel();
             contextMenuStrip1 = new ContextMenuStrip(components);
             tsmAccTop = new ToolStripMenuItem();
@@ -136,11 +123,6 @@
             tlpShowMainData.SuspendLayout();
             tableLayoutPanel12.SuspendLayout();
             tableLayoutPanel16.SuspendLayout();
-            tabPage2.SuspendLayout();
-            tableLayoutPanel11.SuspendLayout();
-            tableLayoutPanel1.SuspendLayout();
-            tableLayoutPanel4.SuspendLayout();
-            tableLayoutPanel6.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             tlpHome.SuspendLayout();
@@ -303,8 +285,6 @@
             // tabControlAccount
             // 
             tabControlAccount.Controls.Add(tabPage1);
-            tabControlAccount.Controls.Add(tabPage2);
-            tabControlAccount.Dock = DockStyle.Fill;
             tabControlAccount.ItemSize = new Size(290, 40);
             tabControlAccount.Location = new Point(3, 3);
             tabControlAccount.Name = "tabControlAccount";
@@ -1070,189 +1050,6 @@
             lblAccDataDetails.Text = "بيانات الحسابات";
             lblAccDataDetails.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // tabPage2
-            // 
-            tabPage2.Controls.Add(tableLayoutPanel11);
-            tabPage2.Location = new Point(4, 44);
-            tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(876, 610);
-            tabPage2.TabIndex = 1;
-            tabPage2.Text = "اضافة حساب";
-            tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // tableLayoutPanel11
-            // 
-            tableLayoutPanel11.ColumnCount = 2;
-            tableLayoutPanel11.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel11.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel11.Controls.Add(tableLayoutPanel1, 1, 0);
-            tableLayoutPanel11.Controls.Add(tableLayoutPanel4, 0, 0);
-            tableLayoutPanel11.Dock = DockStyle.Fill;
-            tableLayoutPanel11.Location = new Point(3, 3);
-            tableLayoutPanel11.Name = "tableLayoutPanel11";
-            tableLayoutPanel11.RowCount = 1;
-            tableLayoutPanel11.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel11.Size = new Size(870, 604);
-            tableLayoutPanel11.TabIndex = 0;
-            // 
-            // tableLayoutPanel1
-            // 
-            tableLayoutPanel1.ColumnCount = 1;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(lstAccAdded, 0, 1);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(3, 3);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.Padding = new Padding(20);
-            tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 6F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 34F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 60F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.Size = new Size(429, 598);
-            tableLayoutPanel1.TabIndex = 2;
-            // 
-            // lstAccAdded
-            // 
-            lstAccAdded.BorderStyle = BorderStyle.None;
-            lstAccAdded.Dock = DockStyle.Left;
-            lstAccAdded.FormattingEnabled = true;
-            lstAccAdded.ItemHeight = 15;
-            lstAccAdded.Location = new Point(192, 56);
-            lstAccAdded.Name = "lstAccAdded";
-            lstAccAdded.Size = new Size(214, 183);
-            lstAccAdded.TabIndex = 1;
-            // 
-            // tableLayoutPanel4
-            // 
-            tableLayoutPanel4.ColumnCount = 1;
-            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel4.Controls.Add(tableLayoutPanel6, 0, 1);
-            tableLayoutPanel4.Controls.Add(panel2, 0, 2);
-            tableLayoutPanel4.Dock = DockStyle.Fill;
-            tableLayoutPanel4.Location = new Point(438, 3);
-            tableLayoutPanel4.Name = "tableLayoutPanel4";
-            tableLayoutPanel4.RowCount = 5;
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 5F));
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 65F));
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel4.Size = new Size(429, 598);
-            tableLayoutPanel4.TabIndex = 1;
-            // 
-            // tableLayoutPanel6
-            // 
-            tableLayoutPanel6.ColumnCount = 2;
-            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
-            tableLayoutPanel6.Controls.Add(lblParentAccName, 1, 1);
-            tableLayoutPanel6.Controls.Add(label2, 0, 0);
-            tableLayoutPanel6.Controls.Add(txtAccName, 1, 0);
-            tableLayoutPanel6.Controls.Add(label6, 0, 1);
-            tableLayoutPanel6.Controls.Add(chkIsHasChildren, 0, 2);
-            tableLayoutPanel6.Controls.Add(lblIsHasChildren, 1, 2);
-            tableLayoutPanel6.Dock = DockStyle.Fill;
-            tableLayoutPanel6.Location = new Point(3, 32);
-            tableLayoutPanel6.Name = "tableLayoutPanel6";
-            tableLayoutPanel6.RowCount = 3;
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel6.Size = new Size(423, 112);
-            tableLayoutPanel6.TabIndex = 93;
-            // 
-            // lblParentAccName
-            // 
-            lblParentAccName.AutoSize = true;
-            lblParentAccName.Dock = DockStyle.Fill;
-            lblParentAccName.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblParentAccName.ForeColor = Color.Gray;
-            lblParentAccName.Location = new Point(4, 37);
-            lblParentAccName.Margin = new Padding(4, 0, 4, 0);
-            lblParentAccName.Name = "lblParentAccName";
-            lblParentAccName.Padding = new Padding(0, 0, 10, 0);
-            lblParentAccName.Size = new Size(289, 37);
-            lblParentAccName.TabIndex = 55;
-            lblParentAccName.Text = "اسم الاب";
-            lblParentAccName.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Dock = DockStyle.Fill;
-            label2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.ForeColor = Color.FromArgb(0, 0, 192);
-            label2.Location = new Point(301, 0);
-            label2.Margin = new Padding(4, 0, 4, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(118, 37);
-            label2.TabIndex = 54;
-            label2.Text = "اسم  الحساب";
-            label2.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // txtAccName
-            // 
-            txtAccName.Dock = DockStyle.Fill;
-            txtAccName.Enabled = false;
-            txtAccName.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtAccName.ForeColor = Color.FromArgb(0, 0, 192);
-            txtAccName.Location = new Point(4, 4);
-            txtAccName.Margin = new Padding(4);
-            txtAccName.Name = "txtAccName";
-            txtAccName.Size = new Size(289, 29);
-            txtAccName.TabIndex = 47;
-            txtAccName.TextAlign = HorizontalAlignment.Center;
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Dock = DockStyle.Fill;
-            label6.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label6.ForeColor = Color.FromArgb(0, 0, 192);
-            label6.Location = new Point(301, 37);
-            label6.Margin = new Padding(4, 0, 4, 0);
-            label6.Name = "label6";
-            label6.Size = new Size(118, 37);
-            label6.TabIndex = 54;
-            label6.Text = "الاب";
-            label6.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // chkIsHasChildren
-            // 
-            chkIsHasChildren.AutoSize = true;
-            chkIsHasChildren.Enabled = false;
-            chkIsHasChildren.Location = new Point(405, 77);
-            chkIsHasChildren.Name = "chkIsHasChildren";
-            chkIsHasChildren.Size = new Size(15, 14);
-            chkIsHasChildren.TabIndex = 89;
-            chkIsHasChildren.UseVisualStyleBackColor = true;
-            chkIsHasChildren.Visible = false;
-            // 
-            // lblIsHasChildren
-            // 
-            lblIsHasChildren.Dock = DockStyle.Fill;
-            lblIsHasChildren.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblIsHasChildren.ForeColor = Color.Gray;
-            lblIsHasChildren.Location = new Point(4, 74);
-            lblIsHasChildren.Margin = new Padding(4, 0, 4, 0);
-            lblIsHasChildren.Name = "lblIsHasChildren";
-            lblIsHasChildren.Size = new Size(289, 38);
-            lblIsHasChildren.TabIndex = 54;
-            lblIsHasChildren.Text = "حساب له فروع";
-            lblIsHasChildren.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // panel2
-            // 
-            panel2.BackColor = SystemColors.ActiveBorder;
-            panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(3, 150);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(423, 1);
-            panel2.TabIndex = 94;
-            // 
             // tableLayoutPanel5
             // 
             tableLayoutPanel5.BackColor = Color.FromArgb(192, 192, 255);
@@ -1390,12 +1187,6 @@
             tableLayoutPanel12.PerformLayout();
             tableLayoutPanel16.ResumeLayout(false);
             tableLayoutPanel16.PerformLayout();
-            tabPage2.ResumeLayout(false);
-            tableLayoutPanel11.ResumeLayout(false);
-            tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel4.ResumeLayout(false);
-            tableLayoutPanel6.ResumeLayout(false);
-            tableLayoutPanel6.PerformLayout();
             tableLayoutPanel5.ResumeLayout(false);
             tableLayoutPanel5.PerformLayout();
             contextMenuStrip1.ResumeLayout(false);
@@ -1463,19 +1254,6 @@
         private Label lblNameNod;
         private Label lblPathNode;
         private Label lblAccDataDetails;
-        private TabPage tabPage2;
-        private TableLayoutPanel tableLayoutPanel11;
-        private TableLayoutPanel tableLayoutPanel1;
-        private ListBox lstAccAdded;
-        private TableLayoutPanel tableLayoutPanel4;
-        private TableLayoutPanel tableLayoutPanel6;
-        private Label lblParentAccName;
-        private Label label2;
-        private TextBox txtAccName;
-        private Label label6;
-        private CheckBox chkIsHasChildren;
-        private Label lblIsHasChildren;
-        private Panel panel2;
         private TableLayoutPanel tableLayoutPanel5;
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem tsmAccTop;
