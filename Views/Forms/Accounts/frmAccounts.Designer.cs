@@ -29,12 +29,11 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             tlpBody = new TableLayoutPanel();
             tableLayoutPanel18 = new TableLayoutPanel();
             label15 = new Label();
             panelList = new TableLayoutPanel();
-            lblSelectedTreeNod = new Label();
             label4 = new Label();
             txtSearchTree = new TextBox();
             treeViewAccounts = new TreeView();
@@ -100,14 +99,10 @@
             btnDeleteDetail = new Button();
             btnModifyDetail = new Button();
             btnNextDetail = new Button();
-            tableLayoutPanel17 = new TableLayoutPanel();
-            tableLayoutPanel2 = new TableLayoutPanel();
             tableLayoutPanel5 = new TableLayoutPanel();
             contextMenuStrip1 = new ContextMenuStrip(components);
             tsmAccTop = new ToolStripMenuItem();
-            txtToTop = new TextBox();
-            lblAccTopID = new Label();
-            lblTitel = new Label();
+            lblSelectedTreeNod = new Label();
             tlpHome = new TableLayoutPanel();
             tlpBody.SuspendLayout();
             tableLayoutPanel18.SuspendLayout();
@@ -135,7 +130,6 @@
             tableLayoutPanel10.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
             tlpBtnExec.SuspendLayout();
-            tableLayoutPanel17.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             tlpHome.SuspendLayout();
@@ -193,7 +187,6 @@
             panelList.BackColor = Color.FromArgb(235, 255, 235);
             panelList.ColumnCount = 1;
             panelList.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            panelList.Controls.Add(lblSelectedTreeNod, 0, 2);
             panelList.Controls.Add(label4, 0, 0);
             panelList.Controls.Add(txtSearchTree, 0, 1);
             panelList.Controls.Add(treeViewAccounts, 0, 3);
@@ -208,19 +201,6 @@
             panelList.RowStyles.Add(new RowStyle(SizeType.Percent, 81F));
             panelList.Size = new Size(211, 533);
             panelList.TabIndex = 2;
-            // 
-            // lblSelectedTreeNod
-            // 
-            lblSelectedTreeNod.BackColor = Color.Transparent;
-            lblSelectedTreeNod.Dock = DockStyle.Fill;
-            lblSelectedTreeNod.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblSelectedTreeNod.ForeColor = Color.FromArgb(192, 0, 0);
-            lblSelectedTreeNod.Location = new Point(5, 69);
-            lblSelectedTreeNod.Name = "lblSelectedTreeNod";
-            lblSelectedTreeNod.Size = new Size(201, 31);
-            lblSelectedTreeNod.TabIndex = 43;
-            lblSelectedTreeNod.Text = "الكل";
-            lblSelectedTreeNod.TextAlign = ContentAlignment.MiddleRight;
             // 
             // label4
             // 
@@ -499,8 +479,8 @@
             DGV.ReadOnly = true;
             DGV.RowHeadersVisible = false;
             DGV.RowHeadersWidth = 51;
-            dataGridViewCellStyle1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DGV.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DGV.RowsDefaultCellStyle = dataGridViewCellStyle2;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DGV.Size = new Size(490, 384);
             DGV.TabIndex = 72;
@@ -1166,47 +1146,18 @@
             btnNextDetail.Text = "<< >>";
             btnNextDetail.UseVisualStyleBackColor = false;
             // 
-            // tableLayoutPanel17
-            // 
-            tableLayoutPanel17.ColumnCount = 1;
-            tableLayoutPanel17.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel17.Controls.Add(tableLayoutPanel2, 0, 0);
-            tableLayoutPanel17.Location = new Point(888, 3);
-            tableLayoutPanel17.Name = "tableLayoutPanel17";
-            tableLayoutPanel17.RowCount = 1;
-            tableLayoutPanel17.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel17.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel17.Size = new Size(43, 35);
-            tableLayoutPanel17.TabIndex = 0;
-            // 
-            // tableLayoutPanel2
-            // 
-            tableLayoutPanel2.BackColor = Color.Transparent;
-            tableLayoutPanel2.ColumnCount = 1;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(3, 3);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(37, 29);
-            tableLayoutPanel2.TabIndex = 3;
-            // 
             // tableLayoutPanel5
             // 
-            tableLayoutPanel5.BackColor = Color.FromArgb(192, 192, 255);
-            tableLayoutPanel5.ColumnCount = 6;
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 71.6836F));
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 19.22549F));
+            tableLayoutPanel5.BackColor = Color.White;
+            tableLayoutPanel5.ColumnCount = 4;
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 78.85197F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21.14804F));
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 298F));
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 388F));
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 175F));
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 9.090908F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel5.ContextMenuStrip = contextMenuStrip1;
-            tableLayoutPanel5.Controls.Add(tableLayoutPanel17, 1, 0);
-            tableLayoutPanel5.Controls.Add(txtToTop, 2, 0);
-            tableLayoutPanel5.Controls.Add(lblAccTopID, 4, 0);
-            tableLayoutPanel5.Controls.Add(lblTitel, 3, 0);
+            tableLayoutPanel5.Controls.Add(lblSelectedTreeNod, 0, 0);
             tableLayoutPanel5.Dock = DockStyle.Fill;
             tableLayoutPanel5.Location = new Point(3, 3);
             tableLayoutPanel5.Name = "tableLayoutPanel5";
@@ -1231,46 +1182,18 @@
             tsmAccTop.Size = new Size(238, 26);
             tsmAccTop.Text = "تعديل خصائص حساب عام";
             // 
-            // txtToTop
+            // lblSelectedTreeNod
             // 
-            txtToTop.BackColor = SystemColors.InactiveCaption;
-            txtToTop.Font = new Font("Times New Roman", 8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtToTop.ForeColor = Color.FromArgb(0, 0, 192);
-            txtToTop.Location = new Point(778, 4);
-            txtToTop.Margin = new Padding(4);
-            txtToTop.Name = "txtToTop";
-            txtToTop.Size = new Size(103, 20);
-            txtToTop.TabIndex = 56;
-            txtToTop.Text = "0";
-            txtToTop.TextAlign = HorizontalAlignment.Center;
-            txtToTop.Visible = false;
-            // 
-            // lblAccTopID
-            // 
-            lblAccTopID.AutoSize = true;
-            lblAccTopID.Dock = DockStyle.Left;
-            lblAccTopID.Font = new Font("Times New Roman", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblAccTopID.ForeColor = SystemColors.ActiveCaption;
-            lblAccTopID.Location = new Point(167, 0);
-            lblAccTopID.Margin = new Padding(4, 0, 4, 0);
-            lblAccTopID.Name = "lblAccTopID";
-            lblAccTopID.Size = new Size(28, 41);
-            lblAccTopID.TabIndex = 61;
-            lblAccTopID.Text = "0";
-            lblAccTopID.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // lblTitel
-            // 
-            lblTitel.Dock = DockStyle.Right;
-            lblTitel.Font = new Font("Times New Roman", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitel.ForeColor = Color.FromArgb(192, 0, 192);
-            lblTitel.Location = new Point(203, 0);
-            lblTitel.Margin = new Padding(4, 0, 4, 0);
-            lblTitel.Name = "lblTitel";
-            lblTitel.Size = new Size(326, 41);
-            lblTitel.TabIndex = 75;
-            lblTitel.Text = "الحسابات العامة";
-            lblTitel.TextAlign = ContentAlignment.MiddleRight;
+            lblSelectedTreeNod.Dock = DockStyle.Fill;
+            lblSelectedTreeNod.Font = new Font("Times New Roman", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblSelectedTreeNod.ForeColor = Color.FromArgb(192, 0, 192);
+            lblSelectedTreeNod.Location = new Point(782, 0);
+            lblSelectedTreeNod.Margin = new Padding(4, 0, 4, 0);
+            lblSelectedTreeNod.Name = "lblSelectedTreeNod";
+            lblSelectedTreeNod.Size = new Size(332, 41);
+            lblSelectedTreeNod.TabIndex = 75;
+            lblSelectedTreeNod.Text = "الحسابات العامة";
+            lblSelectedTreeNod.TextAlign = ContentAlignment.MiddleRight;
             // 
             // tlpHome
             // 
@@ -1336,9 +1259,7 @@
             tableLayoutPanel6.ResumeLayout(false);
             tableLayoutPanel6.PerformLayout();
             tlpBtnExec.ResumeLayout(false);
-            tableLayoutPanel17.ResumeLayout(false);
             tableLayoutPanel5.ResumeLayout(false);
-            tableLayoutPanel5.PerformLayout();
             contextMenuStrip1.ResumeLayout(false);
             tlpHome.ResumeLayout(false);
             ResumeLayout(false);
@@ -1353,8 +1274,6 @@
         private TreeView treeViewAccounts;
         private TextBox txtSearchTree;
         private TableLayoutPanel tableLayoutPanel3;
-        private TableLayoutPanel tableLayoutPanel17;
-        private TableLayoutPanel tableLayoutPanel2;
         private TableLayoutPanel tableLayoutPanel7;
         private TableLayoutPanel tableLayoutPanel10;
         private Button btnModifyAcc;
@@ -1401,9 +1320,6 @@
         private TableLayoutPanel tableLayoutPanel5;
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem tsmAccTop;
-        private TextBox txtToTop;
-        private Label lblAccTopID;
-        private Label lblTitel;
         private TableLayoutPanel tlpHome;
         private Button btnAccAccount;
         private TableLayoutPanel tableLayoutPanel12;
