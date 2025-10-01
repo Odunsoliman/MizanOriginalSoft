@@ -40,8 +40,6 @@
             label4 = new Label();
             treeViewAccounts = new TreeView();
             txtSearchTree = new TextBox();
-            tabControlAccount = new TabControl();
-            tabPage1 = new TabPage();
             tableLayoutPanel3 = new TableLayoutPanel();
             tableLayoutPanel17 = new TableLayoutPanel();
             tableLayoutPanel2 = new TableLayoutPanel();
@@ -103,8 +101,6 @@
             tlpBody.SuspendLayout();
             panelList.SuspendLayout();
             tableLayoutPanel15.SuspendLayout();
-            tabControlAccount.SuspendLayout();
-            tabPage1.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             tableLayoutPanel17.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
@@ -134,8 +130,8 @@
             tlpBody.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             tlpBody.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 0.5F));
             tlpBody.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 79.5F));
+            tlpBody.Controls.Add(tableLayoutPanel3, 2, 0);
             tlpBody.Controls.Add(panelList, 0, 0);
-            tlpBody.Controls.Add(tabControlAccount, 2, 0);
             tlpBody.Dock = DockStyle.Fill;
             tlpBody.Location = new Point(3, 50);
             tlpBody.Name = "tlpBody";
@@ -282,42 +278,20 @@
             txtSearchTree.Enter += txtSearchTree_Enter;
             txtSearchTree.Leave += txtSearchTree_Leave;
             // 
-            // tabControlAccount
-            // 
-            tabControlAccount.Controls.Add(tabPage1);
-            tabControlAccount.ItemSize = new Size(290, 40);
-            tabControlAccount.Location = new Point(3, 3);
-            tabControlAccount.Name = "tabControlAccount";
-            tabControlAccount.RightToLeftLayout = true;
-            tabControlAccount.SelectedIndex = 0;
-            tabControlAccount.Size = new Size(884, 658);
-            tabControlAccount.SizeMode = TabSizeMode.Fixed;
-            tabControlAccount.TabIndex = 1;
-            // 
-            // tabPage1
-            // 
-            tabPage1.Controls.Add(tableLayoutPanel3);
-            tabPage1.Location = new Point(4, 44);
-            tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(7);
-            tabPage1.Size = new Size(876, 610);
-            tabPage1.TabIndex = 0;
-            tabPage1.Text = "الحسابات";
-            tabPage1.UseVisualStyleBackColor = true;
-            // 
             // tableLayoutPanel3
             // 
+            tableLayoutPanel3.BackColor = SystemColors.ControlLightLight;
             tableLayoutPanel3.ColumnCount = 2;
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 57.30337F));
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 42.69663F));
             tableLayoutPanel3.Controls.Add(tableLayoutPanel17, 0, 0);
             tableLayoutPanel3.Controls.Add(tableLayoutPanel14, 1, 0);
             tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(7, 7);
+            tableLayoutPanel3.Location = new Point(3, 3);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new Size(862, 596);
+            tableLayoutPanel3.Size = new Size(884, 658);
             tableLayoutPanel3.TabIndex = 0;
             // 
             // tableLayoutPanel17
@@ -327,12 +301,12 @@
             tableLayoutPanel17.Controls.Add(tableLayoutPanel2, 0, 1);
             tableLayoutPanel17.Controls.Add(pnlMenuContainer, 0, 0);
             tableLayoutPanel17.Dock = DockStyle.Fill;
-            tableLayoutPanel17.Location = new Point(372, 3);
+            tableLayoutPanel17.Location = new Point(381, 3);
             tableLayoutPanel17.Name = "tableLayoutPanel17";
             tableLayoutPanel17.RowCount = 2;
             tableLayoutPanel17.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
             tableLayoutPanel17.RowStyles.Add(new RowStyle(SizeType.Percent, 93F));
-            tableLayoutPanel17.Size = new Size(487, 590);
+            tableLayoutPanel17.Size = new Size(500, 652);
             tableLayoutPanel17.TabIndex = 0;
             // 
             // tableLayoutPanel2
@@ -342,11 +316,11 @@
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel2.Controls.Add(tableLayoutPanel7, 0, 0);
             tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(3, 44);
+            tableLayoutPanel2.Location = new Point(3, 48);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(481, 543);
+            tableLayoutPanel2.Size = new Size(494, 601);
             tableLayoutPanel2.TabIndex = 3;
             // 
             // tableLayoutPanel7
@@ -367,7 +341,7 @@
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 69.8324051F));
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 5.95903158F));
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel7.Size = new Size(475, 537);
+            tableLayoutPanel7.Size = new Size(488, 595);
             tableLayoutPanel7.TabIndex = 2;
             // 
             // tableLayoutPanel10
@@ -380,11 +354,11 @@
             tableLayoutPanel10.Controls.Add(btnModifyAcc, 1, 0);
             tableLayoutPanel10.Controls.Add(btnDeleteAcc, 0, 0);
             tableLayoutPanel10.Dock = DockStyle.Fill;
-            tableLayoutPanel10.Location = new Point(3, 484);
+            tableLayoutPanel10.Location = new Point(3, 536);
             tableLayoutPanel10.Name = "tableLayoutPanel10";
             tableLayoutPanel10.RowCount = 1;
             tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel10.Size = new Size(469, 50);
+            tableLayoutPanel10.Size = new Size(482, 56);
             tableLayoutPanel10.TabIndex = 98;
             // 
             // btnModifyAcc
@@ -396,7 +370,7 @@
             btnModifyAcc.Location = new Point(4, 4);
             btnModifyAcc.Margin = new Padding(4);
             btnModifyAcc.Name = "btnModifyAcc";
-            btnModifyAcc.Size = new Size(227, 42);
+            btnModifyAcc.Size = new Size(233, 48);
             btnModifyAcc.TabIndex = 83;
             btnModifyAcc.Text = "تعديل حساب";
             btnModifyAcc.UseVisualStyleBackColor = false;
@@ -406,10 +380,10 @@
             btnDeleteAcc.BackColor = Color.FromArgb(255, 192, 192);
             btnDeleteAcc.Dock = DockStyle.Fill;
             btnDeleteAcc.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnDeleteAcc.Location = new Point(239, 4);
+            btnDeleteAcc.Location = new Point(245, 4);
             btnDeleteAcc.Margin = new Padding(4);
             btnDeleteAcc.Name = "btnDeleteAcc";
-            btnDeleteAcc.Size = new Size(226, 42);
+            btnDeleteAcc.Size = new Size(233, 48);
             btnDeleteAcc.TabIndex = 89;
             btnDeleteAcc.TabStop = false;
             btnDeleteAcc.Text = "حذف حساب";
@@ -427,11 +401,11 @@
             tableLayoutPanel8.Controls.Add(rdoDaeen, 2, 0);
             tableLayoutPanel8.Controls.Add(rdoMadeen, 1, 0);
             tableLayoutPanel8.Dock = DockStyle.Fill;
-            tableLayoutPanel8.Location = new Point(3, 40);
+            tableLayoutPanel8.Location = new Point(3, 44);
             tableLayoutPanel8.Name = "tableLayoutPanel8";
             tableLayoutPanel8.RowCount = 1;
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel8.Size = new Size(469, 31);
+            tableLayoutPanel8.Size = new Size(482, 35);
             tableLayoutPanel8.TabIndex = 73;
             // 
             // rdoEqual
@@ -439,10 +413,10 @@
             rdoEqual.AutoSize = true;
             rdoEqual.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             rdoEqual.ForeColor = Color.FromArgb(0, 192, 0);
-            rdoEqual.Location = new Point(43, 4);
+            rdoEqual.Location = new Point(46, 4);
             rdoEqual.Margin = new Padding(4);
             rdoEqual.Name = "rdoEqual";
-            rdoEqual.Size = new Size(72, 23);
+            rdoEqual.Size = new Size(72, 26);
             rdoEqual.TabIndex = 81;
             rdoEqual.Text = "مصفره";
             rdoEqual.UseVisualStyleBackColor = true;
@@ -452,10 +426,10 @@
             rdoAll.AutoSize = true;
             rdoAll.Checked = true;
             rdoAll.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            rdoAll.Location = new Point(413, 4);
+            rdoAll.Location = new Point(426, 4);
             rdoAll.Margin = new Padding(4);
             rdoAll.Name = "rdoAll";
-            rdoAll.Size = new Size(52, 23);
+            rdoAll.Size = new Size(52, 26);
             rdoAll.TabIndex = 82;
             rdoAll.TabStop = true;
             rdoAll.Text = "الكل";
@@ -466,10 +440,10 @@
             rdoDaeen.AutoSize = true;
             rdoDaeen.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             rdoDaeen.ForeColor = Color.Blue;
-            rdoDaeen.Location = new Point(160, 4);
+            rdoDaeen.Location = new Point(167, 4);
             rdoDaeen.Margin = new Padding(4);
             rdoDaeen.Name = "rdoDaeen";
-            rdoDaeen.Size = new Size(95, 23);
+            rdoDaeen.Size = new Size(95, 26);
             rdoDaeen.TabIndex = 80;
             rdoDaeen.Text = "دائنون فقط";
             rdoDaeen.UseVisualStyleBackColor = true;
@@ -479,10 +453,10 @@
             rdoMadeen.AutoSize = true;
             rdoMadeen.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             rdoMadeen.ForeColor = Color.Red;
-            rdoMadeen.Location = new Point(296, 4);
+            rdoMadeen.Location = new Point(307, 4);
             rdoMadeen.Margin = new Padding(4);
             rdoMadeen.Name = "rdoMadeen";
-            rdoMadeen.Size = new Size(99, 23);
+            rdoMadeen.Size = new Size(99, 26);
             rdoMadeen.TabIndex = 79;
             rdoMadeen.Text = "مدينون فقط";
             rdoMadeen.UseVisualStyleBackColor = true;
@@ -494,7 +468,7 @@
             DGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DGV.ContextMenuStrip = contextMenuDGV;
             DGV.Dock = DockStyle.Fill;
-            DGV.Location = new Point(4, 78);
+            DGV.Location = new Point(4, 86);
             DGV.Margin = new Padding(4);
             DGV.Name = "DGV";
             DGV.ReadOnly = true;
@@ -503,7 +477,7 @@
             dataGridViewCellStyle1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             DGV.RowsDefaultCellStyle = dataGridViewCellStyle1;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DGV.Size = new Size(467, 367);
+            DGV.Size = new Size(480, 408);
             DGV.TabIndex = 72;
             DGV.TabStop = false;
             DGV.CellClick += DGV_CellClick;
@@ -535,7 +509,7 @@
             tableLayoutPanel13.Name = "tableLayoutPanel13";
             tableLayoutPanel13.RowCount = 1;
             tableLayoutPanel13.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel13.Size = new Size(469, 31);
+            tableLayoutPanel13.Size = new Size(482, 35);
             tableLayoutPanel13.TabIndex = 91;
             // 
             // label7
@@ -544,10 +518,10 @@
             label7.Dock = DockStyle.Fill;
             label7.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label7.ForeColor = Color.Blue;
-            label7.Location = new Point(389, 0);
+            label7.Location = new Point(400, 0);
             label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
-            label7.Size = new Size(76, 31);
+            label7.Size = new Size(78, 35);
             label7.TabIndex = 69;
             label7.Text = "بحــــث";
             label7.TextAlign = ContentAlignment.MiddleCenter;
@@ -560,7 +534,7 @@
             txtSearch.Location = new Point(4, 4);
             txtSearch.Margin = new Padding(4);
             txtSearch.Name = "txtSearch";
-            txtSearch.Size = new Size(377, 26);
+            txtSearch.Size = new Size(388, 26);
             txtSearch.TabIndex = 71;
             txtSearch.TabStop = false;
             txtSearch.TextAlign = HorizontalAlignment.Center;
@@ -571,11 +545,11 @@
             tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tableLayoutPanel9.Controls.Add(lblCountAndTotals, 0, 0);
             tableLayoutPanel9.Dock = DockStyle.Fill;
-            tableLayoutPanel9.Location = new Point(3, 452);
+            tableLayoutPanel9.Location = new Point(3, 501);
             tableLayoutPanel9.Name = "tableLayoutPanel9";
             tableLayoutPanel9.RowCount = 1;
             tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel9.Size = new Size(469, 26);
+            tableLayoutPanel9.Size = new Size(482, 29);
             tableLayoutPanel9.TabIndex = 74;
             // 
             // lblCountAndTotals
@@ -587,7 +561,7 @@
             lblCountAndTotals.Location = new Point(4, 0);
             lblCountAndTotals.Margin = new Padding(4, 0, 4, 0);
             lblCountAndTotals.Name = "lblCountAndTotals";
-            lblCountAndTotals.Size = new Size(461, 26);
+            lblCountAndTotals.Size = new Size(474, 29);
             lblCountAndTotals.TabIndex = 53;
             lblCountAndTotals.Text = "0";
             lblCountAndTotals.TextAlign = ContentAlignment.MiddleLeft;
@@ -597,7 +571,7 @@
             pnlMenuContainer.Dock = DockStyle.Fill;
             pnlMenuContainer.Location = new Point(3, 3);
             pnlMenuContainer.Name = "pnlMenuContainer";
-            pnlMenuContainer.Size = new Size(481, 35);
+            pnlMenuContainer.Size = new Size(494, 39);
             pnlMenuContainer.TabIndex = 96;
             // 
             // tableLayoutPanel14
@@ -617,7 +591,7 @@
             tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
             tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 66F));
             tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel14.Size = new Size(363, 590);
+            tableLayoutPanel14.Size = new Size(372, 652);
             tableLayoutPanel14.TabIndex = 76;
             // 
             // tlpDetailsData
@@ -627,12 +601,12 @@
             tlpDetailsData.Controls.Add(tlpAssetsData, 0, 1);
             tlpDetailsData.Controls.Add(tlpMainData, 0, 0);
             tlpDetailsData.Dock = DockStyle.Fill;
-            tlpDetailsData.Location = new Point(3, 203);
+            tlpDetailsData.Location = new Point(3, 223);
             tlpDetailsData.Name = "tlpDetailsData";
             tlpDetailsData.RowCount = 2;
             tlpDetailsData.RowStyles.Add(new RowStyle(SizeType.Percent, 83.0729141F));
             tlpDetailsData.RowStyles.Add(new RowStyle(SizeType.Percent, 16.927084F));
-            tlpDetailsData.Size = new Size(357, 384);
+            tlpDetailsData.Size = new Size(366, 426);
             tlpDetailsData.TabIndex = 92;
             // 
             // tlpAssetsData
@@ -646,7 +620,7 @@
             tlpAssetsData.Controls.Add(lblFixedAssetsAge, 0, 2);
             tlpAssetsData.Controls.Add(lblFixedAssetsEndDate, 0, 0);
             tlpAssetsData.Dock = DockStyle.Top;
-            tlpAssetsData.Location = new Point(3, 322);
+            tlpAssetsData.Location = new Point(3, 356);
             tlpAssetsData.Name = "tlpAssetsData";
             tlpAssetsData.RowCount = 6;
             tlpAssetsData.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
@@ -655,7 +629,7 @@
             tlpAssetsData.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             tlpAssetsData.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             tlpAssetsData.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-            tlpAssetsData.Size = new Size(351, 59);
+            tlpAssetsData.Size = new Size(360, 59);
             tlpAssetsData.TabIndex = 99;
             // 
             // lblIsEndedFixedAssets_FixedAssetsEndDate
@@ -667,7 +641,7 @@
             lblIsEndedFixedAssets_FixedAssetsEndDate.Location = new Point(4, 43);
             lblIsEndedFixedAssets_FixedAssetsEndDate.Margin = new Padding(4, 0, 4, 0);
             lblIsEndedFixedAssets_FixedAssetsEndDate.Name = "lblIsEndedFixedAssets_FixedAssetsEndDate";
-            lblIsEndedFixedAssets_FixedAssetsEndDate.Size = new Size(343, 8);
+            lblIsEndedFixedAssets_FixedAssetsEndDate.Size = new Size(352, 8);
             lblIsEndedFixedAssets_FixedAssetsEndDate.TabIndex = 68;
             lblIsEndedFixedAssets_FixedAssetsEndDate.Text = "-";
             lblIsEndedFixedAssets_FixedAssetsEndDate.TextAlign = ContentAlignment.MiddleLeft;
@@ -681,7 +655,7 @@
             lblAnnuallyInstallment_MonthlyInstallment.Location = new Point(4, 35);
             lblAnnuallyInstallment_MonthlyInstallment.Margin = new Padding(4, 0, 4, 0);
             lblAnnuallyInstallment_MonthlyInstallment.Name = "lblAnnuallyInstallment_MonthlyInstallment";
-            lblAnnuallyInstallment_MonthlyInstallment.Size = new Size(343, 8);
+            lblAnnuallyInstallment_MonthlyInstallment.Size = new Size(352, 8);
             lblAnnuallyInstallment_MonthlyInstallment.TabIndex = 67;
             lblAnnuallyInstallment_MonthlyInstallment.Text = "-";
             lblAnnuallyInstallment_MonthlyInstallment.TextAlign = ContentAlignment.MiddleLeft;
@@ -695,7 +669,7 @@
             lblAssetsValue_DepreciationRateAnnually.Location = new Point(4, 19);
             lblAssetsValue_DepreciationRateAnnually.Margin = new Padding(4, 0, 4, 0);
             lblAssetsValue_DepreciationRateAnnually.Name = "lblAssetsValue_DepreciationRateAnnually";
-            lblAssetsValue_DepreciationRateAnnually.Size = new Size(343, 8);
+            lblAssetsValue_DepreciationRateAnnually.Size = new Size(352, 8);
             lblAssetsValue_DepreciationRateAnnually.TabIndex = 65;
             lblAssetsValue_DepreciationRateAnnually.Text = "-";
             lblAssetsValue_DepreciationRateAnnually.TextAlign = ContentAlignment.MiddleLeft;
@@ -709,7 +683,7 @@
             lblFixedAssetsAge.Location = new Point(4, 27);
             lblFixedAssetsAge.Margin = new Padding(4, 0, 4, 0);
             lblFixedAssetsAge.Name = "lblFixedAssetsAge";
-            lblFixedAssetsAge.Size = new Size(343, 8);
+            lblFixedAssetsAge.Size = new Size(352, 8);
             lblFixedAssetsAge.TabIndex = 66;
             lblFixedAssetsAge.Text = "-";
             lblFixedAssetsAge.TextAlign = ContentAlignment.MiddleLeft;
@@ -717,7 +691,7 @@
             // lblFixedAssetsEndDate
             // 
             lblFixedAssetsEndDate.AutoSize = true;
-            lblFixedAssetsEndDate.Location = new Point(310, 0);
+            lblFixedAssetsEndDate.Location = new Point(319, 0);
             lblFixedAssetsEndDate.Name = "lblFixedAssetsEndDate";
             lblFixedAssetsEndDate.Size = new Size(38, 15);
             lblFixedAssetsEndDate.TabIndex = 69;
@@ -747,7 +721,7 @@
             tlpMainData.RowStyles.Add(new RowStyle(SizeType.Percent, 14.285306F));
             tlpMainData.RowStyles.Add(new RowStyle(SizeType.Percent, 14.2881632F));
             tlpMainData.RowStyles.Add(new RowStyle(SizeType.Percent, 14.2853088F));
-            tlpMainData.Size = new Size(351, 292);
+            tlpMainData.Size = new Size(360, 292);
             tlpMainData.TabIndex = 96;
             // 
             // lblCreateAndModifyDate
@@ -759,7 +733,7 @@
             lblCreateAndModifyDate.Location = new Point(4, 205);
             lblCreateAndModifyDate.Margin = new Padding(4, 0, 4, 0);
             lblCreateAndModifyDate.Name = "lblCreateAndModifyDate";
-            lblCreateAndModifyDate.Size = new Size(343, 41);
+            lblCreateAndModifyDate.Size = new Size(352, 41);
             lblCreateAndModifyDate.TabIndex = 73;
             lblCreateAndModifyDate.Text = "-";
             lblCreateAndModifyDate.TextAlign = ContentAlignment.MiddleLeft;
@@ -773,7 +747,7 @@
             lblContactName.Location = new Point(4, 0);
             lblContactName.Margin = new Padding(4, 0, 4, 0);
             lblContactName.Name = "lblContactName";
-            lblContactName.Size = new Size(343, 41);
+            lblContactName.Size = new Size(352, 41);
             lblContactName.TabIndex = 72;
             lblContactName.Text = "-";
             lblContactName.TextAlign = ContentAlignment.MiddleLeft;
@@ -787,7 +761,7 @@
             lblPhonAndAnther.Location = new Point(4, 41);
             lblPhonAndAnther.Margin = new Padding(4, 0, 4, 0);
             lblPhonAndAnther.Name = "lblPhonAndAnther";
-            lblPhonAndAnther.Size = new Size(343, 41);
+            lblPhonAndAnther.Size = new Size(352, 41);
             lblPhonAndAnther.TabIndex = 65;
             lblPhonAndAnther.Text = "-";
             lblPhonAndAnther.TextAlign = ContentAlignment.MiddleLeft;
@@ -801,7 +775,7 @@
             lblClientEmail.Location = new Point(4, 82);
             lblClientEmail.Margin = new Padding(4, 0, 4, 0);
             lblClientEmail.Name = "lblClientEmail";
-            lblClientEmail.Size = new Size(343, 41);
+            lblClientEmail.Size = new Size(352, 41);
             lblClientEmail.TabIndex = 68;
             lblClientEmail.Text = "-";
             lblClientEmail.TextAlign = ContentAlignment.MiddleLeft;
@@ -815,7 +789,7 @@
             lblClientAddress.Location = new Point(4, 123);
             lblClientAddress.Margin = new Padding(4, 0, 4, 0);
             lblClientAddress.Name = "lblClientAddress";
-            lblClientAddress.Size = new Size(343, 41);
+            lblClientAddress.Size = new Size(352, 41);
             lblClientAddress.TabIndex = 70;
             lblClientAddress.Text = "-";
             lblClientAddress.TextAlign = ContentAlignment.MiddleLeft;
@@ -829,7 +803,7 @@
             lblAccDetailNote.Location = new Point(4, 164);
             lblAccDetailNote.Margin = new Padding(4, 0, 4, 0);
             lblAccDetailNote.Name = "lblAccDetailNote";
-            lblAccDetailNote.Size = new Size(343, 41);
+            lblAccDetailNote.Size = new Size(352, 41);
             lblAccDetailNote.TabIndex = 67;
             lblAccDetailNote.Text = "-";
             lblAccDetailNote.TextAlign = ContentAlignment.MiddleLeft;
@@ -850,7 +824,7 @@
             tlpBtnExec.Name = "tlpBtnExec";
             tlpBtnExec.RowCount = 1;
             tlpBtnExec.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tlpBtnExec.Size = new Size(345, 40);
+            tlpBtnExec.Size = new Size(354, 40);
             tlpBtnExec.TabIndex = 71;
             // 
             // btnAddDetails
@@ -862,7 +836,7 @@
             btnAddDetails.Location = new Point(4, 4);
             btnAddDetails.Margin = new Padding(4);
             btnAddDetails.Name = "btnAddDetails";
-            btnAddDetails.Size = new Size(79, 32);
+            btnAddDetails.Size = new Size(82, 32);
             btnAddDetails.TabIndex = 87;
             btnAddDetails.Text = "اضافة";
             btnAddDetails.UseVisualStyleBackColor = false;
@@ -873,10 +847,10 @@
             btnDeleteDetail.Dock = DockStyle.Fill;
             btnDeleteDetail.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
             btnDeleteDetail.ForeColor = Color.Yellow;
-            btnDeleteDetail.Location = new Point(91, 4);
+            btnDeleteDetail.Location = new Point(94, 4);
             btnDeleteDetail.Margin = new Padding(4);
             btnDeleteDetail.Name = "btnDeleteDetail";
-            btnDeleteDetail.Size = new Size(78, 32);
+            btnDeleteDetail.Size = new Size(80, 32);
             btnDeleteDetail.TabIndex = 86;
             btnDeleteDetail.Text = "حذف";
             btnDeleteDetail.UseVisualStyleBackColor = false;
@@ -887,10 +861,10 @@
             btnModifyDetail.Dock = DockStyle.Fill;
             btnModifyDetail.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
             btnModifyDetail.ForeColor = Color.Yellow;
-            btnModifyDetail.Location = new Point(177, 4);
+            btnModifyDetail.Location = new Point(182, 4);
             btnModifyDetail.Margin = new Padding(4);
             btnModifyDetail.Name = "btnModifyDetail";
-            btnModifyDetail.Size = new Size(78, 32);
+            btnModifyDetail.Size = new Size(80, 32);
             btnModifyDetail.TabIndex = 85;
             btnModifyDetail.Text = "تعديل";
             btnModifyDetail.UseVisualStyleBackColor = false;
@@ -901,10 +875,10 @@
             btnNextDetail.Dock = DockStyle.Fill;
             btnNextDetail.Font = new Font("Times New Roman", 16F, FontStyle.Bold);
             btnNextDetail.ForeColor = Color.Yellow;
-            btnNextDetail.Location = new Point(263, 4);
+            btnNextDetail.Location = new Point(270, 4);
             btnNextDetail.Margin = new Padding(4);
             btnNextDetail.Name = "btnNextDetail";
-            btnNextDetail.Size = new Size(78, 32);
+            btnNextDetail.Size = new Size(80, 32);
             btnNextDetail.TabIndex = 84;
             btnNextDetail.Text = "<< >>";
             btnNextDetail.UseVisualStyleBackColor = false;
@@ -917,13 +891,13 @@
             tlpShowMainData.Controls.Add(lblNameNod, 0, 1);
             tlpShowMainData.Controls.Add(lblPathNode, 0, 0);
             tlpShowMainData.Dock = DockStyle.Top;
-            tlpShowMainData.Location = new Point(3, 44);
+            tlpShowMainData.Location = new Point(3, 48);
             tlpShowMainData.Name = "tlpShowMainData";
             tlpShowMainData.RowCount = 3;
             tlpShowMainData.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
             tlpShowMainData.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
             tlpShowMainData.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-            tlpShowMainData.Size = new Size(357, 82);
+            tlpShowMainData.Size = new Size(366, 82);
             tlpShowMainData.TabIndex = 97;
             // 
             // lblTotalBalnceState
@@ -935,7 +909,7 @@
             lblTotalBalnceState.Location = new Point(4, 54);
             lblTotalBalnceState.Margin = new Padding(4, 0, 4, 0);
             lblTotalBalnceState.Name = "lblTotalBalnceState";
-            lblTotalBalnceState.Size = new Size(349, 28);
+            lblTotalBalnceState.Size = new Size(358, 28);
             lblTotalBalnceState.TabIndex = 61;
             lblTotalBalnceState.Text = "-";
             lblTotalBalnceState.TextAlign = ContentAlignment.MiddleLeft;
@@ -949,7 +923,7 @@
             lblNameNod.Location = new Point(4, 27);
             lblNameNod.Margin = new Padding(4, 0, 4, 0);
             lblNameNod.Name = "lblNameNod";
-            lblNameNod.Size = new Size(349, 27);
+            lblNameNod.Size = new Size(358, 27);
             lblNameNod.TabIndex = 60;
             lblNameNod.Text = "-";
             lblNameNod.TextAlign = ContentAlignment.MiddleLeft;
@@ -963,7 +937,7 @@
             lblPathNode.Location = new Point(4, 0);
             lblPathNode.Margin = new Padding(4, 0, 4, 0);
             lblPathNode.Name = "lblPathNode";
-            lblPathNode.Size = new Size(349, 27);
+            lblPathNode.Size = new Size(358, 27);
             lblPathNode.TabIndex = 59;
             lblPathNode.Text = "-";
             lblPathNode.TextAlign = ContentAlignment.MiddleLeft;
@@ -980,7 +954,7 @@
             tableLayoutPanel12.Name = "tableLayoutPanel12";
             tableLayoutPanel12.RowCount = 1;
             tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel12.Size = new Size(357, 35);
+            tableLayoutPanel12.Size = new Size(366, 39);
             tableLayoutPanel12.TabIndex = 98;
             // 
             // lblAccID_Tree
@@ -991,7 +965,7 @@
             lblAccID_Tree.Location = new Point(4, 0);
             lblAccID_Tree.Margin = new Padding(4, 0, 4, 0);
             lblAccID_Tree.Name = "lblAccID_Tree";
-            lblAccID_Tree.Size = new Size(105, 35);
+            lblAccID_Tree.Size = new Size(105, 39);
             lblAccID_Tree.TabIndex = 74;
             lblAccID_Tree.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -1001,10 +975,10 @@
             label16.Dock = DockStyle.Left;
             label16.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
             label16.ForeColor = Color.FromArgb(192, 0, 192);
-            label16.Location = new Point(244, 0);
+            label16.Location = new Point(253, 0);
             label16.Margin = new Padding(4, 0, 4, 0);
             label16.Name = "label16";
-            label16.Size = new Size(109, 35);
+            label16.Size = new Size(109, 39);
             label16.TabIndex = 74;
             label16.Text = "البيانات الرئيسية";
             label16.TextAlign = ContentAlignment.MiddleCenter;
@@ -1017,11 +991,11 @@
             tableLayoutPanel16.Controls.Add(lblAccID_DGV, 1, 0);
             tableLayoutPanel16.Controls.Add(lblAccDataDetails, 0, 0);
             tableLayoutPanel16.Dock = DockStyle.Fill;
-            tableLayoutPanel16.Location = new Point(3, 162);
+            tableLayoutPanel16.Location = new Point(3, 178);
             tableLayoutPanel16.Name = "tableLayoutPanel16";
             tableLayoutPanel16.RowCount = 1;
             tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel16.Size = new Size(357, 35);
+            tableLayoutPanel16.Size = new Size(366, 39);
             tableLayoutPanel16.TabIndex = 98;
             // 
             // lblAccID_DGV
@@ -1032,7 +1006,7 @@
             lblAccID_DGV.Location = new Point(4, 0);
             lblAccID_DGV.Margin = new Padding(4, 0, 4, 0);
             lblAccID_DGV.Name = "lblAccID_DGV";
-            lblAccID_DGV.Size = new Size(105, 35);
+            lblAccID_DGV.Size = new Size(105, 39);
             lblAccID_DGV.TabIndex = 74;
             lblAccID_DGV.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -1042,10 +1016,10 @@
             lblAccDataDetails.Dock = DockStyle.Left;
             lblAccDataDetails.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold | FontStyle.Underline);
             lblAccDataDetails.ForeColor = Color.FromArgb(192, 0, 192);
-            lblAccDataDetails.Location = new Point(248, 0);
+            lblAccDataDetails.Location = new Point(257, 0);
             lblAccDataDetails.Margin = new Padding(4, 0, 4, 0);
             lblAccDataDetails.Name = "lblAccDataDetails";
-            lblAccDataDetails.Size = new Size(105, 35);
+            lblAccDataDetails.Size = new Size(105, 39);
             lblAccDataDetails.TabIndex = 74;
             lblAccDataDetails.Text = "بيانات الحسابات";
             lblAccDataDetails.TextAlign = ContentAlignment.MiddleCenter;
@@ -1159,8 +1133,6 @@
             panelList.ResumeLayout(false);
             panelList.PerformLayout();
             tableLayoutPanel15.ResumeLayout(false);
-            tabControlAccount.ResumeLayout(false);
-            tabPage1.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel17.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
@@ -1205,8 +1177,6 @@
         private Label label4;
         private TreeView treeViewAccounts;
         private TextBox txtSearchTree;
-        private TabControl tabControlAccount;
-        private TabPage tabPage1;
         private TableLayoutPanel tableLayoutPanel3;
         private TableLayoutPanel tableLayoutPanel17;
         private TableLayoutPanel tableLayoutPanel2;
