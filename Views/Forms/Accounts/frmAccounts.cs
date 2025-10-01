@@ -89,14 +89,14 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void DGV_SelectionChanged(object sender, EventArgs e)
         {
-            //if (DGV.CurrentRow != null && DGV.CurrentRow.Cells["AccID"].Value != null)
-            //{
-            //    lblAccID_DGV.Text = DGV.CurrentRow.Cells["AccID"].Value.ToString();
-            //}
-            //else
-            //{
-            //    lblAccID_DGV.Text = string.Empty; // في حالة ما فيش صف محدد
-            //}
+            if (DGV.CurrentRow != null && DGV.CurrentRow.Cells["AccID"].Value != null)
+            {
+                lblAccID_DGV.Text = DGV.CurrentRow.Cells["AccID"].Value.ToString();
+            }
+            else
+            {
+                lblAccID_DGV.Text = string.Empty; // في حالة ما فيش صف محدد
+            }
         }
 
         private void DGV_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -190,7 +190,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         #endregion
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            //الكود الاصلى
+            txtSearch.Clear();//الكود الاصلى
 
             // التحقق من أن e و e.Node ليسا null
             if (e?.Node == null) return;
