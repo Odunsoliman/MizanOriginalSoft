@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             tlpBody = new TableLayoutPanel();
             tableLayoutPanel18 = new TableLayoutPanel();
             label15 = new Label();
@@ -479,8 +479,8 @@
             DGV.ReadOnly = true;
             DGV.RowHeadersVisible = false;
             DGV.RowHeadersWidth = 51;
-            dataGridViewCellStyle2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DGV.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DGV.RowsDefaultCellStyle = dataGridViewCellStyle1;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DGV.Size = new Size(490, 384);
             DGV.TabIndex = 72;
@@ -1150,14 +1150,14 @@
             // 
             tableLayoutPanel5.BackColor = Color.White;
             tableLayoutPanel5.ColumnCount = 4;
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 78.85197F));
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21.14804F));
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 298F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 34.6326828F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65.36732F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 62F));
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 388F));
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel5.ContextMenuStrip = contextMenuStrip1;
-            tableLayoutPanel5.Controls.Add(lblSelectedTreeNod, 0, 0);
+            tableLayoutPanel5.Controls.Add(lblSelectedTreeNod, 1, 0);
             tableLayoutPanel5.Dock = DockStyle.Fill;
             tableLayoutPanel5.Location = new Point(3, 3);
             tableLayoutPanel5.Name = "tableLayoutPanel5";
@@ -1187,13 +1187,13 @@
             lblSelectedTreeNod.Dock = DockStyle.Fill;
             lblSelectedTreeNod.Font = new Font("Times New Roman", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblSelectedTreeNod.ForeColor = Color.FromArgb(192, 0, 192);
-            lblSelectedTreeNod.Location = new Point(782, 0);
+            lblSelectedTreeNod.Location = new Point(455, 0);
             lblSelectedTreeNod.Margin = new Padding(4, 0, 4, 0);
             lblSelectedTreeNod.Name = "lblSelectedTreeNod";
-            lblSelectedTreeNod.Size = new Size(332, 41);
+            lblSelectedTreeNod.Size = new Size(428, 41);
             lblSelectedTreeNod.TabIndex = 75;
             lblSelectedTreeNod.Text = "الحسابات العامة";
-            lblSelectedTreeNod.TextAlign = ContentAlignment.MiddleRight;
+            lblSelectedTreeNod.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // tlpHome
             // 
