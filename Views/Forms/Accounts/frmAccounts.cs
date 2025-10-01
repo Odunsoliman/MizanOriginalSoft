@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace MizanOriginalSoft.Views.Forms.Accounts
 {
@@ -83,6 +84,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            //الكود الاصلى
+
             // التحقق من أن e و e.Node ليسا null
             if (e?.Node == null) return;
 
@@ -98,6 +101,95 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             LoadChildAccountsToGrid(e.Node);
             DGVStyle();
+
+            //الكود الجديد
+
+            // ==========================
+            // 0) التحقق من وجود عقدة محددة
+            // ==========================
+            if (treeViewAccounts.SelectedNode == null)
+                return;
+
+            TreeNode selectedNode = treeViewAccounts.SelectedNode;
+
+            // التأكد من أن الـ Tag يحتوي على DataRow
+            if (selectedNode.Tag is not DataRow row)
+                return;
+
+
+            // ==========================
+            // 2) استخراج بيانات الحساب
+            // ==========================
+            int treeAccCode = row.Field<int>("TreeAccCode");      // الترقيم الشجري الجديد
+            int accID = row.Field<int>("AccID");                  // المفتاح الأساسي فقط
+            string accName = row["AccName"]?.ToString() ?? string.Empty;
+            bool hasChildren = row.Field<bool?>("IsHasChildren") ?? false;
+            bool hasDetails = row.Field<bool?>("IsHasDetails") ?? false;
+            bool isEnerAcc = row.Field<bool?>("IsEnerAcc") ?? false;
+
+
+            // ==========================
+            // 4) تحديث التسميات في الواجهة
+            // ==========================
+            lblSelectedTreeNod.Text = $"{treeAccCode} - {accName}";      // عرض TreeAccCode بدل AccID
+ //           lblPathNode.Text = GetFullPathFromNode(selectedNode);        // المسار الكامل من الجذر إلى العقدة
+            lblNameNod.Text = accName;                                   // اسم الحساب فقط
+
+            // ==========================
+            // 5) التحقق من إمكانية إضافة حساب فرعي
+            // ==========================
+            bool canAddChild = !(isEnerAcc && !hasChildren);             // الحساب النهائي لا يمكن إضافة أبناء
+            txtAccName.Enabled = canAddChild;
+
+            if (!canAddChild)
+            {
+                txtAccName.Clear();
+                lblParentAccName.Text = "لا يمكن اضافة حسابات فرعية هنا فهذا حساب نهائى";
+                lblParentAccName.ForeColor = Color.Red;
+                chkIsHasChildren.Enabled = false;
+            }
+            else
+            {
+                lblParentAccName.Text = accName;
+                lblParentAccName.ForeColor = Color.Gray;
+                chkIsHasChildren.Enabled = true;
+            }
+
+            lblIsHasChildren.Text = hasChildren ? "" : "هذا الحساب مازال ليس له فروع";
+
+            // ==========================
+            // 6) التحقق من الأصول الثابتة (Parent = 12)
+            // ==========================
+            if (!hasDetails)
+            {
+                lblAccDataDetails.Text = "";
+                tlpBtnExec.Enabled = false;
+            }
+            else
+            {
+                bool hasFixedAssetParent = false;
+                TreeNode? currentNode = selectedNode;
+
+                // البحث في جميع الآباء حتى الجذر للتحقق من TreeAccCode = 12
+                while (currentNode != null)
+                {
+                    if (currentNode.Tag is DataRow parentRow &&
+                        Convert.ToInt32(parentRow["TreeAccCode"]) == 12)
+                    {
+                        hasFixedAssetParent = true;
+                        break;
+                    }
+                    currentNode = currentNode.Parent;
+                }
+
+                lblAccDataDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
+                tlpBtnExec.Enabled = true;
+            }
+
+            // ==========================
+            // 7) تحميل التقارير الخاصة بالحساب المحدد
+            // ==========================
+//            LoadReportsForSelectedAccount();
         }
         /*اريد عند فتح عقدة جذرية رقمها فى TreeAccCode بين 1 الى 5 يتم اغلاق الجذر الاخرى حتى لا تكبر الشجرة ويكون هناك تركيز على العقدة الحالية*/
 
