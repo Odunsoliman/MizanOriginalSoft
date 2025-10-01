@@ -564,7 +564,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
             catch
             {
-                lblCountAndTotals.Text = "خطأ في حساب الإجمالي";
+                lblCountAndTotals.Text = string .Empty ;
             }
         }
 
