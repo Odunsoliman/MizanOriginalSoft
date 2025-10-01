@@ -526,6 +526,7 @@
             DGV.Size = new Size(467, 367);
             DGV.TabIndex = 72;
             DGV.TabStop = false;
+            DGV.CellClick += DGV_CellClick;
             DGV.SelectionChanged += DGV_SelectionChanged;
             // 
             // contextMenuDGV

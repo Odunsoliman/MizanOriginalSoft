@@ -196,6 +196,18 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
         private void DGV_SelectionChanged(object sender, EventArgs e)
         {
+            //if (DGV.CurrentRow != null && DGV.CurrentRow.Cells["AccID"].Value != null)
+            //{
+            //    lblAccID_DGV.Text = DGV.CurrentRow.Cells["AccID"].Value.ToString();
+            //}
+            //else
+            //{
+            //    lblAccID_DGV.Text = string.Empty; // في حالة ما فيش صف محدد
+            //}
+        }
+
+        private void DGV_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
             if (DGV.CurrentRow != null && DGV.CurrentRow.Cells["AccID"].Value != null)
             {
                 lblAccID_DGV.Text = DGV.CurrentRow.Cells["AccID"].Value.ToString();
@@ -205,7 +217,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 lblAccID_DGV.Text = string.Empty; // في حالة ما فيش صف محدد
             }
         }
-
 
         private bool IsRootNodeInRange(TreeNode node)
         {
@@ -724,7 +735,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         #endregion
 
 
- 
+
     }
 }
 
