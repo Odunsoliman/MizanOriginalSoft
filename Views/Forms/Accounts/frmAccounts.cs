@@ -165,8 +165,70 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     currentNode = currentNode.Parent;
                 }
 
+                // تغيير النص بناءً على النتيجة
                 lblAccDataDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
                 tlpBtnExec.Enabled = true;
+
+                // تغيير ارتفاع صفوف الـ TableLayoutPanel بناءً على النتيجة
+                if (hasFixedAssetParent)
+                {
+                    // الصف الأول 1% والثاني 99%
+                    tlpDetailsData.RowStyles[0].Height = 1;
+                    tlpDetailsData.RowStyles[0].SizeType = SizeType.Percent;
+
+                    tlpDetailsData.RowStyles[1].Height = 99;
+                    tlpDetailsData.RowStyles[1].SizeType = SizeType.Percent;
+                }
+                else
+                {
+                    // الصف الأول 99% والثاني 1%
+                    tlpDetailsData.RowStyles[0].Height = 99;
+                    tlpDetailsData.RowStyles[0].SizeType = SizeType.Percent;
+
+                    tlpDetailsData.RowStyles[1].Height = 1;
+                    tlpDetailsData.RowStyles[1].SizeType = SizeType.Percent;
+                }
+
+                //bool hasFixedAssetParent = false;
+                //TreeNode? currentNode = selectedNode;
+
+                //// البحث في جميع الآباء حتى الجذر للتحقق من TreeAccCode = 12
+                //while (currentNode != null)
+                //{
+                //    if (currentNode.Tag is DataRow parentRow &&
+                //        Convert.ToInt32(parentRow["TreeAccCode"]) == 12)
+                //    {
+                //        hasFixedAssetParent = true;
+                //        break;
+                //    }
+                //    currentNode = currentNode.Parent;
+                //}
+
+                //lblAccDataDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
+                //tlpBtnExec.Enabled = true;
+
+                ///*tlpDetailsData  هذا تيبل ليى اوت بانلل بع صفين وعمود واحد
+                // واريد فى حالة hasFixedAssetParent = false; الصف الاول يكون ارتفاعه 99% والصف الثانى 1% والعكس صحيح
+                // */
+                //if (hasFixedAssetParent)
+                //{
+                //    // الصف الأول 1% والثاني 99%
+                //    tlpDetailsData.RowStyles[0].Height = 1;
+                //    tlpDetailsData.RowStyles[0].SizeType = SizeType.Percent;
+
+                //    tlpDetailsData.RowStyles[1].Height = 99;
+                //    tlpDetailsData.RowStyles[1].SizeType = SizeType.Percent;
+                //}
+                //else
+                //{
+                //    // الصف الأول 99% والثاني 1%
+                //    tlpDetailsData.RowStyles[0].Height = 99;
+                //    tlpDetailsData.RowStyles[0].SizeType = SizeType.Percent;
+
+                //    tlpDetailsData.RowStyles[1].Height = 1;
+                //    tlpDetailsData.RowStyles[1].SizeType = SizeType.Percent;
+                //}
+
             }
 
             // ==========================
