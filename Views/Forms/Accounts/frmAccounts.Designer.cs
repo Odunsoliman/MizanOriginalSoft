@@ -542,6 +542,7 @@
             txtSearch.TabIndex = 71;
             txtSearch.TabStop = false;
             txtSearch.TextAlign = HorizontalAlignment.Center;
+            txtSearch.TextChanged += txtSearch_TextChanged;
             // 
             // tableLayoutPanel9
             // 
@@ -607,7 +608,7 @@
             // 
             // tlpAssetsData
             // 
-            tlpAssetsData.BackColor = Color.FromArgb(255, 224, 192);
+            tlpAssetsData.BackColor = Color.Transparent;
             tlpAssetsData.ColumnCount = 1;
             tlpAssetsData.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tlpAssetsData.Controls.Add(lblIsEndedFixedAssets_FixedAssetsEndDate, 0, 4);
@@ -686,16 +687,15 @@
             // lblFixedAssetsEndDate
             // 
             lblFixedAssetsEndDate.AutoSize = true;
-            lblFixedAssetsEndDate.Location = new Point(284, 0);
+            lblFixedAssetsEndDate.Location = new Point(332, 0);
             lblFixedAssetsEndDate.Name = "lblFixedAssetsEndDate";
-            lblFixedAssetsEndDate.Size = new Size(60, 15);
+            lblFixedAssetsEndDate.Size = new Size(12, 15);
             lblFixedAssetsEndDate.TabIndex = 69;
-            lblFixedAssetsEndDate.Text = "اصول ثابتة";
-            lblFixedAssetsEndDate.Visible = false;
+            lblFixedAssetsEndDate.Text = "-";
             // 
             // tlpMainData
             // 
-            tlpMainData.BackColor = Color.FromArgb(255, 192, 192);
+            tlpMainData.BackColor = Color.Transparent;
             tlpMainData.ColumnCount = 1;
             tlpMainData.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tlpMainData.Controls.Add(lblCreateAndModifyDate, 0, 5);
@@ -743,7 +743,7 @@
             lblContactName.Name = "lblContactName";
             lblContactName.Size = new Size(339, 26);
             lblContactName.TabIndex = 72;
-            lblContactName.Text = "بيانات ش";
+            lblContactName.Text = "-";
             lblContactName.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblPhonAndAnther
