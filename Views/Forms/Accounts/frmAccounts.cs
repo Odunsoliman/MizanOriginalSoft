@@ -123,7 +123,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             int treeAccCode = row.Field<int>("TreeAccCode");      // الترقيم الشجري الجديد
             int accID = row.Field<int>("AccID");                  // المفتاح الأساسي فقط
             string accName = row["AccName"]?.ToString() ?? string.Empty;
-            string accPath = row["AccName"]?.ToString() ?? string.Empty;
+            string accPath = row["FullPath"]?.ToString() ?? string.Empty;
 
             bool hasChildren = row.Field<bool?>("IsHasChildren") ?? false;
             bool hasDetails = row.Field<bool?>("IsHasDetails") ?? false;
@@ -134,7 +134,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // 4) تحديث التسميات في الواجهة
             // ==========================
             lblSelectedTreeNod.Text = $"{treeAccCode} - {accName}";      // عرض TreeAccCode بدل AccID
- //           lblPathNode.Text = GetFullPathFromNode(selectedNode);        // المسار الكامل من الجذر إلى العقدة
+            lblPathNode.Text =accPath;// GetFullPathFromNode(selectedNode);        // المسار الكامل من الجذر إلى العقدة
             lblNameNod.Text = accName;                                   // اسم الحساب فقط
 
             // ==========================
