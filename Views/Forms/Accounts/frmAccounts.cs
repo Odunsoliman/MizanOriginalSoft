@@ -478,6 +478,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void DGVStyle()
         {
+            lblCountAndTotals.Text = string.Empty;
             if (DGV.DataSource == null) return;
 
             foreach (DataGridViewColumn column in DGV.Columns)
