@@ -230,7 +230,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             bool hasDetails = row.Field<bool?>("IsHasDetails") ?? false;
             bool isEnerAcc = row.Field<bool?>("IsEnerAcc") ?? false;
 
-
+            
             // ==========================
             // 4) تحديث التسميات في الواجهة
             // ==========================
@@ -296,7 +296,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // ==========================
             //            LoadReportsForSelectedAccount();
         }
-
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
             string searchText = txtSearch.Text.Trim();
@@ -308,10 +307,13 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
             else
             {
-                // ✅ البحث في كل الحسابات حسب الاسم أو الكود
+                // ✅ البحث في الحسابات النهائية فقط (IsHasChildren = false)
                 var filteredRows = _allAccountsData.AsEnumerable()
                     .Where(r =>
                     {
+                        bool isLeaf = !(r.Field<bool?>("IsHasChildren") ?? false); // حساب نهائي فقط
+                        if (!isLeaf) return false;
+
                         string accName = GetSafeStringValue(r, "AccName");
                         string accCode = r["TreeAccCode"]?.ToString() ?? "";
 
@@ -349,13 +351,15 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     DGV.DataSource = null;
                 }
             }
+
             DGVStyle();
+            DGV.ClearSelection();
         }
 
 
 
 
-  
+
         private void LoadChildAccountsToGrid(TreeNode? selectedNode)
         {
             if (selectedNode?.Tag == null || _allAccountsData == null) return;
@@ -492,6 +496,39 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             DGV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             DGV.GridColor = Color.Gray;
+
+            // ===============================
+            // ✅ حساب عدد الحسابات والإجمالي
+            // ===============================
+            try
+            {
+                var dt = DGV.DataSource as DataTable;
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    int countAccounts = dt.Rows.Count;
+                    decimal totalBalance = dt.AsEnumerable()
+                        .Sum(r => r.Field<decimal?>("Balance") ?? 0);
+
+                    string balanceState;
+                    if (totalBalance > 0)
+                        balanceState = "مدين";
+                    else if (totalBalance < 0)
+                        balanceState = "دائن";
+                    else
+                        balanceState = "متوازن";
+
+                    lblCountAndTotals.Text = $"عدد الحسابات : {countAccounts}   " +
+                                             $"بإجمالي رصيد : {Math.Abs(totalBalance):N2} ({balanceState})";
+                }
+                else
+                {
+                    lblCountAndTotals.Text = "لا توجد بيانات";
+                }
+            }
+            catch
+            {
+                lblCountAndTotals.Text = "خطأ في حساب الإجمالي";
+            }
         }
 
 
