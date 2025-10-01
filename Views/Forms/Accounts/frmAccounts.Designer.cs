@@ -77,7 +77,6 @@
             lblAccDetailNote = new Label();
             tlpShowMainData = new TableLayoutPanel();
             lblTotalBalnceState = new Label();
-            lblNameNod = new Label();
             lblPathNode = new Label();
             tableLayoutPanel12 = new TableLayoutPanel();
             lblAccID_Tree = new Label();
@@ -807,7 +806,6 @@
             tlpShowMainData.ColumnCount = 1;
             tlpShowMainData.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tlpShowMainData.Controls.Add(lblTotalBalnceState, 0, 2);
-            tlpShowMainData.Controls.Add(lblNameNod, 0, 1);
             tlpShowMainData.Controls.Add(lblPathNode, 0, 0);
             tlpShowMainData.Dock = DockStyle.Top;
             tlpShowMainData.Location = new Point(3, 39);
@@ -832,20 +830,6 @@
             lblTotalBalnceState.TabIndex = 61;
             lblTotalBalnceState.Text = "-";
             lblTotalBalnceState.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // lblNameNod
-            // 
-            lblNameNod.AutoSize = true;
-            lblNameNod.Dock = DockStyle.Fill;
-            lblNameNod.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblNameNod.ForeColor = Color.Red;
-            lblNameNod.Location = new Point(4, 27);
-            lblNameNod.Margin = new Padding(4, 0, 4, 0);
-            lblNameNod.Name = "lblNameNod";
-            lblNameNod.Size = new Size(345, 27);
-            lblNameNod.TabIndex = 60;
-            lblNameNod.Text = "-";
-            lblNameNod.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblPathNode
             // 
@@ -1314,7 +1298,6 @@
         private Button btnNextDetail;
         private TableLayoutPanel tlpShowMainData;
         private Label lblTotalBalnceState;
-        private Label lblNameNod;
         private Label lblPathNode;
         private Label lblAccDataDetails;
         private TableLayoutPanel tableLayoutPanel5;
