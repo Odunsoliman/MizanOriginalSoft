@@ -371,7 +371,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         //===============================================================
-        private void LoadChildAccountsToGrid(TreeNode? selectedNode)
+        private void LoadChildAccountsToGrid_(TreeNode? selectedNode)
         {
             if (selectedNode?.Tag == null || _allAccountsData == null) return;
 
@@ -441,7 +441,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         // ===============================================================
-        private void LoadChildAccountsToGrid_(TreeNode? selectedNode)
+        private void LoadChildAccountsToGrid(TreeNode? selectedNode)
         {
             if (selectedNode?.Tag == null || _allAccountsData == null) return;
 
