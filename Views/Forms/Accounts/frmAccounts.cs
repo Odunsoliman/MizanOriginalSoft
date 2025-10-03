@@ -21,6 +21,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void frmAccounts_Load(object sender, EventArgs e)
         {
+            DBServiecs.A_UpdateAllDataBase();
             LoadAccountsTree();
             rdoAll.CheckedChanged += RadioFilter_CheckedChanged;
             rdoMadeen.CheckedChanged += RadioFilter_CheckedChanged;
@@ -70,7 +71,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                                            .OrderBy(n =>
                                            {
                                                if (n.Tag is DataRow row)
-                                                   return row.Field<int>("TreeAccCode");
+                                                   return row.Field<int>("TreeAccCode");//System.InvalidCastException: 'Cannot cast DBNull. Value to type 'System.Int32'. Please use a nullable type.'
                                                return 0;
                                            })
                                            .ToList();

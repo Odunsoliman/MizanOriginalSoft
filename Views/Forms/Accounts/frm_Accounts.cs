@@ -482,10 +482,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         #endregion
 
- 
-        
-        
-        
         #region !!!!!!! DGV & Utilities تنسيقات و الجريد !!!!!!!!!!
 
         private void LoadChildrenInDGV(int parentTreeAccCode)
@@ -911,7 +907,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         #endregion
-
 
         #region !!!!!! تفاصيل الحساب (الأبناء) !!!!!!! 
 
