@@ -499,7 +499,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         //===============================================================
-        private void LoadChildAccountsToGrid_(TreeNode? selectedNode)
+        private void LoadChildAccountsToGrid(TreeNode? selectedNode)
         {
             if (selectedNode?.Tag == null || _allAccountsData == null) return;
 
@@ -520,14 +520,29 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // تطبيق الفلترة
             _allAccountsData.DefaultView.RowFilter = filter;
 
-            // ربط الجريد بالـ DefaultView مباشرة
-            DGV.DataSource = _allAccountsData.DefaultView;
+            // ✅ تحديث الـ DGV لازم من UI Thread
+            if (DGV.InvokeRequired)
+            {
+                DGV.Invoke(new Action(() =>
+                {
+                    DGV.DataSource = _allAccountsData.DefaultView;
 
-            // الأعمدة ParentName و BalanceWithState نحسبهم مرة واحدة فقط
-            EnsureExtraColumns();
-            FillExtraColumns(_allAccountsData.DefaultView);
+                    // الأعمدة ParentName و BalanceWithState نحسبهم مرة واحدة فقط
+                    EnsureExtraColumns();
+                    FillExtraColumns(_allAccountsData.DefaultView);
 
-            DGVStyle();
+                    DGVStyle();
+                }));
+            }
+            else
+            {
+                DGV.DataSource = _allAccountsData.DefaultView;
+
+                EnsureExtraColumns();
+                FillExtraColumns(_allAccountsData.DefaultView);
+
+                DGVStyle();
+            }
         }
 
         /// <summary>
@@ -569,7 +584,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         // ===============================================================
-        private void LoadChildAccountsToGrid(TreeNode? selectedNode)
+        private void LoadChildAccountsToGrid_(TreeNode? selectedNode)
         {
             if (selectedNode?.Tag == null || _allAccountsData == null) return;
 
@@ -606,7 +621,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     row["BalanceWithState"] = balanceWithState;
                 }
 
-                DGV.DataSource = childAccounts;
+                DGV.DataSource = childAccounts;//System.InvalidOperationException: 'Cross-thread operation not valid: Control 'DGV' accessed from a thread other than the thread it was created on.'
             }
             else
             {
