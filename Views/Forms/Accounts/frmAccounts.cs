@@ -31,6 +31,42 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         }
 
+        private void LoadAccountsTree__()
+        {
+            treeViewAccounts.Nodes.Clear();
+            _allAccountsData = DBServiecs.Acc_GetChart() ?? new DataTable();
+            //  هذه الدالة تحضر لى فقط IsHasChildren=1
+            // فهى تبنى الشجرة فقط ولا اريد ان تبنى الابناء داخل الجريد فماذا يكون السيناريو الصحيح
+            if (_allAccountsData.Rows.Count == 0) return;
+
+            Dictionary<string, TreeNode> nodeDict = new Dictionary<string, TreeNode>();
+
+            var parentRows = _allAccountsData.AsEnumerable()
+                               .Where(r => r.Field<bool>("IsHasChildren"))
+                               .ToList();
+
+            foreach (DataRow row in parentRows)
+            {
+                string accName = row["AccName"] as string ?? string.Empty;
+                if (string.IsNullOrWhiteSpace(accName)) continue;
+
+                string treeCode = row["TreeAccCode"].ToString() ?? string.Empty;
+                string? parentCode = row["ParentAccID"] != DBNull.Value ? row["ParentAccID"].ToString() : null;
+
+                TreeNode node = new TreeNode(accName) { Tag = row };
+                nodeDict[treeCode] = node;
+
+                if (string.IsNullOrEmpty(parentCode))
+                    treeViewAccounts.Nodes.Add(node);
+                else if (nodeDict.TryGetValue(parentCode, out TreeNode? parentNode))
+                    parentNode.Nodes.Add(node);
+                else
+                    treeViewAccounts.Nodes.Add(node);
+            }
+
+            SortTreeNodes(treeViewAccounts.Nodes);
+            treeViewAccounts.CollapseAll();
+        }
         private void LoadAccountsTree()
         {
             treeViewAccounts.Nodes.Clear();
@@ -64,7 +100,10 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             SortTreeNodes(treeViewAccounts.Nodes);
             treeViewAccounts.CollapseAll();
+
+
         }
+
 
         private void SortTreeNodes(TreeNodeCollection nodes)
         {
@@ -86,8 +125,180 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
 
+
+
+
+
+
+
         #region !!!!!!! AfterSelect  بعد تحديد عقدة !!!!!!!!!!!!!!
         private TreeNode? _lastSelectedNode = null;
+
+        private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            txtSearch.Clear();//الكود الاصلى
+
+            // التحقق من أن e و e.Node ليسا null
+            if (e?.Node == null) return;
+
+            // إعادة تعيين التنسيق السابق
+            if (_lastSelectedNode != null)
+            {
+                _lastSelectedNode.ForeColor = treeViewAccounts.ForeColor;
+            }
+
+            // تطبيق التنسيق الجديد
+            e.Node.ForeColor = Color.Red;
+            _lastSelectedNode = e.Node;
+
+            LoadChildAccountsToGrid(e.Node);
+            DGVStyle();
+
+            //الكود الجديد
+
+            // ==========================
+            // 0) التحقق من وجود عقدة محددة
+            // ==========================
+            if (treeViewAccounts.SelectedNode == null)
+                return;
+
+            TreeNode selectedNode = treeViewAccounts.SelectedNode;
+
+            // التأكد من أن الـ Tag يحتوي على DataRow
+            if (selectedNode.Tag is not DataRow row)
+                return;
+
+
+            // ==========================
+            // 2) استخراج بيانات الحساب
+            // ==========================
+            int treeAccCode = row.Field<int>("TreeAccCode");      // الترقيم الشجري الجديد
+            int accID = row.Field<int>("AccID");                  // المفتاح الأساسي فقط
+            string accName = row["AccName"]?.ToString() ?? string.Empty;
+            string accPath = row["FullPath"]?.ToString() ?? string.Empty;
+
+            bool hasChildren = row.Field<bool?>("IsHasChildren") ?? false;
+            bool hasDetails = row.Field<bool?>("IsHasDetails") ?? false;
+            bool isEnerAcc = row.Field<bool?>("IsEnerAcc") ?? false;
+
+
+            // ==========================
+            // 4) تحديث التسميات في الواجهة
+            // ==========================
+            lblSelectedTreeNod.Text = $"{treeAccCode} - {accName}";      // عرض TreeAccCode بدل AccID
+            lblPathNode.Text = accPath;// المسار الكامل من الجذر إلى العقدة
+            lblAccID_Tree.Text = accID.ToString();
+            lblAccID_DGV.Text = string.Empty;
+            DGV.ClearSelection();
+
+            // ==========================
+            // 6) التحقق من الأصول الثابتة (Parent = 12)
+            // ==========================
+            if (!hasDetails)
+            {
+                lblAccDataDetails.Text = "";
+                tlpBtnExec.Enabled = false;
+            }
+            else
+            {
+                bool hasFixedAssetParent = false;
+                TreeNode? currentNode = selectedNode;
+
+                // البحث في جميع الآباء حتى الجذر للتحقق من TreeAccCode = 12
+                while (currentNode != null)
+                {
+                    if (currentNode.Tag is DataRow parentRow &&
+                        Convert.ToInt32(parentRow["TreeAccCode"]) == 12)
+                    {
+                        hasFixedAssetParent = true;
+                        break;
+                    }
+                    currentNode = currentNode.Parent;
+                }
+
+                // تغيير النص بناءً على النتيجة
+                lblAccDataDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
+                tlpBtnExec.Enabled = true;
+
+                // تغيير ارتفاع صفوف الـ TableLayoutPanel بناءً على النتيجة
+                if (hasFixedAssetParent)
+                {
+                    // الصف الأول 1% والثاني 99%
+                    tlpDetailsData.RowStyles[0].Height = 1;
+                    tlpDetailsData.RowStyles[0].SizeType = SizeType.Percent;
+
+                    tlpDetailsData.RowStyles[1].Height = 99;
+                    tlpDetailsData.RowStyles[1].SizeType = SizeType.Percent;
+                }
+                else
+                {
+                    // الصف الأول 99% والثاني 1%
+                    tlpDetailsData.RowStyles[0].Height = 99;
+                    tlpDetailsData.RowStyles[0].SizeType = SizeType.Percent;
+
+                    tlpDetailsData.RowStyles[1].Height = 1;
+                    tlpDetailsData.RowStyles[1].SizeType = SizeType.Percent;
+                }
+
+            }
+
+            // ==========================
+            // 7) تحميل التقارير الخاصة بالحساب المحدد
+            // ==========================
+            //            LoadReportsForSelectedAccount();
+        }
+
+
+        private void LoadChildAccountsToGrid(TreeNode? selectedNode)
+        {
+
+
+
+            //if (selectedNode?.Tag == null || _allAccountsData == null) return;
+
+            //DataRow selectedRow = (DataRow)selectedNode.Tag;
+            //int parentTreeCode = selectedRow.Field<int>("TreeAccCode");
+
+            //var filteredRows = _allAccountsData.AsEnumerable()
+            //    .Where(r =>
+            //    {
+            //        int? parentAccID = r.Field<int?>("ParentAccID");
+            //        bool isHasChildren = r.Field<bool>("IsHasChildren");
+            //        return parentAccID == parentTreeCode && !isHasChildren && MatchRadioFilter(r);
+            //    });
+
+            //if (filteredRows.Any())
+            //{
+            //    DataTable childAccounts = filteredRows.CopyToDataTable();
+
+            //    if (!childAccounts.Columns.Contains("ParentName"))
+            //        childAccounts.Columns.Add("ParentName", typeof(string));
+            //    if (!childAccounts.Columns.Contains("BalanceWithState"))
+            //        childAccounts.Columns.Add("BalanceWithState", typeof(string));
+
+            //    foreach (DataRow row in childAccounts.Rows)
+            //    {
+            //        string fullPath = GetSafeStringValue(row, "FullPath");
+            //        string[] pathParts = fullPath.Split(new string[] { " → " }, StringSplitOptions.None);
+            //        string parentName = pathParts.Length > 1 ? pathParts[pathParts.Length - 2] : "---";
+            //        row["ParentName"] = parentName;
+
+            //        decimal balance = GetSafeDecimalValue(row, "Balance");
+            //        string balanceState = GetSafeStringValue(row, "BalanceState");
+            //        string balanceWithState = FormatBalanceWithState(balance, balanceState);
+            //        row["BalanceWithState"] = balanceWithState;
+            //    }
+
+            //    DGV.DataSource = childAccounts;
+            //}
+            //else
+            //{
+            //    DGV.DataSource = null;
+            //}
+        }
+
+
+
 
         private void DGV_SelectionChanged(object sender, EventArgs e)
         {
@@ -190,119 +401,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             return false;
         }
         #endregion
-        private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            txtSearch.Clear();//الكود الاصلى
-
-            // التحقق من أن e و e.Node ليسا null
-            if (e?.Node == null) return;
-
-            // إعادة تعيين التنسيق السابق
-            if (_lastSelectedNode != null)
-            {
-                _lastSelectedNode.ForeColor = treeViewAccounts.ForeColor;
-            }
-
-            // تطبيق التنسيق الجديد
-            e.Node.ForeColor = Color.Red;
-            _lastSelectedNode = e.Node;
-
-            LoadChildAccountsToGrid(e.Node);
-            DGVStyle();
-
-            //الكود الجديد
-
-            // ==========================
-            // 0) التحقق من وجود عقدة محددة
-            // ==========================
-            if (treeViewAccounts.SelectedNode == null)
-                return;
-
-            TreeNode selectedNode = treeViewAccounts.SelectedNode;
-
-            // التأكد من أن الـ Tag يحتوي على DataRow
-            if (selectedNode.Tag is not DataRow row)
-                return;
-
-
-            // ==========================
-            // 2) استخراج بيانات الحساب
-            // ==========================
-            int treeAccCode = row.Field<int>("TreeAccCode");      // الترقيم الشجري الجديد
-            int accID = row.Field<int>("AccID");                  // المفتاح الأساسي فقط
-            string accName = row["AccName"]?.ToString() ?? string.Empty;
-            string accPath = row["FullPath"]?.ToString() ?? string.Empty;
-
-            bool hasChildren = row.Field<bool?>("IsHasChildren") ?? false;
-            bool hasDetails = row.Field<bool?>("IsHasDetails") ?? false;
-            bool isEnerAcc = row.Field<bool?>("IsEnerAcc") ?? false;
-
-            
-            // ==========================
-            // 4) تحديث التسميات في الواجهة
-            // ==========================
-            lblSelectedTreeNod.Text = $"{treeAccCode} - {accName}";      // عرض TreeAccCode بدل AccID
-            lblPathNode.Text = accPath;// المسار الكامل من الجذر إلى العقدة
-            lblAccID_Tree.Text = accID.ToString();
-            lblAccID_DGV.Text = string.Empty;
-            DGV.ClearSelection();
-
-            // ==========================
-            // 6) التحقق من الأصول الثابتة (Parent = 12)
-            // ==========================
-            if (!hasDetails)
-            {
-                lblAccDataDetails.Text = "";
-                tlpBtnExec.Enabled = false;
-            }
-            else
-            {
-                bool hasFixedAssetParent = false;
-                TreeNode? currentNode = selectedNode;
-
-                // البحث في جميع الآباء حتى الجذر للتحقق من TreeAccCode = 12
-                while (currentNode != null)
-                {
-                    if (currentNode.Tag is DataRow parentRow &&
-                        Convert.ToInt32(parentRow["TreeAccCode"]) == 12)
-                    {
-                        hasFixedAssetParent = true;
-                        break;
-                    }
-                    currentNode = currentNode.Parent;
-                }
-
-                // تغيير النص بناءً على النتيجة
-                lblAccDataDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
-                tlpBtnExec.Enabled = true;
-
-                // تغيير ارتفاع صفوف الـ TableLayoutPanel بناءً على النتيجة
-                if (hasFixedAssetParent)
-                {
-                    // الصف الأول 1% والثاني 99%
-                    tlpDetailsData.RowStyles[0].Height = 1;
-                    tlpDetailsData.RowStyles[0].SizeType = SizeType.Percent;
-
-                    tlpDetailsData.RowStyles[1].Height = 99;
-                    tlpDetailsData.RowStyles[1].SizeType = SizeType.Percent;
-                }
-                else
-                {
-                    // الصف الأول 99% والثاني 1%
-                    tlpDetailsData.RowStyles[0].Height = 99;
-                    tlpDetailsData.RowStyles[0].SizeType = SizeType.Percent;
-
-                    tlpDetailsData.RowStyles[1].Height = 1;
-                    tlpDetailsData.RowStyles[1].SizeType = SizeType.Percent;
-                }
-
-            }
-
-            // ==========================
-            // 7) تحميل التقارير الخاصة بالحساب المحدد
-            // ==========================
-            //            LoadReportsForSelectedAccount();
-        }
         private void RadioFilter_CheckedChanged(object? sender, EventArgs e)
         {
             // نعيد تطبيق الفلترة عند تغيير أي راديو
@@ -371,51 +469,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             DGV.ClearSelection();
         }
 
-        private void LoadChildAccountsToGrid(TreeNode? selectedNode)
-        {
-            if (selectedNode?.Tag == null || _allAccountsData == null) return;
-
-            DataRow selectedRow = (DataRow)selectedNode.Tag;
-            int parentTreeCode = selectedRow.Field<int>("TreeAccCode");
-
-            var filteredRows = _allAccountsData.AsEnumerable()
-                .Where(r =>
-                {
-                    int? parentAccID = r.Field<int?>("ParentAccID");
-                    bool isHasChildren = r.Field<bool>("IsHasChildren");
-                    return parentAccID == parentTreeCode && !isHasChildren && MatchRadioFilter(r);
-                });
-
-            if (filteredRows.Any())
-            {
-                DataTable childAccounts = filteredRows.CopyToDataTable();
-
-                if (!childAccounts.Columns.Contains("ParentName"))
-                    childAccounts.Columns.Add("ParentName", typeof(string));
-                if (!childAccounts.Columns.Contains("BalanceWithState"))
-                    childAccounts.Columns.Add("BalanceWithState", typeof(string));
-
-                foreach (DataRow row in childAccounts.Rows)
-                {
-                    string fullPath = GetSafeStringValue(row, "FullPath");
-                    string[] pathParts = fullPath.Split(new string[] { " → " }, StringSplitOptions.None);
-                    string parentName = pathParts.Length > 1 ? pathParts[pathParts.Length - 2] : "---";
-                    row["ParentName"] = parentName;
-
-                    decimal balance = GetSafeDecimalValue(row, "Balance");
-                    string balanceState = GetSafeStringValue(row, "BalanceState");
-                    string balanceWithState = FormatBalanceWithState(balance, balanceState);
-                    row["BalanceWithState"] = balanceWithState;
-                }
-
-                DGV.DataSource = childAccounts;//System.InvalidOperationException: 'Cross-thread operation not valid: Control 'DGV' accessed from a thread other than the thread it was created on.'
-            }
-            else
-            {
-                DGV.DataSource = null;
-            }
-        }
-        // ==============================================================
+    
         private bool MatchRadioFilter(DataRow r)
         {
             decimal balance = GetSafeDecimalValue(r, "Balance");
@@ -570,6 +624,28 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 lblCountAndTotals.Text = string .Empty ;
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         #region !!!!! منطقة البحث  !!!!!!!!!!
