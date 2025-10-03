@@ -1,5 +1,6 @@
 ﻿using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
+using MizanOriginalSoft.Views.Forms.MainForms;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -189,7 +190,133 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             return false;
         }
         #endregion
-        private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
+        //=========================================================================
+        private async void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            txtSearch.Clear();
+
+            // التحقق من أن e و e.Node ليسا null
+            if (e?.Node == null) return;
+
+            // إعادة تعيين التنسيق السابق
+            if (_lastSelectedNode != null)
+            {
+                _lastSelectedNode.ForeColor = treeViewAccounts.ForeColor;
+            }
+
+            // تطبيق التنسيق الجديد
+            e.Node.ForeColor = Color.Red;
+            _lastSelectedNode = e.Node;
+
+            // ===============================
+            // إظهار شاشة التحميل
+            // ===============================
+            frmLoading loadingForm = new frmLoading("جاري تحميل بيانات الحساب ...");
+            loadingForm.StartPosition = FormStartPosition.CenterParent;
+            loadingForm.Show();
+            loadingForm.Refresh();   // مهم عشان تظهر وتتحرك الـ ProgressBar
+
+            try
+            {
+                // تشغيل الكود التقيل في الخلفية
+                await Task.Run(() =>
+                {
+                    LoadChildAccountsToGrid(e.Node);
+                    // لو عندك تحميل تقارير كمان
+                    // LoadReportsForSelectedAccount();
+                });
+            }
+            finally
+            {
+                // إغلاق شاشة الانتظار بعد ما يخلص التحميل
+                if (!loadingForm.IsDisposed)
+                    loadingForm.Close();
+            }
+
+            // ===============================
+            // تنسيق الـ DGV بعد التحميل
+            // ===============================
+            DGVStyle();
+
+            // ===============================
+            // تحديث بيانات العقدة المختارة
+            // ===============================
+            if (treeViewAccounts.SelectedNode?.Tag is DataRow row)
+            {
+                int treeAccCode = row.Field<int>("TreeAccCode");      // الترقيم الشجري الجديد
+                int accID = row.Field<int>("AccID");                  // المفتاح الأساسي فقط
+                string accName = row["AccName"]?.ToString() ?? string.Empty;
+                string accPath = row["FullPath"]?.ToString() ?? string.Empty;
+
+                bool hasChildren = row.Field<bool?>("IsHasChildren") ?? false;
+                bool hasDetails = row.Field<bool?>("IsHasDetails") ?? false;
+                bool isEnerAcc = row.Field<bool?>("IsEnerAcc") ?? false;
+
+                lblSelectedTreeNod.Text = $"{treeAccCode} - {accName}"; // عرض TreeAccCode بدل AccID
+                lblPathNode.Text = accPath;                             // المسار الكامل
+                lblAccID_Tree.Text = accID.ToString();
+                lblAccID_DGV.Text = string.Empty;
+                DGV.ClearSelection();
+
+                // ==========================
+                // 6) التحقق من الأصول الثابتة (Parent = 12)
+                // ==========================
+                if (!hasDetails)
+                {
+                    lblAccDataDetails.Text = "";
+                    tlpBtnExec.Enabled = false;
+                }
+                else
+                {
+                    bool hasFixedAssetParent = false;
+                    TreeNode? currentNode = treeViewAccounts.SelectedNode;
+
+                    // البحث في جميع الآباء حتى الجذر للتحقق من TreeAccCode = 12
+                    while (currentNode != null)
+                    {
+                        if (currentNode.Tag is DataRow parentRow &&
+                            Convert.ToInt32(parentRow["TreeAccCode"]) == 12)
+                        {
+                            hasFixedAssetParent = true;
+                            break;
+                        }
+                        currentNode = currentNode.Parent;
+                    }
+
+                    // تغيير النص بناءً على النتيجة
+                    lblAccDataDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
+                    tlpBtnExec.Enabled = true;
+
+                    // تغيير ارتفاع صفوف الـ TableLayoutPanel بناءً على النتيجة
+                    if (hasFixedAssetParent)
+                    {
+                        // الصف الأول 1% والثاني 99%
+                        tlpDetailsData.RowStyles[0].Height = 1;
+                        tlpDetailsData.RowStyles[0].SizeType = SizeType.Percent;
+
+                        tlpDetailsData.RowStyles[1].Height = 99;
+                        tlpDetailsData.RowStyles[1].SizeType = SizeType.Percent;
+                    }
+                    else
+                    {
+                        // الصف الأول 99% والثاني 1%
+                        tlpDetailsData.RowStyles[0].Height = 99;
+                        tlpDetailsData.RowStyles[0].SizeType = SizeType.Percent;
+
+                        tlpDetailsData.RowStyles[1].Height = 1;
+                        tlpDetailsData.RowStyles[1].SizeType = SizeType.Percent;
+                    }
+                }
+            }
+
+            // ===============================
+            // تحميل التقارير الخاصة بالحساب (لو موجودة)
+            // ===============================
+            // LoadReportsForSelectedAccount();
+        }
+
+        //==========================================================================
+        private void treeViewAccounts_AfterSelect_(object sender, TreeViewEventArgs e)
         {
             txtSearch.Clear();//الكود الاصلى
 
@@ -302,6 +429,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // ==========================
             //            LoadReportsForSelectedAccount();
         }
+        //============================================================================
         private void RadioFilter_CheckedChanged(object? sender, EventArgs e)
         {
             // نعيد تطبيق الفلترة عند تغيير أي راديو
