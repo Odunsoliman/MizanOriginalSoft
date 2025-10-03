@@ -71,7 +71,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                                            .OrderBy(n =>
                                            {
                                                if (n.Tag is DataRow row)
-                                                   return row.Field<int>("TreeAccCode");//System.InvalidCastException: 'Cannot cast DBNull. Value to type 'System.Int32'. Please use a nullable type.'
+                                                   return row.Field<int>("TreeAccCode");
                                                return 0;
                                            })
                                            .ToList();
@@ -370,7 +370,78 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             DGV.ClearSelection();
         }
 
+        //===============================================================
         private void LoadChildAccountsToGrid(TreeNode? selectedNode)
+        {
+            if (selectedNode?.Tag == null || _allAccountsData == null) return;
+
+            DataRow selectedRow = (DataRow)selectedNode.Tag;
+            int parentTreeCode = selectedRow.Field<int>("TreeAccCode");
+
+            // فلترة باستخدام RowFilter بدل CopyToDataTable
+            string filter = $"ParentAccID = {parentTreeCode} AND IsHasChildren = 0";
+
+            // فلترة الراديو
+            if (rdoMadeen.Checked)
+                filter += " AND Balance > 0";
+            else if (rdoDaeen.Checked)
+                filter += " AND Balance < 0";
+            else if (rdoEqual.Checked)
+                filter += " AND Balance = 0";
+
+            // تطبيق الفلترة
+            _allAccountsData.DefaultView.RowFilter = filter;
+
+            // ربط الجريد بالـ DefaultView مباشرة
+            DGV.DataSource = _allAccountsData.DefaultView;
+
+            // الأعمدة ParentName و BalanceWithState نحسبهم مرة واحدة فقط
+            EnsureExtraColumns();
+            FillExtraColumns(_allAccountsData.DefaultView);
+
+            DGVStyle();
+        }
+
+        /// <summary>
+        /// التأكد من وجود الأعمدة المضافة لمرة واحدة فقط
+        /// </summary>
+        private void EnsureExtraColumns()
+        {
+            if (!_allAccountsData.Columns.Contains("ParentName"))
+                _allAccountsData.Columns.Add("ParentName", typeof(string));
+            if (!_allAccountsData.Columns.Contains("BalanceWithState"))
+                _allAccountsData.Columns.Add("BalanceWithState", typeof(string));
+        }
+
+        /// <summary>
+        /// تعبئة الأعمدة المضافة (مرة واحدة فقط عند الحاجة)
+        /// </summary>
+        private void FillExtraColumns(DataView dv)
+        {
+            foreach (DataRowView drv in dv)
+            {
+                DataRow row = drv.Row;
+
+                if (string.IsNullOrEmpty(row["ParentName"]?.ToString()))
+                {
+                    string fullPath = GetSafeStringValue(row, "FullPath");
+                    string[] pathParts = fullPath.Split(new string[] { " → " }, StringSplitOptions.None);
+                    string parentName = pathParts.Length > 1 ? pathParts[pathParts.Length - 2] : "---";
+                    row["ParentName"] = parentName;
+                }
+
+                if (string.IsNullOrEmpty(row["BalanceWithState"]?.ToString()))
+                {
+                    decimal balance = GetSafeDecimalValue(row, "Balance");
+                    string balanceState = GetSafeStringValue(row, "BalanceState");
+                    string balanceWithState = FormatBalanceWithState(balance, balanceState);
+                    row["BalanceWithState"] = balanceWithState;
+                }
+            }
+        }
+
+        // ===============================================================
+        private void LoadChildAccountsToGrid_(TreeNode? selectedNode)
         {
             if (selectedNode?.Tag == null || _allAccountsData == null) return;
 
@@ -414,7 +485,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 DGV.DataSource = null;
             }
         }
-
+        // ==============================================================
         private bool MatchRadioFilter(DataRow r)
         {
             decimal balance = GetSafeDecimalValue(r, "Balance");
