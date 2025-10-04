@@ -1719,21 +1719,20 @@ END
         }
 
         // داخل DBServiecs
-        public static string Acc_DeleteAccount(int accID)
+        public static string Acc_DeleteAccount(int treeAccCode)
         {
             // تمرير المعاملات كـ Dictionary
             var parameters = new Dictionary<string, object>
             {
-                { "@AccID", accID }
+                { "@TreeAccCode", treeAccCode }
             };
 
-            // استدعاء الدالة الجديدة
+            // استدعاء الإجراء الجديد
             return dbHelper.ExecuteNonQueryWithParams(
                 "Acc_DeleteAccount",
                 parameters: parameters,
                 expectMessageOutput: true); // إذا كان الإجراء يرجع رسالة
         }
-
 
         // جلب حساب ###
         public static DataTable Acc_GetData(int accID)
