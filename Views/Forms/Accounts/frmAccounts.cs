@@ -24,10 +24,10 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         {
             DBServiecs.A_UpdateAllDataBase();
             LoadAccountsTree();
-            rdoAll.CheckedChanged += RadioFilter_CheckedChanged;
-            rdoMadeen.CheckedChanged += RadioFilter_CheckedChanged;
-            rdoDaeen.CheckedChanged += RadioFilter_CheckedChanged;
-            rdoEqual.CheckedChanged += RadioFilter_CheckedChanged;
+            rdoAll.CheckedChanged += rdo_CheckedChanged;
+            rdoDaeen.CheckedChanged += rdo_CheckedChanged;
+            rdoMadeen.CheckedChanged += rdo_CheckedChanged;
+            rdoEqual.CheckedChanged += rdo_CheckedChanged;
 
         }
 
@@ -227,19 +227,105 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
         // ✅ حدث يتم تنفيذه عند اختيار أي عقدة في الشجرة
+        private TreeNode? _lastSelectedNode = null; // للاحتفاظ بالعقدة السابقة
+
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
             // ① نتأكد أن هناك عقدة مختارة
             if (e.Node?.Tag == null) return;
 
-            // ② نستخرج الصف (DataRow) المرتبط بالعقدة المختارة
-            DataRow row = (DataRow)e.Node.Tag;
+            TreeNode selectedNode = e.Node;
 
-            // ③ نأخذ قيمة TreeAccCode الخاصة بهذه العقدة
-            int parentTreeAccCode = row.Field<int>("TreeAccCode");
+            // ==========================
+            // 1) تلوين العقدة المختارة بالخط الأحمر
+            // ==========================
+            if (_lastSelectedNode != null)
+            {
+                _lastSelectedNode.ForeColor = treeViewAccounts.ForeColor; // إعادة اللون الافتراضي
+            }
+            selectedNode.ForeColor = Color.Red;
+            _lastSelectedNode = selectedNode;
 
-            // ④ نستدعي الدالة التي تحضر الأبناء وتعرضهم في الـ DGV
-            LoadChildrenInDGV(e.Node); // نمرر العقدة المختارة بالكامل
+            // ==========================
+            // 2) استخراج الصف (DataRow) من العقدة
+            // ==========================
+            if (selectedNode.Tag is not DataRow row) return;
+
+            int treeAccCode = row.Field<int>("TreeAccCode");   // الترقيم الشجري
+            int accID = row.Field<int>("AccID");               // المفتاح الأساسي
+            string accName = row["AccName"]?.ToString() ?? string.Empty;
+            string accPath = row["FullPath"]?.ToString() ?? string.Empty;
+
+            bool hasChildren = row.Field<bool?>("IsHasChildren") ?? false;
+            bool hasDetails = row.Field<bool?>("IsHasDetails") ?? false;
+            bool isEnerAcc = row.Field<bool?>("IsEnerAcc") ?? false;
+
+            // ==========================
+            // 3) تحديث الـ Labels
+            // ==========================
+            lblSelectedTreeNod.Text = $"{treeAccCode} - {accName}";
+            lblPathNode.Text = accPath;
+            lblAccID_Tree.Text = accID.ToString();
+            lblAccID_DGV.Text = string.Empty;
+            DGV.ClearSelection();
+
+            // ==========================
+            // 4) تحديث بيانات التفاصيل
+            // ==========================
+            if (!hasDetails)
+            {
+                lblAccDataDetails.Text = "";
+                tlpBtnExec.Enabled = false;
+            }
+            else
+            {
+                bool hasFixedAssetParent = false;
+                TreeNode? currentNode = selectedNode;
+
+                // البحث في جميع الآباء حتى الجذر للتحقق من TreeAccCode = 12
+                while (currentNode != null)
+                {
+                    if (currentNode.Tag is DataRow parentRow &&
+                        Convert.ToInt32(parentRow["TreeAccCode"]) == 12)
+                    {
+                        hasFixedAssetParent = true;
+                        break;
+                    }
+                    currentNode = currentNode.Parent;
+                }
+
+                // تغيير النص بناءً على النتيجة
+                lblAccDataDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
+                tlpBtnExec.Enabled = true;
+
+                // تغيير ارتفاع صفوف الـ TableLayoutPanel
+                if (hasFixedAssetParent)
+                {
+                    tlpDetailsData.RowStyles[0].Height = 1;
+                    tlpDetailsData.RowStyles[0].SizeType = SizeType.Percent;
+
+                    tlpDetailsData.RowStyles[1].Height = 99;
+                    tlpDetailsData.RowStyles[1].SizeType = SizeType.Percent;
+                }
+                else
+                {
+                    tlpDetailsData.RowStyles[0].Height = 99;
+                    tlpDetailsData.RowStyles[0].SizeType = SizeType.Percent;
+
+                    tlpDetailsData.RowStyles[1].Height = 1;
+                    tlpDetailsData.RowStyles[1].SizeType = SizeType.Percent;
+                }
+            }
+
+            // ==========================
+            // 5) تحميل الأبناء في الـ DGV
+            // ==========================
+            LoadChildrenInDGV(selectedNode);
+
+            // ==========================
+            // 6) تحميل التقارير (ممكن تفعّله لاحقًا)
+            // ==========================
+            // LoadReportsForSelectedAccount();
         }
 
         private void LoadChildrenInDGV(TreeNode selectedNode)
@@ -263,8 +349,35 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 row["ParentName"] = parentName;
             }
 
+            // -----------------------------
+            // ✅ إنشاء DataView للتصفية
+            // -----------------------------
+            DataView dv = dt.DefaultView;
+
+            // فلترة بالراديو بوتن
+            List<string> filters = new List<string>();
+
+            if (rdoDaeen.Checked)
+                filters.Add("Balance < 0");
+            else if (rdoMadeen.Checked)
+                filters.Add("Balance > 0");
+            else if (rdoEqual.Checked)
+                filters.Add("Balance = 0");
+            // لو rdoAll.Checked → مفيش شرط إضافي
+
+            // فلترة بالبحث في الاسم
+            string searchText = txtSearch.Text.Trim();
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                // LIKE مع % عشان يجيب أي جزء من الاسم
+                filters.Add($"AccName LIKE '%{searchText.Replace("'", "''")}%'");
+            }
+
+            // تطبيق كل الفلاتر
+            dv.RowFilter = filters.Count > 0 ? string.Join(" AND ", filters) : "";
+
             // ربط الجدول بالـ DGV
-            DGV.DataSource = dt.DefaultView;
+            DGV.DataSource = dv;
             DGVStyle();
         }
 
@@ -390,6 +503,24 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
+        private void rdo_CheckedChanged(object? sender, EventArgs e)
+        {
+            if (sender is RadioButton rdo && rdo.Checked)
+            {
+                if (treeViewAccounts.SelectedNode != null)
+                {
+                    LoadChildrenInDGV(treeViewAccounts.SelectedNode);
+                }
+            } 
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            if (treeViewAccounts.SelectedNode != null)
+            {
+                LoadChildrenInDGV(treeViewAccounts.SelectedNode);
+            }
+        }
 
 
 
@@ -410,7 +541,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
 
         #region !!!!!!! AfterSelect  بعد تحديد عقدة !!!!!!!!!!!!!!
-        private TreeNode? _lastSelectedNode = null;
 
         private void treeViewAccounts_AfterSelect_(object sender, TreeViewEventArgs e)
         {
@@ -679,138 +809,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             return false;
         }
         #endregion
-        private void RadioFilter_CheckedChanged(object? sender, EventArgs e)
-        {
-            // نعيد تطبيق الفلترة عند تغيير أي راديو
-            ApplyFilters();
-            DGVStyle();
-        }
+        
 
-        private void txtSearch_TextChanged(object? sender, EventArgs? e)
-        {
-            string searchText = txtSearch.Text.Trim();
-
-            if (string.IsNullOrEmpty(searchText))
-            {
-                // ✅ لو مفيش نص → نعرض أبناء العقدة المختارة فقط
-                LoadChildAccountsToGrid(treeViewAccounts.SelectedNode);
-            }
-            else
-            {
-                // ✅ البحث في الحسابات النهائية فقط (IsHasChildren = false) + فلترة الراديو
-                var filteredRows = _allAccountsData.AsEnumerable()
-                    .Where(r =>
-                    {
-                        bool isLeaf = !(r.Field<bool?>("IsHasChildren") ?? false);
-                        if (!isLeaf) return false;
-
-                        string accName = GetSafeStringValue(r, "AccName");
-                        string accCode = r["TreeAccCode"]?.ToString() ?? "";
-
-                        bool matchesText = accName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                                           accCode.Contains(searchText);
-
-                        return matchesText && MatchRadioFilter(r); // ← إضافة فلترة الراديو
-                    });
-
-                if (filteredRows.Any())
-                {
-                    DataTable searchResult = filteredRows.CopyToDataTable();
-
-                    if (!searchResult.Columns.Contains("ParentName"))
-                        searchResult.Columns.Add("ParentName", typeof(string));
-                    if (!searchResult.Columns.Contains("BalanceWithState"))
-                        searchResult.Columns.Add("BalanceWithState", typeof(string));
-
-                    foreach (DataRow row in searchResult.Rows)
-                    {
-                        string fullPath = GetSafeStringValue(row, "FullPath");
-                        string[] pathParts = fullPath.Split(new string[] { " → " }, StringSplitOptions.None);
-                        string parentName = pathParts.Length > 1 ? pathParts[pathParts.Length - 2] : "---";
-                        row["ParentName"] = parentName;
-
-                        decimal balance = GetSafeDecimalValue(row, "Balance");
-                        string balanceState = GetSafeStringValue(row, "BalanceState");
-                        string balanceWithState = FormatBalanceWithState(balance, balanceState);
-                        row["BalanceWithState"] = balanceWithState;
-                    }
-
-                    DGV.DataSource = searchResult;
-                }
-                else
-                {
-                    DGV.DataSource = null;
-                }
-            }
-
-            DGVStyle();
-            DGV.ClearSelection();
-        }
-
-    
-        private bool MatchRadioFilter(DataRow r)
-        {
-            decimal balance = GetSafeDecimalValue(r, "Balance");
-
-            if (rdoAll.Checked) return true;               // الكل
-            if (rdoMadeen.Checked) return balance > 0;     // مدين
-            if (rdoDaeen.Checked) return balance < 0;      // دائن
-            if (rdoEqual.Checked) return balance == 0;     // متساوي
-            DGVStyle();
-            return true;
-        }
-
-        private void ApplyFilters()
-        {
-            string searchText = txtSearch.Text.Trim();
-
-            if (string.IsNullOrEmpty(searchText))
-            {
-                // ✅ لو مفيش نص في البحث → نعرض أبناء العقدة الحالية
-                LoadChildAccountsToGrid(treeViewAccounts.SelectedNode);
-            }
-            else
-            {
-                // ✅ تنفيذ البحث بنفس المنطق
-                txtSearch_TextChanged(null, null);
-            }
-        }
-
-
-        private string GetSafeStringValue(DataRow row, string columnName)
-        {
-            if (row == null || row.IsNull(columnName)) return string.Empty;
-            try { return row.Field<string>(columnName) ?? string.Empty; }
-            catch { return string.Empty; }
-        }
-
-        private decimal GetSafeDecimalValue(DataRow row, string columnName)
-        {
-            if (row == null || row.IsNull(columnName)) return 0;
-            try { return row.Field<decimal>(columnName); }
-            catch { return 0; }
-        }
-
-        private string FormatBalanceWithState(decimal balance, string balanceState)
-        {
-            if (balance == 0) return string.Empty;
-
-            string formattedBalance = balance.ToString("N2");
-
-            switch (balanceState?.ToLower())
-            {
-                case "مدين":
-                case "debit":
-                    return $"{formattedBalance} مدين";
-                case "دائن":
-                case "credit":
-                    return $"{formattedBalance} دائن";
-                default:
-                    return formattedBalance;
-            }
-        }
-
- 
+  
 
 
 
