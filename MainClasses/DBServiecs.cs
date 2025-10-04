@@ -15,29 +15,17 @@ namespace MizanOriginalSoft.MainClasses
     internal class DBServiecs
     {
         #region ********************  Log In Form ********************
-        ////تحديث بيانات قاعدة البيانات
-        //public static string A_UpdateAllDataBase()//@@@ 
-        //{
-        //    string result = dbHelper.ExecuteNonQueryNoParamsWithMessage("A_UpdateAllDataBase", expectMessageOutput: true);
-        //    if (!string.IsNullOrEmpty(result))
-        //        return result;
-
-        //    return "تم التحديث بنجاح";
-        //}
-        // تحديث بيانات قاعدة البيانات
-        public static string A_UpdateAllDataBase()
+        //تحديث بيانات قاعدة البيانات
+        public static string A_UpdateAllDataBase()//@@@ 
         {
-            // لا يوجد بارامترات، لذا نمرر null
-            string result = dbHelper.ExecuteNonQueryWithParams(
-                "A_UpdateAllDataBase",
-                parameters: null,
-                expectMessageOutput: true);
-
+            string result = dbHelper.ExecuteNonQueryNoParamsWithMessage("A_UpdateAllDataBase", expectMessageOutput: true);
             if (!string.IsNullOrEmpty(result))
                 return result;
 
             return "تم التحديث بنجاح";
         }
+        // تحديث بيانات قاعدة البيانات
+    
 
 
 

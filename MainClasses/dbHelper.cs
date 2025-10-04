@@ -420,7 +420,7 @@ namespace MizanOriginalSoft.MainClasses
             }
         }
 
-        public static string ExecuteNonQueryNoParamsWithMessage_(string procedureName, bool expectMessageOutput = false)
+        public static string ExecuteNonQueryNoParamsWithMessage(string procedureName, bool expectMessageOutput = false)
         {
             try
             {
