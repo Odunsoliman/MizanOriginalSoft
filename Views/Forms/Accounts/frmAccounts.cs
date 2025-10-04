@@ -1075,12 +1075,15 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         #endregion
 
+        #region !!!!!!!! حذف حساب او تفاصيل  !!!!!!!!!!!!!!
         private void btnDeleteAccFromTree_Click(object sender, EventArgs e)
         {
             if (treeViewAccounts.SelectedNode?.Tag is DataRow row)
             {
                 int accID = Convert.ToInt32(row["AccID"]);
-                DeleteAcc(accID);
+                // تخزين مفتاح الأب قبل الحذف
+                int? parentAccID = row.Field<int?>("ParentAccID");
+                DeleteAcc(accID, parentAccID, null);
             }
             else
             {
@@ -1093,7 +1096,10 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             if (DGV.CurrentRow?.DataBoundItem is DataRowView rowView)
             {
                 int accID = Convert.ToInt32(rowView.Row["AccID"]);
-                DeleteAcc(accID);
+                // تخزين مفتاح الأب والابن السابق قبل الحذف
+                int? parentAccID = rowView.Row.Field<int?>("ParentAccID");
+                int? previousSiblingID = GetPreviousSiblingID(DGV, rowView.Row); // دالة مساعدة
+                DeleteAcc(accID, parentAccID, previousSiblingID);
             }
             else
             {
@@ -1101,7 +1107,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        private void DeleteAcc(int accID)
+        // الدالة المعدلة لاستقبال معلومات الأب والابن السابق
+        private void DeleteAcc(int accID, int? parentAccID, int? previousSiblingID)
         {
             // استدعاء الإجراء المخزن والحصول على الرسالة
             string outputMsg = DBServiecs.Acc_DeleteAccount(accID);
@@ -1109,296 +1116,79 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // عرض رسالة النجاح أو الخطأ للمستخدم
             MessageBox.Show(outputMsg, "نتيجة العملية", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            // إذا كانت الرسالة تشير إلى نجاح العملية، أعيد تحميل الشجرة أو الجدول
+            // إذا كانت الرسالة تشير إلى نجاح العملية، أعيد تحميل الشجرة والجدول
             if (!string.IsNullOrEmpty(outputMsg) && outputMsg.StartsWith("تم"))
             {
                 LoadAccountsTree();
 
-                if (treeViewAccounts.SelectedNode != null)
-                    LoadChildAccountsToGrid(treeViewAccounts.SelectedNode);
+                if (parentAccID.HasValue)
+                {
+                    // إعادة تحديد الأب في الشجرة
+                    TreeNode? parentNode = FindTreeNodeByAccID(treeViewAccounts.Nodes, parentAccID.Value);
+                    if (parentNode != null)
+                    {
+                        treeViewAccounts.SelectedNode = parentNode;
+                        LoadChildAccountsToGrid(parentNode);
+
+                        // إذا كان هناك ابن سابق، حدده في الجدول
+                        if (previousSiblingID.HasValue)
+                        {
+                            SelectRowInDGV(DGV, previousSiblingID.Value);
+                        }
+                    }
+                }
             }
         }
 
+        // دالة مساعدة للعثور على Node حسب AccID
+        /// <summary>
+        /// يبحث عن TreeNode في TreeView حسب AccID بشكل متكرر.
+        /// </summary>
+        /// <param name="nodes">مجموعة Nodes الحالية</param>
+        /// <param name="accID">رقم الحساب المطلوب</param>
+        /// <returns>TreeNode المطابق أو null إذا لم يوجد</returns>
+        private TreeNode? FindTreeNodeByAccID(TreeNodeCollection nodes, int accID)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Tag is DataRow row)
+                {
+                    int? nodeAccID = row.Field<int?>("AccID");
+                    if (nodeAccID.HasValue && nodeAccID.Value == accID)
+                        return node;
+                }
+
+                TreeNode? found = FindTreeNodeByAccID(node.Nodes, accID);
+                if (found != null)
+                    return found;
+            }
+
+            return null; // إذا لم نجد أي Node مطابق
+        }
+
+        // دالة مساعدة لتحديد الصف في DGV حسب AccID
+        private void SelectRowInDGV(DataGridView dgv, int accID)
+        {
+            foreach (DataGridViewRow row in dgv.Rows)
+            {
+                if (row.DataBoundItem is DataRowView drv && drv.Row.Field<int>("AccID") == accID)
+                {
+                    dgv.CurrentCell = row.Cells[0]; // أو أي عمود رئيسي
+                    break;
+                }
+            }
+        }
+
+        // دالة مساعدة للحصول على الابن السابق للمحذوف في DGV
+        private int? GetPreviousSiblingID(DataGridView dgv, DataRow currentRow)
+        {
+            int index = dgv.Rows.IndexOf(dgv.CurrentRow);
+            if (index > 0 && dgv.Rows[index - 1].DataBoundItem is DataRowView prevRowView)
+            {
+                return prevRowView.Row.Field<int>("AccID");
+            }
+            return null;
+        }
+        #endregion 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//using MizanOriginalSoft.MainClasses;
-//using System;
-//using System.Collections.Generic;
-//using System.ComponentModel;
-//using System.Data;
-//using System.Drawing;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using System.Windows.Forms;
-
-//namespace MizanOriginalSoft.Views.Forms.Accounts
-//{
-//    public partial class frmAccounts : Form
-//    {
-//        private DataTable _allAccountsData; // لتخزين جميع البيانات
-//        public frmAccounts()//تحذير 8618
-//        {
-//            InitializeComponent();
-//        }
-
-//        private void frmAccounts_Load(object sender, EventArgs e)
-//        {
-//            LoadAccountsTree();
-//        }
-
-//        private void LoadAccountsTree()
-//        {
-//            treeViewAccounts.Nodes.Clear();
-//            _allAccountsData = DBServiecs.Acc_GetChart() ?? new DataTable();
-//            if (_allAccountsData.Rows.Count == 0) return;
-
-//            // Dictionary لتخزين العقد أثناء البناء
-//            Dictionary<string, TreeNode> nodeDict = new Dictionary<string, TreeNode>();
-
-//            // عرض الحسابات التي لها فروع فقط
-//            var parentRows = _allAccountsData.AsEnumerable()
-//                               .Where(r => r.Field<bool>("IsHasChildren"))
-//                               .ToList();
-
-//            foreach (DataRow row in parentRows)
-//            {
-//                string accName = row["AccName"] as string ?? string.Empty;
-//                if (string.IsNullOrWhiteSpace(accName)) continue;
-
-//                string? treeCode = row["TreeAccCode"].ToString();
-//                string? parentCode = row["ParentAccID"] != DBNull.Value ? row["ParentAccID"].ToString() : null;
-
-//                TreeNode? node = new TreeNode(accName) { Tag = row };
-//                nodeDict[treeCode] = node;
-
-//                if (string.IsNullOrEmpty(parentCode))
-//                    treeViewAccounts.Nodes.Add(node); // عقدة الجذر
-//                else if (nodeDict.TryGetValue(parentCode, out TreeNode? parentNode))
-//                    parentNode.Nodes.Add(node); // إضافة العقدة للوالد
-//                else
-//                    treeViewAccounts.Nodes.Add(node); // fallback في حالة عدم وجود والد
-//            }
-
-//            SortTreeNodes(treeViewAccounts.Nodes); // ترتيب العقد تصاعديًا حسب AccID
-//            treeViewAccounts.CollapseAll();        // طي جميع الفروع
-//        }
-
-//        private void SortTreeNodes(TreeNodeCollection nodes)
-//        {
-//            List<TreeNode> nodeList = nodes.Cast<TreeNode>()
-//                                           .OrderBy(n =>
-//                                           {
-//                                               if (n.Tag is DataRow row)
-//                                                   return row.Field<int>("TreeAccCode"); // كـ int
-//                                               return 0;
-//                                           })
-//                                           .ToList();
-
-//            nodes.Clear();
-//            foreach (TreeNode node in nodeList)
-//            {
-//                nodes.Add(node);
-//                SortTreeNodes(node.Nodes); // ترتيب الأبناء
-//            }
-//        }
-
-//        private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
-//        {
-//            LoadChildAccountsToGrid(e.Node);
-//            DGVStyle();
-//        }
-
-
-//        private void LoadChildAccountsToGrid(TreeNode? selectedNode)
-//        {
-//            if (selectedNode?.Tag == null || _allAccountsData == null) return;
-
-//            DataRow? selectedRow = selectedNode.Tag as DataRow;
-
-//            // القراءة الآمنة مع التحقق من القيمة
-//            int parentTreeCode = (selectedRow?.Field<int>("TreeAccCode")).GetValueOrDefault();
-
-//            var filteredRows = _allAccountsData.AsEnumerable()
-//                .Where(r =>
-//                {
-//                    int? parentAccID = r.Field<int?>("ParentAccID");
-//                    bool isHasChildren = r.Field<bool>("IsHasChildren");
-
-//                    return parentAccID == parentTreeCode && !isHasChildren;
-//                });
-
-//            // باقي الكود يبقى كما هو...
-//            if (filteredRows.Any())
-//            {
-//                DataTable childAccounts = filteredRows.CopyToDataTable();
-
-//                // إضافة الأعمدة الجديدة
-//                if (!childAccounts.Columns.Contains("ParentName"))
-//                    childAccounts.Columns.Add("ParentName", typeof(string));
-//                if (!childAccounts.Columns.Contains("BalanceWithState"))
-//                    childAccounts.Columns.Add("BalanceWithState", typeof(string));
-
-//                // تعبئة البيانات
-//                foreach (DataRow row in childAccounts.Rows)
-//                {
-//                    // اسم الأب من FullPath
-//                    string fullPath = GetSafeStringValue(row, "FullPath");
-//                    string[] pathParts = fullPath.Split(new string[] { " → " }, StringSplitOptions.None);
-//                    string parentName = pathParts.Length > 1 ? pathParts[pathParts.Length - 2] : "---";
-//                    row["ParentName"] = parentName;
-
-//                    // الرصيد المدمج مع الحالة
-//                    decimal balance = GetSafeDecimalValue(row, "Balance");
-//                    string balanceState = GetSafeStringValue(row, "BalanceState");
-//                    string balanceWithState = FormatBalanceWithState(balance, balanceState);
-//                    row["BalanceWithState"] = balanceWithState;
-//                }
-
-//                DGV.DataSource = childAccounts;
-//            }
-//            else
-//            {
-//                DGV.DataSource = null;
-//            }
-//        }
-//        // الدوال المساعدة لقراءة القيم بشكل آمن
-//        private int? GetSafeIntValue(DataRow row, string columnName)
-//        {
-//            if (row == null || row.IsNull(columnName)) return null;
-//            try { return row.Field<int>(columnName); }
-//            catch { return null; }
-//        }
-
-//        private bool GetSafeBoolValue(DataRow row, string columnName)
-//        {
-//            if (row == null || row.IsNull(columnName)) return false;
-//            try { return row.Field<bool>(columnName); }
-//            catch { return false; }
-//        }
-
-//        private decimal GetSafeDecimalValue(DataRow row, string columnName)
-//        {
-//            if (row == null || row.IsNull(columnName)) return 0;
-//            try { return row.Field<decimal>(columnName); }
-//            catch { return 0; }
-//        }
-
-//        private string GetSafeStringValue(DataRow row, string columnName)
-//        {
-//            if (row == null || row.IsNull(columnName)) return string.Empty;
-//            try { return row.Field<string>(columnName) ?? string.Empty; }
-//            catch { return string.Empty; }
-//        }
-//        // دالة لتنسيق الرصيد مع الحالة
-//        private string FormatBalanceWithState(decimal balance, string balanceState)
-//        {
-//            if (balance == 0)
-//                return string.Empty; // إخفاء إذا كان صفر
-
-//            string formattedBalance = balance.ToString("N2");
-
-//            switch (balanceState?.ToLower())
-//            {
-//                case "مدين":
-//                case "debit":
-//                    return $"{formattedBalance} مدين";
-//                case "دائن":
-//                case "credit":
-//                    return $"{formattedBalance} دائن";
-//                default:
-//                    return formattedBalance; // إذا لم تكن الحالة معروفة
-//            }
-//        }
-
-//        private void DGVStyle()
-//        {
-//            if (DGV.DataSource == null) return;
-
-//            // إخفاء جميع الأعمدة أولاً
-//            foreach (DataGridViewColumn column in DGV.Columns)
-//            {
-//                column.Visible = false;
-//            }
-
-//            // إظهار الأعمدة المطلوبة بالترتيب: اسم الحساب - اسم الأب - الرصيد المدمج
-//            string[] columnOrder = { "AccName", "ParentName", "BalanceWithState" };
-
-//            foreach (string columnName in columnOrder)
-//            {
-//                if (DGV.Columns.Contains(columnName))
-//                {
-//                    DGV.Columns[columnName].Visible = true;
-//                }
-//            }
-
-//            // ترتيب الأعمدة
-//            DGV.Columns["AccName"].DisplayIndex = 0;
-//            DGV.Columns["ParentName"].DisplayIndex = 1;
-//            DGV.Columns["BalanceWithState"].DisplayIndex = 2;
-
-//            // عناوين الأعمدة
-//            DGV.Columns["AccName"].HeaderText = "اسم الحساب";
-//            DGV.Columns["ParentName"].HeaderText = "اسم الأب";
-//            DGV.Columns["BalanceWithState"].HeaderText = "الرصيد";
-
-//            // نسب العرض 2:1:1
-//            int totalWidth = DGV.ClientRectangle.Width;
-//            DGV.Columns["AccName"].Width = (int)(totalWidth * 0.5);   // 50%
-//            DGV.Columns["ParentName"].Width = (int)(totalWidth * 0.25); // 25%
-//            DGV.Columns["BalanceWithState"].Width = (int)(totalWidth * 0.25); // 25%
-
-//            // باقي الإعدادات
-//            DGV.Font = new Font("Times New Roman", 12, FontStyle.Bold);
-//            DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Bold);
-//            DGV.RowHeadersVisible = false;
-//            DGV.AllowUserToAddRows = false;
-//            DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-//            DGV.ReadOnly = true;
-//            DGV.DefaultCellStyle.Font = new Font("Times New Roman", 11, FontStyle.Regular);
-//            DGV.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
-//            DGV.RowsDefaultCellStyle.BackColor = Color.White;
-
-//            // تنسيق عمود الرصيد المدمج
-//            if (DGV.Columns.Contains("BalanceWithState"))
-//            {
-//                DGV.Columns["BalanceWithState"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-//            }
-
-//            // تنسيق عمود اسم الحساب واسم الأب
-//            DGV.Columns["AccName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-//            DGV.Columns["ParentName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-
-//            // تحسين المظهر
-//            DGV.BorderStyle = BorderStyle.None;
-//            DGV.EnableHeadersVisualStyles = false;
-//            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.DarkBlue;
-//            DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-//            DGV.GridColor = Color.Gray;
-//        }
-
-
-
-//    }
-//}
