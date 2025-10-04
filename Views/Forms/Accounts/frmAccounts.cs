@@ -501,6 +501,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             {
                 lblCountAndTotals.Text = string.Empty;
             }
+            DGV.ClearSelection();
         }
 
         private void rdo_CheckedChanged(object? sender, EventArgs e)
