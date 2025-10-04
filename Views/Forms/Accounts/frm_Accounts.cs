@@ -486,7 +486,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void LoadChildrenInDGV(int parentTreeAccCode)
         {
-            DataTable dt = DBServiecs.Acc_GetLeafChildren(parentTreeAccCode);
+            DataTable dt = DBServiecs.Acc_GetChildren(parentTreeAccCode);
             DGV.DataSource = dt.DefaultView;
             DGVStyl();
         }

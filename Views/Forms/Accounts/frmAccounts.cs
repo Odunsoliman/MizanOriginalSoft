@@ -129,41 +129,61 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         /// </summary>
         private void LoadAccountsTree()
         {
+            // ➊ تفريغ أي بيانات سابقة من TreeView
             treeViewAccounts.Nodes.Clear();
-
+            // ➋ جلب بيانات الحسابات (الأب فقط) أو إنشاء DataTable فارغ إذا لم ترجع نتائج
             _allAccountsData = DBServiecs.Acc_GetChart() ?? new DataTable();
             if (_allAccountsData.Rows.Count == 0) return;
 
-            // قاموس للاحتفاظ بالعقد باستخدام TreeAccCode كمفتاح
+            // ➌  قاموس للاحتفاظ بالعقد باستخدام TreeAccCode كمفتاح
             Dictionary<string, TreeNode> nodeDict = new Dictionary<string, TreeNode>();
-
+            // ➍ المرور على جميع الصفوف التي تم إرجاعها من قاعدة البيانات
             foreach (DataRow row in _allAccountsData.Rows)
             {
+                // 1️⃣ قراءة اسم الحساب من العمود AccName
+                //    - إذا كان فارغًا أو null → يتم تجاهل هذا الصف
                 string accName = row["AccName"] as string ?? string.Empty;
                 if (string.IsNullOrWhiteSpace(accName)) continue;
 
+                // 2️⃣ جلب الكود الشجري (TreeAccCode) للحساب
+                //    - هذا الكود يمثل المفتاح الفريد للعقدة في الشجرة
                 string treeCode = row["TreeAccCode"].ToString() ?? string.Empty;
+
+                // 3️⃣ جلب كود الأب (ParentAccID) إن وجد
+                //    - إذا كان NULL → يعني أن هذا الحساب هو جذر رئيسي (Root)
                 string? parentCode = row["ParentAccID"] != DBNull.Value ? row["ParentAccID"].ToString() : null;
 
-                // إنشاء عقدة وربطها بالصف الكامل
+                // 4️⃣ إنشاء عقدة جديدة (TreeNode) بالاسم
+                //    - نربط السطر الكامل (DataRow) داخل خاصية Tag
+                //      للاستفادة من باقي بيانات الصف لاحقًا (مثل الرصيد أو رقم الحساب)
                 TreeNode node = new TreeNode(accName) { Tag = row };
+
+                // 5️⃣ إضافة هذه العقدة إلى القاموس باستخدام TreeAccCode كمفتاح
+                //    - الهدف: تسهيل الوصول إليها عند إضافة أبنائها لاحقًا
                 nodeDict[treeCode] = node;
 
-                // إذا ليس له أب → جذر
+                // 6️⃣ تحديد موقع العقدة في الشجرة:
+                //    - إذا لم يكن لها أب → إضافتها كعقدة جذرية (Root Node)
                 if (string.IsNullOrEmpty(parentCode))
                     treeViewAccounts.Nodes.Add(node);
 
-                // إذا له أب موجود في القاموس → أضفه داخل أبيه
+                //    - إذا كان لها أب موجود بالفعل في القاموس → أضفها كابن لهذا الأب
                 else if (nodeDict.TryGetValue(parentCode, out TreeNode? parentNode))
                     parentNode.Nodes.Add(node);
 
-                // في حالة لم نجد الأب (ممكن يجي لاحقًا أو خطأ بالبيانات) → أضفه كجذر
+                //    - إذا كان لها أب لكن لم يتم إيجاده (قد يكون بسبب ترتيب البيانات أو خطأ في قاعدة البيانات)
+                //      → نضيفها كجذر مؤقتًا حتى لا تُفقد من الشجرة
                 else
                     treeViewAccounts.Nodes.Add(node);
             }
 
+            // 7️⃣ بعد بناء الشجرة، يتم ترتيب العقد حسب TreeAccCode
             SortTreeNodes(treeViewAccounts.Nodes);
+
+            // 8️⃣ طي جميع الفروع (CollapseAll) 
+            //    - الهدف: إظهار الجذور فقط للمستخدم عند فتح الشجرة لأول مرة
             treeViewAccounts.CollapseAll();
+
         }
 
         // ترتيب العقد  داخل شجرة الحسابات بشكل متسلسل.
@@ -206,7 +226,54 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 SortTreeNodes(node.Nodes);
             }
         }
+        // ✅ حدث يتم تنفيذه عند اختيار أي عقدة في الشجرة
+        private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            // ① نتأكد أن هناك عقدة مختارة
+            if (e.Node?.Tag == null) return;
 
+            // ② نستخرج الصف (DataRow) المرتبط بالعقدة المختارة
+            DataRow row = (DataRow)e.Node.Tag;
+
+            // ③ نأخذ قيمة TreeAccCode الخاصة بهذه العقدة
+            int parentTreeAccCode = row.Field<int>("TreeAccCode");
+
+            // ④ نستدعي الدالة التي تحضر الأبناء وتعرضهم في الـ DGV
+            LoadChildrenInDGV(e.Node); // نمرر العقدة المختارة بالكامل
+        }
+
+        private void LoadChildrenInDGV(TreeNode selectedNode)
+        {
+            if (selectedNode?.Tag is not DataRow parentRow) return;
+
+            // كود الحساب المختار
+            int parentTreeAccCode = parentRow.Field<int>("TreeAccCode");
+            string parentName = selectedNode.Text; // اسم الأب من الشجرة
+
+            // استدعاء الإجراء المخزن لجلب الأبناء
+            DataTable dt = DBServiecs.Acc_GetChildren(parentTreeAccCode);
+
+            // ✅ إضافة عمود ParentName يدويًا لو مش موجود
+            if (!dt.Columns.Contains("ParentName"))
+                dt.Columns.Add("ParentName", typeof(string));
+
+            // ✅ تعبئة العمود باسم الأب
+            foreach (DataRow row in dt.Rows)
+            {
+                row["ParentName"] = parentName;
+            }
+
+            // ربط الجدول بالـ DGV
+            DGV.DataSource = dt.DefaultView;
+            DGVStyle();
+        }
+
+        //private void LoadChildrenInDGV(int parentTreeAccCode)
+        //{
+        //    DataTable dt = DBServiecs.Acc_GetChildren(parentTreeAccCode);
+        //    DGV.DataSource = dt.DefaultView;
+        //    DGVStyle();
+        //}
 
 
 
@@ -216,7 +283,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         #region !!!!!!! AfterSelect  بعد تحديد عقدة !!!!!!!!!!!!!!
         private TreeNode? _lastSelectedNode = null;
 
-        private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
+        private void treeViewAccounts_AfterSelect_(object sender, TreeViewEventArgs e)
         {
             txtSearch.Clear();//الكود الاصلى
 
@@ -616,14 +683,19 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void DGVStyle()
         {
+            // ① إفراغ النص قبل كل تحميل جديد
             lblCountAndTotals.Text = string.Empty;
+
+            // ② إذا مفيش مصدر بيانات → خروج
             if (DGV.DataSource == null) return;
 
+            // ③ إخفاء كل الأعمدة كبداية
             foreach (DataGridViewColumn column in DGV.Columns)
             {
                 column.Visible = false;
             }
 
+            // ④ الأعمدة اللي نحب نظهرها بالترتيب
             string[] columnOrder = { "AccName", "ParentName", "BalanceWithState" };
 
             foreach (string columnName in columnOrder)
@@ -634,19 +706,38 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 }
             }
 
-            DGV.Columns["AccName"].DisplayIndex = 0;
-            DGV.Columns["ParentName"].DisplayIndex = 1;
-            DGV.Columns["BalanceWithState"].DisplayIndex = 2;
+            // ⑤ إعادة ترتيب الأعمدة إذا كانت موجودة
+            if (DGV.Columns.Contains("AccName"))
+                DGV.Columns["AccName"].DisplayIndex = 0;
 
-            DGV.Columns["AccName"].HeaderText = "اسم الحساب";
-            DGV.Columns["ParentName"].HeaderText = "اسم الأب";
-            DGV.Columns["BalanceWithState"].HeaderText = "الرصيد";
+            if (DGV.Columns.Contains("ParentName"))
+                DGV.Columns["ParentName"].DisplayIndex = 1;
 
+            if (DGV.Columns.Contains("BalanceWithState"))
+                DGV.Columns["BalanceWithState"].DisplayIndex = 2;
+
+            // ⑥ تغيير عناوين الأعمدة
+            if (DGV.Columns.Contains("AccName"))
+                DGV.Columns["AccName"].HeaderText = "اسم الحساب";
+
+            if (DGV.Columns.Contains("ParentName"))
+                DGV.Columns["ParentName"].HeaderText = "اسم الأب";
+
+            if (DGV.Columns.Contains("BalanceWithState"))
+                DGV.Columns["BalanceWithState"].HeaderText = "الرصيد";
+
+            // ⑦ تحديد عرض الأعمدة نسبيًا من عرض الـ DGV
             int totalWidth = DGV.ClientRectangle.Width;
-            DGV.Columns["AccName"].Width = (int)(totalWidth * 0.5);
-            DGV.Columns["ParentName"].Width = (int)(totalWidth * 0.25);
-            DGV.Columns["BalanceWithState"].Width = (int)(totalWidth * 0.25);
+            if (DGV.Columns.Contains("AccName"))
+                DGV.Columns["AccName"].Width = (int)(totalWidth * 0.5);
 
+            if (DGV.Columns.Contains("ParentName"))
+                DGV.Columns["ParentName"].Width = (int)(totalWidth * 0.25);
+
+            if (DGV.Columns.Contains("BalanceWithState"))
+                DGV.Columns["BalanceWithState"].Width = (int)(totalWidth * 0.25);
+
+            // ⑧ تنسيقات عامة
             DGV.Font = new Font("Times New Roman", 12, FontStyle.Bold);
             DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Bold);
             DGV.RowHeadersVisible = false;
@@ -658,12 +749,13 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             DGV.RowsDefaultCellStyle.BackColor = Color.White;
 
             if (DGV.Columns.Contains("BalanceWithState"))
-            {
                 DGV.Columns["BalanceWithState"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            }
 
-            DGV.Columns["AccName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            DGV.Columns["ParentName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            if (DGV.Columns.Contains("AccName"))
+                DGV.Columns["AccName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+            if (DGV.Columns.Contains("ParentName"))
+                DGV.Columns["ParentName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
 
             DGV.BorderStyle = BorderStyle.None;
             DGV.EnableHeadersVisualStyles = false;
@@ -675,15 +767,17 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // ===============================
             // ✅ حساب عدد الحسابات والإجمالي
             // ===============================
-      
             try
             {
                 var dt = DGV.DataSource as DataTable;
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     int countAccounts = dt.Rows.Count;
-                    float  totalBalance = dt.AsEnumerable()
-                        .Sum(r => r.Field<float ?>("Balance") ?? 0);//الحقل نوعه 
+
+                    // لو العمود "Balance" مش موجود → تجاهل
+                    float totalBalance = dt.Columns.Contains("Balance")
+                        ? dt.AsEnumerable().Sum(r => r.Field<float?>("Balance") ?? 0)
+                        : 0;
 
                     string balanceState;
                     if (totalBalance > 0)
@@ -703,7 +797,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
             catch
             {
-                lblCountAndTotals.Text = string .Empty ;
+                lblCountAndTotals.Text = string.Empty;
             }
         }
 

@@ -1685,15 +1685,16 @@ END
         //==========================================
         //  1 حسابات الشجرة الاساسية
         //==========================================
-        // جلب جميع  شجرة الحسابات ###
+        // جلب جميع  شجرة الحسابات الاباء فقط ###
         public static DataTable Acc_GetChart()//@@
         {
             DataTable? result = dbHelper.ExecuteSelectQuery("Acc_GetChart");
             return result ?? new DataTable();
         }
 
+
         // احضار الابناء الذين ليس لهم ابناء اخر
-        public static DataTable Acc_GetLeafChildren(int ParentAccID)
+        public static DataTable Acc_GetChildren(int ParentAccID)
         {
             DataTable? result = dbHelper.ExecuteSelectQuery("Acc_GetLeafChildren", command =>
             {
