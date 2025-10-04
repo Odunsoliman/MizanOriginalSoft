@@ -268,12 +268,141 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             DGVStyle();
         }
 
-        //private void LoadChildrenInDGV(int parentTreeAccCode)
-        //{
-        //    DataTable dt = DBServiecs.Acc_GetChildren(parentTreeAccCode);
-        //    DGV.DataSource = dt.DefaultView;
-        //    DGVStyle();
-        //}
+        private void DGVStyle()
+        {
+            // ① إفراغ النص قبل كل تحميل جديد
+            lblCountAndTotals.Text = string.Empty;
+
+            // ② إذا مفيش مصدر بيانات → خروج
+            if (DGV.DataSource == null) return;
+
+            // ③ إخفاء كل الأعمدة كبداية
+            foreach (DataGridViewColumn column in DGV.Columns)
+            {
+                column.Visible = false;
+            }
+
+            // ④ الأعمدة اللي نحب نظهرها بالترتيب
+            string[] columnOrder = { "AccName", "ParentName", "BalanceWithState" };
+            
+            foreach (string columnName in columnOrder)
+            {
+                if (DGV.Columns.Contains(columnName))
+                {
+                    DGV.Columns[columnName].Visible = true;
+                }
+            }
+
+            // ⑤ إعادة ترتيب الأعمدة إذا كانت موجودة
+            if (DGV.Columns.Contains("AccName"))
+                DGV.Columns["AccName"].DisplayIndex = 0;
+
+            if (DGV.Columns.Contains("ParentName"))
+                DGV.Columns["ParentName"].DisplayIndex = 1;
+
+            if (DGV.Columns.Contains("BalanceWithState"))
+                DGV.Columns["BalanceWithState"].DisplayIndex = 2;
+
+            // ⑥ تغيير عناوين الأعمدة
+            if (DGV.Columns.Contains("AccName"))
+                DGV.Columns["AccName"].HeaderText = "اسم الحساب";
+
+            if (DGV.Columns.Contains("ParentName"))
+                DGV.Columns["ParentName"].HeaderText = "اسم الأب";
+
+            if (DGV.Columns.Contains("BalanceWithState"))
+                DGV.Columns["BalanceWithState"].HeaderText = "الرصيد";
+
+            // ⑦ تحديد عرض الأعمدة نسبيًا من عرض الـ DGV
+            int totalWidth = DGV.ClientRectangle.Width;
+            if (DGV.Columns.Contains("AccName"))
+                DGV.Columns["AccName"].Width = (int)(totalWidth * 0.5);
+
+            if (DGV.Columns.Contains("ParentName"))
+                DGV.Columns["ParentName"].Width = (int)(totalWidth * 0.25);
+
+            if (DGV.Columns.Contains("BalanceWithState"))
+                DGV.Columns["BalanceWithState"].Width = (int)(totalWidth * 0.25);
+
+            // ⑧ تنسيقات عامة
+            DGV.Font = new Font("Times New Roman", 12, FontStyle.Bold);
+            DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Bold);
+            DGV.RowHeadersVisible = false;
+            DGV.AllowUserToAddRows = false;
+            DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            DGV.ReadOnly = true;
+            DGV.DefaultCellStyle.Font = new Font("Times New Roman", 11, FontStyle.Regular);
+            DGV.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
+            DGV.RowsDefaultCellStyle.BackColor = Color.White;
+
+            if (DGV.Columns.Contains("BalanceWithState"))
+                DGV.Columns["BalanceWithState"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft ;
+
+            if (DGV.Columns.Contains("AccName"))
+                DGV.Columns["AccName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+            if (DGV.Columns.Contains("ParentName"))
+                DGV.Columns["ParentName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+            DGV.BorderStyle = BorderStyle.None;
+            DGV.EnableHeadersVisualStyles = false;
+            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.Gray;
+            DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            DGV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            DGV.GridColor = Color.Gray;
+
+            // ===============================
+            // ✅ حساب عدد الحسابات والإجمالي
+            // ===============================
+            try
+            {
+                if (DGV.Rows.Count > 0)
+                {
+                    int countAccounts = DGV.Rows.Count;
+
+                    float totalBalance = 0;
+                    if (DGV.Columns.Contains("Balance"))
+                    {
+                        foreach (DataGridViewRow row in DGV.Rows)
+                        {
+                            if (row.Cells["Balance"].Value != null &&
+                                float.TryParse(row.Cells["Balance"].Value.ToString(), out float val))
+                            {
+                                totalBalance += val;
+                            }
+                        }
+                    }
+
+                    string balanceState = totalBalance > 0 ? "مدين" :
+                                          totalBalance < 0 ? "دائن" : "متوازن";
+
+                    lblCountAndTotals.Text = $"عدد الحسابات : {countAccounts}   " +
+                                             $"بإجمالي رصيد : {Math.Abs(totalBalance):N2} ({balanceState})";
+                }
+                else
+                {
+                    lblCountAndTotals.Text = "لا توجد بيانات";
+                }
+            }
+            catch
+            {
+                lblCountAndTotals.Text = string.Empty;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -681,126 +810,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        private void DGVStyle()
-        {
-            // ① إفراغ النص قبل كل تحميل جديد
-            lblCountAndTotals.Text = string.Empty;
-
-            // ② إذا مفيش مصدر بيانات → خروج
-            if (DGV.DataSource == null) return;
-
-            // ③ إخفاء كل الأعمدة كبداية
-            foreach (DataGridViewColumn column in DGV.Columns)
-            {
-                column.Visible = false;
-            }
-
-            // ④ الأعمدة اللي نحب نظهرها بالترتيب
-            string[] columnOrder = { "AccName", "ParentName", "BalanceWithState" };
-
-            foreach (string columnName in columnOrder)
-            {
-                if (DGV.Columns.Contains(columnName))
-                {
-                    DGV.Columns[columnName].Visible = true;
-                }
-            }
-
-            // ⑤ إعادة ترتيب الأعمدة إذا كانت موجودة
-            if (DGV.Columns.Contains("AccName"))
-                DGV.Columns["AccName"].DisplayIndex = 0;
-
-            if (DGV.Columns.Contains("ParentName"))
-                DGV.Columns["ParentName"].DisplayIndex = 1;
-
-            if (DGV.Columns.Contains("BalanceWithState"))
-                DGV.Columns["BalanceWithState"].DisplayIndex = 2;
-
-            // ⑥ تغيير عناوين الأعمدة
-            if (DGV.Columns.Contains("AccName"))
-                DGV.Columns["AccName"].HeaderText = "اسم الحساب";
-
-            if (DGV.Columns.Contains("ParentName"))
-                DGV.Columns["ParentName"].HeaderText = "اسم الأب";
-
-            if (DGV.Columns.Contains("BalanceWithState"))
-                DGV.Columns["BalanceWithState"].HeaderText = "الرصيد";
-
-            // ⑦ تحديد عرض الأعمدة نسبيًا من عرض الـ DGV
-            int totalWidth = DGV.ClientRectangle.Width;
-            if (DGV.Columns.Contains("AccName"))
-                DGV.Columns["AccName"].Width = (int)(totalWidth * 0.5);
-
-            if (DGV.Columns.Contains("ParentName"))
-                DGV.Columns["ParentName"].Width = (int)(totalWidth * 0.25);
-
-            if (DGV.Columns.Contains("BalanceWithState"))
-                DGV.Columns["BalanceWithState"].Width = (int)(totalWidth * 0.25);
-
-            // ⑧ تنسيقات عامة
-            DGV.Font = new Font("Times New Roman", 12, FontStyle.Bold);
-            DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Bold);
-            DGV.RowHeadersVisible = false;
-            DGV.AllowUserToAddRows = false;
-            DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DGV.ReadOnly = true;
-            DGV.DefaultCellStyle.Font = new Font("Times New Roman", 11, FontStyle.Regular);
-            DGV.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
-            DGV.RowsDefaultCellStyle.BackColor = Color.White;
-
-            if (DGV.Columns.Contains("BalanceWithState"))
-                DGV.Columns["BalanceWithState"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            if (DGV.Columns.Contains("AccName"))
-                DGV.Columns["AccName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-
-            if (DGV.Columns.Contains("ParentName"))
-                DGV.Columns["ParentName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-
-            DGV.BorderStyle = BorderStyle.None;
-            DGV.EnableHeadersVisualStyles = false;
-            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.Gray;
-            DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            DGV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            DGV.GridColor = Color.Gray;
-
-            // ===============================
-            // ✅ حساب عدد الحسابات والإجمالي
-            // ===============================
-            try
-            {
-                var dt = DGV.DataSource as DataTable;
-                if (dt != null && dt.Rows.Count > 0)
-                {
-                    int countAccounts = dt.Rows.Count;
-
-                    // لو العمود "Balance" مش موجود → تجاهل
-                    float totalBalance = dt.Columns.Contains("Balance")
-                        ? dt.AsEnumerable().Sum(r => r.Field<float?>("Balance") ?? 0)
-                        : 0;
-
-                    string balanceState;
-                    if (totalBalance > 0)
-                        balanceState = "مدين";
-                    else if (totalBalance < 0)
-                        balanceState = "دائن";
-                    else
-                        balanceState = "متوازن";
-
-                    lblCountAndTotals.Text = $"عدد الحسابات : {countAccounts}   " +
-                                             $"بإجمالي رصيد : {Math.Abs(totalBalance):N2} ({balanceState})";
-                }
-                else
-                {
-                    lblCountAndTotals.Text = "لا توجد بيانات";
-                }
-            }
-            catch
-            {
-                lblCountAndTotals.Text = string.Empty;
-            }
-        }
-
+ 
 
 
 
