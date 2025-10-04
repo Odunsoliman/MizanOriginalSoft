@@ -1718,20 +1718,29 @@ END
             }, expectMessageOutput: false);
         }
 
-        // داخل DBServiecs
-        public static string Acc_DeleteAccount(int treeAccCode)
+        public static (int Code, string Message) Acc_DeleteAccount(int treeAccCode)
         {
-            // تمرير المعاملات كـ Dictionary
             var parameters = new Dictionary<string, object>
-            {
-                { "@TreeAccCode", treeAccCode }
-            };
+    {
+        { "@TreeAccCode", treeAccCode }
+    };
 
-            // استدعاء الإجراء الجديد
-            return dbHelper.ExecuteNonQueryWithParams(
+            var resultDict = dbHelper.ExecuteNonQueryWithParams(
                 "Acc_DeleteAccount",
-                parameters: parameters,
-                expectMessageOutput: true); // إذا كان الإجراء يرجع رسالة
+                parameters,
+                expectMessageOutput: true,
+                expectResultCode: true
+            );
+
+            int code = resultDict.ContainsKey("ResultCode")
+                ? (int)resultDict["ResultCode"]
+                : -1;
+
+            string msg = resultDict.ContainsKey("Message")
+                ? resultDict["Message"].ToString() ?? ""
+                : "";
+
+            return (code, msg);
         }
 
         // جلب حساب ###

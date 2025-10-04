@@ -367,15 +367,16 @@ namespace MizanOriginalSoft.MainClasses
 
         #endregion
 
-        public static string ExecuteNonQueryWithParams(
-    string procedureName,
-    Dictionary<string, object>? parameters = null,
-    bool expectMessageOutput = false)
+        public static Dictionary<string, object> ExecuteNonQueryWithParams(
+            string procedureName,
+            Dictionary<string, object>? parameters = null,
+            bool expectMessageOutput = false,
+            bool expectResultCode = false)
         {
+            var outputs = new Dictionary<string, object>();
             try
             {
                 EnsureConnectionOpen();
-                string result = "تم التنفيذ.";
 
                 using (SqlCommand cmd = CreateCommand(procedureName))
                 {
@@ -388,7 +389,7 @@ namespace MizanOriginalSoft.MainClasses
                         }
                     }
 
-                    // إضافة بارامتر إخراج إذا مطلوب
+                    // بارامتر إخراج للرسالة
                     if (expectMessageOutput)
                     {
                         var msgParam = new SqlParameter("@OutputMsg", SqlDbType.NVarChar, 500)
@@ -398,26 +399,42 @@ namespace MizanOriginalSoft.MainClasses
                         cmd.Parameters.Add(msgParam);
                     }
 
+                    // بارامتر إخراج للكود
+                    if (expectResultCode)
+                    {
+                        var codeParam = new SqlParameter("@ResultCode", SqlDbType.Int)
+                        {
+                            Direction = ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(codeParam);
+                    }
+
                     cmd.ExecuteNonQuery();
 
-                    // الحصول على قيمة الإخراج إذا موجودة
+                    // قراءة القيم المرجعة
                     if (expectMessageOutput)
                     {
-                        result = cmd.Parameters["@OutputMsg"].Value?.ToString() ?? result;
+                        outputs["Message"] = cmd.Parameters["@OutputMsg"].Value?.ToString() ?? string.Empty;
+                    }
+
+                    if (expectResultCode)
+                    {
+                        outputs["ResultCode"] = Convert.ToInt32(cmd.Parameters["@ResultCode"].Value ?? -1);
                     }
                 }
-
-                return result;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("خطأ أثناء التنفيذ: " + ex.Message);
-                return "فشل في التنفيذ.";
+                outputs["Message"] = "فشل في التنفيذ.";
+                outputs["ResultCode"] = -1;
             }
             finally
             {
                 EnsureConnectionClosed();
             }
+
+            return outputs;
         }
 
         public static string ExecuteNonQueryNoParamsWithMessage(string procedureName, bool expectMessageOutput = false)

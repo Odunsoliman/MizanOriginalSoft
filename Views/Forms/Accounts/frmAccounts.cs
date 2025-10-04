@@ -98,44 +98,44 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        private void DeleteAcc(int accID, int? parentAccID, int? previousSiblingID)//478-113002-476
-        {
-            // استدعاء الإجراء المخزن والحصول على الرسالة
-            string outputMsg = DBServiecs.Acc_DeleteAccount(accID);
+        //private void DeleteAcc(int accID, int? parentAccID, int? previousSiblingID)//478-113002-476
+        //{
+        //    // استدعاء الإجراء المخزن والحصول على الرسالة
+        //    string outputMsg = DBServiecs.Acc_DeleteAccount(accID);
 
-            MessageBox.Show(outputMsg, "نتيجة العملية", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //    MessageBox.Show(outputMsg, "نتيجة العملية", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            if (!string.IsNullOrEmpty(outputMsg) && outputMsg.StartsWith("تم"))
-            {
-                int? parentTreeCode = null;
-                if (parentAccID.HasValue)
-                {
-                    DataRow[] parentRows = _allAccountsData.Select($"AccID = {parentAccID.Value}");
-                    if (parentRows.Length > 0)
-                        parentTreeCode = parentRows[0].Field<int>("TreeAccCode");
-                }
+        //    if (!string.IsNullOrEmpty(outputMsg) && outputMsg.StartsWith("تم"))
+        //    {
+        //        int? parentTreeCode = null;
+        //        if (parentAccID.HasValue)
+        //        {
+        //            DataRow[] parentRows = _allAccountsData.Select($"AccID = {parentAccID.Value}");
+        //            if (parentRows.Length > 0)
+        //                parentTreeCode = parentRows[0].Field<int>("TreeAccCode");
+        //        }
 
-                // لاحظ هنا: عند الحذف لا نريد CollapseAll
-                LoadAccountsTree(false);
+        //        // لاحظ هنا: عند الحذف لا نريد CollapseAll
+        //        LoadAccountsTree(false);
 
-                if (parentTreeCode.HasValue)
-                {
-                    TreeNode? parentNode = FindTreeNodeByTreeCode(parentTreeCode.Value);
-                    if (parentNode != null)
-                    {
-                        // حدد وافتح كل الآباء
-                        SelectAndExpandNode(parentNode);
+        //        if (parentTreeCode.HasValue)
+        //        {
+        //            TreeNode? parentNode = FindTreeNodeByTreeCode(parentTreeCode.Value);
+        //            if (parentNode != null)
+        //            {
+        //                // حدد وافتح كل الآباء
+        //                SelectAndExpandNode(parentNode);
 
-                        // حمّل أبناء الأب في الجريد
-                        LoadChildAccountsToGrid(parentNode);
+        //                // حمّل أبناء الأب في الجريد
+        //                LoadChildAccountsToGrid(parentNode);
 
-                        // إذا فيه أخ سابق نحدده
-                        if (previousSiblingID.HasValue)
-                            SelectRowInDGV(DGV, previousSiblingID.Value);
-                    }
-                }
-            }
-        }
+        //                // إذا فيه أخ سابق نحدده
+        //                if (previousSiblingID.HasValue)
+        //                    SelectRowInDGV(DGV, previousSiblingID.Value);
+        //            }
+        //        }
+        //    }
+        //}
 
 
 
@@ -469,12 +469,12 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // 🔹 نخزن ParentAccID قبل الحذف عشان نرجع له
             int? parentTreeCode = selectedRow.Field<int?>("ParentAccID");
 
-            string result = DBServiecs.Acc_DeleteAccount(treeAccCode);
+            // استدعاء الإجراء المخزن
+            var result = DBServiecs.Acc_DeleteAccount(treeAccCode);
 
-            if (result.StartsWith("تم"))
+            if (result.Code == 0) // نجاح
             {
-                MessageBox.Show("تم حذف الحساب بنجاح ✅", "نجاح",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(result.Message, "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // إعادة تحميل الشجرة
                 LoadAccountsTree();
@@ -495,26 +495,96 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
             else
             {
-                MessageBox.Show("فشل في الحذف ❌\n" + result, "خطأ",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(result.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
+
         private void btnDeleteAccFromDGV_Click(object sender, EventArgs e)
         {
-            if (DGV.CurrentRow?.DataBoundItem is DataRowView rowView)
+            if (DGV.CurrentRow == null)
             {
-                int accID = Convert.ToInt32(rowView.Row["AccID"]);//الحساب رقمه accID=478
-                // تخزين مفتاح الأب والابن السابق قبل الحذف
-                int? parentAccID = rowView.Row.Field<int?>("ParentAccID");//parentAccID=113002
-                int? previousSiblingID = GetPreviousSiblingID(DGV, rowView.Row); // دالة مساعدةpreviousSiblingID=476
-                DeleteAcc(accID, parentAccID, previousSiblingID);
+                MessageBox.Show("يجب اختيار حساب من الجدول.", "تنبيه",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DataRowView? rowView = DGV.CurrentRow.DataBoundItem as DataRowView;
+            if (rowView == null)
+            {
+                MessageBox.Show("لا يوجد بيانات صالحة للحذف.", "خطأ",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            DataRow selectedRow = rowView.Row;
+
+            DialogResult inputResult = CustomMessageBox.ShowQuestion("هل تريد حذف الحساب المحدد من الجدول؟", "تأكيد");
+
+            if (inputResult == DialogResult.Cancel)
+            {
+                MessageBox.Show("تم إلغاء الحذف.", "إلغاء",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // 🔹 TreeAccCode للحساب المراد حذفه
+            int treeAccCode = selectedRow.Field<int>("TreeAccCode");
+
+            // 🔹 نخزن ParentAccID قبل الحذف
+            int? parentTreeCode = selectedRow.Field<int?>("ParentAccID");
+
+            // 🔹 نحفظ رقم الصف الحالي عشان نحدد الصف التالي بعد الحذف
+            int currentRowIndex = DGV.CurrentRow.Index;
+
+            // استدعاء الإجراء المخزن
+            var result = DBServiecs.Acc_DeleteAccount(treeAccCode);
+
+            if (result.Code == 0) // نجاح
+            {
+                MessageBox.Show(result.Message, "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // إعادة تحميل الشجرة
+                LoadAccountsTree();
+
+                if (parentTreeCode.HasValue)
+                {
+                    TreeNode? parentNode = FindTreeNodeByTreeCode(parentTreeCode.Value);
+                    if (parentNode != null)
+                    {
+                        parentNode.Expand();
+                        treeViewAccounts.SelectedNode = parentNode;
+
+                        // إعادة تحميل الأبناء في الجريد
+                        LoadChildAccountsToGrid(parentNode);
+
+                        // تحديد الصف المناسب بعد الحذف
+                        if (DGV.Rows.Count > 0)
+                        {
+                            int newIndex = currentRowIndex;
+                            if (newIndex >= DGV.Rows.Count)
+                                newIndex = DGV.Rows.Count - 1; // لو الحذف كان آخر واحد نختار الصف السابق
+
+                            // ابحث عن أول عمود ظاهر
+                            DataGridViewColumn? firstVisibleCol = DGV.Columns
+                                .Cast<DataGridViewColumn>()
+                                .FirstOrDefault(c => c.Visible);
+
+                            if (firstVisibleCol != null)
+                            {
+                                DGV.CurrentCell = DGV.Rows[newIndex].Cells[firstVisibleCol.Index];
+                            }
+                        }
+
+                    }
+                }
             }
             else
             {
-                MessageBox.Show("يرجى اختيار حساب من الجدول أولاً.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(result.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         // الدالة المعدلة لاستقبال معلومات الأب والابن السابق
         // دالة لتحديد عقدة وفتح جميع آبائها
@@ -1330,163 +1400,5 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
 
 
-        #region !!!!!!!!   حذف حساب او تفاصيل الملغى  !!!!!!!!!!!!!!
-        private void btnDeleteAccFromTree_Click_(object sender, EventArgs e)
-        {
-            if (treeViewAccounts.SelectedNode?.Tag is DataRow row)
-            {
-                int accID = Convert.ToInt32(row["AccID"]);
-                // تخزين مفتاح الأب قبل الحذف
-                int? parentAccID = row.Field<int?>("ParentAccID");
-                DeleteAcc(accID, parentAccID, null);
-            }
-            else
-            {
-                MessageBox.Show("يرجى اختيار حساب من الشجرة أولاً.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void btnDeleteAccFromDGV_Click_(object sender, EventArgs e)
-        {
-            if (DGV.CurrentRow?.DataBoundItem is DataRowView rowView)
-            {
-                int accID = Convert.ToInt32(rowView.Row["AccID"]);
-                // تخزين مفتاح الأب والابن السابق قبل الحذف
-                int? parentAccID = rowView.Row.Field<int?>("ParentAccID");
-                int? previousSiblingID = GetPreviousSiblingID(DGV, rowView.Row); // دالة مساعدة
-                DeleteAcc(accID, parentAccID, previousSiblingID);
-            }
-            else
-            {
-                MessageBox.Show("يرجى اختيار حساب من الجدول أولاً.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        // الدالة المعدلة لاستقبال معلومات الأب والابن السابق
-        private void DeleteAcc___(int accID, int? parentAccID, int? previousSiblingID)
-        {
-            // استدعاء الإجراء المخزن والحصول على الرسالة
-            string outputMsg = DBServiecs.Acc_DeleteAccount(accID);
-
-            // عرض رسالة النجاح أو الخطأ للمستخدم
-            MessageBox.Show(outputMsg, "نتيجة العملية", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            // إذا كانت الرسالة تشير إلى نجاح العملية، أعيد تحميل الشجرة والجدول
-            if (!string.IsNullOrEmpty(outputMsg) && outputMsg.StartsWith("تم"))
-            {
-                LoadAccountsTree();
-
-                if (parentAccID.HasValue)
-                {
-                    // إعادة تحديد الأب في الشجرة
-                    TreeNode? parentNode = FindTreeNodeByAccID(treeViewAccounts.Nodes, parentAccID.Value);
-                    if (parentNode != null)
-                    {
-                        treeViewAccounts.SelectedNode = parentNode;
-                        LoadChildAccountsToGrid(parentNode);
-
-                        // إذا كان هناك ابن سابق، حدده في الجدول
-                        if (previousSiblingID.HasValue)
-                        {
-                            SelectRowInDGV(DGV, previousSiblingID.Value);
-                        }
-                    }
-                }
-            }
-        }
-        private void DeleteAcc__(int accID, int? parentAccID, int? previousSiblingID)
-        {
-            // استدعاء الإجراء المخزن والحصول على الرسالة
-            string outputMsg = DBServiecs.Acc_DeleteAccount(accID);
-
-            // عرض رسالة النجاح أو الخطأ للمستخدم
-            MessageBox.Show(outputMsg, "نتيجة العملية", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            // إذا كانت الرسالة تشير إلى نجاح العملية
-            if (!string.IsNullOrEmpty(outputMsg) && outputMsg.StartsWith("تم"))
-            {
-                int? parentIdTemp = parentAccID;  // نخزن ParentID قبل إعادة تحميل الشجرة
-
-                // إعادة تحميل الشجرة
-                LoadAccountsTree();
-
-                if (parentIdTemp.HasValue)
-                {
-                    // محاولة إيجاد الأب في الشجرة
-                    TreeNode? parentNode = FindTreeNodeByAccID(treeViewAccounts.Nodes, parentIdTemp.Value);
-                    if (parentNode != null)
-                    {
-                        // إعادة التحديد على الأب
-                        treeViewAccounts.SelectedNode = parentNode;
-                        parentNode.Expand(); // مهم حتى يظهر الأبناء
-
-                        // إعادة تحميل أبناء الأب في الجريد
-                        LoadChildAccountsToGrid(parentNode);
-
-                        // إذا الحذف من الجريد وكان فيه ابن سابق، نعيد التحديد عليه
-                        if (previousSiblingID.HasValue)
-                        {
-                            SelectRowInDGV(DGV, previousSiblingID.Value);
-                        }
-                    }
-                    else
-                    {
-                        // fallback: لو الأب نفسه اتحذف نرجع لأول عقدة في الشجرة
-                        if (treeViewAccounts.Nodes.Count > 0)
-                        {
-                            treeViewAccounts.SelectedNode = treeViewAccounts.Nodes[0];
-                            treeViewAccounts.Nodes[0].Expand();
-                            LoadChildAccountsToGrid(treeViewAccounts.SelectedNode);
-                        }
-                    }
-                }
-            }
-        }
-
-        private TreeNode? FindTreeNodeByAccID_(TreeNodeCollection nodes, int accID)
-        {
-            foreach (TreeNode node in nodes)
-            {
-                if (node.Tag is DataRow row)
-                {
-                    int? nodeAccID = row.Field<int?>("AccID");// الخطأ هنا AccID ليس الاب هذا معرف الحساب
-                    // الاب هو ParentAccID
-                    if (nodeAccID.HasValue && nodeAccID.Value == accID)
-                        return node;
-                }
-
-                TreeNode? found = FindTreeNodeByAccID(node.Nodes, accID);
-                if (found != null)
-                    return found;
-            }
-
-            return null; // إذا لم نجد أي Node مطابق
-        }
-
-        // دالة مساعدة لتحديد الصف في DGV حسب AccID
-        private void SelectRowInDGV_(DataGridView dgv, int accID)
-        {
-            foreach (DataGridViewRow row in dgv.Rows)
-            {
-                if (row.DataBoundItem is DataRowView drv && drv.Row.Field<int>("AccID") == accID)
-                {
-                    dgv.CurrentCell = row.Cells[0]; // أو أي عمود رئيسي
-                    break;
-                }
-            }
-        }
-
-        // دالة مساعدة للحصول على الابن السابق للمحذوف في DGV
-        private int? GetPreviousSiblingID_(DataGridView dgv, DataRow currentRow)
-        {
-            int index = dgv.Rows.IndexOf(dgv.CurrentRow);
-            if (index > 0 && dgv.Rows[index - 1].DataBoundItem is DataRowView prevRowView)
-            {
-                return prevRowView.Row.Field<int>("AccID");
-            }
-            return null;
-        }
-
-        #endregion 
     }
 }

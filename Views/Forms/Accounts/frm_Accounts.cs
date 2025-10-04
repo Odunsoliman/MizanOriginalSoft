@@ -610,36 +610,36 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            if (treeViewAccounts.SelectedNode?.Tag is DataRow row)
-            {
-                int accID = Convert.ToInt32(row["AccID"]);
-                string? accName = row["AccName"].ToString();
+            //if (treeViewAccounts.SelectedNode?.Tag is DataRow row)
+            //{
+            //    int accID = Convert.ToInt32(row["AccID"]);
+            //    string? accName = row["AccName"].ToString();
 
-                DialogResult confirm = MessageBox.Show(
-                    $"هل أنت متأكد أنك تريد حذف الحساب: {accName} (ID={accID})؟",
-                    "تأكيد الحذف",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Warning);
+            //    DialogResult confirm = MessageBox.Show(
+            //        $"هل أنت متأكد أنك تريد حذف الحساب: {accName} (ID={accID})؟",
+            //        "تأكيد الحذف",
+            //        MessageBoxButtons.YesNo,
+            //        MessageBoxIcon.Warning);
 
-                if (confirm == DialogResult.No) return;
+            //    if (confirm == DialogResult.No) return;
 
-                string resultMsg = DBServiecs.Acc_DeleteAccount(accID);
-                // الرسالة الراجعة تم التنفيذ
-                // فلا يقوم باجراءات تحميل الشجرة وتحديد الاب
-                MessageBox.Show(resultMsg, "نتيجة الحذف");
+            //    string resultMsg = DBServiecs.Acc_DeleteAccount(accID);
+            //    // الرسالة الراجعة تم التنفيذ
+            //    // فلا يقوم باجراءات تحميل الشجرة وتحديد الاب
+            //    MessageBox.Show(resultMsg, "نتيجة الحذف");
 
-                // لو تم الحذف فعلاً → نرجع للأب
-                if (!resultMsg.StartsWith("❌")) // يعني مش فشل
-                {
-                    int? parentAccID = row["ParentAccID"] != DBNull.Value ? Convert.ToInt32(row["ParentAccID"]) : (int?)null;
+            //    // لو تم الحذف فعلاً → نرجع للأب
+            //    if (!resultMsg.StartsWith("❌")) // يعني مش فشل
+            //    {
+            //        int? parentAccID = row["ParentAccID"] != DBNull.Value ? Convert.ToInt32(row["ParentAccID"]) : (int?)null;
 
-                    LoadAccountsTree();
+            //        LoadAccountsTree();
 
-                    if (parentAccID.HasValue)
-                        HighlightAndExpandNode(parentAccID.Value);
-                }
+            //        if (parentAccID.HasValue)
+            //            HighlightAndExpandNode(parentAccID.Value);
+            //    }
 
-            }
+            //}
         }
 
         // زر اضافة حساب الى الشجرة
@@ -1611,61 +1611,61 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         private void btnDeleteAcc_Click(object sender, EventArgs e)
         {
             // 1) تأكد من وجود صف محدد في الـ DGV وليس الشجرة
-            if (DGV.CurrentRow?.DataBoundItem is not DataRowView rowView) return;
+            //if (DGV.CurrentRow?.DataBoundItem is not DataRowView rowView) return;
 
-            DataRow row = rowView.Row;
-            int accID = Convert.ToInt32(row["AccID"]);
-            string accName = row["AccName"]?.ToString() ?? "";
+            //DataRow row = rowView.Row;
+            //int accID = Convert.ToInt32(row["AccID"]);
+            //string accName = row["AccName"]?.ToString() ?? "";
 
-            // 2) تأكيد الحذف
-            DialogResult confirm = MessageBox.Show(
-                $"هل أنت متأكد أنك تريد حذف الحساب: {accName} (ID={accID})؟",
-                "تأكيد الحذف",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning);
-            if (confirm == DialogResult.No) return;
+            //// 2) تأكيد الحذف
+            //DialogResult confirm = MessageBox.Show(
+            //    $"هل أنت متأكد أنك تريد حذف الحساب: {accName} (ID={accID})؟",
+            //    "تأكيد الحذف",
+            //    MessageBoxButtons.YesNo,
+            //    MessageBoxIcon.Warning);
+            //if (confirm == DialogResult.No) return;
 
-            // 3) تنفيذ الحذف من قاعدة البيانات
-            string resultMsg = DBServiecs.Acc_DeleteAccount(accID);
-            MessageBox.Show(resultMsg, "نتيجة الحذف");
+            //// 3) تنفيذ الحذف من قاعدة البيانات
+            //string resultMsg = DBServiecs.Acc_DeleteAccount(accID);
+            //MessageBox.Show(resultMsg, "نتيجة الحذف");
 
-            // 4) إذا تم الحذف بنجاح
-            if (!resultMsg.StartsWith("❌"))
-            {
-                // 4a) احصل على معرف الأب لتحديث أبنائه
-                int? parentAccID = null;
-                if (treeViewAccounts.SelectedNode?.Tag is DataRow parentRow)
-                {
-                    parentAccID = parentRow.Field<int?>("TreeAccCode"); // أو "AccID" حسب ما تستخدمه في LoadChildrenInDGV
-                }
+            //// 4) إذا تم الحذف بنجاح
+            //if (!resultMsg.StartsWith("❌"))
+            //{
+            //    // 4a) احصل على معرف الأب لتحديث أبنائه
+            //    int? parentAccID = null;
+            //    if (treeViewAccounts.SelectedNode?.Tag is DataRow parentRow)
+            //    {
+            //        parentAccID = parentRow.Field<int?>("TreeAccCode"); // أو "AccID" حسب ما تستخدمه في LoadChildrenInDGV
+            //    }
 
-                if (parentAccID.HasValue)
-                {
-                    // 4b) إعادة تحميل أبناء الأب فقط في الـ DGV
-                    LoadChildrenInDGV(parentAccID.Value);
+            //    if (parentAccID.HasValue)
+            //    {
+            //        // 4b) إعادة تحميل أبناء الأب فقط في الـ DGV
+            //        LoadChildrenInDGV(parentAccID.Value);
 
-                    // 4c) تحديد الصف الذي يسبق المحذوف (إذا وجد)
-                    int prevIndex = DGV.Rows.Cast<DataGridViewRow>()
-                                             .ToList()
-                                             .FindLastIndex(r => Convert.ToInt32(r.Cells["AccID"].Value) < accID);
+            //        // 4c) تحديد الصف الذي يسبق المحذوف (إذا وجد)
+            //        int prevIndex = DGV.Rows.Cast<DataGridViewRow>()
+            //                                 .ToList()
+            //                                 .FindLastIndex(r => Convert.ToInt32(r.Cells["AccID"].Value) < accID);
 
-                    // إذا لم يوجد صف أقل، اختر أول صف مرئي
-                    if (prevIndex < 0)
-                        prevIndex = DGV.Rows.Cast<DataGridViewRow>()
-                                            .ToList()
-                                            .FindIndex(r => r.Visible);
+            //        // إذا لم يوجد صف أقل، اختر أول صف مرئي
+            //        if (prevIndex < 0)
+            //            prevIndex = DGV.Rows.Cast<DataGridViewRow>()
+            //                                .ToList()
+            //                                .FindIndex(r => r.Visible);
 
-                    // 4d) تعيين الصف الحالي بأمان
-                    if (prevIndex >= 0 && DGV.Rows[prevIndex].Visible)
-                    {
-                        DGV.ClearSelection();
-                        DGV.Rows[prevIndex].Selected = true;
-                        DGV.CurrentCell = DGV.Rows[prevIndex].Cells
-                                           .Cast<DataGridViewCell>()
-                                           .FirstOrDefault(c => c.Visible) ?? DGV.Rows[prevIndex].Cells[0];
-                    }
-                }
-            }
+            //        // 4d) تعيين الصف الحالي بأمان
+            //        if (prevIndex >= 0 && DGV.Rows[prevIndex].Visible)
+            //        {
+            //            DGV.ClearSelection();
+            //            DGV.Rows[prevIndex].Selected = true;
+            //            DGV.CurrentCell = DGV.Rows[prevIndex].Cells
+            //                               .Cast<DataGridViewCell>()
+            //                               .FirstOrDefault(c => c.Visible) ?? DGV.Rows[prevIndex].Cells[0];
+            //        }
+            //    }
+            //}
         }
 
         private void btnModifyAcc_Click(object sender, EventArgs e)
