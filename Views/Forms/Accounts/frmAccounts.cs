@@ -67,19 +67,77 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             SortTreeNodes(treeViewAccounts.Nodes);
             treeViewAccounts.CollapseAll();
         }
-        private void LoadAccountsTree()
+        // تحميل شجرة الحسابات (الأب فقط) داخل عنصر TreeView.
+        // ملاحظات أساسية:
+        // 1. البيانات التي ترجعها الدالة DBServiecs.Acc_GetChart() 
+        //    تمت تصفيتها مسبقًا من قاعدة البيانات بحيث تحتوي على الحسابات التي لها أبناء فقط (IsHasChildren = 1).
+        //    أي أن كل صف هنا يمثل "حساب أب".
+        // 2. كل عقدة (TreeNode) تمثل حسابًا واحدًا.
+        //    - اسم الحساب يعرض في الشجرة.
+        //    - الصف الكامل (DataRow) يُخزن داخل خاصية Tag للعقدة 
+        //      للاستفادة من باقي الأعمدة لاحقًا (مثل TreeAccCode, AccID ... إلخ).
+        // 3. لا يوجد هنا بناء هرمي أو ربط أبناء بآباء 
+        //    لأن النتائج بالفعل تمثل آباء فقط (المستوى الأعلى).
+        // 4. في النهاية يتم ترتيب العقد وترتيب الشجرة ثم طي جميع الفروع.
+        private void LoadAccountsTree_()
         {
+            // ➊ تفريغ أي بيانات سابقة من TreeView
             treeViewAccounts.Nodes.Clear();
+
+            // ➋ جلب بيانات الحسابات (الأب فقط) أو إنشاء DataTable فارغ إذا لم ترجع نتائج
             _allAccountsData = DBServiecs.Acc_GetChart() ?? new DataTable();
+
+            // ➌ إذا لم توجد بيانات → لا يوجد ما يُعرض، إنهاء الدالة
             if (_allAccountsData.Rows.Count == 0) return;
 
-            Dictionary<string, TreeNode> nodeDict = new Dictionary<string, TreeNode>();
-
+            // ➍ اختيار الصفوف التي تمثل الحسابات الأب فقط (IsHasChildren = true)
             var parentRows = _allAccountsData.AsEnumerable()
                                .Where(r => r.Field<bool>("IsHasChildren"))
                                .ToList();
 
+            // ➎ المرور على كل صف يمثل حساب أب
             foreach (DataRow row in parentRows)
+            {
+                // جلب اسم الحساب من العمود AccName
+                string accName = row["AccName"] as string ?? string.Empty;
+
+                // تجاهل الصفوف التي ليس لها اسم صالح
+                if (string.IsNullOrWhiteSpace(accName)) continue;
+
+                // إنشاء عقدة جديدة باسم الحساب
+                // مع تخزين الصف الكامل DataRow بداخل خاصية Tag
+                TreeNode node = new TreeNode(accName) { Tag = row };
+
+                // إضافة العقدة كجذر في الشجرة (بما أنها حساب أب)
+                treeViewAccounts.Nodes.Add(node);
+            }
+
+            // ➏ ترتيب العقد (قد يكون بالاسم أو الكود حسب ما تنفذه الدالة SortTreeNodes)
+            SortTreeNodes(treeViewAccounts.Nodes);
+
+            // ➐ طي جميع الفروع بعد البناء 
+            // بحيث يظهر للمستخدم المستوى الأعلى فقط عند الفتح
+            treeViewAccounts.CollapseAll();
+        }
+
+        /// <summary>
+        /// تحميل شجرة الحسابات من قاعدة البيانات بشكل هرمي.
+        /// - يبني الشجرة باستخدام TreeAccCode و ParentAccID.
+        /// - أي حساب بدون ParentAccID يضاف كجذر.
+        /// - أي حساب له ParentAccID يضاف كابن داخل أبيه.
+        /// - يتم تخزين الصف DataRow داخل خاصية Tag لكل عقدة.
+        /// </summary>
+        private void LoadAccountsTree()
+        {
+            treeViewAccounts.Nodes.Clear();
+
+            _allAccountsData = DBServiecs.Acc_GetChart() ?? new DataTable();
+            if (_allAccountsData.Rows.Count == 0) return;
+
+            // قاموس للاحتفاظ بالعقد باستخدام TreeAccCode كمفتاح
+            Dictionary<string, TreeNode> nodeDict = new Dictionary<string, TreeNode>();
+
+            foreach (DataRow row in _allAccountsData.Rows)
             {
                 string accName = row["AccName"] as string ?? string.Empty;
                 if (string.IsNullOrWhiteSpace(accName)) continue;
@@ -87,43 +145,67 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 string treeCode = row["TreeAccCode"].ToString() ?? string.Empty;
                 string? parentCode = row["ParentAccID"] != DBNull.Value ? row["ParentAccID"].ToString() : null;
 
+                // إنشاء عقدة وربطها بالصف الكامل
                 TreeNode node = new TreeNode(accName) { Tag = row };
                 nodeDict[treeCode] = node;
 
+                // إذا ليس له أب → جذر
                 if (string.IsNullOrEmpty(parentCode))
                     treeViewAccounts.Nodes.Add(node);
+
+                // إذا له أب موجود في القاموس → أضفه داخل أبيه
                 else if (nodeDict.TryGetValue(parentCode, out TreeNode? parentNode))
                     parentNode.Nodes.Add(node);
+
+                // في حالة لم نجد الأب (ممكن يجي لاحقًا أو خطأ بالبيانات) → أضفه كجذر
                 else
                     treeViewAccounts.Nodes.Add(node);
             }
 
             SortTreeNodes(treeViewAccounts.Nodes);
             treeViewAccounts.CollapseAll();
-
-
         }
 
-
+        // ترتيب العقد  داخل شجرة الحسابات بشكل متسلسل.
+        // الفكرة:
+        // 1. يقوم بتحويل مجموعة العقد (TreeNodeCollection) إلى قائمة عادية ليسهل فرزها.
+        // 2. يعتمد في الترتيب على العمود TreeAccCode المخزن داخل الـ DataRow الموجود في Tag.
+        // 3. بعد الترتيب:
+        //     - يتم تفريغ المجموعة الأصلية.
+        //     - إعادة إضافة العقد بالترتيب الصحيح.
+        // 4. الدالة تستدعي نفسها (Recursion) لترتيب الأبناء داخل كل عقدة.
+        // 
+        // ملاحظات:
+        // - Tag لكل عقدة يفترض أنه يحتوي على DataRow من الجدول الأصلي.
+        // - TreeAccCode يمثل الكود الشجري للحساب (int) وهو الأساس في ترتيب العقد.
+        // - إذا لم يكن Tag = DataRow → العقدة تعامل كأنها TreeAccCode = 0.
         private void SortTreeNodes(TreeNodeCollection nodes)
         {
+            // ➊ تحويل مجموعة العقد إلى List ليسهل التعامل معها والفرز
             List<TreeNode> nodeList = nodes.Cast<TreeNode>()
                                            .OrderBy(n =>
                                            {
+                                               // إذا كانت العقدة تحتوي على DataRow في Tag → استخدم TreeAccCode
                                                if (n.Tag is DataRow row)
                                                    return row.Field<int>("TreeAccCode");
+
+                                               // إذا لم يوجد DataRow → اعتبر القيمة 0 (لضمان عدم حدوث خطأ)
                                                return 0;
                                            })
                                            .ToList();
 
+            // ➋ تفريغ المجموعة الأصلية من العقد
             nodes.Clear();
+
+            // ➌ إعادة إضافة العقد بترتيب TreeAccCode الصحيح
             foreach (TreeNode node in nodeList)
             {
                 nodes.Add(node);
+
+                // ➍ استدعاء الدالة بشكل متكرر (Recursion) لترتيب الأبناء لكل عقدة
                 SortTreeNodes(node.Nodes);
             }
         }
-
 
 
 
