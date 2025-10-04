@@ -31,94 +31,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         }
 
-        private void LoadAccountsTree__()
-        {
-            treeViewAccounts.Nodes.Clear();
-            _allAccountsData = DBServiecs.Acc_GetChart() ?? new DataTable();
-            //  هذه الدالة تحضر لى فقط IsHasChildren=1
-            // فهى تبنى الشجرة فقط ولا اريد ان تبنى الابناء داخل الجريد فماذا يكون السيناريو الصحيح
-            if (_allAccountsData.Rows.Count == 0) return;
-
-            Dictionary<string, TreeNode> nodeDict = new Dictionary<string, TreeNode>();
-
-            var parentRows = _allAccountsData.AsEnumerable()
-                               .Where(r => r.Field<bool>("IsHasChildren"))
-                               .ToList();
-
-            foreach (DataRow row in parentRows)
-            {
-                string accName = row["AccName"] as string ?? string.Empty;
-                if (string.IsNullOrWhiteSpace(accName)) continue;
-
-                string treeCode = row["TreeAccCode"].ToString() ?? string.Empty;
-                string? parentCode = row["ParentAccID"] != DBNull.Value ? row["ParentAccID"].ToString() : null;
-
-                TreeNode node = new TreeNode(accName) { Tag = row };
-                nodeDict[treeCode] = node;
-
-                if (string.IsNullOrEmpty(parentCode))
-                    treeViewAccounts.Nodes.Add(node);
-                else if (nodeDict.TryGetValue(parentCode, out TreeNode? parentNode))
-                    parentNode.Nodes.Add(node);
-                else
-                    treeViewAccounts.Nodes.Add(node);
-            }
-
-            SortTreeNodes(treeViewAccounts.Nodes);
-            treeViewAccounts.CollapseAll();
-        }
-        // تحميل شجرة الحسابات (الأب فقط) داخل عنصر TreeView.
-        // ملاحظات أساسية:
-        // 1. البيانات التي ترجعها الدالة DBServiecs.Acc_GetChart() 
-        //    تمت تصفيتها مسبقًا من قاعدة البيانات بحيث تحتوي على الحسابات التي لها أبناء فقط (IsHasChildren = 1).
-        //    أي أن كل صف هنا يمثل "حساب أب".
-        // 2. كل عقدة (TreeNode) تمثل حسابًا واحدًا.
-        //    - اسم الحساب يعرض في الشجرة.
-        //    - الصف الكامل (DataRow) يُخزن داخل خاصية Tag للعقدة 
-        //      للاستفادة من باقي الأعمدة لاحقًا (مثل TreeAccCode, AccID ... إلخ).
-        // 3. لا يوجد هنا بناء هرمي أو ربط أبناء بآباء 
-        //    لأن النتائج بالفعل تمثل آباء فقط (المستوى الأعلى).
-        // 4. في النهاية يتم ترتيب العقد وترتيب الشجرة ثم طي جميع الفروع.
-        private void LoadAccountsTree_()
-        {
-            // ➊ تفريغ أي بيانات سابقة من TreeView
-            treeViewAccounts.Nodes.Clear();
-
-            // ➋ جلب بيانات الحسابات (الأب فقط) أو إنشاء DataTable فارغ إذا لم ترجع نتائج
-            _allAccountsData = DBServiecs.Acc_GetChart() ?? new DataTable();
-
-            // ➌ إذا لم توجد بيانات → لا يوجد ما يُعرض، إنهاء الدالة
-            if (_allAccountsData.Rows.Count == 0) return;
-
-            // ➍ اختيار الصفوف التي تمثل الحسابات الأب فقط (IsHasChildren = true)
-            var parentRows = _allAccountsData.AsEnumerable()
-                               .Where(r => r.Field<bool>("IsHasChildren"))
-                               .ToList();
-
-            // ➎ المرور على كل صف يمثل حساب أب
-            foreach (DataRow row in parentRows)
-            {
-                // جلب اسم الحساب من العمود AccName
-                string accName = row["AccName"] as string ?? string.Empty;
-
-                // تجاهل الصفوف التي ليس لها اسم صالح
-                if (string.IsNullOrWhiteSpace(accName)) continue;
-
-                // إنشاء عقدة جديدة باسم الحساب
-                // مع تخزين الصف الكامل DataRow بداخل خاصية Tag
-                TreeNode node = new TreeNode(accName) { Tag = row };
-
-                // إضافة العقدة كجذر في الشجرة (بما أنها حساب أب)
-                treeViewAccounts.Nodes.Add(node);
-            }
-
-            // ➏ ترتيب العقد (قد يكون بالاسم أو الكود حسب ما تنفذه الدالة SortTreeNodes)
-            SortTreeNodes(treeViewAccounts.Nodes);
-
-            // ➐ طي جميع الفروع بعد البناء 
-            // بحيث يظهر للمستخدم المستوى الأعلى فقط عند الفتح
-            treeViewAccounts.CollapseAll();
-        }
 
         /// <summary>
         /// تحميل شجرة الحسابات من قاعدة البيانات بشكل هرمي.
@@ -328,6 +240,55 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // LoadReportsForSelectedAccount();
         }
 
+        private void btnModify_Click(object sender, EventArgs e)
+        {
+            if (treeViewAccounts.SelectedNode?.Tag is DataRow row)
+            {
+                int accID = Convert.ToInt32(row["AccID"]);
+
+                using (frm_AccountModify frm = new frm_AccountModify(accID))
+                {
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        // 1️⃣ إعادة تحميل الشجرة بالكامل
+                        LoadAccountsTree();
+
+                        // 2️⃣ البحث عن العقدة التي تم تعديلها باستخدام AccID
+                        TreeNode? nodeToSelect = FindNodeByAccID(treeViewAccounts.Nodes, accID);
+
+                        // 3️⃣ تحديد العقدة إذا تم العثور عليها
+                        if (nodeToSelect != null)
+                        {
+                            treeViewAccounts.SelectedNode = nodeToSelect;
+                            nodeToSelect.EnsureVisible(); // لضمان ظهور العقدة في العرض
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("يرجى اختيار حساب أولاً", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        // دالة مساعدة للبحث عن العقدة حسب AccID في أي مستوى
+        private TreeNode? FindNodeByAccID(TreeNodeCollection nodes, int accID)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Tag is DataRow row && Convert.ToInt32(row["AccID"]) == accID)
+                    return node;
+
+                // البحث في الأبناء
+                TreeNode? found = FindNodeByAccID(node.Nodes, accID);
+                if (found != null)
+                    return found;
+            }
+            return null;
+        }
+
+
+
         private void LoadChildrenInDGV(TreeNode selectedNode)
         {
             if (selectedNode?.Tag is not DataRow parentRow) return;
@@ -397,7 +358,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             // ④ الأعمدة اللي نحب نظهرها بالترتيب
             string[] columnOrder = { "AccName", "ParentName", "BalanceWithState" };
-            
+
             foreach (string columnName in columnOrder)
             {
                 if (DGV.Columns.Contains(columnName))
@@ -449,7 +410,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             DGV.RowsDefaultCellStyle.BackColor = Color.White;
 
             if (DGV.Columns.Contains("BalanceWithState"))
-                DGV.Columns["BalanceWithState"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft ;
+                DGV.Columns["BalanceWithState"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
 
             if (DGV.Columns.Contains("AccName"))
                 DGV.Columns["AccName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -512,7 +473,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 {
                     LoadChildrenInDGV(treeViewAccounts.SelectedNode);
                 }
-            } 
+            }
         }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
@@ -810,9 +771,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             return false;
         }
         #endregion
-        
 
-  
+
+
 
 
 
@@ -1032,7 +993,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             DataRow row = rowView.Row;
             int parentTreeAccCode = row.Field<int>("TreeAccCode");
-
+            //System.ArgumentException: 'Column 'TreeAccCode' does not belong to table .'
             string userInput;
             DialogResult inputResult = CustomMessageBox.ShowStringInputBox(out userInput,
                 "من فضلك أدخل اسم الحساب:", "إضافة حساب فرعي");
@@ -1080,21 +1041,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void RefreshAfterAddition(int parentTreeCode)
-        {
-            // إعادة تحميل الشجرة
-            LoadAccountsTree();
-
-            // البحث عن العقدة الأصلية وتحديدها
-            TreeNode? parentNode = FindTreeNodeByTreeCode(parentTreeCode);
-            if (parentNode != null)
-            {
-                treeViewAccounts.SelectedNode = parentNode;
-                parentNode.Expand();
-                LoadChildAccountsToGrid(parentNode);
-                DGV.Focus();
-            }
-        }
+  
         private TreeNode? FindTreeNodeByTreeCode(int treeCode)
         {
             foreach (TreeNode node in treeViewAccounts.Nodes)
