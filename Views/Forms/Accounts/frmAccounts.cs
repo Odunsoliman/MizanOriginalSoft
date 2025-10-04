@@ -1,4 +1,5 @@
-﻿using MizanOriginalSoft.MainClasses;
+﻿using Microsoft.IdentityModel.Tokens.Configuration;
+using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
 using MizanOriginalSoft.Views.Forms.MainForms;
 using System;
@@ -1041,7 +1042,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-  
+
         private TreeNode? FindTreeNodeByTreeCode(int treeCode)
         {
             foreach (TreeNode node in treeViewAccounts.Nodes)
@@ -1074,8 +1075,49 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         #endregion
 
+        private void btnDeleteAccFromTree_Click(object sender, EventArgs e)
+        {
+            if (treeViewAccounts.SelectedNode?.Tag is DataRow row)
+            {
+                int accID = Convert.ToInt32(row["AccID"]);
+                DeleteAcc(accID);
+            }
+            else
+            {
+                MessageBox.Show("يرجى اختيار حساب من الشجرة أولاً.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
 
+        private void btnDeleteAccFromDGV_Click(object sender, EventArgs e)
+        {
+            if (DGV.CurrentRow?.DataBoundItem is DataRowView rowView)
+            {
+                int accID = Convert.ToInt32(rowView.Row["AccID"]);
+                DeleteAcc(accID);
+            }
+            else
+            {
+                MessageBox.Show("يرجى اختيار حساب من الجدول أولاً.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
 
+        private void DeleteAcc(int accID)
+        {
+            // استدعاء الإجراء المخزن والحصول على الرسالة
+            string outputMsg = DBServiecs.Acc_DeleteAccount(accID);
+
+            // عرض رسالة النجاح أو الخطأ للمستخدم
+            MessageBox.Show(outputMsg, "نتيجة العملية", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // إذا كانت الرسالة تشير إلى نجاح العملية، أعيد تحميل الشجرة أو الجدول
+            if (!string.IsNullOrEmpty(outputMsg) && outputMsg.StartsWith("تم"))
+            {
+                LoadAccountsTree();
+
+                if (treeViewAccounts.SelectedNode != null)
+                    LoadChildAccountsToGrid(treeViewAccounts.SelectedNode);
+            }
+        }
 
     }
 }

@@ -367,7 +367,60 @@ namespace MizanOriginalSoft.MainClasses
 
         #endregion
 
-        public static string ExecuteNonQueryNoParamsWithMessage(string procedureName, bool expectMessageOutput = false)
+        public static string ExecuteNonQueryWithParams(
+    string procedureName,
+    Dictionary<string, object>? parameters = null,
+    bool expectMessageOutput = false)
+        {
+            try
+            {
+                EnsureConnectionOpen();
+                string result = "تم التنفيذ.";
+
+                using (SqlCommand cmd = CreateCommand(procedureName))
+                {
+                    // إضافة أي بارامترات واردة
+                    if (parameters != null)
+                    {
+                        foreach (var param in parameters)
+                        {
+                            cmd.Parameters.AddWithValue(param.Key, param.Value ?? DBNull.Value);
+                        }
+                    }
+
+                    // إضافة بارامتر إخراج إذا مطلوب
+                    if (expectMessageOutput)
+                    {
+                        var msgParam = new SqlParameter("@OutputMsg", SqlDbType.NVarChar, 500)
+                        {
+                            Direction = ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(msgParam);
+                    }
+
+                    cmd.ExecuteNonQuery();
+
+                    // الحصول على قيمة الإخراج إذا موجودة
+                    if (expectMessageOutput)
+                    {
+                        result = cmd.Parameters["@OutputMsg"].Value?.ToString() ?? result;
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("خطأ أثناء التنفيذ: " + ex.Message);
+                return "فشل في التنفيذ.";
+            }
+            finally
+            {
+                EnsureConnectionClosed();
+            }
+        }
+
+        public static string ExecuteNonQueryNoParamsWithMessage_(string procedureName, bool expectMessageOutput = false)
         {
             try
             {

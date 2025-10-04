@@ -15,10 +15,24 @@ namespace MizanOriginalSoft.MainClasses
     internal class DBServiecs
     {
         #region ********************  Log In Form ********************
-        //تحديث بيانات قاعدة البيانات
-        public static string A_UpdateAllDataBase()//@@@ 
+        ////تحديث بيانات قاعدة البيانات
+        //public static string A_UpdateAllDataBase()//@@@ 
+        //{
+        //    string result = dbHelper.ExecuteNonQueryNoParamsWithMessage("A_UpdateAllDataBase", expectMessageOutput: true);
+        //    if (!string.IsNullOrEmpty(result))
+        //        return result;
+
+        //    return "تم التحديث بنجاح";
+        //}
+        // تحديث بيانات قاعدة البيانات
+        public static string A_UpdateAllDataBase()
         {
-            string result = dbHelper.ExecuteNonQueryNoParamsWithMessage("A_UpdateAllDataBase", expectMessageOutput: true);
+            // لا يوجد بارامترات، لذا نمرر null
+            string result = dbHelper.ExecuteNonQueryWithParams(
+                "A_UpdateAllDataBase",
+                parameters: null,
+                expectMessageOutput: true);
+
             if (!string.IsNullOrEmpty(result))
                 return result;
 
@@ -26,8 +40,9 @@ namespace MizanOriginalSoft.MainClasses
         }
 
 
+
         #endregion
-    
+
         #region ********** Users ****************************
 
         // احضار كل المستخدمين المتاحين فقط 
@@ -1715,23 +1730,23 @@ END
             }, expectMessageOutput: false);
         }
 
-        // وظيفة حذف حساب
-        public static string Acc_DeleteAccount(int? AccID)
+        // داخل DBServiecs
+        public static string Acc_DeleteAccount(int accID)
         {
-            return dbHelper.ExecuteNonQueryWithLogging("Acc_DeleteAccount", command =>
+            // تمرير المعاملات كـ Dictionary
+            var parameters = new Dictionary<string, object>
             {
-                command.Parameters.Add("@AccID", SqlDbType.Int).Value = (object?)AccID ?? DBNull.Value;
+                { "@AccID", accID }
+            };
 
-                // لاحظ هنا لازم تخلي expectMessageOutput = false
-                var outputParam = new SqlParameter("@OutputMsg", SqlDbType.NVarChar, 500)
-                {
-                    Direction = ParameterDirection.Output
-                };
-                command.Parameters.Add(outputParam);
-
-            }, expectMessageOutput: false); // ❌ عشان ما يضيفش @Message
+            // استدعاء الدالة الجديدة
+            return dbHelper.ExecuteNonQueryWithParams(
+                "Acc_DeleteAccount",
+                parameters: parameters,
+                expectMessageOutput: true); // إذا كان الإجراء يرجع رسالة
         }
-        
+
+
         // جلب حساب ###
         public static DataTable Acc_GetData(int accID)
         {
