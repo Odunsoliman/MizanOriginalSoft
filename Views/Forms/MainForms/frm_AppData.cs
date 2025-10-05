@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.MainClasses.OriginalClasses; // تأكد من المسار الصحيح لمساحة الأسماء لكلاس AppSettings
 
 namespace MizanOriginalSoft.Views.Forms.MainForms
@@ -20,11 +22,41 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 // تحميل القيم من AppSettings فقط
                 DisplaySettings();
+                LoadWarehouses();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("خطأ أثناء تحميل الإعدادات: " + ex.Message);
             }
+        }
+
+        private void LoadWarehouses()
+        {
+            // 1️⃣ تحميل البيانات من قاعدة البيانات
+            DataTable dt = DBServiecs.Warehouse_GetAll();
+            if (dt == null || dt.Rows.Count == 0) return;
+
+            cbxWarehouseId.DataSource = dt;
+            cbxWarehouseId.DisplayMember = "WarehouseName"; // عدّل حسب اسم العمود الفعلي
+            cbxWarehouseId.ValueMember = "WarehouseId";
+
+            // 2️⃣ قراءة القيمة الافتراضية من ملف الإعداد
+            int defaultId = AppSettings.GetInt("ThisVersionIsForWarehouseId", 0);
+            cbxWarehouseId.SelectedValue = defaultId;
+        }
+
+        private void cbxWarehouseId_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbxWarehouseId.SelectedValue is int id)
+            {
+                AppSettings.SaveOrUpdate("ThisVersionIsForWarehouseId", id.ToString());
+            }
+        }
+
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("تم حفظ إعدادات المخزن الافتراضي بنجاح.");
         }
 
         // 🔹 عرض الإعدادات على الأدوات في الشاشة
@@ -103,7 +135,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
 
         // زر الحفظ في الواجهة
-        private void btnSave_Click(object sender, EventArgs e)
+        private void btnSave_Click_(object sender, EventArgs e)
         {
             SaveData();
         }
