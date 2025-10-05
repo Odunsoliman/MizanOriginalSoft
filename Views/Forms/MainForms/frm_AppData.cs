@@ -41,27 +41,37 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             txtAdreass.Text = AppSettings.GetString("CompanyAdreass", "");
             txtCompanyEmail.Text = AppSettings.GetString("EmailCo", "");
 
-            // شعار الشركة
-            string? logoFileName = AppSettings.GetString("LogoImagName", "");
-            string? logoFolder = AppSettings.GetString("CompanyLoGoFolder", "");
-            lblLogoImageName.Text = logoFileName;
-            lblLogoPath.Text = logoFolder;
+            // 🖼️ شعار الشركة
+            string? logoFileName = AppSettings.GetString("LogoImagName", null);
+            string? logoFolder = AppSettings.GetString("CompanyLoGoFolder", null);
 
-            // تحميل الصورة إذا كانت موجودة
-            string? logoFullPath = Path.Combine(logoFolder, logoFileName);
-            if (File.Exists(logoFullPath))
+            lblLogoImageName.Text = logoFileName ?? "";
+            lblLogoPath.Text = logoFolder ?? "";
+
+            // ✅ التأكد أن القيم ليست null قبل Path.Combine
+            if (!string.IsNullOrWhiteSpace(logoFolder) && !string.IsNullOrWhiteSpace(logoFileName))
             {
-                // تحرير أي صورة موجودة مسبقًا لتجنب استثناء FileInUse
-                if (picLogoCo.Image != null)
+                string logoFullPath = Path.Combine(logoFolder, logoFileName);
+
+                if (File.Exists(logoFullPath))
                 {
-                    picLogoCo.Image.Dispose();
-                    picLogoCo.Image = null;
+                    // تحرير أي صورة موجودة مسبقًا لتجنب استثناء FileInUse
+                    if (picLogoCo.Image != null)
+                    {
+                        picLogoCo.Image.Dispose();
+                        picLogoCo.Image = null;
+                    }
+
+                    picLogoCo.Image = Image.FromFile(logoFullPath);
                 }
-                picLogoCo.Image = Image.FromFile(logoFullPath);
+                else
+                {
+                    picLogoCo.Image = null; // أو ضع صورة افتراضية
+                }
             }
             else
             {
-                picLogoCo.Image = null; // أو ضع صورة افتراضية
+                picLogoCo.Image = null;
             }
 
             // 🖨️ إعدادات الطباعة
@@ -205,8 +215,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 AppSettings.SaveOrUpdate("CompanyAnthrPhon", txtAnthrPhon.Text);
                 AppSettings.SaveOrUpdate("CompanyAdreass", txtAdreass.Text);
                 AppSettings.SaveOrUpdate("EmailCo", txtCompanyEmail.Text);
-                AppSettings.SaveOrUpdate("CompanyLoGoFolder", txtCompanyEmail.Text);
-                AppSettings.SaveOrUpdate("LogoImagName", txtCompanyEmail.Text);
+                AppSettings.SaveOrUpdate("CompanyLoGoFolder", lblLogoPath  .Text);
+                AppSettings.SaveOrUpdate("LogoImagName", lblLogoImageName.Text);
 
                 // 🖨️ إعدادات الطباعة
                 AppSettings.SaveOrUpdate("RollPrinter", lblRollPrinter.Text);
