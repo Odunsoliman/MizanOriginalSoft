@@ -40,9 +40,29 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             txtAnthrPhon.Text = AppSettings.GetString("CompanyAnthrPhon", "");
             txtAdreass.Text = AppSettings.GetString("CompanyAdreass", "");
             txtCompanyEmail.Text = AppSettings.GetString("EmailCo", "");
-            lblLogoImageName.Text = AppSettings.GetString("CompanyLoGoFolder", "");
-            lblLogoPath.Text = AppSettings.GetString("LogoImagName", "");
 
+            // شعار الشركة
+            string? logoFileName = AppSettings.GetString("LogoImagName", "");
+            string? logoFolder = AppSettings.GetString("CompanyLoGoFolder", "");
+            lblLogoImageName.Text = logoFileName;
+            lblLogoPath.Text = logoFolder;
+
+            // تحميل الصورة إذا كانت موجودة
+            string? logoFullPath = Path.Combine(logoFolder, logoFileName);
+            if (File.Exists(logoFullPath))
+            {
+                // تحرير أي صورة موجودة مسبقًا لتجنب استثناء FileInUse
+                if (picLogoCo.Image != null)
+                {
+                    picLogoCo.Image.Dispose();
+                    picLogoCo.Image = null;
+                }
+                picLogoCo.Image = Image.FromFile(logoFullPath);
+            }
+            else
+            {
+                picLogoCo.Image = null; // أو ضع صورة افتراضية
+            }
 
             // 🖨️ إعدادات الطباعة
             lblRollPrinter.Text = AppSettings.GetString("RollPrinter", "");
