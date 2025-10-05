@@ -48,7 +48,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             string defaultLogoFolder = AppSettings.GetString("DefaulCompanyLoGoFolder", Path.Combine(Application.StartupPath, "HelpFiles"))
                                        ?? Path.Combine(Application.StartupPath, "HelpFiles");
 
-//            lblLogoImageName.Text = logoFileName ?? defaultLogoFileName;//اريد عدم اظهار الامتداد بعد الدوت "."فى العرض للاسم
+//            lblLogoImageName.Text = logoFileName ?? defaultLogoFileName;
             lblLogoImageName.Text = Path.GetFileNameWithoutExtension(logoFileName ?? defaultLogoFileName);
 
             lblLogoPath.Text = logoFolder ?? defaultLogoFolder;
@@ -84,7 +84,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
 
             // ✅ عرض أبعاد الـ PictureBox (وليس الصورة) في lblImagSize
-            lblImagSize.Text = $"المقاس الطلوب عرض: {picLogoCo.Width}px × ارتفاع: {picLogoCo.Height}px";
+            lblImagSize.Text = $"المقاس الطلوب لصورة اللوجو:    عرض: {picLogoCo.Width}px × ارتفاع: {picLogoCo.Height}px او ما يوازيه حتى لا تفقد دقة الصورة";
 
             // 🖨️ إعدادات الطباعة
             lblRollPrinter.Text = AppSettings.GetString("RollPrinter", "");
