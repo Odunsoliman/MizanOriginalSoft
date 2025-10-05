@@ -595,37 +595,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         #endregion
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         #region !!!!!!! AfterSelect  بعد تحديد عقدة !!!!!!!!!!!!!!
 
  
@@ -734,31 +703,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
         #endregion
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         #region !!!!! منطقة البحث  !!!!!!!!!!
         private bool _isSearching = false;
         private void treeViewAccounts_AfterExpand(object sender, TreeViewEventArgs e)
@@ -774,7 +718,11 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
         // دخول وخروج مربع البحث
         private void txtSearchTree_Enter(object sender, EventArgs e) => _isSearching = true;
+        
+        //الخروج من مربع البحث فى الشجرة
         private void txtSearchTree_Leave(object sender, EventArgs e) => _isSearching = false;
+     
+        // حدث الكتابة فى مربع البخث
         private void txtSearchTree_TextChanged(object sender, EventArgs e)
         {
             try
@@ -798,6 +746,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
+        // وظيفة الغاء الهاى لايت 
         private void ClearAllHighlights()
         {
             foreach (TreeNode node in treeViewAccounts.Nodes)
@@ -817,6 +766,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
+        // وضع هاى لايت اثناء البحث
         private void SearchAndHighlightNodes(string searchText)
         {
             bool foundAny = false;
@@ -876,6 +826,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             return foundInCurrent || foundInChildren;
         }
         #endregion
+  
         #region !!!!!!!!  Add Account  !!!!!!!!
 
         private void btnAccAccount_Click(object sender, EventArgs e)
@@ -1036,7 +987,11 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         #endregion
 
+        #region !!!!!!!!!  التعديل فى الحسابات وتفاصيلها !!!!!!!!!!!!
 
+
+
+        #endregion 
 
 
 
