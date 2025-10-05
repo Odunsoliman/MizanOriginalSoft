@@ -658,6 +658,7 @@
             btnAddWarehouse.TabIndex = 40;
             btnAddWarehouse.Text = "اضافة فرع جديد... ";
             btnAddWarehouse.UseVisualStyleBackColor = true;
+            btnAddWarehouse.Click += btnAddWarehouse_Click;
             // 
             // tabPagePrinterSetting
             // 

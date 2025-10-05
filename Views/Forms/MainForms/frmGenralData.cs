@@ -1352,6 +1352,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         private void btnAddWarehouse_Click(object sender, EventArgs e)
         {
             string name = txtWarehouseName.Text.Trim();
+
             if (string.IsNullOrWhiteSpace(name))
             {
                 MessageBox.Show("❌ يرجى إدخال اسم الفرع أولًا.");

@@ -143,5 +143,32 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             SaveData();
         }
+
+        private void btnAddWarehouse_Click(object sender, EventArgs e)
+        {
+            AddWarehouse();
+        }
+        private void AddWarehouse()
+        {
+            string userInput;
+            DialogResult inputResult = CustomMessageBox.ShowStringInputBox(out userInput,
+                "من فضلك أدخل اسم الفرع:", "إضافة فرع");
+
+            if (inputResult != DialogResult.OK || string.IsNullOrWhiteSpace(userInput))
+            {
+                MessageBox.Show("تم إلغاء الإضافة أو لم يتم إدخال اسم صالح.", "إلغاء",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            int userId = CurrentSession.UserID;
+            string message = DBServiecs.Warehouse_Add(userInput, userId);
+            MessageBox.Show(message);
+            LoadWarehouses(); // 🔄 تحديث القوائم بعد الإضافة.
+
+
+        }
+
+
     }
 }
