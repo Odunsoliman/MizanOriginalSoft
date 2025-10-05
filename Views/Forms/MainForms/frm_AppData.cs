@@ -86,6 +86,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 picLogoCo.Image = null; // أو ضع صورة افتراضية مدمجة بالبرنامج
             }
+       
             // بعد تحميل الصورة في PictureBox
             if (File.Exists(logoFullPath))
             {
@@ -99,7 +100,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 picLogoCo.Image = img;
 
                 // عرض أبعاد الصورة بالبكسل
-                lblImagSize.Text = $"{img.Width} × {img.Height} px";
+                lblImagSize.Text = $"W:{img.Width} × H:{img.Height} px";
             }
             else
             {
