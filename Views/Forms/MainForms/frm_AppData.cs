@@ -48,7 +48,9 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             string defaultLogoFolder = AppSettings.GetString("DefaulCompanyLoGoFolder", Path.Combine(Application.StartupPath, "HelpFiles"))
                                        ?? Path.Combine(Application.StartupPath, "HelpFiles");
 
-            lblLogoImageName.Text = logoFileName ?? defaultLogoFileName;
+//            lblLogoImageName.Text = logoFileName ?? defaultLogoFileName;//اريد عدم اظهار الامتداد بعد الدوت "."فى العرض للاسم
+            lblLogoImageName.Text = Path.GetFileNameWithoutExtension(logoFileName ?? defaultLogoFileName);
+
             lblLogoPath.Text = logoFolder ?? defaultLogoFolder;
 
             string logoFullPath;
