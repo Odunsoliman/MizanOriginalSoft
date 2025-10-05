@@ -877,7 +877,7 @@
             panel3.Dock = DockStyle.Fill;
             panel3.Location = new Point(146, 3);
             panel3.Name = "panel3";
-            panel3.Padding = new Padding(20, 0, 50, 0);
+            panel3.Padding = new Padding(10, 0, 80, 0);
             panel3.Size = new Size(188, 141);
             panel3.TabIndex = 30;
             // 
@@ -887,9 +887,9 @@
             label12.Dock = DockStyle.Fill;
             label12.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label12.ForeColor = Color.FromArgb(192, 0, 192);
-            label12.Location = new Point(20, 0);
+            label12.Location = new Point(10, 0);
             label12.Name = "label12";
-            label12.Size = new Size(118, 141);
+            label12.Size = new Size(98, 141);
             label12.TabIndex = 28;
             label12.Text = "-------------- هوامش صفحة بالملي --------------";
             label12.TextAlign = ContentAlignment.MiddleCenter;
