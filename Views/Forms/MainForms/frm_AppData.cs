@@ -40,10 +40,14 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             cbxWarehouseId.DisplayMember = "WarehouseName"; // عدّل حسب اسم العمود الفعلي
             cbxWarehouseId.ValueMember = "WarehouseId";
 
+            // 🔒 منع الكتابة داخل الكمبوبوكس
+            cbxWarehouseId.DropDownStyle = ComboBoxStyle.DropDownList;
+
             // 2️⃣ قراءة القيمة الافتراضية من ملف الإعداد
             int defaultId = AppSettings.GetInt("ThisVersionIsForWarehouseId", 0);
             cbxWarehouseId.SelectedValue = defaultId;
         }
+
 
         private void cbxWarehouseId_SelectedIndexChanged(object sender, EventArgs e)
         {

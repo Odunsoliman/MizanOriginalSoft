@@ -55,6 +55,10 @@
             txtAdreass = new TextBox();
             lblFirstPhon = new Label();
             cbxWarehouseId = new ComboBox();
+            tableLayoutPanel16 = new TableLayoutPanel();
+            btnDeleteWarehous = new Button();
+            btnRenamWarehous = new Button();
+            btnAddWarehouse = new Button();
             tabPagePrinterSetting = new TabPage();
             tableLayoutPanel18 = new TableLayoutPanel();
             tableLayoutPanel22 = new TableLayoutPanel();
@@ -167,10 +171,6 @@
             tableLayoutPanel35 = new TableLayoutPanel();
             label35 = new Label();
             txtSalesPercentage = new TextBox();
-            tableLayoutPanel16 = new TableLayoutPanel();
-            btnAddWarehouse = new Button();
-            btnRenamWarehous = new Button();
-            btnDeleteWarehous = new Button();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
@@ -181,6 +181,7 @@
             tabPageGenralData.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
             tableLayoutPanel8.SuspendLayout();
+            tableLayoutPanel16.SuspendLayout();
             tabPagePrinterSetting.SuspendLayout();
             tableLayoutPanel18.SuspendLayout();
             tableLayoutPanel22.SuspendLayout();
@@ -219,7 +220,6 @@
             tableLayoutPanel36.SuspendLayout();
             tableLayoutPanel37.SuspendLayout();
             tableLayoutPanel35.SuspendLayout();
-            tableLayoutPanel16.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -608,6 +608,56 @@
             cbxWarehouseId.Name = "cbxWarehouseId";
             cbxWarehouseId.Size = new Size(443, 27);
             cbxWarehouseId.TabIndex = 37;
+            // 
+            // tableLayoutPanel16
+            // 
+            tableLayoutPanel16.ColumnCount = 3;
+            tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel16.Controls.Add(btnDeleteWarehous, 2, 0);
+            tableLayoutPanel16.Controls.Add(btnRenamWarehous, 1, 0);
+            tableLayoutPanel16.Controls.Add(btnAddWarehouse, 0, 0);
+            tableLayoutPanel16.Dock = DockStyle.Fill;
+            tableLayoutPanel16.Location = new Point(71, 268);
+            tableLayoutPanel16.Name = "tableLayoutPanel16";
+            tableLayoutPanel16.RowCount = 1;
+            tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel16.Size = new Size(443, 37);
+            tableLayoutPanel16.TabIndex = 42;
+            // 
+            // btnDeleteWarehous
+            // 
+            btnDeleteWarehous.Dock = DockStyle.Fill;
+            btnDeleteWarehous.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            btnDeleteWarehous.Location = new Point(3, 3);
+            btnDeleteWarehous.Name = "btnDeleteWarehous";
+            btnDeleteWarehous.Size = new Size(143, 31);
+            btnDeleteWarehous.TabIndex = 42;
+            btnDeleteWarehous.Text = "حذف الفرع";
+            btnDeleteWarehous.UseVisualStyleBackColor = true;
+            // 
+            // btnRenamWarehous
+            // 
+            btnRenamWarehous.Dock = DockStyle.Fill;
+            btnRenamWarehous.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            btnRenamWarehous.Location = new Point(152, 3);
+            btnRenamWarehous.Name = "btnRenamWarehous";
+            btnRenamWarehous.Size = new Size(141, 31);
+            btnRenamWarehous.TabIndex = 41;
+            btnRenamWarehous.Text = "تعديل اسم";
+            btnRenamWarehous.UseVisualStyleBackColor = true;
+            // 
+            // btnAddWarehouse
+            // 
+            btnAddWarehouse.Dock = DockStyle.Fill;
+            btnAddWarehouse.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            btnAddWarehouse.Location = new Point(299, 3);
+            btnAddWarehouse.Name = "btnAddWarehouse";
+            btnAddWarehouse.Size = new Size(141, 31);
+            btnAddWarehouse.TabIndex = 40;
+            btnAddWarehouse.Text = "اضافة فرع جديد... ";
+            btnAddWarehouse.UseVisualStyleBackColor = true;
             // 
             // tabPagePrinterSetting
             // 
@@ -2101,56 +2151,6 @@
             txtSalesPercentage.Text = "0";
             txtSalesPercentage.TextAlign = HorizontalAlignment.Center;
             // 
-            // tableLayoutPanel16
-            // 
-            tableLayoutPanel16.ColumnCount = 3;
-            tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel16.Controls.Add(btnDeleteWarehous, 2, 0);
-            tableLayoutPanel16.Controls.Add(btnRenamWarehous, 1, 0);
-            tableLayoutPanel16.Controls.Add(btnAddWarehouse, 0, 0);
-            tableLayoutPanel16.Dock = DockStyle.Fill;
-            tableLayoutPanel16.Location = new Point(71, 268);
-            tableLayoutPanel16.Name = "tableLayoutPanel16";
-            tableLayoutPanel16.RowCount = 1;
-            tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel16.Size = new Size(443, 37);
-            tableLayoutPanel16.TabIndex = 42;
-            // 
-            // btnAddWarehouse
-            // 
-            btnAddWarehouse.Dock = DockStyle.Fill;
-            btnAddWarehouse.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnAddWarehouse.Location = new Point(299, 3);
-            btnAddWarehouse.Name = "btnAddWarehouse";
-            btnAddWarehouse.Size = new Size(141, 31);
-            btnAddWarehouse.TabIndex = 40;
-            btnAddWarehouse.Text = "اضافة فرع جديد... ";
-            btnAddWarehouse.UseVisualStyleBackColor = true;
-            // 
-            // btnRenamWarehous
-            // 
-            btnRenamWarehous.Dock = DockStyle.Fill;
-            btnRenamWarehous.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnRenamWarehous.Location = new Point(152, 3);
-            btnRenamWarehous.Name = "btnRenamWarehous";
-            btnRenamWarehous.Size = new Size(141, 31);
-            btnRenamWarehous.TabIndex = 41;
-            btnRenamWarehous.Text = "تعديل اسم";
-            btnRenamWarehous.UseVisualStyleBackColor = true;
-            // 
-            // btnDeleteWarehous
-            // 
-            btnDeleteWarehous.Dock = DockStyle.Fill;
-            btnDeleteWarehous.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnDeleteWarehous.Location = new Point(3, 3);
-            btnDeleteWarehous.Name = "btnDeleteWarehous";
-            btnDeleteWarehous.Size = new Size(143, 31);
-            btnDeleteWarehous.TabIndex = 42;
-            btnDeleteWarehous.Text = "حذف الفرع";
-            btnDeleteWarehous.UseVisualStyleBackColor = true;
-            // 
             // frm_AppData
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -2173,6 +2173,7 @@
             tableLayoutPanel5.ResumeLayout(false);
             tableLayoutPanel8.ResumeLayout(false);
             tableLayoutPanel8.PerformLayout();
+            tableLayoutPanel16.ResumeLayout(false);
             tabPagePrinterSetting.ResumeLayout(false);
             tableLayoutPanel18.ResumeLayout(false);
             tableLayoutPanel22.ResumeLayout(false);
@@ -2229,7 +2230,6 @@
             tableLayoutPanel37.PerformLayout();
             tableLayoutPanel35.ResumeLayout(false);
             tableLayoutPanel35.PerformLayout();
-            tableLayoutPanel16.ResumeLayout(false);
             ResumeLayout(false);
         }
 
