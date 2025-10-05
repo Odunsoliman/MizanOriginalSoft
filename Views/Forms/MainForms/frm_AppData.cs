@@ -48,7 +48,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             string defaultLogoFolder = AppSettings.GetString("DefaulCompanyLoGoFolder", Path.Combine(Application.StartupPath, "HelpFiles"))
                                        ?? Path.Combine(Application.StartupPath, "HelpFiles");
 
-//            lblLogoImageName.Text = logoFileName ?? defaultLogoFileName;
+            //            lblLogoImageName.Text = logoFileName ?? defaultLogoFileName;
             lblLogoImageName.Text = Path.GetFileNameWithoutExtension(logoFileName ?? defaultLogoFileName);
 
             lblLogoPath.Text = logoFolder ?? defaultLogoFolder;
@@ -386,7 +386,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     try
                     {
                         picLogoCo.Image = Image.FromFile(openFileDialog.FileName);
-                        picLogoCo.SizeMode = PictureBoxSizeMode.Zoom ;
+                        picLogoCo.SizeMode = PictureBoxSizeMode.Zoom;
                         SaveData();
 
                     }
