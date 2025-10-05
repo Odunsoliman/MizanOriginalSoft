@@ -37,7 +37,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         private Dictionary<string, UserPermissionInfo> userPermissions = new();
         private DataTable? tblUsers;
         private DataTable? tblUsVarfy;
-        private DataTable? tblPermissions;
+        private DataTable? tblPermissions;//AppSettings
 
         private string username = string.Empty;
         private string password = string.Empty;
@@ -1102,100 +1102,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-        //private void btnEnd_Click__(object? sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        string settingsPath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
-
-        //        if (!File.Exists(settingsPath))
-        //        {
-        //            MessageBox.Show("❌ ملف إعدادات الاتصال غير موجود!", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //            return;
-        //        }
-
-        //        // تحميل الإعدادات
-        //        AppSettings.Load(settingsPath);
-
-        //        // قراءة الإعدادات بعد التحميل
-        //        string? backupPath = AppSettings.GetString("BackupsPath", "غير موجود");
-        //        string? serverName = AppSettings.GetString("serverName", "غير موجود");
-        //        string? dbName = AppSettings.GetString("DBName", "غير موجود");
-        //        string? googleDrivePath = AppSettings.GetString("GoogleDrivePath", "غير موجود");
-        //        string? projectPath = AppSettings.GetString("ProjectPath", "غير موجود");
-        //        string? backupGitPath = AppSettings.GetString("BackupGitPath", "غير موجود");
-
-        //        // عرض الإعدادات
-        //        MessageBox.Show(
-        //            $"📂 BackupsPath: {backupPath}\n" +
-        //            $"🖥 serverName: {serverName}\n" +
-        //            $"🗄 DBName: {dbName}\n" +
-        //            $"☁ GoogleDrivePath: {googleDrivePath}\n" +
-        //            $"📁 ProjectPath: {projectPath}\n" +
-        //            $"📁 BackupGitPath: {backupGitPath}",
-        //            "الإعدادات المحملة"
-        //        );
-
-        //        var helper = new DatabaseBackupRestoreHelper(settingsPath);
-
-        //        // 1. النسخ الاحتياطي
-        //        helper.BackupDatabase();
-        //        MessageBox.Show($"✅ تم إنشاء النسخة الاحتياطية في:\n{backupPath}", "Backup");
-
-        //        // 2. تنظيف النسخ القديمة
-        //        if (!string.IsNullOrWhiteSpace(backupPath))
-        //        {
-        //            helper.CleanOldBackups(backupPath);
-        //            MessageBox.Show($"🗑 تم تنظيف النسخ القديمة في:\n{backupPath}", "Clean");
-        //        }
-
-        //        // 3. نسخ النسخة الأخيرة إلى مجلد ثابت
-        //        helper.CopyLatestBackupToSharedFolder(
-        //            sourceBackupFolder: backupPath,
-        //            sharedFolderPath: @"D:\BackupToPush",
-        //            outputFileName: "MizanOriginalDB.bak"
-        //        );
-        //        MessageBox.Show("📂 تم نسخ آخر نسخة إلى:\nD:\\BackupToPush\\MizanOriginalDB.bak", "Copy Shared");
-
-        //        // 4. نسخة إلى Google Drive
-        //        if (!string.IsNullOrWhiteSpace(backupPath) &&
-        //            !string.IsNullOrWhiteSpace(dbName) &&
-        //            !string.IsNullOrWhiteSpace(googleDrivePath))
-        //        {
-        //            helper.CopyBackupToGoogleDrive(
-        //                sourceFolder: backupPath,
-        //                googleDriveFolder: googleDrivePath,
-        //                dbName: dbName
-        //            );
-        //            MessageBox.Show($"☁ تم نسخ النسخة إلى Google Drive:\n{googleDrivePath}", "Google Drive");
-        //        }
-
-        //        // 5. Git Push لمجلد المشروع
-        //        if (!string.IsNullOrWhiteSpace(projectPath))
-        //        {
-        //            ExecuteGitPush(projectPath);
-        //            MessageBox.Show($"📤 تم رفع مشروع Git من:\n{projectPath}", "Git Project");
-        //        }
-
-        //        // 6. Git Push لمجلد النسخ
-        //        if (!string.IsNullOrWhiteSpace(backupGitPath))
-        //        {
-        //            ExecuteGitPush(backupGitPath);
-        //            MessageBox.Show($"📤 تم رفع نسخ القواعد من:\n{backupGitPath}", "Git Backup");
-        //        }
-
-        //        // 7. تحديث القاعدة
-        //        DBServiecs.A_UpdateAllDataBase();
-        //        MessageBox.Show("🔄 تم تحديث بيانات القاعدة", "Update DB");
-
-        //        // 8. إنهاء البرنامج
-        //        Application.Exit();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show("❌ حدث خطأ أثناء إنهاء التطبيق: " + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //    }
-        //}
 
         private void btnEnd_Click(object? sender, EventArgs e)
         {
@@ -1498,6 +1404,17 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
             CloseAllFormsExceptMain();
             frm_Accounts frm = new frm_Accounts();
+            OpenFormInPanel(frm);
+        }
+
+        private void btnAppData_Click(object sender, EventArgs e)
+        {
+            if (sender is Button btn)
+            {
+                HighlightTransparentButton(btn);
+            }
+            CloseAllFormsExceptMain();
+            frm_AppData frm = new frm_AppData();
             OpenFormInPanel(frm);
         }
     }

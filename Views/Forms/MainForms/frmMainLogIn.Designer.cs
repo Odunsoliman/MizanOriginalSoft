@@ -45,6 +45,8 @@
             pnlAccounts = new Panel();
             btn_Accounts = new Button();
             pnlMoreSetting = new Panel();
+            btnAppData = new Button();
+            btnAccounts_Old = new Button();
             btnAccounts = new Button();
             btnGenralData = new Button();
             lblCoSeprator = new Label();
@@ -100,7 +102,6 @@
             tlpDown = new TableLayoutPanel();
             tableLayoutPanel3 = new TableLayoutPanel();
             tableLayoutPanel1 = new TableLayoutPanel();
-            btnAccounts_Old = new Button();
             pnlSetting.SuspendLayout();
             pnlAccounts.SuspendLayout();
             pnlMoreSetting.SuspendLayout();
@@ -339,7 +340,7 @@
             pnlAccounts.Controls.Add(btnCustomers);
             pnlAccounts.Controls.Add(btn_Accounts);
             pnlAccounts.Dock = DockStyle.Top;
-            pnlAccounts.Location = new Point(3, 181);
+            pnlAccounts.Location = new Point(3, 231);
             pnlAccounts.Margin = new Padding(3, 2, 3, 2);
             pnlAccounts.MaximumSize = new Size(0, 308);
             pnlAccounts.MinimumSize = new Size(0, 34);
@@ -366,6 +367,7 @@
             // pnlMoreSetting
             // 
             pnlMoreSetting.BackColor = Color.Transparent;
+            pnlMoreSetting.Controls.Add(btnAppData);
             pnlMoreSetting.Controls.Add(btnAccounts_Old);
             pnlMoreSetting.Controls.Add(btnAccounts);
             pnlMoreSetting.Controls.Add(btnGenralData);
@@ -375,12 +377,50 @@
             pnlMoreSetting.Dock = DockStyle.Top;
             pnlMoreSetting.Location = new Point(3, 31);
             pnlMoreSetting.Margin = new Padding(3, 2, 3, 2);
-            pnlMoreSetting.MaximumSize = new Size(0, 150);
+            pnlMoreSetting.MaximumSize = new Size(0, 200);
             pnlMoreSetting.MinimumSize = new Size(0, 34);
             pnlMoreSetting.Name = "pnlMoreSetting";
             pnlMoreSetting.Padding = new Padding(3, 2, 3, 2);
-            pnlMoreSetting.Size = new Size(128, 150);
+            pnlMoreSetting.Size = new Size(128, 200);
             pnlMoreSetting.TabIndex = 5;
+            // 
+            // btnAppData
+            // 
+            btnAppData.Dock = DockStyle.Top;
+            btnAppData.FlatAppearance.BorderSize = 0;
+            btnAppData.FlatStyle = FlatStyle.Flat;
+            btnAppData.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            btnAppData.Location = new Point(3, 148);
+            btnAppData.Margin = new Padding(3, 2, 3, 2);
+            btnAppData.MaximumSize = new Size(0, 29);
+            btnAppData.MinimumSize = new Size(0, 29);
+            btnAppData.Name = "btnAppData";
+            btnAppData.Padding = new Padding(0, 0, 22, 0);
+            btnAppData.Size = new Size(122, 29);
+            btnAppData.TabIndex = 11;
+            btnAppData.Text = "الاعدادات العامة للبرنامج";
+            btnAppData.TextAlign = ContentAlignment.MiddleLeft;
+            btnAppData.UseVisualStyleBackColor = true;
+            btnAppData.Click += btnAppData_Click;
+            // 
+            // btnAccounts_Old
+            // 
+            btnAccounts_Old.Dock = DockStyle.Top;
+            btnAccounts_Old.FlatAppearance.BorderSize = 0;
+            btnAccounts_Old.FlatStyle = FlatStyle.Flat;
+            btnAccounts_Old.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            btnAccounts_Old.Location = new Point(3, 119);
+            btnAccounts_Old.Margin = new Padding(3, 2, 3, 2);
+            btnAccounts_Old.MaximumSize = new Size(0, 29);
+            btnAccounts_Old.MinimumSize = new Size(0, 29);
+            btnAccounts_Old.Name = "btnAccounts_Old";
+            btnAccounts_Old.Padding = new Padding(0, 0, 22, 0);
+            btnAccounts_Old.Size = new Size(122, 29);
+            btnAccounts_Old.TabIndex = 10;
+            btnAccounts_Old.Text = "شجرة الحسابات القديمة";
+            btnAccounts_Old.TextAlign = ContentAlignment.MiddleLeft;
+            btnAccounts_Old.UseVisualStyleBackColor = true;
+            btnAccounts_Old.Click += btnAccounts_Old_Click;
             // 
             // btnAccounts
             // 
@@ -418,6 +458,7 @@
             btnGenralData.Text = "اعداد عامة للبرنامج";
             btnGenralData.TextAlign = ContentAlignment.MiddleLeft;
             btnGenralData.UseVisualStyleBackColor = true;
+            btnGenralData.Click += btnGenralData_Click;
             // 
             // lblCoSeprator
             // 
@@ -1248,25 +1289,6 @@
             tableLayoutPanel1.Size = new Size(982, 556);
             tableLayoutPanel1.TabIndex = 1;
             // 
-            // btnAccounts_Old
-            // 
-            btnAccounts_Old.Dock = DockStyle.Top;
-            btnAccounts_Old.FlatAppearance.BorderSize = 0;
-            btnAccounts_Old.FlatStyle = FlatStyle.Flat;
-            btnAccounts_Old.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnAccounts_Old.Location = new Point(3, 119);
-            btnAccounts_Old.Margin = new Padding(3, 2, 3, 2);
-            btnAccounts_Old.MaximumSize = new Size(0, 29);
-            btnAccounts_Old.MinimumSize = new Size(0, 29);
-            btnAccounts_Old.Name = "btnAccounts_Old";
-            btnAccounts_Old.Padding = new Padding(0, 0, 22, 0);
-            btnAccounts_Old.Size = new Size(122, 29);
-            btnAccounts_Old.TabIndex = 10;
-            btnAccounts_Old.Text = "شجرة الحسابات القديمة";
-            btnAccounts_Old.TextAlign = ContentAlignment.MiddleLeft;
-            btnAccounts_Old.UseVisualStyleBackColor = true;
-            btnAccounts_Old.Click += btnAccounts_Old_Click;
-            // 
             // frmMainLogIn
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1371,5 +1393,6 @@
         private Label label1;
         private Button btnAccounts;
         private Button btnAccounts_Old;
+        private Button btnAppData;
     }
 }

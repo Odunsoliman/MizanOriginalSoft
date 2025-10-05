@@ -133,6 +133,15 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
+
+
+
+
+
+
+
+
+
         private void StyleDGV_Permissions()
         {
             DGV_Permissions.RowHeadersVisible = false;
@@ -172,6 +181,17 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             DGV_Permissions.DefaultCellStyle.ForeColor = Color.Black;
             DGV_Permissions.DefaultCellStyle.BackColor = Color.White;
         }
+
+
+
+
+
+
+
+
+
+
+
 
         private void LoadAllUsers()
         {
@@ -309,6 +329,17 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             cbxUsers.ValueMember = "IDUser";
             cbxUsers.DataSource = usersTable;
         }
+  
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         private void DGVStyl()
         {
             // تفعيل التنسيق المخصص للرأس
@@ -360,11 +391,40 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 DGV.Columns["WarehouseID"].Visible = false;
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         private void CbxUsers_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (cbxUsers.SelectedValue is int selectedUserId)
                 LoadPermissions(selectedUserId);
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         private void LoadPermissions(int userId)
         {
@@ -376,6 +436,27 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             if (DGV.Columns.Contains("PermissionID"))
                 DGV.Columns["PermissionID"].ReadOnly = true;
         }
+   
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         private void BtnSave_Click(object sender, EventArgs e)
         {
             if (cbxUsers.SelectedValue == null || cbxWarehouses.SelectedValue == null)
@@ -450,12 +531,35 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             MessageBox.Show("✅ تم حفظ الصلاحيات بنجاح", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         private bool ConvertToBool(object value)
         {
             return value != null && value != DBNull.Value && Convert.ToBoolean(value);
         }
 
         #endregion
+
+
+
+
+
+
+
+
 
 
         #region تحميل الإعدادات من الملف
@@ -573,6 +677,15 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
         #endregion
+
+
+
+
+
+
+
+
+
 
 
 
@@ -718,6 +831,24 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // ثلاث نقاط هامة يقوم بها هذا الحفظ
         //1- مفاتيح المطوّر الخاصة تفضل زي ما هي.
         //2- التعليقات تبقى زي ما هي.
@@ -800,6 +931,16 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
 
         #endregion
+
+
+
+
+
+
+
+
+
+
 
         #region === التنقل باستخدام Enter بين الحقول ===
 
@@ -1195,6 +1336,16 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             SaveData();
         }
         #endregion
+
+
+
+
+
+
+
+
+
+
 
         #region ✅ التعامل مع الفروع والمخازن
         // ➕ إضافة فرع جديد.
