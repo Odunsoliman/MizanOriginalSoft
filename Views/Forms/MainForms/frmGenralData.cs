@@ -1416,46 +1416,21 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         // 📋 تحميل قائمة الفروع في الكومبوبوكس.
         private void LoadWarehouses()
         {
-            try
-            {
-                DataTable dt = DBServiecs.Warehouse_GetAll();
+            // 1️⃣ تحميل البيانات من قاعدة البيانات
+            DataTable dt = DBServiecs.Warehouse_GetAll();
+            if (dt == null || dt.Rows.Count == 0) return;
 
-                if (dt != null && dt.Rows.Count > 0)
-                {
-                    // ✅ إضافة صف افتراضي "اختر الفرع..."
-                    DataRow defaultRow = dt.NewRow();
-                    defaultRow["WarehouseId"] = -1;
-                    defaultRow["WarehouseName"] = "اختر الفرع...";
-                    dt.Rows.InsertAt(defaultRow, 0);
+            cbxWarehouseId.DataSource = dt;
+            cbxWarehouseId.DisplayMember = "WarehouseName"; // عدّل حسب اسم العمود الفعلي
+            cbxWarehouseId.ValueMember = "WarehouseId";
 
-                    // 🧩 ربط الكومبوبوكس الأول.
-                    cbxWarehouseId.DataSource = null;
-                    cbxWarehouseId.DataSource = dt;
-                    cbxWarehouseId.DisplayMember = "WarehouseName";
-                    cbxWarehouseId.ValueMember = "WarehouseId";
-                    cbxWarehouseId.SelectedIndex = 0;
+            // 🔒 منع الكتابة داخل الكمبوبوكس
+            cbxWarehouseId.DropDownStyle = ComboBoxStyle.DropDownList;
 
-                    // ⚠️ ملاحظة: هنا نفس DataTable مرتبط بـ cbxWarehouses أيضًا،
-                    // وهذا يسبب تعارضًا إذا حاول أحدهما تغيير الاختيار.
-                    // 🧠 الحل: استخدم dt.Copy() للثاني لتفادي الربط المشترك.
-                    cbxWarehouses.DataSource = dt.Copy();
-                    cbxWarehouses.DisplayMember = "WarehouseName";
-                    cbxWarehouses.ValueMember = "WarehouseId";
-                }
-                else
-                {
-                    cbxWarehouseId.DataSource = null;
-                    MessageBox.Show("لا توجد فروع مسجلة في النظام", "تحذير",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("حدث خطأ أثناء تحميل الفروع:\n" + ex.Message,
-                                "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            // 2️⃣ قراءة القيمة الافتراضية من ملف الإعداد
+            int defaultId = AppSettings.GetInt("ThisVersionIsForWarehouseId", 0);
+            cbxWarehouseId.SelectedValue = defaultId;
         }
-
         // ⭐ تعيين الفرع الحالي كافتراضي لهذه النسخة.
         private void btnSetAsDefaultWarehouse_Click(object sender, EventArgs e)
         {
