@@ -228,7 +228,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 AppSettings.SaveOrUpdate("CompanyAnthrPhon", txtAnthrPhon.Text);
                 AppSettings.SaveOrUpdate("CompanyAdreass", txtAdreass.Text);
                 AppSettings.SaveOrUpdate("EmailCo", txtCompanyEmail.Text);
-                AppSettings.SaveOrUpdate("CompanyLoGoFolder", lblLogoPath  .Text);
+                AppSettings.SaveOrUpdate("CompanyLoGoFolder", lblLogoPath.Text);
                 AppSettings.SaveOrUpdate("LogoImagName", lblLogoImageName.Text);
 
                 // 🖨️ إعدادات الطباعة
@@ -301,7 +301,45 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-        #endregion
 
+
+        private void btnDeleteLogo_Click(object sender, EventArgs e)
+        {
+            // إعادة ضبط اللوجو على الافتراضي
+            string defaultLogoFileName = AppSettings.GetString("DefaulLogoImagName", "Mizan Logo.PNG") ?? "Mizan Logo.PNG";
+            string defaultLogoFolder = AppSettings.GetString("DefaulCompanyLoGoFolder", Path.Combine(Application.StartupPath, "HelpFiles"))
+                                       ?? Path.Combine(Application.StartupPath, "HelpFiles");
+
+            // تحديث الكلاس والملف
+            AppSettings.SaveOrUpdate("LogoImagName", "");
+            AppSettings.SaveOrUpdate("CompanyLoGoFolder", "");
+
+            // تحديث العرض على الشاشة
+            lblLogoImageName.Text = "";
+            lblLogoPath.Text = "";
+
+            string logoFullPath = Path.Combine(defaultLogoFolder, defaultLogoFileName);
+
+            if (File.Exists(logoFullPath))
+            {
+                if (picLogoCo.Image != null)
+                {
+                    picLogoCo.Image.Dispose();
+                    picLogoCo.Image = null;
+                }
+
+                picLogoCo.Image = Image.FromFile(logoFullPath);
+                picLogoCo.SizeMode = PictureBoxSizeMode.StretchImage;
+            }
+            else
+            {
+                picLogoCo.Image = null;
+            }
+
+            MessageBox.Show("✅ تم حذف اللوجو المخصص وإرجاع الصورة الافتراضية.", "تم", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+
+        #endregion
     }
 }
