@@ -1194,7 +1194,10 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             SaveData();
         }
-        // إضافة فرع جديد.
+        #endregion
+
+        #region ✅ التعامل مع الفروع والمخازن
+        // ➕ إضافة فرع جديد.
         private void btnAddWarehouse_Click(object sender, EventArgs e)
         {
             string name = txtWarehouseName.Text.Trim();
@@ -1208,12 +1211,10 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             int userId = CurrentSession.UserID;
             string message = DBServiecs.Warehouse_Add(name, userId);
             MessageBox.Show(message);
-            LoadWarehouses();// كتبت هذه الدالة لاعادة تحميل الكمبوبكس
+            LoadWarehouses(); // 🔄 تحديث القوائم بعد الإضافة.
         }
 
-        /// <summary>
-        /// حذف الفرع المحدد.
-        /// </summary>
+        // 🗑️ حذف الفرع المحدد.
         private void btnDeleteWarehous_Click(object sender, EventArgs e)
         {
             if (cbxWarehouseId.SelectedValue == null)
@@ -1225,6 +1226,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             int warehouseId = Convert.ToInt32(cbxWarehouseId.SelectedValue);
             int userId = CurrentSession.UserID;
 
+            // ⚠️ تأكيد الحذف من المستخدم.
             DialogResult confirm = MessageBox.Show("هل أنت متأكد من حذف الفرع المحدد؟",
                 "تأكيد الحذف", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -1232,12 +1234,10 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
             string message = DBServiecs.Warehouse_Delete(warehouseId, userId);
             MessageBox.Show(message);
-            LoadWarehouses();
+            LoadWarehouses(); // 🔄 تحديث القوائم بعد الحذف.
         }
 
-        /// <summary>
-        /// تعديل اسم الفرع المحدد.
-        /// </summary>
+        // ✏️ تعديل اسم الفرع المحدد.
         private void btnRenamWarehous_Click(object sender, EventArgs e)
         {
             if (cbxWarehouseId.SelectedValue == null)
@@ -1259,8 +1259,10 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
             string message = DBServiecs.Warehouse_UpdateName(warehouseId, newName, userId);
             MessageBox.Show(message);
-            LoadWarehouses();
+            LoadWarehouses(); // 🔄 إعادة التحميل بعد التعديل.
         }
+
+        // 📋 تحميل قائمة الفروع في الكومبوبوكس.
         private void LoadWarehouses()
         {
             try
@@ -1269,63 +1271,64 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
                 if (dt != null && dt.Rows.Count > 0)
                 {
-                    // ✅ إنشاء صف اختياري "اختر الفرع..."
+                    // ✅ إضافة صف افتراضي "اختر الفرع..."
                     DataRow defaultRow = dt.NewRow();
                     defaultRow["WarehouseId"] = -1;
                     defaultRow["WarehouseName"] = "اختر الفرع...";
-                    dt.Rows.InsertAt(defaultRow, 0); // إدراجه في أول الصفوف
+                    dt.Rows.InsertAt(defaultRow, 0);
 
-                    // ✅ ربط الكمبوبوكس
+                    // 🧩 ربط الكومبوبوكس الأول.
                     cbxWarehouseId.DataSource = null;
                     cbxWarehouseId.DataSource = dt;
                     cbxWarehouseId.DisplayMember = "WarehouseName";
                     cbxWarehouseId.ValueMember = "WarehouseId";
-                    cbxWarehouseId.SelectedIndex = 0; // جعل "اختر الفرع..." هو الظاهر
+                    cbxWarehouseId.SelectedIndex = 0;
 
-                    //
-                    cbxWarehouses.DataSource = dt;
+                    // ⚠️ ملاحظة: هنا نفس DataTable مرتبط بـ cbxWarehouses أيضًا،
+                    // وهذا يسبب تعارضًا إذا حاول أحدهما تغيير الاختيار.
+                    // 🧠 الحل: استخدم dt.Copy() للثاني لتفادي الربط المشترك.
+                    cbxWarehouses.DataSource = dt.Copy();
                     cbxWarehouses.DisplayMember = "WarehouseName";
                     cbxWarehouses.ValueMember = "WarehouseId";
-
                 }
                 else
                 {
                     cbxWarehouseId.DataSource = null;
-                    MessageBox.Show("لا توجد فروع مسجلة في النظام", "تحذير", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("لا توجد فروع مسجلة في النظام", "تحذير",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("حدث خطأ أثناء تحميل الفروع:\n" + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("حدث خطأ أثناء تحميل الفروع:\n" + ex.Message,
+                                "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-
-
+        // ⭐ تعيين الفرع الحالي كافتراضي لهذه النسخة.
         private void btnSetAsDefaultWarehouse_Click(object sender, EventArgs e)
         {
             if (cbxWarehouseId.SelectedValue == null)
             {
-                MessageBox.Show("❌ يرجى اختيار فرع من القائمة أولًا.", "تحذير", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("❌ يرجى اختيار فرع من القائمة أولًا.",
+                                "تحذير", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // الحصول على رقم الفرع المختار
             int selectedWarehouseId = Convert.ToInt32(cbxWarehouseId.SelectedValue);
 
-            // ✅ التحقق من أن رقم الفرع ليس أقل من صفر
             if (selectedWarehouseId <= 0)
             {
-                MessageBox.Show("❌ رقم الفرع غير صحيح .", "تحذير", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("❌ رقم الفرع غير صحيح.",
+                                "تحذير", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
+            // ⚠️ تأكيد من المستخدم.
             DialogResult confirm = MessageBox.Show(
-                $"هل تريد تعيين الفرع رقم {selectedWarehouseId} كفرع افتراضي لهذه النسخة؟\n" +
+                $"هل تريد تعيين الفرع رقم {selectedWarehouseId} كافتراضي لهذه النسخة؟\n" +
                 "سيتم تفعيل التخصيص عند إعادة تشغيل البرنامج.",
-                "تأكيد التخصيص",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
+                "تأكيد التخصيص", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (confirm == DialogResult.Yes)
             {
@@ -1333,6 +1336,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
+        // 🧾 تحديث ملف الإعدادات بالفرع الافتراضي.
         private void UpdateThisVersionWarehouseId(int newId)
         {
             try
@@ -1340,7 +1344,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 string filePath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
                 if (!File.Exists(filePath))
                 {
-                    MessageBox.Show("⚠️ ملف الإعدادات غير موجود!", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("⚠️ ملف الإعدادات غير موجود!",
+                                    "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -1367,12 +1372,11 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show("حدث خطأ أثناء حفظ التخصيص:\n" + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("حدث خطأ أثناء حفظ التخصيص:\n" + ex.Message,
+                                "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         #endregion
-
 
     }
 }
