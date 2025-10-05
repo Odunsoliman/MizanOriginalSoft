@@ -31,8 +31,85 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
 
         #region !!!!!!!!!!! DisplaySettings  !!!!!!!!!!!!!!!
-        // 🔹 عرض الإعدادات على الأدوات في الشاشة
         private void DisplaySettings()
+        {
+            // 🏢 بيانات الشركة
+            txtNameCo.Text = AppSettings.GetString("CompanyName", "");
+            txtPhon.Text = AppSettings.GetString("CompanyPhon", "");
+            txtAnthrPhon.Text = AppSettings.GetString("CompanyAnthrPhon", "");
+            txtAdreass.Text = AppSettings.GetString("CompanyAdreass", "");
+            txtCompanyEmail.Text = AppSettings.GetString("EmailCo", "");
+
+            // 🖼️ شعار الشركة
+            string? logoFileName = AppSettings.GetString("LogoImagName", null);
+            string? logoFolder = AppSettings.GetString("CompanyLoGoFolder", null);
+
+            string defaultLogoFileName = AppSettings.GetString("DefaulLogoImagName", "Mizan Logo.PNG") ?? "Mizan Logo.PNG";
+            string defaultLogoFolder = AppSettings.GetString("DefaulCompanyLoGoFolder", Path.Combine(Application.StartupPath, "HelpFiles"))
+                                       ?? Path.Combine(Application.StartupPath, "HelpFiles");
+
+            lblLogoImageName.Text = logoFileName ?? defaultLogoFileName;
+            lblLogoPath.Text = logoFolder ?? defaultLogoFolder;
+
+            string logoFullPath;
+            if (!string.IsNullOrWhiteSpace(logoFolder) && !string.IsNullOrWhiteSpace(logoFileName))
+            {
+                logoFullPath = Path.Combine(logoFolder, logoFileName);
+                if (!File.Exists(logoFullPath))
+                {
+                    logoFullPath = Path.Combine(defaultLogoFolder, defaultLogoFileName);
+                }
+            }
+            else
+            {
+                logoFullPath = Path.Combine(defaultLogoFolder, defaultLogoFileName);
+            }
+
+            // تحميل الصورة في PictureBox
+            if (File.Exists(logoFullPath))
+            {
+                if (picLogoCo.Image != null)
+                {
+                    picLogoCo.Image.Dispose();
+                    picLogoCo.Image = null;
+                }
+                picLogoCo.Image = Image.FromFile(logoFullPath);
+                picLogoCo.SizeMode = PictureBoxSizeMode.Zoom; // حفظ النسبة عند تكبير/تصغير
+            }
+            else
+            {
+                picLogoCo.Image = null;
+            }
+
+            // ✅ عرض أبعاد الـ PictureBox (وليس الصورة) في lblImagSize
+            lblImagSize.Text = $"عرض: {picLogoCo.Width}px × ارتفاع: {picLogoCo.Height}px";
+
+            // 🖨️ إعدادات الطباعة
+            lblRollPrinter.Text = AppSettings.GetString("RollPrinter", "");
+            lblSheetPrinter.Text = AppSettings.GetString("SheetPrinter", "");
+            txtSheetRows.Text = AppSettings.GetString("SheetRows", "6");
+            txtSheetCols.Text = AppSettings.GetString("SheetCols", "10");
+            txtMarginTop.Text = AppSettings.GetString("SheetMarginTop", "10");
+            txtMarginBottom.Text = AppSettings.GetString("SheetMarginBottom", "10");
+            txtMarginRight.Text = AppSettings.GetString("SheetMarginRight", "10");
+            txtMarginLeft.Text = AppSettings.GetString("SheetMarginLeft", "10");
+            txtRollLabelWidth.Text = AppSettings.GetString("RollLabelWidth", "50");
+            txtRollLabelHeight.Text = AppSettings.GetString("RollLabelHeight", "25");
+
+            // 💰 إعدادات الضريبة
+            txtSalesTax.Text = AppSettings.GetString("SalesTax", "14");
+            rdoAllowChangTax.Checked = AppSettings.GetBool("IsEnablToChangTax", false);
+            rdoNotAllowChangTax.Checked = !rdoAllowChangTax.Checked;
+
+            // 🛒 إعدادات البيع
+            cbxReturnSaleMode.Text = AppSettings.GetString("ReturnSaleMode", "2");
+            cbxReturnPurchasesMode.Text = AppSettings.GetString("ReturnPurchasesMode", "2");
+            rdoAllowSaleByNegativeStock.Checked = AppSettings.GetBool("IsSaleByNegativeStock", false);
+            rdoNotAllowSaleByNegativeStock.Checked = !rdoAllowSaleByNegativeStock.Checked;
+        }
+
+        // 🔹 عرض الإعدادات على الأدوات في الشاشة
+        private void DisplaySettings_()
         {
             // 🏢 بيانات الشركة
             txtNameCo.Text = AppSettings.GetString("CompanyName", "");
