@@ -343,6 +343,7 @@
             btnChangLogo.TabIndex = 3;
             btnChangLogo.Text = "تغيير اللوجو";
             btnChangLogo.UseVisualStyleBackColor = true;
+            btnChangLogo.Click += btnChangLogo_Click;
             // 
             // panel1
             // 

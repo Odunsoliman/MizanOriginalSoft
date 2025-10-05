@@ -171,8 +171,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             LoadWarehouses(); // 🔄 إعادة التحميل بعد التعديل.
         }
 
-        #endregion 
-        
+        #endregion
+
         #region !!!!!!!!!!!!!  ادوات الحفظ !!!!!!!!!!!!!!
 
         private void SaveData()
@@ -185,6 +185,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 AppSettings.SaveOrUpdate("CompanyAnthrPhon", txtAnthrPhon.Text);
                 AppSettings.SaveOrUpdate("CompanyAdreass", txtAdreass.Text);
                 AppSettings.SaveOrUpdate("EmailCo", txtCompanyEmail.Text);
+                AppSettings.SaveOrUpdate("CompanyLoGoFolder", txtCompanyEmail.Text);
+                AppSettings.SaveOrUpdate("LogoImagName", txtCompanyEmail.Text);
 
                 // 🖨️ إعدادات الطباعة
                 AppSettings.SaveOrUpdate("RollPrinter", lblRollPrinter.Text);
@@ -223,6 +225,40 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
 
 
-        #endregion 
+        #endregion
+
+        #region === تغيير اللوجو ===
+        private void btnChangLogo_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
+                openFileDialog.Title = "اختر صورة اللوجو";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    lblLogoPath.Text = Path.GetDirectoryName(openFileDialog.FileName);
+                    lblLogoImageName.Text = Path.GetFileName(openFileDialog.FileName);
+
+                    try
+                    {
+                        picLogoCo.Image = Image.FromFile(openFileDialog.FileName);
+                        picLogoCo.SizeMode = PictureBoxSizeMode.StretchImage;
+                        SaveData();
+
+                        MessageBox.Show("✅ تم تغيير صورة اللوجو بنجاح", "تم", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("حدث خطأ أثناء تحميل الصورة: " + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        lblLogoPath.Text = "";
+                        lblLogoImageName.Text = "";
+                    }
+                }
+            }
+        }
+
+        #endregion
+
     }
 }

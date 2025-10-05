@@ -1110,38 +1110,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         #endregion
 
-        #region === تغيير اللوجو ===
-        private void btnChangLogo_Click(object sender, EventArgs e)
-        {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
-            {
-                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
-                openFileDialog.Title = "اختر صورة اللوجو";
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    lblLogoPath.Text = Path.GetDirectoryName(openFileDialog.FileName);
-                    lblLogoImageName.Text = Path.GetFileName(openFileDialog.FileName);
-
-                    try
-                    {
-                        picLogoCo.Image = Image.FromFile(openFileDialog.FileName);
-                        picLogoCo.SizeMode = PictureBoxSizeMode.StretchImage;
-                        SaveData();
-
-                        MessageBox.Show("✅ تم تغيير صورة اللوجو بنجاح", "تم", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("حدث خطأ أثناء تحميل الصورة: " + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        lblLogoPath.Text = "";
-                        lblLogoImageName.Text = "";
-                    }
-                }
-            }
-        }
-
-        #endregion
 
         #region === احتياطي: KeyDown لربطه بالتنقل لاحقًا ===
 
