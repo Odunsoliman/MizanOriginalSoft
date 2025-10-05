@@ -82,7 +82,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
 
             // ✅ عرض أبعاد الـ PictureBox (وليس الصورة) في lblImagSize
-            lblImagSize.Text = $"عرض: {picLogoCo.Width}px × ارتفاع: {picLogoCo.Height}px";
+            lblImagSize.Text = $"المقاس الطلوب عرض: {picLogoCo.Width}px × ارتفاع: {picLogoCo.Height}px";
 
             // 🖨️ إعدادات الطباعة
             lblRollPrinter.Text = AppSettings.GetString("RollPrinter", "");
