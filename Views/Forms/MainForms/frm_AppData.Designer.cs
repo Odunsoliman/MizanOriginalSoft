@@ -62,24 +62,9 @@
             cbxWarehouseId = new ComboBox();
             tabPagePrinterSetting = new TabPage();
             tableLayoutPanel19 = new TableLayoutPanel();
-            lblSheetPrinter = new Label();
-            lblRollPrinter = new Label();
-            tableLayoutPanel20 = new TableLayoutPanel();
-            label11 = new Label();
-            txtSheetCols = new TextBox();
-            txtSheetRows = new TextBox();
-            label17 = new Label();
-            btnLoadRollPrinter = new Button();
-            btnLoadSheetPrinter = new Button();
-            tableLayoutPanel40 = new TableLayoutPanel();
-            label16 = new Label();
-            label21 = new Label();
-            txtRollLabelHeight = new TextBox();
-            label18 = new Label();
-            label19 = new Label();
-            txtRollLabelWidth = new TextBox();
             tableLayoutPanel3 = new TableLayoutPanel();
             tableLayoutPanel18 = new TableLayoutPanel();
+            lblCountLables = new Label();
             tableLayoutPanel9 = new TableLayoutPanel();
             txtMarginRight = new TextBox();
             label4 = new Label();
@@ -94,6 +79,27 @@
             tlpPeper = new Panel();
             pnlMargen = new Panel();
             label24 = new Label();
+            tableLayoutPanel13 = new TableLayoutPanel();
+            label23 = new Label();
+            label10 = new Label();
+            tableLayoutPanel14 = new TableLayoutPanel();
+            btnLoadRollPrinter = new Button();
+            tableLayoutPanel40 = new TableLayoutPanel();
+            label16 = new Label();
+            label21 = new Label();
+            txtRollLabelHeight = new TextBox();
+            label18 = new Label();
+            label19 = new Label();
+            txtRollLabelWidth = new TextBox();
+            lblRollPrinter = new Label();
+            tableLayoutPanel15 = new TableLayoutPanel();
+            tableLayoutPanel20 = new TableLayoutPanel();
+            label11 = new Label();
+            txtSheetCols = new TextBox();
+            txtSheetRows = new TextBox();
+            label17 = new Label();
+            lblSheetPrinter = new Label();
+            btnLoadSheetPrinter = new Button();
             tabPageServerSetting = new TabPage();
             tableLayoutPanel10 = new TableLayoutPanel();
             txtDBName = new TextBox();
@@ -168,12 +174,6 @@
             tableLayoutPanel7 = new TableLayoutPanel();
             lblLogoPath = new Label();
             lblImagSize = new Label();
-            lblCountLables = new Label();
-            tableLayoutPanel13 = new TableLayoutPanel();
-            label10 = new Label();
-            label23 = new Label();
-            tableLayoutPanel14 = new TableLayoutPanel();
-            tableLayoutPanel15 = new TableLayoutPanel();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
@@ -188,14 +188,17 @@
             tableLayoutPanel16.SuspendLayout();
             tabPagePrinterSetting.SuspendLayout();
             tableLayoutPanel19.SuspendLayout();
-            tableLayoutPanel20.SuspendLayout();
-            tableLayoutPanel40.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             tableLayoutPanel18.SuspendLayout();
             tableLayoutPanel9.SuspendLayout();
             panel3.SuspendLayout();
             tlpPeper.SuspendLayout();
             pnlMargen.SuspendLayout();
+            tableLayoutPanel13.SuspendLayout();
+            tableLayoutPanel14.SuspendLayout();
+            tableLayoutPanel40.SuspendLayout();
+            tableLayoutPanel15.SuspendLayout();
+            tableLayoutPanel20.SuspendLayout();
             tabPageServerSetting.SuspendLayout();
             tableLayoutPanel10.SuspendLayout();
             tabPageUserSetting.SuspendLayout();
@@ -221,9 +224,6 @@
             tableLayoutPanel35.SuspendLayout();
             tableLayoutPanel17.SuspendLayout();
             tableLayoutPanel7.SuspendLayout();
-            tableLayoutPanel13.SuspendLayout();
-            tableLayoutPanel14.SuspendLayout();
-            tableLayoutPanel15.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -705,216 +705,6 @@
             tableLayoutPanel19.Size = new Size(717, 382);
             tableLayoutPanel19.TabIndex = 0;
             // 
-            // lblSheetPrinter
-            // 
-            lblSheetPrinter.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
-            lblSheetPrinter.ForeColor = Color.FromArgb(128, 128, 255);
-            lblSheetPrinter.Location = new Point(238, 0);
-            lblSheetPrinter.Name = "lblSheetPrinter";
-            lblSheetPrinter.RightToLeft = RightToLeft.No;
-            lblSheetPrinter.Size = new Size(229, 65);
-            lblSheetPrinter.TabIndex = 33;
-            lblSheetPrinter.Text = "اسم الطابعة";
-            lblSheetPrinter.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // lblRollPrinter
-            // 
-            lblRollPrinter.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
-            lblRollPrinter.ForeColor = Color.FromArgb(128, 128, 255);
-            lblRollPrinter.Location = new Point(238, 0);
-            lblRollPrinter.Name = "lblRollPrinter";
-            lblRollPrinter.RightToLeft = RightToLeft.No;
-            lblRollPrinter.Size = new Size(229, 63);
-            lblRollPrinter.TabIndex = 33;
-            lblRollPrinter.Text = "اسم الطابعة";
-            lblRollPrinter.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // tableLayoutPanel20
-            // 
-            tableLayoutPanel20.ColumnCount = 3;
-            tableLayoutPanel20.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.6315784F));
-            tableLayoutPanel20.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 29.3859653F));
-            tableLayoutPanel20.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 42.54386F));
-            tableLayoutPanel20.Controls.Add(label11, 2, 0);
-            tableLayoutPanel20.Controls.Add(txtSheetCols, 1, 1);
-            tableLayoutPanel20.Controls.Add(txtSheetRows, 1, 0);
-            tableLayoutPanel20.Controls.Add(label17, 2, 1);
-            tableLayoutPanel20.Dock = DockStyle.Fill;
-            tableLayoutPanel20.Location = new Point(3, 3);
-            tableLayoutPanel20.Name = "tableLayoutPanel20";
-            tableLayoutPanel20.RightToLeft = RightToLeft.No;
-            tableLayoutPanel20.RowCount = 2;
-            tableLayoutPanel20.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel20.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel20.Size = new Size(229, 59);
-            tableLayoutPanel20.TabIndex = 36;
-            // 
-            // label11
-            // 
-            label11.AutoSize = true;
-            label11.Dock = DockStyle.Fill;
-            label11.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            label11.Location = new Point(133, 0);
-            label11.Name = "label11";
-            label11.RightToLeft = RightToLeft.No;
-            label11.Size = new Size(93, 29);
-            label11.TabIndex = 43;
-            label11.Text = ":عدد الصفوف";
-            label11.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // txtSheetCols
-            // 
-            txtSheetCols.Dock = DockStyle.Fill;
-            txtSheetCols.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtSheetCols.Location = new Point(66, 32);
-            txtSheetCols.Name = "txtSheetCols";
-            txtSheetCols.Size = new Size(61, 29);
-            txtSheetCols.TabIndex = 3;
-            txtSheetCols.Text = "0";
-            txtSheetCols.TextAlign = HorizontalAlignment.Center;
-            // 
-            // txtSheetRows
-            // 
-            txtSheetRows.Dock = DockStyle.Fill;
-            txtSheetRows.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtSheetRows.Location = new Point(66, 3);
-            txtSheetRows.Name = "txtSheetRows";
-            txtSheetRows.Size = new Size(61, 29);
-            txtSheetRows.TabIndex = 2;
-            txtSheetRows.Text = "0";
-            txtSheetRows.TextAlign = HorizontalAlignment.Center;
-            // 
-            // label17
-            // 
-            label17.AutoSize = true;
-            label17.Dock = DockStyle.Fill;
-            label17.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            label17.Location = new Point(133, 29);
-            label17.Name = "label17";
-            label17.RightToLeft = RightToLeft.No;
-            label17.Size = new Size(93, 30);
-            label17.TabIndex = 44;
-            label17.Text = ":عدد الاعمدة";
-            label17.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // btnLoadRollPrinter
-            // 
-            btnLoadRollPrinter.Dock = DockStyle.Fill;
-            btnLoadRollPrinter.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnLoadRollPrinter.Location = new Point(473, 3);
-            btnLoadRollPrinter.Name = "btnLoadRollPrinter";
-            btnLoadRollPrinter.Size = new Size(229, 57);
-            btnLoadRollPrinter.TabIndex = 32;
-            btnLoadRollPrinter.Text = "اسم طابعة الرول";
-            btnLoadRollPrinter.UseVisualStyleBackColor = true;
-            // 
-            // btnLoadSheetPrinter
-            // 
-            btnLoadSheetPrinter.Dock = DockStyle.Fill;
-            btnLoadSheetPrinter.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnLoadSheetPrinter.Location = new Point(473, 3);
-            btnLoadSheetPrinter.Name = "btnLoadSheetPrinter";
-            btnLoadSheetPrinter.Size = new Size(229, 59);
-            btnLoadSheetPrinter.TabIndex = 35;
-            btnLoadSheetPrinter.Text = "طابعة تكت A4";
-            btnLoadSheetPrinter.UseVisualStyleBackColor = true;
-            // 
-            // tableLayoutPanel40
-            // 
-            tableLayoutPanel40.ColumnCount = 3;
-            tableLayoutPanel40.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.6315784F));
-            tableLayoutPanel40.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 29.3859653F));
-            tableLayoutPanel40.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 42.54386F));
-            tableLayoutPanel40.Controls.Add(label16, 0, 1);
-            tableLayoutPanel40.Controls.Add(label21, 2, 0);
-            tableLayoutPanel40.Controls.Add(txtRollLabelHeight, 1, 1);
-            tableLayoutPanel40.Controls.Add(label18, 0, 0);
-            tableLayoutPanel40.Controls.Add(label19, 2, 1);
-            tableLayoutPanel40.Controls.Add(txtRollLabelWidth, 1, 0);
-            tableLayoutPanel40.Dock = DockStyle.Fill;
-            tableLayoutPanel40.Location = new Point(3, 3);
-            tableLayoutPanel40.Name = "tableLayoutPanel40";
-            tableLayoutPanel40.RightToLeft = RightToLeft.No;
-            tableLayoutPanel40.RowCount = 2;
-            tableLayoutPanel40.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel40.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel40.Size = new Size(229, 57);
-            tableLayoutPanel40.TabIndex = 0;
-            // 
-            // label16
-            // 
-            label16.AutoSize = true;
-            label16.Dock = DockStyle.Fill;
-            label16.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            label16.Location = new Point(3, 28);
-            label16.Name = "label16";
-            label16.RightToLeft = RightToLeft.No;
-            label16.Size = new Size(57, 29);
-            label16.TabIndex = 43;
-            label16.Text = "mm";
-            label16.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // label21
-            // 
-            label21.AutoSize = true;
-            label21.Dock = DockStyle.Fill;
-            label21.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            label21.Location = new Point(133, 0);
-            label21.Name = "label21";
-            label21.RightToLeft = RightToLeft.No;
-            label21.Size = new Size(93, 28);
-            label21.TabIndex = 37;
-            label21.Text = ":عرض التكت";
-            label21.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // txtRollLabelHeight
-            // 
-            txtRollLabelHeight.Dock = DockStyle.Fill;
-            txtRollLabelHeight.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtRollLabelHeight.Location = new Point(66, 31);
-            txtRollLabelHeight.Name = "txtRollLabelHeight";
-            txtRollLabelHeight.Size = new Size(61, 29);
-            txtRollLabelHeight.TabIndex = 1;
-            txtRollLabelHeight.Text = "0";
-            txtRollLabelHeight.TextAlign = HorizontalAlignment.Center;
-            // 
-            // label18
-            // 
-            label18.AutoSize = true;
-            label18.Dock = DockStyle.Fill;
-            label18.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            label18.Location = new Point(3, 0);
-            label18.Name = "label18";
-            label18.RightToLeft = RightToLeft.No;
-            label18.Size = new Size(57, 28);
-            label18.TabIndex = 42;
-            label18.Text = "mm";
-            label18.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // label19
-            // 
-            label19.AutoSize = true;
-            label19.Dock = DockStyle.Fill;
-            label19.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            label19.Location = new Point(133, 28);
-            label19.Name = "label19";
-            label19.RightToLeft = RightToLeft.No;
-            label19.Size = new Size(93, 29);
-            label19.TabIndex = 35;
-            label19.Text = ":ارتفاع التكت";
-            label19.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // txtRollLabelWidth
-            // 
-            txtRollLabelWidth.Dock = DockStyle.Fill;
-            txtRollLabelWidth.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtRollLabelWidth.Location = new Point(66, 3);
-            txtRollLabelWidth.Name = "txtRollLabelWidth";
-            txtRollLabelWidth.Size = new Size(61, 29);
-            txtRollLabelWidth.TabIndex = 0;
-            txtRollLabelWidth.Text = "0";
-            txtRollLabelWidth.TextAlign = HorizontalAlignment.Center;
-            // 
             // tableLayoutPanel3
             // 
             tableLayoutPanel3.ColumnCount = 2;
@@ -947,6 +737,18 @@
             tableLayoutPanel18.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel18.Size = new Size(479, 147);
             tableLayoutPanel18.TabIndex = 0;
+            // 
+            // lblCountLables
+            // 
+            lblCountLables.AutoSize = true;
+            lblCountLables.Dock = DockStyle.Fill;
+            lblCountLables.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            lblCountLables.Location = new Point(340, 0);
+            lblCountLables.Name = "lblCountLables";
+            lblCountLables.Size = new Size(136, 147);
+            lblCountLables.TabIndex = 50;
+            lblCountLables.Text = "0";
+            lblCountLables.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel9
             // 
@@ -1075,7 +877,7 @@
             panel3.Dock = DockStyle.Fill;
             panel3.Location = new Point(146, 3);
             panel3.Name = "panel3";
-            panel3.Padding = new Padding(30, 0, 30, 0);
+            panel3.Padding = new Padding(20, 0, 50, 0);
             panel3.Size = new Size(188, 141);
             panel3.TabIndex = 30;
             // 
@@ -1085,9 +887,9 @@
             label12.Dock = DockStyle.Fill;
             label12.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label12.ForeColor = Color.FromArgb(192, 0, 192);
-            label12.Location = new Point(30, 0);
+            label12.Location = new Point(20, 0);
             label12.Name = "label12";
-            label12.Size = new Size(128, 141);
+            label12.Size = new Size(118, 141);
             label12.TabIndex = 28;
             label12.Text = "-------------- هوامش صفحة بالملي --------------";
             label12.TextAlign = ContentAlignment.MiddleCenter;
@@ -1123,6 +925,293 @@
             label24.TabIndex = 13;
             label24.Text = "A4";
             label24.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // tableLayoutPanel13
+            // 
+            tableLayoutPanel13.ColumnCount = 1;
+            tableLayoutPanel13.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel13.Controls.Add(label23, 0, 2);
+            tableLayoutPanel13.Controls.Add(label10, 0, 0);
+            tableLayoutPanel13.Controls.Add(tableLayoutPanel14, 0, 1);
+            tableLayoutPanel13.Controls.Add(tableLayoutPanel15, 0, 3);
+            tableLayoutPanel13.Dock = DockStyle.Fill;
+            tableLayoutPanel13.Location = new Point(3, 3);
+            tableLayoutPanel13.Name = "tableLayoutPanel13";
+            tableLayoutPanel13.RowCount = 4;
+            tableLayoutPanel13.RowStyles.Add(new RowStyle(SizeType.Percent, 1F));
+            tableLayoutPanel13.RowStyles.Add(new RowStyle(SizeType.Percent, 49F));
+            tableLayoutPanel13.RowStyles.Add(new RowStyle(SizeType.Percent, 1F));
+            tableLayoutPanel13.RowStyles.Add(new RowStyle(SizeType.Percent, 49F));
+            tableLayoutPanel13.Size = new Size(711, 142);
+            tableLayoutPanel13.TabIndex = 41;
+            // 
+            // label23
+            // 
+            label23.BackColor = Color.IndianRed;
+            label23.Dock = DockStyle.Fill;
+            label23.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label23.ForeColor = Color.FromArgb(192, 0, 192);
+            label23.Location = new Point(3, 70);
+            label23.Name = "label23";
+            label23.Size = new Size(705, 1);
+            label23.TabIndex = 31;
+            label23.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // label10
+            // 
+            label10.BackColor = Color.IndianRed;
+            label10.Dock = DockStyle.Fill;
+            label10.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label10.ForeColor = Color.FromArgb(192, 0, 192);
+            label10.Location = new Point(3, 0);
+            label10.Name = "label10";
+            label10.Size = new Size(705, 1);
+            label10.TabIndex = 29;
+            label10.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // tableLayoutPanel14
+            // 
+            tableLayoutPanel14.ColumnCount = 3;
+            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel14.Controls.Add(btnLoadRollPrinter, 0, 0);
+            tableLayoutPanel14.Controls.Add(tableLayoutPanel40, 2, 0);
+            tableLayoutPanel14.Controls.Add(lblRollPrinter, 1, 0);
+            tableLayoutPanel14.Dock = DockStyle.Fill;
+            tableLayoutPanel14.Location = new Point(3, 4);
+            tableLayoutPanel14.Name = "tableLayoutPanel14";
+            tableLayoutPanel14.RowCount = 1;
+            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel14.Size = new Size(705, 63);
+            tableLayoutPanel14.TabIndex = 32;
+            // 
+            // btnLoadRollPrinter
+            // 
+            btnLoadRollPrinter.Dock = DockStyle.Fill;
+            btnLoadRollPrinter.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnLoadRollPrinter.Location = new Point(473, 3);
+            btnLoadRollPrinter.Name = "btnLoadRollPrinter";
+            btnLoadRollPrinter.Size = new Size(229, 57);
+            btnLoadRollPrinter.TabIndex = 32;
+            btnLoadRollPrinter.Text = "اسم طابعة الرول";
+            btnLoadRollPrinter.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel40
+            // 
+            tableLayoutPanel40.ColumnCount = 3;
+            tableLayoutPanel40.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.6315784F));
+            tableLayoutPanel40.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 29.3859653F));
+            tableLayoutPanel40.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 42.54386F));
+            tableLayoutPanel40.Controls.Add(label16, 0, 1);
+            tableLayoutPanel40.Controls.Add(label21, 2, 0);
+            tableLayoutPanel40.Controls.Add(txtRollLabelHeight, 1, 1);
+            tableLayoutPanel40.Controls.Add(label18, 0, 0);
+            tableLayoutPanel40.Controls.Add(label19, 2, 1);
+            tableLayoutPanel40.Controls.Add(txtRollLabelWidth, 1, 0);
+            tableLayoutPanel40.Dock = DockStyle.Fill;
+            tableLayoutPanel40.Location = new Point(3, 3);
+            tableLayoutPanel40.Name = "tableLayoutPanel40";
+            tableLayoutPanel40.RightToLeft = RightToLeft.No;
+            tableLayoutPanel40.RowCount = 2;
+            tableLayoutPanel40.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel40.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel40.Size = new Size(229, 57);
+            tableLayoutPanel40.TabIndex = 0;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Dock = DockStyle.Fill;
+            label16.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            label16.Location = new Point(3, 28);
+            label16.Name = "label16";
+            label16.RightToLeft = RightToLeft.No;
+            label16.Size = new Size(57, 29);
+            label16.TabIndex = 43;
+            label16.Text = "mm";
+            label16.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Dock = DockStyle.Fill;
+            label21.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            label21.Location = new Point(133, 0);
+            label21.Name = "label21";
+            label21.RightToLeft = RightToLeft.No;
+            label21.Size = new Size(93, 28);
+            label21.TabIndex = 37;
+            label21.Text = ":عرض التكت";
+            label21.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // txtRollLabelHeight
+            // 
+            txtRollLabelHeight.Dock = DockStyle.Fill;
+            txtRollLabelHeight.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtRollLabelHeight.Location = new Point(66, 31);
+            txtRollLabelHeight.Name = "txtRollLabelHeight";
+            txtRollLabelHeight.Size = new Size(61, 29);
+            txtRollLabelHeight.TabIndex = 1;
+            txtRollLabelHeight.Text = "0";
+            txtRollLabelHeight.TextAlign = HorizontalAlignment.Center;
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Dock = DockStyle.Fill;
+            label18.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            label18.Location = new Point(3, 0);
+            label18.Name = "label18";
+            label18.RightToLeft = RightToLeft.No;
+            label18.Size = new Size(57, 28);
+            label18.TabIndex = 42;
+            label18.Text = "mm";
+            label18.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Dock = DockStyle.Fill;
+            label19.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            label19.Location = new Point(133, 28);
+            label19.Name = "label19";
+            label19.RightToLeft = RightToLeft.No;
+            label19.Size = new Size(93, 29);
+            label19.TabIndex = 35;
+            label19.Text = ":ارتفاع التكت";
+            label19.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // txtRollLabelWidth
+            // 
+            txtRollLabelWidth.Dock = DockStyle.Fill;
+            txtRollLabelWidth.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtRollLabelWidth.Location = new Point(66, 3);
+            txtRollLabelWidth.Name = "txtRollLabelWidth";
+            txtRollLabelWidth.Size = new Size(61, 29);
+            txtRollLabelWidth.TabIndex = 0;
+            txtRollLabelWidth.Text = "0";
+            txtRollLabelWidth.TextAlign = HorizontalAlignment.Center;
+            // 
+            // lblRollPrinter
+            // 
+            lblRollPrinter.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
+            lblRollPrinter.ForeColor = Color.FromArgb(128, 128, 255);
+            lblRollPrinter.Location = new Point(238, 0);
+            lblRollPrinter.Name = "lblRollPrinter";
+            lblRollPrinter.RightToLeft = RightToLeft.No;
+            lblRollPrinter.Size = new Size(229, 63);
+            lblRollPrinter.TabIndex = 33;
+            lblRollPrinter.Text = "اسم الطابعة";
+            lblRollPrinter.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // tableLayoutPanel15
+            // 
+            tableLayoutPanel15.ColumnCount = 3;
+            tableLayoutPanel15.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel15.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel15.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel15.Controls.Add(tableLayoutPanel20, 2, 0);
+            tableLayoutPanel15.Controls.Add(lblSheetPrinter, 1, 0);
+            tableLayoutPanel15.Controls.Add(btnLoadSheetPrinter, 0, 0);
+            tableLayoutPanel15.Dock = DockStyle.Fill;
+            tableLayoutPanel15.Location = new Point(3, 74);
+            tableLayoutPanel15.Name = "tableLayoutPanel15";
+            tableLayoutPanel15.RowCount = 1;
+            tableLayoutPanel15.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel15.Size = new Size(705, 65);
+            tableLayoutPanel15.TabIndex = 32;
+            // 
+            // tableLayoutPanel20
+            // 
+            tableLayoutPanel20.ColumnCount = 3;
+            tableLayoutPanel20.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.6315784F));
+            tableLayoutPanel20.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 29.3859653F));
+            tableLayoutPanel20.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 42.54386F));
+            tableLayoutPanel20.Controls.Add(label11, 2, 0);
+            tableLayoutPanel20.Controls.Add(txtSheetCols, 1, 1);
+            tableLayoutPanel20.Controls.Add(txtSheetRows, 1, 0);
+            tableLayoutPanel20.Controls.Add(label17, 2, 1);
+            tableLayoutPanel20.Dock = DockStyle.Fill;
+            tableLayoutPanel20.Location = new Point(3, 3);
+            tableLayoutPanel20.Name = "tableLayoutPanel20";
+            tableLayoutPanel20.RightToLeft = RightToLeft.No;
+            tableLayoutPanel20.RowCount = 2;
+            tableLayoutPanel20.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel20.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel20.Size = new Size(229, 59);
+            tableLayoutPanel20.TabIndex = 36;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Dock = DockStyle.Fill;
+            label11.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            label11.Location = new Point(133, 0);
+            label11.Name = "label11";
+            label11.RightToLeft = RightToLeft.No;
+            label11.Size = new Size(93, 29);
+            label11.TabIndex = 43;
+            label11.Text = ":عدد الصفوف";
+            label11.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // txtSheetCols
+            // 
+            txtSheetCols.Dock = DockStyle.Fill;
+            txtSheetCols.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtSheetCols.Location = new Point(66, 32);
+            txtSheetCols.Name = "txtSheetCols";
+            txtSheetCols.Size = new Size(61, 29);
+            txtSheetCols.TabIndex = 3;
+            txtSheetCols.Text = "0";
+            txtSheetCols.TextAlign = HorizontalAlignment.Center;
+            // 
+            // txtSheetRows
+            // 
+            txtSheetRows.Dock = DockStyle.Fill;
+            txtSheetRows.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtSheetRows.Location = new Point(66, 3);
+            txtSheetRows.Name = "txtSheetRows";
+            txtSheetRows.Size = new Size(61, 29);
+            txtSheetRows.TabIndex = 2;
+            txtSheetRows.Text = "0";
+            txtSheetRows.TextAlign = HorizontalAlignment.Center;
+            // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Dock = DockStyle.Fill;
+            label17.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            label17.Location = new Point(133, 29);
+            label17.Name = "label17";
+            label17.RightToLeft = RightToLeft.No;
+            label17.Size = new Size(93, 30);
+            label17.TabIndex = 44;
+            label17.Text = ":عدد الاعمدة";
+            label17.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblSheetPrinter
+            // 
+            lblSheetPrinter.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
+            lblSheetPrinter.ForeColor = Color.FromArgb(128, 128, 255);
+            lblSheetPrinter.Location = new Point(238, 0);
+            lblSheetPrinter.Name = "lblSheetPrinter";
+            lblSheetPrinter.RightToLeft = RightToLeft.No;
+            lblSheetPrinter.Size = new Size(229, 65);
+            lblSheetPrinter.TabIndex = 33;
+            lblSheetPrinter.Text = "اسم الطابعة";
+            lblSheetPrinter.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // btnLoadSheetPrinter
+            // 
+            btnLoadSheetPrinter.Dock = DockStyle.Fill;
+            btnLoadSheetPrinter.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnLoadSheetPrinter.Location = new Point(473, 3);
+            btnLoadSheetPrinter.Name = "btnLoadSheetPrinter";
+            btnLoadSheetPrinter.Size = new Size(229, 59);
+            btnLoadSheetPrinter.TabIndex = 35;
+            btnLoadSheetPrinter.Text = "طابعة تكت A4";
+            btnLoadSheetPrinter.UseVisualStyleBackColor = true;
             // 
             // tabPageServerSetting
             // 
@@ -2086,95 +2175,6 @@
             lblImagSize.Text = "لوجو الشركة العام";
             lblImagSize.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // lblCountLables
-            // 
-            lblCountLables.AutoSize = true;
-            lblCountLables.Dock = DockStyle.Fill;
-            lblCountLables.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            lblCountLables.Location = new Point(340, 0);
-            lblCountLables.Name = "lblCountLables";
-            lblCountLables.Size = new Size(136, 147);
-            lblCountLables.TabIndex = 50;
-            lblCountLables.Text = "0";
-            lblCountLables.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // tableLayoutPanel13
-            // 
-            tableLayoutPanel13.ColumnCount = 1;
-            tableLayoutPanel13.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel13.Controls.Add(label23, 0, 2);
-            tableLayoutPanel13.Controls.Add(label10, 0, 0);
-            tableLayoutPanel13.Controls.Add(tableLayoutPanel14, 0, 1);
-            tableLayoutPanel13.Controls.Add(tableLayoutPanel15, 0, 3);
-            tableLayoutPanel13.Dock = DockStyle.Fill;
-            tableLayoutPanel13.Location = new Point(3, 3);
-            tableLayoutPanel13.Name = "tableLayoutPanel13";
-            tableLayoutPanel13.RowCount = 4;
-            tableLayoutPanel13.RowStyles.Add(new RowStyle(SizeType.Percent, 1F));
-            tableLayoutPanel13.RowStyles.Add(new RowStyle(SizeType.Percent, 49F));
-            tableLayoutPanel13.RowStyles.Add(new RowStyle(SizeType.Percent, 1F));
-            tableLayoutPanel13.RowStyles.Add(new RowStyle(SizeType.Percent, 49F));
-            tableLayoutPanel13.Size = new Size(711, 142);
-            tableLayoutPanel13.TabIndex = 41;
-            // 
-            // label10
-            // 
-            label10.BackColor = Color.IndianRed;
-            label10.Dock = DockStyle.Fill;
-            label10.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label10.ForeColor = Color.FromArgb(192, 0, 192);
-            label10.Location = new Point(3, 0);
-            label10.Name = "label10";
-            label10.Size = new Size(705, 1);
-            label10.TabIndex = 29;
-            label10.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // label23
-            // 
-            label23.BackColor = Color.IndianRed;
-            label23.Dock = DockStyle.Fill;
-            label23.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label23.ForeColor = Color.FromArgb(192, 0, 192);
-            label23.Location = new Point(3, 70);
-            label23.Name = "label23";
-            label23.Size = new Size(705, 1);
-            label23.TabIndex = 31;
-            label23.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // tableLayoutPanel14
-            // 
-            tableLayoutPanel14.ColumnCount = 3;
-            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel14.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel14.Controls.Add(btnLoadRollPrinter, 0, 0);
-            tableLayoutPanel14.Controls.Add(tableLayoutPanel40, 2, 0);
-            tableLayoutPanel14.Controls.Add(lblRollPrinter, 1, 0);
-            tableLayoutPanel14.Dock = DockStyle.Fill;
-            tableLayoutPanel14.Location = new Point(3, 4);
-            tableLayoutPanel14.Name = "tableLayoutPanel14";
-            tableLayoutPanel14.RowCount = 1;
-            tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel14.Size = new Size(705, 63);
-            tableLayoutPanel14.TabIndex = 32;
-            // 
-            // tableLayoutPanel15
-            // 
-            tableLayoutPanel15.ColumnCount = 3;
-            tableLayoutPanel15.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel15.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel15.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel15.Controls.Add(tableLayoutPanel20, 2, 0);
-            tableLayoutPanel15.Controls.Add(lblSheetPrinter, 1, 0);
-            tableLayoutPanel15.Controls.Add(btnLoadSheetPrinter, 0, 0);
-            tableLayoutPanel15.Dock = DockStyle.Fill;
-            tableLayoutPanel15.Location = new Point(3, 74);
-            tableLayoutPanel15.Name = "tableLayoutPanel15";
-            tableLayoutPanel15.RowCount = 1;
-            tableLayoutPanel15.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel15.Size = new Size(705, 65);
-            tableLayoutPanel15.TabIndex = 32;
-            // 
             // frm_AppData
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -2201,10 +2201,6 @@
             tableLayoutPanel16.ResumeLayout(false);
             tabPagePrinterSetting.ResumeLayout(false);
             tableLayoutPanel19.ResumeLayout(false);
-            tableLayoutPanel20.ResumeLayout(false);
-            tableLayoutPanel20.PerformLayout();
-            tableLayoutPanel40.ResumeLayout(false);
-            tableLayoutPanel40.PerformLayout();
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel18.ResumeLayout(false);
             tableLayoutPanel18.PerformLayout();
@@ -2213,6 +2209,13 @@
             panel3.ResumeLayout(false);
             tlpPeper.ResumeLayout(false);
             pnlMargen.ResumeLayout(false);
+            tableLayoutPanel13.ResumeLayout(false);
+            tableLayoutPanel14.ResumeLayout(false);
+            tableLayoutPanel40.ResumeLayout(false);
+            tableLayoutPanel40.PerformLayout();
+            tableLayoutPanel15.ResumeLayout(false);
+            tableLayoutPanel20.ResumeLayout(false);
+            tableLayoutPanel20.PerformLayout();
             tabPageServerSetting.ResumeLayout(false);
             tableLayoutPanel10.ResumeLayout(false);
             tableLayoutPanel10.PerformLayout();
@@ -2250,9 +2253,6 @@
             tableLayoutPanel35.PerformLayout();
             tableLayoutPanel17.ResumeLayout(false);
             tableLayoutPanel7.ResumeLayout(false);
-            tableLayoutPanel13.ResumeLayout(false);
-            tableLayoutPanel14.ResumeLayout(false);
-            tableLayoutPanel15.ResumeLayout(false);
             ResumeLayout(false);
         }
 
