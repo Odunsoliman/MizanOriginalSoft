@@ -32,8 +32,8 @@
             label3 = new Label();
             tableLayoutPanel2 = new TableLayoutPanel();
             tableLayoutPanel6 = new TableLayoutPanel();
-            lblLogoImageName = new Label();
             picLogoCo = new PictureBox();
+            lblLogoImageName = new Label();
             btnChangLogo = new Button();
             panel1 = new Panel();
             label22 = new Label();
@@ -176,7 +176,6 @@
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picLogoCo).BeginInit();
-            panel1.SuspendLayout();
             tabMang.SuspendLayout();
             tabPageGenralData.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
@@ -276,10 +275,8 @@
             // 
             tableLayoutPanel6.ColumnCount = 1;
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel6.Controls.Add(picLogoCo, 0, 2);
-            tableLayoutPanel6.Controls.Add(lblLogoImageName, 0, 1);
-            tableLayoutPanel6.Controls.Add(btnChangLogo, 0, 3);
             tableLayoutPanel6.Controls.Add(panel1, 0, 0);
+            tableLayoutPanel6.Controls.Add(picLogoCo, 0, 2);
             tableLayoutPanel6.Dock = DockStyle.Fill;
             tableLayoutPanel6.Location = new Point(7, 7);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
@@ -292,20 +289,6 @@
             tableLayoutPanel6.Size = new Size(311, 476);
             tableLayoutPanel6.TabIndex = 3;
             // 
-            // lblLogoImageName
-            // 
-            lblLogoImageName.BackColor = Color.Transparent;
-            lblLogoImageName.Dock = DockStyle.Fill;
-            lblLogoImageName.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblLogoImageName.ForeColor = Color.DarkBlue;
-            lblLogoImageName.Location = new Point(24, 123);
-            lblLogoImageName.Margin = new Padding(4, 0, 4, 0);
-            lblLogoImageName.Name = "lblLogoImageName";
-            lblLogoImageName.Size = new Size(263, 22);
-            lblLogoImageName.TabIndex = 40;
-            lblLogoImageName.Text = "اسم الصورة";
-            lblLogoImageName.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // picLogoCo
             // 
             picLogoCo.BackColor = Color.Transparent;
@@ -313,16 +296,29 @@
             picLogoCo.Location = new Point(23, 148);
             picLogoCo.Name = "picLogoCo";
             picLogoCo.Size = new Size(265, 268);
+            picLogoCo.SizeMode = PictureBoxSizeMode.Zoom;
             picLogoCo.TabIndex = 4;
             picLogoCo.TabStop = false;
             // 
+            // lblLogoImageName
+            // 
+            lblLogoImageName.BackColor = Color.Transparent;
+            lblLogoImageName.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblLogoImageName.ForeColor = Color.DarkBlue;
+            lblLogoImageName.Location = new Point(4, 33);
+            lblLogoImageName.Margin = new Padding(4, 0, 4, 0);
+            lblLogoImageName.Name = "lblLogoImageName";
+            lblLogoImageName.Size = new Size(60, 22);
+            lblLogoImageName.TabIndex = 40;
+            lblLogoImageName.Text = "اسم الصورة";
+            lblLogoImageName.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // btnChangLogo
             // 
-            btnChangLogo.Dock = DockStyle.Fill;
             btnChangLogo.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
-            btnChangLogo.Location = new Point(23, 422);
+            btnChangLogo.Location = new Point(3, 102);
             btnChangLogo.Name = "btnChangLogo";
-            btnChangLogo.Size = new Size(265, 32);
+            btnChangLogo.Size = new Size(62, 27);
             btnChangLogo.TabIndex = 3;
             btnChangLogo.Text = "تغيير اللوجو";
             btnChangLogo.UseVisualStyleBackColor = true;
@@ -330,7 +326,6 @@
             // 
             // panel1
             // 
-            panel1.Controls.Add(label22);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(23, 3);
             panel1.Name = "panel1";
@@ -341,14 +336,13 @@
             // label22
             // 
             label22.BackColor = Color.Transparent;
-            label22.Dock = DockStyle.Fill;
             label22.Font = new Font("Times New Roman", 22F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label22.ForeColor = Color.Red;
-            label22.Location = new Point(50, 9);
+            label22.Location = new Point(4, 0);
             label22.Margin = new Padding(4, 0, 4, 0);
             label22.Name = "label22";
             label22.Padding = new Padding(10, 9, 10, 9);
-            label22.Size = new Size(165, 99);
+            label22.Size = new Size(60, 33);
             label22.TabIndex = 39;
             label22.Text = "لوجو الشركة العام";
             label22.TextAlign = ContentAlignment.MiddleCenter;
@@ -404,6 +398,9 @@
             tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.6622524F));
             tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 74.3377457F));
             tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 67F));
+            tableLayoutPanel8.Controls.Add(btnChangLogo, 2, 3);
+            tableLayoutPanel8.Controls.Add(label22, 2, 0);
+            tableLayoutPanel8.Controls.Add(lblLogoImageName, 2, 1);
             tableLayoutPanel8.Controls.Add(label25, 0, 6);
             tableLayoutPanel8.Controls.Add(txtCompanyEmail, 1, 5);
             tableLayoutPanel8.Controls.Add(label13, 0, 5);
@@ -2184,7 +2181,6 @@
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)picLogoCo).EndInit();
-            panel1.ResumeLayout(false);
             tabMang.ResumeLayout(false);
             tabPageGenralData.ResumeLayout(false);
             tableLayoutPanel5.ResumeLayout(false);
