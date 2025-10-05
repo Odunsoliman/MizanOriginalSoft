@@ -413,6 +413,8 @@
             tabMang.Location = new Point(324, 7);
             tabMang.Multiline = true;
             tabMang.Name = "tabMang";
+            tabMang.RightToLeft = RightToLeft.Yes;
+            tabMang.RightToLeftLayout = true;
             tabMang.SelectedIndex = 0;
             tabMang.Size = new Size(731, 476);
             tabMang.SizeMode = TabSizeMode.Fixed;
