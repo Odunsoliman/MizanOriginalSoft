@@ -30,39 +30,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-        private void LoadWarehouses()
-        {
-            // 1️⃣ تحميل البيانات من قاعدة البيانات
-            DataTable dt = DBServiecs.Warehouse_GetAll();
-            if (dt == null || dt.Rows.Count == 0) return;
-
-            cbxWarehouseId.DataSource = dt;
-            cbxWarehouseId.DisplayMember = "WarehouseName"; // عدّل حسب اسم العمود الفعلي
-            cbxWarehouseId.ValueMember = "WarehouseId";
-
-            // 🔒 منع الكتابة داخل الكمبوبوكس
-            cbxWarehouseId.DropDownStyle = ComboBoxStyle.DropDownList;
-
-            // 2️⃣ قراءة القيمة الافتراضية من ملف الإعداد
-            int defaultId = AppSettings.GetInt("ThisVersionIsForWarehouseId", 0);
-            cbxWarehouseId.SelectedValue = defaultId;
-        }
-
-
-        private void cbxWarehouseId_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cbxWarehouseId.SelectedValue is int id)
-            {
-                AppSettings.SaveOrUpdate("ThisVersionIsForWarehouseId", id.ToString());
-            }
-        }
-
-
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("تم حفظ إعدادات المخزن الافتراضي بنجاح.");
-        }
-
+        #region !!!!!!!!!!! DisplaySettings  !!!!!!!!!!!!!!!
         // 🔹 عرض الإعدادات على الأدوات في الشاشة
         private void DisplaySettings()
         {
@@ -72,6 +40,9 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             txtAnthrPhon.Text = AppSettings.GetString("CompanyAnthrPhon", "");
             txtAdreass.Text = AppSettings.GetString("CompanyAdreass", "");
             txtCompanyEmail.Text = AppSettings.GetString("EmailCo", "");
+            lblLogoImageName.Text = AppSettings.GetString("CompanyLoGoFolder", "");
+            lblLogoPath.Text = AppSettings.GetString("LogoImagName", "");
+
 
             // 🖨️ إعدادات الطباعة
             lblRollPrinter.Text = AppSettings.GetString("RollPrinter", "");
@@ -97,7 +68,113 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             rdoNotAllowSaleByNegativeStock.Checked = !rdoAllowSaleByNegativeStock.Checked;
         }
 
-        // 🔹 حفظ التعديلات (بشكل مضبوط ومحدود)
+        #endregion
+
+        #region !!!!!!!!!!!! Warehouse  !!!!!!!!!!!!!
+        private void LoadWarehouses()
+        {
+            // 1️⃣ تحميل البيانات من قاعدة البيانات
+            DataTable dt = DBServiecs.Warehouse_GetAll();
+            if (dt == null || dt.Rows.Count == 0) return;
+
+            cbxWarehouseId.DataSource = dt;
+            cbxWarehouseId.DisplayMember = "WarehouseName"; // عدّل حسب اسم العمود الفعلي
+            cbxWarehouseId.ValueMember = "WarehouseId";
+
+            // 🔒 منع الكتابة داخل الكمبوبوكس
+            cbxWarehouseId.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            // 2️⃣ قراءة القيمة الافتراضية من ملف الإعداد
+            int defaultId = AppSettings.GetInt("ThisVersionIsForWarehouseId", 0);
+            cbxWarehouseId.SelectedValue = defaultId;
+        }
+
+        private void cbxWarehouseId_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbxWarehouseId.SelectedValue is int id)
+            {
+                AppSettings.SaveOrUpdate("ThisVersionIsForWarehouseId", id.ToString());
+            }
+        }
+
+        //اضافة فرع او مخزن الى قاعدة البيانات
+        private void btnAddWarehouse_Click(object sender, EventArgs e)
+        {
+            string userInput;
+            DialogResult inputResult = CustomMessageBox.ShowStringInputBox(out userInput,
+                "من فضلك أدخل اسم الفرع:", "إضافة فرع");
+
+            if (inputResult != DialogResult.OK || string.IsNullOrWhiteSpace(userInput))
+            {
+                MessageBox.Show("تم إلغاء الإضافة أو لم يتم إدخال اسم صالح.", "إلغاء",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            int userId = CurrentSession.UserID;
+            string message = DBServiecs.Warehouse_Add(userInput, userId);
+            MessageBox.Show(message);
+            LoadWarehouses(); // 🔄 تحديث القوائم بعد الإضافة.
+
+        }
+
+        // 🗑️ حذف الفرع المحدد.
+        private void btnDeleteWarehous_Click(object sender, EventArgs e)
+        {
+            if (cbxWarehouseId.SelectedValue == null)
+            {
+                MessageBox.Show("❌ يرجى اختيار الفرع المراد حذفه.");
+                return;
+            }
+
+            int warehouseId = Convert.ToInt32(cbxWarehouseId.SelectedValue);
+            int userId = CurrentSession.UserID;
+
+            // ⚠️ تأكيد الحذف من المستخدم.
+            DialogResult confirm = MessageBox.Show("هل أنت متأكد من حذف الفرع المحدد؟",
+                "تأكيد الحذف", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (confirm != DialogResult.Yes) return;
+
+            string message = DBServiecs.Warehouse_Delete(warehouseId, userId);
+            MessageBox.Show(message);
+            LoadWarehouses(); // 🔄 تحديث القوائم بعد الحذف.
+        }
+
+        // ✏️ تعديل اسم الفرع المحدد.
+        private void btnRenamWarehous_Click(object sender, EventArgs e)
+        {
+            if (cbxWarehouseId.SelectedValue == null)
+            {
+                MessageBox.Show("❌ يرجى اختيار الفرع المراد تعديله.");
+                return;
+            }
+
+            string userInput;
+            DialogResult inputResult = CustomMessageBox.ShowStringInputBox(out userInput,
+                "من فضلك أدخل اسم الفرع الجديد:", "تعديل ");
+
+            if (inputResult != DialogResult.OK || string.IsNullOrWhiteSpace(userInput))
+            {
+                MessageBox.Show("تم إلغاء التعديل أو لم يتم إدخال اسم صالح.", "إلغاء",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+
+
+            int warehouseId = Convert.ToInt32(cbxWarehouseId.SelectedValue);
+            int userId = CurrentSession.UserID;
+
+            string message = DBServiecs.Warehouse_UpdateName(warehouseId, userInput, userId);
+            MessageBox.Show(message);
+            LoadWarehouses(); // 🔄 إعادة التحميل بعد التعديل.
+        }
+
+        #endregion 
+        
+        #region !!!!!!!!!!!!!  ادوات الحفظ !!!!!!!!!!!!!!
+
         private void SaveData()
         {
             try
@@ -138,37 +215,14 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
+
         // زر الحفظ في الواجهة
-        private void btnSave_Click_(object sender, EventArgs e)
+        private void btnSave_Click(object sender, EventArgs e)
         {
             SaveData();
         }
 
-        private void btnAddWarehouse_Click(object sender, EventArgs e)
-        {
-            AddWarehouse();
-        }
-        private void AddWarehouse()
-        {
-            string userInput;
-            DialogResult inputResult = CustomMessageBox.ShowStringInputBox(out userInput,
-                "من فضلك أدخل اسم الفرع:", "إضافة فرع");
 
-            if (inputResult != DialogResult.OK || string.IsNullOrWhiteSpace(userInput))
-            {
-                MessageBox.Show("تم إلغاء الإضافة أو لم يتم إدخال اسم صالح.", "إلغاء",
-                               MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            int userId = CurrentSession.UserID;
-            string message = DBServiecs.Warehouse_Add(userInput, userId);
-            MessageBox.Show(message);
-            LoadWarehouses(); // 🔄 تحديث القوائم بعد الإضافة.
-
-
-        }
-
-
+        #endregion 
     }
 }

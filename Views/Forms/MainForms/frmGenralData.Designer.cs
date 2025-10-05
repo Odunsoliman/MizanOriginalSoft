@@ -2408,7 +2408,6 @@
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Button btnGetFolderBak;
         private Label label25;
-        private ComboBox cbxWarehouseId;
         private Button btnAddWarehouse;
         private TextBox txtWarehouseName;
         private Button btnDeleteWarehous;
@@ -2471,5 +2470,6 @@
         private TableLayoutPanel tableLayoutPanel28;
         private ComboBox cbxReturnPurchasesMode;
         private Label label33;
+        private ComboBox cbxWarehouseId;
     }
 }

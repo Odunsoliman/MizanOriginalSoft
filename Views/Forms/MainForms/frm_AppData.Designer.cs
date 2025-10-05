@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             tableLayoutPanel1 = new TableLayoutPanel();
-            lblLogoPath = new Label();
             label3 = new Label();
             tableLayoutPanel2 = new TableLayoutPanel();
             tableLayoutPanel6 = new TableLayoutPanel();
@@ -171,6 +170,9 @@
             tableLayoutPanel35 = new TableLayoutPanel();
             label35 = new Label();
             txtSalesPercentage = new TextBox();
+            tableLayoutPanel17 = new TableLayoutPanel();
+            lblLogoPath = new Label();
+            btnSave = new Button();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
@@ -220,6 +222,7 @@
             tableLayoutPanel36.SuspendLayout();
             tableLayoutPanel37.SuspendLayout();
             tableLayoutPanel35.SuspendLayout();
+            tableLayoutPanel17.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -227,9 +230,9 @@
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.Controls.Add(lblLogoPath, 0, 2);
             tableLayoutPanel1.Controls.Add(label3, 0, 0);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
+            tableLayoutPanel1.Controls.Add(tableLayoutPanel17, 0, 2);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(10, 10);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -240,20 +243,6 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanel1.Size = new Size(1088, 641);
             tableLayoutPanel1.TabIndex = 0;
-            // 
-            // lblLogoPath
-            // 
-            lblLogoPath.BackColor = Color.Transparent;
-            lblLogoPath.Dock = DockStyle.Fill;
-            lblLogoPath.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblLogoPath.ForeColor = Color.DarkBlue;
-            lblLogoPath.Location = new Point(14, 568);
-            lblLogoPath.Margin = new Padding(4, 0, 4, 0);
-            lblLogoPath.Name = "lblLogoPath";
-            lblLogoPath.Size = new Size(1060, 63);
-            lblLogoPath.TabIndex = 40;
-            lblLogoPath.Text = "المسار";
-            lblLogoPath.TextAlign = ContentAlignment.MiddleRight;
             // 
             // label3
             // 
@@ -316,7 +305,7 @@
             lblLogoImageName.Name = "lblLogoImageName";
             lblLogoImageName.Size = new Size(263, 22);
             lblLogoImageName.TabIndex = 40;
-            lblLogoImageName.Text = "المسار";
+            lblLogoImageName.Text = "اسم الصورة";
             lblLogoImageName.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel7
@@ -636,6 +625,7 @@
             btnDeleteWarehous.TabIndex = 42;
             btnDeleteWarehous.Text = "حذف الفرع";
             btnDeleteWarehous.UseVisualStyleBackColor = true;
+            btnDeleteWarehous.Click += btnDeleteWarehous_Click;
             // 
             // btnRenamWarehous
             // 
@@ -647,6 +637,7 @@
             btnRenamWarehous.TabIndex = 41;
             btnRenamWarehous.Text = "تعديل اسم";
             btnRenamWarehous.UseVisualStyleBackColor = true;
+            btnRenamWarehous.Click += btnRenamWarehous_Click;
             // 
             // btnAddWarehouse
             // 
@@ -2152,6 +2143,48 @@
             txtSalesPercentage.Text = "0";
             txtSalesPercentage.TextAlign = HorizontalAlignment.Center;
             // 
+            // tableLayoutPanel17
+            // 
+            tableLayoutPanel17.ColumnCount = 2;
+            tableLayoutPanel17.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 27.2128067F));
+            tableLayoutPanel17.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 72.78719F));
+            tableLayoutPanel17.Controls.Add(lblLogoPath, 1, 0);
+            tableLayoutPanel17.Controls.Add(btnSave, 0, 0);
+            tableLayoutPanel17.Dock = DockStyle.Fill;
+            tableLayoutPanel17.Location = new Point(13, 571);
+            tableLayoutPanel17.Name = "tableLayoutPanel17";
+            tableLayoutPanel17.RowCount = 1;
+            tableLayoutPanel17.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel17.Size = new Size(1062, 57);
+            tableLayoutPanel17.TabIndex = 40;
+            // 
+            // lblLogoPath
+            // 
+            lblLogoPath.BackColor = Color.Transparent;
+            lblLogoPath.Dock = DockStyle.Fill;
+            lblLogoPath.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblLogoPath.ForeColor = Color.DarkBlue;
+            lblLogoPath.Location = new Point(4, 0);
+            lblLogoPath.Margin = new Padding(4, 0, 4, 0);
+            lblLogoPath.Name = "lblLogoPath";
+            lblLogoPath.Size = new Size(765, 57);
+            lblLogoPath.TabIndex = 40;
+            lblLogoPath.Text = "المسار";
+            lblLogoPath.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // btnSave
+            // 
+            btnSave.Dock = DockStyle.Fill;
+            btnSave.Font = new Font("Times New Roman", 18F, FontStyle.Bold);
+            btnSave.ForeColor = Color.Blue;
+            btnSave.Location = new Point(776, 3);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(283, 51);
+            btnSave.TabIndex = 41;
+            btnSave.Text = "حفظ الاعدادات";
+            btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
+            // 
             // frm_AppData
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -2231,6 +2264,7 @@
             tableLayoutPanel37.PerformLayout();
             tableLayoutPanel35.ResumeLayout(false);
             tableLayoutPanel35.PerformLayout();
+            tableLayoutPanel17.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -2379,5 +2413,7 @@
         private Button btnDeleteWarehous;
         private Button btnRenamWarehous;
         private Button btnAddWarehouse;
+        private TableLayoutPanel tableLayoutPanel17;
+        private Button btnSave;
     }
 }
