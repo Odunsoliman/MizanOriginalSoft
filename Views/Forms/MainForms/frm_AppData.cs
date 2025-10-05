@@ -384,10 +384,9 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     try
                     {
                         picLogoCo.Image = Image.FromFile(openFileDialog.FileName);
-                        picLogoCo.SizeMode = PictureBoxSizeMode.StretchImage;
+                        picLogoCo.SizeMode = PictureBoxSizeMode.Zoom ;
                         SaveData();
 
-                        MessageBox.Show("✅ تم تغيير صورة اللوجو بنجاح", "تم", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
                     {
