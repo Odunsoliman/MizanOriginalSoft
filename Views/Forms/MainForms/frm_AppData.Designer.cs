@@ -33,7 +33,6 @@
             tableLayoutPanel2 = new TableLayoutPanel();
             tableLayoutPanel6 = new TableLayoutPanel();
             lblLogoImageName = new Label();
-            tableLayoutPanel7 = new TableLayoutPanel();
             picLogoCo = new PictureBox();
             btnChangLogo = new Button();
             panel1 = new Panel();
@@ -176,7 +175,6 @@
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
-            tableLayoutPanel7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picLogoCo).BeginInit();
             panel1.SuspendLayout();
             tabMang.SuspendLayout();
@@ -278,8 +276,8 @@
             // 
             tableLayoutPanel6.ColumnCount = 1;
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel6.Controls.Add(picLogoCo, 0, 2);
             tableLayoutPanel6.Controls.Add(lblLogoImageName, 0, 1);
-            tableLayoutPanel6.Controls.Add(tableLayoutPanel7, 0, 2);
             tableLayoutPanel6.Controls.Add(btnChangLogo, 0, 3);
             tableLayoutPanel6.Controls.Add(panel1, 0, 0);
             tableLayoutPanel6.Dock = DockStyle.Fill;
@@ -308,28 +306,13 @@
             lblLogoImageName.Text = "اسم الصورة";
             lblLogoImageName.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // tableLayoutPanel7
-            // 
-            tableLayoutPanel7.BackColor = Color.SteelBlue;
-            tableLayoutPanel7.ColumnCount = 1;
-            tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel7.Controls.Add(picLogoCo, 0, 0);
-            tableLayoutPanel7.Dock = DockStyle.Fill;
-            tableLayoutPanel7.Location = new Point(23, 148);
-            tableLayoutPanel7.Name = "tableLayoutPanel7";
-            tableLayoutPanel7.Padding = new Padding(9);
-            tableLayoutPanel7.RowCount = 1;
-            tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel7.Size = new Size(265, 268);
-            tableLayoutPanel7.TabIndex = 4;
-            // 
             // picLogoCo
             // 
             picLogoCo.BackColor = Color.Transparent;
             picLogoCo.Dock = DockStyle.Fill;
-            picLogoCo.Location = new Point(12, 12);
+            picLogoCo.Location = new Point(23, 148);
             picLogoCo.Name = "picLogoCo";
-            picLogoCo.Size = new Size(241, 244);
+            picLogoCo.Size = new Size(265, 268);
             picLogoCo.TabIndex = 4;
             picLogoCo.TabStop = false;
             // 
@@ -2200,7 +2183,6 @@
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel6.ResumeLayout(false);
-            tableLayoutPanel7.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)picLogoCo).EndInit();
             panel1.ResumeLayout(false);
             tabMang.ResumeLayout(false);
@@ -2403,7 +2385,6 @@
         private TextBox txtSalesPercentage;
         private TableLayoutPanel tableLayoutPanel6;
         private Label lblLogoImageName;
-        private TableLayoutPanel tableLayoutPanel7;
         private PictureBox picLogoCo;
         private Button btnChangLogo;
         private Panel panel1;
