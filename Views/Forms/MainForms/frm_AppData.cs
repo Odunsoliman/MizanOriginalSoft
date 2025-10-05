@@ -163,7 +163,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 picLogoCo.Image = null; // أو ضع صورة افتراضية مدمجة بالبرنامج
             }
-       
+
             // بعد تحميل الصورة في PictureBox
             if (File.Exists(logoFullPath))
             {
@@ -436,7 +436,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
             MessageBox.Show("✅ تم حذف اللوجو المخصص وإرجاع الصورة الافتراضية.", "تم", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
 
         #endregion
     }

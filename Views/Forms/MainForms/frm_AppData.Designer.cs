@@ -37,9 +37,7 @@
             btnDeleteLogo = new Button();
             lblLogoImageName = new Label();
             panel1 = new Panel();
-            tableLayoutPanel39 = new TableLayoutPanel();
             label22 = new Label();
-            lblImagSize = new Label();
             picLogoCo = new PictureBox();
             tabMang = new TabControl();
             tabPageGenralData = new TabPage();
@@ -174,15 +172,16 @@
             label35 = new Label();
             txtSalesPercentage = new TextBox();
             tableLayoutPanel17 = new TableLayoutPanel();
-            lblLogoPath = new Label();
             btnSave = new Button();
             tableLayoutPanel7 = new TableLayoutPanel();
+            lblLogoPath = new Label();
+            lblImagSize = new Label();
+            panel2 = new Panel();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
             tableLayoutPanel38.SuspendLayout();
             panel1.SuspendLayout();
-            tableLayoutPanel39.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picLogoCo).BeginInit();
             tabMang.SuspendLayout();
             tabPageGenralData.SuspendLayout();
@@ -229,6 +228,7 @@
             tableLayoutPanel35.SuspendLayout();
             tableLayoutPanel17.SuspendLayout();
             tableLayoutPanel7.SuspendLayout();
+            panel2.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -284,19 +284,18 @@
             // 
             tableLayoutPanel6.ColumnCount = 1;
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel6.Controls.Add(tableLayoutPanel38, 0, 3);
-            tableLayoutPanel6.Controls.Add(lblLogoImageName, 0, 1);
+            tableLayoutPanel6.Controls.Add(tableLayoutPanel38, 0, 2);
             tableLayoutPanel6.Controls.Add(panel1, 0, 0);
-            tableLayoutPanel6.Controls.Add(picLogoCo, 0, 2);
+            tableLayoutPanel6.Controls.Add(picLogoCo, 0, 1);
             tableLayoutPanel6.Dock = DockStyle.Fill;
             tableLayoutPanel6.Location = new Point(7, 7);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
             tableLayoutPanel6.Padding = new Padding(20, 0, 20, 19);
-            tableLayoutPanel6.RowCount = 4;
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 27F));
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
+            tableLayoutPanel6.RowCount = 3;
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 32F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 60F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 8F));
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel6.Size = new Size(311, 476);
             tableLayoutPanel6.TabIndex = 3;
             // 
@@ -308,11 +307,11 @@
             tableLayoutPanel38.Controls.Add(btnChangLogo, 0, 0);
             tableLayoutPanel38.Controls.Add(btnDeleteLogo, 1, 0);
             tableLayoutPanel38.Dock = DockStyle.Fill;
-            tableLayoutPanel38.Location = new Point(23, 422);
+            tableLayoutPanel38.Location = new Point(23, 423);
             tableLayoutPanel38.Name = "tableLayoutPanel38";
             tableLayoutPanel38.RowCount = 1;
             tableLayoutPanel38.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel38.Size = new Size(265, 32);
+            tableLayoutPanel38.Size = new Size(265, 31);
             tableLayoutPanel38.TabIndex = 44;
             // 
             // btnChangLogo
@@ -321,7 +320,7 @@
             btnChangLogo.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
             btnChangLogo.Location = new Point(90, 3);
             btnChangLogo.Name = "btnChangLogo";
-            btnChangLogo.Size = new Size(172, 26);
+            btnChangLogo.Size = new Size(172, 25);
             btnChangLogo.TabIndex = 3;
             btnChangLogo.Text = "تغيير اللوجو";
             btnChangLogo.UseVisualStyleBackColor = true;
@@ -333,7 +332,7 @@
             btnDeleteLogo.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
             btnDeleteLogo.Location = new Point(3, 3);
             btnDeleteLogo.Name = "btnDeleteLogo";
-            btnDeleteLogo.Size = new Size(81, 26);
+            btnDeleteLogo.Size = new Size(81, 25);
             btnDeleteLogo.TabIndex = 41;
             btnDeleteLogo.Text = "حذف اللوجو";
             btnDeleteLogo.UseVisualStyleBackColor = true;
@@ -342,74 +341,48 @@
             // lblLogoImageName
             // 
             lblLogoImageName.BackColor = Color.Transparent;
-            lblLogoImageName.Dock = DockStyle.Fill;
+            lblLogoImageName.Dock = DockStyle.Top;
             lblLogoImageName.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblLogoImageName.ForeColor = Color.DarkBlue;
-            lblLogoImageName.Location = new Point(24, 123);
+            lblLogoImageName.Location = new Point(0, 111);
             lblLogoImageName.Margin = new Padding(4, 0, 4, 0);
             lblLogoImageName.Name = "lblLogoImageName";
-            lblLogoImageName.Size = new Size(263, 22);
+            lblLogoImageName.Size = new Size(165, 22);
             lblLogoImageName.TabIndex = 40;
             lblLogoImageName.Text = "اسم الصورة";
             lblLogoImageName.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // panel1
             // 
-            panel1.Controls.Add(tableLayoutPanel39);
+            panel1.Controls.Add(panel2);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(23, 3);
             panel1.Name = "panel1";
             panel1.Padding = new Padding(50, 0, 50, 0);
-            panel1.Size = new Size(265, 117);
+            panel1.Size = new Size(265, 140);
             panel1.TabIndex = 41;
-            // 
-            // tableLayoutPanel39
-            // 
-            tableLayoutPanel39.ColumnCount = 1;
-            tableLayoutPanel39.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel39.Controls.Add(label22, 0, 0);
-            tableLayoutPanel39.Location = new Point(34, 12);
-            tableLayoutPanel39.Name = "tableLayoutPanel39";
-            tableLayoutPanel39.RowCount = 1;
-            tableLayoutPanel39.RowStyles.Add(new RowStyle(SizeType.Percent, 64F));
-            tableLayoutPanel39.Size = new Size(200, 100);
-            tableLayoutPanel39.TabIndex = 0;
             // 
             // label22
             // 
             label22.BackColor = Color.Transparent;
-            label22.Dock = DockStyle.Fill;
+            label22.Dock = DockStyle.Top;
             label22.Font = new Font("Times New Roman", 22F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label22.ForeColor = Color.Red;
-            label22.Location = new Point(4, 0);
+            label22.Location = new Point(0, 0);
             label22.Margin = new Padding(4, 0, 4, 0);
             label22.Name = "label22";
             label22.Padding = new Padding(10, 9, 10, 9);
-            label22.Size = new Size(192, 100);
+            label22.Size = new Size(165, 111);
             label22.TabIndex = 39;
             label22.Text = "لوجو الشركة العام";
             label22.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // lblImagSize
-            // 
-            lblImagSize.BackColor = Color.Transparent;
-            lblImagSize.Dock = DockStyle.Fill;
-            lblImagSize.Font = new Font("Times New Roman", 8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblImagSize.ForeColor = Color.Silver;
-            lblImagSize.Location = new Point(4, 25);
-            lblImagSize.Margin = new Padding(4, 0, 4, 0);
-            lblImagSize.Name = "lblImagSize";
-            lblImagSize.Size = new Size(759, 26);
-            lblImagSize.TabIndex = 39;
-            lblImagSize.Text = "لوجو الشركة العام";
-            lblImagSize.TextAlign = ContentAlignment.MiddleRight;
             // 
             // picLogoCo
             // 
             picLogoCo.BackColor = Color.Transparent;
             picLogoCo.BorderStyle = BorderStyle.FixedSingle;
             picLogoCo.Dock = DockStyle.Fill;
-            picLogoCo.Location = new Point(23, 148);
+            picLogoCo.Location = new Point(23, 149);
             picLogoCo.Name = "picLogoCo";
             picLogoCo.Size = new Size(265, 268);
             picLogoCo.SizeMode = PictureBoxSizeMode.Zoom;
@@ -2206,20 +2179,6 @@
             tableLayoutPanel17.Size = new Size(1062, 57);
             tableLayoutPanel17.TabIndex = 40;
             // 
-            // lblLogoPath
-            // 
-            lblLogoPath.BackColor = Color.Transparent;
-            lblLogoPath.Dock = DockStyle.Fill;
-            lblLogoPath.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblLogoPath.ForeColor = Color.DarkBlue;
-            lblLogoPath.Location = new Point(4, 0);
-            lblLogoPath.Margin = new Padding(4, 0, 4, 0);
-            lblLogoPath.Name = "lblLogoPath";
-            lblLogoPath.Size = new Size(759, 25);
-            lblLogoPath.TabIndex = 40;
-            lblLogoPath.Text = "المسار";
-            lblLogoPath.TextAlign = ContentAlignment.MiddleRight;
-            // 
             // btnSave
             // 
             btnSave.Dock = DockStyle.Fill;
@@ -2248,6 +2207,44 @@
             tableLayoutPanel7.Size = new Size(767, 51);
             tableLayoutPanel7.TabIndex = 42;
             // 
+            // lblLogoPath
+            // 
+            lblLogoPath.BackColor = Color.Transparent;
+            lblLogoPath.Dock = DockStyle.Fill;
+            lblLogoPath.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblLogoPath.ForeColor = Color.DarkBlue;
+            lblLogoPath.Location = new Point(4, 0);
+            lblLogoPath.Margin = new Padding(4, 0, 4, 0);
+            lblLogoPath.Name = "lblLogoPath";
+            lblLogoPath.Size = new Size(759, 25);
+            lblLogoPath.TabIndex = 40;
+            lblLogoPath.Text = "المسار";
+            lblLogoPath.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // lblImagSize
+            // 
+            lblImagSize.BackColor = Color.Transparent;
+            lblImagSize.Dock = DockStyle.Fill;
+            lblImagSize.Font = new Font("Times New Roman", 8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblImagSize.ForeColor = Color.Silver;
+            lblImagSize.Location = new Point(4, 25);
+            lblImagSize.Margin = new Padding(4, 0, 4, 0);
+            lblImagSize.Name = "lblImagSize";
+            lblImagSize.Size = new Size(759, 26);
+            lblImagSize.TabIndex = 39;
+            lblImagSize.Text = "لوجو الشركة العام";
+            lblImagSize.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(lblLogoImageName);
+            panel2.Controls.Add(label22);
+            panel2.Dock = DockStyle.Fill;
+            panel2.Location = new Point(50, 0);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(165, 140);
+            panel2.TabIndex = 0;
+            // 
             // frm_AppData
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -2264,7 +2261,6 @@
             tableLayoutPanel6.ResumeLayout(false);
             tableLayoutPanel38.ResumeLayout(false);
             panel1.ResumeLayout(false);
-            tableLayoutPanel39.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)picLogoCo).EndInit();
             tabMang.ResumeLayout(false);
             tabPageGenralData.ResumeLayout(false);
@@ -2330,6 +2326,7 @@
             tableLayoutPanel35.PerformLayout();
             tableLayoutPanel17.ResumeLayout(false);
             tableLayoutPanel7.ResumeLayout(false);
+            panel2.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -2491,7 +2488,7 @@
         private Button button1;
         private Button button2;
         private Button button3;
-        private TableLayoutPanel tableLayoutPanel39;
         private Label lblImagSize;
+        private Panel panel2;
     }
 }
