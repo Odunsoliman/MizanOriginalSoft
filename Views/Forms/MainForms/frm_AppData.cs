@@ -45,33 +45,46 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             string? logoFileName = AppSettings.GetString("LogoImagName", null);
             string? logoFolder = AppSettings.GetString("CompanyLoGoFolder", null);
 
-            lblLogoImageName.Text = logoFileName ?? "";
-            lblLogoPath.Text = logoFolder ?? "";
+            // افتراضي إذا لم يتم تحديد أي صورة
+            string defaultLogoFileName = AppSettings.GetString("DefaulLogoImagName", "Mizan Logo.PNG") ?? "Mizan Logo.PNG";
+            string defaultLogoFolder = AppSettings.GetString("DefaulCompanyLoGoFolder", Path.Combine(Application.StartupPath, "HelpFiles"))
+                                       ?? Path.Combine(Application.StartupPath, "HelpFiles");
 
-            // ✅ التأكد أن القيم ليست null قبل Path.Combine
+            lblLogoImageName.Text = logoFileName ?? defaultLogoFileName;
+            lblLogoPath.Text = logoFolder ?? defaultLogoFolder;
+
+            // تحديد المسار النهائي للصورة
+            string logoFullPath;
+
+            // إذا كانت الصورة المخصصة موجودة
             if (!string.IsNullOrWhiteSpace(logoFolder) && !string.IsNullOrWhiteSpace(logoFileName))
             {
-                string logoFullPath = Path.Combine(logoFolder, logoFileName);
-
-                if (File.Exists(logoFullPath))
+                logoFullPath = Path.Combine(logoFolder, logoFileName);
+                if (!File.Exists(logoFullPath))
                 {
-                    // تحرير أي صورة موجودة مسبقًا لتجنب استثناء FileInUse
-                    if (picLogoCo.Image != null)
-                    {
-                        picLogoCo.Image.Dispose();
-                        picLogoCo.Image = null;
-                    }
-
-                    picLogoCo.Image = Image.FromFile(logoFullPath);
-                }
-                else
-                {
-                    picLogoCo.Image = null; // أو ضع صورة افتراضية
+                    // لم توجد الصورة المخصصة، استخدم الافتراضية
+                    logoFullPath = Path.Combine(defaultLogoFolder, defaultLogoFileName);
                 }
             }
             else
             {
-                picLogoCo.Image = null;
+                // استخدم الصورة الافتراضية مباشرة
+                logoFullPath = Path.Combine(defaultLogoFolder, defaultLogoFileName);
+            }
+
+            // تحميل الصورة
+            if (File.Exists(logoFullPath))
+            {
+                if (picLogoCo.Image != null)
+                {
+                    picLogoCo.Image.Dispose();
+                    picLogoCo.Image = null;
+                }
+                picLogoCo.Image = Image.FromFile(logoFullPath);
+            }
+            else
+            {
+                picLogoCo.Image = null; // أو ضع صورة افتراضية مدمجة بالبرنامج
             }
 
             // 🖨️ إعدادات الطباعة
