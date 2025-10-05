@@ -37,7 +37,9 @@
             btnDeleteLogo = new Button();
             lblLogoImageName = new Label();
             panel1 = new Panel();
+            tableLayoutPanel39 = new TableLayoutPanel();
             label22 = new Label();
+            lblImagSize = new Label();
             picLogoCo = new PictureBox();
             tabMang = new TabControl();
             tabPageGenralData = new TabPage();
@@ -174,13 +176,12 @@
             tableLayoutPanel17 = new TableLayoutPanel();
             lblLogoPath = new Label();
             btnSave = new Button();
-            tableLayoutPanel39 = new TableLayoutPanel();
-            lblImagSize = new Label();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
             tableLayoutPanel38.SuspendLayout();
             panel1.SuspendLayout();
+            tableLayoutPanel39.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picLogoCo).BeginInit();
             tabMang.SuspendLayout();
             tabPageGenralData.SuspendLayout();
@@ -226,7 +227,6 @@
             tableLayoutPanel37.SuspendLayout();
             tableLayoutPanel35.SuspendLayout();
             tableLayoutPanel17.SuspendLayout();
-            tableLayoutPanel39.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -361,6 +361,20 @@
             panel1.Size = new Size(265, 117);
             panel1.TabIndex = 41;
             // 
+            // tableLayoutPanel39
+            // 
+            tableLayoutPanel39.ColumnCount = 1;
+            tableLayoutPanel39.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel39.Controls.Add(label22, 0, 0);
+            tableLayoutPanel39.Controls.Add(lblImagSize, 0, 1);
+            tableLayoutPanel39.Location = new Point(34, 12);
+            tableLayoutPanel39.Name = "tableLayoutPanel39";
+            tableLayoutPanel39.RowCount = 2;
+            tableLayoutPanel39.RowStyles.Add(new RowStyle(SizeType.Percent, 64F));
+            tableLayoutPanel39.RowStyles.Add(new RowStyle(SizeType.Percent, 36F));
+            tableLayoutPanel39.Size = new Size(200, 100);
+            tableLayoutPanel39.TabIndex = 0;
+            // 
             // label22
             // 
             label22.BackColor = Color.Transparent;
@@ -371,10 +385,25 @@
             label22.Margin = new Padding(4, 0, 4, 0);
             label22.Name = "label22";
             label22.Padding = new Padding(10, 9, 10, 9);
-            label22.Size = new Size(192, 71);
+            label22.Size = new Size(192, 64);
             label22.TabIndex = 39;
             label22.Text = "لوجو الشركة العام";
             label22.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblImagSize
+            // 
+            lblImagSize.BackColor = Color.Transparent;
+            lblImagSize.Dock = DockStyle.Fill;
+            lblImagSize.Font = new Font("Times New Roman", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblImagSize.ForeColor = Color.Red;
+            lblImagSize.Location = new Point(4, 64);
+            lblImagSize.Margin = new Padding(4, 0, 4, 0);
+            lblImagSize.Name = "lblImagSize";
+            lblImagSize.Padding = new Padding(10, 9, 10, 9);
+            lblImagSize.Size = new Size(192, 36);
+            lblImagSize.TabIndex = 39;
+            lblImagSize.Text = "لوجو الشركة العام";
+            lblImagSize.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // picLogoCo
             // 
@@ -2205,35 +2234,6 @@
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += btnSave_Click;
             // 
-            // tableLayoutPanel39
-            // 
-            tableLayoutPanel39.ColumnCount = 1;
-            tableLayoutPanel39.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel39.Controls.Add(label22, 0, 0);
-            tableLayoutPanel39.Controls.Add(lblImagSize, 0, 1);
-            tableLayoutPanel39.Location = new Point(34, 12);
-            tableLayoutPanel39.Name = "tableLayoutPanel39";
-            tableLayoutPanel39.RowCount = 2;
-            tableLayoutPanel39.RowStyles.Add(new RowStyle(SizeType.Percent, 71F));
-            tableLayoutPanel39.RowStyles.Add(new RowStyle(SizeType.Percent, 29F));
-            tableLayoutPanel39.Size = new Size(200, 100);
-            tableLayoutPanel39.TabIndex = 0;
-            // 
-            // lblImagSize
-            // 
-            lblImagSize.BackColor = Color.Transparent;
-            lblImagSize.Dock = DockStyle.Fill;
-            lblImagSize.Font = new Font("Times New Roman", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblImagSize.ForeColor = Color.Red;
-            lblImagSize.Location = new Point(4, 71);
-            lblImagSize.Margin = new Padding(4, 0, 4, 0);
-            lblImagSize.Name = "lblImagSize";
-            lblImagSize.Padding = new Padding(10, 9, 10, 9);
-            lblImagSize.Size = new Size(192, 29);
-            lblImagSize.TabIndex = 39;
-            lblImagSize.Text = "لوجو الشركة العام";
-            lblImagSize.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // frm_AppData
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -2250,6 +2250,7 @@
             tableLayoutPanel6.ResumeLayout(false);
             tableLayoutPanel38.ResumeLayout(false);
             panel1.ResumeLayout(false);
+            tableLayoutPanel39.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)picLogoCo).EndInit();
             tabMang.ResumeLayout(false);
             tabPageGenralData.ResumeLayout(false);
@@ -2314,7 +2315,6 @@
             tableLayoutPanel35.ResumeLayout(false);
             tableLayoutPanel35.PerformLayout();
             tableLayoutPanel17.ResumeLayout(false);
-            tableLayoutPanel39.ResumeLayout(false);
             ResumeLayout(false);
         }
 

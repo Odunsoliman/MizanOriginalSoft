@@ -86,6 +86,26 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 picLogoCo.Image = null; // أو ضع صورة افتراضية مدمجة بالبرنامج
             }
+            // بعد تحميل الصورة في PictureBox
+            if (File.Exists(logoFullPath))
+            {
+                if (picLogoCo.Image != null)
+                {
+                    picLogoCo.Image.Dispose();
+                    picLogoCo.Image = null;
+                }
+
+                Image img = Image.FromFile(logoFullPath);
+                picLogoCo.Image = img;
+
+                // عرض أبعاد الصورة بالبكسل
+                lblImagSize.Text = $"{img.Width} × {img.Height} px";
+            }
+            else
+            {
+                picLogoCo.Image = null;
+                lblImagSize.Text = "لا توجد صورة";
+            }
 
             // 🖨️ إعدادات الطباعة
             lblRollPrinter.Text = AppSettings.GetString("RollPrinter", "");
