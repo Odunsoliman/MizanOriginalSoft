@@ -739,7 +739,16 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 {
                     lblID_User.Text = selectedUser["IDUser"].ToString();
                     lblUserName.Text = selectedUser["UserName"].ToString();
-                    lblFullName.Text = selectedUser["FullName"].ToString();
+                    if (string.IsNullOrWhiteSpace(selectedUser["FullName"]?.ToString()))
+                    {
+                        lblFullName.Text = "مسمى وظيفي غير محدد";
+                        lblFullName.ForeColor = Color.DarkOrange; // اختر لونًا مميزًا مثل برتقالي أو أحمر غامق
+                    }
+                    else
+                    {
+                        lblFullName.Text = selectedUser["FullName"].ToString();
+                        lblFullName.ForeColor = Color.Black; // اللون الطبيعي عند وجود قيمة
+                    }
 
                     // ✅ تعيين النصوص بناءً على الحالة
                     bool isAdmin = Convert.ToBoolean(selectedUser["IsAdmin"]);
@@ -839,7 +848,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 DGV.Columns["PermissionID"].ReadOnly = true;
         }
 
-        private void BtnSave_Click(object sender, EventArgs e)
+        private void BtnSave_Click__(object sender, EventArgs e)
         {
             if (cbxUsers.SelectedValue == null || cbxWarehouses.SelectedValue == null)
             {
@@ -1038,6 +1047,78 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
+        private void BtnSave_Click(object sender, EventArgs e)
+        {
+            if (cbxUsers.SelectedValue == null || cbxWarehouses.SelectedValue == null)
+            {
+                MessageBox.Show("❌ يرجى اختيار المستخدم والفرع أولاً");
+                return;
+            }
+
+            int userId = Convert.ToInt32(cbxUsers.SelectedValue);
+
+            int warehouseId = Convert.ToInt32(cbxWarehouses.SelectedValue);
+            // ✅ تابع التنفيذ هنا بعد التأكد من صحة رقم الفرع
+
+            if (warehouseId < 1)
+            {
+                MessageBox.Show("⚠️ قم باختيار الفرع بشكل صحيح.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+
+            // ✅ استخدام الدالة التي تُعيد المستخدم
+            DataTable dt = DBServiecs.User_GetOne(userId);
+
+            bool isAdmin = false;
+            if (dt.Rows.Count > 0 && dt.Columns.Contains("IsAdmin"))
+            {
+                isAdmin = Convert.ToBoolean(dt.Rows[0]["IsAdmin"]);
+            }
+
+            // ✅ إذا كان أدمن: استدعاء واحد فقط ثم الخروج
+            if (isAdmin)
+            {
+                if (DGV.Rows.Count > 0 && !DGV.Rows[0].IsNewRow)
+                {
+                    int permissionId = Convert.ToInt32(DGV.Rows[0].Cells["PermissionID"].Value);
+
+                    DBServiecs.Permission_SetForUser(
+                        userId,
+                        permissionId,
+                        true, true, true, true,
+                        warehouseId
+                    );
+                }
+
+                MessageBox.Show("✅ المستخدم أدمن وتم منحه جميع الصلاحيات تلقائيًا", "تم", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // المستخدم ليس أدمن → نحفظ كل صف من الـ DGV كالمعتاد
+            foreach (DataGridViewRow row in DGV.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                int permissionId = Convert.ToInt32(row.Cells["PermissionID"].Value);
+                bool isAllowed = ConvertToBool(row.Cells["IsAllowed"].Value);
+                bool canAdd = ConvertToBool(row.Cells["CanAdd"].Value);
+                bool canEdit = ConvertToBool(row.Cells["CanEdit"].Value);
+                bool canDelete = ConvertToBool(row.Cells["CanDelete"].Value);
+
+                DBServiecs.Permission_SetForUser(
+                    userId,
+                    permissionId,
+                    isAllowed,
+                    canAdd,
+                    canEdit,
+                    canDelete,
+                    warehouseId
+                );
+            }
+
+            MessageBox.Show("✅ تم حفظ الصلاحيات بنجاح", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
 
 
         #endregion

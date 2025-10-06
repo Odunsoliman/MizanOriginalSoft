@@ -122,13 +122,11 @@
             lblID_User = new Label();
             tableLayoutPanel12 = new TableLayoutPanel();
             lblUserName = new Label();
-            lblFullName = new Label();
             btnDeleteUser = new Button();
             btnNewUser = new Button();
-            lblIsAdmin = new CheckBox();
-            lblIsActive = new CheckBox();
-            label20 = new Label();
-            label38 = new Label();
+            lblFullName = new Label();
+            lblIsAdmin = new Label();
+            lblIsActive = new Label();
             tabPageUserPermissions = new TabPage();
             tableLayoutPanel25 = new TableLayoutPanel();
             DGV = new DataGridView();
@@ -1248,10 +1246,10 @@
             // 
             tabPageServerSetting.BackColor = Color.WhiteSmoke;
             tabPageServerSetting.Controls.Add(tableLayoutPanel10);
-            tabPageServerSetting.Location = new Point(4, 84);
+            tabPageServerSetting.Location = new Point(4, 44);
             tabPageServerSetting.Name = "tabPageServerSetting";
             tabPageServerSetting.Padding = new Padding(3);
-            tabPageServerSetting.Size = new Size(747, 388);
+            tabPageServerSetting.Size = new Size(747, 428);
             tabPageServerSetting.TabIndex = 2;
             tabPageServerSetting.Text = "اعدادات السيرفر";
             // 
@@ -1411,10 +1409,10 @@
             // tabPageUserSetting
             // 
             tabPageUserSetting.Controls.Add(tableLayoutPanel4);
-            tabPageUserSetting.Location = new Point(4, 84);
+            tabPageUserSetting.Location = new Point(4, 44);
             tabPageUserSetting.Name = "tabPageUserSetting";
             tabPageUserSetting.Padding = new Padding(6);
-            tabPageUserSetting.Size = new Size(747, 388);
+            tabPageUserSetting.Size = new Size(747, 428);
             tabPageUserSetting.TabIndex = 3;
             tabPageUserSetting.Text = "اعدادات المستخدمين";
             tabPageUserSetting.UseVisualStyleBackColor = true;
@@ -1433,7 +1431,7 @@
             tableLayoutPanel4.Name = "tableLayoutPanel4";
             tableLayoutPanel4.RowCount = 1;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel4.Size = new Size(735, 376);
+            tableLayoutPanel4.Size = new Size(735, 416);
             tableLayoutPanel4.TabIndex = 10;
             // 
             // DGV_Users
@@ -1442,7 +1440,7 @@
             DGV_Users.Dock = DockStyle.Fill;
             DGV_Users.Location = new Point(493, 3);
             DGV_Users.Name = "DGV_Users";
-            DGV_Users.Size = new Size(239, 370);
+            DGV_Users.Size = new Size(239, 410);
             DGV_Users.TabIndex = 0;
             DGV_Users.SelectionChanged += DGV_Users_SelectionChanged;
             // 
@@ -1458,16 +1456,16 @@
             tableLayoutPanel11.RowCount = 2;
             tableLayoutPanel11.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanel11.RowStyles.Add(new RowStyle(SizeType.Percent, 90F));
-            tableLayoutPanel11.Size = new Size(239, 370);
+            tableLayoutPanel11.Size = new Size(239, 410);
             tableLayoutPanel11.TabIndex = 1;
             // 
             // DGV_Permissions
             // 
             DGV_Permissions.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DGV_Permissions.Dock = DockStyle.Fill;
-            DGV_Permissions.Location = new Point(3, 40);
+            DGV_Permissions.Location = new Point(3, 44);
             DGV_Permissions.Name = "DGV_Permissions";
-            DGV_Permissions.Size = new Size(233, 327);
+            DGV_Permissions.Size = new Size(233, 363);
             DGV_Permissions.TabIndex = 6;
             // 
             // lblID_User
@@ -1476,71 +1474,57 @@
             lblID_User.Dock = DockStyle.Fill;
             lblID_User.Location = new Point(3, 0);
             lblID_User.Name = "lblID_User";
-            lblID_User.Size = new Size(233, 37);
+            lblID_User.Size = new Size(233, 41);
             lblID_User.TabIndex = 9;
             lblID_User.Text = "0";
             lblID_User.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel12
             // 
-            tableLayoutPanel12.ColumnCount = 2;
-            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
-            tableLayoutPanel12.Controls.Add(lblUserName, 1, 1);
-            tableLayoutPanel12.Controls.Add(lblFullName, 1, 3);
-            tableLayoutPanel12.Controls.Add(btnDeleteUser, 1, 8);
-            tableLayoutPanel12.Controls.Add(btnNewUser, 1, 10);
-            tableLayoutPanel12.Controls.Add(lblIsAdmin, 1, 5);
-            tableLayoutPanel12.Controls.Add(lblIsActive, 1, 6);
-            tableLayoutPanel12.Controls.Add(label20, 0, 5);
-            tableLayoutPanel12.Controls.Add(label38, 0, 6);
+            tableLayoutPanel12.ColumnCount = 1;
+            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel12.Controls.Add(lblUserName, 0, 1);
+            tableLayoutPanel12.Controls.Add(btnDeleteUser, 0, 8);
+            tableLayoutPanel12.Controls.Add(btnNewUser, 0, 10);
+            tableLayoutPanel12.Controls.Add(lblFullName, 0, 2);
+            tableLayoutPanel12.Controls.Add(lblIsAdmin, 0, 3);
+            tableLayoutPanel12.Controls.Add(lblIsActive, 0, 4);
             tableLayoutPanel12.Dock = DockStyle.Top;
             tableLayoutPanel12.Location = new Point(3, 3);
             tableLayoutPanel12.Name = "tableLayoutPanel12";
             tableLayoutPanel12.RowCount = 12;
-            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333333F));
-            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333333F));
-            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333333F));
-            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333333F));
-            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333333F));
-            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333333F));
-            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333333F));
-            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333333F));
-            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333333F));
-            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333333F));
-            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333333F));
-            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333333F));
+            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333332F));
+            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333332F));
+            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333332F));
+            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333332F));
+            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333332F));
+            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333332F));
+            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333332F));
+            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333332F));
+            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333332F));
+            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333332F));
+            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333332F));
+            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333332F));
             tableLayoutPanel12.Size = new Size(239, 370);
             tableLayoutPanel12.TabIndex = 2;
             // 
             // lblUserName
             // 
             lblUserName.AutoSize = true;
-            lblUserName.Dock = DockStyle.Fill;
-            lblUserName.Location = new Point(3, 30);
+            lblUserName.Location = new Point(155, 30);
             lblUserName.Name = "lblUserName";
-            lblUserName.Size = new Size(186, 30);
+            lblUserName.Size = new Size(81, 19);
             lblUserName.TabIndex = 8;
             lblUserName.Text = "اسم المستخدم";
             lblUserName.TextAlign = ContentAlignment.BottomLeft;
-            // 
-            // lblFullName
-            // 
-            lblFullName.AutoSize = true;
-            lblFullName.Dock = DockStyle.Fill;
-            lblFullName.Location = new Point(3, 90);
-            lblFullName.Name = "lblFullName";
-            lblFullName.Size = new Size(186, 30);
-            lblFullName.TabIndex = 7;
-            lblFullName.Text = "المسمى الوظيفى";
-            lblFullName.TextAlign = ContentAlignment.BottomLeft;
             // 
             // btnDeleteUser
             // 
             btnDeleteUser.Dock = DockStyle.Fill;
             btnDeleteUser.Location = new Point(3, 243);
             btnDeleteUser.Name = "btnDeleteUser";
-            btnDeleteUser.Size = new Size(186, 24);
+            btnDeleteUser.Size = new Size(233, 24);
             btnDeleteUser.TabIndex = 3;
             btnDeleteUser.Text = "حذف مستخدم";
             btnDeleteUser.UseVisualStyleBackColor = true;
@@ -1548,7 +1532,7 @@
             // 
             // btnNewUser
             // 
-            btnNewUser.Location = new Point(10, 303);
+            btnNewUser.Location = new Point(57, 303);
             btnNewUser.Name = "btnNewUser";
             btnNewUser.Size = new Size(179, 24);
             btnNewUser.TabIndex = 9;
@@ -1556,53 +1540,43 @@
             btnNewUser.UseVisualStyleBackColor = true;
             btnNewUser.Click += btnNewUser_Click;
             // 
+            // lblFullName
+            // 
+            lblFullName.AutoSize = true;
+            lblFullName.Location = new Point(141, 60);
+            lblFullName.Name = "lblFullName";
+            lblFullName.Size = new Size(95, 19);
+            lblFullName.TabIndex = 7;
+            lblFullName.Text = "المسمى الوظيفى";
+            lblFullName.TextAlign = ContentAlignment.BottomLeft;
+            // 
             // lblIsAdmin
             // 
             lblIsAdmin.AutoSize = true;
-            lblIsAdmin.Location = new Point(102, 153);
+            lblIsAdmin.Location = new Point(141, 90);
             lblIsAdmin.Name = "lblIsAdmin";
-            lblIsAdmin.Size = new Size(87, 23);
-            lblIsAdmin.TabIndex = 10;
-            lblIsAdmin.Text = "Is Admin";
-            lblIsAdmin.UseVisualStyleBackColor = true;
+            lblIsAdmin.Size = new Size(95, 19);
+            lblIsAdmin.TabIndex = 7;
+            lblIsAdmin.Text = "المسمى الوظيفى";
+            lblIsAdmin.TextAlign = ContentAlignment.BottomLeft;
             // 
             // lblIsActive
             // 
             lblIsActive.AutoSize = true;
-            lblIsActive.Location = new Point(102, 183);
+            lblIsActive.Location = new Point(141, 120);
             lblIsActive.Name = "lblIsActive";
-            lblIsActive.Size = new Size(87, 23);
-            lblIsActive.TabIndex = 11;
-            lblIsActive.Text = "Is Active";
-            lblIsActive.UseVisualStyleBackColor = true;
-            // 
-            // label20
-            // 
-            label20.AutoSize = true;
-            label20.Location = new Point(198, 150);
-            label20.Name = "label20";
-            label20.Size = new Size(38, 30);
-            label20.TabIndex = 12;
-            label20.Text = "اسم المستخدم";
-            label20.TextAlign = ContentAlignment.BottomLeft;
-            // 
-            // label38
-            // 
-            label38.AutoSize = true;
-            label38.Location = new Point(198, 180);
-            label38.Name = "label38";
-            label38.Size = new Size(38, 30);
-            label38.TabIndex = 12;
-            label38.Text = "اسم المستخدم";
-            label38.TextAlign = ContentAlignment.BottomLeft;
+            lblIsActive.Size = new Size(95, 19);
+            lblIsActive.TabIndex = 7;
+            lblIsActive.Text = "المسمى الوظيفى";
+            lblIsActive.TextAlign = ContentAlignment.BottomLeft;
             // 
             // tabPageUserPermissions
             // 
             tabPageUserPermissions.Controls.Add(tableLayoutPanel25);
-            tabPageUserPermissions.Location = new Point(4, 44);
+            tabPageUserPermissions.Location = new Point(4, 84);
             tabPageUserPermissions.Name = "tabPageUserPermissions";
             tabPageUserPermissions.Padding = new Padding(3);
-            tabPageUserPermissions.Size = new Size(747, 428);
+            tabPageUserPermissions.Size = new Size(747, 388);
             tabPageUserPermissions.TabIndex = 4;
             tabPageUserPermissions.Text = "اعداد الصلاحيات";
             tabPageUserPermissions.UseVisualStyleBackColor = true;
@@ -1623,16 +1597,16 @@
             tableLayoutPanel25.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanel25.RowStyles.Add(new RowStyle(SizeType.Percent, 80F));
             tableLayoutPanel25.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel25.Size = new Size(741, 422);
+            tableLayoutPanel25.Size = new Size(741, 382);
             tableLayoutPanel25.TabIndex = 1;
             // 
             // DGV
             // 
             DGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DGV.Dock = DockStyle.Fill;
-            DGV.Location = new Point(8, 49);
+            DGV.Location = new Point(8, 45);
             DGV.Name = "DGV";
-            DGV.Size = new Size(725, 323);
+            DGV.Size = new Size(725, 291);
             DGV.TabIndex = 0;
             // 
             // tableLayoutPanel26
@@ -1651,7 +1625,7 @@
             tableLayoutPanel26.Name = "tableLayoutPanel26";
             tableLayoutPanel26.RowCount = 1;
             tableLayoutPanel26.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel26.Size = new Size(725, 35);
+            tableLayoutPanel26.Size = new Size(725, 31);
             tableLayoutPanel26.TabIndex = 2;
             // 
             // label30
@@ -1660,7 +1634,7 @@
             label30.Dock = DockStyle.Fill;
             label30.Location = new Point(259, 0);
             label30.Name = "label30";
-            label30.Size = new Size(102, 35);
+            label30.Size = new Size(102, 31);
             label30.TabIndex = 5;
             label30.Text = "المخازن";
             label30.TextAlign = ContentAlignment.MiddleRight;
@@ -1690,7 +1664,7 @@
             label31.Dock = DockStyle.Fill;
             label31.Location = new Point(620, 0);
             label31.Name = "label31";
-            label31.Size = new Size(102, 35);
+            label31.Size = new Size(102, 31);
             label31.TabIndex = 2;
             label31.Text = "المستخدمين";
             label31.TextAlign = ContentAlignment.MiddleRight;
@@ -1698,9 +1672,9 @@
             // btnUserPermissions
             // 
             btnUserPermissions.Dock = DockStyle.Left;
-            btnUserPermissions.Location = new Point(459, 378);
+            btnUserPermissions.Location = new Point(459, 342);
             btnUserPermissions.Name = "btnUserPermissions";
-            btnUserPermissions.Size = new Size(274, 36);
+            btnUserPermissions.Size = new Size(274, 32);
             btnUserPermissions.TabIndex = 3;
             btnUserPermissions.Text = "حفظ الصلاحيات";
             btnUserPermissions.UseVisualStyleBackColor = true;
@@ -2149,7 +2123,7 @@
             btnSave.TabIndex = 41;
             btnSave.Text = "حفظ الاعدادات";
             btnSave.UseVisualStyleBackColor = true;
-            btnSave.Click += btnSave_Click;
+            btnSave.Click += BtnSave_Click;
             // 
             // tableLayoutPanel7
             // 
@@ -2425,9 +2399,7 @@
         private TableLayoutPanel tableLayoutPanel15;
         private TableLayoutPanel tableLayoutPanel21;
         private Label lblCountLables;
-        private CheckBox lblIsAdmin;
-        private CheckBox lblIsActive;
-        private Label label20;
-        private Label label38;
+        private Label lblIsAdmin;
+        private Label lblIsActive;
     }
 }
