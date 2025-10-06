@@ -157,6 +157,19 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             // 2️⃣ قراءة القيمة الافتراضية من ملف الإعداد
             int defaultId = AppSettings.GetInt("ThisVersionIsForWarehouseId", 0);
             cbxWarehouseId.SelectedValue = defaultId;
+
+
+            //* خاص بالمستخدمين
+            cbxWarehouses.DataSource = dt;
+            cbxWarehouses.DisplayMember = "WarehouseName"; // عدّل حسب اسم العمود الفعلي
+            cbxWarehouses.ValueMember = "WarehouseId";
+
+            // 🔒 منع الكتابة داخل الكمبوبوكس
+            cbxWarehouses.DropDownStyle = ComboBoxStyle.DropDownList;
+
+
+
+
         }
         // 🧾 
         private void cbxWarehouseId_SelectedIndexChanged(object sender, EventArgs e)
@@ -752,92 +765,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-        private void btnNewUser_Click(object? sender, EventArgs? e)
-        {
-            DGV_Users.ClearSelection();
-            DGV_Permissions.DataSource = null;
-            lblID_User.Text = "0";
-            txtUserName.Clear();
-            txtFullName.Clear();
-
-        }
-        private void btnSave_UserData_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(txtUserName.Text) || string.IsNullOrWhiteSpace(txtFullName.Text))
-            {
-                MessageBox.Show("يرجى إدخال اسم المستخدم والاسم الكامل.");
-                return;
-            }
-
-            string username = txtUserName.Text.Trim();
-            string fullName = txtFullName.Text.Trim();
-            int userId = Convert.ToInt32(lblID_User.Text);
-
-            // ✅ الربط الفعلي مع CheckBox
-            bool isAdmin = chkIsAdmin.Checked;
-            bool isActive = chkIsActive.Checked;
-
-            string result;
-
-            if (userId == 0)
-            {
-                result = DBServiecs.User_Add(username, fullName, CurrentSession.UserID); // لا تحتاج isAdmin و isActive عند الإضافة إذا كانت افتراضية
-            }
-            else
-            {
-                result = DBServiecs.User_Update(userId, username, fullName, isAdmin, isActive, CurrentSession.UserID);
-
-            }
-
-            MessageBox.Show(result);
-            LoadAllUsers();
-        }
-
-        private void btnDeleteUser_Click(object sender, EventArgs e)
-        {
-            if (lblID_User.Text == "0")
-            {
-                MessageBox.Show("لا يوجد مستخدم محدد للحذف.");
-                return;
-            }
-
-            int userId = Convert.ToInt32(lblID_User.Text);
-            var confirm = MessageBox.Show("هل أنت متأكد من حذف المستخدم؟", "تأكيد", MessageBoxButtons.YesNo);
-            if (confirm == DialogResult.Yes)
-            {
-                string result = DBServiecs.User_DeleteIfAllowed(userId);
-                MessageBox.Show(result);
-                LoadAllUsers();
-                btnNewUser_Click(null, null); // تفريغ البيانات بعد الحذف
-            }
-        }
-
-        private void btnResetPassword_Click(object sender, EventArgs e)
-        {
-            if (lblID_User.Text == "0")
-            {
-                MessageBox.Show("لا يوجد مستخدم محدد.");
-                return;
-            }
-
-            int userId = Convert.ToInt32(lblID_User.Text);
-            var confirm = MessageBox.Show("هل تريد إعادة تعيين كلمة المرور إلى '00'؟", "تأكيد", MessageBoxButtons.YesNo);
-            if (confirm == DialogResult.Yes)
-            {
-                string result = DBServiecs.User_ChangePassword(userId, "00");
-                MessageBox.Show(result);
-            }
-        }
-
-        private void DGV_Users_SelectionChanged(object? sender, EventArgs? e)
-        {
-            if (DGV_Users.CurrentRow != null && DGV_Users.CurrentRow.Index >= 0)
-            {
-                int userId = Convert.ToInt32(DGV_Users.CurrentRow.Cells["IDUser"].Value);
-                LoadPermissionsForUser(userId);
-            }
-        }
-
         //
         private void LoadUsers()
         {
@@ -1033,6 +960,92 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             return controls;
         }
 
+        private void btnNewUser_Click(object? sender, EventArgs? e)
+        {
+            DGV_Users.ClearSelection();
+            DGV_Permissions.DataSource = null;
+            lblID_User.Text = "0";
+            txtUserName.Clear();
+            txtFullName.Clear();
+
+        }
+        private void btnSave_UserData_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtUserName.Text) || string.IsNullOrWhiteSpace(txtFullName.Text))
+            {
+                MessageBox.Show("يرجى إدخال اسم المستخدم والاسم الكامل.");
+                return;
+            }
+
+            string username = txtUserName.Text.Trim();
+            string fullName = txtFullName.Text.Trim();
+            int userId = Convert.ToInt32(lblID_User.Text);
+
+            // ✅ الربط الفعلي مع CheckBox
+            bool isAdmin = chkIsAdmin.Checked;
+            bool isActive = chkIsActive.Checked;
+
+            string result;
+
+            if (userId == 0)
+            {
+                result = DBServiecs.User_Add(username, fullName, CurrentSession.UserID); // لا تحتاج isAdmin و isActive عند الإضافة إذا كانت افتراضية
+            }
+            else
+            {
+                result = DBServiecs.User_Update(userId, username, fullName, isAdmin, isActive, CurrentSession.UserID);
+
+            }
+
+            MessageBox.Show(result);
+            LoadAllUsers();
+        }
+
+        private void btnDeleteUser_Click(object sender, EventArgs e)
+        {
+            if (lblID_User.Text == "0")
+            {
+                MessageBox.Show("لا يوجد مستخدم محدد للحذف.");
+                return;
+            }
+
+            int userId = Convert.ToInt32(lblID_User.Text);
+            var confirm = MessageBox.Show("هل أنت متأكد من حذف المستخدم؟", "تأكيد", MessageBoxButtons.YesNo);
+            if (confirm == DialogResult.Yes)
+            {
+                string result = DBServiecs.User_DeleteIfAllowed(userId);
+                MessageBox.Show(result);
+                LoadAllUsers();
+                btnNewUser_Click(null, null); // تفريغ البيانات بعد الحذف
+            }
+        }
+
+        private void btnResetPassword_Click(object sender, EventArgs e)
+        {
+            if (lblID_User.Text == "0")
+            {
+                MessageBox.Show("لا يوجد مستخدم محدد.");
+                return;
+            }
+
+            int userId = Convert.ToInt32(lblID_User.Text);
+            var confirm = MessageBox.Show("هل تريد إعادة تعيين كلمة المرور إلى '00'؟", "تأكيد", MessageBoxButtons.YesNo);
+            if (confirm == DialogResult.Yes)
+            {
+                string result = DBServiecs.User_ChangePassword(userId, "00");
+                MessageBox.Show(result);
+            }
+        }
+
+        private void DGV_Users_SelectionChanged(object? sender, EventArgs? e)
+        {
+            if (DGV_Users.CurrentRow != null && DGV_Users.CurrentRow.Index >= 0)
+            {
+                int userId = Convert.ToInt32(DGV_Users.CurrentRow.Cells["IDUser"].Value);
+                LoadPermissionsForUser(userId);
+            }
+        }
+
 
 
         #endregion
@@ -1173,9 +1186,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
 
         #endregion
-
-
-
     }
 }
 // ➕ إضافة .
