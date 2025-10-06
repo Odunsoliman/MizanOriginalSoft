@@ -24,6 +24,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 DisplaySettings();
                 LoadWarehouses();
                 TextBoxesInTabs();
+                LoadBackupFiles();
             }
             catch (Exception ex)
             {
@@ -424,8 +425,188 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         #endregion
 
-   
-        
+
+
+
+        #region === تبويب السيرفر ===
+        #region ✅  النسخ الاحتياطية
+
+        // تحميل ملفات النسخ الاحتياطية من المسار المحدد في الإعدادات.
+        private void LoadBackupFiles()
+        {
+            try
+            {
+                string settingsPath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
+
+                if (!File.Exists(settingsPath))
+                {
+                    MessageBox.Show("❌ ملف الإعدادات غير موجود في: " + settingsPath);
+                    return;
+                }
+
+                // تحميل الإعدادات لمرة واحدة
+                AppSettings.Load(settingsPath);
+
+                string? backupPath = AppSettings.GetString("BackupsPath", null);
+
+                if (string.IsNullOrWhiteSpace(backupPath))
+                {
+                    MessageBox.Show("❌ مسار النسخ الاحتياطي غير محدد في الإعدادات");
+                    return;
+                }
+
+                if (!Directory.Exists(backupPath))
+                {
+                    MessageBox.Show("❌ المجلد المحدد للنسخ الاحتياطية غير موجود: " + backupPath);
+                    return;
+                }
+
+                var files = Directory.GetFiles(backupPath, "*.bak")
+                                     .Select(f => new FileInfo(f))
+                                     .OrderByDescending(f => f.CreationTime)
+                                     .Select(f => new
+                                     {
+                                         FullName = f.FullName,
+                                         DisplayName = $"نسخة بتاريخ {f.CreationTime:dd/MM/yyyy} الساعة {f.CreationTime:HH:mm:ss}"
+                                     })
+                                     .ToList();
+
+                comboBoxBackups.DisplayMember = "DisplayName";
+                comboBoxBackups.ValueMember = "FullName";
+                comboBoxBackups.DataSource = files;
+
+                if (files.Count == 0)
+                    MessageBox.Show("❌ لا توجد نسخ احتياطية في المجلد المحدد");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ أثناء تحميل النسخ الاحتياطية:\n" + ex.Message);
+            }
+        }
+
+        // اختيار مجلد النسخ الاحتياطية من المستخدم.
+        private void btnGetFolderBak_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
+                {
+                    folderDialog.Description = "اختر مجلد النسخ الاحتياطية";
+                    folderDialog.ShowNewFolderButton = true;
+
+                    if (!string.IsNullOrEmpty(txtBackupsPath.Text))
+                    {
+                        folderDialog.SelectedPath = txtBackupsPath.Text;
+                    }
+
+                    if (folderDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        txtBackupsPath.Text = folderDialog.SelectedPath;
+                        SaveData(); // حفظ المسار مباشرة
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ أثناء اختيار المجلد: " + ex.Message,
+                    "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // تنفيذ عملية استرجاع نسخة احتياطية مع إنشاء نسخة احتياطية مؤقتة أولاً.
+        private async void btnRestoreBackup_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (comboBoxBackups.SelectedValue == null)
+                {
+                    MessageBox.Show("❌ يرجى اختيار النسخة الاحتياطية التي ترغب في استرجاعها.");
+                    return;
+                }
+
+                string settingsPath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
+
+                AppSettings.Load(settingsPath); // تحميل الإعدادات
+
+                var helper = new DatabaseBackupRestoreHelper(settingsPath);
+
+                string? dbName = AppSettings.GetString("DBName", null);
+                if (string.IsNullOrWhiteSpace(dbName))
+                {
+                    MessageBox.Show("❌ لم يتم العثور على اسم قاعدة البيانات في الإعدادات.");
+                    return;
+                }
+
+                string? selectedBackupFile = comboBoxBackups.SelectedValue.ToString();
+                if (string.IsNullOrWhiteSpace(selectedBackupFile))
+                {
+                    MessageBox.Show("❌ لم يتم تحديد مسار النسخة الاحتياطية بشكل صحيح.");
+                    return;
+                }
+
+                var confirmResult = MessageBox.Show(
+                    "⚠️ هل أنت متأكد من أنك تريد استرجاع هذه النسخة؟ سيتم عمل نسخة احتياطية أولًا.",
+                    "تأكيد الاسترجاع", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (confirmResult == DialogResult.No)
+                    return;
+
+                // 🟢 الخطوة 1: عمل نسخة احتياطية
+                helper.BackupDatabase();
+                MessageBox.Show("✅ تم إنشاء نسخة احتياطية من الوضع الحالي بنجاح.");
+
+                // 🟢 الخطوة 2: نافذة تحميل مؤقتة
+                frmLoading loadingForm = new frmLoading("جارٍ استرجاع النسخة الاحتياطية، الرجاء الانتظار...");
+                loadingForm.Show();
+                loadingForm.Refresh();
+
+                // 🟢 الخطوة 3: استرجاع النسخة المحددة
+                await Task.Run(() => helper.RestoreDatabase(selectedBackupFile));
+
+                loadingForm.Close();
+
+                MessageBox.Show("✅ تم استرجاع النسخة بنجاح. يُفضل إعادة تشغيل البرنامج.");
+                Application.Exit();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("❌ حدث خطأ أثناء استرجاع النسخة الاحتياطية:\n" + ex.Message,
+                    "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // عند مغادرة الحقل يتم حفظ القيمة تلقائيًا.
+        private void txtMaxBackups_Leave(object sender, EventArgs e)
+        {
+            SaveData();
+        }
+        #endregion
+
+
+        #endregion
+
+
+        #region === تبويب المستخدمين ===
+
+
+        #endregion
+
+
+        #region === تبويب الصلاحيات ===
+
+
+        #endregion
+
+
+
+        #region === تبويب البيع والشراء ===
+
+
+        #endregion
+
+
+
+
         #region === احتياطي: KeyDown لربطه بالتنقل لاحقًا ===
 
         private void txtRollLabelWidth_KeyDown(object sender, KeyEventArgs e)  { }

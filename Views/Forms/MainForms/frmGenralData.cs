@@ -1141,11 +1141,9 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         #endregion
 
-        #region ✅ تحميل النسخ الاحتياطية
+        #region ✅  النسخ الاحتياطية
 
-        /// <summary>
-        /// تحميل ملفات النسخ الاحتياطية من المسار المحدد في الإعدادات.
-        /// </summary>
+        // تحميل ملفات النسخ الاحتياطية من المسار المحدد في الإعدادات.
         private void LoadBackupFiles()
         {
             try
@@ -1197,10 +1195,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 MessageBox.Show("حدث خطأ أثناء تحميل النسخ الاحتياطية:\n" + ex.Message);
             }
         }
-
-        #endregion
-
-        #region ✅ اختيار مجلد النسخ الاحتياطية
 
         // اختيار مجلد النسخ الاحتياطية من المستخدم.
         private void btnGetFolderBak_Click(object sender, EventArgs e)

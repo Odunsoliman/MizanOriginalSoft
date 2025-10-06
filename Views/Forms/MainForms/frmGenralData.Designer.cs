@@ -583,10 +583,10 @@
             // 
             tabPagePrinterSetting.BackColor = Color.WhiteSmoke;
             tabPagePrinterSetting.Controls.Add(tableLayoutPanel18);
-            tabPagePrinterSetting.Location = new Point(4, 84);
+            tabPagePrinterSetting.Location = new Point(4, 44);
             tabPagePrinterSetting.Name = "tabPagePrinterSetting";
             tabPagePrinterSetting.Padding = new Padding(3);
-            tabPagePrinterSetting.Size = new Size(812, 395);
+            tabPagePrinterSetting.Size = new Size(812, 435);
             tabPagePrinterSetting.TabIndex = 1;
             tabPagePrinterSetting.Text = "اعدادات الطابعات";
             // 
@@ -1200,10 +1200,10 @@
             // 
             tabPageServerSetting.BackColor = Color.WhiteSmoke;
             tabPageServerSetting.Controls.Add(tableLayoutPanel10);
-            tabPageServerSetting.Location = new Point(4, 44);
+            tabPageServerSetting.Location = new Point(4, 84);
             tabPageServerSetting.Name = "tabPageServerSetting";
             tabPageServerSetting.Padding = new Padding(3);
-            tabPageServerSetting.Size = new Size(812, 435);
+            tabPageServerSetting.Size = new Size(812, 395);
             tabPageServerSetting.TabIndex = 2;
             tabPageServerSetting.Text = "اعدادات السيرفر";
             // 
