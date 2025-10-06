@@ -159,13 +159,13 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             cbxWarehouseId.SelectedValue = defaultId;
 
 
-            //* خاص بالمستخدمين
-            cbxWarehouses.DataSource = dt;
-            cbxWarehouses.DisplayMember = "WarehouseName"; // عدّل حسب اسم العمود الفعلي
-            cbxWarehouses.ValueMember = "WarehouseId";
+            ////* خاص بالمستخدمين
+            //cbxWarehouses.DataSource = dt;
+            //cbxWarehouses.DisplayMember = "WarehouseName"; // عدّل حسب اسم العمود الفعلي
+            //cbxWarehouses.ValueMember = "WarehouseId";
 
-            // 🔒 منع الكتابة داخل الكمبوبوكس
-            cbxWarehouses.DropDownStyle = ComboBoxStyle.DropDownList;
+            //// 🔒 منع الكتابة داخل الكمبوبوكس
+            //cbxWarehouses.DropDownStyle = ComboBoxStyle.DropDownList;
 
 
 
