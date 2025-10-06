@@ -135,6 +135,11 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             cbxReturnPurchasesMode.Text = AppSettings.GetString("ReturnPurchasesMode", "2");
             rdoAllowSaleByNegativeStock.Checked = AppSettings.GetBool("IsSaleByNegativeStock", false);
             rdoNotAllowSaleByNegativeStock.Checked = !rdoAllowSaleByNegativeStock.Checked;
+            
+            // 💰 السماح او عدمه للاتحكم فى نسبة الخصم
+            rdoOpendMaxRateDiscount.Checked = AppSettings.GetBool("IsOpendMaxRateDiscount", false);
+            rdoClosedMaxRateDiscount.Checked = !rdoOpendMaxRateDiscount.Checked;
+
         }
 
 
