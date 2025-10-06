@@ -29,17 +29,17 @@
         private void InitializeComponent()
         {
             tableLayoutPanel1 = new TableLayoutPanel();
-            lblTitel = new Label();
+            btnSave_UserData = new Button();
             tableLayoutPanel12 = new TableLayoutPanel();
             label29 = new Label();
             txtUserName = new TextBox();
+            label2 = new Label();
             label28 = new Label();
             txtFullName = new TextBox();
-            btnResetPassword = new Button();
-            btnSave_UserData = new Button();
             chkIsAdmin = new CheckBox();
             chkIsActive = new CheckBox();
-            label2 = new Label();
+            btnResetPassword = new Button();
+            lblTitel = new Label();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel12.SuspendLayout();
             SuspendLayout();
@@ -53,7 +53,7 @@
             tableLayoutPanel1.Controls.Add(lblTitel, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
-            tableLayoutPanel1.Margin = new Padding(4, 4, 4, 4);
+            tableLayoutPanel1.Margin = new Padding(4);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.Padding = new Padding(10, 10, 10, 30);
             tableLayoutPanel1.RowCount = 3;
@@ -63,17 +63,17 @@
             tableLayoutPanel1.Size = new Size(391, 414);
             tableLayoutPanel1.TabIndex = 0;
             // 
-            // lblTitel
+            // btnSave_UserData
             // 
-            lblTitel.Dock = DockStyle.Fill;
-            lblTitel.Font = new Font("Times New Roman", 16F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTitel.Location = new Point(14, 10);
-            lblTitel.Margin = new Padding(4, 0, 4, 0);
-            lblTitel.Name = "lblTitel";
-            lblTitel.Size = new Size(363, 46);
-            lblTitel.TabIndex = 1;
-            lblTitel.Text = "label1";
-            lblTitel.TextAlign = ContentAlignment.MiddleCenter;
+            btnSave_UserData.Dock = DockStyle.Top;
+            btnSave_UserData.Location = new Point(14, 321);
+            btnSave_UserData.Margin = new Padding(4);
+            btnSave_UserData.Name = "btnSave_UserData";
+            btnSave_UserData.Size = new Size(363, 39);
+            btnSave_UserData.TabIndex = 4;
+            btnSave_UserData.Text = "حفظ التعديل";
+            btnSave_UserData.UseVisualStyleBackColor = true;
+            btnSave_UserData.Click += btnSave_UserData_Click;
             // 
             // tableLayoutPanel12
             // 
@@ -90,7 +90,7 @@
             tableLayoutPanel12.Controls.Add(btnResetPassword, 1, 5);
             tableLayoutPanel12.Dock = DockStyle.Top;
             tableLayoutPanel12.Location = new Point(14, 60);
-            tableLayoutPanel12.Margin = new Padding(4, 4, 4, 4);
+            tableLayoutPanel12.Margin = new Padding(4);
             tableLayoutPanel12.Name = "tableLayoutPanel12";
             tableLayoutPanel12.RowCount = 7;
             tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 8.333333F));
@@ -120,10 +120,22 @@
             txtUserName.Dock = DockStyle.Fill;
             txtUserName.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
             txtUserName.Location = new Point(4, 40);
-            txtUserName.Margin = new Padding(4, 4, 4, 4);
+            txtUserName.Margin = new Padding(4);
             txtUserName.Name = "txtUserName";
             txtUserName.Size = new Size(246, 29);
             txtUserName.TabIndex = 1;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Dock = DockStyle.Fill;
+            label2.Location = new Point(258, 180);
+            label2.Margin = new Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(101, 36);
+            label2.TabIndex = 1;
+            label2.Text = "2222";
+            label2.TextAlign = ContentAlignment.MiddleRight;
             // 
             // label28
             // 
@@ -142,40 +154,17 @@
             txtFullName.Dock = DockStyle.Fill;
             txtFullName.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
             txtFullName.Location = new Point(4, 76);
-            txtFullName.Margin = new Padding(4, 4, 4, 4);
+            txtFullName.Margin = new Padding(4);
             txtFullName.Name = "txtFullName";
             txtFullName.Size = new Size(246, 29);
             txtFullName.TabIndex = 2;
-            // 
-            // btnResetPassword
-            // 
-            btnResetPassword.Dock = DockStyle.Fill;
-            btnResetPassword.Location = new Point(4, 184);
-            btnResetPassword.Margin = new Padding(4, 4, 4, 4);
-            btnResetPassword.Name = "btnResetPassword";
-            btnResetPassword.Size = new Size(246, 28);
-            btnResetPassword.TabIndex = 5;
-            btnResetPassword.Text = "كسر كلمة المرور";
-            btnResetPassword.UseVisualStyleBackColor = true;
-            // 
-            // btnSave_UserData
-            // 
-            btnSave_UserData.Dock = DockStyle.Top;
-            btnSave_UserData.Location = new Point(14, 321);
-            btnSave_UserData.Margin = new Padding(4, 4, 4, 4);
-            btnSave_UserData.Name = "btnSave_UserData";
-            btnSave_UserData.Size = new Size(363, 39);
-            btnSave_UserData.TabIndex = 4;
-            btnSave_UserData.Text = "حفظ التعديل";
-            btnSave_UserData.UseVisualStyleBackColor = true;
-            btnSave_UserData.Click += btnSave_UserData_Click;
             // 
             // chkIsAdmin
             // 
             chkIsAdmin.AutoSize = true;
             chkIsAdmin.Dock = DockStyle.Fill;
             chkIsAdmin.Location = new Point(4, 112);
-            chkIsAdmin.Margin = new Padding(4, 4, 4, 4);
+            chkIsAdmin.Margin = new Padding(4);
             chkIsAdmin.Name = "chkIsAdmin";
             chkIsAdmin.Size = new Size(246, 28);
             chkIsAdmin.TabIndex = 10;
@@ -187,24 +176,35 @@
             chkIsActive.AutoSize = true;
             chkIsActive.Dock = DockStyle.Fill;
             chkIsActive.Location = new Point(4, 148);
-            chkIsActive.Margin = new Padding(4, 4, 4, 4);
+            chkIsActive.Margin = new Padding(4);
             chkIsActive.Name = "chkIsActive";
             chkIsActive.Size = new Size(246, 28);
             chkIsActive.TabIndex = 11;
             chkIsActive.Text = "Is Active";
             chkIsActive.UseVisualStyleBackColor = true;
             // 
-            // label2
+            // btnResetPassword
             // 
-            label2.AutoSize = true;
-            label2.Dock = DockStyle.Fill;
-            label2.Location = new Point(258, 180);
-            label2.Margin = new Padding(4, 0, 4, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(101, 36);
-            label2.TabIndex = 1;
-            label2.Text = "2222";
-            label2.TextAlign = ContentAlignment.MiddleRight;
+            btnResetPassword.Dock = DockStyle.Fill;
+            btnResetPassword.Location = new Point(4, 184);
+            btnResetPassword.Margin = new Padding(4);
+            btnResetPassword.Name = "btnResetPassword";
+            btnResetPassword.Size = new Size(246, 28);
+            btnResetPassword.TabIndex = 5;
+            btnResetPassword.Text = "كسر كلمة المرور";
+            btnResetPassword.UseVisualStyleBackColor = true;
+            // 
+            // lblTitel
+            // 
+            lblTitel.Dock = DockStyle.Fill;
+            lblTitel.Font = new Font("Times New Roman", 16F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitel.Location = new Point(14, 10);
+            lblTitel.Margin = new Padding(4, 0, 4, 0);
+            lblTitel.Name = "lblTitel";
+            lblTitel.Size = new Size(363, 46);
+            lblTitel.TabIndex = 1;
+            lblTitel.Text = "label1";
+            lblTitel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // frm_Users
             // 
@@ -213,7 +213,7 @@
             ClientSize = new Size(391, 414);
             Controls.Add(tableLayoutPanel1);
             Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            Margin = new Padding(4, 4, 4, 4);
+            Margin = new Padding(4);
             Name = "frm_Users";
             RightToLeft = RightToLeft.Yes;
             Text = "frm_Users";

@@ -738,8 +738,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 if (selectedUser != null)
                 {
                     lblID_User.Text = selectedUser["IDUser"].ToString();
-                    txtUserName.Text = selectedUser["UserName"].ToString();
-                    txtFullName.Text = selectedUser["FullName"].ToString();
+                    lblUserName.Text = selectedUser["UserName"].ToString();
+                    lblFullName.Text = selectedUser["FullName"].ToString();
 
                     // ✅ تعيين النصوص بناءً على الحالة
                     bool isAdmin = Convert.ToBoolean(selectedUser["IsAdmin"]);
@@ -989,8 +989,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             DGV_Users.ClearSelection();
             DGV_Permissions.DataSource = null;
             lblID_User.Text = "0";
-            txtUserName.Clear();
-            txtFullName.Clear();
+ 
 
         }
         

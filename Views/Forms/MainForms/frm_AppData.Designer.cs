@@ -121,12 +121,14 @@
             DGV_Permissions = new DataGridView();
             lblID_User = new Label();
             tableLayoutPanel12 = new TableLayoutPanel();
-            label29 = new Label();
-            txtUserName = new TextBox();
-            label28 = new Label();
-            txtFullName = new TextBox();
+            lblUserName = new Label();
+            lblFullName = new Label();
             btnDeleteUser = new Button();
             btnNewUser = new Button();
+            lblIsAdmin = new CheckBox();
+            lblIsActive = new CheckBox();
+            label20 = new Label();
+            label38 = new Label();
             tabPageUserPermissions = new TabPage();
             tableLayoutPanel25 = new TableLayoutPanel();
             DGV = new DataGridView();
@@ -171,10 +173,6 @@
             tableLayoutPanel7 = new TableLayoutPanel();
             lblLogoPath = new Label();
             lblImagSize = new Label();
-            lblIsAdmin = new CheckBox();
-            lblIsActive = new CheckBox();
-            label20 = new Label();
-            label38 = new Label();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
@@ -1250,10 +1248,10 @@
             // 
             tabPageServerSetting.BackColor = Color.WhiteSmoke;
             tabPageServerSetting.Controls.Add(tableLayoutPanel10);
-            tabPageServerSetting.Location = new Point(4, 44);
+            tabPageServerSetting.Location = new Point(4, 84);
             tabPageServerSetting.Name = "tabPageServerSetting";
             tabPageServerSetting.Padding = new Padding(3);
-            tabPageServerSetting.Size = new Size(747, 428);
+            tabPageServerSetting.Size = new Size(747, 388);
             tabPageServerSetting.TabIndex = 2;
             tabPageServerSetting.Text = "اعدادات السيرفر";
             // 
@@ -1488,10 +1486,8 @@
             tableLayoutPanel12.ColumnCount = 2;
             tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
-            tableLayoutPanel12.Controls.Add(label29, 1, 1);
-            tableLayoutPanel12.Controls.Add(txtUserName, 1, 2);
-            tableLayoutPanel12.Controls.Add(label28, 1, 3);
-            tableLayoutPanel12.Controls.Add(txtFullName, 1, 4);
+            tableLayoutPanel12.Controls.Add(lblUserName, 1, 1);
+            tableLayoutPanel12.Controls.Add(lblFullName, 1, 3);
             tableLayoutPanel12.Controls.Add(btnDeleteUser, 1, 8);
             tableLayoutPanel12.Controls.Add(btnNewUser, 1, 10);
             tableLayoutPanel12.Controls.Add(lblIsAdmin, 1, 5);
@@ -1517,42 +1513,27 @@
             tableLayoutPanel12.Size = new Size(239, 370);
             tableLayoutPanel12.TabIndex = 2;
             // 
-            // label29
+            // lblUserName
             // 
-            label29.AutoSize = true;
-            label29.Dock = DockStyle.Fill;
-            label29.Location = new Point(3, 30);
-            label29.Name = "label29";
-            label29.Size = new Size(186, 30);
-            label29.TabIndex = 8;
-            label29.Text = "اسم المستخدم";
-            label29.TextAlign = ContentAlignment.BottomLeft;
+            lblUserName.AutoSize = true;
+            lblUserName.Dock = DockStyle.Fill;
+            lblUserName.Location = new Point(3, 30);
+            lblUserName.Name = "lblUserName";
+            lblUserName.Size = new Size(186, 30);
+            lblUserName.TabIndex = 8;
+            lblUserName.Text = "اسم المستخدم";
+            lblUserName.TextAlign = ContentAlignment.BottomLeft;
             // 
-            // txtUserName
+            // lblFullName
             // 
-            txtUserName.Location = new Point(89, 63);
-            txtUserName.Name = "txtUserName";
-            txtUserName.Size = new Size(100, 26);
-            txtUserName.TabIndex = 1;
-            // 
-            // label28
-            // 
-            label28.AutoSize = true;
-            label28.Dock = DockStyle.Fill;
-            label28.Location = new Point(3, 90);
-            label28.Name = "label28";
-            label28.Size = new Size(186, 30);
-            label28.TabIndex = 7;
-            label28.Text = "المسمى الوظيفى";
-            label28.TextAlign = ContentAlignment.BottomLeft;
-            // 
-            // txtFullName
-            // 
-            txtFullName.Dock = DockStyle.Fill;
-            txtFullName.Location = new Point(3, 123);
-            txtFullName.Name = "txtFullName";
-            txtFullName.Size = new Size(186, 26);
-            txtFullName.TabIndex = 2;
+            lblFullName.AutoSize = true;
+            lblFullName.Dock = DockStyle.Fill;
+            lblFullName.Location = new Point(3, 90);
+            lblFullName.Name = "lblFullName";
+            lblFullName.Size = new Size(186, 30);
+            lblFullName.TabIndex = 7;
+            lblFullName.Text = "المسمى الوظيفى";
+            lblFullName.TextAlign = ContentAlignment.BottomLeft;
             // 
             // btnDeleteUser
             // 
@@ -1574,6 +1555,46 @@
             btnNewUser.Text = "مستخدم جديد";
             btnNewUser.UseVisualStyleBackColor = true;
             btnNewUser.Click += btnNewUser_Click;
+            // 
+            // lblIsAdmin
+            // 
+            lblIsAdmin.AutoSize = true;
+            lblIsAdmin.Location = new Point(102, 153);
+            lblIsAdmin.Name = "lblIsAdmin";
+            lblIsAdmin.Size = new Size(87, 23);
+            lblIsAdmin.TabIndex = 10;
+            lblIsAdmin.Text = "Is Admin";
+            lblIsAdmin.UseVisualStyleBackColor = true;
+            // 
+            // lblIsActive
+            // 
+            lblIsActive.AutoSize = true;
+            lblIsActive.Location = new Point(102, 183);
+            lblIsActive.Name = "lblIsActive";
+            lblIsActive.Size = new Size(87, 23);
+            lblIsActive.TabIndex = 11;
+            lblIsActive.Text = "Is Active";
+            lblIsActive.UseVisualStyleBackColor = true;
+            // 
+            // label20
+            // 
+            label20.AutoSize = true;
+            label20.Location = new Point(198, 150);
+            label20.Name = "label20";
+            label20.Size = new Size(38, 30);
+            label20.TabIndex = 12;
+            label20.Text = "اسم المستخدم";
+            label20.TextAlign = ContentAlignment.BottomLeft;
+            // 
+            // label38
+            // 
+            label38.AutoSize = true;
+            label38.Location = new Point(198, 180);
+            label38.Name = "label38";
+            label38.Size = new Size(38, 30);
+            label38.TabIndex = 12;
+            label38.Text = "اسم المستخدم";
+            label38.TextAlign = ContentAlignment.BottomLeft;
             // 
             // tabPageUserPermissions
             // 
@@ -2173,46 +2194,6 @@
             lblImagSize.Text = "لوجو الشركة العام";
             lblImagSize.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // lblIsAdmin
-            // 
-            lblIsAdmin.AutoSize = true;
-            lblIsAdmin.Location = new Point(102, 153);
-            lblIsAdmin.Name = "lblIsAdmin";
-            lblIsAdmin.Size = new Size(87, 23);
-            lblIsAdmin.TabIndex = 10;
-            lblIsAdmin.Text = "Is Admin";
-            lblIsAdmin.UseVisualStyleBackColor = true;
-            // 
-            // lblIsActive
-            // 
-            lblIsActive.AutoSize = true;
-            lblIsActive.Location = new Point(102, 183);
-            lblIsActive.Name = "lblIsActive";
-            lblIsActive.Size = new Size(87, 23);
-            lblIsActive.TabIndex = 11;
-            lblIsActive.Text = "Is Active";
-            lblIsActive.UseVisualStyleBackColor = true;
-            // 
-            // label20
-            // 
-            label20.AutoSize = true;
-            label20.Location = new Point(198, 150);
-            label20.Name = "label20";
-            label20.Size = new Size(38, 30);
-            label20.TabIndex = 12;
-            label20.Text = "اسم المستخدم";
-            label20.TextAlign = ContentAlignment.BottomLeft;
-            // 
-            // label38
-            // 
-            label38.AutoSize = true;
-            label38.Location = new Point(198, 180);
-            label38.Name = "label38";
-            label38.Size = new Size(38, 30);
-            label38.TabIndex = 12;
-            label38.Text = "اسم المستخدم";
-            label38.TextAlign = ContentAlignment.BottomLeft;
-            // 
             // frm_AppData
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -2359,10 +2340,8 @@
         private DataGridView DGV_Permissions;
         private Label lblID_User;
         private TableLayoutPanel tableLayoutPanel12;
-        private Label label29;
-        private TextBox txtUserName;
-        private Label label28;
-        private TextBox txtFullName;
+        private Label lblUserName;
+        private Label lblFullName;
         private Button btnDeleteUser;
         private Button btnNewUser;
         private TabPage tabPageUserPermissions;
