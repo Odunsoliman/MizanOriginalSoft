@@ -679,10 +679,10 @@
             // 
             tabPagePrinterSetting.BackColor = Color.WhiteSmoke;
             tabPagePrinterSetting.Controls.Add(tableLayoutPanel18);
-            tabPagePrinterSetting.Location = new Point(4, 44);
+            tabPagePrinterSetting.Location = new Point(4, 84);
             tabPagePrinterSetting.Name = "tabPagePrinterSetting";
             tabPagePrinterSetting.Padding = new Padding(3);
-            tabPagePrinterSetting.Size = new Size(812, 435);
+            tabPagePrinterSetting.Size = new Size(812, 395);
             tabPagePrinterSetting.TabIndex = 1;
             tabPagePrinterSetting.Text = "اعدادات الطابعات";
             // 

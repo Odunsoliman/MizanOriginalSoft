@@ -835,6 +835,7 @@
             txtMarginRight.TabIndex = 6;
             txtMarginRight.Text = "0";
             txtMarginRight.TextAlign = HorizontalAlignment.Center;
+            txtMarginRight.TextChanged += txtMarginRight_TextChanged;
             // 
             // label4
             // 
