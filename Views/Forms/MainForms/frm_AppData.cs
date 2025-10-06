@@ -135,8 +135,10 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             cbxReturnPurchasesMode.Text = AppSettings.GetString("ReturnPurchasesMode", "2");
             rdoAllowSaleByNegativeStock.Checked = AppSettings.GetBool("IsSaleByNegativeStock", false);
             rdoNotAllowSaleByNegativeStock.Checked = !rdoAllowSaleByNegativeStock.Checked;
-            
+
             // 💰 السماح او عدمه للاتحكم فى نسبة الخصم
+            txtSalesPercentage.Text = AppSettings.GetString("SalesPercentage", "14");
+            txtMaxRateDiscount.Text = AppSettings.GetString("MaxRateDiscount", "14");
             rdoOpendMaxRateDiscount.Checked = AppSettings.GetBool("IsOpendMaxRateDiscount", false);
             rdoClosedMaxRateDiscount.Checked = !rdoOpendMaxRateDiscount.Checked;
 
@@ -287,9 +289,13 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 AppSettings.SaveOrUpdate("IsSaleByNegativeStock", rdoAllowSaleByNegativeStock.Checked.ToString());
 
                 // 💰 حفظ السماح او عدمه للتحكم فى نسبة الخصم
+                AppSettings.SaveOrUpdate("SalesPercentage", txtSalesPercentage.Text);
+                AppSettings.SaveOrUpdate("MaxRateDiscount", txtMaxRateDiscount .Text);
                 AppSettings.SaveOrUpdate("IsOpendMaxRateDiscount", rdoOpendMaxRateDiscount.Checked.ToString());
 
                 MessageBox.Show("✅ تم حفظ الإعدادات بنجاح.", "حفظ الإعدادات", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
             }
             catch (Exception ex)
             {
