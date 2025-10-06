@@ -703,7 +703,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             DGV_Permissions.DefaultCellStyle.BackColor = Color.White;
         }
 
-
         private void LoadAllUsers()
         {
             try
