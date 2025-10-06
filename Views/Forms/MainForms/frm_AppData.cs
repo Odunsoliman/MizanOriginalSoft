@@ -525,11 +525,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         #endregion
 
-        private void txtMarginRight_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         #region === احتياطي: KeyDown لربطه بالتنقل لاحقًا ===
 
         private void txtRollLabelWidth_KeyDown(object sender, KeyEventArgs e) { }
@@ -542,8 +537,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         private void txtMarginLeft_KeyDown(object sender, KeyEventArgs e) { }
 
         #endregion
-
  
+
 
 
     }

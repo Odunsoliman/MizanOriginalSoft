@@ -835,7 +835,7 @@
             txtMarginRight.TabIndex = 6;
             txtMarginRight.Text = "0";
             txtMarginRight.TextAlign = HorizontalAlignment.Center;
-            txtMarginRight.TextChanged += txtMarginRight_TextChanged;
+            txtMarginRight.TextChanged += txtMarginTop_TextChanged;
             // 
             // label4
             // 
@@ -871,6 +871,7 @@
             txtMarginLeft.TabIndex = 7;
             txtMarginLeft.Text = "0";
             txtMarginLeft.TextAlign = HorizontalAlignment.Center;
+            txtMarginLeft.TextChanged += txtMarginTop_TextChanged;
             // 
             // label8
             // 
@@ -906,6 +907,7 @@
             txtMarginTop.TabIndex = 4;
             txtMarginTop.Text = "0";
             txtMarginTop.TextAlign = HorizontalAlignment.Center;
+            txtMarginTop.TextChanged += txtMarginTop_TextChanged;
             // 
             // txtMarginBottom
             // 
@@ -917,6 +919,7 @@
             txtMarginBottom.TabIndex = 5;
             txtMarginBottom.Text = "0";
             txtMarginBottom.TextAlign = HorizontalAlignment.Center;
+            txtMarginBottom.TextChanged += txtMarginTop_TextChanged;
             // 
             // panel3
             // 
