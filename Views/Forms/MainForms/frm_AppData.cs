@@ -33,29 +33,15 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
 
         #region !!!!!!!!!!! DisplaySettings  !!!!!!!!!!!!!!!
-    
+
         // 🔹 عرض الإعدادات على الأدوات في الشاشة
         private void DisplaySettings()
         {
             //بيانات السيرفر
-            txtServerName .Text = AppSettings.GetString("serverName", "");
-            txtDBName .Text = AppSettings.GetString("DBName", "");
-            txtBackupsPath .Text = AppSettings.GetString("BackupsPath", "");
-            txtMaxBackups .Text = AppSettings.GetString("maxBackups", "");
-            /*# اسم السيرفر
-serverName=DESKTOP-EE70K28\SQLEXPRESS
-# اسم قاعدة البيانات
-DBName=MizanOriginalDB
-# اسم الإجراء أو قاعدة البيانات الخاصة بالنسخ الاحتياطي
-BackupDB=Original_BackupDatabase
-# اسم الإجراء أو قاعدة البيانات الخاصة بالاستعادة
-RestoreDB=Original_RestoreDatabase
-            maxBackups=10
-# مسار حفظ النسخ الاحتياطية
-BackupsPath=D:\MizanOriginalSoft\DataBaseApp\BakUpDB
-
-             
-             */
+            txtServerName.Text = AppSettings.GetString("serverName", "");
+            txtDBName.Text = AppSettings.GetString("DBName", "");
+            txtBackupsPath.Text = AppSettings.GetString("BackupsPath", "");
+            txtMaxBackups.Text = AppSettings.GetString("maxBackups", "");
 
             // 🏢 بيانات الشركة
             txtNameCo.Text = AppSettings.GetString("CompanyName", "");
@@ -629,7 +615,7 @@ BackupsPath=D:\MizanOriginalSoft\DataBaseApp\BakUpDB
 
         #region === احتياطي: KeyDown لربطه بالتنقل لاحقًا ===
 
-        private void txtRollLabelWidth_KeyDown(object sender, KeyEventArgs e)  { }
+        private void txtRollLabelWidth_KeyDown(object sender, KeyEventArgs e) { }
         private void txtRollLabelHeight_KeyDown(object sender, KeyEventArgs e) { }
         private void txtSheetRows_KeyDown(object sender, KeyEventArgs e) { }
         private void txtSheetCols_KeyDown(object sender, KeyEventArgs e) { }
@@ -712,7 +698,6 @@ BackupsPath=D:\MizanOriginalSoft\DataBaseApp\BakUpDB
         }
 
         #endregion
-
     }
 }
 // ➕ إضافة فرع جديد.

@@ -1354,6 +1354,7 @@
             btnRestoreBackup.TabIndex = 29;
             btnRestoreBackup.Text = "RestoreDatabase";
             btnRestoreBackup.UseVisualStyleBackColor = true;
+            btnRestoreBackup.Click += btnRestoreBackup_Click;
             // 
             // txtBackupsPath
             // 
