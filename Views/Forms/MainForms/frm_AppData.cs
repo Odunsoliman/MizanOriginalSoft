@@ -918,6 +918,20 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
 
         #region === تبويب الصلاحيات ===
+        private void tabMang_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // تحقق من التبويب الحالي
+            TabPage? selectedTab = tabMang.SelectedTab;
+
+            if (selectedTab == tabPageUserSetting || selectedTab == tabPageUserPermissions )
+            {
+                btnSave.Visible = false; // إخفاء الزر
+            }
+            else
+            {
+                btnSave.Visible = true; // إظهاره لباقي الصفحات
+            }
+        }
 
         private void fillWarehouses()
         {
