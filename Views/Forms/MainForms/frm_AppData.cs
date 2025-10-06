@@ -32,6 +32,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
 
         #region !!!!!!!!!!! DisplaySettings  !!!!!!!!!!!!!!!
+    
+        // 🔹 عرض الإعدادات على الأدوات في الشاشة
         private void DisplaySettings()
         {
             // 🏢 بيانات الشركة
@@ -111,107 +113,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             rdoNotAllowSaleByNegativeStock.Checked = !rdoAllowSaleByNegativeStock.Checked;
         }
 
-        // 🔹 عرض الإعدادات على الأدوات في الشاشة
-        private void DisplaySettings_()
-        {
-            // 🏢 بيانات الشركة
-            txtNameCo.Text = AppSettings.GetString("CompanyName", "");
-            txtPhon.Text = AppSettings.GetString("CompanyPhon", "");
-            txtAnthrPhon.Text = AppSettings.GetString("CompanyAnthrPhon", "");
-            txtAdreass.Text = AppSettings.GetString("CompanyAdreass", "");
-            txtCompanyEmail.Text = AppSettings.GetString("EmailCo", "");
-
-            // 🖼️ شعار الشركة
-            string? logoFileName = AppSettings.GetString("LogoImagName", null);
-            string? logoFolder = AppSettings.GetString("CompanyLoGoFolder", null);
-
-            // افتراضي إذا لم يتم تحديد أي صورة
-            string defaultLogoFileName = AppSettings.GetString("DefaulLogoImagName", "Mizan Logo.PNG") ?? "Mizan Logo.PNG";
-            string defaultLogoFolder = AppSettings.GetString("DefaulCompanyLoGoFolder", Path.Combine(Application.StartupPath, "HelpFiles"))
-                                       ?? Path.Combine(Application.StartupPath, "HelpFiles");
-
-            lblLogoImageName.Text = logoFileName ?? defaultLogoFileName;
-            lblLogoPath.Text = logoFolder ?? defaultLogoFolder;
-
-            // تحديد المسار النهائي للصورة
-            string logoFullPath;
-
-            // إذا كانت الصورة المخصصة موجودة
-            if (!string.IsNullOrWhiteSpace(logoFolder) && !string.IsNullOrWhiteSpace(logoFileName))
-            {
-                logoFullPath = Path.Combine(logoFolder, logoFileName);
-                if (!File.Exists(logoFullPath))
-                {
-                    // لم توجد الصورة المخصصة، استخدم الافتراضية
-                    logoFullPath = Path.Combine(defaultLogoFolder, defaultLogoFileName);
-                }
-            }
-            else
-            {
-                // استخدم الصورة الافتراضية مباشرة
-                logoFullPath = Path.Combine(defaultLogoFolder, defaultLogoFileName);
-            }
-
-            // تحميل الصورة
-            if (File.Exists(logoFullPath))
-            {
-                if (picLogoCo.Image != null)
-                {
-                    picLogoCo.Image.Dispose();
-                    picLogoCo.Image = null;
-                }
-                picLogoCo.Image = Image.FromFile(logoFullPath);
-            }
-            else
-            {
-                picLogoCo.Image = null; // أو ضع صورة افتراضية مدمجة بالبرنامج
-            }
-
-            // بعد تحميل الصورة في PictureBox
-            if (File.Exists(logoFullPath))
-            {
-                if (picLogoCo.Image != null)
-                {
-                    picLogoCo.Image.Dispose();
-                    picLogoCo.Image = null;
-                }
-
-                Image img = Image.FromFile(logoFullPath);
-                picLogoCo.Image = img;
-
-                // عرض أبعاد الصورة بالبكسل
-                lblImagSize.Text = $"W:{img.Width} × H:{img.Height} px";
-            }
-            else
-            {
-                picLogoCo.Image = null;
-                lblImagSize.Text = "لا توجد صورة";
-            }
-
-            // 🖨️ إعدادات الطباعة
-            lblRollPrinter.Text = AppSettings.GetString("RollPrinter", "");
-            lblSheetPrinter.Text = AppSettings.GetString("SheetPrinter", "");
-            txtSheetRows.Text = AppSettings.GetString("SheetRows", "6");
-            txtSheetCols.Text = AppSettings.GetString("SheetCols", "10");
-            txtMarginTop.Text = AppSettings.GetString("SheetMarginTop", "10");
-            txtMarginBottom.Text = AppSettings.GetString("SheetMarginBottom", "10");
-            txtMarginRight.Text = AppSettings.GetString("SheetMarginRight", "10");
-            txtMarginLeft.Text = AppSettings.GetString("SheetMarginLeft", "10");
-            txtRollLabelWidth.Text = AppSettings.GetString("RollLabelWidth", "50");
-            txtRollLabelHeight.Text = AppSettings.GetString("RollLabelHeight", "25");
-
-            // 💰 إعدادات الضريبة
-            txtSalesTax.Text = AppSettings.GetString("SalesTax", "14");
-            rdoAllowChangTax.Checked = AppSettings.GetBool("IsEnablToChangTax", false);
-            rdoNotAllowChangTax.Checked = !rdoAllowChangTax.Checked;
-
-            // 🛒 إعدادات البيع
-            cbxReturnSaleMode.Text = AppSettings.GetString("ReturnSaleMode", "2");
-            cbxReturnPurchasesMode.Text = AppSettings.GetString("ReturnPurchasesMode", "2");
-            rdoAllowSaleByNegativeStock.Checked = AppSettings.GetBool("IsSaleByNegativeStock", false);
-            rdoNotAllowSaleByNegativeStock.Checked = !rdoAllowSaleByNegativeStock.Checked;
-        }
-
+   
         #endregion
 
         #region !!!!!!!!!!!! Warehouse  !!!!!!!!!!!!!
@@ -441,7 +343,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         #endregion
 
-        #region === إعدادات A4 Sheet: الحواف واللاصقات ===
+        #region === تبويب الطابعات ===
 
         // حساب عدد اللاصقات المعروضة في الورقة.
         private void UpdateLabelCount()
@@ -496,9 +398,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         private void txtSheetCols_TextChanged(object sender, EventArgs e) => UpdateLabelCount();
         private void txtMarginTop_TextChanged(object sender, EventArgs e) => tlpPading();
 
-        #endregion
-
-        #region === إعدادات الطابعات ===
         private void btnLoadRollPrinter_Click(object sender, EventArgs e)
         {
             using (PrintDialog printDialog = new PrintDialog())
@@ -524,10 +423,11 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         #endregion
 
+   
+        
         #region === احتياطي: KeyDown لربطه بالتنقل لاحقًا ===
 
-        private void txtRollLabelWidth_KeyDown(object sender, KeyEventArgs e) 
-        { }
+        private void txtRollLabelWidth_KeyDown(object sender, KeyEventArgs e)  { }
         private void txtRollLabelHeight_KeyDown(object sender, KeyEventArgs e) { }
         private void txtSheetRows_KeyDown(object sender, KeyEventArgs e) { }
         private void txtSheetCols_KeyDown(object sender, KeyEventArgs e) { }
@@ -596,9 +496,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-        /// <summary>
-        /// البحث عن TabControl الذي يحتوي على العنصر.
-        /// </summary>
+        // البحث عن TabControl الذي يحتوي على العنصر.
         private TabControl? FindParentTabControl(Control? control)
         {
             while (control != null)
