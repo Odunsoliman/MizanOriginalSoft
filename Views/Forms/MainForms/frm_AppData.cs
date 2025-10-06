@@ -20,12 +20,15 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             try
             {
-                // تحميل القيم من AppSettings فقط
-                DisplaySettings();
-                LoadWarehouses();
+                tabMang.ItemSize = new Size(150, 40);
+                FillcbxReturnSaleMode();
+                FillcbxReturnPurchasesMode();
+                tlpPading();
+                UpdateLabelCount();
                 TextBoxesInTabs();
+                txtNameCo.Focus();
+                txtNameCo.SelectAll();
                 LoadBackupFiles();
-   //             AttachControlHandlers(this);
                 ApplyPermissionsToControls();
                 LoadAllUsers();
                 DGV_Users.SelectionChanged += DGV_Users_SelectionChanged;
@@ -34,6 +37,10 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 LoadUsers();
                 cbxUsers.SelectedIndexChanged += CbxUsers_SelectedIndexChanged;
                 DGVStyl();
+                // تحميل القيم من AppSettings فقط
+                DisplaySettings();
+                LoadWarehouses();
+
             }
             catch (Exception ex)
             {
@@ -1120,6 +1127,55 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
 
         #endregion
+
+        #region 🔹 إعداد وضع البيع المرتد (ReturnSaleMode)
+
+        // 🔹 ملء ComboBox بالقيم المتاحة (1، 2، 3) وربطه بالبيانات
+        private void FillcbxReturnSaleMode()
+        {
+            cbxReturnSaleMode.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            var saleModes = new List<KeyValuePair<int, string>>
+    {
+        new KeyValuePair<int, string>(1, "حسب فاتورة البيع"),
+        new KeyValuePair<int, string>(2, "بالكود مباشر"),
+        new KeyValuePair<int, string>(3, "بالنظامين")
+    };
+
+            cbxReturnSaleMode.DataSource = saleModes;
+            cbxReturnSaleMode.DisplayMember = "Value";
+            cbxReturnSaleMode.ValueMember = "Key";
+
+            // تحميل القيمة المحفوظة
+            int savedMode = AppSettings.GetInt("ReturnSaleMode", 1);
+            cbxReturnSaleMode.SelectedValue = savedMode;
+        }
+
+        // 🔹 ملء ComboBox بالقيم المتاحة (1، 2، 3) وربطه بالبيانات
+        private void FillcbxReturnPurchasesMode()
+        {
+            cbxReturnPurchasesMode.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            var PurchModes = new List<KeyValuePair<int, string>>
+            {
+                new KeyValuePair<int, string>(1, "حسب فاتورة الشراء"),
+                new KeyValuePair<int, string>(2, "بالكود مباشر"),
+                new KeyValuePair<int, string>(3, "بالنظامين")
+            };
+
+            cbxReturnPurchasesMode.DataSource = PurchModes;
+            cbxReturnPurchasesMode.DisplayMember = "Value";
+            cbxReturnPurchasesMode.ValueMember = "Key";
+
+            // تحميل القيمة المحفوظة
+            int savedMode = AppSettings.GetInt("ReturnPurchasesMode", 1);
+            cbxReturnPurchasesMode.SelectedValue = savedMode;
+        }
+
+        #endregion
+
+
+
     }
 }
 // ➕ إضافة .
