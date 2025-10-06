@@ -725,7 +725,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 MessageBox.Show("حدث خطأ أثناء تحميل المستخدمين: " + ex.Message);
             }
         }
-
         private void LoadPermissionsForUser(int userId)
         {
             try
@@ -742,11 +741,18 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     txtUserName.Text = selectedUser["UserName"].ToString();
                     txtFullName.Text = selectedUser["FullName"].ToString();
 
-                    // ✅ تعيين الحالة بناءً على بيانات المستخدم
-                    chkIsAdmin.Checked = Convert.ToBoolean(selectedUser["IsAdmin"]);
-                    chkIsActive.Checked = Convert.ToBoolean(selectedUser["IsActive"]);
-                }
+                    // ✅ تعيين النصوص بناءً على الحالة
+                    bool isAdmin = Convert.ToBoolean(selectedUser["IsAdmin"]);
+                    bool isActive = Convert.ToBoolean(selectedUser["IsActive"]);
 
+                    // 🧩 التعامل مع الخاصيتين الجديدتين
+                    lblIsAdmin.Text = isAdmin ? "المستخدم له خواص الأدمن" : "";
+                    lblIsActive.Text = isActive ? "مستخدم فعال الآن" : "مستخدم تم تعطيله";
+
+                    // (اختياري) تغيير اللون لتوضيح الحالة أكثر
+                    lblIsAdmin.ForeColor = isAdmin ? Color.DarkRed : Color.Gray;
+                    lblIsActive.ForeColor = isActive ? Color.Green : Color.OrangeRed;
+                }
             }
             catch (Exception ex)
             {
@@ -987,38 +993,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             txtFullName.Clear();
 
         }
-        private void btnSave_UserData_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(txtUserName.Text) || string.IsNullOrWhiteSpace(txtFullName.Text))
-            {
-                MessageBox.Show("يرجى إدخال اسم المستخدم والاسم الكامل.");
-                return;
-            }
-
-            string username = txtUserName.Text.Trim();
-            string fullName = txtFullName.Text.Trim();
-            int userId = Convert.ToInt32(lblID_User.Text);
-
-            // ✅ الربط الفعلي مع CheckBox
-            bool isAdmin = chkIsAdmin.Checked;
-            bool isActive = chkIsActive.Checked;
-
-            string result;
-
-            if (userId == 0)
-            {
-                result = DBServiecs.User_Add(username, fullName, CurrentSession.UserID); // لا تحتاج isAdmin و isActive عند الإضافة إذا كانت افتراضية
-            }
-            else
-            {
-                result = DBServiecs.User_Update(userId, username, fullName, isAdmin, isActive, CurrentSession.UserID);
-
-            }
-
-            MessageBox.Show(result);
-            LoadAllUsers();
-        }
-
+        
         private void btnDeleteUser_Click(object sender, EventArgs e)
         {
             if (lblID_User.Text == "0")
