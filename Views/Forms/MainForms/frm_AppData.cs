@@ -527,7 +527,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         #region === احتياطي: KeyDown لربطه بالتنقل لاحقًا ===
 
-        private void txtRollLabelWidth_KeyDown(object sender, KeyEventArgs e) { }
+        private void txtRollLabelWidth_KeyDown(object sender, KeyEventArgs e) 
+        { }
         private void txtRollLabelHeight_KeyDown(object sender, KeyEventArgs e) { }
         private void txtSheetRows_KeyDown(object sender, KeyEventArgs e) { }
         private void txtSheetCols_KeyDown(object sender, KeyEventArgs e) { }
@@ -537,9 +538,87 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         private void txtMarginLeft_KeyDown(object sender, KeyEventArgs e) { }
 
         #endregion
- 
 
+        #region === التنقل باستخدام Enter بين الحقول ===
 
+        /// <summary>
+        /// التنقل بين مربعات النص داخل التبويب بالضغط على Enter.
+        /// </summary>
+        private void HandleEnterKeyNavigation(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+
+                if (sender is Control currentControl)
+                {
+                    var currentTabControl = FindParentTabControl(currentControl);
+
+                    if (currentTabControl != null)
+                    {
+                        var tabControls = GetAllTextBoxes(currentTabControl.SelectedTab!)
+                                          .OrderBy(c => c.TabIndex).ToList();
+
+                        int currentIndex = tabControls.IndexOf((TextBox)currentControl);
+
+                        if (currentIndex >= 0)
+                        {
+                            // الانتقال للمربع التالي أو الرجوع لأول واحد
+                            int nextIndex = (currentIndex + 1) % tabControls.Count;
+                            tabControls[nextIndex].Focus();
+                            tabControls[nextIndex].SelectAll();
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// الحصول على جميع مربعات النص داخل حاوية معينة.
+        /// </summary>
+        private List<TextBox> GetAllTextBoxes(Control parent)
+        {
+            var list = new List<TextBox>();
+            foreach (Control c in parent.Controls)
+            {
+                if (c is TextBox tb)
+                    list.Add(tb);
+                else if (c.HasChildren)
+                    list.AddRange(GetAllTextBoxes(c));
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// ربط حدث KeyDown بجميع مربعات النص داخل التبويبات.
+        /// </summary>
+        private void TextBoxesInTabs()
+        {
+            foreach (TabPage tab in tabMang.TabPages)
+            {
+                foreach (TextBox tb in GetAllTextBoxes(tab))
+                {
+                    tb.KeyDown += HandleEnterKeyNavigation;
+                }
+            }
+        }
+
+        /// <summary>
+        /// البحث عن TabControl الذي يحتوي على العنصر.
+        /// </summary>
+        private TabControl? FindParentTabControl(Control? control)
+        {
+            while (control != null)
+            {
+                if (control.Parent is TabControl tab)
+                    return tab;
+
+                control = control.Parent;
+            }
+            return null;
+        }
+
+        #endregion
 
     }
 }

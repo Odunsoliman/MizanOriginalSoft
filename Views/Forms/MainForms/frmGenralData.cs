@@ -1117,7 +1117,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         private void txtRollLabelHeight_KeyDown(object sender, KeyEventArgs e) { }
         private void txtSheetRows_KeyDown(object sender, KeyEventArgs e) { }
         private void txtSheetCols_KeyDown(object sender, KeyEventArgs e) { }
-        private void txtMarginTop_KeyDown(object sender, KeyEventArgs e) { }
+        private void txtMarginTop_KeyDown(object sender, KeyEventArgs e) 
+        { }
         private void txtMarginBottom_KeyDown(object sender, KeyEventArgs e) { }
         private void txtMarginRight_KeyDown(object sender, KeyEventArgs e) { }
         private void txtMarginLeft_KeyDown(object sender, KeyEventArgs e) { }

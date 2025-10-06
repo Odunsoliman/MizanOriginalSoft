@@ -836,6 +836,7 @@
             txtMarginRight.Text = "0";
             txtMarginRight.TextAlign = HorizontalAlignment.Center;
             txtMarginRight.TextChanged += txtMarginTop_TextChanged;
+            txtMarginRight.KeyDown += txtMarginRight_KeyDown;
             // 
             // label4
             // 
@@ -872,6 +873,7 @@
             txtMarginLeft.Text = "0";
             txtMarginLeft.TextAlign = HorizontalAlignment.Center;
             txtMarginLeft.TextChanged += txtMarginTop_TextChanged;
+            txtMarginLeft.KeyDown += txtMarginLeft_KeyDown;
             // 
             // label8
             // 
@@ -908,6 +910,7 @@
             txtMarginTop.Text = "0";
             txtMarginTop.TextAlign = HorizontalAlignment.Center;
             txtMarginTop.TextChanged += txtMarginTop_TextChanged;
+            txtMarginTop.KeyDown += txtMarginTop_KeyDown;
             // 
             // txtMarginBottom
             // 
@@ -920,6 +923,7 @@
             txtMarginBottom.Text = "0";
             txtMarginBottom.TextAlign = HorizontalAlignment.Center;
             txtMarginBottom.TextChanged += txtMarginTop_TextChanged;
+            txtMarginBottom.KeyDown += txtMarginBottom_KeyDown;
             // 
             // panel3
             // 
@@ -1074,6 +1078,7 @@
             txtRollLabelHeight.TabIndex = 1;
             txtRollLabelHeight.Text = "0";
             txtRollLabelHeight.TextAlign = HorizontalAlignment.Center;
+            txtRollLabelHeight.KeyDown += txtRollLabelHeight_KeyDown;
             // 
             // label18
             // 
@@ -1111,6 +1116,7 @@
             txtRollLabelWidth.TabIndex = 0;
             txtRollLabelWidth.Text = "0";
             txtRollLabelWidth.TextAlign = HorizontalAlignment.Center;
+            txtRollLabelWidth.KeyDown += txtRollLabelWidth_KeyDown;
             // 
             // lblRollPrinter
             // 
@@ -1185,6 +1191,7 @@
             txtSheetCols.Text = "0";
             txtSheetCols.TextAlign = HorizontalAlignment.Center;
             txtSheetCols.TextChanged += txtSheetCols_TextChanged;
+            txtSheetCols.KeyDown += txtSheetCols_KeyDown;
             // 
             // txtSheetRows
             // 
@@ -1197,6 +1204,7 @@
             txtSheetRows.Text = "0";
             txtSheetRows.TextAlign = HorizontalAlignment.Center;
             txtSheetRows.TextChanged += txtSheetRows_TextChanged;
+            txtSheetRows.KeyDown += txtSheetRows_KeyDown;
             // 
             // label17
             // 
