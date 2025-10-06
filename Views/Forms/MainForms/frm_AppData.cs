@@ -442,9 +442,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         #region === إعدادات A4 Sheet: الحواف واللاصقات ===
 
-        /// <summary>
-        /// حساب عدد اللاصقات المعروضة في الورقة.
-        /// </summary>
+        // حساب عدد اللاصقات المعروضة في الورقة.
         private void UpdateLabelCount()
         {
             if (int.TryParse(txtSheetRows.Text, out int rows) &&
@@ -526,7 +524,5 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
 
         #endregion
-
-
     }
 }

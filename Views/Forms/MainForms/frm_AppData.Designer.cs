@@ -1180,6 +1180,7 @@
             txtSheetCols.TabIndex = 3;
             txtSheetCols.Text = "0";
             txtSheetCols.TextAlign = HorizontalAlignment.Center;
+            txtSheetCols.TextChanged += txtSheetCols_TextChanged;
             // 
             // txtSheetRows
             // 
@@ -1191,6 +1192,7 @@
             txtSheetRows.TabIndex = 2;
             txtSheetRows.Text = "0";
             txtSheetRows.TextAlign = HorizontalAlignment.Center;
+            txtSheetRows.TextChanged += txtSheetRows_TextChanged;
             // 
             // label17
             // 
