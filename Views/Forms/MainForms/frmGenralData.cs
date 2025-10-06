@@ -22,7 +22,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
 
             tabMang.ItemSize = new Size(150, 40);
-            LoadWarehouses();
             FillcbxReturnSaleMode();
             FillcbxReturnPurchasesMode();
             LoadSettings();   // يفضل الإبقاء عليه لتحميل القيم
@@ -606,10 +605,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                     case "EmailCo": txtCompanyEmail.Text = value; break;
                     case "CompanyLoGoFolder": lblLogoPath.Text = value; break;
                     case "LogoImagName": lblLogoImageName.Text = value; break;
-                    case "DefaultWarehouseId":
-                        if (int.TryParse(value, out int defWarehouseId))
-                            cbxWarehouseId.SelectedValue = defWarehouseId;
-                        break;
 
                     // 🔹 البيع حسب الرصيد أو المكشوف
                     case "IsSaleByNegativeStock":
@@ -888,7 +883,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 ["EmailCo"] = txtCompanyEmail.Text,
                 ["CompanyLoGoFolder"] = lblLogoPath.Text,
                 ["LogoImagName"] = lblLogoImageName.Text,
-                ["ThisVersionIsForWarehouseId"] = cbxWarehouseId.SelectedValue?.ToString() ?? "",
 
                 // 🔹 البيع والشراء
                 ["IsSaleByNegativeStock"] = rdoAllowSaleByNegativeStock.Checked.ToString(),
@@ -1318,120 +1312,13 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         #region ✅ التعامل مع الفروع والمخازن
         // ➕ إضافة فرع جديد.
-        private void btnAddWarehouse_Click(object sender, EventArgs e)
-        {
-            string name = txtWarehouseName.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                MessageBox.Show("❌ يرجى إدخال اسم الفرع أولًا.");
-                txtWarehouseName.Focus();
-                return;
-            }
-
-            int userId = CurrentSession.UserID;
-            string message = DBServiecs.Warehouse_Add(name, userId);
-            MessageBox.Show(message);
-            LoadWarehouses(); // 🔄 تحديث القوائم بعد الإضافة.
-        }
-
+ 
         // 🗑️ حذف الفرع المحدد.
-        private void btnDeleteWarehous_Click(object sender, EventArgs e)
-        {
-            if (cbxWarehouseId.SelectedValue == null)
-            {
-                MessageBox.Show("❌ يرجى اختيار الفرع المراد حذفه.");
-                return;
-            }
-
-            int warehouseId = Convert.ToInt32(cbxWarehouseId.SelectedValue);
-            int userId = CurrentSession.UserID;
-
-            // ⚠️ تأكيد الحذف من المستخدم.
-            DialogResult confirm = MessageBox.Show("هل أنت متأكد من حذف الفرع المحدد؟",
-                "تأكيد الحذف", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (confirm != DialogResult.Yes) return;
-
-            string message = DBServiecs.Warehouse_Delete(warehouseId, userId);
-            MessageBox.Show(message);
-            LoadWarehouses(); // 🔄 تحديث القوائم بعد الحذف.
-        }
-
+ 
         // ✏️ تعديل اسم الفرع المحدد.
-        private void btnRenamWarehous_Click(object sender, EventArgs e)
-        {
-            if (cbxWarehouseId.SelectedValue == null)
-            {
-                MessageBox.Show("❌ يرجى اختيار الفرع المراد تعديله.");
-                return;
-            }
-
-            string newName = txtWarehouseName.Text.Trim();
-            if (string.IsNullOrWhiteSpace(newName))
-            {
-                MessageBox.Show("❌ يرجى إدخال الاسم الجديد للفرع.");
-                txtWarehouseName.Focus();
-                return;
-            }
-
-            int warehouseId = Convert.ToInt32(cbxWarehouseId.SelectedValue);
-            int userId = CurrentSession.UserID;
-
-            string message = DBServiecs.Warehouse_UpdateName(warehouseId, newName, userId);
-            MessageBox.Show(message);
-            LoadWarehouses(); // 🔄 إعادة التحميل بعد التعديل.
-        }
 
         // 📋 تحميل قائمة الفروع في الكومبوبوكس.
-        private void LoadWarehouses()
-        {
-            // 1️⃣ تحميل البيانات من قاعدة البيانات
-            DataTable dt = DBServiecs.Warehouse_GetAll();
-            if (dt == null || dt.Rows.Count == 0) return;
-
-            cbxWarehouseId.DataSource = dt;
-            cbxWarehouseId.DisplayMember = "WarehouseName"; // عدّل حسب اسم العمود الفعلي
-            cbxWarehouseId.ValueMember = "WarehouseId";
-
-            // 🔒 منع الكتابة داخل الكمبوبوكس
-            cbxWarehouseId.DropDownStyle = ComboBoxStyle.DropDownList;
-
-            // 2️⃣ قراءة القيمة الافتراضية من ملف الإعداد
-            int defaultId = AppSettings.GetInt("ThisVersionIsForWarehouseId", 0);
-            cbxWarehouseId.SelectedValue = defaultId;
-        }
         // ⭐ تعيين الفرع الحالي كافتراضي لهذه النسخة.
-        private void btnSetAsDefaultWarehouse_Click(object sender, EventArgs e)
-        {
-            if (cbxWarehouseId.SelectedValue == null)
-            {
-                MessageBox.Show("❌ يرجى اختيار فرع من القائمة أولًا.",
-                                "تحذير", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            int selectedWarehouseId = Convert.ToInt32(cbxWarehouseId.SelectedValue);
-
-            if (selectedWarehouseId <= 0)
-            {
-                MessageBox.Show("❌ رقم الفرع غير صحيح.",
-                                "تحذير", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // ⚠️ تأكيد من المستخدم.
-            DialogResult confirm = MessageBox.Show(
-                $"هل تريد تعيين الفرع رقم {selectedWarehouseId} كافتراضي لهذه النسخة؟\n" +
-                "سيتم تفعيل التخصيص عند إعادة تشغيل البرنامج.",
-                "تأكيد التخصيص", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (confirm == DialogResult.Yes)
-            {
-                UpdateThisVersionWarehouseId(selectedWarehouseId);
-            }
-        }
-
         // 🧾 تحديث ملف الإعدادات بالفرع الافتراضي.
         private void UpdateThisVersionWarehouseId(int newId)
         {

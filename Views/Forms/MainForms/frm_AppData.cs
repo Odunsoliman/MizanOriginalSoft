@@ -113,10 +113,11 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             rdoNotAllowSaleByNegativeStock.Checked = !rdoAllowSaleByNegativeStock.Checked;
         }
 
-   
+
         #endregion
 
         #region !!!!!!!!!!!! Warehouse  !!!!!!!!!!!!!
+        // 📋 تحميل قائمة الفروع في الكومبوبوكس.
         private void LoadWarehouses()
         {
             // 1️⃣ تحميل البيانات من قاعدة البيانات
@@ -134,7 +135,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             int defaultId = AppSettings.GetInt("ThisVersionIsForWarehouseId", 0);
             cbxWarehouseId.SelectedValue = defaultId;
         }
-
+        // 🧾 
         private void cbxWarehouseId_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbxWarehouseId.SelectedValue is int id)
@@ -143,7 +144,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-        //اضافة فرع او مخزن الى قاعدة البيانات
+        // ➕ إضافة فرع جديد.
         private void btnAddWarehouse_Click(object sender, EventArgs e)
         {
             string userInput;
@@ -513,3 +514,9 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
     }
 }
+// ➕ إضافة فرع جديد.
+// 🗑️ حذف الفرع المحدد.
+// ✏️ تعديل اسم الفرع المحدد.
+// 📋 تحميل قائمة الفروع في الكومبوبوكس.
+// ⭐ تعيين الفرع الحالي كافتراضي لهذه النسخة.
+// 🧾 تحديث ملف الإعدادات بالفرع الافتراضي.
