@@ -39,7 +39,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 DGVStyl();
                 // تحميل القيم من AppSettings فقط
                 DisplaySettings();
-                LoadWarehouses();
+                LoadWarehouses();//خاص باعداد الفرع لهذه النسخة
+                fillWarehouses();//خاص بالصلاحيات
 
             }
             catch (Exception ex)
@@ -157,18 +158,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             // 2️⃣ قراءة القيمة الافتراضية من ملف الإعداد
             int defaultId = AppSettings.GetInt("ThisVersionIsForWarehouseId", 0);
             cbxWarehouseId.SelectedValue = defaultId;
-
-
-            ////* خاص بالمستخدمين
-            //cbxWarehouses.DataSource = dt;
-            //cbxWarehouses.DisplayMember = "WarehouseName"; // عدّل حسب اسم العمود الفعلي
-            //cbxWarehouses.ValueMember = "WarehouseId";
-
-            //// 🔒 منع الكتابة داخل الكمبوبوكس
-            //cbxWarehouses.DropDownStyle = ComboBoxStyle.DropDownList;
-
-
-
 
         }
         // 🧾 
@@ -929,6 +918,21 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
 
         #region === تبويب الصلاحيات ===
+
+        private void fillWarehouses()
+        {
+            // 1️⃣ تحميل البيانات من قاعدة البيانات
+            DataTable dtW = DBServiecs.Warehouse_GetAll();
+            if (dtW == null || dtW.Rows.Count == 0) return;
+
+            cbxWarehouses.DataSource = dtW;
+            cbxWarehouses.DisplayMember = "WarehouseName"; // عدّل حسب اسم العمود الفعلي
+            cbxWarehouses.ValueMember = "WarehouseId";
+
+            // 🔒 منع الكتابة داخل الكمبوبوكس
+            cbxWarehouses.DropDownStyle = ComboBoxStyle.DropDownList;
+
+        }
         private void ApplyPermissionsToControls()
         {
             var allControls = GetAllControls(this);
