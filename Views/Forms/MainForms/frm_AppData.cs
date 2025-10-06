@@ -23,6 +23,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 // تحميل القيم من AppSettings فقط
                 DisplaySettings();
                 LoadWarehouses();
+                TextBoxesInTabs();
             }
             catch (Exception ex)
             {
@@ -456,9 +457,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-        /// <summary>
-        /// تطبيق الحواف حسب القيم المدخلة.
-        /// </summary>
+        // تطبيق الحواف حسب القيم المدخلة.
         private void tlpPading()
         {
             try
@@ -541,9 +540,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         #region === التنقل باستخدام Enter بين الحقول ===
 
-        /// <summary>
-        /// التنقل بين مربعات النص داخل التبويب بالضغط على Enter.
-        /// </summary>
+        // التنقل بين مربعات النص داخل التبويب بالضغط على Enter.
         private void HandleEnterKeyNavigation(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -573,9 +570,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-        /// <summary>
-        /// الحصول على جميع مربعات النص داخل حاوية معينة.
-        /// </summary>
+        // الحصول على جميع مربعات النص داخل حاوية معينة.
         private List<TextBox> GetAllTextBoxes(Control parent)
         {
             var list = new List<TextBox>();
@@ -589,9 +584,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             return list;
         }
 
-        /// <summary>
-        /// ربط حدث KeyDown بجميع مربعات النص داخل التبويبات.
-        /// </summary>
+        // ربط حدث KeyDown بجميع مربعات النص داخل التبويبات.
         private void TextBoxesInTabs()
         {
             foreach (TabPage tab in tabMang.TabPages)
