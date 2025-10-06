@@ -938,7 +938,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             // تحقق من التبويب الحالي
             TabPage? selectedTab = tabMang.SelectedTab;
 
-            if (selectedTab == tabPageUserSetting || selectedTab == tabPageUserPermissions )
+            if (selectedTab == tabPageUserSetting || selectedTab == tabPageUserPermissions)
             {
                 btnSave.Visible = false; // إخفاء الزر
             }
@@ -998,10 +998,10 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             DGV_Users.ClearSelection();
             DGV_Permissions.DataSource = null;
             lblID_User.Text = "0";
- 
+
 
         }
-        
+
         private void btnDeleteUser_Click(object sender, EventArgs e)
         {
             if (lblID_User.Text == "0")
@@ -1047,79 +1047,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
-        private void BtnSave_Click(object sender, EventArgs e)
-        {
-            if (cbxUsers.SelectedValue == null || cbxWarehouses.SelectedValue == null)
-            {
-                MessageBox.Show("❌ يرجى اختيار المستخدم والفرع أولاً");
-                return;
-            }
-
-            int userId = Convert.ToInt32(cbxUsers.SelectedValue);
-
-            int warehouseId = Convert.ToInt32(cbxWarehouses.SelectedValue);
-            // ✅ تابع التنفيذ هنا بعد التأكد من صحة رقم الفرع
-
-            if (warehouseId < 1)
-            {
-                MessageBox.Show("⚠️ قم باختيار الفرع بشكل صحيح.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-
-            // ✅ استخدام الدالة التي تُعيد المستخدم
-            DataTable dt = DBServiecs.User_GetOne(userId);
-
-            bool isAdmin = false;
-            if (dt.Rows.Count > 0 && dt.Columns.Contains("IsAdmin"))
-            {
-                isAdmin = Convert.ToBoolean(dt.Rows[0]["IsAdmin"]);
-            }
-
-            // ✅ إذا كان أدمن: استدعاء واحد فقط ثم الخروج
-            if (isAdmin)
-            {
-                if (DGV.Rows.Count > 0 && !DGV.Rows[0].IsNewRow)
-                {
-                    int permissionId = Convert.ToInt32(DGV.Rows[0].Cells["PermissionID"].Value);
-
-                    DBServiecs.Permission_SetForUser(
-                        userId,
-                        permissionId,
-                        true, true, true, true,
-                        warehouseId
-                    );
-                }
-
-                MessageBox.Show("✅ المستخدم أدمن وتم منحه جميع الصلاحيات تلقائيًا", "تم", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            // المستخدم ليس أدمن → نحفظ كل صف من الـ DGV كالمعتاد
-            foreach (DataGridViewRow row in DGV.Rows)
-            {
-                if (row.IsNewRow) continue;
-
-                int permissionId = Convert.ToInt32(row.Cells["PermissionID"].Value);
-                bool isAllowed = ConvertToBool(row.Cells["IsAllowed"].Value);
-                bool canAdd = ConvertToBool(row.Cells["CanAdd"].Value);
-                bool canEdit = ConvertToBool(row.Cells["CanEdit"].Value);
-                bool canDelete = ConvertToBool(row.Cells["CanDelete"].Value);
-
-                DBServiecs.Permission_SetForUser(
-                    userId,
-                    permissionId,
-                    isAllowed,
-                    canAdd,
-                    canEdit,
-                    canDelete,
-                    warehouseId
-                );
-            }
-
-            MessageBox.Show("✅ تم حفظ الصلاحيات بنجاح", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
+ 
 
         #endregion
 
@@ -1259,6 +1187,82 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
 
         #endregion
+
+        private void btnUserPermissions_Click(object sender, EventArgs e)
+        {
+            if (cbxUsers.SelectedValue == null || cbxWarehouses.SelectedValue == null)
+            {
+                MessageBox.Show("❌ يرجى اختيار المستخدم والفرع أولاً");
+                return;
+            }
+
+            int userId = Convert.ToInt32(cbxUsers.SelectedValue);
+
+            int warehouseId = Convert.ToInt32(cbxWarehouses.SelectedValue);
+            // ✅ تابع التنفيذ هنا بعد التأكد من صحة رقم الفرع
+
+            if (warehouseId < 1)
+            {
+                MessageBox.Show("⚠️ قم باختيار الفرع بشكل صحيح.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+
+
+            // ✅ استخدام الدالة التي تُعيد المستخدم
+            DataTable dt = DBServiecs.User_GetOne(userId);
+
+            bool isAdmin = false;
+            if (dt.Rows.Count > 0 && dt.Columns.Contains("IsAdmin"))
+            {
+                isAdmin = Convert.ToBoolean(dt.Rows[0]["IsAdmin"]);
+            }
+
+            // ✅ إذا كان أدمن: استدعاء واحد فقط ثم الخروج
+            if (isAdmin)
+            {
+                if (DGV.Rows.Count > 0 && !DGV.Rows[0].IsNewRow)
+                {
+                    int permissionId = Convert.ToInt32(DGV.Rows[0].Cells["PermissionID"].Value);
+
+                    DBServiecs.Permission_SetForUser(
+                        userId,
+                        permissionId,
+                        true, true, true, true,
+                        warehouseId
+                    );
+                }
+
+                MessageBox.Show("✅ المستخدم أدمن وتم منحه جميع الصلاحيات تلقائيًا", "تم", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // المستخدم ليس أدمن → نحفظ كل صف من الـ DGV كالمعتاد
+            foreach (DataGridViewRow row in DGV.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                int permissionId = Convert.ToInt32(row.Cells["PermissionID"].Value);
+                bool isAllowed = ConvertToBool(row.Cells["IsAllowed"].Value);
+                bool canAdd = ConvertToBool(row.Cells["CanAdd"].Value);
+                bool canEdit = ConvertToBool(row.Cells["CanEdit"].Value);
+                bool canDelete = ConvertToBool(row.Cells["CanDelete"].Value);
+
+                DBServiecs.Permission_SetForUser(
+                    userId,
+                    permissionId,
+                    isAllowed,
+                    canAdd,
+                    canEdit,
+                    canDelete,
+                    warehouseId
+                );
+            }
+
+            MessageBox.Show("✅ تم حفظ الصلاحيات بنجاح", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        }
+
     }
 }
 // ➕ إضافة .

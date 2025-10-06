@@ -1365,10 +1365,10 @@
             // tabPageUserSetting
             // 
             tabPageUserSetting.Controls.Add(tableLayoutPanel1);
-            tabPageUserSetting.Location = new Point(4, 84);
+            tabPageUserSetting.Location = new Point(4, 44);
             tabPageUserSetting.Name = "tabPageUserSetting";
             tabPageUserSetting.Padding = new Padding(6);
-            tabPageUserSetting.Size = new Size(812, 395);
+            tabPageUserSetting.Size = new Size(812, 435);
             tabPageUserSetting.TabIndex = 3;
             tabPageUserSetting.Text = "اعدادات المستخدمين";
             tabPageUserSetting.UseVisualStyleBackColor = true;
@@ -1387,7 +1387,7 @@
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(800, 383);
+            tableLayoutPanel1.Size = new Size(800, 423);
             tableLayoutPanel1.TabIndex = 10;
             // 
             // DGV_Users
@@ -1396,7 +1396,7 @@
             DGV_Users.Dock = DockStyle.Fill;
             DGV_Users.Location = new Point(537, 3);
             DGV_Users.Name = "DGV_Users";
-            DGV_Users.Size = new Size(260, 377);
+            DGV_Users.Size = new Size(260, 417);
             DGV_Users.TabIndex = 0;
             // 
             // tableLayoutPanel11
@@ -1411,16 +1411,16 @@
             tableLayoutPanel11.RowCount = 2;
             tableLayoutPanel11.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             tableLayoutPanel11.RowStyles.Add(new RowStyle(SizeType.Percent, 90F));
-            tableLayoutPanel11.Size = new Size(260, 377);
+            tableLayoutPanel11.Size = new Size(260, 417);
             tableLayoutPanel11.TabIndex = 1;
             // 
             // DGV_Permissions
             // 
             DGV_Permissions.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             DGV_Permissions.Dock = DockStyle.Fill;
-            DGV_Permissions.Location = new Point(3, 40);
+            DGV_Permissions.Location = new Point(3, 44);
             DGV_Permissions.Name = "DGV_Permissions";
-            DGV_Permissions.Size = new Size(254, 334);
+            DGV_Permissions.Size = new Size(254, 370);
             DGV_Permissions.TabIndex = 6;
             // 
             // lblID_User
@@ -1429,7 +1429,7 @@
             lblID_User.Dock = DockStyle.Fill;
             lblID_User.Location = new Point(3, 0);
             lblID_User.Name = "lblID_User";
-            lblID_User.Size = new Size(254, 37);
+            lblID_User.Size = new Size(254, 41);
             lblID_User.TabIndex = 9;
             lblID_User.Text = "0";
             lblID_User.TextAlign = ContentAlignment.MiddleCenter;

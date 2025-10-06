@@ -1678,6 +1678,7 @@
             btnUserPermissions.TabIndex = 3;
             btnUserPermissions.Text = "حفظ الصلاحيات";
             btnUserPermissions.UseVisualStyleBackColor = true;
+            btnUserPermissions.Click += btnUserPermissions_Click;
             // 
             // tabPage1
             // 
@@ -2123,7 +2124,7 @@
             btnSave.TabIndex = 41;
             btnSave.Text = "حفظ الاعدادات";
             btnSave.UseVisualStyleBackColor = true;
-            btnSave.Click += BtnSave_Click;
+            btnSave.Click += btnSave_Click;
             // 
             // tableLayoutPanel7
             // 
