@@ -439,5 +439,94 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
 
         #endregion
+
+        #region === إعدادات A4 Sheet: الحواف واللاصقات ===
+
+        /// <summary>
+        /// حساب عدد اللاصقات المعروضة في الورقة.
+        /// </summary>
+        private void UpdateLabelCount()
+        {
+            if (int.TryParse(txtSheetRows.Text, out int rows) &&
+                int.TryParse(txtSheetCols.Text, out int cols))
+            {
+                lblCountLables.Text = $"عدد اللاصقات : {rows * cols}";
+            }
+            else
+            {
+                lblCountLables.Text = "اكتب رقم صحيح";
+            }
+        }
+
+        /// <summary>
+        /// تطبيق الحواف حسب القيم المدخلة.
+        /// </summary>
+        private void tlpPading()
+        {
+            try
+            {
+                int top = string.IsNullOrEmpty(txtMarginTop.Text) ? 0 : int.Parse(txtMarginTop.Text);
+                int bottom = string.IsNullOrEmpty(txtMarginBottom.Text) ? 0 : int.Parse(txtMarginBottom.Text);
+                int left = string.IsNullOrEmpty(txtMarginLeft.Text) ? 0 : int.Parse(txtMarginLeft.Text);
+                int right = string.IsNullOrEmpty(txtMarginRight.Text) ? 0 : int.Parse(txtMarginRight.Text);
+
+                tlpPeper.Padding = new Padding(left, top, right, bottom);
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("الرجاء إدخال أرقام صحيحة فقط", "خطأ في الإدخال", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"حدث خطأ: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            pnlMargen.BorderStyle = BorderStyle.None;
+
+            pnlMargen.Paint += (sender, e) =>
+            {
+                ControlPaint.DrawBorder(e.Graphics, pnlMargen.ClientRectangle,
+                    Color.Blue, 1, ButtonBorderStyle.Solid,        // أعلى
+                    Color.GreenYellow, 2, ButtonBorderStyle.Solid, // يمين
+                    Color.Blue, 1, ButtonBorderStyle.Solid,        // أسفل
+                    Color.GreenYellow, 2, ButtonBorderStyle.Solid  // يسار
+                );
+            };
+        }
+
+        // إعادة الحساب عند تغيير القيم
+        private void txtSheetRows_TextChanged(object sender, EventArgs e) => UpdateLabelCount();
+        private void txtSheetCols_TextChanged(object sender, EventArgs e) => UpdateLabelCount();
+        private void txtMarginTop_TextChanged(object sender, EventArgs e) => tlpPading();
+
+        #endregion
+
+        #region === إعدادات الطابعات ===
+        private void btnLoadRollPrinter_Click(object sender, EventArgs e)
+        {
+            using (PrintDialog printDialog = new PrintDialog())
+            {
+                if (printDialog.ShowDialog() == DialogResult.OK)
+                {
+                    lblRollPrinter.Text = printDialog.PrinterSettings.PrinterName;
+                    SaveData();
+                }
+            }
+        }
+        private void btnLoadSheetPrinter_Click(object sender, EventArgs e)
+        {
+            using (PrintDialog printDialog = new PrintDialog())
+            {
+                if (printDialog.ShowDialog() == DialogResult.OK)
+                {
+                    lblSheetPrinter.Text = printDialog.PrinterSettings.PrinterName;
+                    SaveData();
+                }
+            }
+        }
+
+        #endregion
+
+
     }
 }
