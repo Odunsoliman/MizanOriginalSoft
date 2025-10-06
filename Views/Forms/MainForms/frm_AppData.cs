@@ -286,6 +286,9 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 AppSettings.SaveOrUpdate("ReturnPurchasesMode", cbxReturnPurchasesMode.Text);
                 AppSettings.SaveOrUpdate("IsSaleByNegativeStock", rdoAllowSaleByNegativeStock.Checked.ToString());
 
+                // 💰 حفظ السماح او عدمه للتحكم فى نسبة الخصم
+                AppSettings.SaveOrUpdate("IsOpendMaxRateDiscount", rdoOpendMaxRateDiscount.Checked.ToString());
+
                 MessageBox.Show("✅ تم حفظ الإعدادات بنجاح.", "حفظ الإعدادات", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
