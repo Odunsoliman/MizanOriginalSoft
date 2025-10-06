@@ -71,13 +71,13 @@
             tableLayoutPanel18 = new TableLayoutPanel();
             tableLayoutPanel9 = new TableLayoutPanel();
             txtMarginRight = new TextBox();
-            label4 = new Label();
-            label5 = new Label();
-            txtMarginLeft = new TextBox();
-            label8 = new Label();
-            label9 = new Label();
             txtMarginTop = new TextBox();
+            txtMarginLeft = new TextBox();
             txtMarginBottom = new TextBox();
+            label5 = new Label();
+            label8 = new Label();
+            label4 = new Label();
+            label9 = new Label();
             panel3 = new Panel();
             label12 = new Label();
             tableLayoutPanel13 = new TableLayoutPanel();
@@ -773,13 +773,15 @@
             // lblCountLables
             // 
             lblCountLables.Dock = DockStyle.Top;
-            lblCountLables.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            lblCountLables.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
+            lblCountLables.ForeColor = Color.FromArgb(192, 0, 192);
             lblCountLables.Location = new Point(3, 0);
             lblCountLables.Name = "lblCountLables";
+            lblCountLables.Padding = new Padding(30, 0, 0, 0);
             lblCountLables.Size = new Size(473, 47);
             lblCountLables.TabIndex = 51;
             lblCountLables.Text = "0";
-            lblCountLables.TextAlign = ContentAlignment.MiddleCenter;
+            lblCountLables.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // tableLayoutPanel18
             // 
@@ -827,6 +829,7 @@
             // 
             // txtMarginRight
             // 
+            txtMarginRight.Dock = DockStyle.Fill;
             txtMarginRight.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             txtMarginRight.Location = new Point(3, 73);
             txtMarginRight.Name = "txtMarginRight";
@@ -837,64 +840,9 @@
             txtMarginRight.TextChanged += txtMarginTop_TextChanged;
             txtMarginRight.KeyDown += txtMarginRight_KeyDown;
             // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.Location = new Point(79, 105);
-            label4.Name = "label4";
-            label4.Size = new Size(53, 22);
-            label4.TabIndex = 11;
-            label4.Text = "الايسر:";
-            label4.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label5.Location = new Point(81, 70);
-            label5.Name = "label5";
-            label5.Size = new Size(51, 22);
-            label5.TabIndex = 12;
-            label5.Text = "الايمن:";
-            label5.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // txtMarginLeft
-            // 
-            txtMarginLeft.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtMarginLeft.Location = new Point(3, 108);
-            txtMarginLeft.Name = "txtMarginLeft";
-            txtMarginLeft.Size = new Size(62, 29);
-            txtMarginLeft.TabIndex = 7;
-            txtMarginLeft.Text = "0";
-            txtMarginLeft.TextAlign = HorizontalAlignment.Center;
-            txtMarginLeft.TextChanged += txtMarginTop_TextChanged;
-            txtMarginLeft.KeyDown += txtMarginLeft_KeyDown;
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.Location = new Point(77, 0);
-            label8.Name = "label8";
-            label8.Size = new Size(55, 22);
-            label8.TabIndex = 14;
-            label8.Text = "العلوى:";
-            label8.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label9.Location = new Point(76, 35);
-            label9.Name = "label9";
-            label9.Size = new Size(56, 22);
-            label9.TabIndex = 13;
-            label9.Text = "السفلى:";
-            label9.TextAlign = ContentAlignment.MiddleRight;
-            // 
             // txtMarginTop
             // 
+            txtMarginTop.Dock = DockStyle.Fill;
             txtMarginTop.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             txtMarginTop.Location = new Point(3, 3);
             txtMarginTop.Name = "txtMarginTop";
@@ -905,8 +853,22 @@
             txtMarginTop.TextChanged += txtMarginTop_TextChanged;
             txtMarginTop.KeyDown += txtMarginTop_KeyDown;
             // 
+            // txtMarginLeft
+            // 
+            txtMarginLeft.Dock = DockStyle.Fill;
+            txtMarginLeft.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            txtMarginLeft.Location = new Point(3, 108);
+            txtMarginLeft.Name = "txtMarginLeft";
+            txtMarginLeft.Size = new Size(62, 29);
+            txtMarginLeft.TabIndex = 7;
+            txtMarginLeft.Text = "0";
+            txtMarginLeft.TextAlign = HorizontalAlignment.Center;
+            txtMarginLeft.TextChanged += txtMarginTop_TextChanged;
+            txtMarginLeft.KeyDown += txtMarginLeft_KeyDown;
+            // 
             // txtMarginBottom
             // 
+            txtMarginBottom.Dock = DockStyle.Fill;
             txtMarginBottom.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             txtMarginBottom.Location = new Point(3, 38);
             txtMarginBottom.Name = "txtMarginBottom";
@@ -916,6 +878,54 @@
             txtMarginBottom.TextAlign = HorizontalAlignment.Center;
             txtMarginBottom.TextChanged += txtMarginTop_TextChanged;
             txtMarginBottom.KeyDown += txtMarginBottom_KeyDown;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Dock = DockStyle.Fill;
+            label5.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label5.Location = new Point(71, 70);
+            label5.Name = "label5";
+            label5.Size = new Size(61, 35);
+            label5.TabIndex = 12;
+            label5.Text = "الايمن:";
+            label5.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Dock = DockStyle.Fill;
+            label8.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label8.Location = new Point(71, 0);
+            label8.Name = "label8";
+            label8.Size = new Size(61, 35);
+            label8.TabIndex = 14;
+            label8.Text = "العلوى:";
+            label8.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Dock = DockStyle.Fill;
+            label4.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label4.Location = new Point(71, 105);
+            label4.Name = "label4";
+            label4.Size = new Size(61, 36);
+            label4.TabIndex = 11;
+            label4.Text = "الايسر:";
+            label4.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Dock = DockStyle.Fill;
+            label9.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label9.Location = new Point(71, 35);
+            label9.Name = "label9";
+            label9.Size = new Size(61, 35);
+            label9.TabIndex = 13;
+            label9.Text = "السفلى:";
+            label9.TextAlign = ContentAlignment.MiddleRight;
             // 
             // panel3
             // 
