@@ -470,7 +470,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             var buttonEventMap = new Dictionary<Button, EventHandler>
             {
-                [btnGenralData] = btnGenralData_Click,
+                [btnAppData] = btnGenralData_Click,
                 [btnProdSetting_] = btnProdSetting__Click,
                 [btn_MoreSetting] = btn_MoreSetting_Click,
                 [btn_MainSetting] = btn_MainSetting_Click,
@@ -572,14 +572,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         //الاعدادات - الاعدادات العامة
         private void btnGenralData_Click(object? sender, EventArgs e)
         {
-            if (sender is Button btn)
-            {
-                HighlightTransparentButton(btn);
-            }
-            CloseAllFormsExceptMain();
-            frmGenralData frm = new frmGenralData();
-            OpenFormInPanel(frm);
-
 
         }
 

@@ -48,7 +48,6 @@
             btnAppData = new Button();
             btnAccounts_Old = new Button();
             btnAccounts = new Button();
-            btnGenralData = new Button();
             lblCoSeprator = new Label();
             btnProdSetting_ = new Button();
             btn_MoreSetting = new Button();
@@ -370,7 +369,6 @@
             pnlMoreSetting.Controls.Add(btnAppData);
             pnlMoreSetting.Controls.Add(btnAccounts_Old);
             pnlMoreSetting.Controls.Add(btnAccounts);
-            pnlMoreSetting.Controls.Add(btnGenralData);
             pnlMoreSetting.Controls.Add(lblCoSeprator);
             pnlMoreSetting.Controls.Add(btnProdSetting_);
             pnlMoreSetting.Controls.Add(btn_MoreSetting);
@@ -390,7 +388,7 @@
             btnAppData.FlatAppearance.BorderSize = 0;
             btnAppData.FlatStyle = FlatStyle.Flat;
             btnAppData.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnAppData.Location = new Point(3, 148);
+            btnAppData.Location = new Point(3, 119);
             btnAppData.Margin = new Padding(3, 2, 3, 2);
             btnAppData.MaximumSize = new Size(0, 29);
             btnAppData.MinimumSize = new Size(0, 29);
@@ -409,7 +407,7 @@
             btnAccounts_Old.FlatAppearance.BorderSize = 0;
             btnAccounts_Old.FlatStyle = FlatStyle.Flat;
             btnAccounts_Old.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnAccounts_Old.Location = new Point(3, 119);
+            btnAccounts_Old.Location = new Point(3, 90);
             btnAccounts_Old.Margin = new Padding(3, 2, 3, 2);
             btnAccounts_Old.MaximumSize = new Size(0, 29);
             btnAccounts_Old.MinimumSize = new Size(0, 29);
@@ -428,7 +426,7 @@
             btnAccounts.FlatAppearance.BorderSize = 0;
             btnAccounts.FlatStyle = FlatStyle.Flat;
             btnAccounts.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnAccounts.Location = new Point(3, 90);
+            btnAccounts.Location = new Point(3, 61);
             btnAccounts.Margin = new Padding(3, 2, 3, 2);
             btnAccounts.MaximumSize = new Size(0, 29);
             btnAccounts.MinimumSize = new Size(0, 29);
@@ -440,25 +438,6 @@
             btnAccounts.TextAlign = ContentAlignment.MiddleLeft;
             btnAccounts.UseVisualStyleBackColor = true;
             btnAccounts.Click += btnAccounts_Click;
-            // 
-            // btnGenralData
-            // 
-            btnGenralData.Dock = DockStyle.Top;
-            btnGenralData.FlatAppearance.BorderSize = 0;
-            btnGenralData.FlatStyle = FlatStyle.Flat;
-            btnGenralData.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnGenralData.Location = new Point(3, 61);
-            btnGenralData.Margin = new Padding(3, 2, 3, 2);
-            btnGenralData.MaximumSize = new Size(0, 29);
-            btnGenralData.MinimumSize = new Size(0, 29);
-            btnGenralData.Name = "btnGenralData";
-            btnGenralData.Padding = new Padding(0, 0, 22, 0);
-            btnGenralData.Size = new Size(122, 29);
-            btnGenralData.TabIndex = 5;
-            btnGenralData.Text = "اعداد عامة للبرنامج";
-            btnGenralData.TextAlign = ContentAlignment.MiddleLeft;
-            btnGenralData.UseVisualStyleBackColor = true;
-            btnGenralData.Click += btnGenralData_Click;
             // 
             // lblCoSeprator
             // 
@@ -1337,7 +1316,6 @@
         private Panel pnlAccounts;
         private Button btn_Accounts;
         private Panel pnlMoreSetting;
-        private Button btnGenralData;
         private Label lblCoSeprator;
         private Button btnProdSetting_;
         private Button btn_MoreSetting;
