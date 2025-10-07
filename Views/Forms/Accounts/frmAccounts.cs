@@ -96,7 +96,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-    
+
         // ✅ حدث يتم تنفيذه عند اختيار أي عقدة في الشجرة
         private TreeNode? _lastSelectedNode = null; // للاحتفاظ بالعقدة السابقة
 
@@ -447,8 +447,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        #endregion 
-        
+        #endregion
+
         #region !!!!!!!! حذف حساب شجرى او ابن من الجريد  !!!!!!!!!!!!!!
 
         // حذف حساب من الشجرة
@@ -597,7 +597,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         #region !!!!!!! AfterSelect  بعد تحديد عقدة !!!!!!!!!!!!!!
 
- 
+
 
 
 
@@ -718,10 +718,10 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
         // دخول وخروج مربع البحث
         private void txtSearchTree_Enter(object sender, EventArgs e) => _isSearching = true;
-        
+
         //الخروج من مربع البحث فى الشجرة
         private void txtSearchTree_Leave(object sender, EventArgs e) => _isSearching = false;
-     
+
         // حدث الكتابة فى مربع البخث
         private void txtSearchTree_TextChanged(object sender, EventArgs e)
         {
@@ -826,7 +826,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             return foundInCurrent || foundInChildren;
         }
         #endregion
-  
+
         #region !!!!!!!!  Add Account  !!!!!!!!
 
         private void btnAccAccount_Click(object sender, EventArgs e)
@@ -838,7 +838,10 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         {
             AddChildrenFromDGV();
         }
-
+        private void btnAddChildren_Click(object sender, EventArgs e)
+        {
+            AddChildrenFromDGV();
+        }
         private void AddChildrenFromTree()
         {
             if (treeViewAccounts.SelectedNode?.Tag is not DataRow selectedRow)
@@ -867,7 +870,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             if (result.StartsWith("تم"))
             {
-                MessageBox.Show("تم حفظ الحساب بنجاح ✅", "نجاح",
+                MessageBox.Show("تم حفظ حساب الفرع الشجرى بنجاح ✅", "نجاح",
                                MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // حفظ العقدة المحددة حالياً
@@ -897,15 +900,13 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void AddChildrenFromDGV()
         {
-            if (DGV.CurrentRow?.DataBoundItem is not DataRowView rowView)
+            if (treeViewAccounts.SelectedNode?.Tag is not DataRow selectedRow)
             {
-                MessageBox.Show("يجب اختيار حساب من الجدول لإضافة حساب فرعي له.", "تنبيه",
+                MessageBox.Show("يجب اختيار عقدة من الشجرة لإضافة حساب ابن لها.", "تنبيه",
                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            DataRow row = rowView.Row;
-            int parentTreeAccCode = row.Field<int>("TreeAccCode");
             string userInput;
             DialogResult inputResult = CustomMessageBox.ShowStringInputBox(out userInput,
                 "من فضلك أدخل اسم الحساب:", "إضافة حساب فرعي");
@@ -918,33 +919,32 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
 
             string accName = userInput.Trim();
+            int parentTreeAccCode = selectedRow.Field<int>("TreeAccCode");
             int createByUserID = CurrentSession.UserID;
 
             string result = DBServiecs.Acc_AddFinalAccount(accName, parentTreeAccCode, createByUserID);
 
             if (result.StartsWith("تم"))
             {
-                MessageBox.Show("تم حفظ الحساب بنجاح ✅", "نجاح",
+                MessageBox.Show("تم حفظ حساب الابن بنجاح ✅", "نجاح",
                                MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // حفظ المعلومات قبل إعادة التحميل
-                int selectedTreeCode = parentTreeAccCode;
+                // حفظ العقدة المحددة حالياً
+                TreeNode? selectedNode = treeViewAccounts.SelectedNode;
+                int selectedTreeCode = selectedRow.Field<int>("TreeAccCode");
 
                 // إعادة تحميل الشجرة
                 LoadAccountsTree();
 
-                // البحث عن العقدة الأصلية وتحديدها
+                // البحث عن العقدة الأصلية وفتحها
                 TreeNode? parentNode = FindTreeNodeByTreeCode(selectedTreeCode);
                 if (parentNode != null)
                 {
-                    treeViewAccounts.SelectedNode = parentNode;
                     parentNode.Expand();
+                    treeViewAccounts.SelectedNode = parentNode;
 
-                    // تحميل الأبناء الجدد في الجريد
+                    // تحميل الأبناء في الجريد
                     LoadChildrenInDGV(parentNode);
-
-                    // تمرير التركيز إلى الجريد
-                    DGV.Focus();
                 }
             }
             else
@@ -990,7 +990,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
 
 
-        #endregion 
+        #endregion
 
 
 

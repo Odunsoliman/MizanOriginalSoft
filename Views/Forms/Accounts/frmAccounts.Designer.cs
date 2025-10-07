@@ -89,6 +89,7 @@
             tableLayoutPanel4 = new TableLayoutPanel();
             tableLayoutPanel11 = new TableLayoutPanel();
             tableLayoutPanel10 = new TableLayoutPanel();
+            btnAddChildren = new Button();
             btnModifyAcc = new Button();
             btnDeleteAccFromDGV = new Button();
             label2 = new Label();
@@ -298,7 +299,7 @@
             btnDeleteAccFromTree.Size = new Size(72, 36);
             btnDeleteAccFromTree.TabIndex = 90;
             btnDeleteAccFromTree.TabStop = false;
-            btnDeleteAccFromTree.Text = "حذف الاب";
+            btnDeleteAccFromTree.Text = "حذف الفرع";
             btnDeleteAccFromTree.UseVisualStyleBackColor = false;
             btnDeleteAccFromTree.Click += btnDeleteAccFromTree_Click;
             // 
@@ -986,13 +987,13 @@
             // 
             // tableLayoutPanel10
             // 
-            tableLayoutPanel10.ColumnCount = 2;
-            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel10.ColumnCount = 3;
+            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel10.Controls.Add(btnAddChildren, 0, 0);
             tableLayoutPanel10.Controls.Add(btnModifyAcc, 1, 0);
-            tableLayoutPanel10.Controls.Add(btnDeleteAccFromDGV, 0, 0);
+            tableLayoutPanel10.Controls.Add(btnDeleteAccFromDGV, 2, 0);
             tableLayoutPanel10.Dock = DockStyle.Fill;
             tableLayoutPanel10.Location = new Point(3, 28);
             tableLayoutPanel10.Name = "tableLayoutPanel10";
@@ -1001,16 +1002,30 @@
             tableLayoutPanel10.Size = new Size(476, 44);
             tableLayoutPanel10.TabIndex = 98;
             // 
+            // btnAddChildren
+            // 
+            btnAddChildren.BackColor = Color.Teal;
+            btnAddChildren.Dock = DockStyle.Fill;
+            btnAddChildren.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
+            btnAddChildren.ForeColor = Color.Yellow;
+            btnAddChildren.Location = new Point(322, 4);
+            btnAddChildren.Margin = new Padding(4);
+            btnAddChildren.Name = "btnAddChildren";
+            btnAddChildren.Size = new Size(150, 36);
+            btnAddChildren.TabIndex = 90;
+            btnAddChildren.Text = "اضافة حــ";
+            btnAddChildren.UseVisualStyleBackColor = false;
+            btnAddChildren.Click += btnAddChildren_Click;
+            // 
             // btnModifyAcc
             // 
             btnModifyAcc.BackColor = Color.Teal;
-            btnModifyAcc.Dock = DockStyle.Fill;
-            btnModifyAcc.Font = new Font("Times New Roman", 16F, FontStyle.Bold);
+            btnModifyAcc.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
             btnModifyAcc.ForeColor = Color.Yellow;
-            btnModifyAcc.Location = new Point(4, 4);
+            btnModifyAcc.Location = new Point(164, 4);
             btnModifyAcc.Margin = new Padding(4);
             btnModifyAcc.Name = "btnModifyAcc";
-            btnModifyAcc.Size = new Size(230, 36);
+            btnModifyAcc.Size = new Size(150, 36);
             btnModifyAcc.TabIndex = 83;
             btnModifyAcc.Text = "تعديل حساب";
             btnModifyAcc.UseVisualStyleBackColor = false;
@@ -1018,15 +1033,14 @@
             // btnDeleteAccFromDGV
             // 
             btnDeleteAccFromDGV.BackColor = Color.FromArgb(255, 192, 192);
-            btnDeleteAccFromDGV.Dock = DockStyle.Fill;
-            btnDeleteAccFromDGV.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnDeleteAccFromDGV.Location = new Point(242, 4);
+            btnDeleteAccFromDGV.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnDeleteAccFromDGV.Location = new Point(4, 4);
             btnDeleteAccFromDGV.Margin = new Padding(4);
             btnDeleteAccFromDGV.Name = "btnDeleteAccFromDGV";
-            btnDeleteAccFromDGV.Size = new Size(230, 36);
+            btnDeleteAccFromDGV.Size = new Size(152, 36);
             btnDeleteAccFromDGV.TabIndex = 89;
             btnDeleteAccFromDGV.TabStop = false;
-            btnDeleteAccFromDGV.Text = "حذف حساب";
+            btnDeleteAccFromDGV.Text = "حذف الابن";
             btnDeleteAccFromDGV.UseVisualStyleBackColor = false;
             btnDeleteAccFromDGV.Click += btnDeleteAccFromDGV_Click;
             // 
@@ -1345,5 +1359,6 @@
         private Button button1;
         private Button btnDeleteAccFromTree;
         private Button btnDeleteAccFromDGV;
+        private Button btnAddChildren;
     }
 }
