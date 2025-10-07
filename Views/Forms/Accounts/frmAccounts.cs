@@ -906,7 +906,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             DataRow row = rowView.Row;
             int parentTreeAccCode = row.Field<int>("TreeAccCode");
-            //System.ArgumentException: 'Column 'TreeAccCode' does not belong to table .'
             string userInput;
             DialogResult inputResult = CustomMessageBox.ShowStringInputBox(out userInput,
                 "من فضلك أدخل اسم الحساب:", "إضافة حساب فرعي");
