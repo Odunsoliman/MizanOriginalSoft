@@ -1706,8 +1706,28 @@ END
 
             return result ?? new DataTable();
         }
+        // إضافة حساب شجرى  []
+        public static string Acc_AddParentAccount(string AccName, int? ParentTreeAccCode, int? CreateByUserID)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("Acc_AddParentAccount", command =>
+            {
+                command.Parameters.Add("@AccName", SqlDbType.NVarChar).Value = AccName;
+                command.Parameters.Add("@ParentTreeAccCode", SqlDbType.Int).Value = (object?)ParentTreeAccCode ?? DBNull.Value;
+                command.Parameters.Add("@CreateByUserID", SqlDbType.Int).Value = (object?)CreateByUserID ?? DBNull.Value;
+            }, expectMessageOutput: false);
+        }
 
-        // إضافة حساب جديد
+        // إضافة حساب نهائى  [][]
+        public static string Acc_AddFinalAccount(string AccName, int? ParentTreeAccCode, int? CreateByUserID)
+        {
+            return dbHelper.ExecuteNonQueryWithLogging("Acc_AddFinalAccount", command =>
+            {
+                command.Parameters.Add("@AccName", SqlDbType.NVarChar).Value = AccName;
+                command.Parameters.Add("@ParentTreeAccCode", SqlDbType.Int).Value = (object?)ParentTreeAccCode ?? DBNull.Value;
+                command.Parameters.Add("@CreateByUserID", SqlDbType.Int).Value = (object?)CreateByUserID ?? DBNull.Value;
+            }, expectMessageOutput: false);
+        }
+        // إضافة حساب جديد  []
         public static string Acc_AddAccount(string AccName, int? ParentTreeAccCode, int? CreateByUserID)
         {
             return dbHelper.ExecuteNonQueryWithLogging("Acc_AddAccount", command =>

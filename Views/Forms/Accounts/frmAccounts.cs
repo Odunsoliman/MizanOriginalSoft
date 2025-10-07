@@ -863,7 +863,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             int parentTreeAccCode = selectedRow.Field<int>("TreeAccCode");
             int createByUserID = CurrentSession.UserID;
 
-            string result = DBServiecs.Acc_AddAccount(accName, parentTreeAccCode, createByUserID);
+            string result = DBServiecs.Acc_AddParentAccount(accName, parentTreeAccCode, createByUserID);
 
             if (result.StartsWith("تم"))
             {
@@ -920,7 +920,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             string accName = userInput.Trim();
             int createByUserID = CurrentSession.UserID;
 
-            string result = DBServiecs.Acc_AddAccount(accName, parentTreeAccCode, createByUserID);
+            string result = DBServiecs.Acc_AddFinalAccount(accName, parentTreeAccCode, createByUserID);
 
             if (result.StartsWith("تم"))
             {
