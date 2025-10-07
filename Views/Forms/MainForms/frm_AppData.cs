@@ -463,9 +463,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         #endregion
 
-
-
-
         #region === تبويب السيرفر ===
         #region ✅  النسخ الاحتياطية
 
@@ -622,7 +619,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
 
         #endregion
-
 
         #region === تبويب المستخدمين ===
         // ➕ إضافة .
@@ -944,7 +940,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
 
         #endregion
-
 
         #region === تبويب الصلاحيات ===
         private void tabMang_SelectedIndexChanged(object sender, EventArgs e)
