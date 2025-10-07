@@ -470,7 +470,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             var buttonEventMap = new Dictionary<Button, EventHandler>
             {
-                [btnAppData] = btnGenralData_Click,
+                [btnAppData] = btnAppData_Click,
                 [btnProdSetting_] = btnProdSetting__Click,
                 [btn_MoreSetting] = btn_MoreSetting_Click,
                 [btn_MainSetting] = btn_MainSetting_Click,
@@ -569,12 +569,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             frm.Show();
         }
          */
-        //الاعدادات - الاعدادات العامة
-        private void btnGenralData_Click(object? sender, EventArgs e)
-        {
-
-        }
-
+     
         //الاعدادات - شجرة الحسابات
         private void btnAccounts_Click(object sender, EventArgs e)
         {
@@ -1399,7 +1394,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             OpenFormInPanel(frm);
         }
 
-        private void btnAppData_Click(object sender, EventArgs e)
+        private void btnAppData_Click(object? sender, EventArgs e)
         {
             if (sender is Button btn)
             {
