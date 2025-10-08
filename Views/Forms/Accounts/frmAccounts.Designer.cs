@@ -55,7 +55,6 @@
             rdoMadeen = new RadioButton();
             DGV = new DataGridView();
             contextMenuDGV = new ContextMenuStrip(components);
-            btnStripAddChildren = new ToolStripMenuItem();
             tableLayoutPanel13 = new TableLayoutPanel();
             label7 = new Label();
             txtSearch = new TextBox();
@@ -116,7 +115,6 @@
             tableLayoutPanel7.SuspendLayout();
             tableLayoutPanel8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DGV).BeginInit();
-            contextMenuDGV.SuspendLayout();
             tableLayoutPanel13.SuspendLayout();
             tableLayoutPanel9.SuspendLayout();
             tableLayoutPanel14.SuspendLayout();
@@ -507,17 +505,9 @@
             // 
             // contextMenuDGV
             // 
-            contextMenuDGV.Items.AddRange(new ToolStripItem[] { btnStripAddChildren });
             contextMenuDGV.Name = "contextMenuDGV";
             contextMenuDGV.RightToLeft = RightToLeft.Yes;
-            contextMenuDGV.Size = new Size(169, 26);
-            // 
-            // btnStripAddChildren
-            // 
-            btnStripAddChildren.Name = "btnStripAddChildren";
-            btnStripAddChildren.Size = new Size(168, 22);
-            btnStripAddChildren.Text = "اضافة حساب فرعى";
-            btnStripAddChildren.Click += btnStripAddChildren_Click;
+            contextMenuDGV.Size = new Size(181, 26);
             // 
             // tableLayoutPanel13
             // 
@@ -1251,7 +1241,6 @@
             tableLayoutPanel8.ResumeLayout(false);
             tableLayoutPanel8.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)DGV).EndInit();
-            contextMenuDGV.ResumeLayout(false);
             tableLayoutPanel13.ResumeLayout(false);
             tableLayoutPanel13.PerformLayout();
             tableLayoutPanel9.ResumeLayout(false);

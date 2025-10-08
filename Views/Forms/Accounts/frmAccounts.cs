@@ -477,14 +477,26 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             int? parentTreeCode = selectedRow.Field<int?>("ParentTree");
 
             // استدعاء الإجراء المخزن
-            var result = DBServiecs.Acc_DeleteAccount(treeAccCode);
+            string result = DBServiecs.Acc_DeleteAccount(treeAccCode);
 
-            if (result.Contains("نجاح"))
+            // 🔹 عرض الرسالة القادمة من الإجراء كما هي (سواء نجاح أو فشل)
+            MessageBoxIcon icon;
+
+            if (result.StartsWith("✅"))
+                icon = MessageBoxIcon.Information;
+            else if (result.StartsWith("⚠️"))
+                icon = MessageBoxIcon.Warning;
+            else if (result.StartsWith("❌"))
+                icon = MessageBoxIcon.Error;
+            else
+                icon = MessageBoxIcon.None;
+
+            // عرض الرسالة للمستخدم
+            MessageBox.Show(result, "نتيجة العملية", MessageBoxButtons.OK, icon);
+
+            // 🔹 في حالة النجاح فقط، نُحدث الشجرة والجريد
+            if (result.StartsWith("✅"))
             {
-                MessageBox.Show("تم حذف الحساب بنجاح ✅", "نجاح",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-
                 // إعادة تحميل الشجرة بالكامل
                 LoadAccountsTree();
 
@@ -506,6 +518,41 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     DGV.DataSource = null;
                 }
             }
+
+
+            //    // استدعاء الإجراء المخزن
+            //    var result = DBServiecs.Acc_DeleteAccount(treeAccCode);
+            //    /*result تعود بعدة رسائل حسب الحالة فى الرفض مع رسالة النجاح 
+            //     ولكن فى هذه الحالة لا ترجع للمستخدم اى رسالة غير النجاح اما باقى الرسائل مع الرفض اى سبب راجع
+            //     */
+            //    if (result.Contains("نجاح"))
+            //    {
+            //        MessageBox.Show("تم حذف الحساب بنجاح ✅", "نجاح",
+            //                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+            //        // إعادة تحميل الشجرة بالكامل
+            //        LoadAccountsTree();
+
+            //        // تحديد الأب إن وُجد
+            //        if (parentTreeCode.HasValue)
+            //        {
+            //            TreeNode? parentNode = FindTreeNodeByTreeCode(parentTreeCode.Value);
+            //            if (parentNode != null)
+            //            {
+            //                treeViewAccounts.SelectedNode = parentNode;
+            //                parentNode.Expand();
+            //                LoadChildrenInDGV(parentNode);
+            //            }
+            //        }
+            //        else
+            //        {
+            //            // في حال لم يكن له أب (أي أنه كان جذرًا)
+            //            treeViewAccounts.SelectedNode = null;
+            //            DGV.DataSource = null;
+            //        }
+
+            //    }
         }
 
         // حذف حساب ابن من الجريد
@@ -515,6 +562,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             {
                 MessageBox.Show("يجب اختيار حساب من الجدول.", "تنبيه",
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                
                 return;
             }
 
@@ -545,21 +593,32 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             // 🔹 نحفظ رقم الصف الحالي عشان نحدد الصف التالي بعد الحذف
             int currentRowIndex = DGV.CurrentRow.Index;
-
             // استدعاء الإجراء المخزن
-            var result = DBServiecs.Acc_DeleteAccount(treeAccCode);
+            string result = DBServiecs.Acc_DeleteAccount(treeAccCode);
 
-            if (result.Contains("نجاح"))
+            // 🔹 تحديد نوع الأيقونة حسب محتوى الرسالة
+            MessageBoxIcon icon;
+            if (result.StartsWith("✅"))
+                icon = MessageBoxIcon.Information;
+            else if (result.StartsWith("⚠️"))
+                icon = MessageBoxIcon.Warning;
+            else if (result.StartsWith("❌"))
+                icon = MessageBoxIcon.Error;
+            else
+                icon = MessageBoxIcon.None;
+
+            // 🔹 عرض الرسالة كما هي للمستخدم
+            MessageBox.Show(result, "نتيجة العملية", MessageBoxButtons.OK, icon);
+
+            // 🔹 إذا كانت العملية ناجحة فقط، حدّث الـ DGV
+            if (result.StartsWith("✅"))
             {
-                MessageBox.Show("تم حذف الحساب بنجاح ✅", "نجاح",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // العقدة الحالية في الشجرة (الأب)
+                // الحصول على العقدة الحالية في الشجرة (الأب)
                 TreeNode? currentParentNode = treeViewAccounts.SelectedNode;
 
                 if (currentParentNode != null)
                 {
-                    // إعادة تحميل أبناء العقدة في DGV فقط
+                    // إعادة تحميل أبناء العقدة فقط في الجريد
                     LoadChildrenInDGV(currentParentNode);
 
                     // محاولة تحديد الصف التالي بعد الحذف
@@ -569,17 +628,28 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                         if (newIndex >= DGV.Rows.Count)
                             newIndex = DGV.Rows.Count - 1; // لو الحذف كان آخر صف
 
-                        // البحث عن أول عمود ظاهر لتحديد الخلية عليه
+                        // 🔹 تحديد أول عمود ظاهر لتجنّب الخطأ
                         DataGridViewColumn? firstVisibleColumn = DGV.Columns
                             .Cast<DataGridViewColumn>()
                             .FirstOrDefault(c => c.Visible);
 
                         if (firstVisibleColumn != null)
                         {
-                            DGV.CurrentCell = DGV.Rows[newIndex].Cells[firstVisibleColumn.Index];
+                            try
+                            {
+                                DGV.CurrentCell = DGV.Rows[newIndex].Cells[firstVisibleColumn.Index];
+                            }
+                            catch
+                            {
+                                // تجاهل أي خطأ في حالة الخلية غير قابلة للتحديد
+                            }
                         }
                     }
-
+                }
+                else
+                {
+                    // إذا لم يكن هناك عقدة محددة، نظّف الجريد
+                    DGV.DataSource = null;
                 }
             }
         }
@@ -826,10 +896,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             AddChildrenFromTree();
         }
 
-        private void btnStripAddChildren_Click(object sender, EventArgs e)
-        {
-            AddChildrenFromDGV();
-        }
         private void btnAddChildren_Click(object sender, EventArgs e)
         {
             AddChildrenFromDGV();
@@ -979,12 +1045,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         #endregion
 
         #region !!!!!!!!!  التعديل فى الحسابات وتفاصيلها !!!!!!!!!!!!
-
-
-
-        #endregion
-
-        #region !!!!!! تفاصيل الحساب (الأبناء) !!!!!!! 
 
         // يحدد الصف داخل الـ DGV بناءً على رقم الحساب TreeAccCode.
         private void HighlightRowByTreeAccCode(int treeAccCode)
