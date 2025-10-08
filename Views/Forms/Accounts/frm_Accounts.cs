@@ -40,6 +40,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         private void LoadAccountsTree()
         {
             treeViewAccounts.Nodes.Clear();
+
             DataTable dt = DBServiecs.Acc_GetChart() ?? new DataTable();
             if (dt.Rows.Count == 0) return;
 
@@ -54,25 +55,81 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             foreach (DataRow row in parentRows)
             {
                 string accName = row["AccName"] as string ?? string.Empty;
-                if (string.IsNullOrWhiteSpace(accName)) continue;
+                if (string.IsNullOrWhiteSpace(accName))
+                    continue;
 
-                string treeCode = row["TreeAccCode"].ToString();
-                string parentCode = row["ParentAccID"] != DBNull.Value ? row["ParentAccID"].ToString() : null;
+                string treeCode = row["TreeAccCode"]?.ToString() ?? string.Empty;
+                string? parentCode = row["ParentAccID"] != DBNull.Value
+                    ? row["ParentAccID"]?.ToString()
+                    : null;
+
+                // تخطى الصف إذا لم يوجد كود أساسى
+                if (string.IsNullOrWhiteSpace(treeCode))
+                    continue;
 
                 TreeNode node = new TreeNode(accName) { Tag = row };
                 nodeDict[treeCode] = node;
 
-                if (string.IsNullOrEmpty(parentCode))
-                    treeViewAccounts.Nodes.Add(node); // عقدة الجذر
-                else if (nodeDict.TryGetValue(parentCode, out TreeNode parentNode))
-                    parentNode.Nodes.Add(node); // إضافة العقدة للوالد
+                if (string.IsNullOrWhiteSpace(parentCode))
+                {
+                    // عقدة الجذر
+                    treeViewAccounts.Nodes.Add(node);
+                }
+                else if (nodeDict.TryGetValue(parentCode, out TreeNode? parentNode) && parentNode != null)
+                {
+                    // إضافة العقدة للوالد إذا كان موجوداً
+                    parentNode.Nodes.Add(node);
+                }
                 else
-                    treeViewAccounts.Nodes.Add(node); // fallback في حالة عدم وجود والد
+                {
+                    // في حال لم يوجد الوالد بعد، أضفها كجذر مؤقت
+                    treeViewAccounts.Nodes.Add(node);
+                }
             }
 
-            SortTreeNodes(treeViewAccounts.Nodes); // ترتيب العقد تصاعديًا حسب AccID
-            treeViewAccounts.CollapseAll();        // طي جميع الفروع
+            // ترتيب العقد حسب AccID
+            SortTreeNodes(treeViewAccounts.Nodes);
+
+            // طي جميع الفروع
+            treeViewAccounts.CollapseAll();
         }
+
+        //private void LoadAccountsTree_()
+        //{
+        //    treeViewAccounts.Nodes.Clear();
+        //    DataTable dt = DBServiecs.Acc_GetChart() ?? new DataTable();
+        //    if (dt.Rows.Count == 0) return;
+
+        //    // Dictionary لتخزين العقد أثناء البناء
+        //    Dictionary<string, TreeNode> nodeDict = new Dictionary<string, TreeNode>();
+
+        //    // عرض الحسابات التي لها فروع فقط
+        //    var parentRows = dt.AsEnumerable()
+        //                       .Where(r => r.Field<bool>("IsHasChildren"))
+        //                       .ToList();
+
+        //    foreach (DataRow row in parentRows)
+        //    {
+        //        string accName = row["AccName"] as string ?? string.Empty;
+        //        if (string.IsNullOrWhiteSpace(accName)) continue;
+
+        //        string? treeCode = row["TreeAccCode"].ToString();
+        //        string? parentCode = row["ParentAccID"] != DBNull.Value ? row["ParentAccID"].ToString() : null;
+
+        //        TreeNode? node = new TreeNode(accName) { Tag = row };
+        //        nodeDict[treeCode] = node;//تحذير 8604
+
+        //        if (string.IsNullOrEmpty(parentCode))
+        //            treeViewAccounts.Nodes.Add(node); // عقدة الجذر
+        //        else if (nodeDict.TryGetValue(parentCode, out TreeNode parentNode))//تحذير 8600
+        //            parentNode.Nodes.Add(node); // إضافة العقدة للوالد
+        //        else
+        //            treeViewAccounts.Nodes.Add(node); // fallback في حالة عدم وجود والد
+        //    }
+
+        //    SortTreeNodes(treeViewAccounts.Nodes); // ترتيب العقد تصاعديًا حسب AccID
+        //    treeViewAccounts.CollapseAll();        // طي جميع الفروع
+        //}
 
         private void SortTreeNodes(TreeNodeCollection nodes)
         {
@@ -171,26 +228,36 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // ==========================
         // رسم العقدة بالكامل
         // ==========================
-        private void treeViewAccounts_DrawNode(object sender, DrawTreeNodeEventArgs e)// الحل الاول تلوين جزئى
+        private void treeViewAccounts_DrawNode(object? sender, DrawTreeNodeEventArgs e)
         {
-            // استخدام الخلفية المباشرة من العقدة
+            // تحقق أولاً من أن e.Node ليست null
+            if (e.Node == null)
+                return;
+
+            // استخدام الخلفية من العقدة بشكل آمن
             using (Brush bgBrush = new SolidBrush(e.Node.BackColor))
             {
                 e.Graphics.FillRectangle(bgBrush, e.Bounds);
             }
 
-            // تحديد الخط
-            Font nodeFont = e.Node == activeNode
+            // تحديد الخط حسب حالة العقدة
+            Font nodeFont = (e.Node == activeNode)
                 ? new Font("Times New Roman", 13, FontStyle.Bold)
                 : new Font("Times New Roman", 12, FontStyle.Bold);
 
-            // رسم النص
-            TextRenderer.DrawText(e.Graphics, e.Node.Text, nodeFont, e.Bounds, e.Node.ForeColor,
-                TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine);
+            // رسم النص في العقدة
+            TextRenderer.DrawText(
+                e.Graphics,
+                e.Node.Text ?? string.Empty, // حماية من null في النص
+                nodeFont,
+                e.Bounds,
+                e.Node.ForeColor,
+                TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine
+            );
 
-            // لا تستخدم e.DrawDefault = false إذا كنت تريد السلوك الافتراضي جزئياً
             e.DrawDefault = false;
         }
+
         private void SearchAndHighlightNodes(TreeNodeCollection nodes, string searchText)// الحل الثانى تلوين جزئى
         {
             foreach (TreeNode node in nodes)
@@ -220,24 +287,38 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 treeViewAccounts.Invalidate(new Rectangle(node.Bounds.Location, node.Bounds.Size));
             }
         }
-        private void treeViewAccounts_DrawNode_(object sender, DrawTreeNodeEventArgs e)//الحل الثالث تلوين جزئى وليس كل العقدة
-        {
-            // هذا سيرسم الخلفية تلقائياً ويعتني بالتحديد
-            if ((e.State & TreeNodeStates.Selected) != 0)
-            {
-                e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds);
-                TextRenderer.DrawText(e.Graphics, e.Node.Text, e.Node.NodeFont ?? treeViewAccounts.Font,
-                    e.Bounds, SystemColors.HighlightText,
-                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
-            }
-            else
-            {
-                e.Graphics.FillRectangle(new SolidBrush(e.Node.BackColor), e.Bounds);
-                TextRenderer.DrawText(e.Graphics, e.Node.Text, e.Node.NodeFont ?? treeViewAccounts.Font,
-                    e.Bounds, e.Node.ForeColor,
-                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
-            }
-        }
+        //private void treeViewAccounts_DrawNode_(object sender, DrawTreeNodeEventArgs e)
+        //{
+        //    // تأكيد أن العقدة ليست null
+        //    if (e.Node == null)
+        //        return;
+
+        //    // تحديد الخط المستخدم
+        //    Font nodeFont = e.Node.NodeFont ?? treeViewAccounts.Font;
+        //    Color textColor = e.Node.ForeColor;
+        //    Color backColor = e.Node.BackColor;
+
+        //    // تحديد الخلفية إذا كانت العقدة محددة
+        //    if ((e.State & TreeNodeStates.Selected) != 0)
+        //    {
+        //        e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds);
+        //        TextRenderer.DrawText(e.Graphics, e.Node.Text, nodeFont,
+        //            e.Bounds, SystemColors.HighlightText,
+        //            TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+        //    }
+        //    else
+        //    {
+        //        using (SolidBrush backBrush = new SolidBrush(backColor))
+        //        {
+        //            e.Graphics.FillRectangle(backBrush, e.Bounds);
+        //        }
+
+        //        TextRenderer.DrawText(e.Graphics, e.Node.Text, nodeFont,
+        //            e.Bounds, textColor,
+        //            TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+        //    }
+        //}
+
         //// إلغاء الـ Custom Drawing واستخدام السلوك الافتراضي مع تحسينات بسيطة
         //private void treeViewAccounts_DrawNode(object sender, DrawTreeNodeEventArgs e)// الحل الرابع يبحث جيدا لكنه لا يلون خلفية العقدة
         //{
@@ -650,7 +731,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 if (!string.IsNullOrWhiteSpace(txtAccName.Text))
                 {
                     // نفذ الإضافة
-                    Addchiled();
+             //       Addchiled();
 
                     // أضف الاسم الجديد في قائمة الجلسة
                     lstAccAdded.Items.Add(txtAccName.Text);
@@ -668,54 +749,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
 
-        // دالة الاضافة الى اشجرة
-        private void Addchiled()
-        {
-            if (selectedRow == null)
-            {
-                MessageBox.Show("من فضلك اختر حساب من الشجرة أولاً");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(txtAccName.Text))
-            {
-                MessageBox.Show("من فضلك أدخل اسم الحساب الجديد");
-                return;
-            }
-
-            string accName = txtAccName.Text.Trim();
-            int parentAccID = Convert.ToInt32(selectedRow["AccID"]);
-            int createByUserID = CurrentSession.UserID;
-
-            // 🟢 استدعاء الإجراء
-            string result = DBServiecs.Acc_AddAccount(accName, parentAccID, createByUserID);
-
-            if (result.StartsWith("تم")) // يعني نجحت العملية
-            {
-                MessageBox.Show("تم حفظ الحساب بنجاح ✅");
-
-                // 🟢 إعادة تحميل الشجرة
-                LoadAccountsTree();
-
-                // 🟢 البحث عن الأب المباشر وتحديده
-                TreeNode? parentNode = FindNodeByAccID(treeViewAccounts.Nodes, parentAccID);
-                if (parentNode != null)
-                {
-                    treeViewAccounts.SelectedNode = parentNode;
-                    parentNode.EnsureVisible();
-                }
-
-                // 🟢 تحديث الجريد لإظهار الحساب الجديد
-                LoadChildrenInDGV(parentAccID);
-
-
-            }
-            else
-            {
-                MessageBox.Show("فشل في الحفظ ❌\n" + result);
-            }
-        }
-
+ 
         // زر تعديل حساب
         private void btnModify_Click(object sender, EventArgs e)
         {
@@ -1116,66 +1150,10 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        // إضافة حساب فرعي
-        private void AddChildren()
-        {
-            if (DGV.CurrentRow == null)
-            {
-                MessageBox.Show("يجب اختيار حساب من الجدول لإضافة حساب فرعي له.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            DataRowView? rowView = DGV.CurrentRow.DataBoundItem as DataRowView;
-            if (rowView == null) return;
-
-            DataRow row = rowView.Row;
-            int parentTreeAccCode = Convert.ToInt32(row["TreeAccCode"]);
-
-            string userInput;
-            DialogResult inputResult = CustomMessageBox.ShowStringInputBox(out userInput, "من فضلك أدخل اسم الحساب:", "إضافة حساب فرعي");
-
-            if (inputResult != DialogResult.OK || string.IsNullOrWhiteSpace(userInput))
-            {
-                MessageBox.Show("تم إلغاء الإضافة أو لم يتم إدخال اسم صالح.", "إلغاء", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            string AccName = userInput.Trim();
-            int CreateByUserID = CurrentSession.UserID;
-
-            string result = DBServiecs.Acc_AddAccount(AccName, parentTreeAccCode, CreateByUserID);
-
-            if (result.StartsWith("تم"))
-            {
-                MessageBox.Show("تم حفظ الحساب بنجاح ✅", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                LoadAccountsTree();
-
-                TreeNode? parentNode = FindNodeByTreeAccCode(treeViewAccounts.Nodes, parentTreeAccCode);
-                // الان خطأ واحد فقط The name 'FindNodeByTreeAccCode' does not exist in the current context
-                if (parentNode != null)
-                {
-                    parentNode.Expand();
-                    TreeNode? newNode = parentNode.Nodes.Cast<TreeNode>().FirstOrDefault(n => n.Text == AccName);
-                    if (newNode != null)
-                    {
-                        treeViewAccounts.SelectedNode = newNode;
-                        newNode.EnsureVisible();
-                    }
-                }
-
-                HighlightAndExpandNode(parentTreeAccCode);
-                HighlightRowByTreeAccCode(parentTreeAccCode);
-            }
-            else
-            {
-                MessageBox.Show("فشل في الحفظ ❌\n" + result, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void btnStripAddChildren_Click(object sender, EventArgs e)
         {
-            AddChildren();
+    //        AddChildren();
         }
 
         // دالة للبحث عن عقدة داخل TreeView باستخدام TreeAccCode

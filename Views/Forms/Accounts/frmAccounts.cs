@@ -479,30 +479,33 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // استدعاء الإجراء المخزن
             var result = DBServiecs.Acc_DeleteAccount(treeAccCode);
 
-            if (result.Code == 0) // نجاح
+            if (result.Contains("نجاح"))
             {
-                MessageBox.Show(result.Message, "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("تم حذف حساب الابن بنجاح ✅", "نجاح",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // حفظ العقدة المحددة حالياً
+                TreeNode? selectedNode = treeViewAccounts.SelectedNode;
+                int selectedTreeCode = selectedRow.Field<int>("TreeAccCode");
 
                 // إعادة تحميل الشجرة
                 LoadAccountsTree();
 
-                // 🔹 نحدد العقدة الأب بعد الحذف
-                if (parentTreeCode.HasValue)
+                // البحث عن العقدة الأصلية وفتحها
+                TreeNode? parentNode = FindTreeNodeByTreeCode(selectedTreeCode);
+                if (parentNode != null)
                 {
-                    TreeNode? parentNode = FindTreeNodeByTreeCode(parentTreeCode.Value);
-                    if (parentNode != null)
-                    {
-                        parentNode.Expand();
-                        treeViewAccounts.SelectedNode = parentNode;
+                    parentNode.Expand();
+                    treeViewAccounts.SelectedNode = parentNode;
 
-                        // تحميل الأبناء في الجريد
-                        LoadChildrenInDGV(parentNode);
-                    }
+                    // تحميل الأبناء في الجريد
+                    LoadChildrenInDGV(parentNode);
                 }
             }
             else
             {
-                MessageBox.Show(result.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("فشل في الحذف ❌\n" + result, "خطأ",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -547,48 +550,33 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // استدعاء الإجراء المخزن
             var result = DBServiecs.Acc_DeleteAccount(treeAccCode);
 
-            if (result.Code == 0) // نجاح
+            if (result.Contains("نجاح"))
             {
-                MessageBox.Show(result.Message, "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("تم حذف حساب الاب بنجاح ✅", "نجاح",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // حفظ العقدة المحددة حالياً
+                TreeNode? selectedNode = treeViewAccounts.SelectedNode;
+                int selectedTreeCode = selectedRow.Field<int>("TreeAccCode");
 
                 // إعادة تحميل الشجرة
                 LoadAccountsTree();
 
-                if (parentTreeCode.HasValue)
+                // البحث عن العقدة الأصلية وفتحها
+                TreeNode? parentNode = FindTreeNodeByTreeCode(selectedTreeCode);
+                if (parentNode != null)
                 {
-                    TreeNode? parentNode = FindTreeNodeByTreeCode(parentTreeCode.Value);
-                    if (parentNode != null)
-                    {
-                        parentNode.Expand();
-                        treeViewAccounts.SelectedNode = parentNode;
+                    parentNode.Expand();
+                    treeViewAccounts.SelectedNode = parentNode;
 
-                        // إعادة تحميل الأبناء في الجريد
-                        LoadChildrenInDGV(parentNode);
-
-                        // تحديد الصف المناسب بعد الحذف
-                        if (DGV.Rows.Count > 0)
-                        {
-                            int newIndex = currentRowIndex;
-                            if (newIndex >= DGV.Rows.Count)
-                                newIndex = DGV.Rows.Count - 1; // لو الحذف كان آخر واحد نختار الصف السابق
-
-                            // ابحث عن أول عمود ظاهر
-                            DataGridViewColumn? firstVisibleCol = DGV.Columns
-                                .Cast<DataGridViewColumn>()
-                                .FirstOrDefault(c => c.Visible);
-
-                            if (firstVisibleCol != null)
-                            {
-                                DGV.CurrentCell = DGV.Rows[newIndex].Cells[firstVisibleCol.Index];
-                            }
-                        }
-
-                    }
+                    // تحميل الأبناء في الجريد
+                    LoadChildrenInDGV(parentNode);
                 }
             }
             else
             {
-                MessageBox.Show(result.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("فشل في الحذف ❌\n" + result, "خطأ",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -924,7 +912,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             string result = DBServiecs.Acc_AddFinalAccount(accName, parentTreeAccCode, createByUserID);
 
-            if (result.StartsWith("تم"))
+            if (result.Contains("نجاح"))
             {
                 MessageBox.Show("تم حفظ حساب الابن بنجاح ✅", "نجاح",
                                MessageBoxButtons.OK, MessageBoxIcon.Information);

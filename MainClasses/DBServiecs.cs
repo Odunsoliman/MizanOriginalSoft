@@ -246,11 +246,11 @@ namespace MizanOriginalSoft.MainClasses
 
         }
 
-        public static DataTable MainAcc_GetAccounts(int ParentAccID)
+        public static DataTable MainAcc_GetAccounts(int ParentTree)
         {
             DataTable? result = dbHelper.ExecuteSelectQuery("MainAcc_GetAccounts", cmd =>
             {
-                cmd.Parameters.Add("@ParentAccID", SqlDbType.Int).Value = ParentAccID;
+                cmd.Parameters.Add("@ParentTree", SqlDbType.Int).Value = ParentTree;
             });
 
             return result ?? new DataTable(); // تأمين ضد null
@@ -1088,7 +1088,7 @@ namespace MizanOriginalSoft.MainClasses
         //دالة ادراج او تعديل حساب 
         public static bool MainAcc_UpdateOrInsert(
           int accID,
-          int? parentAccID,
+          int? ParentTree,
           string accName,
           bool isHidden,
           float? fixedAssetsValue,
@@ -1111,7 +1111,7 @@ namespace MizanOriginalSoft.MainClasses
                 cmd =>
                 {
                     cmd.Parameters.AddWithValue("@AccID", accID);
-                    cmd.Parameters.AddWithValue("@ParentAccID", parentAccID ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ParentTree", ParentTree ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@AccName", accName);
                     cmd.Parameters.AddWithValue("@IsHidden", isHidden);
                     cmd.Parameters.AddWithValue("@FixedAssetsValue", fixedAssetsValue ?? (object)DBNull.Value);
@@ -1266,7 +1266,7 @@ namespace MizanOriginalSoft.MainClasses
         //ادراج تصنيف فرعى
         public static bool MainAcc_InsertSubCat(
            int accID,
-           int? parentAccID,
+           int? ParentTree,
            string accName,
            out string resultMessage)
         {
@@ -1275,7 +1275,7 @@ namespace MizanOriginalSoft.MainClasses
                 cmd =>
                 {
                     cmd.Parameters.AddWithValue("@AccID", accID);
-                    cmd.Parameters.AddWithValue("@ParentAccID", parentAccID ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ParentTree", ParentTree ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@AccName", accName);
                 },
                 expectMessageOutput: true
@@ -1428,7 +1428,7 @@ BEGIN
         WHERE TRY_CAST(value AS INT) IS NOT NULL
     )
     UPDATE M
-    SET M.ParentAccID = @NewParentID
+    SET M.ParentTree = @NewParentID
     FROM dbo.MainAccounts M
     INNER JOIN CTE C ON M.AccID = C.AccID;
 
@@ -1697,72 +1697,95 @@ END
 
 
         // احضار الابناء الذين ليس لهم ابناء اخر
-        public static DataTable Acc_GetChildren(int ParentAccID)
+        public static DataTable Acc_GetChildren(int ParentTree)
         {
             DataTable? result = dbHelper.ExecuteSelectQuery("Acc_GetLeafChildren", command =>
             {
-                command.Parameters.Add("@ParentAccID", SqlDbType.Int).Value = ParentAccID;
+                command.Parameters.Add("@ParentTree", SqlDbType.Int).Value = ParentTree;
             });
 
             return result ?? new DataTable();
         }
         // إضافة حساب شجرى  []
-        public static string Acc_AddParentAccount(string AccName, int? ParentTreeAccCode, int? CreateByUserID)
+        public static string Acc_AddParentAccount(string AccName, int? ParentTree, int? CreateByUserID)
         {
-            return dbHelper.ExecuteNonQueryWithLogging("Acc_AddParentAccount", command =>
+            return dbHelper.ExecuteStoredProcedureWithOutputMessage("Acc_AddParentAccount", command =>
             {
                 command.Parameters.Add("@AccName", SqlDbType.NVarChar).Value = AccName;
-                command.Parameters.Add("@ParentTreeAccCode", SqlDbType.Int).Value = (object?)ParentTreeAccCode ?? DBNull.Value;
+                command.Parameters.Add("@ParentTree", SqlDbType.Int).Value = (object?)ParentTree ?? DBNull.Value;
                 command.Parameters.Add("@CreateByUserID", SqlDbType.Int).Value = (object?)CreateByUserID ?? DBNull.Value;
-            }, expectMessageOutput: false);
+            });
         }
 
+        /*
+         * 
+         * رسالة الخطأ هى 
+         * The best overload for 'ExecuteStoredProcedureWithOutputMessage' does not have a parameter named 'expectMessageOutput'
+         هذه دالة التى تسدعيها فى كلاس dbHelper
+        فما هو التعارض فى expectMessageOutput 
+               public static string ExecuteStoredProcedureWithOutputMessage(
+            string procedureName,
+            Action<SqlCommand> setParams,
+            int outputMessageSize = 500)
+        {
+            try
+            {
+                EnsureConnectionOpen();
+                string result = "تم التنفيذ.";
+
+                using (SqlCommand cmd = CreateCommand(procedureName))
+                {
+                    // إنشاء باراميتر الإخراج
+                    var msgParam = new SqlParameter("@Message", SqlDbType.NVarChar, outputMessageSize)
+                    {
+                        Direction = ParameterDirection.Output
+                    };
+                    cmd.Parameters.Add(msgParam);
+
+                    // إضافة باقي الباراميترات
+                    setParams?.Invoke(cmd);
+
+                    cmd.ExecuteNonQuery();
+
+                    result = cmd.Parameters["@Message"].Value?.ToString() ?? result;
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("خطأ أثناء التنفيذ: " + ex.Message);
+                return "فشل في التنفيذ.";
+            }
+            finally
+            {
+                EnsureConnectionClosed();
+            }
+        }
+
+
+         */
         // إضافة حساب نهائى  [][]
-        public static string Acc_AddFinalAccount(string AccName, int? ParentTreeAccCode, int? CreateByUserID)
+        public static string Acc_AddFinalAccount(string AccName, int? ParentTree, int? CreateByUserID)
         {
-            return dbHelper.ExecuteNonQueryWithLogging("Acc_AddFinalAccount", command =>
+            return dbHelper.ExecuteStoredProcedureWithOutputMessage("Acc_AddFinalAccount", command =>
             {
                 command.Parameters.Add("@AccName", SqlDbType.NVarChar).Value = AccName;
-                command.Parameters.Add("@ParentTreeAccCode", SqlDbType.Int).Value = (object?)ParentTreeAccCode ?? DBNull.Value;
+                command.Parameters.Add("@ParentTree", SqlDbType.Int).Value = (object?)ParentTree ?? DBNull.Value;
                 command.Parameters.Add("@CreateByUserID", SqlDbType.Int).Value = (object?)CreateByUserID ?? DBNull.Value;
-            }, expectMessageOutput: false);
+            });
         }
-        // إضافة حساب جديد  []
-        public static string Acc_AddAccount(string AccName, int? ParentTreeAccCode, int? CreateByUserID)
+
+        // حذف حساب @TreeAccCode
+        public static string Acc_DeleteAccount(int? TreeAccCode)
         {
-            return dbHelper.ExecuteNonQueryWithLogging("Acc_AddAccount", command =>
+            return dbHelper.ExecuteStoredProcedureWithOutputMessage("Acc_DeleteAccount", command =>
             {
-                command.Parameters.Add("@AccName", SqlDbType.NVarChar).Value = AccName;
-                command.Parameters.Add("@ParentTreeAccCode", SqlDbType.Int).Value = (object?)ParentTreeAccCode ?? DBNull.Value;
-                command.Parameters.Add("@CreateByUserID", SqlDbType.Int).Value = (object?)CreateByUserID ?? DBNull.Value;
-            }, expectMessageOutput: false);
+                command.Parameters.Add("@TreeAccCode", SqlDbType.Int).Value = (object?)TreeAccCode ?? DBNull.Value;
+            });
         }
 
-        public static (int Code, string Message) Acc_DeleteAccount(int treeAccCode)
-        {
-            var parameters = new Dictionary<string, object>
-    {
-        { "@TreeAccCode", treeAccCode }
-    };
-
-            var resultDict = dbHelper.ExecuteNonQueryWithParams(
-                "Acc_DeleteAccount",
-                parameters,
-                expectMessageOutput: true,
-                expectResultCode: true
-            );
-
-            int code = resultDict.ContainsKey("ResultCode")
-                ? (int)resultDict["ResultCode"]
-                : -1;
-
-            string msg = resultDict.ContainsKey("Message")
-                ? resultDict["Message"].ToString() ?? ""
-                : "";
-
-            return (code, msg);
-        }
-
+ 
         // جلب حساب ###
         public static DataTable Acc_GetData(int accID)
         {
