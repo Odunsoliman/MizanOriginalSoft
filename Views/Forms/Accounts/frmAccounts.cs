@@ -49,7 +49,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 if (string.IsNullOrWhiteSpace(accName)) continue;
 
                 string treeCode = row["TreeAccCode"].ToString() ?? string.Empty;
-                string? parentCode = row["ParentAccID"] != DBNull.Value ? row["ParentAccID"].ToString() : null;
+                string? parentCode = row["ParentTree"] != DBNull.Value ? row["ParentTree"].ToString() : null;
 
                 TreeNode node = new TreeNode(accName) { Tag = row };
                 nodeDict[treeCode] = node;
@@ -473,8 +473,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // 🔹 TreeAccCode للحساب المراد حذفه
             int treeAccCode = selectedRow.Field<int>("TreeAccCode");
 
-            // 🔹 نخزن ParentAccID قبل الحذف عشان نرجع له
-            int? parentTreeCode = selectedRow.Field<int?>("ParentAccID");
+            // 🔹 نخزن ParentTree قبل الحذف عشان نرجع له
+            int? parentTreeCode = selectedRow.Field<int?>("ParentTree");
 
             // استدعاء الإجراء المخزن
             var result = DBServiecs.Acc_DeleteAccount(treeAccCode);
@@ -538,8 +538,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // 🔹 TreeAccCode للحساب المراد حذفه
             int treeAccCode = selectedRow.Field<int>("TreeAccCode");
 
-            // 🔹 نخزن ParentAccID قبل الحذف
-            int? parentTreeCode = selectedRow.Field<int?>("ParentAccID");
+            // 🔹 نخزن ParentTree قبل الحذف
+            int? parentTreeCode = selectedRow.Field<int?>("ParentTree");
 
             // 🔹 نحفظ رقم الصف الحالي عشان نحدد الصف التالي بعد الحذف
             int currentRowIndex = DGV.CurrentRow.Index;
@@ -630,10 +630,10 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             if (node?.Tag is DataRow row)
             {
                 int treeAccCode = row.Field<int>("TreeAccCode");
-                int? parentAccID = row.Field<int?>("ParentAccID");
+                int? ParentTree = row.Field<int?>("ParentTree");
 
                 // التحقق إذا كانت عقدة جذرية (ليس لها والد) ورقمها بين 1-5
-                return !parentAccID.HasValue && treeAccCode >= 1 && treeAccCode <= 5;
+                return !ParentTree.HasValue && treeAccCode >= 1 && treeAccCode <= 5;
             }
             return false;
         }
@@ -696,8 +696,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         {
             if (node?.Tag is DataRow row)
             {
-                int? parentAccID = row.Field<int?>("ParentAccID");
-                return !parentAccID.HasValue;
+                int? ParentTree = row.Field<int?>("ParentTree");
+                return !ParentTree.HasValue;
             }
             return false;
         }
