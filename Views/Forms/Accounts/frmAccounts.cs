@@ -481,31 +481,30 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             if (result.Contains("نجاح"))
             {
-                MessageBox.Show("تم حذف حساب الابن بنجاح ✅", "نجاح",
-                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("تم حذف الحساب بنجاح ✅", "نجاح",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // حفظ العقدة المحددة حالياً
-                TreeNode? selectedNode = treeViewAccounts.SelectedNode;
-                int selectedTreeCode = selectedRow.Field<int>("TreeAccCode");
 
-                // إعادة تحميل الشجرة
+                // إعادة تحميل الشجرة بالكامل
                 LoadAccountsTree();
 
-                // البحث عن العقدة الأصلية وفتحها
-                TreeNode? parentNode = FindTreeNodeByTreeCode(selectedTreeCode);
-                if (parentNode != null)
+                // تحديد الأب إن وُجد
+                if (parentTreeCode.HasValue)
                 {
-                    parentNode.Expand();
-                    treeViewAccounts.SelectedNode = parentNode;
-
-                    // تحميل الأبناء في الجريد
-                    LoadChildrenInDGV(parentNode);
+                    TreeNode? parentNode = FindTreeNodeByTreeCode(parentTreeCode.Value);
+                    if (parentNode != null)
+                    {
+                        treeViewAccounts.SelectedNode = parentNode;
+                        parentNode.Expand();
+                        LoadChildrenInDGV(parentNode);
+                    }
                 }
-            }
-            else
-            {
-                MessageBox.Show("فشل في الحذف ❌\n" + result, "خطأ",
-                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                {
+                    // في حال لم يكن له أب (أي أنه كان جذرًا)
+                    treeViewAccounts.SelectedNode = null;
+                    DGV.DataSource = null;
+                }
             }
         }
 
@@ -552,31 +551,36 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             if (result.Contains("نجاح"))
             {
-                MessageBox.Show("تم حذف حساب الاب بنجاح ✅", "نجاح",
-                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("تم حذف الحساب بنجاح ✅", "نجاح",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // حفظ العقدة المحددة حالياً
-                TreeNode? selectedNode = treeViewAccounts.SelectedNode;
-                int selectedTreeCode = selectedRow.Field<int>("TreeAccCode");
+                // العقدة الحالية في الشجرة (الأب)
+                TreeNode? currentParentNode = treeViewAccounts.SelectedNode;
 
-                // إعادة تحميل الشجرة
-                LoadAccountsTree();
-
-                // البحث عن العقدة الأصلية وفتحها
-                TreeNode? parentNode = FindTreeNodeByTreeCode(selectedTreeCode);
-                if (parentNode != null)
+                if (currentParentNode != null)
                 {
-                    parentNode.Expand();
-                    treeViewAccounts.SelectedNode = parentNode;
+                    // إعادة تحميل أبناء العقدة في DGV فقط
+                    LoadChildrenInDGV(currentParentNode);
 
-                    // تحميل الأبناء في الجريد
-                    LoadChildrenInDGV(parentNode);
+                    // محاولة تحديد الصف التالي بعد الحذف
+                    if (DGV.Rows.Count > 0)
+                    {
+                        int newIndex = currentRowIndex;
+                        if (newIndex >= DGV.Rows.Count)
+                            newIndex = DGV.Rows.Count - 1; // لو الحذف كان آخر صف
+
+                        // البحث عن أول عمود ظاهر لتحديد الخلية عليه
+                        DataGridViewColumn? firstVisibleColumn = DGV.Columns
+                            .Cast<DataGridViewColumn>()
+                            .FirstOrDefault(c => c.Visible);
+
+                        if (firstVisibleColumn != null)
+                        {
+                            DGV.CurrentCell = DGV.Rows[newIndex].Cells[firstVisibleColumn.Index];
+                        }
+                    }
+
                 }
-            }
-            else
-            {
-                MessageBox.Show("فشل في الحذف ❌\n" + result, "خطأ",
-                               MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -856,9 +860,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             string result = DBServiecs.Acc_AddParentAccount(accName, parentTreeAccCode, createByUserID);
 
-            if (result.StartsWith("تم"))
+            if (result.Contains ("نجاح"))
             {
-                MessageBox.Show("تم حفظ حساب الفرع الشجرى بنجاح ✅", "نجاح",
+                MessageBox.Show("تم اضافة حساب الفرع الشجرى بنجاح ✅", "نجاح",
                                MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // حفظ العقدة المحددة حالياً
@@ -980,6 +984,235 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         #endregion
 
+        #region !!!!!! تفاصيل الحساب (الأبناء) !!!!!!! 
+
+        // يحدد الصف داخل الـ DGV بناءً على رقم الحساب TreeAccCode.
+        private void HighlightRowByTreeAccCode(int treeAccCode)
+        {
+            if (DGV == null || DGV.Rows.Count == 0) return;
+
+            foreach (DataGridViewRow row in DGV.Rows)
+            {
+                if (row.Cells["TreeAccCode"].Value != null &&
+                    Convert.ToInt32(row.Cells["TreeAccCode"].Value) == treeAccCode)
+                {
+                    row.Selected = true;
+
+                    // 🔹 إيجاد أول عمود ظاهر
+                    DataGridViewColumn? firstVisibleColumn = DGV.Columns
+                        .Cast<DataGridViewColumn>()
+                        .FirstOrDefault(c => c.Visible);
+
+                    if (firstVisibleColumn != null)
+                    {
+                        row.Cells[firstVisibleColumn.Index].Selected = true;
+                        DGV.CurrentCell = row.Cells[firstVisibleColumn.Index];
+                    }
+
+                    // 🔹 يضمن ظهور الصف في الشاشة
+                    DGV.FirstDisplayedScrollingRowIndex = row.Index;
+                    break;
+                }
+            }
+        }
+
+        // عرض سجل تفصيلي معين
+        private void ShowDetail(int index)
+        {
+            if (dtDetails.Rows.Count == 0 || index < 0 || index >= dtDetails.Rows.Count)
+                return;
+
+            DataRow row = dtDetails.Rows[index];
+
+            lblContactName.Text = row["ContactName"]?.ToString() ?? "";
+
+            string phone = row["Phone"]?.ToString() ?? "";
+            string mobile = row["Mobile"]?.ToString() ?? "";
+
+            lblPhonAndAnther.Text = (!string.IsNullOrEmpty(mobile) && !string.IsNullOrEmpty(phone))
+                ? $"هواتف: {mobile} + {phone}"
+                : (!string.IsNullOrEmpty(mobile) ? $"هاتف: {mobile}" : (!string.IsNullOrEmpty(phone) ? $"هاتف: {phone}" : ""));
+
+            lblClientEmail.Text = row["Email"]?.ToString() ?? "";
+            lblClientAddress.Text = row["Address"]?.ToString() ?? "";
+            lblAccDetailNote.Text = row["Notes"]?.ToString() ?? "";
+
+            DateTime? createdDate = row["CreatedDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["CreatedDate"]);
+            DateTime? modifiedDate = row["ModifiedDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["ModifiedDate"]);
+
+            lblCreateAndModifyDate.Text = $"{(createdDate.HasValue ? $"تاريخ الإنشاء: {createdDate:yyyy/MM/dd HH:mm}" : "تاريخ الإنشاء: غير متوفر")}\n" +
+                                          $"{(modifiedDate.HasValue ? $"تاريخ التعديل: {modifiedDate:yyyy/MM/dd HH:mm}" : "تاريخ التعديل: غير متوفر")}";
+        }
+
+        // تنظيف الحقول عند عدم وجود بيانات
+        private void ClearDetailFields()
+        {
+            lblContactName.Text = "";
+            lblPhonAndAnther.Text = "";
+            lblClientEmail.Text = "";
+            lblClientAddress.Text = "";
+            lblAccDetailNote.Text = "";
+            lblCreateAndModifyDate.Text = "";
+        }
+
+        // زر التنقل بين التفاصيل
+        private void btnNextDetail_Click(object sender, EventArgs e)
+        {
+            if (dtDetails == null || dtDetails.Rows.Count == 0)
+            {
+                MessageBox.Show("لا توجد تفاصيل لعرضها", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            currentDetailIndex++;
+            if (currentDetailIndex >= dtDetails.Rows.Count) currentDetailIndex = 0;
+
+            ShowDetail(currentDetailIndex);
+        }
+
+        // زر الإضافة
+        private void btnAddDetail_Click(object sender, EventArgs e)
+        {
+            if (DGV.CurrentRow == null)
+            {
+                MessageBox.Show("يجب تحديد حساب من الجدول قبل إضافة تفاصيل.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DataRowView? rowView = DGV.CurrentRow.DataBoundItem as DataRowView;
+            if (rowView == null) return;
+
+            DataRow row = rowView.Row;
+            int treeAccCode = Convert.ToInt32(row["TreeAccCode"]);
+
+            using (frm_AccountDetailAdd frm = new frm_AccountDetailAdd(treeAccCode))
+            {
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    Acc_GetDetails(treeAccCode);
+                    HighlightRowByTreeAccCode(treeAccCode);
+                }
+            }
+        }
+
+        DataTable dtDetails = new DataTable();
+        int currentDetailIndex = -1;
+
+        // تحميل تفاصيل الحساب لرقم معين
+        private void Acc_GetDetails(int treeAccCode)
+        {
+            dtDetails = DBServiecs.Acc_GetDetails(treeAccCode);
+            currentDetailIndex = dtDetails.Rows.Count > 0 ? 0 : -1;
+
+            if (currentDetailIndex >= 0)
+                ShowDetail(currentDetailIndex);
+            else
+                ClearDetailFields();
+        }
+
+        // زر التعديل
+        private void btnModifyDetail_Click(object sender, EventArgs e)
+        {
+            if (dtDetails == null || dtDetails.Rows.Count == 0 || currentDetailIndex < 0)
+            {
+                MessageBox.Show("⚠️ لا يوجد تفاصيل لتعديلها.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DataRow row = dtDetails.Rows[currentDetailIndex];
+            int treeAccCode = Convert.ToInt32(row["TreeAccCode"]);
+            int detailID = Convert.ToInt32(row["DetailID"]);
+
+            using (frm_AccountDetailAdd frm = new frm_AccountDetailAdd(treeAccCode, detailID))
+            {
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    Acc_GetDetails(treeAccCode);
+                    HighlightRowByTreeAccCode(treeAccCode);
+
+                    for (int i = 0; i < dtDetails.Rows.Count; i++)
+                    {
+                        if (Convert.ToInt32(dtDetails.Rows[i]["DetailID"]) == detailID)
+                        {
+                            currentDetailIndex = i;
+                            ShowDetail(currentDetailIndex);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // زر الحذف
+        private void btnDeleteDetail_Click(object sender, EventArgs e)
+        {
+            if (dtDetails == null || dtDetails.Rows.Count == 0 || currentDetailIndex < 0)
+            {
+                MessageBox.Show("⚠️ لا يوجد تفاصيل للحذف.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DataRow row = dtDetails.Rows[currentDetailIndex];
+            int treeAccCode = Convert.ToInt32(row["TreeAccCode"]);
+            int detailID = Convert.ToInt32(row["DetailID"]);
+
+            var result = MessageBox.Show("هل تريد حذف هذا التفصيل؟", "تأكيد الحذف", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (result == DialogResult.Yes)
+            {
+                string resultMsg = DBServiecs.Acc_DeleteDetails(detailID);
+
+                if (!resultMsg.StartsWith("❌"))
+                {
+                    MessageBox.Show(resultMsg, "تم الحذف", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    Acc_GetDetails(treeAccCode);
+
+                    if (dtDetails.Rows.Count > 0)
+                    {
+                        if (currentDetailIndex >= dtDetails.Rows.Count)
+                            currentDetailIndex = dtDetails.Rows.Count - 1;
+
+                        ShowDetail(currentDetailIndex);
+                    }
+                    else
+                    {
+                        ClearDetailFields();
+                    }
+
+                    HighlightRowByTreeAccCode(treeAccCode);
+                }
+                else
+                {
+                    MessageBox.Show(resultMsg, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+
+
+        // دالة للبحث عن عقدة داخل TreeView باستخدام TreeAccCode
+        private TreeNode? FindNodeByTreeAccCode(TreeNodeCollection nodes, int treeAccCode)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Tag is DataRow row)
+                {
+                    int nodeCode = Convert.ToInt32(row["TreeAccCode"]);
+                    if (nodeCode == treeAccCode)
+                        return node;
+                }
+
+                // البحث في الأبناء بشكل متكرر
+                TreeNode? childResult = FindNodeByTreeAccCode(node.Nodes, treeAccCode);
+                if (childResult != null)
+                    return childResult;
+            }
+
+            return null; // لم يتم العثور على العقدة
+        }
+
+        #endregion
 
 
     }

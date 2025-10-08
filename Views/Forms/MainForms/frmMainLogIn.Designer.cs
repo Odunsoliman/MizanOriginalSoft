@@ -46,7 +46,6 @@
             btn_Accounts = new Button();
             pnlMoreSetting = new Panel();
             btnAppData = new Button();
-            btnAccounts_Old = new Button();
             btnAccounts = new Button();
             lblCoSeprator = new Label();
             btnProdSetting_ = new Button();
@@ -367,7 +366,6 @@
             // 
             pnlMoreSetting.BackColor = Color.Transparent;
             pnlMoreSetting.Controls.Add(btnAppData);
-            pnlMoreSetting.Controls.Add(btnAccounts_Old);
             pnlMoreSetting.Controls.Add(btnAccounts);
             pnlMoreSetting.Controls.Add(lblCoSeprator);
             pnlMoreSetting.Controls.Add(btnProdSetting_);
@@ -388,7 +386,7 @@
             btnAppData.FlatAppearance.BorderSize = 0;
             btnAppData.FlatStyle = FlatStyle.Flat;
             btnAppData.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnAppData.Location = new Point(3, 119);
+            btnAppData.Location = new Point(3, 90);
             btnAppData.Margin = new Padding(3, 2, 3, 2);
             btnAppData.MaximumSize = new Size(0, 29);
             btnAppData.MinimumSize = new Size(0, 29);
@@ -400,25 +398,6 @@
             btnAppData.TextAlign = ContentAlignment.MiddleLeft;
             btnAppData.UseVisualStyleBackColor = true;
             btnAppData.Click += btnAppData_Click;
-            // 
-            // btnAccounts_Old
-            // 
-            btnAccounts_Old.Dock = DockStyle.Top;
-            btnAccounts_Old.FlatAppearance.BorderSize = 0;
-            btnAccounts_Old.FlatStyle = FlatStyle.Flat;
-            btnAccounts_Old.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnAccounts_Old.Location = new Point(3, 90);
-            btnAccounts_Old.Margin = new Padding(3, 2, 3, 2);
-            btnAccounts_Old.MaximumSize = new Size(0, 29);
-            btnAccounts_Old.MinimumSize = new Size(0, 29);
-            btnAccounts_Old.Name = "btnAccounts_Old";
-            btnAccounts_Old.Padding = new Padding(0, 0, 22, 0);
-            btnAccounts_Old.Size = new Size(122, 29);
-            btnAccounts_Old.TabIndex = 10;
-            btnAccounts_Old.Text = "شجرة الحسابات القديمة";
-            btnAccounts_Old.TextAlign = ContentAlignment.MiddleLeft;
-            btnAccounts_Old.UseVisualStyleBackColor = true;
-            btnAccounts_Old.Click += btnAccounts_Old_Click;
             // 
             // btnAccounts
             // 
@@ -1370,7 +1349,6 @@
         private Button btnPOS;
         private Label label1;
         private Button btnAccounts;
-        private Button btnAccounts_Old;
         private Button btnAppData;
     }
 }
