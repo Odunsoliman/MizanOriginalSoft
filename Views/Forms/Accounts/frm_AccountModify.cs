@@ -18,7 +18,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         DataTable dtAccData = new DataTable();
 
         // 🟢 متغيرات داخلية (لا تظهر على الشاشة)
-        int? _parentAccID;
+        int? _parentTree;
         decimal? _balance;
         string? _balanceState;
         DateTime? _dateOfJoin;
@@ -47,7 +47,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             DataRow row = dtAccData.Rows[0];
 
             // 🟢 تخزين الأعمدة في متغيرات
-            _parentAccID = row["ParentAccID"] != DBNull.Value ? Convert.ToInt32(row["ParentAccID"]) : (int?)null;
+            _parentTree = row["ParentTree"] != DBNull.Value ? Convert.ToInt32(row["ParentTree"]) : (int?)null;
             _balance = row["Balance"] != DBNull.Value ? Convert.ToDecimal(row["Balance"]) : (decimal?)null;
             _balanceState = row["BalanceState"] != DBNull.Value ? row["BalanceState"].ToString() : null;
             _dateOfJoin = row["DateOfJoin"] != DBNull.Value ? Convert.ToDateTime(row["DateOfJoin"]) : (DateTime?)null;

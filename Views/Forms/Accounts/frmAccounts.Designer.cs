@@ -507,7 +507,7 @@
             // 
             contextMenuDGV.Name = "contextMenuDGV";
             contextMenuDGV.RightToLeft = RightToLeft.Yes;
-            contextMenuDGV.Size = new Size(181, 26);
+            contextMenuDGV.Size = new Size(61, 4);
             // 
             // tableLayoutPanel13
             // 
@@ -1010,6 +1010,7 @@
             // btnModifyAcc
             // 
             btnModifyAcc.BackColor = Color.Teal;
+            btnModifyAcc.Dock = DockStyle.Fill;
             btnModifyAcc.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
             btnModifyAcc.ForeColor = Color.Yellow;
             btnModifyAcc.Location = new Point(164, 4);
@@ -1023,6 +1024,7 @@
             // btnDeleteAccFromDGV
             // 
             btnDeleteAccFromDGV.BackColor = Color.FromArgb(255, 192, 192);
+            btnDeleteAccFromDGV.Dock = DockStyle.Fill;
             btnDeleteAccFromDGV.Font = new Font("Times New Roman", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnDeleteAccFromDGV.Location = new Point(4, 4);
             btnDeleteAccFromDGV.Margin = new Padding(4);

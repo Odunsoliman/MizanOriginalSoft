@@ -519,40 +519,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 }
             }
 
-
-            //    // استدعاء الإجراء المخزن
-            //    var result = DBServiecs.Acc_DeleteAccount(treeAccCode);
-            //    /*result تعود بعدة رسائل حسب الحالة فى الرفض مع رسالة النجاح 
-            //     ولكن فى هذه الحالة لا ترجع للمستخدم اى رسالة غير النجاح اما باقى الرسائل مع الرفض اى سبب راجع
-            //     */
-            //    if (result.Contains("نجاح"))
-            //    {
-            //        MessageBox.Show("تم حذف الحساب بنجاح ✅", "نجاح",
-            //                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-
-            //        // إعادة تحميل الشجرة بالكامل
-            //        LoadAccountsTree();
-
-            //        // تحديد الأب إن وُجد
-            //        if (parentTreeCode.HasValue)
-            //        {
-            //            TreeNode? parentNode = FindTreeNodeByTreeCode(parentTreeCode.Value);
-            //            if (parentNode != null)
-            //            {
-            //                treeViewAccounts.SelectedNode = parentNode;
-            //                parentNode.Expand();
-            //                LoadChildrenInDGV(parentNode);
-            //            }
-            //        }
-            //        else
-            //        {
-            //            // في حال لم يكن له أب (أي أنه كان جذرًا)
-            //            treeViewAccounts.SelectedNode = null;
-            //            DGV.DataSource = null;
-            //        }
-
-            //    }
         }
 
         // حذف حساب ابن من الجريد
