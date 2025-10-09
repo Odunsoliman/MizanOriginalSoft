@@ -99,9 +99,21 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // 🔹 جلب قائمة الحسابات الأب من قاعدة البيانات
             DataTable dt = DBServiecs.Acc_GetChart();
 
+            // 🔹 إنشاء عمود عرض جديد يحتوي على "اسم الحساب - النوع المحاسبي"
+            if (!dt.Columns.Contains("DisplayText"))
+                dt.Columns.Add("DisplayText", typeof(string));
+
+            foreach (DataRow row in dt.Rows)
+            {
+                string accName = row["AccName"]?.ToString() ?? "";
+                string accType = row["AccTypeName"]?.ToString() ?? "";
+                row["DisplayText"] = $"{accName} - {accType}";
+            }
+
+            // 🔹 إعداد مصدر البيانات
             cbxParentTree.DataSource = dt;
-            cbxParentTree.DisplayMember = "AccName";
-            cbxParentTree.ValueMember = "TreeAccCode"; // ⚠️ يجب أن يكون هذا هو الحقل الذي يتوافق مع ParentTree
+            cbxParentTree.DisplayMember = "DisplayText";
+            cbxParentTree.ValueMember = "TreeAccCode"; // يعتمد على ParentTree في الجدول
             cbxParentTree.DropDownStyle = ComboBoxStyle.DropDownList; // 🔒 منع الكتابة اليدوية
 
             // 🔹 تحديد الحساب الأب الحالي بناءً على الرقم الشجري
