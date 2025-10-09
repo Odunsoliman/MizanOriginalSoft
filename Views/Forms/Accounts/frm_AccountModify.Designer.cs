@@ -34,21 +34,20 @@
             lblDateOfJoin = new Label();
             chkIsHidden = new CheckBox();
             tableLayoutPanel6 = new TableLayoutPanel();
-            lblBalanceAndState = new Label();
-            lblParentTree = new Label();
-            lblCreateByUserName = new Label();
-            chkIsForManger = new CheckBox();
-            chkIsHasDetails = new CheckBox();
-            cbxParentTree = new ComboBox();
             lblTreeAccCode = new Label();
             lblAccTypeID = new Label();
-            lblCreatedByUser = new Label();
+            chkIsForManger = new CheckBox();
+            chkIsHasDetails = new CheckBox();
+            lblParentTree = new Label();
+            lblBalanceAndState = new Label();
+            lblCreateByUserName = new Label();
+            cbxParentTree = new ComboBox();
+            label1 = new Label();
             lblTitetl_Item = new Label();
             tableLayoutPanel16 = new TableLayoutPanel();
             btnSave = new Button();
             btnClose = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
-            label1 = new Label();
             tableLayoutPanel6.SuspendLayout();
             tableLayoutPanel16.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
@@ -124,7 +123,6 @@
             tableLayoutPanel6.Controls.Add(chkIsHidden, 1, 1);
             tableLayoutPanel6.Controls.Add(lblTreeAccCode, 1, 11);
             tableLayoutPanel6.Controls.Add(lblAccTypeID, 1, 12);
-            tableLayoutPanel6.Controls.Add(lblCreatedByUser, 1, 13);
             tableLayoutPanel6.Controls.Add(lblIsEnerAcc, 1, 2);
             tableLayoutPanel6.Controls.Add(chkIsForManger, 1, 3);
             tableLayoutPanel6.Controls.Add(chkIsHasDetails, 1, 4);
@@ -154,42 +152,23 @@
             tableLayoutPanel6.Size = new Size(443, 463);
             tableLayoutPanel6.TabIndex = 93;
             // 
-            // lblBalanceAndState
+            // lblTreeAccCode
             // 
-            lblBalanceAndState.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblBalanceAndState.ForeColor = SystemColors.ActiveCaption;
-            lblBalanceAndState.Location = new Point(4, 198);
-            lblBalanceAndState.Margin = new Padding(4, 0, 4, 0);
-            lblBalanceAndState.Name = "lblBalanceAndState";
-            lblBalanceAndState.Size = new Size(281, 29);
-            lblBalanceAndState.TabIndex = 58;
-            lblBalanceAndState.Text = "الرصيد";
-            lblBalanceAndState.TextAlign = ContentAlignment.MiddleLeft;
+            lblTreeAccCode.AutoSize = true;
+            lblTreeAccCode.Location = new Point(248, 363);
+            lblTreeAccCode.Name = "lblTreeAccCode";
+            lblTreeAccCode.Size = new Size(38, 15);
+            lblTreeAccCode.TabIndex = 78;
+            lblTreeAccCode.Text = "label1";
             // 
-            // lblParentTree
+            // lblAccTypeID
             // 
-            lblParentTree.AutoSize = true;
-            lblParentTree.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblParentTree.ForeColor = SystemColors.ActiveCaption;
-            lblParentTree.Location = new Point(222, 165);
-            lblParentTree.Margin = new Padding(4, 0, 4, 0);
-            lblParentTree.Name = "lblParentTree";
-            lblParentTree.Size = new Size(63, 22);
-            lblParentTree.TabIndex = 58;
-            lblParentTree.Text = "اسم الاب";
-            lblParentTree.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // lblCreateByUserName
-            // 
-            lblCreateByUserName.AutoSize = true;
-            lblCreateByUserName.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
-            lblCreateByUserName.ForeColor = SystemColors.ActiveCaption;
-            lblCreateByUserName.Location = new Point(232, 231);
-            lblCreateByUserName.Name = "lblCreateByUserName";
-            lblCreateByUserName.Size = new Size(54, 22);
-            lblCreateByUserName.TabIndex = 75;
-            lblCreateByUserName.Text = "المنشئ";
-            lblCreateByUserName.TextAlign = ContentAlignment.MiddleLeft;
+            lblAccTypeID.AutoSize = true;
+            lblAccTypeID.Location = new Point(248, 396);
+            lblAccTypeID.Name = "lblAccTypeID";
+            lblAccTypeID.Size = new Size(38, 15);
+            lblAccTypeID.TabIndex = 79;
+            lblAccTypeID.Text = "label1";
             // 
             // chkIsForManger
             // 
@@ -211,6 +190,43 @@
             chkIsHasDetails.Text = "هل توجد تفاصيل للحساب";
             chkIsHasDetails.UseVisualStyleBackColor = true;
             // 
+            // lblParentTree
+            // 
+            lblParentTree.AutoSize = true;
+            lblParentTree.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblParentTree.ForeColor = SystemColors.ActiveCaption;
+            lblParentTree.Location = new Point(222, 165);
+            lblParentTree.Margin = new Padding(4, 0, 4, 0);
+            lblParentTree.Name = "lblParentTree";
+            lblParentTree.Size = new Size(63, 22);
+            lblParentTree.TabIndex = 58;
+            lblParentTree.Text = "اسم الاب";
+            lblParentTree.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // lblBalanceAndState
+            // 
+            lblBalanceAndState.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblBalanceAndState.ForeColor = SystemColors.ActiveCaption;
+            lblBalanceAndState.Location = new Point(4, 198);
+            lblBalanceAndState.Margin = new Padding(4, 0, 4, 0);
+            lblBalanceAndState.Name = "lblBalanceAndState";
+            lblBalanceAndState.Size = new Size(281, 29);
+            lblBalanceAndState.TabIndex = 58;
+            lblBalanceAndState.Text = "الرصيد";
+            lblBalanceAndState.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblCreateByUserName
+            // 
+            lblCreateByUserName.AutoSize = true;
+            lblCreateByUserName.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
+            lblCreateByUserName.ForeColor = SystemColors.ActiveCaption;
+            lblCreateByUserName.Location = new Point(232, 231);
+            lblCreateByUserName.Name = "lblCreateByUserName";
+            lblCreateByUserName.Size = new Size(54, 22);
+            lblCreateByUserName.TabIndex = 75;
+            lblCreateByUserName.Text = "المنشئ";
+            lblCreateByUserName.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // cbxParentTree
             // 
             cbxParentTree.FormattingEnabled = true;
@@ -219,32 +235,17 @@
             cbxParentTree.Size = new Size(121, 23);
             cbxParentTree.TabIndex = 77;
             // 
-            // lblTreeAccCode
+            // label1
             // 
-            lblTreeAccCode.AutoSize = true;
-            lblTreeAccCode.Location = new Point(248, 363);
-            lblTreeAccCode.Name = "lblTreeAccCode";
-            lblTreeAccCode.Size = new Size(38, 15);
-            lblTreeAccCode.TabIndex = 78;
-            lblTreeAccCode.Text = "label1";
-            // 
-            // lblAccTypeID
-            // 
-            lblAccTypeID.AutoSize = true;
-            lblAccTypeID.Location = new Point(248, 396);
-            lblAccTypeID.Name = "lblAccTypeID";
-            lblAccTypeID.Size = new Size(38, 15);
-            lblAccTypeID.TabIndex = 79;
-            lblAccTypeID.Text = "label1";
-            // 
-            // lblCreatedByUser
-            // 
-            lblCreatedByUser.AutoSize = true;
-            lblCreatedByUser.Location = new Point(248, 429);
-            lblCreatedByUser.Name = "lblCreatedByUser";
-            lblCreatedByUser.Size = new Size(38, 15);
-            lblCreatedByUser.TabIndex = 80;
-            lblCreatedByUser.Text = "label3";
+            label1.AutoSize = true;
+            label1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
+            label1.ForeColor = SystemColors.ActiveCaption;
+            label1.Location = new Point(330, 297);
+            label1.Name = "label1";
+            label1.Size = new Size(110, 22);
+            label1.TabIndex = 75;
+            label1.Text = "نقل الى فرع اخر";
+            label1.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblTitetl_Item
             // 
@@ -319,18 +320,6 @@
             tableLayoutPanel1.Size = new Size(449, 587);
             tableLayoutPanel1.TabIndex = 4;
             // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
-            label1.ForeColor = SystemColors.ActiveCaption;
-            label1.Location = new Point(330, 297);
-            label1.Name = "label1";
-            label1.Size = new Size(110, 22);
-            label1.TabIndex = 75;
-            label1.Text = "نقل الى فرع اخر";
-            label1.TextAlign = ContentAlignment.MiddleLeft;
-            // 
             // frm_AccountModify
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -370,7 +359,6 @@
         private ComboBox cbxParentTree;
         private Label lblTreeAccCode;
         private Label lblAccTypeID;
-        private Label lblCreatedByUser;
         private Label label1;
     }
 }
