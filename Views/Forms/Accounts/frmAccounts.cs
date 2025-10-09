@@ -408,6 +408,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             if (DGV.Columns.Contains("BalanceWithState"))
                 DGV.Columns["BalanceWithState"].HeaderText = "الرصيد";
+         
+
 
             // ⑦ تحديد عرض الأعمدة نسبيًا من عرض الـ DGV
             int totalWidth = DGV.ClientRectangle.Width;
@@ -420,6 +422,12 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             if (DGV.Columns.Contains("BalanceWithState"))
                 DGV.Columns["BalanceWithState"].Width = (int)(totalWidth * 0.25);
 
+            if (DGV.Columns.Contains("BalanceWithState"))
+            {
+                DGV.Columns["BalanceWithState"].HeaderText = "الرصيد";
+                DGV.Columns["BalanceWithState"].DefaultCellStyle.Format = "N2"; // عرض برقم عشري بفاصل الآلاف ورقمين عشريين
+                DGV.Columns["BalanceWithState"].Width = (int)(totalWidth * 0.25);
+            }
             // ⑧ تنسيقات عامة
             DGV.Font = new Font("Times New Roman", 12, FontStyle.Bold);
             DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Bold);
