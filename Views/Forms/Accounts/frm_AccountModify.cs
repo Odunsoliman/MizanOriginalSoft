@@ -19,85 +19,74 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         // 🟢 متغيرات داخلية (لا تظهر على الشاشة)
         int? _parentTree;
+        int? _AccTypeID;
         decimal? _balance;
         string? _balanceState;
         DateTime? _dateOfJoin;
         int? _createByUserID;
+        bool? _isEnerAcc;
         bool? _isHasDetails;
-
+        bool? _isForManger;
+        bool? _isHasChildren;
+        bool? _isHidden;
         public frm_AccountModify(int AccID)
         {
             InitializeComponent();
             _accID = AccID;
         }
 
-
         private void frm_AccountModify_Load(object sender, EventArgs e)
         {
-            LoadData();
+            LoadParentAccounts();  // تحميل قائمة الحسابات الأب في ComboBox
+            LoadData();            // تحميل بيانات الحساب الحالي
         }
 
+        private void LoadParentAccounts()
+        {
+
+        }
         private void LoadData()
         {
             dtAccData = DBServiecs.Acc_GetData(_accID);
-
             if (dtAccData.Rows.Count == 0)
                 return;
 
             DataRow row = dtAccData.Rows[0];
 
-            // 🟢 تخزين الأعمدة في متغيرات
+            // 🔹 تخزين البيانات الداخلية
             _parentTree = row["ParentTree"] != DBNull.Value ? Convert.ToInt32(row["ParentTree"]) : (int?)null;
+            _AccTypeID = row["AccTypeID"] != DBNull.Value ? Convert.ToInt32(row["AccTypeID"]) : (int?)null;
             _balance = row["Balance"] != DBNull.Value ? Convert.ToDecimal(row["Balance"]) : (decimal?)null;
-            _balanceState = row["BalanceState"] != DBNull.Value ? row["BalanceState"].ToString() : null;
+            _balanceState = row["BalanceState"]?.ToString();
             _dateOfJoin = row["DateOfJoin"] != DBNull.Value ? Convert.ToDateTime(row["DateOfJoin"]) : (DateTime?)null;
-            _isHasDetails = row["IsHasDetails"] != DBNull.Value ? Convert.ToBoolean(row["IsHasDetails"]) : (Boolean?)null;
+            _createByUserID = row["CreateByUserID"] != DBNull.Value ? Convert.ToInt32(row["CreateByUserID"]) : (int?)null;
+            _isHasDetails = row["IsHasDetails"] != DBNull.Value ? Convert.ToBoolean(row["IsHasDetails"]) : (bool?)null;
+            _isForManger = row["IsForManger"] != DBNull.Value ? Convert.ToBoolean(row["IsForManger"]) : (bool?)null;
+            _isHidden = row["IsHidden"] != DBNull.Value ? Convert.ToBoolean(row["IsHidden"]) : (bool?)null;
 
-            // ✅ عرض الرصيد وحالته في Label واحد
-            Control[] balanceLbls = this.Controls.Find("lblBalanceAndState", true);
-            if (balanceLbls.Length > 0 && balanceLbls[0] is Label lblBal)
-            {
-                string balText = _balance.HasValue ? _balance.Value.ToString("N2") : "0.00";
-                string stateText = !string.IsNullOrEmpty(_balanceState) ? _balanceState : "";
-                lblBal.Text = $"الرصيد: {balText}  {stateText}";
-            }
+            // 🔹 عرض اسم الحساب في TextBox
+            txtAccName.Text = row["AccName"].ToString();
 
-            // ✅ إظهار الأعمدة المطلوبة فقط
-            foreach (DataColumn col in dtAccData.Columns)
-            {
-                string colName = col.ColumnName;
-                object value = row[colName];
+            // 🔹 عرض خصائص التعديل
+            chkIsForManger.Checked = _isForManger ?? false;
+            chkIsHasDetails.Checked = _isHasDetails ?? false;
+            chkIsHidden.Checked = _isHidden ?? false;
 
-                // Label
-                Control[] lbls = this.Controls.Find("lbl" + colName, true);
-                if (lbls.Length > 0 && lbls[0] is Label lbl)
-                    lbl.Text = value?.ToString();
+            // 🔹 عرض الأب في ComboBox
+            if (_parentTree.HasValue)
+                cbxParentTree.SelectedValue = _parentTree.Value;
 
-                // TextBox
-                Control[] txts = this.Controls.Find("txt" + colName, true);
-                if (txts.Length > 0 && txts[0] is TextBox txt)
-                    txt.Text = value?.ToString();
+            // 🔹 عرض الرصيد
+            lblBalanceAndState.Text = $"الرصيد: {_balance:N2} {_balanceState}";
 
-                // CheckBox
-                Control[] chks = this.Controls.Find("chk" + colName, true);
-                if (chks.Length > 0 && chks[0] is CheckBox chk)
-                    chk.Checked = value != DBNull.Value && Convert.ToBoolean(value);
-            }
-
-            // خاصية IsEnerAcc → حساب داخلي أو فارغ
-            if (dtAccData.Columns.Contains("IsEnerAcc"))
-            {
-                object isEnerAcc = row["IsEnerAcc"];
-                Control[] lbls = this.Controls.Find("lblIsEnerAcc", true);
-                if (lbls.Length > 0 && lbls[0] is Label lblEner)
-                {
-                    if (isEnerAcc != DBNull.Value && Convert.ToBoolean(isEnerAcc))
-                        lblEner.Text = "حساب داخلي";
-                    else
-                        lblEner.Text = "";
-                }
-            }
+            // 🔹 معلومات إضافية للعرض فقط
+            lblTreeAccCode.Text = row["TreeAccCode"].ToString();
+            lblAccTypeID.Text = row["AccTypeID"].ToString();
+            lblCreateByUserID.Text = row["CreateByUserID"].ToString();
+            lblDateOfJoin.Text = _dateOfJoin?.ToShortDateString();
         }
+
+
 
         public int UpdatedAccID { get; private set; }
 
@@ -130,5 +119,30 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         }
 
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this .Close();
+        }
     }
 }
+/*
+
+SELECT [AccID]              عرض
+,[IsEnerAcc]          عرض          
+,[TreeAccCode]        عرض
+,[AccName]            للتعديل
+,[ParentTree]         لتغير الاب من خلال كمبوبكس
+,[IsForManger]        للتعديل
+,[IsHasDetails]       للتعديل
+,[IsHasChildren]      عرض
+,[AccTypeID]          عرض
+,[CreateByUserID]     عرض
+,[Balance]            عرض
+,[BalanceState]       عرض
+,[IsHidden]           للتعديل
+,[DateOfJoin]         عرض
+FROM [dbo].[Accounts]
+الدالة DBServiecs.Acc_GetData(_accID); تجلب كل الحقول السابقة
+فكيف السيناريو لعرض كل كل هذه الحقول لتعديلها من من خلال الشاشة
+
+ */
