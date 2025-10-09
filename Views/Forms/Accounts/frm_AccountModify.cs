@@ -37,14 +37,10 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void frm_AccountModify_Load(object sender, EventArgs e)
         {
-            LoadParentAccounts();  // تحميل قائمة الحسابات الأب في ComboBox
             LoadData();            // تحميل بيانات الحساب الحالي
         }
 
-        private void LoadParentAccounts()
-        {
 
-        }
         private void LoadData()
         {
             // 🔹 جلب البيانات من الإجراء المخزن
@@ -83,10 +79,10 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // 🔹 عرض خصائص التعديل (قيم منطقية فقط)
             chkIsHasDetails.Checked = row["IsHasDetails"] != DBNull.Value && Convert.ToBoolean(row["IsHasDetails"]);
         
-                // 🔹 عرض المعلومات النصية الجاهزة من SQL
-                lblTreeAccCode.Text = row["TreeAccCode"].ToString();     // الترقيم الشجري
+            lblTreeAccCode.Text = row["TreeAccCode"].ToString();     // الترقيم الشجري
             lblAccTypeID.Text = row["Acc_TypeName"].ToString();    // النوع المحاسبي
-            lblParentTree.Text = row["ParentTree"].ToString();      // اسم الأب
+            lblParentTree.Text = row["ParentTreeName"].ToString();      // اسم الأب
+            _parentTree=row["ParentTree"] != DBNull.Value ? Convert.ToInt32(row["ParentTree"]) : (int?)null;
             lblCreateByUserName.Text = "أنشئ بواسطة   "+ row["UserName"].ToString();        // أنشئ بواسطة
             lblBalanceAndState.Text = row["Balance"].ToString();         // الرصيد الآن: xxx دائن
             lblDateOfJoin.Text = row["DateOfJoin"].ToString();      // تاريخ الإنشاء: yyyy-mm-dd
@@ -94,9 +90,30 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // 🔹 لا حاجة لتحويل القيم الداخلية بعد الآن، لأنها أصبحت نصوصًا جاهزة
             // ولكن يمكنك تخزين قيم مهمة داخليًا إن أردت (اختياري)
             _AccTypeID = row["AccTypeID"] != DBNull.Value ? Convert.ToInt32(row["AccTypeID"]) : (int?)null;
+            LoadParentAccounts();  // تحميل قائمة الحسابات الأب في ComboBox
+
         }
 
+        private void LoadParentAccounts()
+        {
+            // 🔹 جلب قائمة الحسابات الأب من قاعدة البيانات
+            DataTable dt = DBServiecs.Acc_GetChart();
 
+            cbxParentTree.DataSource = dt;
+            cbxParentTree.DisplayMember = "AccName";
+            cbxParentTree.ValueMember = "TreeAccCode"; // ⚠️ يجب أن يكون هذا هو الحقل الذي يتوافق مع ParentTree
+            cbxParentTree.DropDownStyle = ComboBoxStyle.DropDownList; // 🔒 منع الكتابة اليدوية
+
+            // 🔹 تحديد الحساب الأب الحالي بناءً على الرقم الشجري
+            if (_parentTree.HasValue)
+            {
+                cbxParentTree.SelectedValue = _parentTree.Value;
+            }
+            else
+            {
+                cbxParentTree.SelectedIndex = -1; // لا يوجد أب
+            }
+        }
 
         public int UpdatedAccID { get; private set; }
 

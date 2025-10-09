@@ -62,7 +62,7 @@
             lblIsEnerAcc.Location = new Point(4, 76);
             lblIsEnerAcc.Margin = new Padding(4, 0, 4, 0);
             lblIsEnerAcc.Name = "lblIsEnerAcc";
-            lblIsEnerAcc.Size = new Size(281, 38);
+            lblIsEnerAcc.Size = new Size(275, 38);
             lblIsEnerAcc.TabIndex = 58;
             lblIsEnerAcc.Text = "هل حساب داخلى";
             lblIsEnerAcc.TextAlign = ContentAlignment.MiddleLeft;
@@ -73,11 +73,11 @@
             label2.Dock = DockStyle.Fill;
             label2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label2.ForeColor = Color.FromArgb(0, 0, 192);
-            label2.Location = new Point(293, 0);
+            label2.Location = new Point(287, 0);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Padding = new Padding(0, 0, 20, 0);
-            label2.Size = new Size(146, 38);
+            label2.Size = new Size(142, 38);
             label2.TabIndex = 54;
             label2.Text = "اسم  الحساب";
             label2.TextAlign = ContentAlignment.MiddleLeft;
@@ -90,7 +90,7 @@
             txtAccName.Location = new Point(4, 4);
             txtAccName.Margin = new Padding(4);
             txtAccName.Name = "txtAccName";
-            txtAccName.Size = new Size(281, 29);
+            txtAccName.Size = new Size(275, 29);
             txtAccName.TabIndex = 47;
             txtAccName.TextAlign = HorizontalAlignment.Center;
             // 
@@ -102,7 +102,7 @@
             lblDateOfJoin.ForeColor = SystemColors.ActiveCaption;
             lblDateOfJoin.Location = new Point(3, 380);
             lblDateOfJoin.Name = "lblDateOfJoin";
-            lblDateOfJoin.Size = new Size(283, 38);
+            lblDateOfJoin.Size = new Size(277, 38);
             lblDateOfJoin.TabIndex = 75;
             lblDateOfJoin.Text = "التاريخ";
             lblDateOfJoin.TextAlign = ContentAlignment.MiddleLeft;
@@ -115,7 +115,7 @@
             chkIsHidden.ForeColor = Color.FromArgb(0, 0, 192);
             chkIsHidden.Location = new Point(3, 41);
             chkIsHidden.Name = "chkIsHidden";
-            chkIsHidden.Size = new Size(283, 32);
+            chkIsHidden.Size = new Size(277, 32);
             chkIsHidden.TabIndex = 73;
             chkIsHidden.Text = "حساب مخفى";
             chkIsHidden.UseVisualStyleBackColor = true;
@@ -156,7 +156,7 @@
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
-            tableLayoutPanel6.Size = new Size(443, 463);
+            tableLayoutPanel6.Size = new Size(433, 463);
             tableLayoutPanel6.TabIndex = 93;
             // 
             // chkIsForManger
@@ -167,7 +167,7 @@
             chkIsForManger.ForeColor = Color.FromArgb(0, 0, 192);
             chkIsForManger.Location = new Point(3, 117);
             chkIsForManger.Name = "chkIsForManger";
-            chkIsForManger.Size = new Size(283, 32);
+            chkIsForManger.Size = new Size(277, 32);
             chkIsForManger.TabIndex = 76;
             chkIsForManger.Text = "خاص بالاداريين";
             chkIsForManger.UseVisualStyleBackColor = true;
@@ -180,7 +180,7 @@
             chkIsHasDetails.ForeColor = Color.FromArgb(0, 0, 192);
             chkIsHasDetails.Location = new Point(3, 155);
             chkIsHasDetails.Name = "chkIsHasDetails";
-            chkIsHasDetails.Size = new Size(283, 32);
+            chkIsHasDetails.Size = new Size(277, 32);
             chkIsHasDetails.TabIndex = 76;
             chkIsHasDetails.Text = "هل توجد تفاصيل للحساب";
             chkIsHasDetails.UseVisualStyleBackColor = true;
@@ -194,7 +194,7 @@
             lblParentTree.Location = new Point(4, 190);
             lblParentTree.Margin = new Padding(4, 0, 4, 0);
             lblParentTree.Name = "lblParentTree";
-            lblParentTree.Size = new Size(281, 38);
+            lblParentTree.Size = new Size(275, 38);
             lblParentTree.TabIndex = 58;
             lblParentTree.Text = "اسم الاب";
             lblParentTree.TextAlign = ContentAlignment.MiddleLeft;
@@ -207,7 +207,7 @@
             lblCreateByUserName.ForeColor = SystemColors.ActiveCaption;
             lblCreateByUserName.Location = new Point(3, 418);
             lblCreateByUserName.Name = "lblCreateByUserName";
-            lblCreateByUserName.Size = new Size(283, 45);
+            lblCreateByUserName.Size = new Size(277, 45);
             lblCreateByUserName.TabIndex = 75;
             lblCreateByUserName.Text = "المنشئ";
             lblCreateByUserName.TextAlign = ContentAlignment.MiddleLeft;
@@ -220,7 +220,7 @@
             lblBalanceAndState.Location = new Point(4, 342);
             lblBalanceAndState.Margin = new Padding(4, 0, 4, 0);
             lblBalanceAndState.Name = "lblBalanceAndState";
-            lblBalanceAndState.Size = new Size(281, 38);
+            lblBalanceAndState.Size = new Size(275, 38);
             lblBalanceAndState.TabIndex = 58;
             lblBalanceAndState.Text = "الرصيد";
             lblBalanceAndState.TextAlign = ContentAlignment.MiddleLeft;
@@ -233,7 +233,7 @@
             lblTreeAccCode.ForeColor = SystemColors.ActiveCaption;
             lblTreeAccCode.Location = new Point(3, 304);
             lblTreeAccCode.Name = "lblTreeAccCode";
-            lblTreeAccCode.Size = new Size(283, 38);
+            lblTreeAccCode.Size = new Size(277, 38);
             lblTreeAccCode.TabIndex = 75;
             lblTreeAccCode.Text = "الترقيم الشجرى";
             lblTreeAccCode.TextAlign = ContentAlignment.MiddleLeft;
@@ -246,7 +246,7 @@
             cbxParentTree.FormattingEnabled = true;
             cbxParentTree.Location = new Point(3, 269);
             cbxParentTree.Name = "cbxParentTree";
-            cbxParentTree.Size = new Size(283, 28);
+            cbxParentTree.Size = new Size(277, 28);
             cbxParentTree.TabIndex = 77;
             // 
             // label1
@@ -255,9 +255,9 @@
             label1.Dock = DockStyle.Fill;
             label1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
             label1.ForeColor = SystemColors.ActiveCaption;
-            label1.Location = new Point(292, 228);
+            label1.Location = new Point(286, 228);
             label1.Name = "label1";
-            label1.Size = new Size(148, 38);
+            label1.Size = new Size(144, 38);
             label1.TabIndex = 75;
             label1.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -267,11 +267,11 @@
             label3.Dock = DockStyle.Fill;
             label3.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label3.ForeColor = Color.FromArgb(0, 0, 192);
-            label3.Location = new Point(293, 266);
+            label3.Location = new Point(287, 266);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Padding = new Padding(0, 0, 20, 0);
-            label3.Size = new Size(146, 38);
+            label3.Size = new Size(142, 38);
             label3.TabIndex = 54;
             label3.Text = "نقل الى فرع اخر";
             label3.TextAlign = ContentAlignment.MiddleLeft;
@@ -284,7 +284,7 @@
             lblAccTypeID.ForeColor = SystemColors.ActiveCaption;
             lblAccTypeID.Location = new Point(3, 228);
             lblAccTypeID.Name = "lblAccTypeID";
-            lblAccTypeID.Size = new Size(283, 38);
+            lblAccTypeID.Size = new Size(277, 38);
             lblAccTypeID.TabIndex = 75;
             lblAccTypeID.Text = "نوع محاسبى";
             lblAccTypeID.TextAlign = ContentAlignment.MiddleLeft;
@@ -298,7 +298,7 @@
             lblTitetl_Item.Location = new Point(4, 0);
             lblTitetl_Item.Margin = new Padding(4, 0, 4, 0);
             lblTitetl_Item.Name = "lblTitetl_Item";
-            lblTitetl_Item.Size = new Size(441, 29);
+            lblTitetl_Item.Size = new Size(431, 29);
             lblTitetl_Item.TabIndex = 96;
             lblTitetl_Item.Text = "تعديل حساب";
             lblTitetl_Item.TextAlign = ContentAlignment.MiddleCenter;
@@ -317,7 +317,7 @@
             tableLayoutPanel16.Name = "tableLayoutPanel16";
             tableLayoutPanel16.RowCount = 1;
             tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel16.Size = new Size(443, 83);
+            tableLayoutPanel16.Size = new Size(433, 83);
             tableLayoutPanel16.TabIndex = 92;
             // 
             // btnSave
@@ -329,7 +329,7 @@
             btnSave.Location = new Point(4, 4);
             btnSave.Margin = new Padding(4);
             btnSave.Name = "btnSave";
-            btnSave.Size = new Size(215, 75);
+            btnSave.Size = new Size(210, 75);
             btnSave.TabIndex = 83;
             btnSave.Text = "حفــظ";
             btnSave.UseVisualStyleBackColor = false;
@@ -340,10 +340,10 @@
             btnClose.BackColor = Color.Yellow;
             btnClose.Dock = DockStyle.Fill;
             btnClose.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnClose.Location = new Point(373, 4);
+            btnClose.Location = new Point(365, 4);
             btnClose.Margin = new Padding(4);
             btnClose.Name = "btnClose";
-            btnClose.Size = new Size(66, 75);
+            btnClose.Size = new Size(64, 75);
             btnClose.TabIndex = 73;
             btnClose.TabStop = false;
             btnClose.Text = "اغلاق";
@@ -358,13 +358,13 @@
             tableLayoutPanel1.Controls.Add(lblTitetl_Item, 0, 0);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel6, 0, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Location = new Point(10, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 3;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 4.940375F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 79.89779F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 15F));
-            tableLayoutPanel1.Size = new Size(449, 587);
+            tableLayoutPanel1.Size = new Size(439, 587);
             tableLayoutPanel1.TabIndex = 4;
             // 
             // frm_AccountModify
@@ -374,6 +374,7 @@
             ClientSize = new Size(449, 587);
             Controls.Add(tableLayoutPanel1);
             Name = "frm_AccountModify";
+            Padding = new Padding(10, 0, 0, 0);
             RightToLeft = RightToLeft.Yes;
             Text = "تعديل حساب";
             Load += frm_AccountModify_Load;
