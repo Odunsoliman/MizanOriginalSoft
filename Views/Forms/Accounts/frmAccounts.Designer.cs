@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             tlpBody = new TableLayoutPanel();
             tableLayoutPanel18 = new TableLayoutPanel();
             label15 = new Label();
@@ -494,8 +494,8 @@
             DGV.ReadOnly = true;
             DGV.RowHeadersVisible = false;
             DGV.RowHeadersWidth = 51;
-            dataGridViewCellStyle1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DGV.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DGV.RowsDefaultCellStyle = dataGridViewCellStyle2;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DGV.Size = new Size(469, 384);
             DGV.TabIndex = 72;
@@ -813,15 +813,15 @@
             // 
             tlpShowMainData.ColumnCount = 1;
             tlpShowMainData.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tlpShowMainData.Controls.Add(lblTotalBalnceState, 0, 2);
+            tlpShowMainData.Controls.Add(lblTotalBalnceState, 0, 1);
             tlpShowMainData.Controls.Add(lblPathNode, 0, 0);
             tlpShowMainData.Dock = DockStyle.Top;
             tlpShowMainData.Location = new Point(3, 39);
             tlpShowMainData.Name = "tlpShowMainData";
-            tlpShowMainData.RowCount = 3;
-            tlpShowMainData.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-            tlpShowMainData.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-            tlpShowMainData.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+            tlpShowMainData.RowCount = 2;
+            tlpShowMainData.RowStyles.Add(new RowStyle(SizeType.Percent, 70F));
+            tlpShowMainData.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
+            tlpShowMainData.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tlpShowMainData.Size = new Size(339, 82);
             tlpShowMainData.TabIndex = 97;
             // 
@@ -831,10 +831,10 @@
             lblTotalBalnceState.Dock = DockStyle.Fill;
             lblTotalBalnceState.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTotalBalnceState.ForeColor = SystemColors.ActiveCaption;
-            lblTotalBalnceState.Location = new Point(4, 54);
+            lblTotalBalnceState.Location = new Point(4, 57);
             lblTotalBalnceState.Margin = new Padding(4, 0, 4, 0);
             lblTotalBalnceState.Name = "lblTotalBalnceState";
-            lblTotalBalnceState.Size = new Size(331, 28);
+            lblTotalBalnceState.Size = new Size(331, 25);
             lblTotalBalnceState.TabIndex = 61;
             lblTotalBalnceState.Text = "-";
             lblTotalBalnceState.TextAlign = ContentAlignment.MiddleLeft;
@@ -848,7 +848,7 @@
             lblPathNode.Location = new Point(4, 0);
             lblPathNode.Margin = new Padding(4, 0, 4, 0);
             lblPathNode.Name = "lblPathNode";
-            lblPathNode.Size = new Size(331, 27);
+            lblPathNode.Size = new Size(331, 57);
             lblPathNode.TabIndex = 59;
             lblPathNode.Text = "-";
             lblPathNode.TextAlign = ContentAlignment.MiddleLeft;
