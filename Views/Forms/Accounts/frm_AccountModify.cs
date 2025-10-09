@@ -57,12 +57,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             // 🔹 عرض اسم الحساب
             txtAccName.Text = row["AccName"].ToString();
-
-            // 🔹 عرض خصائص التعديل (قيم منطقية فقط)
-            chkIsForManger.Checked = row["IsForManger"] != DBNull.Value && Convert.ToBoolean(row["IsForManger"]);
-            chkIsHasDetails.Checked = row["IsHasDetails"] != DBNull.Value && Convert.ToBoolean(row["IsHasDetails"]);
             chkIsHidden.Checked = row["IsHidden"] != DBNull.Value && Convert.ToBoolean(row["IsHidden"]);
-            if (chkIsHidden.Checked )
+            if (chkIsHidden.Checked)
             {
                 chkIsHidden.Text = "الحساب غير فعال";
             }
@@ -70,7 +66,12 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             {
                 chkIsHidden.Text = "الحساب  فعال";
             }
+            lblIsEnerAcc .Text = row["IsEnerAcc"].ToString();     // هل الرقم داخلى ام تشغيلى
 
+            // 🔹 عرض خصائص التعديل (قيم منطقية فقط)
+            chkIsForManger.Checked = row["IsForManger"] != DBNull.Value && Convert.ToBoolean(row["IsForManger"]);
+            chkIsHasDetails.Checked = row["IsHasDetails"] != DBNull.Value && Convert.ToBoolean(row["IsHasDetails"]);
+        
                 // 🔹 عرض المعلومات النصية الجاهزة من SQL
                 lblTreeAccCode.Text = row["TreeAccCode"].ToString();     // الترقيم الشجري
             lblAccTypeID.Text = row["Acc_TypeName"].ToString();    // النوع المحاسبي

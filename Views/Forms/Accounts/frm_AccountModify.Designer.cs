@@ -59,7 +59,7 @@
             // 
             lblIsEnerAcc.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblIsEnerAcc.ForeColor = SystemColors.ActiveCaption;
-            lblIsEnerAcc.Location = new Point(4, 58);
+            lblIsEnerAcc.Location = new Point(4, 66);
             lblIsEnerAcc.Margin = new Padding(4, 0, 4, 0);
             lblIsEnerAcc.Name = "lblIsEnerAcc";
             lblIsEnerAcc.Size = new Size(318, 29);
@@ -96,7 +96,7 @@
             lblDateOfJoin.AutoSize = true;
             lblDateOfJoin.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
             lblDateOfJoin.ForeColor = SystemColors.ActiveCaption;
-            lblDateOfJoin.Location = new Point(272, 116);
+            lblDateOfJoin.Location = new Point(272, 132);
             lblDateOfJoin.Name = "lblDateOfJoin";
             lblDateOfJoin.Size = new Size(51, 22);
             lblDateOfJoin.TabIndex = 75;
@@ -108,9 +108,9 @@
             chkIsHidden.AutoSize = true;
             chkIsHidden.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
             chkIsHidden.ForeColor = Color.FromArgb(0, 0, 192);
-            chkIsHidden.Location = new Point(216, 32);
+            chkIsHidden.Location = new Point(216, 36);
             chkIsHidden.Name = "chkIsHidden";
-            chkIsHidden.Size = new Size(107, 23);
+            chkIsHidden.Size = new Size(107, 26);
             chkIsHidden.TabIndex = 73;
             chkIsHidden.Text = "حساب مخفى";
             chkIsHidden.UseVisualStyleBackColor = true;
@@ -136,7 +136,7 @@
             tableLayoutPanel6.Controls.Add(lblAccTypeID, 1, 12);
             tableLayoutPanel6.Controls.Add(lblCreatedByUser, 1, 13);
             tableLayoutPanel6.Controls.Add(lblIsEnerAcc, 1, 2);
-            tableLayoutPanel6.Location = new Point(3, 61);
+            tableLayoutPanel6.Location = new Point(3, 32);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
             tableLayoutPanel6.RowCount = 14;
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
@@ -153,14 +153,14 @@
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
-            tableLayoutPanel6.Size = new Size(443, 415);
+            tableLayoutPanel6.Size = new Size(443, 463);
             tableLayoutPanel6.TabIndex = 93;
             // 
             // lblBalanceAndState
             // 
             lblBalanceAndState.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblBalanceAndState.ForeColor = SystemColors.ActiveCaption;
-            lblBalanceAndState.Location = new Point(4, 203);
+            lblBalanceAndState.Location = new Point(4, 231);
             lblBalanceAndState.Margin = new Padding(4, 0, 4, 0);
             lblBalanceAndState.Name = "lblBalanceAndState";
             lblBalanceAndState.Size = new Size(318, 29);
@@ -173,7 +173,7 @@
             lblParentTree.AutoSize = true;
             lblParentTree.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblParentTree.ForeColor = SystemColors.ActiveCaption;
-            lblParentTree.Location = new Point(376, 116);
+            lblParentTree.Location = new Point(376, 132);
             lblParentTree.Margin = new Padding(4, 0, 4, 0);
             lblParentTree.Name = "lblParentTree";
             lblParentTree.Size = new Size(63, 22);
@@ -186,7 +186,7 @@
             lblCreateByUserName.AutoSize = true;
             lblCreateByUserName.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
             lblCreateByUserName.ForeColor = SystemColors.ActiveCaption;
-            lblCreateByUserName.Location = new Point(269, 145);
+            lblCreateByUserName.Location = new Point(269, 165);
             lblCreateByUserName.Name = "lblCreateByUserName";
             lblCreateByUserName.Size = new Size(54, 22);
             lblCreateByUserName.TabIndex = 75;
@@ -198,7 +198,7 @@
             label6.AutoSize = true;
             label6.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label6.ForeColor = SystemColors.ActiveCaption;
-            label6.Location = new Point(359, 145);
+            label6.Location = new Point(359, 165);
             label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
             label6.Size = new Size(80, 22);
@@ -211,7 +211,7 @@
             lblAccountPath.AutoSize = true;
             lblAccountPath.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
             lblAccountPath.ForeColor = SystemColors.ActiveCaption;
-            lblAccountPath.Location = new Point(273, 174);
+            lblAccountPath.Location = new Point(273, 198);
             lblAccountPath.Name = "lblAccountPath";
             lblAccountPath.Size = new Size(50, 22);
             lblAccountPath.TabIndex = 75;
@@ -221,7 +221,7 @@
             // chkIsForManger
             // 
             chkIsForManger.AutoSize = true;
-            chkIsForManger.Location = new Point(223, 235);
+            chkIsForManger.Location = new Point(223, 267);
             chkIsForManger.Name = "chkIsForManger";
             chkIsForManger.Size = new Size(100, 19);
             chkIsForManger.TabIndex = 76;
@@ -231,7 +231,7 @@
             // chkIsHasDetails
             // 
             chkIsHasDetails.AutoSize = true;
-            chkIsHasDetails.Location = new Point(173, 264);
+            chkIsHasDetails.Location = new Point(173, 300);
             chkIsHasDetails.Name = "chkIsHasDetails";
             chkIsHasDetails.Size = new Size(150, 19);
             chkIsHasDetails.TabIndex = 76;
@@ -241,7 +241,7 @@
             // cbxParentTree
             // 
             cbxParentTree.FormattingEnabled = true;
-            cbxParentTree.Location = new Point(202, 293);
+            cbxParentTree.Location = new Point(202, 333);
             cbxParentTree.Name = "cbxParentTree";
             cbxParentTree.Size = new Size(121, 23);
             cbxParentTree.TabIndex = 77;
@@ -249,7 +249,7 @@
             // lblTreeAccCode
             // 
             lblTreeAccCode.AutoSize = true;
-            lblTreeAccCode.Location = new Point(285, 319);
+            lblTreeAccCode.Location = new Point(285, 363);
             lblTreeAccCode.Name = "lblTreeAccCode";
             lblTreeAccCode.Size = new Size(38, 15);
             lblTreeAccCode.TabIndex = 78;
@@ -258,7 +258,7 @@
             // lblAccTypeID
             // 
             lblAccTypeID.AutoSize = true;
-            lblAccTypeID.Location = new Point(285, 348);
+            lblAccTypeID.Location = new Point(285, 396);
             lblAccTypeID.Name = "lblAccTypeID";
             lblAccTypeID.Size = new Size(38, 15);
             lblAccTypeID.TabIndex = 79;
@@ -267,7 +267,7 @@
             // lblCreatedByUser
             // 
             lblCreatedByUser.AutoSize = true;
-            lblCreatedByUser.Location = new Point(285, 377);
+            lblCreatedByUser.Location = new Point(285, 429);
             lblCreatedByUser.Name = "lblCreatedByUser";
             lblCreatedByUser.Size = new Size(38, 15);
             lblCreatedByUser.TabIndex = 80;
@@ -340,8 +340,8 @@
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 75F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 4.940375F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 79.89779F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 15F));
             tableLayoutPanel1.Size = new Size(449, 587);
             tableLayoutPanel1.TabIndex = 4;
