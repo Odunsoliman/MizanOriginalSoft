@@ -67,16 +67,16 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 chkIsHidden.Text = "الحساب  فعال";
             }
             lblIsEnerAcc .Text = row["IsEnerAcc"].ToString();     // هل الرقم داخلى ام تشغيلى
+            chkIsForManger.Checked = row["IsForManger"] != DBNull.Value && Convert.ToBoolean(row["IsForManger"]);
 
             // 🔹 عرض خصائص التعديل (قيم منطقية فقط)
-            chkIsForManger.Checked = row["IsForManger"] != DBNull.Value && Convert.ToBoolean(row["IsForManger"]);
             chkIsHasDetails.Checked = row["IsHasDetails"] != DBNull.Value && Convert.ToBoolean(row["IsHasDetails"]);
         
                 // 🔹 عرض المعلومات النصية الجاهزة من SQL
                 lblTreeAccCode.Text = row["TreeAccCode"].ToString();     // الترقيم الشجري
             lblAccTypeID.Text = row["Acc_TypeName"].ToString();    // النوع المحاسبي
             lblParentTree.Text = row["ParentTree"].ToString();      // اسم الأب
-            lblCreatedByUser.Text = row["UserName"].ToString();        // أنشئ بواسطة
+            lblCreatedByUser.Text = "أنشئ بواسطة: "+ row["UserName"].ToString();        // أنشئ بواسطة
             lblBalanceAndState.Text = row["Balance"].ToString();         // الرصيد الآن: xxx دائن
             lblDateOfJoin.Text = row["DateOfJoin"].ToString();      // تاريخ الإنشاء: yyyy-mm-dd
 
