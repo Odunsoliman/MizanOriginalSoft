@@ -56,11 +56,13 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             {
                 cbxParentTree .Enabled = true ;
                 chkIsHidden.Enabled = true ;
+                lblCBX .Visible = true ;
             }
             else
             {
                 cbxParentTree .Enabled = false ;
                 chkIsHidden.Enabled = false ;
+                lblCBX .Visible = false ;
             }
                 // 🔹 عرض اسم الحساب
                 txtAccName.Text = row["AccName"].ToString();

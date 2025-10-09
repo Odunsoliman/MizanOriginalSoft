@@ -42,7 +42,7 @@
             lblTreeAccCode = new Label();
             cbxParentTree = new ComboBox();
             label1 = new Label();
-            label3 = new Label();
+            lblCBX = new Label();
             lblAccTypeID = new Label();
             lblTitetl_Item = new Label();
             tableLayoutPanel16 = new TableLayoutPanel();
@@ -139,7 +139,7 @@
             tableLayoutPanel6.Controls.Add(lblTreeAccCode, 1, 8);
             tableLayoutPanel6.Controls.Add(cbxParentTree, 1, 7);
             tableLayoutPanel6.Controls.Add(label1, 0, 6);
-            tableLayoutPanel6.Controls.Add(label3, 0, 7);
+            tableLayoutPanel6.Controls.Add(lblCBX, 0, 7);
             tableLayoutPanel6.Controls.Add(lblAccTypeID, 1, 6);
             tableLayoutPanel6.Dock = DockStyle.Fill;
             tableLayoutPanel6.ForeColor = Color.Black;
@@ -263,20 +263,20 @@
             label1.TabIndex = 75;
             label1.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label3
+            // lblCBX
             // 
-            label3.AutoSize = true;
-            label3.Dock = DockStyle.Fill;
-            label3.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.ForeColor = Color.FromArgb(0, 0, 192);
-            label3.Location = new Point(287, 266);
-            label3.Margin = new Padding(4, 0, 4, 0);
-            label3.Name = "label3";
-            label3.Padding = new Padding(0, 0, 20, 0);
-            label3.Size = new Size(142, 38);
-            label3.TabIndex = 54;
-            label3.Text = "نقل الى فرع اخر";
-            label3.TextAlign = ContentAlignment.MiddleLeft;
+            lblCBX.AutoSize = true;
+            lblCBX.Dock = DockStyle.Fill;
+            lblCBX.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblCBX.ForeColor = Color.FromArgb(0, 0, 192);
+            lblCBX.Location = new Point(287, 266);
+            lblCBX.Margin = new Padding(4, 0, 4, 0);
+            lblCBX.Name = "lblCBX";
+            lblCBX.Padding = new Padding(0, 0, 20, 0);
+            lblCBX.Size = new Size(142, 38);
+            lblCBX.TabIndex = 54;
+            lblCBX.Text = "نقل الى فرع اخر";
+            lblCBX.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblAccTypeID
             // 
@@ -408,7 +408,7 @@
         private CheckBox chkIsHasDetails;
         private ComboBox cbxParentTree;
         private Label lblAccTypeIDlblAccTypeID;
-        private Label label3;
+        private Label lblCBX;
         private Label label1;
         private Label lblTreeAccCode;
         private Label lblAccTypeID;
