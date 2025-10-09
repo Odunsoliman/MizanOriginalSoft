@@ -122,6 +122,7 @@
             // 
             // tableLayoutPanel6
             // 
+            tableLayoutPanel6.BackColor = SystemColors.Control;
             tableLayoutPanel6.ColumnCount = 2;
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 34.76298F));
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65.23702F));
@@ -141,6 +142,7 @@
             tableLayoutPanel6.Controls.Add(label3, 0, 7);
             tableLayoutPanel6.Controls.Add(lblAccTypeID, 1, 6);
             tableLayoutPanel6.Dock = DockStyle.Fill;
+            tableLayoutPanel6.ForeColor = Color.Black;
             tableLayoutPanel6.Location = new Point(3, 32);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
             tableLayoutPanel6.RowCount = 12;
@@ -182,7 +184,7 @@
             chkIsHasDetails.Name = "chkIsHasDetails";
             chkIsHasDetails.Size = new Size(277, 32);
             chkIsHasDetails.TabIndex = 76;
-            chkIsHasDetails.Text = "هل توجد تفاصيل للحساب";
+            chkIsHasDetails.Text = "هل للحساب تفاصيل خاصة";
             chkIsHasDetails.UseVisualStyleBackColor = true;
             // 
             // lblParentTree
@@ -321,31 +323,32 @@
             // 
             // btnSave
             // 
-            btnSave.BackColor = Color.Teal;
+            btnSave.BackColor = SystemColors.Control;
             btnSave.Dock = DockStyle.Fill;
             btnSave.Font = new Font("Times New Roman", 16F, FontStyle.Bold);
-            btnSave.ForeColor = Color.Yellow;
+            btnSave.ForeColor = Color.Black;
             btnSave.Location = new Point(4, 4);
             btnSave.Margin = new Padding(4);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(339, 75);
             btnSave.TabIndex = 83;
-            btnSave.Text = "حفــظ";
+            btnSave.Text = "حفظ التعديلات";
             btnSave.UseVisualStyleBackColor = false;
             btnSave.Click += btnSave_Click;
             // 
             // btnClose
             // 
-            btnClose.BackColor = Color.Yellow;
+            btnClose.BackColor = SystemColors.Control;
             btnClose.Dock = DockStyle.Fill;
             btnClose.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnClose.ForeColor = Color.Black;
             btnClose.Location = new Point(351, 4);
             btnClose.Margin = new Padding(4);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(78, 75);
             btnClose.TabIndex = 73;
             btnClose.TabStop = false;
-            btnClose.Text = "اغلاق";
+            btnClose.Text = "الغاء";
             btnClose.UseVisualStyleBackColor = false;
             btnClose.Click += btnClose_Click;
             // 
