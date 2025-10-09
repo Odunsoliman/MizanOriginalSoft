@@ -305,12 +305,11 @@
             // 
             // tableLayoutPanel16
             // 
-            tableLayoutPanel16.ColumnCount = 3;
-            tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.7014618F));
-            tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 32.9853859F));
-            tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel16.ColumnCount = 2;
+            tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
             tableLayoutPanel16.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel16.Controls.Add(btnSave, 2, 0);
+            tableLayoutPanel16.Controls.Add(btnSave, 1, 0);
             tableLayoutPanel16.Controls.Add(btnClose, 0, 0);
             tableLayoutPanel16.Dock = DockStyle.Fill;
             tableLayoutPanel16.Location = new Point(3, 501);
@@ -329,7 +328,7 @@
             btnSave.Location = new Point(4, 4);
             btnSave.Margin = new Padding(4);
             btnSave.Name = "btnSave";
-            btnSave.Size = new Size(210, 75);
+            btnSave.Size = new Size(339, 75);
             btnSave.TabIndex = 83;
             btnSave.Text = "حفــظ";
             btnSave.UseVisualStyleBackColor = false;
@@ -340,10 +339,10 @@
             btnClose.BackColor = Color.Yellow;
             btnClose.Dock = DockStyle.Fill;
             btnClose.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnClose.Location = new Point(365, 4);
+            btnClose.Location = new Point(351, 4);
             btnClose.Margin = new Padding(4);
             btnClose.Name = "btnClose";
-            btnClose.Size = new Size(64, 75);
+            btnClose.Size = new Size(78, 75);
             btnClose.TabIndex = 73;
             btnClose.TabStop = false;
             btnClose.Text = "اغلاق";
