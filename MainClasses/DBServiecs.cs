@@ -1803,24 +1803,28 @@ END
                 command.Parameters.Add("@AccID", SqlDbType.Int).Value = accID;
             }) ?? new DataTable();
         }
-
         // تحديث بيانات حساب
-        public static string Acc_UpdateAccount(int? accID, string accName, bool isHidden)
+        public static string Acc_UpdateAccount(
+            int AccID,
+            string AccName,
+            int ParentTree,
+            bool IsForManger,
+            bool IsHasDetails,
+            bool IsHidden  )
         {
-            return dbHelper.ExecuteNonQueryWithLogging("Acc_UpdateAccount", command =>
+            return dbHelper.ExecuteStoredProcedureWithOutputMessage("Acc_UpdateAccount", command =>
             {
-                command.Parameters.Add("@AccID", SqlDbType.Int).Value = (object?)accID ?? DBNull.Value;
-                command.Parameters.Add("@AccName", SqlDbType.NVarChar, 200).Value = (object?)accName ?? DBNull.Value;
-                command.Parameters.Add("@IsHidden", SqlDbType.Bit).Value = isHidden;
+                command.Parameters.Add("@AccID", SqlDbType.Int).Value = AccID;
+                command.Parameters.Add("@AccName", SqlDbType.NVarChar, 200).Value = AccName;
+                command.Parameters.Add("@ParentTree", SqlDbType.Int).Value = ParentTree;
+                command.Parameters.Add("@IsForManger", SqlDbType.Bit).Value = IsForManger;
+                command.Parameters.Add("@IsHasDetails", SqlDbType.Bit).Value = IsHasDetails;
+                command.Parameters.Add("@IsHidden", SqlDbType.Bit).Value = IsHidden;
 
-                var outputParam = new SqlParameter("@OutputMsg", SqlDbType.NVarChar, 500)
-                {
-                    Direction = ParameterDirection.Output
-                };
-                command.Parameters.Add(outputParam);
-
-            }, expectMessageOutput: false);
+            });
         }
+
+
 
         //========================================
         //  2-   تفاصيل الحساب الشخصية

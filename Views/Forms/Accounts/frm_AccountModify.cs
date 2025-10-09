@@ -133,31 +133,36 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            // استدعاء الإجراء مع القيم
+            // هنا يمكن وضع قيمة الأب المختار من فورمك أو من TreeView
+            int parentTree = _selectedParentTree ?? 0; // لو ليس هناك أب، ضع 0 أو NULL حسب المنطق
+            bool isForManager = chkIsForManager.Checked; // Checkbox موجود بالفورم
+            bool isHasDetails = chkIsHasDetails.Checked; // Checkbox موجود بالفورم
+            bool isHidden = chkIsHidden.Checked;         // Checkbox موجود بالفورم
+
+            // استدعاء الدالة
             string resultMsg = DBServiecs.Acc_UpdateAccount(
                 _accID,
-                txtAccName.Text,                  // اسم الحساب
-                chkIsHidden.Checked               // هل الحساب مخفي
+                txtAccName.Text,
+                parentTree,
+                isForManager,
+                isHasDetails,
+                isHidden
             );
 
             // التحقق من النتيجة
-            if (resultMsg.StartsWith("❌")) // ❌ خطأ
+            if (resultMsg.StartsWith("❌"))
             {
                 MessageBox.Show(resultMsg, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // لا نغلق الشاشة
             }
-            else // ✅ نجاح
+            else
             {
                 MessageBox.Show(resultMsg, "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // نحتفظ بالـID المعدل عشان نقدر نرجعله في الرئيسية
                 UpdatedAccID = _accID;
 
-                // نغلق الشاشة ونرجع OK
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
-
         }
 
         private void btnClose_Click(object sender, EventArgs e)
