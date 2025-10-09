@@ -1785,11 +1785,20 @@ END
             });
         }
 
- 
-        // جلب حساب ###
+
+        // جلب حساب ###Acc_GetDataForModify
         public static DataTable Acc_GetData(int accID)
         {
             return dbHelper.ExecuteSelectQuery("Acc_GetData", command =>
+            {
+                command.Parameters.Add("@AccID", SqlDbType.Int).Value = accID;
+            }) ?? new DataTable();
+        }
+
+        // جلب حساب ###
+        public static DataTable Acc_GetDataForModify(int accID)
+        {
+            return dbHelper.ExecuteSelectQuery("Acc_GetDataForModify", command =>
             {
                 command.Parameters.Add("@AccID", SqlDbType.Int).Value = accID;
             }) ?? new DataTable();

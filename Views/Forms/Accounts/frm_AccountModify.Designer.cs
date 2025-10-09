@@ -35,7 +35,7 @@
             chkIsHidden = new CheckBox();
             tableLayoutPanel6 = new TableLayoutPanel();
             lblBalanceAndState = new Label();
-            label4 = new Label();
+            lblParentTree = new Label();
             lblCreateByUserName = new Label();
             label6 = new Label();
             chkIsHasChildren = new CheckBox();
@@ -45,7 +45,7 @@
             cbxParentTree = new ComboBox();
             lblTreeAccCode = new Label();
             lblAccTypeID = new Label();
-            lblCreateByUserID = new Label();
+            lblCreatedByUser = new Label();
             lblTitetl_Item = new Label();
             tableLayoutPanel16 = new TableLayoutPanel();
             btnSave = new Button();
@@ -131,7 +131,7 @@
             tableLayoutPanel6.Controls.Add(label2, 0, 0);
             tableLayoutPanel6.Controls.Add(txtAccName, 1, 0);
             tableLayoutPanel6.Controls.Add(lblDateOfJoin, 1, 4);
-            tableLayoutPanel6.Controls.Add(label4, 0, 4);
+            tableLayoutPanel6.Controls.Add(lblParentTree, 0, 4);
             tableLayoutPanel6.Controls.Add(chkIsHidden, 1, 1);
             tableLayoutPanel6.Controls.Add(lblCreateByUserName, 1, 5);
             tableLayoutPanel6.Controls.Add(label6, 0, 5);
@@ -142,7 +142,7 @@
             tableLayoutPanel6.Controls.Add(cbxParentTree, 1, 10);
             tableLayoutPanel6.Controls.Add(lblTreeAccCode, 1, 11);
             tableLayoutPanel6.Controls.Add(lblAccTypeID, 1, 12);
-            tableLayoutPanel6.Controls.Add(lblCreateByUserID, 1, 13);
+            tableLayoutPanel6.Controls.Add(lblCreatedByUser, 1, 13);
             tableLayoutPanel6.Dock = DockStyle.Top;
             tableLayoutPanel6.Location = new Point(3, 61);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
@@ -177,19 +177,19 @@
             lblBalanceAndState.Text = "الرصيد";
             lblBalanceAndState.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // label4
+            // lblParentTree
             // 
-            label4.AutoSize = true;
-            label4.Dock = DockStyle.Fill;
-            label4.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.ForeColor = SystemColors.ActiveCaption;
-            label4.Location = new Point(330, 116);
-            label4.Margin = new Padding(4, 0, 4, 0);
-            label4.Name = "label4";
-            label4.Size = new Size(109, 29);
-            label4.TabIndex = 58;
-            label4.Text = "تم الانشاء فى";
-            label4.TextAlign = ContentAlignment.MiddleRight;
+            lblParentTree.AutoSize = true;
+            lblParentTree.Dock = DockStyle.Fill;
+            lblParentTree.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblParentTree.ForeColor = SystemColors.ActiveCaption;
+            lblParentTree.Location = new Point(330, 116);
+            lblParentTree.Margin = new Padding(4, 0, 4, 0);
+            lblParentTree.Name = "lblParentTree";
+            lblParentTree.Size = new Size(109, 29);
+            lblParentTree.TabIndex = 58;
+            lblParentTree.Text = "اسم الاب";
+            lblParentTree.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblCreateByUserName
             // 
@@ -247,21 +247,21 @@
             // chkIsForManger
             // 
             chkIsForManger.AutoSize = true;
-            chkIsForManger.Location = new Point(240, 235);
+            chkIsForManger.Location = new Point(223, 235);
             chkIsForManger.Name = "chkIsForManger";
-            chkIsForManger.Size = new Size(83, 19);
+            chkIsForManger.Size = new Size(100, 19);
             chkIsForManger.TabIndex = 76;
-            chkIsForManger.Text = "checkBox1";
+            chkIsForManger.Text = "خاص بالاداريين";
             chkIsForManger.UseVisualStyleBackColor = true;
             // 
             // chkIsHasDetails
             // 
             chkIsHasDetails.AutoSize = true;
-            chkIsHasDetails.Location = new Point(240, 264);
+            chkIsHasDetails.Location = new Point(173, 264);
             chkIsHasDetails.Name = "chkIsHasDetails";
-            chkIsHasDetails.Size = new Size(83, 19);
+            chkIsHasDetails.Size = new Size(150, 19);
             chkIsHasDetails.TabIndex = 76;
-            chkIsHasDetails.Text = "checkBox1";
+            chkIsHasDetails.Text = "هل توجد تفاصيل للحساب";
             chkIsHasDetails.UseVisualStyleBackColor = true;
             // 
             // cbxParentTree
@@ -290,14 +290,14 @@
             lblAccTypeID.TabIndex = 79;
             lblAccTypeID.Text = "label1";
             // 
-            // lblCreateByUserID
+            // lblCreatedByUser
             // 
-            lblCreateByUserID.AutoSize = true;
-            lblCreateByUserID.Location = new Point(285, 377);
-            lblCreateByUserID.Name = "lblCreateByUserID";
-            lblCreateByUserID.Size = new Size(38, 15);
-            lblCreateByUserID.TabIndex = 80;
-            lblCreateByUserID.Text = "label3";
+            lblCreatedByUser.AutoSize = true;
+            lblCreatedByUser.Location = new Point(285, 377);
+            lblCreatedByUser.Name = "lblCreatedByUser";
+            lblCreatedByUser.Size = new Size(38, 15);
+            lblCreatedByUser.TabIndex = 80;
+            lblCreatedByUser.Text = "label3";
             // 
             // lblTitetl_Item
             // 
@@ -409,7 +409,7 @@
         private Button btnClose;
         private Label lblAccountPath;
         private CheckBox chkIsHasChildren;
-        private Label label4;
+        private Label lblParentTree;
         private Label lblBalanceAndState;
         private Label label6;
         private Label lblCreateByUserName;
@@ -419,6 +419,6 @@
         private ComboBox cbxParentTree;
         private Label lblTreeAccCode;
         private Label lblAccTypeID;
-        private Label lblCreateByUserID;
+        private Label lblCreatedByUser;
     }
 }

@@ -47,43 +47,32 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
         private void LoadData()
         {
-            dtAccData = DBServiecs.Acc_GetData(_accID);
+            // 🔹 جلب البيانات من الإجراء المخزن
+            dtAccData = DBServiecs.Acc_GetDataForModify(_accID);
             if (dtAccData.Rows.Count == 0)
                 return;
 
             DataRow row = dtAccData.Rows[0];
 
-            // 🔹 تخزين البيانات الداخلية
-            _parentTree = row["ParentTree"] != DBNull.Value ? Convert.ToInt32(row["ParentTree"]) : (int?)null;
-            _AccTypeID = row["AccTypeID"] != DBNull.Value ? Convert.ToInt32(row["AccTypeID"]) : (int?)null;
-            _balance = row["Balance"] != DBNull.Value ? Convert.ToDecimal(row["Balance"]) : (decimal?)null;
-            _balanceState = row["BalanceState"]?.ToString();
-            _dateOfJoin = row["DateOfJoin"] != DBNull.Value ? Convert.ToDateTime(row["DateOfJoin"]) : (DateTime?)null;
-            _createByUserID = row["CreateByUserID"] != DBNull.Value ? Convert.ToInt32(row["CreateByUserID"]) : (int?)null;
-            _isHasDetails = row["IsHasDetails"] != DBNull.Value ? Convert.ToBoolean(row["IsHasDetails"]) : (bool?)null;
-            _isForManger = row["IsForManger"] != DBNull.Value ? Convert.ToBoolean(row["IsForManger"]) : (bool?)null;
-            _isHidden = row["IsHidden"] != DBNull.Value ? Convert.ToBoolean(row["IsHidden"]) : (bool?)null;
-
-            // 🔹 عرض اسم الحساب في TextBox
+            // 🔹 عرض اسم الحساب
             txtAccName.Text = row["AccName"].ToString();
 
-            // 🔹 عرض خصائص التعديل
-            chkIsForManger.Checked = _isForManger ?? false;
-            chkIsHasDetails.Checked = _isHasDetails ?? false;
-            chkIsHidden.Checked = _isHidden ?? false;
+            // 🔹 عرض خصائص التعديل (قيم منطقية فقط)
+            chkIsForManger.Checked = row["IsForManger"] != DBNull.Value && Convert.ToBoolean(row["IsForManger"]);
+            chkIsHasDetails.Checked = row["IsHasDetails"] != DBNull.Value && Convert.ToBoolean(row["IsHasDetails"]);
+            chkIsHidden.Checked = row["IsHidden"] != DBNull.Value && Convert.ToBoolean(row["IsHidden"]);
 
-            // 🔹 عرض الأب في ComboBox
-            if (_parentTree.HasValue)
-                cbxParentTree.SelectedValue = _parentTree.Value;
+            // 🔹 عرض المعلومات النصية الجاهزة من SQL
+            lblTreeAccCode.Text = row["TreeAccCode"].ToString();     // الترقيم الشجري
+            lblAccTypeID.Text = row["Acc_TypeName"].ToString();    // النوع المحاسبي
+            lblParentTree.Text = row["ParentTree"].ToString();      // اسم الأب
+            lblCreatedByUser.Text = row["UserName"].ToString();        // أنشئ بواسطة
+            lblBalanceAndState.Text = row["Balance"].ToString();         // الرصيد الآن: xxx دائن
+            lblDateOfJoin.Text = row["DateOfJoin"].ToString();      // تاريخ الإنشاء: yyyy-mm-dd
 
-            // 🔹 عرض الرصيد
-            lblBalanceAndState.Text = $"الرصيد: {_balance:N2} {_balanceState}";
-
-            // 🔹 معلومات إضافية للعرض فقط
-            lblTreeAccCode.Text = row["TreeAccCode"].ToString();
-            lblAccTypeID.Text = row["AccTypeID"].ToString();
-            lblCreateByUserID.Text = row["CreateByUserID"].ToString();
-            lblDateOfJoin.Text = _dateOfJoin?.ToShortDateString();
+            // 🔹 لا حاجة لتحويل القيم الداخلية بعد الآن، لأنها أصبحت نصوصًا جاهزة
+            // ولكن يمكنك تخزين قيم مهمة داخليًا إن أردت (اختياري)
+            _AccTypeID = row["AccTypeID"] != DBNull.Value ? Convert.ToInt32(row["AccTypeID"]) : (int?)null;
         }
 
 
