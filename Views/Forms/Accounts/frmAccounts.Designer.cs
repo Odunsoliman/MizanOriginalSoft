@@ -89,7 +89,7 @@
             tableLayoutPanel11 = new TableLayoutPanel();
             tableLayoutPanel10 = new TableLayoutPanel();
             btnAddChildren = new Button();
-            btnModifyAcc = new Button();
+            btnModifyAccFromGrid = new Button();
             btnDeleteAccFromDGV = new Button();
             label2 = new Label();
             tableLayoutPanel6 = new TableLayoutPanel();
@@ -982,7 +982,7 @@
             tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
             tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
             tableLayoutPanel10.Controls.Add(btnAddChildren, 0, 0);
-            tableLayoutPanel10.Controls.Add(btnModifyAcc, 1, 0);
+            tableLayoutPanel10.Controls.Add(btnModifyAccFromGrid, 1, 0);
             tableLayoutPanel10.Controls.Add(btnDeleteAccFromDGV, 2, 0);
             tableLayoutPanel10.Dock = DockStyle.Fill;
             tableLayoutPanel10.Location = new Point(3, 28);
@@ -1007,19 +1007,20 @@
             btnAddChildren.UseVisualStyleBackColor = false;
             btnAddChildren.Click += btnAddChildren_Click;
             // 
-            // btnModifyAcc
+            // btnModifyAccFromGrid
             // 
-            btnModifyAcc.BackColor = Color.Teal;
-            btnModifyAcc.Dock = DockStyle.Fill;
-            btnModifyAcc.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
-            btnModifyAcc.ForeColor = Color.Yellow;
-            btnModifyAcc.Location = new Point(164, 4);
-            btnModifyAcc.Margin = new Padding(4);
-            btnModifyAcc.Name = "btnModifyAcc";
-            btnModifyAcc.Size = new Size(150, 36);
-            btnModifyAcc.TabIndex = 83;
-            btnModifyAcc.Text = "تعديل حساب";
-            btnModifyAcc.UseVisualStyleBackColor = false;
+            btnModifyAccFromGrid.BackColor = Color.Teal;
+            btnModifyAccFromGrid.Dock = DockStyle.Fill;
+            btnModifyAccFromGrid.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
+            btnModifyAccFromGrid.ForeColor = Color.Yellow;
+            btnModifyAccFromGrid.Location = new Point(164, 4);
+            btnModifyAccFromGrid.Margin = new Padding(4);
+            btnModifyAccFromGrid.Name = "btnModifyAccFromGrid";
+            btnModifyAccFromGrid.Size = new Size(150, 36);
+            btnModifyAccFromGrid.TabIndex = 83;
+            btnModifyAccFromGrid.Text = "تعديل حساب";
+            btnModifyAccFromGrid.UseVisualStyleBackColor = false;
+            btnModifyAccFromGrid.Click += btnModifyAccFromGrid_Click;
             // 
             // btnDeleteAccFromDGV
             // 
@@ -1283,7 +1284,7 @@
         private TableLayoutPanel tableLayoutPanel3;
         private TableLayoutPanel tableLayoutPanel7;
         private TableLayoutPanel tableLayoutPanel10;
-        private Button btnModifyAcc;
+        private Button btnModifyAccFromGrid;
         private Button btnDeleteAcc;
         private TableLayoutPanel tableLayoutPanel8;
         private RadioButton rdoEqual;

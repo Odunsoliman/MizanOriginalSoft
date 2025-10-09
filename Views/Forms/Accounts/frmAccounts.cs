@@ -232,6 +232,67 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
+        // تعديل الحساب النهائى المختارة
+        private void btnModifyAccFromGrid_Click(object sender, EventArgs e)
+        {
+            if (DGV.CurrentRow == null)
+            {
+                MessageBox.Show("يرجى اختيار حساب أولاً", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int accID = Convert.ToInt32(DGV.CurrentRow.Cells["AccID"].Value);
+
+            using (frm_AccountModify frm = new frm_AccountModify(accID))
+            {
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    // 🔹 نحصل على العقدة المحددة حالياً في الشجرة
+                    TreeNode? selectedNode = treeViewAccounts.SelectedNode;
+
+                    if (selectedNode != null)
+                    {
+                        // 1️⃣ إعادة تحميل بيانات الأبناء في الجريد بناءً على العقدة المحددة
+                        LoadChildrenInDGV(selectedNode);
+                    }
+
+                    // 2️⃣ تحديد نفس الصف بعد التعديل
+                    foreach (DataGridViewRow row in DGV.Rows)
+                    {
+                        if (Convert.ToInt32(row.Cells["AccID"].Value) == accID)
+                        {
+                            row.Selected = true;
+
+                            // 🔹 البحث عن أول عمود ظاهر لتعيينه كخلية حالية
+                            DataGridViewCell? firstVisibleCell = row.Cells
+                                .Cast<DataGridViewCell>()
+                                .FirstOrDefault(c => c.Visible);
+
+                            if (firstVisibleCell != null)
+                            {
+                                DGV.CurrentCell = firstVisibleCell;
+                            }
+
+                            // 🔹 ضمان ظهور الصف في العرض
+                            DGV.FirstDisplayedScrollingRowIndex = row.Index;
+                            break;
+                        }
+                    }
+
+
+                    // 3️⃣ (اختياري) إعادة تحميل الشجرة بالكامل لو أردت تحديث أسم الحساب في الجهة الأخرى
+                    // LoadAccountsTree();
+
+                    /*توجد مشكلة صغيرة وهى
+                     فى شاشة التعديل يمكن تعديل الاب للحساب وبذلك يختلف العدة التى دخلت منها الى العقدة التى تم التعديل اليها 
+                    واريد ان يذهب اليها لتحديدها
+                     
+                     */
+                }
+            }
+        }
+
+ 
         // دالة مساعدة للبحث عن العقدة حسب AccID في أي مستوى
         private TreeNode? FindNodeByAccID(TreeNodeCollection nodes, int accID)
         {
@@ -528,7 +589,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             {
                 MessageBox.Show("يجب اختيار حساب من الجدول.", "تنبيه",
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                
+
                 return;
             }
 
@@ -892,7 +953,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             string result = DBServiecs.Acc_AddParentAccount(accName, parentTreeAccCode, createByUserID);
 
-            if (result.Contains ("نجاح"))
+            if (result.Contains("نجاح"))
             {
                 MessageBox.Show("تم اضافة حساب الفرع الشجرى بنجاح ✅", "نجاح",
                                MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1241,5 +1302,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         #endregion
 
 
+
     }
 }
+// 👈
