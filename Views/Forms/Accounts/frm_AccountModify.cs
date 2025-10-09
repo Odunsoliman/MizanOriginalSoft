@@ -51,6 +51,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             dtAccData = DBServiecs.Acc_GetDataForModify(_accID);
             if (dtAccData.Rows.Count == 0)
                 return;
+            lblTitetl_Item.Text = "تعديل الحساب رقم : " + _accID;
 
             DataRow row = dtAccData.Rows[0];
 
@@ -61,9 +62,17 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             chkIsForManger.Checked = row["IsForManger"] != DBNull.Value && Convert.ToBoolean(row["IsForManger"]);
             chkIsHasDetails.Checked = row["IsHasDetails"] != DBNull.Value && Convert.ToBoolean(row["IsHasDetails"]);
             chkIsHidden.Checked = row["IsHidden"] != DBNull.Value && Convert.ToBoolean(row["IsHidden"]);
+            if (chkIsHidden.Checked )
+            {
+                chkIsHidden.Text = "الحساب غير فعال";
+            }
+            else
+            {
+                chkIsHidden.Text = "الحساب  فعال";
+            }
 
-            // 🔹 عرض المعلومات النصية الجاهزة من SQL
-            lblTreeAccCode.Text = row["TreeAccCode"].ToString();     // الترقيم الشجري
+                // 🔹 عرض المعلومات النصية الجاهزة من SQL
+                lblTreeAccCode.Text = row["TreeAccCode"].ToString();     // الترقيم الشجري
             lblAccTypeID.Text = row["Acc_TypeName"].ToString();    // النوع المحاسبي
             lblParentTree.Text = row["ParentTree"].ToString();      // اسم الأب
             lblCreatedByUser.Text = row["UserName"].ToString();        // أنشئ بواسطة
