@@ -52,11 +52,22 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             if (dtAccData.Rows.Count == 0)
                 return;
             lblTitetl_Item.Text = "تعديل الحساب رقم : " + _accID;
+            bool?  isEnerAcc=false ;     // هل الرقم داخلى ام تشغيلى
 
             DataRow row = dtAccData.Rows[0];
-
-            // 🔹 عرض اسم الحساب
-            txtAccName.Text = row["AccName"].ToString();
+            isEnerAcc = row["IsEnerAcc"] != DBNull.Value && Convert.ToBoolean(row["IsEnerAcc"]);
+            if (isEnerAcc==false )
+            {
+                cbxParentTree .Enabled = true ;
+                chkIsHidden.Enabled = true ;
+            }
+            else
+            {
+                cbxParentTree .Enabled = false ;
+                chkIsHidden.Enabled = false ;
+            }
+                // 🔹 عرض اسم الحساب
+                txtAccName.Text = row["AccName"].ToString();
             chkIsHidden.Checked = row["IsHidden"] != DBNull.Value && Convert.ToBoolean(row["IsHidden"]);
             if (chkIsHidden.Checked)
             {
@@ -66,7 +77,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             {
                 chkIsHidden.Text = "الحساب  فعال";
             }
-            lblIsEnerAcc .Text = row["IsEnerAcc"].ToString();     // هل الرقم داخلى ام تشغيلى
+            lblIsEnerAcc .Text = row["IsEnerAccType"].ToString();     // هل الرقم داخلى ام تشغيلى
             chkIsForManger.Checked = row["IsForManger"] != DBNull.Value && Convert.ToBoolean(row["IsForManger"]);
 
             // 🔹 عرض خصائص التعديل (قيم منطقية فقط)
