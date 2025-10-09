@@ -76,7 +76,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 lblTreeAccCode.Text = row["TreeAccCode"].ToString();     // الترقيم الشجري
             lblAccTypeID.Text = row["Acc_TypeName"].ToString();    // النوع المحاسبي
             lblParentTree.Text = row["ParentTree"].ToString();      // اسم الأب
-            lblCreateByUserName.Text = "أنشئ بواسطة: "+ row["UserName"].ToString();        // أنشئ بواسطة
+            lblCreateByUserName.Text = "أنشئ بواسطة   "+ row["UserName"].ToString();        // أنشئ بواسطة
             lblBalanceAndState.Text = row["Balance"].ToString();         // الرصيد الآن: xxx دائن
             lblDateOfJoin.Text = row["DateOfJoin"].ToString();      // تاريخ الإنشاء: yyyy-mm-dd
 
