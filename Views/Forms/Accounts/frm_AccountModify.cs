@@ -41,7 +41,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
 
-        private void LoadData()
+        private void LoadData_()
         {
             // 🔹 جلب البيانات من الإجراء المخزن
             dtAccData = DBServiecs.Acc_GetDataForModify(_accID);
@@ -93,8 +93,99 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // ولكن يمكنك تخزين قيم مهمة داخليًا إن أردت (اختياري)
             _AccTypeID = row["AccTypeID"] != DBNull.Value ? Convert.ToInt32(row["AccTypeID"]) : (int?)null;
             LoadParentAccounts();  // تحميل قائمة الحسابات الأب في ComboBox
-
+            LodeAccTypeID();
         }
+        private void LoadData()
+        {
+            // 🔹 جلب البيانات من الإجراء المخزن
+            dtAccData = DBServiecs.Acc_GetDataForModify(_accID);
+            if (dtAccData.Rows.Count == 0)
+                return;
+
+            lblTitetl_Item.Text = "تعديل الحساب رقم : " + _accID;
+            bool? isEnerAcc = false;     // هل الرقم داخلى ام تشغيلى
+
+            DataRow row = dtAccData.Rows[0];
+            isEnerAcc = row["IsEnerAcc"] != DBNull.Value && Convert.ToBoolean(row["IsEnerAcc"]);
+            _isEnerAcc = isEnerAcc; // تخزين القيمة في متغير الفورم
+
+            if (isEnerAcc == false)
+            {
+                cbxParentTree.Enabled = true;
+                chkIsHidden.Enabled = true;
+                lblCBX.Visible = true;
+            }
+            else
+            {
+                cbxParentTree.Enabled = false;
+                chkIsHidden.Enabled = false;
+                lblCBX.Visible = false;
+            }
+
+            // 🔹 عرض اسم الحساب
+            txtAccName.Text = row["AccName"].ToString();
+            chkIsHidden.Checked = row["IsHidden"] != DBNull.Value && Convert.ToBoolean(row["IsHidden"]);
+
+            if (chkIsHidden.Checked)
+            {
+                chkIsHidden.Text = "الحساب غير فعال";
+            }
+            else
+            {
+                chkIsHidden.Text = "الحساب فعال";
+            }
+
+            lblIsEnerAcc.Text = row["IsEnerAccType"].ToString();     // هل الرقم داخلى ام تشغيلى
+            chkIsForManger.Checked = row["IsForManger"] != DBNull.Value && Convert.ToBoolean(row["IsForManger"]);
+
+            // 🔹 عرض خصائص التعديل (قيم منطقية فقط)
+            chkIsHasDetails.Checked = row["IsHasDetails"] != DBNull.Value && Convert.ToBoolean(row["IsHasDetails"]);
+
+            lblTreeAccCode.Text = row["TreeAccCode"].ToString();     // الترقيم الشجري
+            lblAccTypeID.Text = row["Acc_TypeName"].ToString();    // النوع المحاسبي
+            lblParentTree.Text = row["ParentTreeName"].ToString();      // اسم الأب
+            _parentTree = row["ParentTree"] != DBNull.Value ? Convert.ToInt32(row["ParentTree"]) : (int?)null;
+            lblCreateByUserName.Text = "أنشئ بواسطة   " + row["UserName"].ToString();        // أنشئ بواسطة
+            lblBalanceAndState.Text = row["Balance"].ToString();         // الرصيد الآن: xxx دائن
+            lblDateOfJoin.Text = row["DateOfJoin"].ToString();      // تاريخ الإنشاء: yyyy-mm-dd
+
+            // 🔹 تخزين القيم المهمة داخليًا
+            _AccTypeID = row["AccTypeID"] != DBNull.Value ? Convert.ToInt32(row["AccTypeID"]) : (int?)null;
+
+            LoadParentAccounts();  // تحميل قائمة الحسابات الأب في ComboBox
+            LodeAccTypeID();
+        }
+
+        private void LodeAccTypeID()
+        {
+            DataTable dt = DBServiecs.Acc_GetAccTypeID();
+
+            // 🔹 إعداد مصدر البيانات
+            cbxAccTypeID.DataSource = dt;
+            cbxAccTypeID.DisplayMember = "AccTypeName";
+            cbxAccTypeID.ValueMember = "AccTypeID";
+            cbxAccTypeID.DropDownStyle = ComboBoxStyle.DropDownList; // 🔒 منع الكتابة اليدوية
+
+            // 🔹 تحديد القيمة الحالية في ال ComboBox
+            if (_AccTypeID.HasValue)
+            {
+                cbxAccTypeID.SelectedValue = _AccTypeID.Value;
+            }
+
+            // 🔹 التحكم في إمكانية التعديل بناءً على نوع الحساب
+            if (_isEnerAcc == false)
+            {
+                // الحساب العادي - متاح للتعديل
+                cbxAccTypeID.Enabled = true;
+            }
+            else
+            {
+                // الحساب الداخلي - غير متاح للتعديل
+                cbxAccTypeID.Enabled = false;
+            }
+        }
+
+
 
         private void LoadParentAccounts()
         {
@@ -130,15 +221,22 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         public int UpdatedAccID { get; private set; }
-
+        int parentTree  ; 
+        bool isForManager ;
+        bool isHasDetails ; 
+        bool isHidden ;     
+        int AccTypeID;
+        private void GetDataForModify()
+        {
+            parentTree = Convert .ToInt32 (cbxParentTree ?.SelectedValue ?? 0);
+            isForManager = chkIsForManger .Checked;
+            isHasDetails = chkIsHasDetails.Checked;
+            isHidden = chkIsHidden.Checked;
+            AccTypeID = Convert.ToInt32(cbxAccTypeID?.SelectedValue ?? 0);
+        }
         private void btnSave_Click(object sender, EventArgs e)
         {
-            // هنا يمكن وضع قيمة الأب المختار من فورمك أو من TreeView
-            int parentTree = _selectedParentTree ?? 0; // لو ليس هناك أب، ضع 0 أو NULL حسب المنطق
-            bool isForManager = chkIsForManager.Checked; // Checkbox موجود بالفورم
-            bool isHasDetails = chkIsHasDetails.Checked; // Checkbox موجود بالفورم
-            bool isHidden = chkIsHidden.Checked;         // Checkbox موجود بالفورم
-
+            GetDataForModify();
             // استدعاء الدالة
             string resultMsg = DBServiecs.Acc_UpdateAccount(
                 _accID,
@@ -146,7 +244,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 parentTree,
                 isForManager,
                 isHasDetails,
-                isHidden
+                isHidden, AccTypeID
             );
 
             // التحقق من النتيجة
@@ -171,24 +269,3 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
     }
 }
-/*
-
-SELECT [AccID]              عرض
-,[IsEnerAcc]          عرض          
-,[TreeAccCode]        عرض
-,[AccName]            للتعديل
-,[ParentTree]         لتغير الاب من خلال كمبوبكس
-,[IsForManger]        للتعديل
-,[IsHasDetails]       للتعديل
-,[IsHasChildren]      عرض
-,[AccTypeID]          عرض
-,[CreateByUserID]     عرض
-,[Balance]            عرض
-,[BalanceState]       عرض
-,[IsHidden]           للتعديل
-,[DateOfJoin]         عرض
-FROM [dbo].[Accounts]
-الدالة DBServiecs.Acc_GetData(_accID); تجلب كل الحقول السابقة
-فكيف السيناريو لعرض كل كل هذه الحقول لتعديلها من من خلال الشاشة
-
- */

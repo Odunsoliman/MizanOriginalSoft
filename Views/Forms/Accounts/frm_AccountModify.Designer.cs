@@ -43,13 +43,16 @@
             cbxParentTree = new ComboBox();
             label1 = new Label();
             lblCBX = new Label();
+            tableLayoutPanel2 = new TableLayoutPanel();
             lblAccTypeID = new Label();
+            cbxAccTypeID = new ComboBox();
             lblTitetl_Item = new Label();
             tableLayoutPanel16 = new TableLayoutPanel();
             btnSave = new Button();
             btnClose = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
             tableLayoutPanel6.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel16.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
@@ -140,24 +143,24 @@
             tableLayoutPanel6.Controls.Add(cbxParentTree, 1, 7);
             tableLayoutPanel6.Controls.Add(label1, 0, 6);
             tableLayoutPanel6.Controls.Add(lblCBX, 0, 7);
-            tableLayoutPanel6.Controls.Add(lblAccTypeID, 1, 6);
+            tableLayoutPanel6.Controls.Add(tableLayoutPanel2, 1, 6);
             tableLayoutPanel6.Dock = DockStyle.Fill;
             tableLayoutPanel6.ForeColor = Color.Black;
             tableLayoutPanel6.Location = new Point(3, 32);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
             tableLayoutPanel6.RowCount = 12;
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
-            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.142857F));
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.69254351F));
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.69254351F));
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.69254351F));
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.69254351F));
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.69254351F));
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.69254351F));
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.69254351F));
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.69254351F));
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.69254351F));
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.69254351F));
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.69254351F));
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.69254351F));
             tableLayoutPanel6.Size = new Size(433, 463);
             tableLayoutPanel6.TabIndex = 93;
             // 
@@ -278,18 +281,43 @@
             lblCBX.Text = "نقل الى فرع اخر";
             lblCBX.TextAlign = ContentAlignment.MiddleLeft;
             // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 2;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 61.01083F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 38.98917F));
+            tableLayoutPanel2.Controls.Add(lblAccTypeID, 0, 0);
+            tableLayoutPanel2.Controls.Add(cbxAccTypeID, 1, 0);
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Location = new Point(3, 231);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 1;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Size = new Size(277, 32);
+            tableLayoutPanel2.TabIndex = 80;
+            // 
             // lblAccTypeID
             // 
             lblAccTypeID.AutoSize = true;
             lblAccTypeID.Dock = DockStyle.Fill;
             lblAccTypeID.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
             lblAccTypeID.ForeColor = SystemColors.ActiveCaption;
-            lblAccTypeID.Location = new Point(3, 228);
+            lblAccTypeID.Location = new Point(111, 0);
             lblAccTypeID.Name = "lblAccTypeID";
-            lblAccTypeID.Size = new Size(277, 38);
-            lblAccTypeID.TabIndex = 75;
+            lblAccTypeID.Size = new Size(163, 32);
+            lblAccTypeID.TabIndex = 78;
             lblAccTypeID.Text = "نوع محاسبى";
             lblAccTypeID.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // cbxAccTypeID
+            // 
+            cbxAccTypeID.Dock = DockStyle.Fill;
+            cbxAccTypeID.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold);
+            cbxAccTypeID.FormattingEnabled = true;
+            cbxAccTypeID.Location = new Point(3, 3);
+            cbxAccTypeID.Name = "cbxAccTypeID";
+            cbxAccTypeID.Size = new Size(102, 28);
+            cbxAccTypeID.TabIndex = 79;
             // 
             // lblTitetl_Item
             // 
@@ -382,6 +410,8 @@
             Load += frm_AccountModify_Load;
             tableLayoutPanel6.ResumeLayout(false);
             tableLayoutPanel6.PerformLayout();
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
             tableLayoutPanel16.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
@@ -411,6 +441,8 @@
         private Label lblCBX;
         private Label label1;
         private Label lblTreeAccCode;
+        private TableLayoutPanel tableLayoutPanel2;
         private Label lblAccTypeID;
+        private ComboBox cbxAccTypeID;
     }
 }

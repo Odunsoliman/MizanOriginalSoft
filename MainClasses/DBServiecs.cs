@@ -1803,14 +1803,10 @@ END
                 command.Parameters.Add("@AccID", SqlDbType.Int).Value = accID;
             }) ?? new DataTable();
         }
+
         // تحديث بيانات حساب
-        public static string Acc_UpdateAccount(
-            int AccID,
-            string AccName,
-            int ParentTree,
-            bool IsForManger,
-            bool IsHasDetails,
-            bool IsHidden  )
+        public static string Acc_UpdateAccount(int AccID,string AccName,int ParentTree,bool IsForManger, bool IsHasDetails,
+                                                bool IsHidden,int AccTypeID)
         {
             return dbHelper.ExecuteStoredProcedureWithOutputMessage("Acc_UpdateAccount", command =>
             {
@@ -1820,10 +1816,18 @@ END
                 command.Parameters.Add("@IsForManger", SqlDbType.Bit).Value = IsForManger;
                 command.Parameters.Add("@IsHasDetails", SqlDbType.Bit).Value = IsHasDetails;
                 command.Parameters.Add("@IsHidden", SqlDbType.Bit).Value = IsHidden;
-
+                command.Parameters.Add("@AccTypeID", SqlDbType.Int).Value = AccTypeID;
             });
         }
 
+        // احضار انواع الحسابات
+        public static DataTable Acc_GetAccTypeID()
+        {
+            DataTable? result = dbHelper.ExecuteSelectQuery("Acc_GetAccTypeID", command =>
+            {
+            });
+            return result ?? new DataTable();
+        }
 
 
         //========================================
