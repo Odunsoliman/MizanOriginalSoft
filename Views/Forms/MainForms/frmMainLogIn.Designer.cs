@@ -100,6 +100,7 @@
             tlpDown = new TableLayoutPanel();
             tableLayoutPanel3 = new TableLayoutPanel();
             tableLayoutPanel1 = new TableLayoutPanel();
+            btnDashBoard = new Button();
             pnlSetting.SuspendLayout();
             pnlAccounts.SuspendLayout();
             pnlMoreSetting.SuspendLayout();
@@ -318,7 +319,7 @@
             pnlSetting.MinimumSize = new Size(0, 34);
             pnlSetting.Name = "pnlSetting";
             pnlSetting.Padding = new Padding(3, 2, 3, 2);
-            pnlSetting.Size = new Size(134, 375);
+            pnlSetting.Size = new Size(134, 34);
             pnlSetting.TabIndex = 1;
             // 
             // pnlAccounts
@@ -748,7 +749,7 @@
             pnlMovement.Controls.Add(btnSales);
             pnlMovement.Controls.Add(btn_MainMove);
             pnlMovement.Dock = DockStyle.Top;
-            pnlMovement.Location = new Point(0, 375);
+            pnlMovement.Location = new Point(0, 34);
             pnlMovement.Margin = new Padding(3, 2, 3, 2);
             pnlMovement.MaximumSize = new Size(0, 338);
             pnlMovement.MinimumSize = new Size(0, 34);
@@ -868,16 +869,17 @@
             // pnlReports
             // 
             pnlReports.BackColor = Color.Transparent;
+            pnlReports.Controls.Add(btnDashBoard);
             pnlReports.Controls.Add(DGV);
             pnlReports.Controls.Add(btn_MainReports);
             pnlReports.Dock = DockStyle.Top;
-            pnlReports.Location = new Point(0, 443);
+            pnlReports.Location = new Point(0, 183);
             pnlReports.Margin = new Padding(3, 2, 3, 2);
             pnlReports.MaximumSize = new Size(0, 400);
             pnlReports.MinimumSize = new Size(0, 34);
             pnlReports.Name = "pnlReports";
             pnlReports.Padding = new Padding(4);
-            pnlReports.Size = new Size(134, 258);
+            pnlReports.Size = new Size(134, 362);
             pnlReports.TabIndex = 3;
             // 
             // DGV
@@ -886,12 +888,12 @@
             DGV.AllowUserToAddRows = false;
             DGV.AllowUserToDeleteRows = false;
             DGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            DGV.Dock = DockStyle.Fill;
+            DGV.Dock = DockStyle.Top;
             DGV.Location = new Point(4, 33);
             DGV.Name = "DGV";
             DGV.ReadOnly = true;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DGV.Size = new Size(126, 221);
+            DGV.Size = new Size(126, 180);
             DGV.TabIndex = 2;
             DGV.DoubleClick += DGV_DoubleClick;
             // 
@@ -962,13 +964,13 @@
             pnlBills.Controls.Add(btnCashOut);
             pnlBills.Controls.Add(btn_MainBill);
             pnlBills.Dock = DockStyle.Top;
-            pnlBills.Location = new Point(0, 409);
+            pnlBills.Location = new Point(0, 68);
             pnlBills.Margin = new Padding(3, 2, 3, 2);
             pnlBills.MaximumSize = new Size(0, 338);
             pnlBills.MinimumSize = new Size(0, 34);
             pnlBills.Name = "pnlBills";
             pnlBills.Padding = new Padding(3, 2, 3, 2);
-            pnlBills.Size = new Size(134, 34);
+            pnlBills.Size = new Size(134, 115);
             pnlBills.TabIndex = 2;
             // 
             // btnCreditSettlement
@@ -1247,6 +1249,25 @@
             tableLayoutPanel1.Size = new Size(982, 556);
             tableLayoutPanel1.TabIndex = 1;
             // 
+            // btnDashBoard
+            // 
+            btnDashBoard.Dock = DockStyle.Top;
+            btnDashBoard.FlatAppearance.BorderSize = 0;
+            btnDashBoard.FlatStyle = FlatStyle.Flat;
+            btnDashBoard.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
+            btnDashBoard.Location = new Point(4, 213);
+            btnDashBoard.Margin = new Padding(3, 2, 3, 2);
+            btnDashBoard.MaximumSize = new Size(0, 29);
+            btnDashBoard.MinimumSize = new Size(0, 29);
+            btnDashBoard.Name = "btnDashBoard";
+            btnDashBoard.Padding = new Padding(0, 0, 22, 0);
+            btnDashBoard.Size = new Size(126, 29);
+            btnDashBoard.TabIndex = 6;
+            btnDashBoard.Text = "لوحة التحكم";
+            btnDashBoard.TextAlign = ContentAlignment.MiddleLeft;
+            btnDashBoard.UseVisualStyleBackColor = true;
+            btnDashBoard.Click += btnDashBoard_Click;
+            // 
             // frmMainLogIn
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1350,5 +1371,6 @@
         private Label label1;
         private Button btnAccounts;
         private Button btnAppData;
+        private Button btnDashBoard;
     }
 }

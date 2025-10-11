@@ -569,7 +569,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             frm.Show();
         }
          */
-     
+
         //الاعدادات - شجرة الحسابات
         private void btnAccounts_Click(object sender, EventArgs e)
         {
@@ -1402,6 +1402,17 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
             CloseAllFormsExceptMain();
             frm_AppData frm = new frm_AppData();
+            OpenFormInPanel(frm);
+        }
+
+        private void btnDashBoard_Click(object sender, EventArgs e)
+        {
+            if (sender is Button btn)
+            {
+                HighlightTransparentButton(btn);
+            }
+            CloseAllFormsExceptMain();
+            frmDailyDashBoard frm = new frmDailyDashBoard ();
             OpenFormInPanel(frm);
         }
     }

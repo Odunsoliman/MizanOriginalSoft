@@ -2,6 +2,7 @@
 using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
 using MizanOriginalSoft.Views.Forms.MainForms;
+using MizanOriginalSoft.Views.Reports;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -29,8 +30,170 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             rdoDaeen.CheckedChanged += rdo_CheckedChanged;
             rdoMadeen.CheckedChanged += rdo_CheckedChanged;
             rdoEqual.CheckedChanged += rdo_CheckedChanged;
-
+            SetupMenuStrip();
         }
+
+        #region !!!!!!!! إعداد قوائم التقارير  !!!!!!!!!!
+
+        // قوائم التقارير
+        private ToolStripMenuItem tsmiCategoryReports = new();
+        private ToolStripMenuItem tsmiGroupedReports = new();
+
+        // شريط القوائم داخل Panel
+        private MenuStrip? menuStrip1;
+
+        // تهيئة MenuStrip داخل Panel
+        private void SetupMenuStrip()
+        {
+            // إزالة أي شريط موجود مسبقًا
+            if (menuStrip1 != null && pnlMenuContainer.Controls.Contains(menuStrip1))
+                pnlMenuContainer.Controls.Remove(menuStrip1);
+
+            MenuStrip mainMenu = new MenuStrip
+            {
+                Dock = DockStyle.Fill,
+                BackColor = Color.LightSteelBlue,
+                Font = new Font("Times New Roman", 14, FontStyle.Regular),
+                RightToLeft = RightToLeft.Yes
+            };
+
+            // لتفعيل محاذاة من اليمين لليسار عند ظهور القوائم المنسدلة:
+            mainMenu.LayoutStyle = ToolStripLayoutStyle.Flow; // أو HorizontalStackWithOverflow
+
+
+            // إنشاء عناصر القوائم
+            tsmiCategoryReports = new ToolStripMenuItem("تقارير الصنف المحدد ▼");
+            tsmiGroupedReports = new ToolStripMenuItem("تقارير مجمعة للأصناف المحددة ▼");
+
+            mainMenu.Items.Add(tsmiCategoryReports);
+            mainMenu.Items.Add(tsmiGroupedReports);
+
+            pnlMenuContainer.Controls.Add(mainMenu);
+            mainMenu.Location = new Point(10, 5);
+
+            menuStrip1 = mainMenu; // حفظ المرجع
+        }
+
+        // تحميل القوائم بناءً على الحساب المحدد
+        private void LoadReportsForSelectedAccount()
+        {
+            int? topAccID = GetCurrentEntityID();
+            if (topAccID.HasValue)
+                LoadReports(topAccID.Value);
+        }
+
+        // تحميل البيانات من قاعدة البيانات ووضعها في القوائم
+        private void LoadReports(int topAcc)
+        {
+            try
+            {
+                DataTable dt = DBServiecs.Reports_GetByTopAcc(topAcc, false);
+                if (dt == null || dt.Rows.Count == 0)
+                {
+                    tsmiCategoryReports.DropDownItems.Clear();
+                    tsmiGroupedReports.DropDownItems.Clear();
+                    tsmiCategoryReports.DropDownItems.Add(new ToolStripMenuItem("لا توجد تقارير متاحة") { Enabled = false });
+                    tsmiGroupedReports.DropDownItems.Add(new ToolStripMenuItem("لا توجد تقارير متاحة") { Enabled = false });
+                    return;
+                }
+
+                // تقارير فردية
+                DataRow[] singleReports = dt.Select("IsGrouped = 0");
+                LoadMenuItems(tsmiCategoryReports, singleReports);
+
+                // تقارير مجمعة
+                DataRow[] groupedReports = dt.Select("IsGrouped = 1");
+                LoadMenuItems(tsmiGroupedReports, groupedReports);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("خطأ أثناء تحميل التقارير: " + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // تعبئة القائمة بعناصر من DataRow[] مع ترتيب الاسم تصاعديًا
+        private void LoadMenuItems(ToolStripMenuItem parentMenu, DataRow[] rows)
+        {
+            parentMenu.DropDownItems.Clear();
+
+            if (rows.Length == 0)
+            {
+                ToolStripMenuItem emptyItem = new("لا توجد تقارير متاحة") { Enabled = false };
+                parentMenu.DropDownItems.Add(emptyItem);
+                return;
+            }
+
+            // ترتيب الصفوف حسب اسم التقرير
+            var sortedRows = rows.OrderBy(r => r["ReportDisplayName"]?.ToString()).ToArray();
+
+            foreach (DataRow row in sortedRows)
+            {
+                string displayName = row["ReportDisplayName"]?.ToString() ?? "تقرير بدون اسم";
+                string codeName = row["ReportCodeName"]?.ToString() ?? "";
+                int reportId = Convert.ToInt32(row["ReportID"]);
+
+                // تجهيز القاموس من البداية
+                Dictionary<string, object> tagData = new()
+        {
+            { "ReportCodeName", codeName },
+            { "ReportDisplayName", displayName },
+            { "ReportID", reportId },
+            { "IsGrouped", Convert.ToBoolean(row["IsGrouped"]) }
+        };
+
+                ToolStripMenuItem menuItem = new(displayName)
+                {
+                    Tag = tagData
+                };
+                menuItem.Click += ReportMenuItem_Click;
+
+                parentMenu.DropDownItems.Add(menuItem);
+            }
+        }
+
+        // معرف المستخدم الحالي
+        int ID_user;
+
+        // حدث النقر على أي تقرير
+        private void ReportMenuItem_Click(object? sender, EventArgs e)
+        {
+            if (sender is not ToolStripMenuItem clickedItem || clickedItem.Tag is not Dictionary<string, object> tagData)
+            {
+                MessageBox.Show("بيانات التقرير غير صحيحة.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                Dictionary<string, object> reportParameters = new(tagData)
+        {
+            { "UserID", ID_user }
+        };
+
+                using frmSettingReports previewForm = new frmSettingReports(reportParameters);
+                previewForm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"حدث خطأ أثناء فتح شاشة إعداد التقرير: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // جلب كود الحساب الحالي من الشجرة
+        private int? GetCurrentEntityID()
+        {
+            if (treeViewAccounts.SelectedNode?.Tag is DataRow row)
+            {
+                if (row["AccID"] != DBNull.Value && int.TryParse(row["AccID"].ToString(), out int id))
+                    return id;
+            }
+
+            MessageBox.Show("⚠️ يجب اختيار الحساب قبل عرض التقرير.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return null;
+        }
+
+        #endregion
+
 
         #region !!!!!!!!!! عرض الشجرة والجريد !!!!!!!!!!!
         private void LoadAccountsTree(bool collapseAll = true)
@@ -292,7 +455,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
- 
+
         // دالة مساعدة للبحث عن العقدة حسب AccID في أي مستوى
         private TreeNode? FindNodeByAccID(TreeNodeCollection nodes, int accID)
         {
@@ -408,7 +571,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             if (DGV.Columns.Contains("BalanceWithState"))
                 DGV.Columns["BalanceWithState"].HeaderText = "الرصيد";
-         ////*اريد اظهار رقم الرصيد بفاصلة الالاف*/
+            ////*اريد اظهار رقم الرصيد بفاصلة الالاف*/
 
 
             // ⑦ تحديد عرض الأعمدة نسبيًا من عرض الـ DGV
@@ -914,7 +1077,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void DGV_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            DGV_SelectionChanged(null,null);
+            DGV_SelectionChanged(null, null);
         }
 
         private bool IsRootNodeInRange(TreeNode node)
@@ -1361,7 +1524,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         // زر الإضافة
-        private void btnAddDetail_Click(object sender, EventArgs e)
+        private void btnAddDetails_Click(object sender, EventArgs e)
         {
             if (DGV.CurrentRow == null)
             {
@@ -1380,9 +1543,12 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
                     Acc_GetDetails(treeAccCode);
+                    //         HighlightAndExpandNode(treeAccCode);
                     HighlightRowByTreeAccCode(treeAccCode);
                 }
             }
+
+
         }
 
         DataTable dtDetails = new DataTable();
@@ -1503,6 +1669,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         #endregion
+
 
 
 

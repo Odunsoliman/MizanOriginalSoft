@@ -1145,6 +1145,7 @@
             btnAddDetails.TabIndex = 87;
             btnAddDetails.Text = "اضافة";
             btnAddDetails.UseVisualStyleBackColor = false;
+            btnAddDetails.Click += btnAddDetails_Click;
             // 
             // btnDeleteDetail
             // 
@@ -1159,6 +1160,7 @@
             btnDeleteDetail.TabIndex = 86;
             btnDeleteDetail.Text = "حذف";
             btnDeleteDetail.UseVisualStyleBackColor = false;
+            btnDeleteDetail.Click += btnDeleteDetail_Click;
             // 
             // btnModifyDetail
             // 
@@ -1173,6 +1175,7 @@
             btnModifyDetail.TabIndex = 85;
             btnModifyDetail.Text = "تعديل";
             btnModifyDetail.UseVisualStyleBackColor = false;
+            btnModifyDetail.Click += btnModifyDetail_Click;
             // 
             // btnNextDetail
             // 
@@ -1187,6 +1190,7 @@
             btnNextDetail.TabIndex = 84;
             btnNextDetail.Text = "<< >>";
             btnNextDetail.UseVisualStyleBackColor = false;
+            btnNextDetail.Click += btnNextDetail_Click;
             // 
             // tableLayoutPanel5
             // 
@@ -1381,7 +1385,7 @@
         private Label label4;
         private Panel pnlMenuContainer;
         private Panel panel1;
-        private Button button1;
+//        private Button button1;
         private Button btnDeleteAccFromTree;
         private Button btnDeleteAccFromDGV;
         private Button btnAddChildren;
