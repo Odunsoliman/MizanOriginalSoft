@@ -741,6 +741,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             {
                 // 1. استخراج القيم من الصف المحدد
                 string? accID = DGV.CurrentRow.Cells["AccID"].Value.ToString();
+                string? SorceID = DGV.CurrentRow.Cells["SorceIDAcc"].Value.ToString();
                 string? treeAccCode = DGV.CurrentRow.Cells["TreeAccCode"].Value.ToString();
                 string? accTypeName = DGV.CurrentRow.Cells["AccTypeName"].Value.ToString();
                 string? balance = DGV.CurrentRow.Cells["Balance"].Value.ToString();
@@ -756,8 +757,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
                 // 2. تعبئة العناوين بالصيغ المطلوبة
 
-                // 🔹 lblAccID_DGV.Text
-                lblAccID_DGV.Text = $"المعرف: {accID} | الكود الشجري: {treeAccCode} | طبيعته: {accTypeName}";
+                // 🔹 lblAccID_DGV.Text  
+                lblAccID_DGV.Text = $"المعرف: {accID} | الكود الشجري: {treeAccCode} | طبيعته: {accTypeName} |  {SorceID} ";
 
                 // 🔹 lblBalanceToDay.Text
                 string enerAccText = isEnerAcc ? "حـ: داخلي" : string.Empty;
