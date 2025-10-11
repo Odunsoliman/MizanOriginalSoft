@@ -364,7 +364,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         //تنسيق الجريد
-        private void DGVStyle()
+        private void DGVStyle_()
         {
             // ① إفراغ النص قبل كل تحميل جديد
             lblCountAndTotals.Text = string.Empty;
@@ -408,7 +408,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             if (DGV.Columns.Contains("BalanceWithState"))
                 DGV.Columns["BalanceWithState"].HeaderText = "الرصيد";
-         
+         ////*اريد اظهار رقم الرصيد بفاصلة الالاف*/
 
 
             // ⑦ تحديد عرض الأعمدة نسبيًا من عرض الـ DGV
@@ -492,6 +492,140 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             {
                 lblCountAndTotals.Text = string.Empty;
             }
+            DGV.ClearSelection();
+        }
+        private void DGVStyle()
+        {
+            // ① إفراغ النص قبل كل تحميل جديد
+            lblCountAndTotals.Text = string.Empty;
+
+            // ② إذا مفيش مصدر بيانات → خروج
+            if (DGV.DataSource == null) return;
+
+            // ③ إخفاء كل الأعمدة كبداية
+            foreach (DataGridViewColumn column in DGV.Columns)
+            {
+                column.Visible = false;
+            }
+
+            // ④ الأعمدة اللي نحب نظهرها بالترتيب
+            string[] columnOrder = { "AccName", "ParentName", "BalanceWithState" };
+
+            foreach (string columnName in columnOrder)
+            {
+                if (DGV.Columns.Contains(columnName))
+                {
+                    DGV.Columns[columnName].Visible = true;
+                }
+            }
+
+            // ⑤ إعادة ترتيب الأعمدة إذا كانت موجودة
+            if (DGV.Columns.Contains("AccName"))
+                DGV.Columns["AccName"].DisplayIndex = 0;
+
+            if (DGV.Columns.Contains("ParentName"))
+                DGV.Columns["ParentName"].DisplayIndex = 1;
+
+            if (DGV.Columns.Contains("BalanceWithState"))
+                DGV.Columns["BalanceWithState"].DisplayIndex = 2;
+
+            // ⑥ تغيير عناوين الأعمدة
+            if (DGV.Columns.Contains("AccName"))
+                DGV.Columns["AccName"].HeaderText = "اسم الحساب";
+
+            if (DGV.Columns.Contains("ParentName"))
+                DGV.Columns["ParentName"].HeaderText = "اسم الأب";
+
+            if (DGV.Columns.Contains("BalanceWithState"))
+                DGV.Columns["BalanceWithState"].HeaderText = "الرصيد";
+
+            // ⑦ تحديد عرض الأعمدة نسبيًا من عرض الـ DGV
+            int totalWidth = DGV.ClientRectangle.Width;
+
+            if (DGV.Columns.Contains("AccName"))
+                DGV.Columns["AccName"].Width = (int)(totalWidth * 0.5);
+
+            if (DGV.Columns.Contains("ParentName"))
+                DGV.Columns["ParentName"].Width = (int)(totalWidth * 0.25);
+
+            if (DGV.Columns.Contains("BalanceWithState"))
+            {
+                DGV.Columns["BalanceWithState"].Width = (int)(totalWidth * 0.25);
+
+                // 🔥 تنسيق الرصيد بفاصلة الآلاف والمنازل العشرية
+                DGV.Columns["BalanceWithState"].DefaultCellStyle.Format = "N2";
+                DGV.Columns["BalanceWithState"].DefaultCellStyle.FormatProvider =
+                    System.Globalization.CultureInfo.GetCultureInfo("ar-SA"); // للغة العربية
+            }
+
+            // ⑧ تنسيقات عامة
+            DGV.Font = new Font("Times New Roman", 12, FontStyle.Bold);
+            DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Bold);
+            DGV.RowHeadersVisible = false;
+            DGV.AllowUserToAddRows = false;
+            DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            DGV.ReadOnly = true;
+            DGV.DefaultCellStyle.Font = new Font("Times New Roman", 11, FontStyle.Regular);
+            DGV.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
+            DGV.RowsDefaultCellStyle.BackColor = Color.White;
+
+            // محاذاة الخلايا
+            if (DGV.Columns.Contains("BalanceWithState"))
+                DGV.Columns["BalanceWithState"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight; // 🔥 تغيير إلى اليمين للأرقام
+
+            if (DGV.Columns.Contains("AccName"))
+                DGV.Columns["AccName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+            if (DGV.Columns.Contains("ParentName"))
+                DGV.Columns["ParentName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+            DGV.BorderStyle = BorderStyle.None;
+            DGV.EnableHeadersVisualStyles = false;
+            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.Gray;
+            DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            DGV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            DGV.GridColor = Color.Gray;
+
+            // ===============================
+            // ✅ حساب عدد الحسابات والإجمالي
+            // ===============================
+            try
+            {
+                if (DGV.Rows.Count > 0)
+                {
+                    int countAccounts = DGV.Rows.Count;
+
+                    decimal totalBalance = 0; // 🔥 تغيير إلى decimal لدقة أفضل
+                    if (DGV.Columns.Contains("BalanceWithState")) // 🔥 استخدام العمود الصحيح
+                    {
+                        foreach (DataGridViewRow row in DGV.Rows)
+                        {
+                            if (row.Cells["BalanceWithState"].Value != null &&
+                                decimal.TryParse(row.Cells["BalanceWithState"].Value.ToString(), out decimal val))
+                            {
+                                totalBalance += val;
+                            }
+                        }
+                    }
+
+                    string balanceState = totalBalance > 0 ? "مدين" :
+                                          totalBalance < 0 ? "دائن" : "متوازن";
+
+                    // 🔥 تنسيق الإجمالي بفاصلة الآلاف
+                    lblCountAndTotals.Text = $"عدد الحسابات : {countAccounts:N0}   " +
+                                           $"بإجمالي رصيد : {Math.Abs(totalBalance):N2} ({balanceState})";
+                }
+                else
+                {
+                    lblCountAndTotals.Text = "لا توجد بيانات";
+                }
+            }
+            catch (Exception ex)
+            {
+                lblCountAndTotals.Text = "خطأ في حساب الإجمالي";
+                // يمكنك تسجيل الخطأ: Console.WriteLine(ex.Message);
+            }
+
             DGV.ClearSelection();
         }
 

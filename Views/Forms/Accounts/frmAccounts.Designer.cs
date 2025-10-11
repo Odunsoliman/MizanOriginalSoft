@@ -934,34 +934,37 @@
             // 
             // lblAccID_DGV
             // 
-            lblAccID_DGV.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
+            lblAccID_DGV.Dock = DockStyle.Fill;
+            lblAccID_DGV.Font = new Font("Times New Roman", 12F, FontStyle.Bold | FontStyle.Underline);
             lblAccID_DGV.ForeColor = Color.FromArgb(128, 128, 255);
-            lblAccID_DGV.Location = new Point(7, 31);
+            lblAccID_DGV.Location = new Point(4, 31);
             lblAccID_DGV.Margin = new Padding(4, 0, 4, 0);
             lblAccID_DGV.Name = "lblAccID_DGV";
-            lblAccID_DGV.Size = new Size(328, 30);
+            lblAccID_DGV.Size = new Size(331, 31);
             lblAccID_DGV.TabIndex = 74;
             lblAccID_DGV.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblBalanceToDay
             // 
-            lblBalanceToDay.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
+            lblBalanceToDay.Dock = DockStyle.Fill;
+            lblBalanceToDay.Font = new Font("Times New Roman", 12F, FontStyle.Bold | FontStyle.Underline);
             lblBalanceToDay.ForeColor = Color.FromArgb(128, 128, 255);
-            lblBalanceToDay.Location = new Point(7, 62);
+            lblBalanceToDay.Location = new Point(4, 62);
             lblBalanceToDay.Margin = new Padding(4, 0, 4, 0);
             lblBalanceToDay.Name = "lblBalanceToDay";
-            lblBalanceToDay.Size = new Size(328, 30);
+            lblBalanceToDay.Size = new Size(331, 31);
             lblBalanceToDay.TabIndex = 74;
             lblBalanceToDay.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblGenralData
             // 
-            lblGenralData.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
+            lblGenralData.Dock = DockStyle.Fill;
+            lblGenralData.Font = new Font("Times New Roman", 12F, FontStyle.Bold | FontStyle.Underline);
             lblGenralData.ForeColor = Color.FromArgb(128, 128, 255);
-            lblGenralData.Location = new Point(7, 93);
+            lblGenralData.Location = new Point(4, 93);
             lblGenralData.Margin = new Padding(4, 0, 4, 0);
             lblGenralData.Name = "lblGenralData";
-            lblGenralData.Size = new Size(328, 30);
+            lblGenralData.Size = new Size(331, 32);
             lblGenralData.TabIndex = 74;
             lblGenralData.TextAlign = ContentAlignment.MiddleLeft;
             // 
