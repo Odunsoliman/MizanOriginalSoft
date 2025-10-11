@@ -77,6 +77,7 @@
             btnSales = new Button();
             btn_MainMove = new Button();
             pnlReports = new Panel();
+            btnDashBoard = new Button();
             DGV = new DataGridView();
             btn_MainReports = new Button();
             panelContainer = new Panel();
@@ -100,7 +101,6 @@
             tlpDown = new TableLayoutPanel();
             tableLayoutPanel3 = new TableLayoutPanel();
             tableLayoutPanel1 = new TableLayoutPanel();
-            btnDashBoard = new Button();
             pnlSetting.SuspendLayout();
             pnlAccounts.SuspendLayout();
             pnlMoreSetting.SuspendLayout();
@@ -882,6 +882,25 @@
             pnlReports.Size = new Size(134, 362);
             pnlReports.TabIndex = 3;
             // 
+            // btnDashBoard
+            // 
+            btnDashBoard.Dock = DockStyle.Top;
+            btnDashBoard.FlatAppearance.BorderSize = 0;
+            btnDashBoard.FlatStyle = FlatStyle.Flat;
+            btnDashBoard.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
+            btnDashBoard.Location = new Point(4, 213);
+            btnDashBoard.Margin = new Padding(3, 2, 3, 2);
+            btnDashBoard.MaximumSize = new Size(0, 29);
+            btnDashBoard.MinimumSize = new Size(0, 29);
+            btnDashBoard.Name = "btnDashBoard";
+            btnDashBoard.Padding = new Padding(0, 0, 22, 0);
+            btnDashBoard.Size = new Size(126, 29);
+            btnDashBoard.TabIndex = 6;
+            btnDashBoard.Text = "لوحة التحكم";
+            btnDashBoard.TextAlign = ContentAlignment.MiddleLeft;
+            btnDashBoard.UseVisualStyleBackColor = true;
+            btnDashBoard.Click += btnDashBoard_Click;
+            // 
             // DGV
             // 
             DGV.AccessibleRole = AccessibleRole.None;
@@ -1248,25 +1267,6 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
             tableLayoutPanel1.Size = new Size(982, 556);
             tableLayoutPanel1.TabIndex = 1;
-            // 
-            // btnDashBoard
-            // 
-            btnDashBoard.Dock = DockStyle.Top;
-            btnDashBoard.FlatAppearance.BorderSize = 0;
-            btnDashBoard.FlatStyle = FlatStyle.Flat;
-            btnDashBoard.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
-            btnDashBoard.Location = new Point(4, 213);
-            btnDashBoard.Margin = new Padding(3, 2, 3, 2);
-            btnDashBoard.MaximumSize = new Size(0, 29);
-            btnDashBoard.MinimumSize = new Size(0, 29);
-            btnDashBoard.Name = "btnDashBoard";
-            btnDashBoard.Padding = new Padding(0, 0, 22, 0);
-            btnDashBoard.Size = new Size(126, 29);
-            btnDashBoard.TabIndex = 6;
-            btnDashBoard.Text = "لوحة التحكم";
-            btnDashBoard.TextAlign = ContentAlignment.MiddleLeft;
-            btnDashBoard.UseVisualStyleBackColor = true;
-            btnDashBoard.Click += btnDashBoard_Click;
             // 
             // frmMainLogIn
             // 
