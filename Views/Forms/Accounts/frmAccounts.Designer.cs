@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             tlpBody = new TableLayoutPanel();
             tableLayoutPanel18 = new TableLayoutPanel();
             label15 = new Label();
@@ -496,8 +496,8 @@
             DGV.ReadOnly = true;
             DGV.RowHeadersVisible = false;
             DGV.RowHeadersWidth = 51;
-            dataGridViewCellStyle2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DGV.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DGV.RowsDefaultCellStyle = dataGridViewCellStyle1;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DGV.Size = new Size(469, 384);
             DGV.TabIndex = 72;
@@ -941,7 +941,7 @@
             lblAccID_DGV.Name = "lblAccID_DGV";
             lblAccID_DGV.Size = new Size(328, 30);
             lblAccID_DGV.TabIndex = 74;
-            lblAccID_DGV.TextAlign = ContentAlignment.MiddleCenter;
+            lblAccID_DGV.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblBalanceToDay
             // 
@@ -952,7 +952,7 @@
             lblBalanceToDay.Name = "lblBalanceToDay";
             lblBalanceToDay.Size = new Size(328, 30);
             lblBalanceToDay.TabIndex = 74;
-            lblBalanceToDay.TextAlign = ContentAlignment.MiddleCenter;
+            lblBalanceToDay.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblGenralData
             // 
@@ -963,7 +963,7 @@
             lblGenralData.Name = "lblGenralData";
             lblGenralData.Size = new Size(328, 30);
             lblGenralData.TabIndex = 74;
-            lblGenralData.TextAlign = ContentAlignment.MiddleCenter;
+            lblGenralData.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // panel1
             // 

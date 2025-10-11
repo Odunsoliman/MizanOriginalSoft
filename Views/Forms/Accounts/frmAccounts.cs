@@ -693,54 +693,80 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         #endregion
 
         #region !!!!!!! AfterSelect  بعد تحديد عقدة !!!!!!!!!!!!!!
+        /*
+         private void DGV_SelectionChanged(object sender, EventArgs e)
+{
+    if (DGV.CurrentRow != null && DGV.CurrentRow.Cells["AccID"].Value != null)
+    {
+        // 1. استخراج القيم من الصف المحدد
+        string accID = DGV.CurrentRow.Cells["AccID"].Value.ToString();
+        string treeAccCode = DGV.CurrentRow.Cells["TreeAccCode"].Value.ToString();
+        string accTypeName = DGV.CurrentRow.Cells["AccTypeName"].Value.ToString();
+        string balance = DGV.CurrentRow.Cells["Balance"].Value.ToString();
+        string balanceState = DGV.CurrentRow.Cells["BalanceState"].Value.ToString();
+        bool isEnerAcc = Convert.ToBoolean(DGV.CurrentRow.Cells["IsEnerAcc"].Value);
+        bool isHidden = Convert.ToBoolean(DGV.CurrentRow.Cells["IsHidden"].Value);
+        string createByUserID = DGV.CurrentRow.Cells["CreateByUserID"].Value.ToString();
+        
+        // 🔴 التعديل لضمان التنسيق (تم وضعه سابقاً في الجزء العلوي)
+        DateTime dateOfJoinObject = Convert.ToDateTime(DGV.CurrentRow.Cells["DateOfJoin"].Value);
+        string formattedDate = dateOfJoinObject.ToShortDateString();
 
 
+        // 2. تعبئة العناوين بالصيغ المطلوبة
 
+        // 🔹 lblAccID_DGV.Text
+        lblAccID_DGV.Text = $"المعرف: {accID} | الكود الشجري: {treeAccCode} | طبيعته: {accTypeName}";
 
+        // 🔹 lblBalanceToDay.Text
+        string enerAccText = isEnerAcc ? "حـ: داخلي" : string.Empty;
+        lblBalanceToDay.Text = $"الرصيد الحالي: {balance} {balanceState} {enerAccText}".Trim();
 
-        private void DGV_SelectionChanged(object sender, EventArgs e)
+        // 🔹 lblGenralData.Text
+        // ✅ استخدام formattedDate هنا يضمن ظهور التاريخ فقط
+        string hiddenText = isHidden ? "مخفي" : string.Empty;
+        lblGenralData.Text = $"{hiddenText} | أُنشئ في: {formattedDate} | بواسطة: {createByUserID}"; 
+    }
+    else
+    {
+        // ... (جزء else) ...
+    }
+}
+         
+         */
+        private void DGV_SelectionChanged(object? sender, EventArgs? e)
         {
             // تحقق من وجود صف حالي محدد وأن قيمة AccID موجودة وليست فارغة
             if (DGV.CurrentRow != null && DGV.CurrentRow.Cells["AccID"].Value != null)
             {
-                // ----------------------------------------------------
                 // 1. استخراج القيم من الصف المحدد
-                // ----------------------------------------------------
-
-                // جلب القيم الأساسية
                 string? accID = DGV.CurrentRow.Cells["AccID"].Value.ToString();
                 string? treeAccCode = DGV.CurrentRow.Cells["TreeAccCode"].Value.ToString();
                 string? accTypeName = DGV.CurrentRow.Cells["AccTypeName"].Value.ToString();
                 string? balance = DGV.CurrentRow.Cells["Balance"].Value.ToString();
                 string? balanceState = DGV.CurrentRow.Cells["BalanceState"].Value.ToString();
-
-                // جلب قيم الحالات المنطقية والنصية
                 bool isEnerAcc = Convert.ToBoolean(DGV.CurrentRow.Cells["IsEnerAcc"].Value);
                 bool isHidden = Convert.ToBoolean(DGV.CurrentRow.Cells["IsHidden"].Value);
-                string? dateOfJoin = DGV.CurrentRow.Cells["DateOfJoin"].Value.ToString();
                 string? createByUserID = DGV.CurrentRow.Cells["CreateByUserID"].Value.ToString();
 
-               
-                // ----------------------------------------------------
+                // 🔴 التعديل لضمان التنسيق (تم وضعه سابقاً في الجزء العلوي)
+                DateTime dateOfJoinObject = Convert.ToDateTime(DGV.CurrentRow.Cells["DateOfJoin"].Value);
+                string formattedDate = dateOfJoinObject.ToShortDateString();
+
+
                 // 2. تعبئة العناوين بالصيغ المطلوبة
-                // ----------------------------------------------------
 
                 // 🔹 lblAccID_DGV.Text
-                // الصيغة المطلوبة: المعرف:AccID الكود الشجري : TreeAccCode وطبيعته : AccTypeName
                 lblAccID_DGV.Text = $"المعرف: {accID} | الكود الشجري: {treeAccCode} | طبيعته: {accTypeName}";
 
-
                 // 🔹 lblBalanceToDay.Text
-                // الصيغة المطلوبة: الرصيد الحالي :Balance " " BalanceState حـ: داخلي او فراغ حسب IsEnerAcc
                 string enerAccText = isEnerAcc ? "حـ: داخلي" : string.Empty;
                 lblBalanceToDay.Text = $"الرصيد الحالي: {balance} {balanceState} {enerAccText}".Trim();
 
-
                 // 🔹 lblGenralData.Text
-                // الصيغة المطلوبة: مخفي او فراغ حسب IsHidden + انشئ في DateOfJoin + بواسطة :CreateByUserID
+                // ✅ استخدام formattedDate هنا يضمن ظهور التاريخ فقط
                 string hiddenText = isHidden ? "مخفي" : string.Empty;
-                lblGenralData.Text = $"{hiddenText} | أُنشئ في: {dateOfJoin} | بواسطة: {createByUserID}";
-
+                lblGenralData.Text = $"{hiddenText} | أُنشئ في: {formattedDate} | بواسطة: {createByUserID}";
             }
             else
             {
@@ -753,14 +779,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void DGV_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (DGV.CurrentRow != null && DGV.CurrentRow.Cells["AccID"].Value != null)
-            {
-                lblAccID_DGV.Text = DGV.CurrentRow.Cells["AccID"].Value.ToString();
-            }
-            else
-            {
-                lblAccID_DGV.Text = string.Empty; // في حالة ما فيش صف محدد
-            }
+            DGV_SelectionChanged(null,null);
         }
 
         private bool IsRootNodeInRange(TreeNode node)
