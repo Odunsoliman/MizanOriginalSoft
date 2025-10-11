@@ -935,7 +935,7 @@
             // lblAccID_DGV
             // 
             lblAccID_DGV.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
-            lblAccID_DGV.ForeColor = Color.FromArgb(255, 192, 255);
+            lblAccID_DGV.ForeColor = Color.FromArgb(128, 128, 255);
             lblAccID_DGV.Location = new Point(7, 31);
             lblAccID_DGV.Margin = new Padding(4, 0, 4, 0);
             lblAccID_DGV.Name = "lblAccID_DGV";
@@ -946,7 +946,7 @@
             // lblBalanceToDay
             // 
             lblBalanceToDay.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
-            lblBalanceToDay.ForeColor = Color.FromArgb(255, 192, 255);
+            lblBalanceToDay.ForeColor = Color.FromArgb(128, 128, 255);
             lblBalanceToDay.Location = new Point(7, 62);
             lblBalanceToDay.Margin = new Padding(4, 0, 4, 0);
             lblBalanceToDay.Name = "lblBalanceToDay";
@@ -957,7 +957,7 @@
             // lblGenralData
             // 
             lblGenralData.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
-            lblGenralData.ForeColor = Color.FromArgb(255, 192, 255);
+            lblGenralData.ForeColor = Color.FromArgb(128, 128, 255);
             lblGenralData.Location = new Point(7, 93);
             lblGenralData.Margin = new Padding(4, 0, 4, 0);
             lblGenralData.Name = "lblGenralData";
