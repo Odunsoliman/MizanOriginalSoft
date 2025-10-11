@@ -662,11 +662,11 @@ namespace MizanOriginalSoft.MainClasses
 
         /// حفظ بيانات التقرير الافتراضي (الطابعة، المخزن، والفترة) وإرجاع رسالة من الإجراء المخزن
         public static string GenralData_SaveDefRepData(
-    DateTime DefStartPeriod,
-    DateTime DefEndPeriod,
-    string DefaultPrinter,
-    string DefaultWarehouse,
-    string DefEndRdoChecked)
+        DateTime DefStartPeriod,
+        DateTime DefEndPeriod,
+        string DefaultPrinter,
+        string DefaultWarehouse,
+        string DefEndRdoChecked)
         {
             return dbHelper.ExecuteNonQueryWithLogging(
                 "GenralData_SaveDefRepData",
@@ -758,8 +758,7 @@ namespace MizanOriginalSoft.MainClasses
                 cmd.Parameters.Add("@WarehouseName", SqlDbType.NVarChar).Value = warehouseName;
                 cmd.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
             });
-        }//Microsoft.Data.SqlClient.SqlException: 'Cannot insert explicit value for identity column in table 'Warehouse' when IDENTITY_INSERT is set to OFF.'
-//ما هذه الرسالة
+        }
 
         public static string Warehouse_UpdateName(int warehouseId, string newName, int userId)
         {
@@ -1353,91 +1352,6 @@ namespace MizanOriginalSoft.MainClasses
             return resultMessage.StartsWith("تم");
         }
 
-        /*
-         
-         وهذا كود الكلاس dbHelper
-               public static string ExecuteNonQueryWithLogging(
-            string procedureName,
-            Action<SqlCommand> setParams,
-            string? logProcedureName = null,
-            Action<SqlCommand>? logParams = null,
-            bool expectMessageOutput = false)
-        {
-            try
-            {
-                EnsureConnectionOpen();
-                string result = "تم التنفيذ.";
-
-                using (SqlCommand cmd = CreateCommand(procedureName))
-                {
-                    if (expectMessageOutput)
-                    {
-                        var msgParam = new SqlParameter("@Message", SqlDbType.NVarChar, 500)
-                        {
-                            Direction = ParameterDirection.Output
-                        };
-                        cmd.Parameters.Add(msgParam);
-                    }
-
-                    setParams?.Invoke(cmd);
-                    cmd.ExecuteNonQuery();
-
-                    if (expectMessageOutput)
-                        result = cmd.Parameters["@Message"].Value?.ToString() ?? result;
-                }
-
-                if (!string.IsNullOrEmpty(logProcedureName) && logParams != null)
-                {
-                    using (SqlCommand logCmd = CreateCommand(logProcedureName))
-                    {
-                        logParams(logCmd);
-                        logCmd.ExecuteNonQuery();
-                    }
-                }
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("خطأ أثناء التنفيذ: " + ex.Message);
-                return "فشل في التنفيذ.";
-            }
-            finally
-            {
-                EnsureConnectionClosed();
-            }
-        }
-
-
-
-
-        وهذا الاجراء
-
-        ALTER PROCEDURE dbo.MainAcc_ChangAccCat
-    @NewParentID INT,             
-    @AccIDs NVARCHAR(MAX),        
-    @Message NVARCHAR(500) OUTPUT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    ;WITH CTE AS
-    (
-        SELECT TRY_CAST(value AS INT) AS AccID
-        FROM STRING_SPLIT(@AccIDs, ',')
-        WHERE TRY_CAST(value AS INT) IS NOT NULL
-    )
-    UPDATE M
-    SET M.ParentTree = @NewParentID
-    FROM dbo.MainAccounts M
-    INNER JOIN CTE C ON M.AccID = C.AccID;
-
-    SET @Message = N'تم نقل ' + CAST(@@ROWCOUNT AS NVARCHAR) + N' حساب/حسابات.';
-END
-
-
-        فلماذ يرجع خطأ ويفشل فى التنفيذ 
-         */
         #endregion
 
         #region ############# frmReport_Preview ##################

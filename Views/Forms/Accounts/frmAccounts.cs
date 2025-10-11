@@ -700,13 +700,54 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         private void DGV_SelectionChanged(object sender, EventArgs e)
         {
+            // تحقق من وجود صف حالي محدد وأن قيمة AccID موجودة وليست فارغة
             if (DGV.CurrentRow != null && DGV.CurrentRow.Cells["AccID"].Value != null)
             {
-                lblAccID_DGV.Text = DGV.CurrentRow.Cells["AccID"].Value.ToString();
+                // ----------------------------------------------------
+                // 1. استخراج القيم من الصف المحدد
+                // ----------------------------------------------------
+
+                // جلب القيم الأساسية
+                string? accID = DGV.CurrentRow.Cells["AccID"].Value.ToString();
+                string? treeAccCode = DGV.CurrentRow.Cells["TreeAccCode"].Value.ToString();
+                string? accTypeName = DGV.CurrentRow.Cells["AccTypeName"].Value.ToString();
+                string? balance = DGV.CurrentRow.Cells["Balance"].Value.ToString();
+                string? balanceState = DGV.CurrentRow.Cells["BalanceState"].Value.ToString();
+
+                // جلب قيم الحالات المنطقية والنصية
+                bool isEnerAcc = Convert.ToBoolean(DGV.CurrentRow.Cells["IsEnerAcc"].Value);
+                bool isHidden = Convert.ToBoolean(DGV.CurrentRow.Cells["IsHidden"].Value);
+                string? dateOfJoin = DGV.CurrentRow.Cells["DateOfJoin"].Value.ToString();
+                string? createByUserID = DGV.CurrentRow.Cells["CreateByUserID"].Value.ToString();
+
+               
+                // ----------------------------------------------------
+                // 2. تعبئة العناوين بالصيغ المطلوبة
+                // ----------------------------------------------------
+
+                // 🔹 lblAccID_DGV.Text
+                // الصيغة المطلوبة: المعرف:AccID الكود الشجري : TreeAccCode وطبيعته : AccTypeName
+                lblAccID_DGV.Text = $"المعرف: {accID} | الكود الشجري: {treeAccCode} | طبيعته: {accTypeName}";
+
+
+                // 🔹 lblBalanceToDay.Text
+                // الصيغة المطلوبة: الرصيد الحالي :Balance " " BalanceState حـ: داخلي او فراغ حسب IsEnerAcc
+                string enerAccText = isEnerAcc ? "حـ: داخلي" : string.Empty;
+                lblBalanceToDay.Text = $"الرصيد الحالي: {balance} {balanceState} {enerAccText}".Trim();
+
+
+                // 🔹 lblGenralData.Text
+                // الصيغة المطلوبة: مخفي او فراغ حسب IsHidden + انشئ في DateOfJoin + بواسطة :CreateByUserID
+                string hiddenText = isHidden ? "مخفي" : string.Empty;
+                lblGenralData.Text = $"{hiddenText} | أُنشئ في: {dateOfJoin} | بواسطة: {createByUserID}";
+
             }
             else
             {
-                lblAccID_DGV.Text = string.Empty; // في حالة ما فيش صف محدد
+                // في حالة عدم وجود صف محدد، إفراغ جميع العناوين
+                lblAccID_DGV.Text = string.Empty;
+                lblBalanceToDay.Text = string.Empty;
+                lblGenralData.Text = string.Empty;
             }
         }
 
