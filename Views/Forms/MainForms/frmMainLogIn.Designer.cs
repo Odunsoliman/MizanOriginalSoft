@@ -476,6 +476,7 @@
             btn_MainSetting.TabIndex = 0;
             btn_MainSetting.Text = "اعدادات عامة";
             btn_MainSetting.UseVisualStyleBackColor = false;
+            btn_MainSetting.Click += btn_MainSetting_Click;
             // 
             // lblUserID
             // 

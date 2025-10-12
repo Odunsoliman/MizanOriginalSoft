@@ -1412,7 +1412,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 HighlightTransparentButton(btn);
             }
             CloseAllFormsExceptMain();
-            frmDailyDashBoard frm = new frmDailyDashBoard ();
+            frmDailyDashBoard frm = new frmDailyDashBoard();
             OpenFormInPanel(frm);
         }
     }
