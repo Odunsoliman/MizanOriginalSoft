@@ -2124,7 +2124,7 @@ namespace MizanOriginalSoft.MainClasses
 
         #region 
         // التاريخ المطلوب، وإذا لم يُمرر يكون تاريخ اليوم
-        public static DataTable TodayRpt_SalesSummary(DateTime? TargetDate = null)
+        public static DataTable TodayRpt_SalesAndExpenses(DateTime? TargetDate = null)
         {
             DataTable? result = dbHelper.ExecuteSelectQuery("TodayRpt_SalesSummary", command =>
             {

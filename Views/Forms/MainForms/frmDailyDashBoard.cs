@@ -76,15 +76,37 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         DataTable dt = new DataTable();
         private void GetData()
         {
-            dt=DBServiecs.TodayRpt_SalesSummary(dtpTargetDate.Value );
-            lblSalesCash.Text = dt.ToString();//Cash_Sales
-            lblElectronicSales.Text = dt.ToString();//Electronic_Sales
-            lblSalesCredit .Text = dt.ToString();//Credit_Sales
-            lblTotalCash.Text = dt.ToString();//Total_Sales
+            dt = DBServiecs.TodayRpt_SalesAndExpenses(dtpTargetDate.Value);
 
+            if (dt.Rows.Count > 0)
+            {
+                DataRow row = dt.Rows[0];
+
+                lblSalesCash.Text = Convert.ToDecimal(row["Cash_Sales"]).ToString("N2");
+                lblElectronicSales.Text = Convert.ToDecimal(row["Electronic_Sales"]).ToString("N2");
+                lblSalesCredit.Text = Convert.ToDecimal(row["Credit_Sales"]).ToString("N2");
+                lblTotalCash.Text = Convert.ToDecimal(row["Total_Sales"]).ToString("N2");
+                lblExpenses.Text = Convert.ToDecimal(row["Total_Cash_Expenses"]).ToString("N2");
+                lblPurchases.Text = Convert.ToDecimal(row["Total_Purchases"]).ToString("N2");
+                lblUnSaved_Invoice.Text = Convert.ToInt32 (row["UnSaved_Invoice_All"]).ToString("N2");
+                //System.ArgumentException: 'Column 'Total_Cash_Expenses' does not belong to table .'
+                //System.ArgumentException: 'Column 'Total_Purchases' does not belong to table .'
+                //System.ArgumentException: 'Column 'UnSaved_Invoice_All' does not belong to table .'
+            }
+            else
+            {
+                lblSalesCash.Text = "0.00";
+                lblElectronicSales.Text = "0.00";
+                lblSalesCredit.Text = "0.00";
+                lblTotalCash.Text = "0.00";
+            }
         }
 
 
+        private void dtpTargetDate_ValueChanged(object sender, EventArgs e)
+        {
+            GetData();
+        }
     }
 }
 

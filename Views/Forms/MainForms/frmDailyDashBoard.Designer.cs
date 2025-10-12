@@ -103,6 +103,10 @@
             lblTopProduct = new Label();
             panel26 = new Panel();
             tabPage3 = new TabPage();
+            panelUnSaved_Invoice = new Panel();
+            tableLayoutPanel17 = new TableLayoutPanel();
+            label13 = new Label();
+            lblUnSaved_Invoice = new Label();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel13.SuspendLayout();
             tableLayoutPanel34.SuspendLayout();
@@ -111,6 +115,7 @@
             tabPage1.SuspendLayout();
             pnl0.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
+            panel9.SuspendLayout();
             panel8.SuspendLayout();
             panelPurchases.SuspendLayout();
             tableLayoutPanel16.SuspendLayout();
@@ -146,6 +151,8 @@
             panel24.SuspendLayout();
             panelTopProduct.SuspendLayout();
             tableLayoutPanel10.SuspendLayout();
+            panelUnSaved_Invoice.SuspendLayout();
+            tableLayoutPanel17.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -229,6 +236,7 @@
             dtpTargetDate.Name = "dtpTargetDate";
             dtpTargetDate.Size = new Size(326, 32);
             dtpTargetDate.TabIndex = 0;
+            dtpTargetDate.ValueChanged += dtpTargetDate_ValueChanged;
             // 
             // tabControl1
             // 
@@ -295,6 +303,7 @@
             // 
             // panel9
             // 
+            panel9.Controls.Add(panelUnSaved_Invoice);
             panel9.Dock = DockStyle.Fill;
             panel9.Location = new Point(3, 343);
             panel9.Name = "panel9";
@@ -1095,6 +1104,59 @@
             tabPage3.Text = "-------------";
             tabPage3.UseVisualStyleBackColor = true;
             // 
+            // panelUnSaved_Invoice
+            // 
+            panelUnSaved_Invoice.BackColor = Color.MistyRose;
+            panelUnSaved_Invoice.BorderStyle = BorderStyle.FixedSingle;
+            panelUnSaved_Invoice.Controls.Add(tableLayoutPanel17);
+            panelUnSaved_Invoice.Dock = DockStyle.Fill;
+            panelUnSaved_Invoice.Location = new Point(10, 10);
+            panelUnSaved_Invoice.Name = "panelUnSaved_Invoice";
+            panelUnSaved_Invoice.Padding = new Padding(5);
+            panelUnSaved_Invoice.Size = new Size(301, 146);
+            panelUnSaved_Invoice.TabIndex = 2;
+            // 
+            // tableLayoutPanel17
+            // 
+            tableLayoutPanel17.BackColor = Color.Transparent;
+            tableLayoutPanel17.ColumnCount = 1;
+            tableLayoutPanel17.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel17.Controls.Add(label13, 0, 0);
+            tableLayoutPanel17.Controls.Add(lblUnSaved_Invoice, 0, 1);
+            tableLayoutPanel17.Dock = DockStyle.Fill;
+            tableLayoutPanel17.Location = new Point(5, 5);
+            tableLayoutPanel17.Name = "tableLayoutPanel17";
+            tableLayoutPanel17.Padding = new Padding(3);
+            tableLayoutPanel17.RowCount = 2;
+            tableLayoutPanel17.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel17.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel17.Size = new Size(289, 134);
+            tableLayoutPanel17.TabIndex = 1;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Dock = DockStyle.Fill;
+            label13.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
+            label13.Location = new Point(6, 3);
+            label13.Name = "label13";
+            label13.Size = new Size(277, 64);
+            label13.TabIndex = 4;
+            label13.Text = "عدد فواتير لم تحفظ";
+            label13.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblUnSaved_Invoice
+            // 
+            lblUnSaved_Invoice.AutoSize = true;
+            lblUnSaved_Invoice.Dock = DockStyle.Fill;
+            lblUnSaved_Invoice.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
+            lblUnSaved_Invoice.Location = new Point(6, 67);
+            lblUnSaved_Invoice.Name = "lblUnSaved_Invoice";
+            lblUnSaved_Invoice.Size = new Size(277, 64);
+            lblUnSaved_Invoice.TabIndex = 3;
+            lblUnSaved_Invoice.Text = "0";
+            lblUnSaved_Invoice.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // frmDailyDashBoard
             // 
             AutoScaleDimensions = new SizeF(12F, 24F);
@@ -1117,6 +1179,7 @@
             tabPage1.ResumeLayout(false);
             pnl0.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
+            panel9.ResumeLayout(false);
             panel8.ResumeLayout(false);
             panelPurchases.ResumeLayout(false);
             tableLayoutPanel16.ResumeLayout(false);
@@ -1163,6 +1226,9 @@
             panelTopProduct.ResumeLayout(false);
             tableLayoutPanel10.ResumeLayout(false);
             tableLayoutPanel10.PerformLayout();
+            panelUnSaved_Invoice.ResumeLayout(false);
+            tableLayoutPanel17.ResumeLayout(false);
+            tableLayoutPanel17.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -1243,5 +1309,9 @@
         private TableLayoutPanel tableLayoutPanel16;
         private Label label12;
         private Label lblPurchases;
+        private Panel panelUnSaved_Invoice;
+        private TableLayoutPanel tableLayoutPanel17;
+        private Label label13;
+        private Label lblUnSaved_Invoice;
     }
 }
