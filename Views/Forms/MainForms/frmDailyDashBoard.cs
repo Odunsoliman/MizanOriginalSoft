@@ -21,22 +21,60 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         }
 
-        private void frmDailyDashBoard_Load(object? sender, EventArgs e)
+        private void SetDashboardCardColors()
         {
+            // 🟩 المبيعات النقدية
+            panelSalesCash.BackColor = ColorTranslator.FromHtml("#C8E6C9");
 
+            // 🟦 المبيعات الآجلة
+            panelSalesCredit.BackColor = ColorTranslator.FromHtml("#BBDEFB");
+
+            // 🟧 المصروفات
+            panelExpenses.BackColor = ColorTranslator.FromHtml("#FFE0B2");
+
+            // 🟪 المشتريات
+            //        panelPurchases.BackColor = ColorTranslator.FromHtml("#E1BEE7");
+
+            // 🟨 إجمالي النقدية الحالي
+            panelTotalCash.BackColor = ColorTranslator.FromHtml("#FFF9C4");
+
+            // 🟥 المستحقات للتسديد
+            panelToPay.BackColor = ColorTranslator.FromHtml("#FFCDD2");
+
+            // 🟦 المستحقات للتحصيل
+            panelToCollect.BackColor = ColorTranslator.FromHtml("#E3F2FD");
+
+            // 🟩 أكبر صنف مبيعًا
+            panelTopProduct.BackColor = ColorTranslator.FromHtml("#B2DFDB");
+
+            // 🟫 أصناف راكدة
+            panelSlowProducts.BackColor = ColorTranslator.FromHtml("#EEEEEE");
+
+            // 🟠 نواقص الأصناف
+            panelMissingStock.BackColor = ColorTranslator.FromHtml("#FFF3E0");
+
+            // ⚫ تنسيق النص (اختياري)
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is Panel pnl)
+                {
+                    pnl.ForeColor = Color.FromArgb(33, 33, 33); // لون النص غامق
+                }
+            }
         }
 
-   
 
 
-  
-    
+
+
+
+
         private void frmDailyDashBoard_Resize(object? sender, EventArgs e)
         {
 
         }
 
-  
+
 
         #region 🖱️ Mouse Effects
         private void lblNext_MouseEnter(object sender, EventArgs e)
@@ -112,7 +150,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             if (animationTimer.Enabled) return;
 
-            if (panel.Width  > panel.MinimumSize.Width )
+            if (panel.Width > panel.MinimumSize.Width)
             {
                 targetPanel = panel;
                 targetHeight = panel.MinimumSize.Width;
@@ -132,7 +170,10 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             animationTimer.Start();
         }
 
-
+        private void frmDailyDashBoard_Load(object sender, EventArgs e)
+        {
+            SetDashboardCardColors();
+        }
     }
 }
 
