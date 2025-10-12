@@ -29,15 +29,10 @@
         private void InitializeComponent()
         {
             tableLayoutPanel1 = new TableLayoutPanel();
-            tableLayoutPanel12 = new TableLayoutPanel();
-            label2 = new Label();
-            dateTimePicker1 = new DateTimePicker();
             tableLayoutPanel13 = new TableLayoutPanel();
             tableLayoutPanel34 = new TableLayoutPanel();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
-            tabPage2 = new TabPage();
-            tabPage3 = new TabPage();
             pnl0 = new Panel();
             tableLayoutPanel2 = new TableLayoutPanel();
             panel9 = new Panel();
@@ -76,6 +71,7 @@
             tableLayoutPanel4 = new TableLayoutPanel();
             label13 = new Label();
             label1 = new Label();
+            tabPage2 = new TabPage();
             pnl1 = new Panel();
             tableLayoutPanel14 = new TableLayoutPanel();
             panel13 = new Panel();
@@ -114,6 +110,7 @@
             tableLayoutPanel23 = new TableLayoutPanel();
             label36 = new Label();
             label37 = new Label();
+            tabPage3 = new TabPage();
             pnl2 = new Panel();
             tableLayoutPanel24 = new TableLayoutPanel();
             panel22 = new Panel();
@@ -152,14 +149,14 @@
             tableLayoutPanel33 = new TableLayoutPanel();
             label54 = new Label();
             label55 = new Label();
+            tableLayoutPanel12 = new TableLayoutPanel();
+            dateTimePicker1 = new DateTimePicker();
+            label2 = new Label();
             tableLayoutPanel1.SuspendLayout();
-            tableLayoutPanel12.SuspendLayout();
             tableLayoutPanel13.SuspendLayout();
             tableLayoutPanel34.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
-            tabPage2.SuspendLayout();
-            tabPage3.SuspendLayout();
             pnl0.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             panel9.SuspendLayout();
@@ -180,6 +177,7 @@
             tableLayoutPanel3.SuspendLayout();
             panel1.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
+            tabPage2.SuspendLayout();
             pnl1.SuspendLayout();
             tableLayoutPanel14.SuspendLayout();
             panel13.SuspendLayout();
@@ -200,6 +198,7 @@
             tableLayoutPanel22.SuspendLayout();
             panel21.SuspendLayout();
             tableLayoutPanel23.SuspendLayout();
+            tabPage3.SuspendLayout();
             pnl2.SuspendLayout();
             tableLayoutPanel24.SuspendLayout();
             panel22.SuspendLayout();
@@ -220,13 +219,14 @@
             tableLayoutPanel32.SuspendLayout();
             panel30.SuspendLayout();
             tableLayoutPanel33.SuspendLayout();
+            tableLayoutPanel12.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel1
             // 
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel12, 0, 0);
+            tableLayoutPanel1.Controls.Add(label2, 0, 0);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel13, 0, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(20, 20);
@@ -236,42 +236,6 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 80F));
             tableLayoutPanel1.Size = new Size(1084, 686);
             tableLayoutPanel1.TabIndex = 0;
-            // 
-            // tableLayoutPanel12
-            // 
-            tableLayoutPanel12.ColumnCount = 2;
-            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 67.34694F));
-            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 32.65306F));
-            tableLayoutPanel12.Controls.Add(label2, 0, 0);
-            tableLayoutPanel12.Controls.Add(dateTimePicker1, 1, 0);
-            tableLayoutPanel12.Dock = DockStyle.Fill;
-            tableLayoutPanel12.Location = new Point(3, 3);
-            tableLayoutPanel12.Name = "tableLayoutPanel12";
-            tableLayoutPanel12.RowCount = 1;
-            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel12.Size = new Size(1078, 70);
-            tableLayoutPanel12.TabIndex = 1;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Dock = DockStyle.Fill;
-            label2.Font = new Font("Times New Roman", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.ForeColor = Color.Blue;
-            label2.Location = new Point(355, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(720, 70);
-            label2.TabIndex = 0;
-            label2.Text = "لوحة التحكم اليومية";
-            label2.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // dateTimePicker1
-            // 
-            dateTimePicker1.Dock = DockStyle.Fill;
-            dateTimePicker1.Location = new Point(3, 3);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(346, 32);
-            dateTimePicker1.TabIndex = 1;
             // 
             // tableLayoutPanel13
             // 
@@ -292,14 +256,15 @@
             // 
             tableLayoutPanel34.ColumnCount = 1;
             tableLayoutPanel34.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel34.Controls.Add(tabControl1, 0, 0);
+            tableLayoutPanel34.Controls.Add(tableLayoutPanel12, 0, 0);
+            tableLayoutPanel34.Controls.Add(tabControl1, 0, 1);
             tableLayoutPanel34.Dock = DockStyle.Fill;
             tableLayoutPanel34.Location = new Point(36, 3);
             tableLayoutPanel34.Name = "tableLayoutPanel34";
             tableLayoutPanel34.Padding = new Padding(5);
-            tableLayoutPanel34.RowCount = 1;
-            tableLayoutPanel34.RowStyles.Add(new RowStyle(SizeType.Percent, 99.99999F));
-            tableLayoutPanel34.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel34.RowCount = 2;
+            tableLayoutPanel34.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
+            tableLayoutPanel34.RowStyles.Add(new RowStyle(SizeType.Percent, 93F));
             tableLayoutPanel34.Size = new Size(1007, 598);
             tableLayoutPanel34.TabIndex = 4;
             // 
@@ -311,12 +276,12 @@
             tabControl1.Controls.Add(tabPage3);
             tabControl1.Dock = DockStyle.Fill;
             tabControl1.ItemSize = new Size(150, 29);
-            tabControl1.Location = new Point(8, 8);
+            tabControl1.Location = new Point(8, 49);
             tabControl1.Name = "tabControl1";
             tabControl1.RightToLeft = RightToLeft.Yes;
             tabControl1.RightToLeftLayout = true;
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(991, 582);
+            tabControl1.Size = new Size(991, 541);
             tabControl1.SizeMode = TabSizeMode.Fixed;
             tabControl1.TabIndex = 0;
             // 
@@ -326,32 +291,10 @@
             tabPage1.Location = new Point(4, 4);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(993, 444);
+            tabPage1.Size = new Size(983, 504);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "tabPage1";
             tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // tabPage2
-            // 
-            tabPage2.Controls.Add(pnl1);
-            tabPage2.Location = new Point(4, 4);
-            tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(993, 444);
-            tabPage2.TabIndex = 1;
-            tabPage2.Text = "tabPage2";
-            tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // tabPage3
-            // 
-            tabPage3.Controls.Add(pnl2);
-            tabPage3.Location = new Point(4, 4);
-            tabPage3.Name = "tabPage3";
-            tabPage3.Padding = new Padding(3);
-            tabPage3.Size = new Size(983, 545);
-            tabPage3.TabIndex = 2;
-            tabPage3.Text = "tabPage3";
-            tabPage3.UseVisualStyleBackColor = true;
             // 
             // pnl0
             // 
@@ -360,7 +303,7 @@
             pnl0.Dock = DockStyle.Fill;
             pnl0.Location = new Point(3, 3);
             pnl0.Name = "pnl0";
-            pnl0.Size = new Size(987, 438);
+            pnl0.Size = new Size(977, 498);
             pnl0.TabIndex = 1;
             // 
             // tableLayoutPanel2
@@ -385,17 +328,17 @@
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel2.Size = new Size(987, 438);
+            tableLayoutPanel2.Size = new Size(977, 498);
             tableLayoutPanel2.TabIndex = 0;
             // 
             // panel9
             // 
             panel9.Controls.Add(tableLayoutPanel11);
             panel9.Dock = DockStyle.Fill;
-            panel9.Location = new Point(3, 293);
+            panel9.Location = new Point(3, 335);
             panel9.Name = "panel9";
             panel9.Padding = new Padding(10);
-            panel9.Size = new Size(323, 142);
+            panel9.Size = new Size(321, 160);
             panel9.TabIndex = 9;
             // 
             // tableLayoutPanel11
@@ -412,7 +355,7 @@
             tableLayoutPanel11.RowCount = 2;
             tableLayoutPanel11.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel11.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel11.Size = new Size(303, 122);
+            tableLayoutPanel11.Size = new Size(301, 140);
             tableLayoutPanel11.TabIndex = 0;
             // 
             // label19
@@ -420,9 +363,9 @@
             label19.AutoSize = true;
             label19.Dock = DockStyle.Fill;
             label19.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label19.Location = new Point(6, 61);
+            label19.Location = new Point(6, 70);
             label19.Name = "label19";
-            label19.Size = new Size(291, 58);
+            label19.Size = new Size(289, 67);
             label19.TabIndex = 3;
             label19.Text = "0";
             label19.TextAlign = ContentAlignment.MiddleCenter;
@@ -434,7 +377,7 @@
             label8.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label8.Location = new Point(6, 3);
             label8.Name = "label8";
-            label8.Size = new Size(291, 58);
+            label8.Size = new Size(289, 67);
             label8.TabIndex = 1;
             label8.Text = "الصنف الاكبر مبيعا";
             label8.TextAlign = ContentAlignment.MiddleCenter;
@@ -443,10 +386,10 @@
             // 
             panel8.Controls.Add(tableLayoutPanel10);
             panel8.Dock = DockStyle.Fill;
-            panel8.Location = new Point(332, 293);
+            panel8.Location = new Point(330, 335);
             panel8.Name = "panel8";
             panel8.Padding = new Padding(10);
-            panel8.Size = new Size(323, 142);
+            panel8.Size = new Size(319, 160);
             panel8.TabIndex = 8;
             // 
             // tableLayoutPanel10
@@ -463,7 +406,7 @@
             tableLayoutPanel10.RowCount = 2;
             tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel10.Size = new Size(303, 122);
+            tableLayoutPanel10.Size = new Size(299, 140);
             tableLayoutPanel10.TabIndex = 0;
             // 
             // label18
@@ -471,9 +414,9 @@
             label18.AutoSize = true;
             label18.Dock = DockStyle.Fill;
             label18.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label18.Location = new Point(6, 61);
+            label18.Location = new Point(6, 70);
             label18.Name = "label18";
-            label18.Size = new Size(291, 58);
+            label18.Size = new Size(287, 67);
             label18.TabIndex = 3;
             label18.Text = "0";
             label18.TextAlign = ContentAlignment.MiddleCenter;
@@ -485,7 +428,7 @@
             label9.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label9.Location = new Point(6, 3);
             label9.Name = "label9";
-            label9.Size = new Size(291, 58);
+            label9.Size = new Size(287, 67);
             label9.TabIndex = 1;
             label9.Text = "نواقص الاصناف";
             label9.TextAlign = ContentAlignment.MiddleCenter;
@@ -494,10 +437,10 @@
             // 
             panel7.Controls.Add(tableLayoutPanel9);
             panel7.Dock = DockStyle.Fill;
-            panel7.Location = new Point(661, 293);
+            panel7.Location = new Point(655, 335);
             panel7.Name = "panel7";
             panel7.Padding = new Padding(10);
-            panel7.Size = new Size(323, 142);
+            panel7.Size = new Size(319, 160);
             panel7.TabIndex = 7;
             // 
             // tableLayoutPanel9
@@ -514,7 +457,7 @@
             tableLayoutPanel9.RowCount = 2;
             tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel9.Size = new Size(303, 122);
+            tableLayoutPanel9.Size = new Size(299, 140);
             tableLayoutPanel9.TabIndex = 0;
             // 
             // label17
@@ -522,9 +465,9 @@
             label17.AutoSize = true;
             label17.Dock = DockStyle.Fill;
             label17.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label17.Location = new Point(6, 61);
+            label17.Location = new Point(6, 70);
             label17.Name = "label17";
-            label17.Size = new Size(291, 58);
+            label17.Size = new Size(287, 67);
             label17.TabIndex = 3;
             label17.Text = "0";
             label17.TextAlign = ContentAlignment.MiddleCenter;
@@ -536,7 +479,7 @@
             label10.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label10.Location = new Point(6, 3);
             label10.Name = "label10";
-            label10.Size = new Size(291, 58);
+            label10.Size = new Size(287, 67);
             label10.TabIndex = 1;
             label10.Text = "مستحقات التسديد";
             label10.TextAlign = ContentAlignment.MiddleCenter;
@@ -545,10 +488,10 @@
             // 
             panel6.Controls.Add(tableLayoutPanel8);
             panel6.Dock = DockStyle.Fill;
-            panel6.Location = new Point(3, 148);
+            panel6.Location = new Point(3, 169);
             panel6.Name = "panel6";
             panel6.Padding = new Padding(10);
-            panel6.Size = new Size(323, 139);
+            panel6.Size = new Size(321, 160);
             panel6.TabIndex = 6;
             // 
             // tableLayoutPanel8
@@ -565,7 +508,7 @@
             tableLayoutPanel8.RowCount = 2;
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel8.Size = new Size(303, 119);
+            tableLayoutPanel8.Size = new Size(301, 140);
             tableLayoutPanel8.TabIndex = 0;
             // 
             // label14
@@ -573,9 +516,9 @@
             label14.AutoSize = true;
             label14.Dock = DockStyle.Fill;
             label14.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label14.Location = new Point(6, 59);
+            label14.Location = new Point(6, 70);
             label14.Name = "label14";
-            label14.Size = new Size(291, 57);
+            label14.Size = new Size(289, 67);
             label14.TabIndex = 3;
             label14.Text = "0";
             label14.TextAlign = ContentAlignment.MiddleCenter;
@@ -587,7 +530,7 @@
             label7.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label7.Location = new Point(6, 3);
             label7.Name = "label7";
-            label7.Size = new Size(291, 56);
+            label7.Size = new Size(289, 67);
             label7.TabIndex = 1;
             label7.Text = "مستحقات القبض";
             label7.TextAlign = ContentAlignment.MiddleCenter;
@@ -596,10 +539,10 @@
             // 
             panel5.Controls.Add(tableLayoutPanel7);
             panel5.Dock = DockStyle.Fill;
-            panel5.Location = new Point(332, 148);
+            panel5.Location = new Point(330, 169);
             panel5.Name = "panel5";
             panel5.Padding = new Padding(10);
-            panel5.Size = new Size(323, 139);
+            panel5.Size = new Size(319, 160);
             panel5.TabIndex = 5;
             // 
             // tableLayoutPanel7
@@ -616,7 +559,7 @@
             tableLayoutPanel7.RowCount = 2;
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel7.Size = new Size(303, 119);
+            tableLayoutPanel7.Size = new Size(299, 140);
             tableLayoutPanel7.TabIndex = 0;
             // 
             // label15
@@ -624,9 +567,9 @@
             label15.AutoSize = true;
             label15.Dock = DockStyle.Fill;
             label15.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label15.Location = new Point(6, 59);
+            label15.Location = new Point(6, 70);
             label15.Name = "label15";
-            label15.Size = new Size(291, 57);
+            label15.Size = new Size(287, 67);
             label15.TabIndex = 3;
             label15.Text = "0";
             label15.TextAlign = ContentAlignment.MiddleCenter;
@@ -638,7 +581,7 @@
             label6.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label6.Location = new Point(6, 3);
             label6.Name = "label6";
-            label6.Size = new Size(291, 56);
+            label6.Size = new Size(287, 67);
             label6.TabIndex = 1;
             label6.Text = "من لوحة التحكم اليومية";
             label6.TextAlign = ContentAlignment.MiddleCenter;
@@ -647,10 +590,10 @@
             // 
             panel4.Controls.Add(tableLayoutPanel6);
             panel4.Dock = DockStyle.Fill;
-            panel4.Location = new Point(661, 148);
+            panel4.Location = new Point(655, 169);
             panel4.Name = "panel4";
             panel4.Padding = new Padding(10);
-            panel4.Size = new Size(323, 139);
+            panel4.Size = new Size(319, 160);
             panel4.TabIndex = 4;
             // 
             // tableLayoutPanel6
@@ -667,7 +610,7 @@
             tableLayoutPanel6.RowCount = 2;
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel6.Size = new Size(303, 119);
+            tableLayoutPanel6.Size = new Size(299, 140);
             tableLayoutPanel6.TabIndex = 0;
             // 
             // label16
@@ -675,9 +618,9 @@
             label16.AutoSize = true;
             label16.Dock = DockStyle.Fill;
             label16.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label16.Location = new Point(6, 59);
+            label16.Location = new Point(6, 70);
             label16.Name = "label16";
-            label16.Size = new Size(291, 57);
+            label16.Size = new Size(287, 67);
             label16.TabIndex = 3;
             label16.Text = "0";
             label16.TextAlign = ContentAlignment.MiddleCenter;
@@ -689,7 +632,7 @@
             label5.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label5.Location = new Point(6, 3);
             label5.Name = "label5";
-            label5.Size = new Size(291, 56);
+            label5.Size = new Size(287, 67);
             label5.TabIndex = 1;
             label5.Text = "المشتريات";
             label5.TextAlign = ContentAlignment.MiddleCenter;
@@ -698,10 +641,10 @@
             // 
             panel3.Controls.Add(tableLayoutPanel5);
             panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(332, 3);
+            panel3.Location = new Point(330, 3);
             panel3.Name = "panel3";
             panel3.Padding = new Padding(10);
-            panel3.Size = new Size(323, 139);
+            panel3.Size = new Size(319, 160);
             panel3.TabIndex = 3;
             // 
             // tableLayoutPanel5
@@ -718,7 +661,7 @@
             tableLayoutPanel5.RowCount = 2;
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel5.Size = new Size(303, 119);
+            tableLayoutPanel5.Size = new Size(299, 140);
             tableLayoutPanel5.TabIndex = 0;
             // 
             // label12
@@ -726,9 +669,9 @@
             label12.AutoSize = true;
             label12.Dock = DockStyle.Fill;
             label12.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label12.Location = new Point(6, 59);
+            label12.Location = new Point(6, 70);
             label12.Name = "label12";
-            label12.Size = new Size(291, 57);
+            label12.Size = new Size(287, 67);
             label12.TabIndex = 3;
             label12.Text = "0";
             label12.TextAlign = ContentAlignment.MiddleCenter;
@@ -740,7 +683,7 @@
             label4.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label4.Location = new Point(6, 3);
             label4.Name = "label4";
-            label4.Size = new Size(291, 56);
+            label4.Size = new Size(287, 67);
             label4.TabIndex = 1;
             label4.Text = "المبيعات الاجلة";
             label4.TextAlign = ContentAlignment.MiddleCenter;
@@ -749,10 +692,10 @@
             // 
             panel2.Controls.Add(tableLayoutPanel3);
             panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(661, 3);
+            panel2.Location = new Point(655, 3);
             panel2.Name = "panel2";
             panel2.Padding = new Padding(10);
-            panel2.Size = new Size(323, 139);
+            panel2.Size = new Size(319, 160);
             panel2.TabIndex = 2;
             // 
             // tableLayoutPanel3
@@ -769,7 +712,7 @@
             tableLayoutPanel3.RowCount = 2;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel3.Size = new Size(303, 119);
+            tableLayoutPanel3.Size = new Size(299, 140);
             tableLayoutPanel3.TabIndex = 0;
             // 
             // label11
@@ -777,9 +720,9 @@
             label11.AutoSize = true;
             label11.Dock = DockStyle.Fill;
             label11.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label11.Location = new Point(6, 59);
+            label11.Location = new Point(6, 70);
             label11.Name = "label11";
-            label11.Size = new Size(291, 57);
+            label11.Size = new Size(287, 67);
             label11.TabIndex = 2;
             label11.Text = "0";
             label11.TextAlign = ContentAlignment.MiddleCenter;
@@ -791,7 +734,7 @@
             label3.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label3.Location = new Point(6, 3);
             label3.Name = "label3";
-            label3.Size = new Size(291, 56);
+            label3.Size = new Size(287, 67);
             label3.TabIndex = 1;
             label3.Text = "المبيعات النقدية";
             label3.TextAlign = ContentAlignment.MiddleCenter;
@@ -803,7 +746,7 @@
             panel1.Location = new Point(3, 3);
             panel1.Name = "panel1";
             panel1.Padding = new Padding(10);
-            panel1.Size = new Size(323, 139);
+            panel1.Size = new Size(321, 160);
             panel1.TabIndex = 1;
             // 
             // tableLayoutPanel4
@@ -820,7 +763,7 @@
             tableLayoutPanel4.RowCount = 2;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel4.Size = new Size(303, 119);
+            tableLayoutPanel4.Size = new Size(301, 140);
             tableLayoutPanel4.TabIndex = 0;
             // 
             // label13
@@ -828,9 +771,9 @@
             label13.AutoSize = true;
             label13.Dock = DockStyle.Fill;
             label13.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label13.Location = new Point(6, 59);
+            label13.Location = new Point(6, 70);
             label13.Name = "label13";
-            label13.Size = new Size(291, 57);
+            label13.Size = new Size(289, 67);
             label13.TabIndex = 3;
             label13.Text = "0";
             label13.TextAlign = ContentAlignment.MiddleCenter;
@@ -842,10 +785,21 @@
             label1.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label1.Location = new Point(6, 3);
             label1.Name = "label1";
-            label1.Size = new Size(291, 56);
+            label1.Size = new Size(289, 67);
             label1.TabIndex = 1;
             label1.Text = "المصروفات";
             label1.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // tabPage2
+            // 
+            tabPage2.Controls.Add(pnl1);
+            tabPage2.Location = new Point(4, 4);
+            tabPage2.Name = "tabPage2";
+            tabPage2.Padding = new Padding(3);
+            tabPage2.Size = new Size(983, 545);
+            tabPage2.TabIndex = 1;
+            tabPage2.Text = "tabPage2";
+            tabPage2.UseVisualStyleBackColor = true;
             // 
             // pnl1
             // 
@@ -856,7 +810,7 @@
             pnl1.MaximumSize = new Size(1007, 0);
             pnl1.MinimumSize = new Size(2, 0);
             pnl1.Name = "pnl1";
-            pnl1.Size = new Size(987, 438);
+            pnl1.Size = new Size(977, 539);
             pnl1.TabIndex = 2;
             // 
             // tableLayoutPanel14
@@ -881,17 +835,17 @@
             tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
             tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
             tableLayoutPanel14.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel14.Size = new Size(987, 438);
+            tableLayoutPanel14.Size = new Size(977, 539);
             tableLayoutPanel14.TabIndex = 0;
             // 
             // panel13
             // 
             panel13.Controls.Add(tableLayoutPanel15);
             panel13.Dock = DockStyle.Fill;
-            panel13.Location = new Point(3, 293);
+            panel13.Location = new Point(3, 361);
             panel13.Name = "panel13";
             panel13.Padding = new Padding(10);
-            panel13.Size = new Size(323, 142);
+            panel13.Size = new Size(321, 175);
             panel13.TabIndex = 9;
             // 
             // tableLayoutPanel15
@@ -908,7 +862,7 @@
             tableLayoutPanel15.RowCount = 2;
             tableLayoutPanel15.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel15.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel15.Size = new Size(303, 122);
+            tableLayoutPanel15.Size = new Size(301, 155);
             tableLayoutPanel15.TabIndex = 0;
             // 
             // label20
@@ -916,9 +870,9 @@
             label20.AutoSize = true;
             label20.Dock = DockStyle.Fill;
             label20.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label20.Location = new Point(6, 61);
+            label20.Location = new Point(6, 77);
             label20.Name = "label20";
-            label20.Size = new Size(291, 58);
+            label20.Size = new Size(289, 75);
             label20.TabIndex = 3;
             label20.Text = "0";
             label20.TextAlign = ContentAlignment.MiddleCenter;
@@ -930,7 +884,7 @@
             label21.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label21.Location = new Point(6, 3);
             label21.Name = "label21";
-            label21.Size = new Size(291, 58);
+            label21.Size = new Size(289, 74);
             label21.TabIndex = 1;
             label21.Text = "الصنف الاكبر مبيعا";
             label21.TextAlign = ContentAlignment.MiddleCenter;
@@ -939,10 +893,10 @@
             // 
             panel14.Controls.Add(tableLayoutPanel16);
             panel14.Dock = DockStyle.Fill;
-            panel14.Location = new Point(332, 293);
+            panel14.Location = new Point(330, 361);
             panel14.Name = "panel14";
             panel14.Padding = new Padding(10);
-            panel14.Size = new Size(323, 142);
+            panel14.Size = new Size(319, 175);
             panel14.TabIndex = 8;
             // 
             // tableLayoutPanel16
@@ -959,7 +913,7 @@
             tableLayoutPanel16.RowCount = 2;
             tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel16.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel16.Size = new Size(303, 122);
+            tableLayoutPanel16.Size = new Size(299, 155);
             tableLayoutPanel16.TabIndex = 0;
             // 
             // label22
@@ -967,9 +921,9 @@
             label22.AutoSize = true;
             label22.Dock = DockStyle.Fill;
             label22.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label22.Location = new Point(6, 61);
+            label22.Location = new Point(6, 77);
             label22.Name = "label22";
-            label22.Size = new Size(291, 58);
+            label22.Size = new Size(287, 75);
             label22.TabIndex = 3;
             label22.Text = "0";
             label22.TextAlign = ContentAlignment.MiddleCenter;
@@ -981,7 +935,7 @@
             label23.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label23.Location = new Point(6, 3);
             label23.Name = "label23";
-            label23.Size = new Size(291, 58);
+            label23.Size = new Size(287, 74);
             label23.TabIndex = 1;
             label23.Text = "نواقص الاصناف";
             label23.TextAlign = ContentAlignment.MiddleCenter;
@@ -990,10 +944,10 @@
             // 
             panel15.Controls.Add(tableLayoutPanel17);
             panel15.Dock = DockStyle.Fill;
-            panel15.Location = new Point(661, 293);
+            panel15.Location = new Point(655, 361);
             panel15.Name = "panel15";
             panel15.Padding = new Padding(10);
-            panel15.Size = new Size(323, 142);
+            panel15.Size = new Size(319, 175);
             panel15.TabIndex = 7;
             // 
             // tableLayoutPanel17
@@ -1010,7 +964,7 @@
             tableLayoutPanel17.RowCount = 2;
             tableLayoutPanel17.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel17.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel17.Size = new Size(303, 122);
+            tableLayoutPanel17.Size = new Size(299, 155);
             tableLayoutPanel17.TabIndex = 0;
             // 
             // label24
@@ -1018,9 +972,9 @@
             label24.AutoSize = true;
             label24.Dock = DockStyle.Fill;
             label24.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label24.Location = new Point(6, 61);
+            label24.Location = new Point(6, 77);
             label24.Name = "label24";
-            label24.Size = new Size(291, 58);
+            label24.Size = new Size(287, 75);
             label24.TabIndex = 3;
             label24.Text = "0";
             label24.TextAlign = ContentAlignment.MiddleCenter;
@@ -1032,7 +986,7 @@
             label25.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label25.Location = new Point(6, 3);
             label25.Name = "label25";
-            label25.Size = new Size(291, 58);
+            label25.Size = new Size(287, 74);
             label25.TabIndex = 1;
             label25.Text = "مستحقات التسديد";
             label25.TextAlign = ContentAlignment.MiddleCenter;
@@ -1041,10 +995,10 @@
             // 
             panel16.Controls.Add(tableLayoutPanel18);
             panel16.Dock = DockStyle.Fill;
-            panel16.Location = new Point(3, 148);
+            panel16.Location = new Point(3, 182);
             panel16.Name = "panel16";
             panel16.Padding = new Padding(10);
-            panel16.Size = new Size(323, 139);
+            panel16.Size = new Size(321, 173);
             panel16.TabIndex = 6;
             // 
             // tableLayoutPanel18
@@ -1061,7 +1015,7 @@
             tableLayoutPanel18.RowCount = 2;
             tableLayoutPanel18.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel18.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel18.Size = new Size(303, 119);
+            tableLayoutPanel18.Size = new Size(301, 153);
             tableLayoutPanel18.TabIndex = 0;
             // 
             // label26
@@ -1069,9 +1023,9 @@
             label26.AutoSize = true;
             label26.Dock = DockStyle.Fill;
             label26.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label26.Location = new Point(6, 59);
+            label26.Location = new Point(6, 76);
             label26.Name = "label26";
-            label26.Size = new Size(291, 57);
+            label26.Size = new Size(289, 74);
             label26.TabIndex = 3;
             label26.Text = "0";
             label26.TextAlign = ContentAlignment.MiddleCenter;
@@ -1083,7 +1037,7 @@
             label27.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label27.Location = new Point(6, 3);
             label27.Name = "label27";
-            label27.Size = new Size(291, 56);
+            label27.Size = new Size(289, 73);
             label27.TabIndex = 1;
             label27.Text = "مستحقات القبض";
             label27.TextAlign = ContentAlignment.MiddleCenter;
@@ -1092,10 +1046,10 @@
             // 
             panel17.Controls.Add(tableLayoutPanel19);
             panel17.Dock = DockStyle.Fill;
-            panel17.Location = new Point(332, 148);
+            panel17.Location = new Point(330, 182);
             panel17.Name = "panel17";
             panel17.Padding = new Padding(10);
-            panel17.Size = new Size(323, 139);
+            panel17.Size = new Size(319, 173);
             panel17.TabIndex = 5;
             // 
             // tableLayoutPanel19
@@ -1112,7 +1066,7 @@
             tableLayoutPanel19.RowCount = 2;
             tableLayoutPanel19.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel19.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel19.Size = new Size(303, 119);
+            tableLayoutPanel19.Size = new Size(299, 153);
             tableLayoutPanel19.TabIndex = 0;
             // 
             // label28
@@ -1120,9 +1074,9 @@
             label28.AutoSize = true;
             label28.Dock = DockStyle.Fill;
             label28.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label28.Location = new Point(6, 59);
+            label28.Location = new Point(6, 76);
             label28.Name = "label28";
-            label28.Size = new Size(291, 57);
+            label28.Size = new Size(287, 74);
             label28.TabIndex = 3;
             label28.Text = "0";
             label28.TextAlign = ContentAlignment.MiddleCenter;
@@ -1134,7 +1088,7 @@
             label29.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label29.Location = new Point(6, 3);
             label29.Name = "label29";
-            label29.Size = new Size(291, 56);
+            label29.Size = new Size(287, 73);
             label29.TabIndex = 1;
             label29.Text = "من لوحة التحكم اليومية";
             label29.TextAlign = ContentAlignment.MiddleCenter;
@@ -1143,10 +1097,10 @@
             // 
             panel18.Controls.Add(tableLayoutPanel20);
             panel18.Dock = DockStyle.Fill;
-            panel18.Location = new Point(661, 148);
+            panel18.Location = new Point(655, 182);
             panel18.Name = "panel18";
             panel18.Padding = new Padding(10);
-            panel18.Size = new Size(323, 139);
+            panel18.Size = new Size(319, 173);
             panel18.TabIndex = 4;
             // 
             // tableLayoutPanel20
@@ -1163,7 +1117,7 @@
             tableLayoutPanel20.RowCount = 2;
             tableLayoutPanel20.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel20.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel20.Size = new Size(303, 119);
+            tableLayoutPanel20.Size = new Size(299, 153);
             tableLayoutPanel20.TabIndex = 0;
             // 
             // label30
@@ -1171,9 +1125,9 @@
             label30.AutoSize = true;
             label30.Dock = DockStyle.Fill;
             label30.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label30.Location = new Point(6, 59);
+            label30.Location = new Point(6, 76);
             label30.Name = "label30";
-            label30.Size = new Size(291, 57);
+            label30.Size = new Size(287, 74);
             label30.TabIndex = 3;
             label30.Text = "0";
             label30.TextAlign = ContentAlignment.MiddleCenter;
@@ -1185,7 +1139,7 @@
             label31.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label31.Location = new Point(6, 3);
             label31.Name = "label31";
-            label31.Size = new Size(291, 56);
+            label31.Size = new Size(287, 73);
             label31.TabIndex = 1;
             label31.Text = "المشتريات";
             label31.TextAlign = ContentAlignment.MiddleCenter;
@@ -1194,10 +1148,10 @@
             // 
             panel19.Controls.Add(tableLayoutPanel21);
             panel19.Dock = DockStyle.Fill;
-            panel19.Location = new Point(332, 3);
+            panel19.Location = new Point(330, 3);
             panel19.Name = "panel19";
             panel19.Padding = new Padding(10);
-            panel19.Size = new Size(323, 139);
+            panel19.Size = new Size(319, 173);
             panel19.TabIndex = 3;
             // 
             // tableLayoutPanel21
@@ -1214,7 +1168,7 @@
             tableLayoutPanel21.RowCount = 2;
             tableLayoutPanel21.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel21.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel21.Size = new Size(303, 119);
+            tableLayoutPanel21.Size = new Size(299, 153);
             tableLayoutPanel21.TabIndex = 0;
             // 
             // label32
@@ -1222,9 +1176,9 @@
             label32.AutoSize = true;
             label32.Dock = DockStyle.Fill;
             label32.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label32.Location = new Point(6, 59);
+            label32.Location = new Point(6, 76);
             label32.Name = "label32";
-            label32.Size = new Size(291, 57);
+            label32.Size = new Size(287, 74);
             label32.TabIndex = 3;
             label32.Text = "0";
             label32.TextAlign = ContentAlignment.MiddleCenter;
@@ -1236,7 +1190,7 @@
             label33.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label33.Location = new Point(6, 3);
             label33.Name = "label33";
-            label33.Size = new Size(291, 56);
+            label33.Size = new Size(287, 73);
             label33.TabIndex = 1;
             label33.Text = "المبيعات الاجلة";
             label33.TextAlign = ContentAlignment.MiddleCenter;
@@ -1245,10 +1199,10 @@
             // 
             panel20.Controls.Add(tableLayoutPanel22);
             panel20.Dock = DockStyle.Fill;
-            panel20.Location = new Point(661, 3);
+            panel20.Location = new Point(655, 3);
             panel20.Name = "panel20";
             panel20.Padding = new Padding(10);
-            panel20.Size = new Size(323, 139);
+            panel20.Size = new Size(319, 173);
             panel20.TabIndex = 2;
             // 
             // tableLayoutPanel22
@@ -1265,7 +1219,7 @@
             tableLayoutPanel22.RowCount = 2;
             tableLayoutPanel22.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel22.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel22.Size = new Size(303, 119);
+            tableLayoutPanel22.Size = new Size(299, 153);
             tableLayoutPanel22.TabIndex = 0;
             // 
             // label34
@@ -1273,9 +1227,9 @@
             label34.AutoSize = true;
             label34.Dock = DockStyle.Fill;
             label34.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label34.Location = new Point(6, 59);
+            label34.Location = new Point(6, 76);
             label34.Name = "label34";
-            label34.Size = new Size(291, 57);
+            label34.Size = new Size(287, 74);
             label34.TabIndex = 2;
             label34.Text = "0";
             label34.TextAlign = ContentAlignment.MiddleCenter;
@@ -1287,7 +1241,7 @@
             label35.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label35.Location = new Point(6, 3);
             label35.Name = "label35";
-            label35.Size = new Size(291, 56);
+            label35.Size = new Size(287, 73);
             label35.TabIndex = 1;
             label35.Text = "المبيعات النقدية";
             label35.TextAlign = ContentAlignment.MiddleCenter;
@@ -1299,7 +1253,7 @@
             panel21.Location = new Point(3, 3);
             panel21.Name = "panel21";
             panel21.Padding = new Padding(10);
-            panel21.Size = new Size(323, 139);
+            panel21.Size = new Size(321, 173);
             panel21.TabIndex = 1;
             // 
             // tableLayoutPanel23
@@ -1316,7 +1270,7 @@
             tableLayoutPanel23.RowCount = 2;
             tableLayoutPanel23.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel23.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel23.Size = new Size(303, 119);
+            tableLayoutPanel23.Size = new Size(301, 153);
             tableLayoutPanel23.TabIndex = 0;
             // 
             // label36
@@ -1324,9 +1278,9 @@
             label36.AutoSize = true;
             label36.Dock = DockStyle.Fill;
             label36.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label36.Location = new Point(6, 59);
+            label36.Location = new Point(6, 76);
             label36.Name = "label36";
-            label36.Size = new Size(291, 57);
+            label36.Size = new Size(289, 74);
             label36.TabIndex = 3;
             label36.Text = "0";
             label36.TextAlign = ContentAlignment.MiddleCenter;
@@ -1338,10 +1292,21 @@
             label37.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label37.Location = new Point(6, 3);
             label37.Name = "label37";
-            label37.Size = new Size(291, 56);
+            label37.Size = new Size(289, 73);
             label37.TabIndex = 1;
             label37.Text = "المصروفات";
             label37.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // tabPage3
+            // 
+            tabPage3.Controls.Add(pnl2);
+            tabPage3.Location = new Point(4, 4);
+            tabPage3.Name = "tabPage3";
+            tabPage3.Padding = new Padding(3);
+            tabPage3.Size = new Size(983, 545);
+            tabPage3.TabIndex = 2;
+            tabPage3.Text = "tabPage3";
+            tabPage3.UseVisualStyleBackColor = true;
             // 
             // pnl2
             // 
@@ -1839,6 +1804,42 @@
             label55.Text = "المصروفات";
             label55.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // tableLayoutPanel12
+            // 
+            tableLayoutPanel12.ColumnCount = 2;
+            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 67.34694F));
+            tableLayoutPanel12.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 32.65306F));
+            tableLayoutPanel12.Controls.Add(dateTimePicker1, 1, 0);
+            tableLayoutPanel12.Dock = DockStyle.Fill;
+            tableLayoutPanel12.Location = new Point(8, 8);
+            tableLayoutPanel12.Name = "tableLayoutPanel12";
+            tableLayoutPanel12.Padding = new Padding(8, 0, 0, 0);
+            tableLayoutPanel12.RowCount = 1;
+            tableLayoutPanel12.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel12.Size = new Size(991, 35);
+            tableLayoutPanel12.TabIndex = 2;
+            // 
+            // dateTimePicker1
+            // 
+            dateTimePicker1.Dock = DockStyle.Fill;
+            dateTimePicker1.Location = new Point(11, 3);
+            dateTimePicker1.Name = "dateTimePicker1";
+            dateTimePicker1.Size = new Size(315, 32);
+            dateTimePicker1.TabIndex = 1;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Dock = DockStyle.Fill;
+            label2.Font = new Font("Times New Roman", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.ForeColor = Color.Blue;
+            label2.Location = new Point(3, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(1078, 76);
+            label2.TabIndex = 3;
+            label2.Text = "لوحة التحكم اليومية";
+            label2.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // frmDailyDashBoard
             // 
             AutoScaleDimensions = new SizeF(12F, 24F);
@@ -1852,14 +1853,11 @@
             RightToLeft = RightToLeft.Yes;
             Text = "frmDailyDashBoard";
             tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel12.ResumeLayout(false);
-            tableLayoutPanel12.PerformLayout();
+            tableLayoutPanel1.PerformLayout();
             tableLayoutPanel13.ResumeLayout(false);
             tableLayoutPanel34.ResumeLayout(false);
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
-            tabPage2.ResumeLayout(false);
-            tabPage3.ResumeLayout(false);
             pnl0.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             panel9.ResumeLayout(false);
@@ -1889,6 +1887,7 @@
             panel1.ResumeLayout(false);
             tableLayoutPanel4.ResumeLayout(false);
             tableLayoutPanel4.PerformLayout();
+            tabPage2.ResumeLayout(false);
             pnl1.ResumeLayout(false);
             tableLayoutPanel14.ResumeLayout(false);
             panel13.ResumeLayout(false);
@@ -1918,6 +1917,7 @@
             panel21.ResumeLayout(false);
             tableLayoutPanel23.ResumeLayout(false);
             tableLayoutPanel23.PerformLayout();
+            tabPage3.ResumeLayout(false);
             pnl2.ResumeLayout(false);
             tableLayoutPanel24.ResumeLayout(false);
             panel22.ResumeLayout(false);
@@ -1947,15 +1947,13 @@
             panel30.ResumeLayout(false);
             tableLayoutPanel33.ResumeLayout(false);
             tableLayoutPanel33.PerformLayout();
+            tableLayoutPanel12.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
         private TableLayoutPanel tableLayoutPanel1;
-        private Label label2;
-        private TableLayoutPanel tableLayoutPanel12;
-        private DateTimePicker dateTimePicker1;
         private TableLayoutPanel tableLayoutPanel13;
         private TableLayoutPanel tableLayoutPanel34;
         private TabControl tabControl1;
@@ -2076,5 +2074,8 @@
         private TableLayoutPanel tableLayoutPanel33;
         private Label label54;
         private Label label55;
+        private Label label2;
+        private TableLayoutPanel tableLayoutPanel12;
+        private DateTimePicker dateTimePicker1;
     }
 }
