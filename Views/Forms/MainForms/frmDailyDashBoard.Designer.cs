@@ -32,43 +32,43 @@
             tableLayoutPanel2 = new TableLayoutPanel();
             panel9 = new Panel();
             tableLayoutPanel11 = new TableLayoutPanel();
+            label19 = new Label();
             label8 = new Label();
             panel8 = new Panel();
             tableLayoutPanel10 = new TableLayoutPanel();
+            label18 = new Label();
             label9 = new Label();
             panel7 = new Panel();
             tableLayoutPanel9 = new TableLayoutPanel();
+            label17 = new Label();
             label10 = new Label();
             panel6 = new Panel();
             tableLayoutPanel8 = new TableLayoutPanel();
+            label14 = new Label();
             label7 = new Label();
             panel5 = new Panel();
             tableLayoutPanel7 = new TableLayoutPanel();
+            label15 = new Label();
             label6 = new Label();
             panel4 = new Panel();
             tableLayoutPanel6 = new TableLayoutPanel();
+            label16 = new Label();
             label5 = new Label();
             panel3 = new Panel();
             tableLayoutPanel5 = new TableLayoutPanel();
+            label12 = new Label();
             label4 = new Label();
             panel2 = new Panel();
             tableLayoutPanel3 = new TableLayoutPanel();
+            label11 = new Label();
             label3 = new Label();
             panel1 = new Panel();
             tableLayoutPanel4 = new TableLayoutPanel();
+            label13 = new Label();
             label1 = new Label();
             tableLayoutPanel12 = new TableLayoutPanel();
             label2 = new Label();
             dateTimePicker1 = new DateTimePicker();
-            label11 = new Label();
-            label12 = new Label();
-            label13 = new Label();
-            label14 = new Label();
-            label15 = new Label();
-            label16 = new Label();
-            label17 = new Label();
-            label18 = new Label();
-            label19 = new Label();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             panel9.SuspendLayout();
@@ -159,6 +159,18 @@
             tableLayoutPanel11.Size = new Size(334, 178);
             tableLayoutPanel11.TabIndex = 0;
             // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Dock = DockStyle.Fill;
+            label19.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
+            label19.Location = new Point(6, 89);
+            label19.Name = "label19";
+            label19.Size = new Size(322, 86);
+            label19.TabIndex = 3;
+            label19.Text = "0";
+            label19.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // label8
             // 
             label8.AutoSize = true;
@@ -197,6 +209,18 @@
             tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel10.Size = new Size(333, 178);
             tableLayoutPanel10.TabIndex = 0;
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Dock = DockStyle.Fill;
+            label18.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
+            label18.Location = new Point(6, 89);
+            label18.Name = "label18";
+            label18.Size = new Size(321, 86);
+            label18.TabIndex = 3;
+            label18.Text = "0";
+            label18.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // label9
             // 
@@ -237,6 +261,18 @@
             tableLayoutPanel9.Size = new Size(333, 178);
             tableLayoutPanel9.TabIndex = 0;
             // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Dock = DockStyle.Fill;
+            label17.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
+            label17.Location = new Point(6, 89);
+            label17.Name = "label17";
+            label17.Size = new Size(321, 86);
+            label17.TabIndex = 3;
+            label17.Text = "0";
+            label17.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // label10
             // 
             label10.AutoSize = true;
@@ -275,6 +311,18 @@
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel8.Size = new Size(334, 178);
             tableLayoutPanel8.TabIndex = 0;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Dock = DockStyle.Fill;
+            label14.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
+            label14.Location = new Point(6, 89);
+            label14.Name = "label14";
+            label14.Size = new Size(322, 86);
+            label14.TabIndex = 3;
+            label14.Text = "0";
+            label14.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // label7
             // 
@@ -315,6 +363,18 @@
             tableLayoutPanel7.Size = new Size(333, 178);
             tableLayoutPanel7.TabIndex = 0;
             // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Dock = DockStyle.Fill;
+            label15.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
+            label15.Location = new Point(6, 89);
+            label15.Name = "label15";
+            label15.Size = new Size(321, 86);
+            label15.TabIndex = 3;
+            label15.Text = "0";
+            label15.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // label6
             // 
             label6.AutoSize = true;
@@ -353,6 +413,18 @@
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel6.Size = new Size(333, 178);
             tableLayoutPanel6.TabIndex = 0;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Dock = DockStyle.Fill;
+            label16.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
+            label16.Location = new Point(6, 89);
+            label16.Name = "label16";
+            label16.Size = new Size(321, 86);
+            label16.TabIndex = 3;
+            label16.Text = "0";
+            label16.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // label5
             // 
@@ -393,6 +465,18 @@
             tableLayoutPanel5.Size = new Size(333, 178);
             tableLayoutPanel5.TabIndex = 0;
             // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Dock = DockStyle.Fill;
+            label12.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
+            label12.Location = new Point(6, 89);
+            label12.Name = "label12";
+            label12.Size = new Size(321, 86);
+            label12.TabIndex = 3;
+            label12.Text = "0";
+            label12.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // label4
             // 
             label4.AutoSize = true;
@@ -432,6 +516,18 @@
             tableLayoutPanel3.Size = new Size(333, 178);
             tableLayoutPanel3.TabIndex = 0;
             // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Dock = DockStyle.Fill;
+            label11.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
+            label11.Location = new Point(6, 89);
+            label11.Name = "label11";
+            label11.Size = new Size(321, 86);
+            label11.TabIndex = 2;
+            label11.Text = "0";
+            label11.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // label3
             // 
             label3.AutoSize = true;
@@ -470,6 +566,18 @@
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel4.Size = new Size(334, 178);
             tableLayoutPanel4.TabIndex = 0;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Dock = DockStyle.Fill;
+            label13.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
+            label13.Location = new Point(6, 89);
+            label13.Name = "label13";
+            label13.Size = new Size(322, 86);
+            label13.TabIndex = 3;
+            label13.Text = "0";
+            label13.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // label1
             // 
@@ -520,114 +628,6 @@
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(346, 32);
             dateTimePicker1.TabIndex = 1;
-            // 
-            // label11
-            // 
-            label11.AutoSize = true;
-            label11.Dock = DockStyle.Fill;
-            label11.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label11.Location = new Point(6, 89);
-            label11.Name = "label11";
-            label11.Size = new Size(321, 86);
-            label11.TabIndex = 2;
-            label11.Text = "0";
-            label11.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // label12
-            // 
-            label12.AutoSize = true;
-            label12.Dock = DockStyle.Fill;
-            label12.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label12.Location = new Point(6, 89);
-            label12.Name = "label12";
-            label12.Size = new Size(321, 86);
-            label12.TabIndex = 3;
-            label12.Text = "0";
-            label12.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // label13
-            // 
-            label13.AutoSize = true;
-            label13.Dock = DockStyle.Fill;
-            label13.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label13.Location = new Point(6, 89);
-            label13.Name = "label13";
-            label13.Size = new Size(322, 86);
-            label13.TabIndex = 3;
-            label13.Text = "0";
-            label13.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // label14
-            // 
-            label14.AutoSize = true;
-            label14.Dock = DockStyle.Fill;
-            label14.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label14.Location = new Point(6, 89);
-            label14.Name = "label14";
-            label14.Size = new Size(322, 86);
-            label14.TabIndex = 3;
-            label14.Text = "0";
-            label14.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // label15
-            // 
-            label15.AutoSize = true;
-            label15.Dock = DockStyle.Fill;
-            label15.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label15.Location = new Point(6, 89);
-            label15.Name = "label15";
-            label15.Size = new Size(321, 86);
-            label15.TabIndex = 3;
-            label15.Text = "0";
-            label15.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // label16
-            // 
-            label16.AutoSize = true;
-            label16.Dock = DockStyle.Fill;
-            label16.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label16.Location = new Point(6, 89);
-            label16.Name = "label16";
-            label16.Size = new Size(321, 86);
-            label16.TabIndex = 3;
-            label16.Text = "0";
-            label16.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // label17
-            // 
-            label17.AutoSize = true;
-            label17.Dock = DockStyle.Fill;
-            label17.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label17.Location = new Point(6, 89);
-            label17.Name = "label17";
-            label17.Size = new Size(321, 86);
-            label17.TabIndex = 3;
-            label17.Text = "0";
-            label17.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // label18
-            // 
-            label18.AutoSize = true;
-            label18.Dock = DockStyle.Fill;
-            label18.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label18.Location = new Point(6, 89);
-            label18.Name = "label18";
-            label18.Size = new Size(321, 86);
-            label18.TabIndex = 3;
-            label18.Text = "0";
-            label18.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // label19
-            // 
-            label19.AutoSize = true;
-            label19.Dock = DockStyle.Fill;
-            label19.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label19.Location = new Point(6, 89);
-            label19.Name = "label19";
-            label19.Size = new Size(322, 86);
-            label19.TabIndex = 3;
-            label19.Text = "0";
-            label19.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // frmDailyDashBoard
             // 

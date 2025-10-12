@@ -888,7 +888,7 @@
             btnDashBoard.FlatAppearance.BorderSize = 0;
             btnDashBoard.FlatStyle = FlatStyle.Flat;
             btnDashBoard.Font = new Font("Times New Roman", 14F, FontStyle.Bold);
-            btnDashBoard.Location = new Point(4, 213);
+            btnDashBoard.Location = new Point(4, 288);
             btnDashBoard.Margin = new Padding(3, 2, 3, 2);
             btnDashBoard.MaximumSize = new Size(0, 29);
             btnDashBoard.MinimumSize = new Size(0, 29);
@@ -912,7 +912,7 @@
             DGV.Name = "DGV";
             DGV.ReadOnly = true;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DGV.Size = new Size(126, 180);
+            DGV.Size = new Size(126, 255);
             DGV.TabIndex = 2;
             DGV.DoubleClick += DGV_DoubleClick;
             // 
