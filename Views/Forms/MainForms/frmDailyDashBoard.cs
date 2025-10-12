@@ -9,50 +9,71 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
     {
         private readonly Panel[] panels;
         private int currentPanelIndex = 0;
-        private bool isAnimating = false; // 🔒 لتجنب بدء حركة جديدة أثناء حركة جارية
+        private bool isAnimating = false;
 
         public frmDailyDashBoard()
         {
             InitializeComponent();
 
             panels = new Panel[] { pnl0, pnl1, pnl2 };
+
+            // 🟢 تهيئة الحالة عند الفتح
+            this.Load += frmDailyDashBoard_Load;
+        }
+
+        private void frmDailyDashBoard_Load(object? sender, EventArgs e)
+        {
+            // تأكد من أن pnlContainer محمّلة
+            if (pnlContainer == null) return;
+
+            pnlContainer.SuspendLayout();
+
+            // 🔹 pnl0 مفتوحة
+            panels[0].Width = (int)(pnlContainer.Width * 0.98);
+
+            // 🔹 الباقي مغلق
+            for (int i = 1; i < panels.Length; i++)
+                panels[i].Width = (int)(pnlContainer.Width * 0.02);
+
+            pnlContainer.ResumeLayout();
+
+            // 🔹 تحديث حالة الأسهم
+            UpdateNavigationButtons();
         }
 
         private async void lblNext_Click(object sender, EventArgs e)
         {
-            if (isAnimating) return; // ⛔ منع الحركة أثناء أخرى
+            if (isAnimating || currentPanelIndex >= panels.Length - 1) return;
 
-            if (currentPanelIndex < panels.Length - 1)
-            {
-                isAnimating = true;
-                pnlContainer.SuspendLayout(); // 🧱 إيقاف الترتيب المؤقت
-                await CollapsePanel(panels[currentPanelIndex]);
-                currentPanelIndex++;
-                await ExpandPanel(panels[currentPanelIndex]);
-                pnlContainer.ResumeLayout(); // ✅ استئناف الترتيب
-                isAnimating = false;
-            }
+            isAnimating = true;
+            pnlContainer.SuspendLayout();
+            await CollapsePanel(panels[currentPanelIndex]);
+            currentPanelIndex++;
+            await ExpandPanel(panels[currentPanelIndex]);
+            pnlContainer.ResumeLayout();
+            isAnimating = false;
+
+            UpdateNavigationButtons();
         }
 
         private async void lblPrev_Click(object sender, EventArgs e)
         {
-            if (isAnimating) return;
+            if (isAnimating || currentPanelIndex <= 0) return;
 
-            if (currentPanelIndex > 0)
-            {
-                isAnimating = true;
-                pnlContainer.SuspendLayout();
-                await CollapsePanel(panels[currentPanelIndex]);
-                currentPanelIndex--;
-                await ExpandPanel(panels[currentPanelIndex]);
-                pnlContainer.ResumeLayout();
-                isAnimating = false;
-            }
+            isAnimating = true;
+            pnlContainer.SuspendLayout();
+            await CollapsePanel(panels[currentPanelIndex]);
+            currentPanelIndex--;
+            await ExpandPanel(panels[currentPanelIndex]);
+            pnlContainer.ResumeLayout();
+            isAnimating = false;
+
+            UpdateNavigationButtons();
         }
 
         private async Task CollapsePanel(Panel pnl)
         {
-            int targetWidth = (int)(pnlContainer.Width * 0.02); // 2%
+            int targetWidth = (int)(pnlContainer.Width * 0.02);
             while (pnl.Width > targetWidth)
             {
                 pnl.Width = Math.Max(pnl.Width - 20, targetWidth);
@@ -62,7 +83,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         private async Task ExpandPanel(Panel pnl)
         {
-            int targetWidth = (int)(pnlContainer.Width * 0.98); // 98%
+            int targetWidth = (int)(pnlContainer.Width * 0.98);
             while (pnl.Width < targetWidth)
             {
                 pnl.Width = Math.Min(pnl.Width + 20, targetWidth);
@@ -86,10 +107,38 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             pnlContainer.ResumeLayout();
         }
 
+        private void UpdateNavigationButtons()
+        {
+            // 🔹 في أول بانل
+            if (currentPanelIndex == 0)
+            {
+                lblPrev.Enabled = false;
+                lblPrev.ForeColor = Color.Gray;
+                lblNext.Enabled = true;
+                lblNext.ForeColor = Color.Black;
+            }
+            // 🔹 في آخر بانل
+            else if (currentPanelIndex == panels.Length - 1)
+            {
+                lblNext.Enabled = false;
+                lblNext.ForeColor = Color.Gray;
+                lblPrev.Enabled = true;
+                lblPrev.ForeColor = Color.Black;
+            }
+            // 🔹 بينهما
+            else
+            {
+                lblPrev.Enabled = true;
+                lblNext.Enabled = true;
+                lblPrev.ForeColor = Color.Black;
+                lblNext.ForeColor = Color.Black;
+            }
+        }
+
         #region 🖱️ Mouse Effects
         private void lblNext_MouseEnter(object sender, EventArgs e)
         {
-            if (sender is Label lbl)
+            if (sender is Label lbl && lbl.Enabled)
             {
                 lbl.BackColor = Color.LightBlue;
                 lbl.ForeColor = Color.DarkBlue;
@@ -102,13 +151,13 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             if (sender is Label lbl)
             {
                 lbl.BackColor = Color.Transparent;
-                lbl.ForeColor = Color.Black;
+                lbl.ForeColor = lbl.Enabled ? Color.Black : Color.Gray;
             }
         }
 
         private void lblPrev_MouseEnter(object sender, EventArgs e)
         {
-            if (sender is Label lbl)
+            if (sender is Label lbl && lbl.Enabled)
             {
                 lbl.BackColor = Color.LightBlue;
                 lbl.ForeColor = Color.DarkBlue;
@@ -121,7 +170,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             if (sender is Label lbl)
             {
                 lbl.BackColor = Color.Transparent;
-                lbl.ForeColor = Color.Black;
+                lbl.ForeColor = lbl.Enabled ? Color.Black : Color.Gray;
             }
         }
         #endregion
