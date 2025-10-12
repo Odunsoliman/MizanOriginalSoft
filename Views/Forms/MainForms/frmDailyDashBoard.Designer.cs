@@ -251,6 +251,7 @@
             // 
             // panel9
             // 
+            panel9.BorderStyle = BorderStyle.FixedSingle;
             panel9.Controls.Add(tableLayoutPanel11);
             panel9.Dock = DockStyle.Fill;
             panel9.Location = new Point(3, 343);
@@ -273,7 +274,7 @@
             tableLayoutPanel11.RowCount = 2;
             tableLayoutPanel11.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel11.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel11.Size = new Size(301, 146);
+            tableLayoutPanel11.Size = new Size(299, 144);
             tableLayoutPanel11.TabIndex = 0;
             // 
             // label19
@@ -281,9 +282,9 @@
             label19.AutoSize = true;
             label19.Dock = DockStyle.Fill;
             label19.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label19.Location = new Point(6, 73);
+            label19.Location = new Point(6, 72);
             label19.Name = "label19";
-            label19.Size = new Size(289, 70);
+            label19.Size = new Size(287, 69);
             label19.TabIndex = 3;
             label19.Text = "0";
             label19.TextAlign = ContentAlignment.MiddleCenter;
@@ -295,7 +296,7 @@
             label8.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
             label8.Location = new Point(6, 3);
             label8.Name = "label8";
-            label8.Size = new Size(289, 70);
+            label8.Size = new Size(287, 69);
             label8.TabIndex = 1;
             label8.Text = "الصنف الاكبر مبيعا";
             label8.TextAlign = ContentAlignment.MiddleCenter;
@@ -619,7 +620,6 @@
             // tableLayoutPanel3
             // 
             tableLayoutPanel3.BackColor = Color.MistyRose;
-            tableLayoutPanel3.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
             tableLayoutPanel3.ColumnCount = 1;
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel3.Controls.Add(label11, 0, 1);
@@ -639,9 +639,9 @@
             label11.AutoSize = true;
             label11.Dock = DockStyle.Fill;
             label11.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label11.Location = new Point(7, 72);
+            label11.Location = new Point(6, 72);
             label11.Name = "label11";
-            label11.Size = new Size(285, 68);
+            label11.Size = new Size(287, 69);
             label11.TabIndex = 2;
             label11.Text = "0";
             label11.TextAlign = ContentAlignment.MiddleCenter;
@@ -651,9 +651,9 @@
             label3.AutoSize = true;
             label3.Dock = DockStyle.Fill;
             label3.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label3.Location = new Point(7, 4);
+            label3.Location = new Point(6, 3);
             label3.Name = "label3";
-            label3.Size = new Size(285, 67);
+            label3.Size = new Size(287, 69);
             label3.TabIndex = 1;
             label3.Text = "المبيعات النقدية";
             label3.TextAlign = ContentAlignment.MiddleCenter;
