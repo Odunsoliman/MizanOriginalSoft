@@ -88,10 +88,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 lblTotalCash.Text = Convert.ToDecimal(row["Total_Sales"]).ToString("N2");
                 lblExpenses.Text = Convert.ToDecimal(row["Total_Cash_Expenses"]).ToString("N2");
                 lblPurchases.Text = Convert.ToDecimal(row["Total_Purchases"]).ToString("N2");
-                lblUnSaved_Invoice.Text = Convert.ToInt32 (row["UnSaved_Invoice_All"]).ToString("N2");
-                //System.ArgumentException: 'Column 'Total_Cash_Expenses' does not belong to table .'
-                //System.ArgumentException: 'Column 'Total_Purchases' does not belong to table .'
-                //System.ArgumentException: 'Column 'UnSaved_Invoice_All' does not belong to table .'
+                lblUnSaved_Invoice.Text = Convert.ToInt32(row["UnSaved_Invoice_All"]).ToString();
             }
             else
             {
@@ -99,6 +96,13 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 lblElectronicSales.Text = "0.00";
                 lblSalesCredit.Text = "0.00";
                 lblTotalCash.Text = "0.00";
+
+
+                lblExpenses.Text =  "0.00";
+                lblPurchases.Text = "0.00";
+                lblUnSaved_Invoice.Text = "0";
+
+
             }
         }
 

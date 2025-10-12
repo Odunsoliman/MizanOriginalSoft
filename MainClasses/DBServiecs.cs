@@ -2126,7 +2126,7 @@ namespace MizanOriginalSoft.MainClasses
         // التاريخ المطلوب، وإذا لم يُمرر يكون تاريخ اليوم
         public static DataTable TodayRpt_SalesAndExpenses(DateTime? TargetDate = null)
         {
-            DataTable? result = dbHelper.ExecuteSelectQuery("TodayRpt_SalesSummary", command =>
+            DataTable? result = dbHelper.ExecuteSelectQuery("TodayRpt_SalesAndExpenses", command =>
             {
                 command.Parameters.Add("@TargetDate", SqlDbType.Date ).Value = TargetDate;
             });
