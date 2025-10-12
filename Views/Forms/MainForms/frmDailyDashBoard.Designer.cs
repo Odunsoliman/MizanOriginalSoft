@@ -297,6 +297,7 @@
             lblPrev.TabIndex = 3;
             lblPrev.Text = "◄";
             lblPrev.TextAlign = ContentAlignment.MiddleCenter;
+            lblPrev.Click += lblPrev_Click;
             lblPrev.MouseEnter += lblPrev_MouseEnter;
             lblPrev.MouseLeave += lblPrev_MouseLeave;
             // 
@@ -312,6 +313,7 @@
             lblNext.TabIndex = 1;
             lblNext.Text = "►";
             lblNext.TextAlign = ContentAlignment.MiddleCenter;
+            lblNext.Click += lblNext_Click;
             lblNext.MouseEnter += lblNext_MouseEnter;
             lblNext.MouseLeave += lblNext_MouseLeave;
             // 
