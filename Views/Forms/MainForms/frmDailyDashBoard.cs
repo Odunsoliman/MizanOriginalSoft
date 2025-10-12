@@ -15,9 +15,10 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             InitializeComponent();
 
-            panels = new Panel[] { pnl0, pnl1, pnl2 };
-            this.Load += frmDailyDashBoard_Load;
-            this.Resize += frmDailyDashBoard_Resize;
+            dtpToDay.Format = DateTimePickerFormat.Custom;
+            dtpToDay.CustomFormat = "dddd dd MMMM yyyy";
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("ar-EG");
+
         }
 
         private void frmDailyDashBoard_Load(object? sender, EventArgs e)
