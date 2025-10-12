@@ -1872,8 +1872,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
 
 
-        #region Default Account
-        #endregion
 
         #region AutoComplete Configuration
         private void ConfigureAutoCompleteForAccount()
@@ -2608,11 +2606,11 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // 🔥 تحديد الحساب الافتراضي حسب نوع الفاتورة
             int defaultAccID = currentInvoiceType switch
             {
-                InvoiceType.Sale or InvoiceType.SaleReturn => 55,   // عميل نقدي
-                InvoiceType.Purchase or InvoiceType.PurchaseReturn => 56, // مورد نقدي
-                InvoiceType.Inventory => 72,     // حساب جرد المخزون
-                InvoiceType.DeductStock => 73,   // حساب خصم من المخزون
-                InvoiceType.AddStock => 74,      // حساب إضافة إلى المخزون
+                InvoiceType.Sale or InvoiceType.SaleReturn => 14,   // عميل نقدي
+                InvoiceType.Purchase or InvoiceType.PurchaseReturn => 28, // مورد نقدي
+                InvoiceType.Inventory => 20,     // حساب جرد المخزون
+                InvoiceType.DeductStock => 19,   // حساب خصم من المخزون
+                InvoiceType.AddStock => 19,      // حساب إضافة إلى المخزون
                 _ => -1
             };
 

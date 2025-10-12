@@ -317,7 +317,7 @@ namespace MizanOriginalSoft .Views.Forms.Movments
         private void GetBills(int? focusTransactionID = null)
         {
             tblBills = DBServiecs.CashTransactions_GetBillByType(Type_ID);
-
+            /**/
             if (tblBills == null || tblBills.Rows.Count == 0)
             {
                 currentIndex = 0;
