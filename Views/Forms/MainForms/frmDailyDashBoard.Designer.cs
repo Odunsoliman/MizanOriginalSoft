@@ -319,6 +319,7 @@
             // 
             // pnlContainer
             // 
+            pnlContainer.BackColor = SystemColors.AppWorkspace;
             pnlContainer.Controls.Add(pnl2);
             pnlContainer.Controls.Add(pnl1);
             pnlContainer.Controls.Add(pnl0);
@@ -330,6 +331,7 @@
             // 
             // pnl2
             // 
+            pnl2.BackColor = SystemColors.Info;
             pnl2.Controls.Add(tableLayoutPanel24);
             pnl2.Dock = DockStyle.Right;
             pnl2.Location = new Point(977, 0);
@@ -825,6 +827,7 @@
             // 
             // pnl1
             // 
+            pnl1.BackColor = Color.SeaShell;
             pnl1.Controls.Add(tableLayoutPanel14);
             pnl1.Dock = DockStyle.Right;
             pnl1.Location = new Point(987, 0);
@@ -1320,6 +1323,7 @@
             // 
             // pnl0
             // 
+            pnl0.BackColor = SystemColors.ButtonHighlight;
             pnl0.Controls.Add(tableLayoutPanel2);
             pnl0.Dock = DockStyle.Right;
             pnl0.Location = new Point(997, 0);
