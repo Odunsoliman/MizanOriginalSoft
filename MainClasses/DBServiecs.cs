@@ -2122,7 +2122,7 @@ namespace MizanOriginalSoft.MainClasses
         #endregion
 
 
-        #region 
+        #region !!!!!!! لوحة التحكم  !!!!!!!!!
         // التاريخ المطلوب، وإذا لم يُمرر يكون تاريخ اليوم
         public static DataTable TodayRpt_SalesAndExpenses(DateTime? TargetDate = null)
         {
