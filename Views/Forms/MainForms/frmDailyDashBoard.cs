@@ -8,56 +8,85 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
     public partial class frmDailyDashBoard : Form
     {
         private readonly Panel[] panels;
-        private readonly int[] minWidths = { 100, 100, 100 };
-        private readonly int[] maxWidths = { 400, 400, 400 };
         private int currentPanelIndex = 0;
+        private bool isAnimating = false; // 🔒 لتجنب بدء حركة جديدة أثناء حركة جارية
 
         public frmDailyDashBoard()
         {
             InitializeComponent();
 
-            // ✅ تهيئة المصفوفة بعد تحميل مكونات الفورم
             panels = new Panel[] { pnl0, pnl1, pnl2 };
         }
 
         private async void lblNext_Click(object sender, EventArgs e)
         {
+            if (isAnimating) return; // ⛔ منع الحركة أثناء أخرى
+
             if (currentPanelIndex < panels.Length - 1)
             {
-                await CollapsePanel(panels[currentPanelIndex], minWidths[currentPanelIndex]);
+                isAnimating = true;
+                pnlContainer.SuspendLayout(); // 🧱 إيقاف الترتيب المؤقت
+                await CollapsePanel(panels[currentPanelIndex]);
                 currentPanelIndex++;
-                await ExpandPanel(panels[currentPanelIndex], maxWidths[currentPanelIndex]);
+                await ExpandPanel(panels[currentPanelIndex]);
+                pnlContainer.ResumeLayout(); // ✅ استئناف الترتيب
+                isAnimating = false;
             }
         }
 
         private async void lblPrev_Click(object sender, EventArgs e)
         {
+            if (isAnimating) return;
+
             if (currentPanelIndex > 0)
             {
-                await CollapsePanel(panels[currentPanelIndex], minWidths[currentPanelIndex]);
+                isAnimating = true;
+                pnlContainer.SuspendLayout();
+                await CollapsePanel(panels[currentPanelIndex]);
                 currentPanelIndex--;
-                await ExpandPanel(panels[currentPanelIndex], maxWidths[currentPanelIndex]);
+                await ExpandPanel(panels[currentPanelIndex]);
+                pnlContainer.ResumeLayout();
+                isAnimating = false;
             }
         }
 
-        private async Task CollapsePanel(Panel pnl, int minWidth)
+        private async Task CollapsePanel(Panel pnl)
         {
-            while (pnl.Width > minWidth)
+            int targetWidth = (int)(pnlContainer.Width * 0.02); // 2%
+            while (pnl.Width > targetWidth)
             {
-                pnl.Width -= 20;
-                await Task.Delay(10);
+                pnl.Width = Math.Max(pnl.Width - 20, targetWidth);
+                await Task.Delay(5);
             }
         }
 
-        private async Task ExpandPanel(Panel pnl, int maxWidth)
+        private async Task ExpandPanel(Panel pnl)
         {
-            while (pnl.Width < maxWidth)
+            int targetWidth = (int)(pnlContainer.Width * 0.98); // 98%
+            while (pnl.Width < targetWidth)
             {
-                pnl.Width += 20;
-                await Task.Delay(10);
+                pnl.Width = Math.Min(pnl.Width + 20, targetWidth);
+                await Task.Delay(5);
             }
+            pnl.Width = targetWidth;
         }
 
+        private void frmDailyDashBoard_Resize(object sender, EventArgs e)
+        {
+            if (pnlContainer == null || panels == null) return;
+
+            pnlContainer.SuspendLayout();
+            for (int i = 0; i < panels.Length; i++)
+            {
+                if (i == currentPanelIndex)
+                    panels[i].Width = (int)(pnlContainer.Width * 0.98);
+                else
+                    panels[i].Width = (int)(pnlContainer.Width * 0.02);
+            }
+            pnlContainer.ResumeLayout();
+        }
+
+        #region 🖱️ Mouse Effects
         private void lblNext_MouseEnter(object sender, EventArgs e)
         {
             if (sender is Label lbl)
@@ -95,5 +124,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 lbl.ForeColor = Color.Black;
             }
         }
+        #endregion
     }
 }
