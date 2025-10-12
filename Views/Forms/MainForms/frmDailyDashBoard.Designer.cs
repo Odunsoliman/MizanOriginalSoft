@@ -619,6 +619,7 @@
             // tableLayoutPanel3
             // 
             tableLayoutPanel3.BackColor = Color.MistyRose;
+            tableLayoutPanel3.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
             tableLayoutPanel3.ColumnCount = 1;
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel3.Controls.Add(label11, 0, 1);
@@ -638,9 +639,9 @@
             label11.AutoSize = true;
             label11.Dock = DockStyle.Fill;
             label11.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label11.Location = new Point(6, 72);
+            label11.Location = new Point(7, 72);
             label11.Name = "label11";
-            label11.Size = new Size(287, 69);
+            label11.Size = new Size(285, 68);
             label11.TabIndex = 2;
             label11.Text = "0";
             label11.TextAlign = ContentAlignment.MiddleCenter;
@@ -650,9 +651,9 @@
             label3.AutoSize = true;
             label3.Dock = DockStyle.Fill;
             label3.Font = new Font("Times New Roman", 22F, FontStyle.Bold);
-            label3.Location = new Point(6, 3);
+            label3.Location = new Point(7, 4);
             label3.Name = "label3";
-            label3.Size = new Size(287, 69);
+            label3.Size = new Size(285, 67);
             label3.TabIndex = 1;
             label3.Text = "المبيعات النقدية";
             label3.TextAlign = ContentAlignment.MiddleCenter;
