@@ -711,6 +711,7 @@
             // 
             // txtAccName
             // 
+            txtAccName.BackColor = Color.FromArgb(192, 255, 192);
             txtAccName.Dock = DockStyle.Fill;
             txtAccName.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             txtAccName.Location = new Point(873, 3);
