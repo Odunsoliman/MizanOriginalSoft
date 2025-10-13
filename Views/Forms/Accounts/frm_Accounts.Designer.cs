@@ -141,6 +141,7 @@
             // 
             // txtSearchTree
             // 
+            txtSearchTree.BackColor = Color.FromArgb(255, 255, 192);
             txtSearchTree.Dock = DockStyle.Fill;
             txtSearchTree.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold);
             txtSearchTree.Location = new Point(5, 87);

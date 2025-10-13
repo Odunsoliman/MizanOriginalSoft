@@ -863,13 +863,13 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         // 🔹 نقطة بيع الكاشير
         private void btnPOS_Click(object sender, EventArgs e)
         {
-            if (sender is Button btn)
-            {
-                HighlightTransparentButton(btn);
-            }
-            CloseAllFormsExceptMain();
-            frmPOS frm = new frmPOS();
-            OpenFormInPanel(frm);
+            //if (sender is Button btn)
+            //{
+            //    HighlightTransparentButton(btn);
+            //}
+            //CloseAllFormsExceptMain();
+            //frmPOS frm = new frmPOS();
+            //OpenFormInPanel(frm);
         }
         #endregion
 
