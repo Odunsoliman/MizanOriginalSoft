@@ -1636,14 +1636,16 @@ namespace MizanOriginalSoft.MainClasses
         }
 
 
-        // إضافة حساب شجرى  []
-        public static string Acc_AddParentAccount(string AccName, int? ParentTree, int? CreateByUserID)
+        // إضافة حساب شجرى  []@
+        public static string Acc_AddParentAccount(string AccName, int? ParentTree, int? CreateByUserID ,bool IsForManger)
         {
             return dbHelper.ExecuteStoredProcedureWithOutputMessage("Acc_AddParentAccount", command =>
             {
                 command.Parameters.Add("@AccName", SqlDbType.NVarChar).Value = AccName;
                 command.Parameters.Add("@ParentTree", SqlDbType.Int).Value = (object?)ParentTree ?? DBNull.Value;
                 command.Parameters.Add("@CreateByUserID", SqlDbType.Int).Value = (object?)CreateByUserID ?? DBNull.Value;
+                command.Parameters.Add("@IsForManger", SqlDbType.Bit ).Value = (object?)IsForManger ?? DBNull.Value;
+
             });
         }
 
@@ -1696,13 +1698,15 @@ namespace MizanOriginalSoft.MainClasses
 
          */
         // إضافة حساب نهائى  [][]
-        public static string Acc_AddFinalAccount(string AccName, int? ParentTree, int? CreateByUserID)
+        public static string Acc_AddFinalAccount(string AccName, int? ParentTree, int? CreateByUserID, bool IsForManger)
         {
             return dbHelper.ExecuteStoredProcedureWithOutputMessage("Acc_AddFinalAccount", command =>
             {
                 command.Parameters.Add("@AccName", SqlDbType.NVarChar).Value = AccName;
                 command.Parameters.Add("@ParentTree", SqlDbType.Int).Value = (object?)ParentTree ?? DBNull.Value;
                 command.Parameters.Add("@CreateByUserID", SqlDbType.Int).Value = (object?)CreateByUserID ?? DBNull.Value;
+                command.Parameters.Add("@IsForManger", SqlDbType.Bit).Value = (object?)IsForManger ?? DBNull.Value;
+
             });
         }
 

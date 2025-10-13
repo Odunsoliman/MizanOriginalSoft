@@ -758,7 +758,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             string parentName = selectedNode.Text; // اسم الأب من الشجرة
 
             // استدعاء الإجراء المخزن لجلب الأبناء
-            DataTable dt = DBServiecs.Acc_GetChildren(parentTreeAccCode);
+            DataTable dt = DBServiecs.Acc_GetLeafChildren_ForManger(parentTreeAccCode);
 
             // ✅ إضافة عمود ParentName يدويًا لو مش موجود
             if (!dt.Columns.Contains("ParentName"))
@@ -1271,7 +1271,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             int parentTreeAccCode = selectedRow.Field<int>("TreeAccCode");
             int createByUserID = CurrentSession.UserID;
 
-            string result = DBServiecs.Acc_AddParentAccount(accName, parentTreeAccCode, createByUserID);
+            string result = DBServiecs.Acc_AddParentAccount(accName, parentTreeAccCode, createByUserID,true );
 
             if (result.Contains("نجاح"))
             {
@@ -1327,7 +1327,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             int parentTreeAccCode = selectedRow.Field<int>("TreeAccCode");
             int createByUserID = CurrentSession.UserID;
 
-            string result = DBServiecs.Acc_AddFinalAccount(accName, parentTreeAccCode, createByUserID);
+            string result = DBServiecs.Acc_AddFinalAccount(accName, parentTreeAccCode, createByUserID,true );
 
             if (result.Contains("نجاح"))
             {

@@ -1246,7 +1246,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             int parentTreeAccCode = selectedRow.Field<int>("TreeAccCode");
             int createByUserID = CurrentSession.UserID;
 
-            string result = DBServiecs.Acc_AddParentAccount(accName, parentTreeAccCode, createByUserID);
+            string result = DBServiecs.Acc_AddParentAccount(accName, parentTreeAccCode, createByUserID,false);
 
             if (result.Contains("نجاح"))
             {
@@ -1302,7 +1302,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             int parentTreeAccCode = selectedRow.Field<int>("TreeAccCode");
             int createByUserID = CurrentSession.UserID;
 
-            string result = DBServiecs.Acc_AddFinalAccount(accName, parentTreeAccCode, createByUserID);
+            string result = DBServiecs.Acc_AddFinalAccount(accName, parentTreeAccCode, createByUserID, false);
 
             if (result.Contains("نجاح"))
             {

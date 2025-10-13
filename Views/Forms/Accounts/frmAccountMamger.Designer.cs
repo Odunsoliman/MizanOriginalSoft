@@ -525,7 +525,7 @@
             label15.Name = "label15";
             label15.Size = new Size(205, 32);
             label15.TabIndex = 43;
-            label15.Text = "شجرة الحسابات العامة";
+            label15.Text = "الحسابات العامة";
             label15.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // panelList
