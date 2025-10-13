@@ -264,6 +264,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         //اختيار العقدة من الشجرة
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            txtSearch .Text = string.Empty;
             // ① نتأكد أن هناك عقدة مختارة
             if (e.Node?.Tag == null) return;
 
