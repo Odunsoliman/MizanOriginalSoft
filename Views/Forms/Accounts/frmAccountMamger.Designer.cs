@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             lblPhonAndAnther = new Label();
             lblAccDataDetails = new Label();
             lblAccID_DGV = new Label();
@@ -570,6 +570,9 @@
             txtSearchTree.Size = new Size(195, 29);
             txtSearchTree.TabIndex = 5;
             txtSearchTree.TextAlign = HorizontalAlignment.Center;
+            txtSearchTree.TextChanged += txtSearchTree_TextChanged;
+            txtSearchTree.Enter += txtSearchTree_Enter;
+            txtSearchTree.Leave += txtSearchTree_Leave;
             // 
             // treeViewAccounts
             // 
@@ -584,6 +587,8 @@
             treeViewAccounts.RightToLeftLayout = true;
             treeViewAccounts.Size = new Size(195, 417);
             treeViewAccounts.TabIndex = 4;
+            treeViewAccounts.AfterExpand += treeViewAccounts_AfterExpand;
+            treeViewAccounts.AfterSelect += treeViewAccounts_AfterSelect;
             // 
             // tableLayoutPanel34
             // 
@@ -643,6 +648,7 @@
             btnDeleteAccFromTree.TabStop = false;
             btnDeleteAccFromTree.Text = "حذف الفرع";
             btnDeleteAccFromTree.UseVisualStyleBackColor = false;
+            btnDeleteAccFromTree.Click += btnDeleteAccFromTree_Click;
             // 
             // btnAccAccount
             // 
@@ -657,6 +663,7 @@
             btnAccAccount.TabIndex = 84;
             btnAccAccount.Text = "اضافة حــ";
             btnAccAccount.UseVisualStyleBackColor = false;
+            btnAccAccount.Click += btnAccAccount_Click;
             // 
             // btnModify
             // 
@@ -671,6 +678,7 @@
             btnModify.TabIndex = 83;
             btnModify.Text = "تعديل";
             btnModify.UseVisualStyleBackColor = false;
+            btnModify.Click += btnModify_Click;
             // 
             // label27
             // 
@@ -835,12 +843,14 @@
             DGV.ReadOnly = true;
             DGV.RowHeadersVisible = false;
             DGV.RowHeadersWidth = 51;
-            dataGridViewCellStyle1.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            DGV.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DGV.RowsDefaultCellStyle = dataGridViewCellStyle2;
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DGV.Size = new Size(493, 384);
             DGV.TabIndex = 72;
             DGV.TabStop = false;
+            DGV.CellClick += DGV_CellClick;
+            DGV.SelectionChanged += DGV_SelectionChanged;
             // 
             // contextMenuDGV
             // 
@@ -889,6 +899,9 @@
             txtSearch.TabIndex = 71;
             txtSearch.TabStop = false;
             txtSearch.TextAlign = HorizontalAlignment.Center;
+            txtSearch.TextChanged += txtSearch_TextChanged;
+            txtSearch.Enter += txtSearch_Enter;
+            txtSearch.Leave += txtSearch_Leave;
             // 
             // tableLayoutPanel9
             // 
@@ -1094,6 +1107,7 @@
             btnAddChildren.TabIndex = 90;
             btnAddChildren.Text = "اضافة حــ";
             btnAddChildren.UseVisualStyleBackColor = false;
+            btnAddChildren.Click += btnAddChildren_Click;
             // 
             // btnModifyAccFromGrid
             // 
@@ -1108,6 +1122,7 @@
             btnModifyAccFromGrid.TabIndex = 83;
             btnModifyAccFromGrid.Text = "تعديل حساب";
             btnModifyAccFromGrid.UseVisualStyleBackColor = false;
+            btnModifyAccFromGrid.Click += btnModifyAccFromGrid_Click;
             // 
             // btnDeleteAccFromDGV
             // 
@@ -1122,6 +1137,7 @@
             btnDeleteAccFromDGV.TabStop = false;
             btnDeleteAccFromDGV.Text = "حذف الابن";
             btnDeleteAccFromDGV.UseVisualStyleBackColor = false;
+            btnDeleteAccFromDGV.Click += btnDeleteAccFromDGV_Click;
             // 
             // label2
             // 
@@ -1198,6 +1214,7 @@
             btnAddDetails.TabIndex = 87;
             btnAddDetails.Text = "اضافة";
             btnAddDetails.UseVisualStyleBackColor = false;
+            btnAddDetails.Click += btnAddDetails_Click;
             // 
             // btnDeleteDetail
             // 
@@ -1212,6 +1229,7 @@
             btnDeleteDetail.TabIndex = 86;
             btnDeleteDetail.Text = "حذف";
             btnDeleteDetail.UseVisualStyleBackColor = false;
+            btnDeleteDetail.Click += btnDeleteDetail_Click;
             // 
             // btnModifyDetail
             // 
@@ -1226,6 +1244,7 @@
             btnModifyDetail.TabIndex = 85;
             btnModifyDetail.Text = "تعديل";
             btnModifyDetail.UseVisualStyleBackColor = false;
+            btnModifyDetail.Click += btnModifyDetail_Click;
             // 
             // btnNextDetail
             // 
@@ -1240,6 +1259,7 @@
             btnNextDetail.TabIndex = 84;
             btnNextDetail.Text = "<< >>";
             btnNextDetail.UseVisualStyleBackColor = false;
+            btnNextDetail.Click += btnNextDetail_Click;
             // 
             // frmAccountMamger
             // 
@@ -1250,6 +1270,7 @@
             Name = "frmAccountMamger";
             RightToLeft = RightToLeft.Yes;
             Text = "frmAccountMamger";
+            Load += frmAccountMamger_Load;
             tableLayoutPanel16.ResumeLayout(false);
             tableLayoutPanel16.PerformLayout();
             tableLayoutPanel12.ResumeLayout(false);
