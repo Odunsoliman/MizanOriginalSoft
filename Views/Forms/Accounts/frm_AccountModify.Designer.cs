@@ -46,6 +46,7 @@
             tableLayoutPanel2 = new TableLayoutPanel();
             lblAccTypeID = new Label();
             cbxAccTypeID = new ComboBox();
+            chkImplementOnChildren = new CheckBox();
             lblTitetl_Item = new Label();
             tableLayoutPanel16 = new TableLayoutPanel();
             btnSave = new Button();
@@ -144,6 +145,7 @@
             tableLayoutPanel6.Controls.Add(label1, 0, 6);
             tableLayoutPanel6.Controls.Add(lblCBX, 0, 7);
             tableLayoutPanel6.Controls.Add(tableLayoutPanel2, 1, 6);
+            tableLayoutPanel6.Controls.Add(chkImplementOnChildren, 0, 3);
             tableLayoutPanel6.Dock = DockStyle.Fill;
             tableLayoutPanel6.ForeColor = Color.Black;
             tableLayoutPanel6.Location = new Point(3, 32);
@@ -180,12 +182,11 @@
             // chkIsHasDetails
             // 
             chkIsHasDetails.AutoSize = true;
-            chkIsHasDetails.Dock = DockStyle.Fill;
             chkIsHasDetails.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
             chkIsHasDetails.ForeColor = Color.FromArgb(0, 0, 192);
-            chkIsHasDetails.Location = new Point(3, 155);
+            chkIsHasDetails.Location = new Point(91, 155);
             chkIsHasDetails.Name = "chkIsHasDetails";
-            chkIsHasDetails.Size = new Size(277, 32);
+            chkIsHasDetails.Size = new Size(189, 26);
             chkIsHasDetails.TabIndex = 76;
             chkIsHasDetails.Text = "هل للحساب تفاصيل خاصة";
             chkIsHasDetails.UseVisualStyleBackColor = true;
@@ -319,6 +320,18 @@
             cbxAccTypeID.Size = new Size(102, 28);
             cbxAccTypeID.TabIndex = 79;
             // 
+            // chkImplementOnChildren
+            // 
+            chkImplementOnChildren.AutoSize = true;
+            chkImplementOnChildren.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            chkImplementOnChildren.ForeColor = Color.MediumOrchid;
+            chkImplementOnChildren.Location = new Point(289, 117);
+            chkImplementOnChildren.Name = "chkImplementOnChildren";
+            chkImplementOnChildren.Size = new Size(141, 23);
+            chkImplementOnChildren.TabIndex = 76;
+            chkImplementOnChildren.Text = "تطبيق على المباشرين";
+            chkImplementOnChildren.UseVisualStyleBackColor = true;
+            // 
             // lblTitetl_Item
             // 
             lblTitetl_Item.AutoSize = true;
@@ -444,5 +457,6 @@
         private TableLayoutPanel tableLayoutPanel2;
         private Label lblAccTypeID;
         private ComboBox cbxAccTypeID;
+        private CheckBox chkImplementOnChildren;
     }
 }

@@ -14,7 +14,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 {
     public partial class frm_AccountModify : Form
     {
-        int _accID;
+        private readonly int _accID;
         DataTable dtAccData = new DataTable();
 
         // 🟢 متغيرات داخلية (لا تظهر على الشاشة)
@@ -219,50 +219,147 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 cbxParentTree.SelectedIndex = -1; // لا يوجد أب
             }
         }
+        /*
+
+
+
+    }
+}
+
+         */
 
         public int UpdatedAccID { get; private set; }
-        int parentTree  ; 
-        bool isForManager ;
-        bool isHasDetails ; 
-        bool isHidden ;     
+
+        private int parentTree;
+        private bool isForManager;
+        private bool isHasDetails;
+        private bool isHidden;
+        private int accTypeID;
+
+        
+
         int AccTypeID;
+        // 🟢 دالة لجمع البيانات من الواجهة
         private void GetDataForModify()
         {
-            parentTree = Convert .ToInt32 (cbxParentTree ?.SelectedValue ?? 0);
-            isForManager = chkIsForManger .Checked;
+            parentTree = Convert.ToInt32(cbxParentTree?.SelectedValue ?? 0);
+            isForManager = chkIsForManger.Checked;
             isHasDetails = chkIsHasDetails.Checked;
             isHidden = chkIsHidden.Checked;
-            AccTypeID = Convert.ToInt32(cbxAccTypeID?.SelectedValue ?? 0);
+            accTypeID = Convert.ToInt32(cbxAccTypeID?.SelectedValue ?? 0);
         }
+
+
+        //private void GetDataForModify()
+        //{
+        //    parentTree = Convert .ToInt32 (cbxParentTree ?.SelectedValue ?? 0);
+        //    isForManager = chkIsForManger .Checked;
+        //    isHasDetails = chkIsHasDetails.Checked;
+        //    isHidden = chkIsHidden.Checked;
+        //    AccTypeID = Convert.ToInt32(cbxAccTypeID?.SelectedValue ?? 0);
+        //}
+
+        // 🟢 عند الضغط على زر الحفظ
         private void btnSave_Click(object sender, EventArgs e)
         {
-            GetDataForModify();
-            // استدعاء الدالة
-            string resultMsg = DBServiecs.Acc_UpdateAccount(
-                _accID,
-                txtAccName.Text,
-                parentTree,
-                isForManager,
-                isHasDetails,
-                isHidden, AccTypeID
-            );
-
-            // التحقق من النتيجة
-            if (resultMsg.StartsWith("❌"))
+            try
             {
-                MessageBox.Show(resultMsg, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                MessageBox.Show(resultMsg, "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                GetDataForModify();
 
+                // تنفيذ التحديث الرئيسي
+                string resultMsg = DBServiecs.Acc_UpdateAccount(
+                    _accID,
+                    txtAccName.Text.Trim(),
+                    parentTree,
+                    isForManager,
+                    isHasDetails,
+                    isHidden,
+                    accTypeID
+                );
+
+                // التحقق من النتيجة
+                if (resultMsg.StartsWith("❌") || resultMsg.Contains("خطأ"))
+                {
+                    MessageBox.Show(resultMsg, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // ✅ إذا تم الحفظ بنجاح
                 UpdatedAccID = _accID;
+
+                string fullMessage = resultMsg;
+
+                // هل نطبق نفس الخاصية على الأبناء؟
+                if (chkImplementOnChildren.Checked)
+                {
+                    string childMsg = DBServiecs.Acc_UpdateImplementChild_ForManger(parentTree, isForManager);
+
+                    // ضم الرسالتين في نافذة واحدة
+                    fullMessage += Environment.NewLine + childMsg;
+                }
+
+                MessageBox.Show(fullMessage, "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ غير متوقع: " + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
+        //private void btnSave_Click_(object sender, EventArgs e)
+        //{
+        //    GetDataForModify();
+        //    // استدعاء الدالة
+        //    string resultMsg = DBServiecs.Acc_UpdateAccount(
+        //        _accID,
+        //        txtAccName.Text,
+        //        parentTree,
+        //        isForManager,
+        //        isHasDetails,
+        //        isHidden, AccTypeID
+        //    );
+
+        //    // التحقق من النتيجة
+        //    if (resultMsg.StartsWith("❌"))
+        //    {
+        //        MessageBox.Show(resultMsg, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show(resultMsg, "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        //        UpdatedAccID = _accID;
+
+        //        this.DialogResult = DialogResult.OK;
+        //        if (chkImplementOnChildren.Checked) 
+        //        {
+        //            ImplementOnChildren();
+        //        }
+                
+        //        this.Close();
+        //    }
+        //}
+        //private void ImplementOnChildren()
+        //{
+        //    // استدعاء الدالة
+        //    string resultMsg = DBServiecs.Acc_UpdateImplementChild_ForManger(
+        //        parentTree,
+        //        isForManager
+        //    );
+
+        //    // التحقق من النتيجة
+        //    if (resultMsg.StartsWith("❌"))
+        //    {
+        //        MessageBox.Show(resultMsg, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show(resultMsg, "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //    }
+        //}
         private void btnClose_Click(object sender, EventArgs e)
         {
             this .Close();

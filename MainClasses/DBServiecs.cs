@@ -1734,6 +1734,19 @@ namespace MizanOriginalSoft.MainClasses
             });
         }
 
+
+        public static string Acc_UpdateImplementChild_ForManger(int ParentTree, bool IsForManger)
+        {
+            return dbHelper.ExecuteStoredProcedureWithOutputMessage("Acc_UpdateImplementChild_ForManger", command =>
+            {
+                command.Parameters.Add("@ParentTree", SqlDbType.Int).Value = ParentTree;
+                command.Parameters.Add("@IsForManger", SqlDbType.Bit).Value = IsForManger;
+            });
+        }
+
+
+
+
         // احضار انواع الحسابات
         public static DataTable Acc_GetAccTypeID()
         {
