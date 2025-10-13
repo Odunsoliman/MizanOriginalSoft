@@ -34,12 +34,13 @@
             lblDateOfJoin = new Label();
             chkIsHidden = new CheckBox();
             tableLayoutPanel6 = new TableLayoutPanel();
+            lblTreeAccCode = new Label();
             chkIsForManger = new CheckBox();
             chkIsHasDetails = new CheckBox();
             lblParentTree = new Label();
             lblCreateByUserName = new Label();
             lblBalanceAndState = new Label();
-            lblTreeAccCode = new Label();
+            lblTreeAccCodeAndText = new Label();
             cbxParentTree = new ComboBox();
             label1 = new Label();
             lblCBX = new Label();
@@ -130,6 +131,7 @@
             tableLayoutPanel6.ColumnCount = 2;
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 34.76298F));
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65.23702F));
+            tableLayoutPanel6.Controls.Add(lblTreeAccCode, 0, 1);
             tableLayoutPanel6.Controls.Add(label2, 0, 0);
             tableLayoutPanel6.Controls.Add(txtAccName, 1, 0);
             tableLayoutPanel6.Controls.Add(chkIsHidden, 1, 1);
@@ -140,7 +142,7 @@
             tableLayoutPanel6.Controls.Add(lblCreateByUserName, 1, 11);
             tableLayoutPanel6.Controls.Add(lblDateOfJoin, 1, 10);
             tableLayoutPanel6.Controls.Add(lblBalanceAndState, 1, 9);
-            tableLayoutPanel6.Controls.Add(lblTreeAccCode, 1, 8);
+            tableLayoutPanel6.Controls.Add(lblTreeAccCodeAndText, 1, 8);
             tableLayoutPanel6.Controls.Add(cbxParentTree, 1, 7);
             tableLayoutPanel6.Controls.Add(label1, 0, 6);
             tableLayoutPanel6.Controls.Add(lblCBX, 0, 7);
@@ -165,6 +167,21 @@
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 7.69254351F));
             tableLayoutPanel6.Size = new Size(433, 463);
             tableLayoutPanel6.TabIndex = 93;
+            // 
+            // lblTreeAccCode
+            // 
+            lblTreeAccCode.AutoSize = true;
+            lblTreeAccCode.Dock = DockStyle.Fill;
+            lblTreeAccCode.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTreeAccCode.ForeColor = Color.FromArgb(0, 0, 192);
+            lblTreeAccCode.Location = new Point(287, 38);
+            lblTreeAccCode.Margin = new Padding(4, 0, 4, 0);
+            lblTreeAccCode.Name = "lblTreeAccCode";
+            lblTreeAccCode.Padding = new Padding(0, 0, 20, 0);
+            lblTreeAccCode.Size = new Size(142, 38);
+            lblTreeAccCode.TabIndex = 81;
+            lblTreeAccCode.Text = "اسم  الحساب";
+            lblTreeAccCode.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // chkIsForManger
             // 
@@ -231,18 +248,18 @@
             lblBalanceAndState.Text = "الرصيد";
             lblBalanceAndState.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // lblTreeAccCode
+            // lblTreeAccCodeAndText
             // 
-            lblTreeAccCode.AutoSize = true;
-            lblTreeAccCode.Dock = DockStyle.Fill;
-            lblTreeAccCode.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
-            lblTreeAccCode.ForeColor = SystemColors.ActiveCaption;
-            lblTreeAccCode.Location = new Point(3, 304);
-            lblTreeAccCode.Name = "lblTreeAccCode";
-            lblTreeAccCode.Size = new Size(277, 38);
-            lblTreeAccCode.TabIndex = 75;
-            lblTreeAccCode.Text = "الترقيم الشجرى";
-            lblTreeAccCode.TextAlign = ContentAlignment.MiddleLeft;
+            lblTreeAccCodeAndText.AutoSize = true;
+            lblTreeAccCodeAndText.Dock = DockStyle.Fill;
+            lblTreeAccCodeAndText.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold);
+            lblTreeAccCodeAndText.ForeColor = SystemColors.ActiveCaption;
+            lblTreeAccCodeAndText.Location = new Point(3, 304);
+            lblTreeAccCodeAndText.Name = "lblTreeAccCodeAndText";
+            lblTreeAccCodeAndText.Size = new Size(277, 38);
+            lblTreeAccCodeAndText.TabIndex = 75;
+            lblTreeAccCodeAndText.Text = "الترقيم الشجرى";
+            lblTreeAccCodeAndText.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // cbxParentTree
             // 
@@ -453,10 +470,11 @@
         private Label lblAccTypeIDlblAccTypeID;
         private Label lblCBX;
         private Label label1;
-        private Label lblTreeAccCode;
+        private Label lblTreeAccCodeAndText;
         private TableLayoutPanel tableLayoutPanel2;
         private Label lblAccTypeID;
         private ComboBox cbxAccTypeID;
         private CheckBox chkImplementOnChildren;
+        private Label lblTreeAccCode;
     }
 }

@@ -41,60 +41,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
 
-        private void LoadData_()
-        {
-            // 🔹 جلب البيانات من الإجراء المخزن
-            dtAccData = DBServiecs.Acc_GetDataForModify(_accID);
-            if (dtAccData.Rows.Count == 0)
-                return;
-            lblTitetl_Item.Text = "تعديل الحساب رقم : " + _accID;
-            bool?  isEnerAcc=false ;     // هل الرقم داخلى ام تشغيلى
-
-            DataRow row = dtAccData.Rows[0];
-            isEnerAcc = row["IsEnerAcc"] != DBNull.Value && Convert.ToBoolean(row["IsEnerAcc"]);
-            if (isEnerAcc==false )
-            {
-                cbxParentTree .Enabled = true ;
-                chkIsHidden.Enabled = true ;
-                lblCBX .Visible = true ;
-            }
-            else
-            {
-                cbxParentTree .Enabled = false ;
-                chkIsHidden.Enabled = false ;
-                lblCBX .Visible = false ;
-            }
-                // 🔹 عرض اسم الحساب
-                txtAccName.Text = row["AccName"].ToString();
-            chkIsHidden.Checked = row["IsHidden"] != DBNull.Value && Convert.ToBoolean(row["IsHidden"]);
-            if (chkIsHidden.Checked)
-            {
-                chkIsHidden.Text = "الحساب غير فعال";
-            }
-            else
-            {
-                chkIsHidden.Text = "الحساب  فعال";
-            }
-            lblIsEnerAcc .Text = row["IsEnerAccType"].ToString();     // هل الرقم داخلى ام تشغيلى
-            chkIsForManger.Checked = row["IsForManger"] != DBNull.Value && Convert.ToBoolean(row["IsForManger"]);
-
-            // 🔹 عرض خصائص التعديل (قيم منطقية فقط)
-            chkIsHasDetails.Checked = row["IsHasDetails"] != DBNull.Value && Convert.ToBoolean(row["IsHasDetails"]);
-        
-            lblTreeAccCode.Text = row["TreeAccCode"].ToString();     // الترقيم الشجري
-            lblAccTypeID.Text = row["Acc_TypeName"].ToString();    // النوع المحاسبي
-            lblParentTree.Text = row["ParentTreeName"].ToString();      // اسم الأب
-            _parentTree=row["ParentTree"] != DBNull.Value ? Convert.ToInt32(row["ParentTree"]) : (int?)null;
-            lblCreateByUserName.Text = "أنشئ بواسطة   "+ row["UserName"].ToString();        // أنشئ بواسطة
-            lblBalanceAndState.Text = row["Balance"].ToString();         // الرصيد الآن: xxx دائن
-            lblDateOfJoin.Text = row["DateOfJoin"].ToString();      // تاريخ الإنشاء: yyyy-mm-dd
-
-            // 🔹 لا حاجة لتحويل القيم الداخلية بعد الآن، لأنها أصبحت نصوصًا جاهزة
-            // ولكن يمكنك تخزين قيم مهمة داخليًا إن أردت (اختياري)
-            _AccTypeID = row["AccTypeID"] != DBNull.Value ? Convert.ToInt32(row["AccTypeID"]) : (int?)null;
-            LoadParentAccounts();  // تحميل قائمة الحسابات الأب في ComboBox
-            LodeAccTypeID();
-        }
         private void LoadData()
         {
             // 🔹 جلب البيانات من الإجراء المخزن
@@ -141,7 +87,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // 🔹 عرض خصائص التعديل (قيم منطقية فقط)
             chkIsHasDetails.Checked = row["IsHasDetails"] != DBNull.Value && Convert.ToBoolean(row["IsHasDetails"]);
 
-            lblTreeAccCode.Text = row["TreeAccCode"].ToString();     // الترقيم الشجري
+            lblTreeAccCodeAndText.Text = row["TreeAccCode"].ToString();     // الترقيم الشجري
             lblAccTypeID.Text = row["Acc_TypeName"].ToString();    // النوع المحاسبي
             lblParentTree.Text = row["ParentTreeName"].ToString();      // اسم الأب
             _parentTree = row["ParentTree"] != DBNull.Value ? Convert.ToInt32(row["ParentTree"]) : (int?)null;
@@ -235,8 +181,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         private bool isHasDetails;
         private bool isHidden;
         private int accTypeID;
+        private int parentchildren;
 
-        
 
         int AccTypeID;
         // 🟢 دالة لجمع البيانات من الواجهة
@@ -247,6 +193,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             isHasDetails = chkIsHasDetails.Checked;
             isHidden = chkIsHidden.Checked;
             accTypeID = Convert.ToInt32(cbxAccTypeID?.SelectedValue ?? 0);
+            parentchildren = Convert.ToInt32(lblTreeAccCodeAndText.Text);
+            //System.FormatException: 'The input string '   ترقيمه الشجري   113' was not in a correct format.'
         }
 
 
@@ -292,7 +240,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 // هل نطبق نفس الخاصية على الأبناء؟
                 if (chkImplementOnChildren.Checked)
                 {
-                    string childMsg = DBServiecs.Acc_UpdateImplementChild_ForManger(parentTree, isForManager);
+                    string childMsg = DBServiecs.Acc_UpdateImplementChild_ForManger(parentchildren, isForManager);
 
                     // ضم الرسالتين في نافذة واحدة
                     fullMessage += Environment.NewLine + childMsg;
