@@ -307,7 +307,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             innerTimer.Interval = 15;
             innerTimer.Tick += InnerTimer_Tick;
-            pnlMoreSetting.Height = pnlMoreSetting.MinimumSize.Height;
         }
 
         private void InnerTimer_Tick(object? sender, EventArgs e)
@@ -471,7 +470,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 [btnAppData] = btnAppData_Click,
                 [btnProdSetting_] = btnProdSetting__Click,
-                [btn_MoreSetting] = btn_MoreSetting_Click,
                 [btn_MainSetting] = btn_MainSetting_Click,
 
 
@@ -513,12 +511,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         private void btn_MainSetting_Click(object? sender, EventArgs e)
         {
             TogglePanel(pnlSetting);
-        }
-
-        //زر رئيئسى الاعدادات الاخرى
-        private void btn_MoreSetting_Click(object? sender, EventArgs e)
-        {
-            ToggleInnerPanel(pnlMoreSetting);
         }
 
         //الاعدادات - الاعدادات للاصناف
@@ -1274,7 +1266,5 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             frmDailyDashBoard frm = new frmDailyDashBoard();
             OpenFormInPanel(frm);
         }
-
-
     }
 }
