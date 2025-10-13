@@ -86,8 +86,9 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
             // 🔹 عرض خصائص التعديل (قيم منطقية فقط)
             chkIsHasDetails.Checked = row["IsHasDetails"] != DBNull.Value && Convert.ToBoolean(row["IsHasDetails"]);
+            lblTreeAccCode.Text = row["TreeAccCode"].ToString();     // الترقيم الشجري
 
-            lblTreeAccCodeAndText.Text = row["TreeAccCode"].ToString();     // الترقيم الشجري
+            lblTreeAccCodeAndText.Text = row["TreeAccCodeAndText"].ToString();     // الترقيم الشجري
             lblAccTypeID.Text = row["Acc_TypeName"].ToString();    // النوع المحاسبي
             lblParentTree.Text = row["ParentTreeName"].ToString();      // اسم الأب
             _parentTree = row["ParentTree"] != DBNull.Value ? Convert.ToInt32(row["ParentTree"]) : (int?)null;
@@ -165,14 +166,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 cbxParentTree.SelectedIndex = -1; // لا يوجد أب
             }
         }
-        /*
-
-
-
-    }
-}
-
-         */
 
         public int UpdatedAccID { get; private set; }
 
@@ -193,19 +186,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             isHasDetails = chkIsHasDetails.Checked;
             isHidden = chkIsHidden.Checked;
             accTypeID = Convert.ToInt32(cbxAccTypeID?.SelectedValue ?? 0);
-            parentchildren = Convert.ToInt32(lblTreeAccCodeAndText.Text);
-            //System.FormatException: 'The input string '   ترقيمه الشجري   113' was not in a correct format.'
+            parentchildren = Convert.ToInt32(lblTreeAccCode.Text);
         }
-
-
-        //private void GetDataForModify()
-        //{
-        //    parentTree = Convert .ToInt32 (cbxParentTree ?.SelectedValue ?? 0);
-        //    isForManager = chkIsForManger .Checked;
-        //    isHasDetails = chkIsHasDetails.Checked;
-        //    isHidden = chkIsHidden.Checked;
-        //    AccTypeID = Convert.ToInt32(cbxAccTypeID?.SelectedValue ?? 0);
-        //}
 
         // 🟢 عند الضغط على زر الحفظ
         private void btnSave_Click(object sender, EventArgs e)
