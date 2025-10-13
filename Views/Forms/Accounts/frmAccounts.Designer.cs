@@ -217,7 +217,7 @@
             // 
             // txtSearchTree
             // 
-            txtSearchTree.BackColor = Color.FromArgb(192, 255, 192);
+            txtSearchTree.BackColor = Color.FromArgb(192, 255, 255);
             txtSearchTree.Dock = DockStyle.Fill;
             txtSearchTree.Font = new Font("Times New Roman", 13.8F, FontStyle.Bold);
             txtSearchTree.Location = new Point(5, 36);
@@ -1242,7 +1242,7 @@
             lblSelectedTreeNod.Name = "lblSelectedTreeNod";
             lblSelectedTreeNod.Size = new Size(428, 41);
             lblSelectedTreeNod.TabIndex = 75;
-            lblSelectedTreeNod.Text = "الحسابات العامة";
+            lblSelectedTreeNod.Text = "شجرة الحسابات";
             lblSelectedTreeNod.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // tlpHome
