@@ -194,58 +194,94 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
 
         #region !!!!!!!!!! عرض الشجرة والجريد !!!!!!!!!!!
+        // ✅ تحميل الشجرة الأصل والفروع بشكل صحيح
         private void LoadAccountsTree(bool collapseAll = true)
         {
-            treeViewAccounts.Nodes.Clear();
-            _allAccountsData = DBServiecs.Acc_GetChart() ?? new DataTable();
-
-            if (_allAccountsData.Rows.Count == 0) return;
-
-            // قاموس لحفظ العقد حسب TreeAccCode
-            Dictionary<string, TreeNode> nodeDict = new Dictionary<string, TreeNode>();
-
-            foreach (DataRow row in _allAccountsData.Rows)
+            try
             {
-                string accName = row["AccName"] as string ?? string.Empty;
-                if (string.IsNullOrWhiteSpace(accName)) continue;
+                treeViewAccounts.Nodes.Clear();
+                _allAccountsData = DBServiecs.Acc_GetChart_ForManger() ?? new DataTable();
 
-                string treeCode = row["TreeAccCode"].ToString() ?? string.Empty;
-                string? parentCode = row["ParentTree"] != DBNull.Value ? row["ParentTree"].ToString() : null;
+                if (_allAccountsData.Rows.Count == 0) return;
 
-                TreeNode node = new TreeNode(accName) { Tag = row };
-                nodeDict[treeCode] = node;
+                // 🔹 ترتيب حسب sortAccID لضمان الترتيب الصحيح
+                DataView view = _allAccountsData.DefaultView;
+                view.Sort = "sortAccID ASC";
+                DataTable sortedTable = view.ToTable();
 
-                if (string.IsNullOrEmpty(parentCode))
+                // قاموس للاحتفاظ بكل العقد التي تم إنشاؤها
+                Dictionary<string, TreeNode> nodeDict = new Dictionary<string, TreeNode>();
+
+                // إنشاء العقدة أو استرجاعها من القاموس (تعمل بشكل متكرر)
+                TreeNode GetOrCreateNode(DataRow row)
                 {
-                    // عقدة جذر
-                    treeViewAccounts.Nodes.Add(node);
+                    string treeCode = row["TreeAccCode"]?.ToString() ?? string.Empty;
+                    string accName = row["AccName"]?.ToString() ?? string.Empty;
+
+                    if (string.IsNullOrWhiteSpace(treeCode))
+                        throw new Exception("TreeAccCode مفقود في أحد الصفوف.");
+
+                    // إذا كانت العقدة موجودة مسبقًا نرجعها
+                    if (nodeDict.TryGetValue(treeCode, out TreeNode? existingNode))
+                        return existingNode;
+
+                    // إنشاء عقدة جديدة
+                    TreeNode newNode = new TreeNode(accName) { Tag = row };
+                    nodeDict[treeCode] = newNode;
+
+                    // محاولة إضافة العقدة لأبيها إن وجد
+                    string? parentCode = row["ParentTree"] != DBNull.Value ? row["ParentTree"].ToString() : null;
+                    if (!string.IsNullOrEmpty(parentCode))
+                    {
+                        // البحث عن صف الأب في الجدول
+                        DataRow[] parentRows = sortedTable.Select($"TreeAccCode = '{parentCode}'");
+                        if (parentRows.Length > 0)
+                        {
+                            TreeNode parentNode = GetOrCreateNode(parentRows[0]);
+                            parentNode.Nodes.Add(newNode);
+                        }
+                        else
+                        {
+                            // الأب غير موجود في الجدول (افتراضًا جذر)
+                            treeViewAccounts.Nodes.Add(newNode);
+                        }
+                    }
+                    else
+                    {
+                        // بدون أب = عقدة جذر
+                        treeViewAccounts.Nodes.Add(newNode);
+                    }
+
+                    return newNode;
                 }
-                else if (nodeDict.TryGetValue(parentCode, out TreeNode? parentNode))
+
+                // إنشاء جميع العقد
+                foreach (DataRow row in sortedTable.Rows)
                 {
-                    // إضافة للاب الموجود
-                    parentNode.Nodes.Add(node);
+                    GetOrCreateNode(row);
                 }
+
+                // 🔹 ترتيب الشجرة بصريًا حسب TreeAccCode
+                SortTreeNodes(treeViewAccounts.Nodes);
+
+                // 🔹 تطبيق الانهيار أو التوسيع
+                if (collapseAll)
+                    treeViewAccounts.CollapseAll();
                 else
-                {
-                    // الأب مش موجود لسه → أضف كجذر مؤقت
-                    treeViewAccounts.Nodes.Add(node);
-                }
+                    treeViewAccounts.ExpandAll();
             }
-
-            // ترتيب العقد حسب TreeAccCode
-            SortTreeNodes(treeViewAccounts.Nodes);
-
-            if (collapseAll)
-                treeViewAccounts.CollapseAll();
-            else
-                treeViewAccounts.ExpandAll();
+            catch (Exception ex)
+            {
+                MessageBox.Show($"حدث خطأ أثناء تحميل الشجرة:\n{ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        // ترتيب العقد أبجديًا أو حسب TreeAccCode
+
+        // ✅ ترتيب العقد داخل كل مستوى
         private void SortTreeNodes(TreeNodeCollection nodes)
         {
             List<TreeNode> sorted = nodes.Cast<TreeNode>()
-                                         .OrderBy(n => ((DataRow)n.Tag)["TreeAccCode"].ToString())
+                                         .OrderBy(n => ((DataRow)n.Tag)["sortAccID"])
                                          .ToList();
 
             nodes.Clear();
@@ -259,53 +295,49 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
 
         // ✅ حدث يتم تنفيذه عند اختيار أي عقدة في الشجرة
-        private TreeNode? _lastSelectedNode = null; // للاحتفاظ بالعقدة السابقة
+        private TreeNode? _lastSelectedNode = null;
 
-        //اختيار العقدة من الشجرة
         private void treeViewAccounts_AfterSelect(object sender, TreeViewEventArgs e)
         {
             txtSearch.Text = string.Empty;
-            // ① نتأكد أن هناك عقدة مختارة
+
             if (e.Node?.Tag == null) return;
 
             TreeNode selectedNode = e.Node;
 
-            // ==========================
-            // 1) تلوين العقدة المختارة بالخط الأحمر
-            // ==========================
+            // ① تلوين العقدة المختارة
             if (_lastSelectedNode != null)
-            {
-                _lastSelectedNode.ForeColor = treeViewAccounts.ForeColor; // إعادة اللون الافتراضي
-            }
+                _lastSelectedNode.ForeColor = treeViewAccounts.ForeColor;
+
             selectedNode.ForeColor = Color.Red;
             _lastSelectedNode = selectedNode;
 
-            // ==========================
-            // 2) استخراج الصف (DataRow) من العقدة
-            // ==========================
+            // ② استخراج بيانات الحساب
             if (selectedNode.Tag is not DataRow row) return;
 
-            int treeAccCode = row.Field<int>("TreeAccCode");   // الترقيم الشجري
-            int accID = row.Field<int>("AccID");               // المفتاح الأساسي
+            int accID = row.Field<int>("AccID");
             string accName = row["AccName"]?.ToString() ?? string.Empty;
-            string accPath = row["FullPath"]?.ToString() ?? string.Empty;
-
+            string treeAccCode = row["TreeAccCode"]?.ToString() ?? string.Empty;
             bool hasChildren = row.Field<bool?>("IsHasChildren") ?? false;
             bool hasDetails = row.Field<bool?>("IsHasDetails") ?? false;
             bool isEnerAcc = row.Field<bool?>("IsEnerAcc") ?? false;
 
-            // ==========================
-            // 3) تحديث الـ Labels
-            // ==========================
+            // ✅ التحويل الآمن لـ Balance
+            decimal balance = 0;
+            object balanceObj = row["Balance"];
+            if (balanceObj != DBNull.Value)
+                balance = Convert.ToDecimal(balanceObj);
+
+            string balanceState = row["BalanceState"]?.ToString() ?? "";
+
+            // ③ تحديث الـ Labels
             lblSelectedTreeNod.Text = $"{treeAccCode} - {accName}";
-            lblPathNode.Text = accPath;
             lblAccID_Tree.Text = accID.ToString();
             lblAccID_DGV.Text = string.Empty;
+            lblPathNode.Text = $"الرصيد: {balance:N2} {balanceState}";
             DGV.ClearSelection();
 
-            // ==========================
-            // 4) تحديث بيانات التفاصيل
-            // ==========================
+            // ④ تفعيل أو تعطيل زر التنفيذ بناءً على وجود التفاصيل
             if (!hasDetails)
             {
                 lblAccDataDetails.Text = "";
@@ -313,10 +345,10 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
             else
             {
+                // التحقق إن كان الحساب ضمن فئة الأصول الثابتة (TreeAccCode = 12)
                 bool hasFixedAssetParent = false;
                 TreeNode? currentNode = selectedNode;
 
-                // البحث في جميع الآباء حتى الجذر للتحقق من TreeAccCode = 12
                 while (currentNode != null)
                 {
                     if (currentNode.Tag is DataRow parentRow &&
@@ -328,16 +360,14 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     currentNode = currentNode.Parent;
                 }
 
-                // تغيير النص بناءً على النتيجة
                 lblAccDataDetails.Text = hasFixedAssetParent ? "بيانات الأصل الثابت" : "بيانات شخصية";
                 tlpBtnExec.Enabled = true;
 
-                // تغيير ارتفاع صفوف الـ TableLayoutPanel
+                // ضبط ارتفاع الصفوف في الـ TableLayoutPanel
                 if (hasFixedAssetParent)
                 {
                     tlpDetailsData.RowStyles[0].Height = 1;
                     tlpDetailsData.RowStyles[0].SizeType = SizeType.Percent;
-
                     tlpDetailsData.RowStyles[1].Height = 99;
                     tlpDetailsData.RowStyles[1].SizeType = SizeType.Percent;
                 }
@@ -345,20 +375,15 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 {
                     tlpDetailsData.RowStyles[0].Height = 99;
                     tlpDetailsData.RowStyles[0].SizeType = SizeType.Percent;
-
                     tlpDetailsData.RowStyles[1].Height = 1;
                     tlpDetailsData.RowStyles[1].SizeType = SizeType.Percent;
                 }
             }
 
-            // ==========================
-            // 5) تحميل الأبناء في الـ DGV
-            // ==========================
+            // ⑤ تحميل الأبناء في الـ DGV
             LoadChildrenInDGV(selectedNode);
 
-            // ==========================
-            // 6) تحميل التقارير (ممكن تفعّله لاحقًا)
-            // ==========================
+            // ⑥ تحميل التقارير الخاصة بالحساب (يمكن تفعيلها لاحقًا)
             LoadReportsForSelectedAccount();
         }
 
