@@ -469,61 +469,91 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
             return null;
         }
+        #endregion
 
-        //تعميل الابناء فى الجريد
-        private void LoadChildrenInDGV(TreeNode selectedNode)
+
+
+
+        #region !!! البحث العام في جميع الحسابات !!!
+
+        // متغير لتحديد وضع البحث العام
+        private bool _isGlobalSearchMode = false;
+
+        // عند دخول مربع البحث → تفعيل وضع البحث العام
+        private void txtSearch_Enter(object sender, EventArgs e)
         {
-            if (selectedNode?.Tag is not DataRow parentRow) return;
-
-            // كود الحساب المختار
-            int parentTreeAccCode = parentRow.Field<int>("TreeAccCode");
-            string parentName = selectedNode.Text; // اسم الأب من الشجرة
-
-            // استدعاء الإجراء المخزن لجلب الأبناء
-            DataTable dt = DBServiecs.Acc_GetChildren(parentTreeAccCode);
-
-            // ✅ إضافة عمود ParentName يدويًا لو مش موجود
-            if (!dt.Columns.Contains("ParentName"))
-                dt.Columns.Add("ParentName", typeof(string));
-
-            // ✅ تعبئة العمود باسم الأب
-            foreach (DataRow row in dt.Rows)
-            {
-                row["ParentName"] = parentName;
-            }
-
-            // -----------------------------
-            // ✅ إنشاء DataView للتصفية
-            // -----------------------------
-            DataView dv = dt.DefaultView;
-
-            // فلترة بالراديو بوتن
-            List<string> filters = new List<string>();
-
-            if (rdoDaeen.Checked)
-                filters.Add("Balance < 0");
-            else if (rdoMadeen.Checked)
-                filters.Add("Balance > 0");
-            else if (rdoEqual.Checked)
-                filters.Add("Balance = 0");
-            // لو rdoAll.Checked → مفيش شرط إضافي
-
-            // فلترة بالبحث في الاسم
-            string searchText = txtSearch.Text.Trim();
-            if (!string.IsNullOrEmpty(searchText))
-            {
-                // LIKE مع % عشان يجيب أي جزء من الاسم
-                filters.Add($"AccName LIKE '%{searchText.Replace("'", "''")}%'");
-            }
-
-            // تطبيق كل الفلاتر
-            dv.RowFilter = filters.Count > 0 ? string.Join(" AND ", filters) : "";
-
-            // ربط الجدول بالـ DGV
-            DGV.DataSource = dv;
-            DGVStyle();
+            _isGlobalSearchMode = true;
         }
 
+        // عند مغادرة مربع البحث → العودة للوضع العادي (تحميل أبناء الفرع المحدد فقط)
+        private void txtSearch_Leave(object sender, EventArgs e)
+        {
+            _isGlobalSearchMode = false;
+
+            if (treeViewAccounts.SelectedNode != null)
+                LoadChildrenInDGV(treeViewAccounts.SelectedNode);
+        }
+
+        // عند تغيير نص البحث
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            if (_isGlobalSearchMode)
+            {
+                PerformGlobalSearch(txtSearch.Text.Trim());
+                return;
+            }
+
+            if (treeViewAccounts.SelectedNode != null)
+                LoadChildrenInDGV(treeViewAccounts.SelectedNode);
+        }
+
+        // 🔍 دالة البحث العام
+        private void PerformGlobalSearch(string searchText)
+        {
+            // إذا لم يُكتب أي شيء → تفريغ النتائج
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                DGV.DataSource = null;
+                lblCountAndTotals.Text = "أدخل نص البحث...";
+                return;
+            }
+
+            // ✅ جلب كل الأبناء الورقيين فقط (بدون تحديد ParentTree)
+            DataTable dt = DBServiecs.Acc_GetChildren(null);
+
+            // ✅ فلترة محلية بالاسم
+            DataView dv = dt.DefaultView;
+            dv.RowFilter = $"AccName LIKE '%{searchText.Replace("'", "''")}%'";
+
+            // ✅ ربط النتيجة بالجريد
+            DGV.DataSource = dv;
+            DGVStyle();
+
+            // ✅ عرض ملخص النتائج
+            lblCountAndTotals.Text = $"نتائج البحث عن: {searchText} ({dv.Count:N0} نتيجة)";
+        }
+
+        #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+        #region !!!!!! DGV !!!!!!!!!!!
         //تنسيق الجريد
         private void DGVStyle()
         {
@@ -673,7 +703,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         // دالة البحث فى الجريد
-        private void txtSearch_TextChanged(object sender, EventArgs e)
+        private void txtSearch_TextChanged_(object sender, EventArgs e)
         {
             if (treeViewAccounts.SelectedNode != null)
             {
@@ -681,16 +711,77 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
         private bool _isSearchingInChild = false;
-        private void txtSearch_Enter(object sender, EventArgs e)
+        private void txtSearch_Enter__(object sender, EventArgs e)
         {
             _isSearchingInChild = true ;
 
         }
 
-        private void txtSearch_Leave(object sender, EventArgs e)
+        private void txtSearch_Leave__(object sender, EventArgs e)
         {
             _isSearchingInChild = false;
         }
+
+        //تعميل الابناء فى الجريد
+        private void LoadChildrenInDGV(TreeNode selectedNode)
+        {
+            if (selectedNode?.Tag is not DataRow parentRow) return;
+
+            // كود الحساب المختار
+            int parentTreeAccCode = parentRow.Field<int>("TreeAccCode");
+            string parentName = selectedNode.Text; // اسم الأب من الشجرة
+
+            // استدعاء الإجراء المخزن لجلب الأبناء
+            DataTable dt = DBServiecs.Acc_GetChildren(parentTreeAccCode);
+
+            // ✅ إضافة عمود ParentName يدويًا لو مش موجود
+            if (!dt.Columns.Contains("ParentName"))
+                dt.Columns.Add("ParentName", typeof(string));
+
+            // ✅ تعبئة العمود باسم الأب
+            foreach (DataRow row in dt.Rows)
+            {
+                row["ParentName"] = parentName;
+            }
+
+            // -----------------------------
+            // ✅ إنشاء DataView للتصفية
+            // -----------------------------
+            DataView dv = dt.DefaultView;
+
+            // فلترة بالراديو بوتن
+            List<string> filters = new List<string>();
+
+            if (rdoDaeen.Checked)
+                filters.Add("Balance < 0");
+            else if (rdoMadeen.Checked)
+                filters.Add("Balance > 0");
+            else if (rdoEqual.Checked)
+                filters.Add("Balance = 0");
+            // لو rdoAll.Checked → مفيش شرط إضافي
+
+            // فلترة بالبحث في الاسم
+            string searchText = txtSearch.Text.Trim();
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                // LIKE مع % عشان يجيب أي جزء من الاسم
+                filters.Add($"AccName LIKE '%{searchText.Replace("'", "''")}%'");
+            }
+
+            // تطبيق كل الفلاتر
+            dv.RowFilter = filters.Count > 0 ? string.Join(" AND ", filters) : "";
+
+            // ربط الجدول بالـ DGV
+            DGV.DataSource = dv;
+            DGVStyle();
+        }
+        /*هنا تتم تعبئة الجريد من خلال تحديد فرع من الشجرة فيظهر ابنائه فى الجريد بوضع مثالى
+         ما اريده عند البحث عن احد الابناء ليس شرطأ ان يكون احد ابناء الفرع المحدد 
+        اريد ان يكون البحث فى كل الابناء مهما كانت فروعهم 
+        وريد ايقاف التحميل من خلال الفرع بشكل مؤقت حتى انهى البحث والخروج من مربع البحث
+        فما السيناريو الذى يجب اتباعه
+         */
+
         #endregion
 
         #region !!!!!!!! حذف حساب شجرى او ابن من الجريد  !!!!!!!!!!!!!!

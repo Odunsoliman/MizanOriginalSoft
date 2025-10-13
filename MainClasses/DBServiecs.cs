@@ -1609,16 +1609,32 @@ namespace MizanOriginalSoft.MainClasses
             return result ?? new DataTable();
         }
 
-        // احضار الابناء الذين ليس لهم ابناء اخر
-        public static DataTable Acc_GetChildren(int ParentTree)
+        //// احضار الابناء الذين ليس لهم ابناء اخر
+        //public static DataTable Acc_GetChildren(int ParentTree)
+        //{
+        //    DataTable? result = dbHelper.ExecuteSelectQuery("Acc_GetLeafChildren", command =>
+        //    {
+        //        command.Parameters.Add("@ParentTree", SqlDbType.Int).Value = ParentTree;
+        //    });
+
+        //    return result ?? new DataTable();
+        //}
+
+
+        // ✅ إحضار الأبناء الذين ليس لهم أبناء آخرون (الأوراق)
+        //    - إذا مررت رقم ParentTree → يعيد أبناء هذا الفرع فقط
+        //    - إذا مررت null → يعيد كل الأبناء الورقيين في قاعدة البيانات
+        public static DataTable Acc_GetChildren(int? ParentTree)
         {
             DataTable? result = dbHelper.ExecuteSelectQuery("Acc_GetLeafChildren", command =>
             {
-                command.Parameters.Add("@ParentTree", SqlDbType.Int).Value = ParentTree;
+                // ⚙️ لو القيمة null نمررها كـ DBNull.Value
+                command.Parameters.Add("@ParentTree", SqlDbType.Int).Value = (object?)ParentTree ?? DBNull.Value;
             });
 
             return result ?? new DataTable();
         }
+
 
         // إضافة حساب شجرى  []
         public static string Acc_AddParentAccount(string AccName, int? ParentTree, int? CreateByUserID)
