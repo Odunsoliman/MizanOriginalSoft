@@ -45,6 +45,7 @@
             pnlAccounts = new Panel();
             btn_Accounts = new Button();
             pnlMoreSetting = new Panel();
+            btnAccForManger = new Button();
             btnAppData = new Button();
             btnAccounts = new Button();
             lblCoSeprator = new Label();
@@ -319,7 +320,7 @@
             pnlSetting.MinimumSize = new Size(0, 34);
             pnlSetting.Name = "pnlSetting";
             pnlSetting.Padding = new Padding(3, 2, 3, 2);
-            pnlSetting.Size = new Size(134, 34);
+            pnlSetting.Size = new Size(134, 246);
             pnlSetting.TabIndex = 1;
             // 
             // pnlAccounts
@@ -366,6 +367,7 @@
             // pnlMoreSetting
             // 
             pnlMoreSetting.BackColor = Color.Transparent;
+            pnlMoreSetting.Controls.Add(btnAccForManger);
             pnlMoreSetting.Controls.Add(btnAppData);
             pnlMoreSetting.Controls.Add(btnAccounts);
             pnlMoreSetting.Controls.Add(lblCoSeprator);
@@ -380,6 +382,25 @@
             pnlMoreSetting.Padding = new Padding(3, 2, 3, 2);
             pnlMoreSetting.Size = new Size(128, 200);
             pnlMoreSetting.TabIndex = 5;
+            // 
+            // btnAccForManger
+            // 
+            btnAccForManger.Dock = DockStyle.Top;
+            btnAccForManger.FlatAppearance.BorderSize = 0;
+            btnAccForManger.FlatStyle = FlatStyle.Flat;
+            btnAccForManger.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            btnAccForManger.Location = new Point(3, 119);
+            btnAccForManger.Margin = new Padding(3, 2, 3, 2);
+            btnAccForManger.MaximumSize = new Size(0, 29);
+            btnAccForManger.MinimumSize = new Size(0, 29);
+            btnAccForManger.Name = "btnAccForManger";
+            btnAccForManger.Padding = new Padding(0, 0, 22, 0);
+            btnAccForManger.Size = new Size(122, 29);
+            btnAccForManger.TabIndex = 12;
+            btnAccForManger.Text = "الحسابات العامة";
+            btnAccForManger.TextAlign = ContentAlignment.MiddleLeft;
+            btnAccForManger.UseVisualStyleBackColor = true;
+            btnAccForManger.Click += btnAccForManger_Click;
             // 
             // btnAppData
             // 
@@ -750,7 +771,7 @@
             pnlMovement.Controls.Add(btnSales);
             pnlMovement.Controls.Add(btn_MainMove);
             pnlMovement.Dock = DockStyle.Top;
-            pnlMovement.Location = new Point(0, 34);
+            pnlMovement.Location = new Point(0, 246);
             pnlMovement.Margin = new Padding(3, 2, 3, 2);
             pnlMovement.MaximumSize = new Size(0, 338);
             pnlMovement.MinimumSize = new Size(0, 34);
@@ -777,7 +798,7 @@
             btnPOS.Text = "POS_كاشير";
             btnPOS.TextAlign = ContentAlignment.MiddleRight;
             btnPOS.UseVisualStyleBackColor = true;
-            btnPOS.Click += btnPOS_Click;
+ //           btnPOS.Click += btnPOS_Click;
             // 
             // label1
             // 
@@ -874,7 +895,7 @@
             pnlReports.Controls.Add(DGV);
             pnlReports.Controls.Add(btn_MainReports);
             pnlReports.Dock = DockStyle.Top;
-            pnlReports.Location = new Point(0, 183);
+            pnlReports.Location = new Point(0, 395);
             pnlReports.Margin = new Padding(3, 2, 3, 2);
             pnlReports.MaximumSize = new Size(0, 400);
             pnlReports.MinimumSize = new Size(0, 34);
@@ -984,7 +1005,7 @@
             pnlBills.Controls.Add(btnCashOut);
             pnlBills.Controls.Add(btn_MainBill);
             pnlBills.Dock = DockStyle.Top;
-            pnlBills.Location = new Point(0, 68);
+            pnlBills.Location = new Point(0, 280);
             pnlBills.Margin = new Padding(3, 2, 3, 2);
             pnlBills.MaximumSize = new Size(0, 338);
             pnlBills.MinimumSize = new Size(0, 34);
@@ -1373,5 +1394,6 @@
         private Button btnAccounts;
         private Button btnAppData;
         private Button btnDashBoard;
+        private Button btnAccForManger;
     }
 }

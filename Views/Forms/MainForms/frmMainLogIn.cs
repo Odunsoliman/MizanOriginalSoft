@@ -583,6 +583,18 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             frmAccounts frm = new frmAccounts();
             OpenFormInPanel(frm);
         }
+
+        private void btnAccForManger_Click(object sender, EventArgs e)
+        {
+            if (sender is Button btn)
+            {
+                HighlightTransparentButton(btn);
+            }
+
+            CloseAllFormsExceptMain();
+            frmAccountMamger frm = new frmAccountMamger();
+            OpenFormInPanel(frm);
+        }
         #endregion 
 
         #region  ******   اعدادالحسابات  *****************************
@@ -860,17 +872,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             OpenFormInPanel(frm); // فتح الفورم داخل الـ Panel
         }
 
-        // 🔹 نقطة بيع الكاشير
-        private void btnPOS_Click(object sender, EventArgs e)
-        {
-            //if (sender is Button btn)
-            //{
-            //    HighlightTransparentButton(btn);
-            //}
-            //CloseAllFormsExceptMain();
-            //frmPOS frm = new frmPOS();
-            //OpenFormInPanel(frm);
-        }
         #endregion
 
         #region *****************   قائمة السندات  **********************
@@ -1382,18 +1383,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             previewForm.ShowDialog();
         }
 
-        private void btnAccounts_Old_Click(object sender, EventArgs e)
-        {
-            //if (sender is Button btn)
-            //{
-            //    HighlightTransparentButton(btn);
-            //}
-
-            //CloseAllFormsExceptMain();
-            //frm_Accounts frm = new frm_Accounts();
-            //OpenFormInPanel(frm);
-        }
-
         private void btnAppData_Click(object? sender, EventArgs e)
         {
             if (sender is Button btn)
@@ -1415,5 +1404,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             frmDailyDashBoard frm = new frmDailyDashBoard();
             OpenFormInPanel(frm);
         }
+
+
     }
 }
