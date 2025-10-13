@@ -658,12 +658,12 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     int countAccounts = DGV.Rows.Count;
 
                     decimal totalBalance = 0; // 🔥 تغيير إلى decimal لدقة أفضل
-                    if (DGV.Columns.Contains("BalanceWithState")) // 🔥 استخدام العمود الصحيح
+                    if (DGV.Columns.Contains("Balance")) // 🔥 استخدام العمود الصحيح
                     {
                         foreach (DataGridViewRow row in DGV.Rows)
                         {
-                            if (row.Cells["BalanceWithState"].Value != null &&
-                                decimal.TryParse(row.Cells["BalanceWithState"].Value.ToString(), out decimal val))
+                            if (row.Cells["Balance"].Value != null &&
+                                decimal.TryParse(row.Cells["Balance"].Value.ToString(), out decimal val))
                             {
                                 totalBalance += val;
                             }
