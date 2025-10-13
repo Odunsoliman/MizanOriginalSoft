@@ -406,59 +406,6 @@ namespace MizanOriginalSoft .Views.Forms.Movments
         }
 
 
-        ////private void ShowBill(int index)
-        ////{
-        ////    if (tblBills == null || tblBills.Rows.Count == 0 || index < 0 || index > tblBills.Rows.Count)
-        ////        return;//هنا فى بداية البرنامج تكون الجدول فارغة فتخرج من الدالة والمطلوب فى هذه الحالة تفعيل 
-        ////               //الدالة ClearBillFields(); فكيف يكون ذلك
-
-        ////    if (index == tblBills.Rows.Count)
-        ////    {
-        ////        ClearBillFields(); // سند جديد
-        ////        return;
-        ////    }
-
-        ////    DataRow row = tblBills.Rows[index];
-
-        ////    // بيانات السند
-        ////    lblTransactionID.Text = GetSafeValue(row, "TransactionID");
-        ////    lblVoucherNumber.Text = GetSafeValue(row, "VoucherNumber");
-        ////    dtpTransactionDate.Value = Convert.ToDateTime(row["TransactionDate"]);
-        ////    lblOperationType_ID.Text = GetSafeValue(row, "OperationType_ID");
-        ////    lblAccountID.Text = GetSafeValue(row, "AccountID");
-        ////    txtAmount.Text = Convert.ToDecimal(row["Amount"]).ToString("N2");
-
-        ////    // طريقة الدفع
-        ////    if (tblBills.Columns.Contains("PaymentMethodID"))
-        ////        cbxPaymentMethod.SelectedValue = Convert.ToInt32(row["PaymentMethodID"]);
-        ////    else
-        ////        cbxPaymentMethod.SelectedIndex = -1;
-
-        ////    txtDescriptionNote.Text = GetSafeValue(row, "DescriptionNote");
-        ////    lblCreatedByUsID.Text = GetSafeValue(row, "CreatedByUsID");
-        ////    lblSaveTransaction.Text = GetSafeValue(row, "SaveTransaction");
-
-        ////    // بيانات الحساب الرئيسي (العميل أو المورد)
-        ////    lblAccName.Text = GetSafeValue(row, "AccountName");
-        ////    lblBalance.Text = GetSafeValue(row, "Balance");
-        ////    lblBalanceState.Text = GetSafeValue(row, "BalanceState");
-        ////    lblFirstPhon.Text = GetSafeValue(row, "FirstPhon");
-        ////    lblAntherPhon.Text = GetSafeValue(row, "AntherPhon");
-        ////    lblClientEmail.Text = GetSafeValue(row, "ClientEmail");
-        ////    lblClientAddress.Text = GetSafeValue(row, "ClientAddress");
-
-        ////    // بيانات حساب الصندوق
-        ////    lbl_Box.Text = GetSafeValue(row, "BoxAccountName");
-
-        ////    if (tblBills.Columns.Contains("BoxID") && row["BoxID"] != DBNull.Value)
-        ////        cbxBox.SelectedValue = Convert.ToInt32(row["BoxID"]);
-        ////    else
-        ////        cbxBox.SelectedIndex = -1;
-
-
-        ////    AttachAutoSaveEvents(); // مراقبة التعديلات
-        ////}
-
         private string? GetSafeValue(DataRow row, string columnName)
         {
             return row.Table.Columns.Contains(columnName) ? row[columnName].ToString() : string.Empty;//Possible null reference return.
