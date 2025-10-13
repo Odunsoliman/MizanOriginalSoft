@@ -308,7 +308,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             innerTimer.Interval = 15;
             innerTimer.Tick += InnerTimer_Tick;
             pnlMoreSetting.Height = pnlMoreSetting.MinimumSize.Height;
-            pnlAccounts.Height = pnlAccounts.MinimumSize.Height;
         }
 
         private void InnerTimer_Tick(object? sender, EventArgs e)
@@ -475,16 +474,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 [btn_MoreSetting] = btn_MoreSetting_Click,
                 [btn_MainSetting] = btn_MainSetting_Click,
 
-                [btnCreditors] = btnCreditors_Click,
-                [btnDebtors] = btnDebtors_Click,
-                [btnFixedAssets] = btnFixedAssets_Click,
-                [btnExpenses] = btnExpenses_Click,
-                [btnEmployees] = btnEmployees_Click,
-                [btnCashBox] = btnCashBox_Click,
-                [btnPartners] = btnPartners_Click,
-                [btnSuppliers] = btnSuppliers_Click,
-                [btnCustomers] = btnCustomers_Click,
-                [btn_Accounts] = btn_Accounts_Click,
+
 
                 [btnIncreaseStock] = btnIncreaseStock_Click,
                 [btnDecreaseStock] = btnDecreaseStock_Click,
@@ -597,126 +587,6 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
         #endregion 
 
-        #region  ******   اعدادالحسابات  *****************************
-
-        //زر رئيئسى اعدادالحسابات العامة
-        private void btn_Accounts_Click(object? sender, EventArgs e)
-        {
-            ToggleInnerPanel(pnlAccounts);
-        }
-
-        //الاعدادات -العملاء
-        private void btnCustomers_Click(object? sender, EventArgs e)
-        {
-            if (sender is Button btn)
-            {
-                HighlightTransparentButton(btn);
-            }
-            int TopID = 3;
-            frmMainAccounts frm = new frmMainAccounts(TopID);
-            OpenFormInPanel(frm);
-        }
-
-        //الاعدادات -الموردين
-        private void btnSuppliers_Click(object? sender, EventArgs e)
-        {
-            if (sender is Button btn)
-            {
-                HighlightTransparentButton(btn);
-            }
-            int TopID = 4;
-            frmMainAccounts frm = new frmMainAccounts(TopID);
-            OpenFormInPanel(frm);
-
-        }
-
-        //الاعدادات -جاري الشركاء
-        private void btnPartners_Click(object? sender, EventArgs e)
-        {
-            if (sender is Button btn)
-            {
-                HighlightTransparentButton(btn);
-            }
-            int TopID = 40;
-            frmMainAccounts frm = new frmMainAccounts(TopID);
-            OpenFormInPanel(frm);
-
-        }
-
-        //الاعدادات -النقدية
-        private void btnCashBox_Click(object? sender, EventArgs e)
-        {
-            if (sender is Button btn)
-            {
-                HighlightTransparentButton(btn);
-            }
-            int TopID = 18;
-            frmMainAccounts frm = new frmMainAccounts(TopID);
-            OpenFormInPanel(frm);
-
-        }
-
-        //الاعدادات -العاملون
-        private void btnEmployees_Click(object? sender, EventArgs e)
-        {
-            if (sender is Button btn)
-            {
-                HighlightTransparentButton(btn);
-            }
-            int TopID = 8;
-            frmMainAccounts frm = new frmMainAccounts(TopID);
-            OpenFormInPanel(frm);
-        }
-
-        //الاعدادات -المصروفات
-        private void btnExpenses_Click(object? sender, EventArgs e)
-        {
-            if (sender is Button btn)
-            {
-                HighlightTransparentButton(btn);
-            }
-            int TopID = 6;
-            frmMainAccounts frm = new frmMainAccounts(TopID);
-            OpenFormInPanel(frm);
-        }
-
-        //الاعدادات -الاصول الثابتة
-        private void btnFixedAssets_Click(object? sender, EventArgs e)
-        {
-            if (sender is Button btn)
-            {
-                HighlightTransparentButton(btn);
-            }
-            int TopID = 21;
-            frmMainAccounts frm = new frmMainAccounts(TopID);
-            OpenFormInPanel(frm);
-        }
-
-        //الاعدادات -المدينين
-        private void btnDebtors_Click(object? sender, EventArgs e)
-        {
-            if (sender is Button btn)
-            {
-                HighlightTransparentButton(btn);
-            }
-            int TopID = 52;
-            frmMainAccounts frm = new frmMainAccounts(TopID);
-            OpenFormInPanel(frm);
-        }
-
-        //الاعدادات -الدائنون
-        private void btnCreditors_Click(object? sender, EventArgs e)
-        {
-            if (sender is Button btn)
-            {
-                HighlightTransparentButton(btn);
-            }
-            int TopID = 53;
-            frmMainAccounts frm = new frmMainAccounts(TopID);
-            OpenFormInPanel(frm);
-        }
-
-        #endregion
 
         #region *****************   قائمة الحركة  **********************
 

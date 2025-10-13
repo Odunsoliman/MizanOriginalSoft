@@ -29,21 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            btnCreditors = new Button();
-            btnDebtors = new Button();
-            lblCriditSeparator = new Label();
-            btnFixedAssets = new Button();
-            btnExpenses = new Button();
-            btnEmployees = new Button();
-            lblBoxSeparator = new Label();
-            btnCashBox = new Button();
-            lblAccSeparator = new Label();
-            btnPartners = new Button();
-            btnSuppliers = new Button();
-            btnCustomers = new Button();
             pnlSetting = new Panel();
-            pnlAccounts = new Panel();
-            btn_Accounts = new Button();
             pnlMoreSetting = new Panel();
             btnAccForManger = new Button();
             btnAppData = new Button();
@@ -103,7 +89,6 @@
             tableLayoutPanel3 = new TableLayoutPanel();
             tableLayoutPanel1 = new TableLayoutPanel();
             pnlSetting.SuspendLayout();
-            pnlAccounts.SuspendLayout();
             pnlMoreSetting.SuspendLayout();
             tlpUsers.SuspendLayout();
             tlpTop.SuspendLayout();
@@ -117,200 +102,9 @@
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
-            // btnCreditors
-            // 
-            btnCreditors.Dock = DockStyle.Top;
-            btnCreditors.FlatAppearance.BorderSize = 0;
-            btnCreditors.FlatStyle = FlatStyle.Flat;
-            btnCreditors.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnCreditors.Location = new Point(3, 266);
-            btnCreditors.Margin = new Padding(3, 2, 3, 2);
-            btnCreditors.MaximumSize = new Size(0, 29);
-            btnCreditors.MinimumSize = new Size(0, 29);
-            btnCreditors.Name = "btnCreditors";
-            btnCreditors.Padding = new Padding(0, 0, 22, 0);
-            btnCreditors.Size = new Size(122, 29);
-            btnCreditors.TabIndex = 17;
-            btnCreditors.Text = "اعداد الدائنــــون";
-            btnCreditors.TextAlign = ContentAlignment.MiddleLeft;
-            btnCreditors.UseVisualStyleBackColor = true;
-            // 
-            // btnDebtors
-            // 
-            btnDebtors.Dock = DockStyle.Top;
-            btnDebtors.FlatAppearance.BorderSize = 0;
-            btnDebtors.FlatStyle = FlatStyle.Flat;
-            btnDebtors.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnDebtors.Location = new Point(3, 237);
-            btnDebtors.Margin = new Padding(3, 2, 3, 2);
-            btnDebtors.MaximumSize = new Size(0, 29);
-            btnDebtors.MinimumSize = new Size(0, 29);
-            btnDebtors.Name = "btnDebtors";
-            btnDebtors.Padding = new Padding(0, 0, 22, 0);
-            btnDebtors.Size = new Size(122, 29);
-            btnDebtors.TabIndex = 16;
-            btnDebtors.Text = "اعداد المدينــــون";
-            btnDebtors.TextAlign = ContentAlignment.MiddleLeft;
-            btnDebtors.UseVisualStyleBackColor = true;
-            // 
-            // lblCriditSeparator
-            // 
-            lblCriditSeparator.BackColor = SystemColors.ControlLight;
-            lblCriditSeparator.Dock = DockStyle.Top;
-            lblCriditSeparator.Location = new Point(3, 236);
-            lblCriditSeparator.Name = "lblCriditSeparator";
-            lblCriditSeparator.Size = new Size(122, 1);
-            lblCriditSeparator.TabIndex = 15;
-            // 
-            // btnFixedAssets
-            // 
-            btnFixedAssets.Dock = DockStyle.Top;
-            btnFixedAssets.FlatAppearance.BorderSize = 0;
-            btnFixedAssets.FlatStyle = FlatStyle.Flat;
-            btnFixedAssets.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnFixedAssets.Location = new Point(3, 207);
-            btnFixedAssets.Margin = new Padding(3, 2, 3, 2);
-            btnFixedAssets.MaximumSize = new Size(0, 29);
-            btnFixedAssets.MinimumSize = new Size(0, 29);
-            btnFixedAssets.Name = "btnFixedAssets";
-            btnFixedAssets.Padding = new Padding(0, 0, 22, 0);
-            btnFixedAssets.Size = new Size(122, 29);
-            btnFixedAssets.TabIndex = 14;
-            btnFixedAssets.Text = "اعداد الاصول الثابتة";
-            btnFixedAssets.TextAlign = ContentAlignment.MiddleLeft;
-            btnFixedAssets.UseVisualStyleBackColor = true;
-            // 
-            // btnExpenses
-            // 
-            btnExpenses.Dock = DockStyle.Top;
-            btnExpenses.FlatAppearance.BorderSize = 0;
-            btnExpenses.FlatStyle = FlatStyle.Flat;
-            btnExpenses.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnExpenses.Location = new Point(3, 178);
-            btnExpenses.Margin = new Padding(3, 2, 3, 2);
-            btnExpenses.MaximumSize = new Size(0, 29);
-            btnExpenses.MinimumSize = new Size(0, 29);
-            btnExpenses.Name = "btnExpenses";
-            btnExpenses.Padding = new Padding(0, 0, 22, 0);
-            btnExpenses.Size = new Size(122, 29);
-            btnExpenses.TabIndex = 13;
-            btnExpenses.Text = "اعداد بنود المصروفات";
-            btnExpenses.TextAlign = ContentAlignment.MiddleLeft;
-            btnExpenses.UseVisualStyleBackColor = true;
-            // 
-            // btnEmployees
-            // 
-            btnEmployees.Dock = DockStyle.Top;
-            btnEmployees.FlatAppearance.BorderSize = 0;
-            btnEmployees.FlatStyle = FlatStyle.Flat;
-            btnEmployees.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnEmployees.Location = new Point(3, 149);
-            btnEmployees.Margin = new Padding(3, 2, 3, 2);
-            btnEmployees.MaximumSize = new Size(0, 29);
-            btnEmployees.MinimumSize = new Size(0, 29);
-            btnEmployees.Name = "btnEmployees";
-            btnEmployees.Padding = new Padding(0, 0, 22, 0);
-            btnEmployees.Size = new Size(122, 29);
-            btnEmployees.TabIndex = 12;
-            btnEmployees.Text = "اعداد العاملـــون";
-            btnEmployees.TextAlign = ContentAlignment.MiddleLeft;
-            btnEmployees.UseVisualStyleBackColor = true;
-            // 
-            // lblBoxSeparator
-            // 
-            lblBoxSeparator.BackColor = SystemColors.ControlLight;
-            lblBoxSeparator.Dock = DockStyle.Top;
-            lblBoxSeparator.Location = new Point(3, 148);
-            lblBoxSeparator.Name = "lblBoxSeparator";
-            lblBoxSeparator.Size = new Size(122, 1);
-            lblBoxSeparator.TabIndex = 11;
-            // 
-            // btnCashBox
-            // 
-            btnCashBox.Dock = DockStyle.Top;
-            btnCashBox.FlatAppearance.BorderSize = 0;
-            btnCashBox.FlatStyle = FlatStyle.Flat;
-            btnCashBox.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnCashBox.Location = new Point(3, 119);
-            btnCashBox.Margin = new Padding(3, 2, 3, 2);
-            btnCashBox.MaximumSize = new Size(0, 29);
-            btnCashBox.MinimumSize = new Size(0, 29);
-            btnCashBox.Name = "btnCashBox";
-            btnCashBox.Padding = new Padding(0, 0, 22, 0);
-            btnCashBox.Size = new Size(122, 29);
-            btnCashBox.TabIndex = 10;
-            btnCashBox.Text = "اعداد الصندوق";
-            btnCashBox.TextAlign = ContentAlignment.MiddleLeft;
-            btnCashBox.UseVisualStyleBackColor = true;
-            // 
-            // lblAccSeparator
-            // 
-            lblAccSeparator.BackColor = SystemColors.ControlLight;
-            lblAccSeparator.Dock = DockStyle.Top;
-            lblAccSeparator.Location = new Point(3, 118);
-            lblAccSeparator.Name = "lblAccSeparator";
-            lblAccSeparator.Size = new Size(122, 1);
-            lblAccSeparator.TabIndex = 9;
-            // 
-            // btnPartners
-            // 
-            btnPartners.Dock = DockStyle.Top;
-            btnPartners.FlatAppearance.BorderSize = 0;
-            btnPartners.FlatStyle = FlatStyle.Flat;
-            btnPartners.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnPartners.Location = new Point(3, 89);
-            btnPartners.Margin = new Padding(3, 2, 3, 2);
-            btnPartners.MaximumSize = new Size(0, 29);
-            btnPartners.MinimumSize = new Size(0, 29);
-            btnPartners.Name = "btnPartners";
-            btnPartners.Padding = new Padding(0, 0, 22, 0);
-            btnPartners.Size = new Size(122, 29);
-            btnPartners.TabIndex = 4;
-            btnPartners.Text = "اعداد جارى الشركاء";
-            btnPartners.TextAlign = ContentAlignment.MiddleLeft;
-            btnPartners.UseVisualStyleBackColor = true;
-            // 
-            // btnSuppliers
-            // 
-            btnSuppliers.Dock = DockStyle.Top;
-            btnSuppliers.FlatAppearance.BorderSize = 0;
-            btnSuppliers.FlatStyle = FlatStyle.Flat;
-            btnSuppliers.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnSuppliers.Location = new Point(3, 60);
-            btnSuppliers.Margin = new Padding(3, 2, 3, 2);
-            btnSuppliers.MaximumSize = new Size(0, 29);
-            btnSuppliers.MinimumSize = new Size(0, 29);
-            btnSuppliers.Name = "btnSuppliers";
-            btnSuppliers.Padding = new Padding(0, 0, 22, 0);
-            btnSuppliers.Size = new Size(122, 29);
-            btnSuppliers.TabIndex = 3;
-            btnSuppliers.Text = "اعداد الموردين";
-            btnSuppliers.TextAlign = ContentAlignment.MiddleLeft;
-            btnSuppliers.UseVisualStyleBackColor = true;
-            // 
-            // btnCustomers
-            // 
-            btnCustomers.Dock = DockStyle.Top;
-            btnCustomers.FlatAppearance.BorderSize = 0;
-            btnCustomers.FlatStyle = FlatStyle.Flat;
-            btnCustomers.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnCustomers.Location = new Point(3, 31);
-            btnCustomers.Margin = new Padding(3, 2, 3, 2);
-            btnCustomers.MaximumSize = new Size(0, 29);
-            btnCustomers.MinimumSize = new Size(0, 29);
-            btnCustomers.Name = "btnCustomers";
-            btnCustomers.Padding = new Padding(0, 0, 22, 0);
-            btnCustomers.Size = new Size(122, 29);
-            btnCustomers.TabIndex = 2;
-            btnCustomers.Text = "اعداد العملاء";
-            btnCustomers.TextAlign = ContentAlignment.MiddleLeft;
-            btnCustomers.UseVisualStyleBackColor = true;
-            btnCustomers.Click += btnCustomers_Click;
-            // 
             // pnlSetting
             // 
             pnlSetting.BackColor = Color.Transparent;
-            pnlSetting.Controls.Add(pnlAccounts);
             pnlSetting.Controls.Add(pnlMoreSetting);
             pnlSetting.Controls.Add(btn_MainSetting);
             pnlSetting.Dock = DockStyle.Top;
@@ -322,47 +116,6 @@
             pnlSetting.Padding = new Padding(3, 2, 3, 2);
             pnlSetting.Size = new Size(134, 246);
             pnlSetting.TabIndex = 1;
-            // 
-            // pnlAccounts
-            // 
-            pnlAccounts.BackColor = Color.Transparent;
-            pnlAccounts.Controls.Add(btnCreditors);
-            pnlAccounts.Controls.Add(btnDebtors);
-            pnlAccounts.Controls.Add(lblCriditSeparator);
-            pnlAccounts.Controls.Add(btnFixedAssets);
-            pnlAccounts.Controls.Add(btnExpenses);
-            pnlAccounts.Controls.Add(btnEmployees);
-            pnlAccounts.Controls.Add(lblBoxSeparator);
-            pnlAccounts.Controls.Add(btnCashBox);
-            pnlAccounts.Controls.Add(lblAccSeparator);
-            pnlAccounts.Controls.Add(btnPartners);
-            pnlAccounts.Controls.Add(btnSuppliers);
-            pnlAccounts.Controls.Add(btnCustomers);
-            pnlAccounts.Controls.Add(btn_Accounts);
-            pnlAccounts.Dock = DockStyle.Top;
-            pnlAccounts.Location = new Point(3, 231);
-            pnlAccounts.Margin = new Padding(3, 2, 3, 2);
-            pnlAccounts.MaximumSize = new Size(0, 308);
-            pnlAccounts.MinimumSize = new Size(0, 34);
-            pnlAccounts.Name = "pnlAccounts";
-            pnlAccounts.Padding = new Padding(3, 2, 3, 2);
-            pnlAccounts.Size = new Size(128, 34);
-            pnlAccounts.TabIndex = 4;
-            // 
-            // btn_Accounts
-            // 
-            btn_Accounts.Dock = DockStyle.Top;
-            btn_Accounts.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btn_Accounts.Location = new Point(3, 2);
-            btn_Accounts.Margin = new Padding(3, 2, 3, 2);
-            btn_Accounts.MaximumSize = new Size(0, 29);
-            btn_Accounts.MinimumSize = new Size(0, 29);
-            btn_Accounts.Name = "btn_Accounts";
-            btn_Accounts.Size = new Size(122, 29);
-            btn_Accounts.TabIndex = 1;
-            btn_Accounts.Text = "الحسابات العامة";
-            btn_Accounts.TextAlign = ContentAlignment.MiddleLeft;
-            btn_Accounts.UseVisualStyleBackColor = true;
             // 
             // pnlMoreSetting
             // 
@@ -798,7 +551,6 @@
             btnPOS.Text = "POS_كاشير";
             btnPOS.TextAlign = ContentAlignment.MiddleRight;
             btnPOS.UseVisualStyleBackColor = true;
- //           btnPOS.Click += btnPOS_Click;
             // 
             // label1
             // 
@@ -1302,7 +1054,6 @@
             WindowState = FormWindowState.Maximized;
             Load += frmMainLogIn_Load;
             pnlSetting.ResumeLayout(false);
-            pnlAccounts.ResumeLayout(false);
             pnlMoreSetting.ResumeLayout(false);
             tlpUsers.ResumeLayout(false);
             tlpUsers.PerformLayout();
@@ -1321,22 +1072,7 @@
         }
 
         #endregion
-
-        private Button btnCreditors;
-        private Button btnDebtors;
-        private Label lblCriditSeparator;
-        private Button btnFixedAssets;
-        private Button btnExpenses;
-        private Button btnEmployees;
-        private Label lblBoxSeparator;
-        private Button btnCashBox;
-        private Label lblAccSeparator;
-        private Button btnPartners;
-        private Button btnSuppliers;
-        private Button btnCustomers;
         private Panel pnlSetting;
-        private Panel pnlAccounts;
-        private Button btn_Accounts;
         private Panel pnlMoreSetting;
         private Label lblCoSeprator;
         private Button btnProdSetting_;
