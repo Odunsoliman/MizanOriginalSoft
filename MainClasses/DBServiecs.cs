@@ -1609,7 +1609,6 @@ namespace MizanOriginalSoft.MainClasses
             return result ?? new DataTable();
         }
 
-
         // احضار الابناء الذين ليس لهم ابناء اخر
         public static DataTable Acc_GetChildren(int ParentTree)
         {
@@ -1620,6 +1619,7 @@ namespace MizanOriginalSoft.MainClasses
 
             return result ?? new DataTable();
         }
+
         // إضافة حساب شجرى  []
         public static string Acc_AddParentAccount(string AccName, int? ParentTree, int? CreateByUserID)
         {
@@ -1906,6 +1906,25 @@ namespace MizanOriginalSoft.MainClasses
 
 
         #endregion
+
+        #region *********  شجرة حسابات الاداريين  ************
+        // جلب   شجرة الحسابات الاباء فقط للاداريين ###
+        public static DataTable Acc_GetChart_ForManger()//@@
+        {
+            DataTable? result = dbHelper.ExecuteSelectQuery("Acc_GetChart_ForManger");
+            return result ?? new DataTable();
+        }
+        // احضار الابناء الذين ليس لهم ابناء وخاصين للاداريين
+        public static DataTable Acc_GetLeafChildren_ForManger(int ParentTree)
+        {
+            DataTable? result = dbHelper.ExecuteSelectQuery("Acc_GetLeafChildren_ForManger", command =>
+            {
+                command.Parameters.Add("@ParentTree", SqlDbType.Int).Value = ParentTree;
+            });
+
+            return result ?? new DataTable();
+        }
+        #endregion 
 
         #region @@@@ Cheque Batches @@@@
 

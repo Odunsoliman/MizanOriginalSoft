@@ -554,6 +554,8 @@
             txtSearch.TabStop = false;
             txtSearch.TextAlign = HorizontalAlignment.Center;
             txtSearch.TextChanged += txtSearch_TextChanged;
+            txtSearch.Enter += txtSearch_Enter;
+            txtSearch.Leave += txtSearch_Leave;
             // 
             // tableLayoutPanel9
             // 
@@ -1323,7 +1325,7 @@
         private TableLayoutPanel tableLayoutPanel7;
         private TableLayoutPanel tableLayoutPanel10;
         private Button btnModifyAccFromGrid;
-        private Button btnDeleteAcc;
+ //       private Button btnDeleteAcc;
         private TableLayoutPanel tableLayoutPanel8;
         private RadioButton rdoEqual;
         private RadioButton rdoAll;
@@ -1331,7 +1333,7 @@
         private RadioButton rdoMadeen;
         private DataGridView DGV;
         private ContextMenuStrip contextMenuDGV;
-        private ToolStripMenuItem btnStripAddChildren;
+     //   private ToolStripMenuItem btnStripAddChildren;
         private TableLayoutPanel tableLayoutPanel13;
         private Label label7;
         private TextBox txtSearch;

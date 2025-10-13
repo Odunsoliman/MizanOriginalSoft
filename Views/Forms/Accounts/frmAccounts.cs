@@ -16,10 +16,11 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
     public partial class frmAccounts : Form
     {
         private DataTable _allAccountsData = new DataTable();
-
+        private readonly int ID_user;
         public frmAccounts()
         {
             InitializeComponent();
+            ID_user = CurrentSession.UserID; // ← هذا هو الموضع الصحيح
         }
 
         private void frmAccounts_Load(object sender, EventArgs e)
@@ -74,7 +75,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             menuStrip1 = mainMenu; // حفظ المرجع
         }
 
-        // تحميل القوائم بناءً على الحساب المحدد
+        // تحميل القوائم بناءً على الحساب الشجرى المحدد
         private void LoadReportsForSelectedAccount()
         {
             int? topAccID = GetCurrentEntityID();
@@ -151,8 +152,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        // معرف المستخدم الحالي
-        int ID_user;
 
         // حدث النقر على أي تقرير
         private void ReportMenuItem_Click(object? sender, EventArgs e)
@@ -162,7 +161,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 MessageBox.Show("بيانات التقرير غير صحيحة.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
             try
             {
                 Dictionary<string, object> reportParameters = new(tagData)
@@ -360,7 +358,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             // ==========================
             // 6) تحميل التقارير (ممكن تفعّله لاحقًا)
             // ==========================
-            // LoadReportsForSelectedAccount();
+            LoadReportsForSelectedAccount();
         }
 
         // تعديل عقدة مختارة
@@ -527,136 +525,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
 
         //تنسيق الجريد
-        private void DGVStyle_()
-        {
-            // ① إفراغ النص قبل كل تحميل جديد
-            lblCountAndTotals.Text = string.Empty;
-
-            // ② إذا مفيش مصدر بيانات → خروج
-            if (DGV.DataSource == null) return;
-
-            // ③ إخفاء كل الأعمدة كبداية
-            foreach (DataGridViewColumn column in DGV.Columns)
-            {
-                column.Visible = false;
-            }
-
-            // ④ الأعمدة اللي نحب نظهرها بالترتيب
-            string[] columnOrder = { "AccName", "ParentName", "BalanceWithState" };
-
-            foreach (string columnName in columnOrder)
-            {
-                if (DGV.Columns.Contains(columnName))
-                {
-                    DGV.Columns[columnName].Visible = true;
-                }
-            }
-
-            // ⑤ إعادة ترتيب الأعمدة إذا كانت موجودة
-            if (DGV.Columns.Contains("AccName"))
-                DGV.Columns["AccName"].DisplayIndex = 0;
-
-            if (DGV.Columns.Contains("ParentName"))
-                DGV.Columns["ParentName"].DisplayIndex = 1;
-
-            if (DGV.Columns.Contains("BalanceWithState"))
-                DGV.Columns["BalanceWithState"].DisplayIndex = 2;
-
-            // ⑥ تغيير عناوين الأعمدة
-            if (DGV.Columns.Contains("AccName"))
-                DGV.Columns["AccName"].HeaderText = "اسم الحساب";
-
-            if (DGV.Columns.Contains("ParentName"))
-                DGV.Columns["ParentName"].HeaderText = "اسم الأب";
-
-            if (DGV.Columns.Contains("BalanceWithState"))
-                DGV.Columns["BalanceWithState"].HeaderText = "الرصيد";
-            ////*اريد اظهار رقم الرصيد بفاصلة الالاف*/
-
-
-            // ⑦ تحديد عرض الأعمدة نسبيًا من عرض الـ DGV
-            int totalWidth = DGV.ClientRectangle.Width;
-            if (DGV.Columns.Contains("AccName"))
-                DGV.Columns["AccName"].Width = (int)(totalWidth * 0.5);
-
-            if (DGV.Columns.Contains("ParentName"))
-                DGV.Columns["ParentName"].Width = (int)(totalWidth * 0.25);
-
-            if (DGV.Columns.Contains("BalanceWithState"))
-                DGV.Columns["BalanceWithState"].Width = (int)(totalWidth * 0.25);
-
-            if (DGV.Columns.Contains("BalanceWithState"))
-            {
-                DGV.Columns["BalanceWithState"].HeaderText = "الرصيد";
-                DGV.Columns["BalanceWithState"].DefaultCellStyle.Format = "N2"; // عرض برقم عشري بفاصل الآلاف ورقمين عشريين
-                DGV.Columns["BalanceWithState"].Width = (int)(totalWidth * 0.25);
-            }
-            // ⑧ تنسيقات عامة
-            DGV.Font = new Font("Times New Roman", 12, FontStyle.Bold);
-            DGV.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Bold);
-            DGV.RowHeadersVisible = false;
-            DGV.AllowUserToAddRows = false;
-            DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DGV.ReadOnly = true;
-            DGV.DefaultCellStyle.Font = new Font("Times New Roman", 11, FontStyle.Regular);
-            DGV.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
-            DGV.RowsDefaultCellStyle.BackColor = Color.White;
-
-            if (DGV.Columns.Contains("BalanceWithState"))
-                DGV.Columns["BalanceWithState"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-
-            if (DGV.Columns.Contains("AccName"))
-                DGV.Columns["AccName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-
-            if (DGV.Columns.Contains("ParentName"))
-                DGV.Columns["ParentName"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-
-            DGV.BorderStyle = BorderStyle.None;
-            DGV.EnableHeadersVisualStyles = false;
-            DGV.ColumnHeadersDefaultCellStyle.BackColor = Color.Gray;
-            DGV.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            DGV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            DGV.GridColor = Color.Gray;
-
-            // ===============================
-            // ✅ حساب عدد الحسابات والإجمالي
-            // ===============================
-            try
-            {
-                if (DGV.Rows.Count > 0)
-                {
-                    int countAccounts = DGV.Rows.Count;
-
-                    float totalBalance = 0;
-                    if (DGV.Columns.Contains("Balance"))
-                    {
-                        foreach (DataGridViewRow row in DGV.Rows)
-                        {
-                            if (row.Cells["Balance"].Value != null &&
-                                float.TryParse(row.Cells["Balance"].Value.ToString(), out float val))
-                            {
-                                totalBalance += val;
-                            }
-                        }
-                    }
-
-                    string balanceState = totalBalance > 0 ? "مدين" :
-                                          totalBalance < 0 ? "دائن" : "متوازن";
-
-                    lblCountAndTotals.Text = $"عدد الحسابات : {countAccounts}   " +
-                                             $"بإجمالي رصيد : {Math.Abs(totalBalance):N2} ({balanceState})";
-                }
-                else
-                {
-                    lblCountAndTotals.Text = "لا توجد بيانات";
-                }
-            }
-            catch
-            {
-                lblCountAndTotals.Text = string.Empty;
-            }
-            DGV.ClearSelection();
-        }
         private void DGVStyle()
         {
             // ① إفراغ النص قبل كل تحميل جديد
@@ -812,7 +680,17 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                 LoadChildrenInDGV(treeViewAccounts.SelectedNode);
             }
         }
+        private bool _isSearchingInChild = false;
+        private void txtSearch_Enter(object sender, EventArgs e)
+        {
+            _isSearchingInChild = true ;
 
+        }
+
+        private void txtSearch_Leave(object sender, EventArgs e)
+        {
+            _isSearchingInChild = false;
+        }
         #endregion
 
         #region !!!!!!!! حذف حساب شجرى او ابن من الجريد  !!!!!!!!!!!!!!
@@ -990,47 +868,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         #endregion
 
         #region !!!!!!! AfterSelect  بعد تحديد عقدة !!!!!!!!!!!!!!
-        /*
-         private void DGV_SelectionChanged(object sender, EventArgs e)
-{
-    if (DGV.CurrentRow != null && DGV.CurrentRow.Cells["AccID"].Value != null)
-    {
-        // 1. استخراج القيم من الصف المحدد
-        string accID = DGV.CurrentRow.Cells["AccID"].Value.ToString();
-        string treeAccCode = DGV.CurrentRow.Cells["TreeAccCode"].Value.ToString();
-        string accTypeName = DGV.CurrentRow.Cells["AccTypeName"].Value.ToString();
-        string balance = DGV.CurrentRow.Cells["Balance"].Value.ToString();
-        string balanceState = DGV.CurrentRow.Cells["BalanceState"].Value.ToString();
-        bool isEnerAcc = Convert.ToBoolean(DGV.CurrentRow.Cells["IsEnerAcc"].Value);
-        bool isHidden = Convert.ToBoolean(DGV.CurrentRow.Cells["IsHidden"].Value);
-        string createByUserID = DGV.CurrentRow.Cells["CreateByUserID"].Value.ToString();
-        
-        // 🔴 التعديل لضمان التنسيق (تم وضعه سابقاً في الجزء العلوي)
-        DateTime dateOfJoinObject = Convert.ToDateTime(DGV.CurrentRow.Cells["DateOfJoin"].Value);
-        string formattedDate = dateOfJoinObject.ToShortDateString();
-
-
-        // 2. تعبئة العناوين بالصيغ المطلوبة
-
-        // 🔹 lblAccID_DGV.Text
-        lblAccID_DGV.Text = $"المعرف: {accID} | الكود الشجري: {treeAccCode} | طبيعته: {accTypeName}";
-
-        // 🔹 lblBalanceToDay.Text
-        string enerAccText = isEnerAcc ? "حـ: داخلي" : string.Empty;
-        lblBalanceToDay.Text = $"الرصيد الحالي: {balance} {balanceState} {enerAccText}".Trim();
-
-        // 🔹 lblGenralData.Text
-        // ✅ استخدام formattedDate هنا يضمن ظهور التاريخ فقط
-        string hiddenText = isHidden ? "مخفي" : string.Empty;
-        lblGenralData.Text = $"{hiddenText} | أُنشئ في: {formattedDate} | بواسطة: {createByUserID}"; 
-    }
-    else
-    {
-        // ... (جزء else) ...
-    }
-}
-         
-         */
         private void DGV_SelectionChanged(object? sender, EventArgs? e)
         {
             // تحقق من وجود صف حالي محدد وأن قيمة AccID موجودة وليست فارغة
@@ -1158,7 +995,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         }
         #endregion
 
-        #region !!!!! منطقة البحث  !!!!!!!!!!
+        #region !!!!!  منطقة البحث فى الشجرة !!!!!!!!!!
         private bool _isSearching = false;
         private void treeViewAccounts_AfterExpand(object sender, TreeViewEventArgs e)
         {
