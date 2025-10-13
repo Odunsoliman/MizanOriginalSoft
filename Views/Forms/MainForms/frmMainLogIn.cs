@@ -1384,14 +1384,14 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
         private void btnAccounts_Old_Click(object sender, EventArgs e)
         {
-            if (sender is Button btn)
-            {
-                HighlightTransparentButton(btn);
-            }
+            //if (sender is Button btn)
+            //{
+            //    HighlightTransparentButton(btn);
+            //}
 
-            CloseAllFormsExceptMain();
-            frm_Accounts frm = new frm_Accounts();
-            OpenFormInPanel(frm);
+            //CloseAllFormsExceptMain();
+            //frm_Accounts frm = new frm_Accounts();
+            //OpenFormInPanel(frm);
         }
 
         private void btnAppData_Click(object? sender, EventArgs e)
