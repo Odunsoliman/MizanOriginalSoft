@@ -192,7 +192,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
 
         #endregion
 
-
         #region !!!!!!!!!! عرض الشجرة والجريد !!!!!!!!!!!
         // ✅ تحميل الشجرة الأصل والفروع بشكل صحيح
         private void LoadAccountsTree(bool collapseAll = true)
@@ -496,9 +495,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             return null;
         }
         #endregion
-
-
-
 
         #region !!! البحث العام في جميع الحسابات !!!
 

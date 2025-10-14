@@ -30,10 +30,10 @@
         {
             components = new System.ComponentModel.Container();
             pnlSetting = new Panel();
-            btnAccForManger = new Button();
-            btnAppData = new Button();
             btnAccounts = new Button();
+            btnAppData = new Button();
             btnProdSetting_ = new Button();
+            btnAccForManger = new Button();
             btn_MainSetting = new Button();
             lblUserID = new Label();
             btnIncreaseStock = new Button();
@@ -60,8 +60,8 @@
             btnSales = new Button();
             btn_MainMove = new Button();
             pnlReports = new Panel();
-            btnDashBoard = new Button();
             DGV = new DataGridView();
+            btnDashBoard = new Button();
             btn_MainReports = new Button();
             panelContainer = new Panel();
             tlpLeft = new TableLayoutPanel();
@@ -115,24 +115,24 @@
             pnlSetting.Size = new Size(134, 34);
             pnlSetting.TabIndex = 1;
             // 
-            // btnAccForManger
+            // btnAccounts
             // 
-            btnAccForManger.Dock = DockStyle.Top;
-            btnAccForManger.FlatAppearance.BorderSize = 0;
-            btnAccForManger.FlatStyle = FlatStyle.Flat;
-            btnAccForManger.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnAccForManger.Location = new Point(3, 31);
-            btnAccForManger.Margin = new Padding(3, 2, 3, 2);
-            btnAccForManger.MaximumSize = new Size(0, 29);
-            btnAccForManger.MinimumSize = new Size(0, 29);
-            btnAccForManger.Name = "btnAccForManger";
-            btnAccForManger.Padding = new Padding(0, 0, 22, 0);
-            btnAccForManger.Size = new Size(128, 29);
-            btnAccForManger.TabIndex = 2;
-            btnAccForManger.Text = "الحسابات العامة";
-            btnAccForManger.TextAlign = ContentAlignment.MiddleLeft;
-            btnAccForManger.UseVisualStyleBackColor = true;
-            btnAccForManger.Click += btnAccForManger_Click;
+            btnAccounts.Dock = DockStyle.Top;
+            btnAccounts.FlatAppearance.BorderSize = 0;
+            btnAccounts.FlatStyle = FlatStyle.Flat;
+            btnAccounts.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            btnAccounts.Location = new Point(3, 118);
+            btnAccounts.Margin = new Padding(3, 2, 3, 2);
+            btnAccounts.MaximumSize = new Size(0, 29);
+            btnAccounts.MinimumSize = new Size(0, 29);
+            btnAccounts.Name = "btnAccounts";
+            btnAccounts.Padding = new Padding(0, 0, 22, 0);
+            btnAccounts.Size = new Size(128, 29);
+            btnAccounts.TabIndex = 1;
+            btnAccounts.Text = "شجرة الحسابات";
+            btnAccounts.TextAlign = ContentAlignment.MiddleLeft;
+            btnAccounts.UseVisualStyleBackColor = true;
+            btnAccounts.Click += btnAccounts_Click;
             // 
             // btnAppData
             // 
@@ -153,25 +153,6 @@
             btnAppData.UseVisualStyleBackColor = true;
             btnAppData.Click += btnAppData_Click;
             // 
-            // btnAccounts
-            // 
-            btnAccounts.Dock = DockStyle.Top;
-            btnAccounts.FlatAppearance.BorderSize = 0;
-            btnAccounts.FlatStyle = FlatStyle.Flat;
-            btnAccounts.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
-            btnAccounts.Location = new Point(3, 118);
-            btnAccounts.Margin = new Padding(3, 2, 3, 2);
-            btnAccounts.MaximumSize = new Size(0, 29);
-            btnAccounts.MinimumSize = new Size(0, 29);
-            btnAccounts.Name = "btnAccounts";
-            btnAccounts.Padding = new Padding(0, 0, 22, 0);
-            btnAccounts.Size = new Size(128, 29);
-            btnAccounts.TabIndex = 1;
-            btnAccounts.Text = "شجرة الحسابات";
-            btnAccounts.TextAlign = ContentAlignment.MiddleLeft;
-            btnAccounts.UseVisualStyleBackColor = true;
-            btnAccounts.Click += btnAccounts_Click;
-            // 
             // btnProdSetting_
             // 
             btnProdSetting_.Dock = DockStyle.Top;
@@ -190,6 +171,25 @@
             btnProdSetting_.TextAlign = ContentAlignment.MiddleLeft;
             btnProdSetting_.UseVisualStyleBackColor = true;
             btnProdSetting_.Click += btnProdSetting__Click;
+            // 
+            // btnAccForManger
+            // 
+            btnAccForManger.Dock = DockStyle.Top;
+            btnAccForManger.FlatAppearance.BorderSize = 0;
+            btnAccForManger.FlatStyle = FlatStyle.Flat;
+            btnAccForManger.Font = new Font("Times New Roman", 12F, FontStyle.Bold);
+            btnAccForManger.Location = new Point(3, 31);
+            btnAccForManger.Margin = new Padding(3, 2, 3, 2);
+            btnAccForManger.MaximumSize = new Size(0, 29);
+            btnAccForManger.MinimumSize = new Size(0, 29);
+            btnAccForManger.Name = "btnAccForManger";
+            btnAccForManger.Padding = new Padding(0, 0, 22, 0);
+            btnAccForManger.Size = new Size(128, 29);
+            btnAccForManger.TabIndex = 2;
+            btnAccForManger.Text = "الحسابات العامة";
+            btnAccForManger.TextAlign = ContentAlignment.MiddleLeft;
+            btnAccForManger.UseVisualStyleBackColor = true;
+            btnAccForManger.Click += btnAccForManger_Click;
             // 
             // btn_MainSetting
             // 
@@ -591,6 +591,21 @@
             pnlReports.Size = new Size(134, 319);
             pnlReports.TabIndex = 3;
             // 
+            // DGV
+            // 
+            DGV.AccessibleRole = AccessibleRole.None;
+            DGV.AllowUserToAddRows = false;
+            DGV.AllowUserToDeleteRows = false;
+            DGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            DGV.Dock = DockStyle.Top;
+            DGV.Location = new Point(4, 62);
+            DGV.Name = "DGV";
+            DGV.ReadOnly = true;
+            DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            DGV.Size = new Size(126, 250);
+            DGV.TabIndex = 2;
+            DGV.DoubleClick += DGV_DoubleClick;
+            // 
             // btnDashBoard
             // 
             btnDashBoard.Dock = DockStyle.Top;
@@ -609,21 +624,6 @@
             btnDashBoard.TextAlign = ContentAlignment.MiddleLeft;
             btnDashBoard.UseVisualStyleBackColor = true;
             btnDashBoard.Click += btnDashBoard_Click;
-            // 
-            // DGV
-            // 
-            DGV.AccessibleRole = AccessibleRole.None;
-            DGV.AllowUserToAddRows = false;
-            DGV.AllowUserToDeleteRows = false;
-            DGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            DGV.Dock = DockStyle.Top;
-            DGV.Location = new Point(4, 62);
-            DGV.Name = "DGV";
-            DGV.ReadOnly = true;
-            DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            DGV.Size = new Size(126, 250);
-            DGV.TabIndex = 2;
-            DGV.DoubleClick += DGV_DoubleClick;
             // 
             // btn_MainReports
             // 

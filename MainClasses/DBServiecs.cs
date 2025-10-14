@@ -1371,52 +1371,6 @@ namespace MizanOriginalSoft.MainClasses
         #endregion
 
         #region *****************  Programer ****************
-        /*وازر فى الفورم 
-                private void btnDelete_Click(object sender, EventArgs e)
-        {
-            // تحقق أن هناك تقرير محدد
-            if (selectedReportID <= 0)
-            {
-                MessageBox.Show("الرجاء اختيار تقرير لحذفه.", "تنبيه",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // رسالة تأكيد قبل الحذف
-            DialogResult confirm = MessageBox.Show(
-                "هل أنت متأكد أنك تريد حذف هذا التقرير؟",
-                "تأكيد الحذف",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question
-            );
-
-            if (confirm != DialogResult.Yes)
-                return;
-
-            // تنفيذ الحذف
-            string msg;
-            bool success = DBServiecs.ReportsMaster_Delete(selectedReportID, out msg);
-
-            // عرض النتيجة
-            MessageBox.Show(msg, "نتيجة العملية",
-                            MessageBoxButtons.OK,
-                            success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
-
-            if (success)
-            {
-                // إعادة تحميل التقارير للقائمة الحالية
-                if (cbxID_TopAcc.SelectedValue != null && int.TryParse(cbxID_TopAcc.SelectedValue.ToString(), out int idTopAcc))
-                {
-                    LoadReports(idTopAcc);
-                }
-
-                // مسح الحقول بعد الحذف
-                btnNew_Click(null, null);
-            }
-        }
-
-        وهذه الدالة فى كلاس DBServiecs
-*/
         //
         public static string ReportsMaster_Delete(int ReportID)
         {
@@ -1438,8 +1392,6 @@ namespace MizanOriginalSoft.MainClasses
                 cmd.Parameters.Add(new SqlParameter("@ShowAll", SqlDbType.Bit) { Value = ShowAll });
             }) ?? new DataTable();
         }
-
-
 
         public static bool ReportsMaster_Save(
             int ReportID,
@@ -1609,18 +1561,7 @@ namespace MizanOriginalSoft.MainClasses
             return result ?? new DataTable();
         }
 
-        //// احضار الابناء الذين ليس لهم ابناء اخر
-        //public static DataTable Acc_GetChildren(int ParentTree)
-        //{
-        //    DataTable? result = dbHelper.ExecuteSelectQuery("Acc_GetLeafChildren", command =>
-        //    {
-        //        command.Parameters.Add("@ParentTree", SqlDbType.Int).Value = ParentTree;
-        //    });
-
-        //    return result ?? new DataTable();
-        //}
-
-
+ 
         // ✅ إحضار الأبناء الذين ليس لهم أبناء آخرون (الأوراق)
         //    - إذا مررت رقم ParentTree → يعيد أبناء هذا الفرع فقط
         //    - إذا مررت null → يعيد كل الأبناء الورقيين في قاعدة البيانات
@@ -1649,54 +1590,6 @@ namespace MizanOriginalSoft.MainClasses
             });
         }
 
-        /*
-         * 
-         * رسالة الخطأ هى 
-         * The best overload for 'ExecuteStoredProcedureWithOutputMessage' does not have a parameter named 'expectMessageOutput'
-         هذه دالة التى تسدعيها فى كلاس dbHelper
-        فما هو التعارض فى expectMessageOutput 
-               public static string ExecuteStoredProcedureWithOutputMessage(
-            string procedureName,
-            Action<SqlCommand> setParams,
-            int outputMessageSize = 500)
-        {
-            try
-            {
-                EnsureConnectionOpen();
-                string result = "تم التنفيذ.";
-
-                using (SqlCommand cmd = CreateCommand(procedureName))
-                {
-                    // إنشاء باراميتر الإخراج
-                    var msgParam = new SqlParameter("@Message", SqlDbType.NVarChar, outputMessageSize)
-                    {
-                        Direction = ParameterDirection.Output
-                    };
-                    cmd.Parameters.Add(msgParam);
-
-                    // إضافة باقي الباراميترات
-                    setParams?.Invoke(cmd);
-
-                    cmd.ExecuteNonQuery();
-
-                    result = cmd.Parameters["@Message"].Value?.ToString() ?? result;
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("خطأ أثناء التنفيذ: " + ex.Message);
-                return "فشل في التنفيذ.";
-            }
-            finally
-            {
-                EnsureConnectionClosed();
-            }
-        }
-
-
-         */
         // إضافة حساب نهائى  [][]
         public static string Acc_AddFinalAccount(string AccName, int? ParentTree, int? CreateByUserID, bool IsForManger)
         {

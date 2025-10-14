@@ -259,16 +259,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             tblUsVarfy = DBServiecs.User_Varify(username, password);
         }
 
-        //private IEnumerable<Control> GetAllControls(Control parent)
-        //{
-        //    foreach (Control control in parent.Controls)
-        //    {
-        //        yield return control;
-        //        foreach (var child in GetAllControls(control))
-        //            yield return child;
-        //    }
-        //}
-
+        
         private void LogFalse()
         {
             tlpUsers.Visible = false;
