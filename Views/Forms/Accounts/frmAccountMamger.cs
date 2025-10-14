@@ -272,6 +272,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             catch (Exception ex)
             {
                 MessageBox.Show($"حدث خطأ أثناء تحميل الشجرة:\n{ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //{"Failed to compare two elements in the array."}
             }
         }
 
@@ -279,10 +280,45 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // ✅ ترتيب العقد داخل كل مستوى
         private void SortTreeNodes(TreeNodeCollection nodes)
         {
+            try
+            {
+                // نحاول تحويل sortAccID إلى رقم آمن للمقارنة
+                List<TreeNode> sorted = nodes.Cast<TreeNode>()
+                    .OrderBy(n =>
+                    {
+                        DataRow? row = n.Tag as DataRow;
+                        if (row == null) return int.MaxValue; // إذا لم يوجد Tag
+                        object val = row["sortAccID"];
+                        if (val == DBNull.Value || val == null) return int.MaxValue; // قيمة فارغة = في النهاية
+
+                        // محاولة التحويل إلى رقم
+                        if (int.TryParse(val.ToString(), out int num))
+                            return num;
+                        else
+                            return int.MaxValue; // أي قيمة غير رقمية توضع في النهاية
+                    })
+                    .ToList();
+
+                nodes.Clear();
+                foreach (TreeNode n in sorted)
+                {
+                    nodes.Add(n);
+                    if (n.Nodes.Count > 0)
+                        SortTreeNodes(n.Nodes);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"خطأ أثناء ترتيب العقد: {ex.Message}", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SortTreeNodes_(TreeNodeCollection nodes)
+        {
             List<TreeNode> sorted = nodes.Cast<TreeNode>()
                                          .OrderBy(n => ((DataRow)n.Tag)["sortAccID"])
                                          .ToList();
-
+            //{"Failed to compare two elements in the array."}   يظهر هذا الخطأ فى اثناء المرور فى احد العقد ما هو السبب
             nodes.Clear();
             foreach (TreeNode n in sorted)
             {
