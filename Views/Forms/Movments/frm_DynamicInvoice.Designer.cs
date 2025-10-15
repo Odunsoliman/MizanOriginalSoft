@@ -1302,13 +1302,13 @@
             // dtpInv_Date
             // 
             dtpInv_Date.Dock = DockStyle.Fill;
-            dtpInv_Date.Font = new Font("Times New Roman", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dtpInv_Date.Font = new Font("Times New Roman", 16F, FontStyle.Bold, GraphicsUnit.Point, 0);
             dtpInv_Date.Location = new Point(59, 3);
             dtpInv_Date.Margin = new Padding(4, 3, 4, 3);
             dtpInv_Date.Name = "dtpInv_Date";
             dtpInv_Date.RightToLeft = RightToLeft.Yes;
             dtpInv_Date.RightToLeftLayout = true;
-            dtpInv_Date.Size = new Size(335, 26);
+            dtpInv_Date.Size = new Size(335, 32);
             dtpInv_Date.TabIndex = 26;
             // 
             // tlpAcc
