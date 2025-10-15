@@ -2199,8 +2199,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 // 🔹 البحث بالهاتف
                 selectedAccount = dt.AsEnumerable()
                     .FirstOrDefault(row =>
-                        string.Equals(row.Field<string?>("FirstPhon"), input, StringComparison.OrdinalIgnoreCase) ||
-                        string.Equals(row.Field<string?>("AntherPhon"), input, StringComparison.OrdinalIgnoreCase));
+                        string.Equals(row.Field<string?>("Phone"), input, StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(row.Field<string?>("Mobile"), input, StringComparison.OrdinalIgnoreCase));
 
                 if (selectedAccount == null)
                 {
