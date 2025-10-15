@@ -2080,10 +2080,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-        // اى الكودين يفى بمعظم الامور وكيف اوفق بين واظائفم
-        /// <summary>
-        /// فتح نموذج إضافة حساب جديد وربطه بالفاتورة
-        /// </summary>
+        // فتح نموذج إضافة حساب جديد وربطه بالفاتورة
         private void OpenNewAccountForm()
         {
             string enteredName = txtAccName.Text.Trim();
@@ -2109,8 +2106,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-        /// تعيين الحساب الافتراضي
-        /// </summary>
+        // تعيين الحساب الافتراضي
         private void SetDefaultAccount()
         {
             if (defaultAccounts.TryGetValue(currentInvoiceType, out string? defaultAccID))
