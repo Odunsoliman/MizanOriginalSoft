@@ -168,9 +168,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         }
 
 
-        /// <summary>
-        /// تحميل الإعدادات من ملف النص وتعيين القيم في الواجهة.
-        /// </summary>
+        // تحميل الإعدادات من ملف النص وتعيين القيم في الواجهة.
         // مسار ملف الإعدادات
         private readonly string SettingsFilePath = @"serverConnectionSettings.txt";
         private void UpdateOrAddLine(List<string> lines, string key, string value)
