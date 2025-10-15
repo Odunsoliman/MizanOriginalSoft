@@ -738,6 +738,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         /// <summary>
         /// حدث الضغط على لوحة المفاتيح داخل مربع نص اسم الحساب
         /// </summary>
+        /// 
+//        frm_NewInvoice فى فورم
         private void txtAccName_KeyDown(object sender, KeyEventArgs e)
         {
             // ✅ فتح شاشة البحث عند الضغط على Ctrl + F
@@ -823,7 +825,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
         }
 
-
+        // اى الكودين يفى بمعظم الامور وكيف اوفق بين واظائفم
         /// <summary>
         /// فتح نموذج إضافة حساب جديد وربطه بالفاتورة
         /// </summary>

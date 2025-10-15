@@ -20,15 +20,8 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         // 🟢 متغيرات داخلية (لا تظهر على الشاشة)
         int? _parentTree;
         int? _AccTypeID;
-        decimal? _balance;
-        string? _balanceState;
-        DateTime? _dateOfJoin;
-        int? _createByUserID;
         bool? _isEnerAcc;
-        bool? _isHasDetails;
-        bool? _isForManger;
-        bool? _isHasChildren;
-        bool? _isHidden;
+
         public frm_AccountModify(int AccID)
         {
             InitializeComponent();
@@ -177,7 +170,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
         private int parentchildren;
 
 
-        int AccTypeID;
         // 🟢 دالة لجمع البيانات من الواجهة
         private void GetDataForModify()
         {

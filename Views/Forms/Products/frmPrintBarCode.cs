@@ -56,25 +56,27 @@ namespace Signee.Views.Forms.Products
 
 
 
-      
 
-        private string rollPrinterName;
-        private string sheetPrinterName;
-        
+        private string rollPrinterName = string.Empty;
+        private string sheetPrinterName = string.Empty;
+
         private bool directPrint;
         private int currentPrintIndex;
-        private DataTable tblCode;
-        private PrintDocument printDoc;
+        private DataTable tblCode = new DataTable();
+        private PrintDocument printDoc = new PrintDocument();
+
         int sheetRows;
         int sheetCols;
         int sheetMarginTop;
         int sheetMarginBottom;
         int sheetMarginRight;
         int sheetMarginLeft;
+
         private int rollLabelWidth = 100;
         private int rollLabelHeight = 50;
-        private string companyName;
-  
+        private string? companyName;
+
+
         //زر الطباعة المباشرة او المعاينه على رول او شيت مقسم الى تكتس A4 
         private void btnPrintBarCode_Click(object sender, EventArgs e)
         {
@@ -240,7 +242,7 @@ namespace Signee.Views.Forms.Products
             int labelWidth = printableWidth / labelsPerRow;
             int labelHeight = printableHeight / labelsPerColumn;
 
-            Graphics g = e.Graphics;
+            Graphics? g = e.Graphics!;
 
             using (Font fontBig = new Font("Times New Roman", 8, FontStyle.Bold))
             using (Font fontSmall = new Font("Times New Roman", 7, FontStyle.Regular))
@@ -257,11 +259,11 @@ namespace Signee.Views.Forms.Products
                         }
 
                         DataRow dataRow = tblCode.Rows[currentPrintIndex];
-                        string productCode = dataRow["ProductCode"].ToString();
-                        string prodName = dataRow["ProdName"].ToString();
-                        string price = Convert.ToDecimal(dataRow["U_Price"]).ToString("0.00");
-                        string suplierID = dataRow["SuplierID"].ToString();
-                        string fixedText = lbl_CO.Text;
+                        string? productCode = dataRow["ProductCode"].ToString();
+                        string? prodName = dataRow["ProdName"].ToString();
+                        string? price = Convert.ToDecimal(dataRow["U_Price"]).ToString("0.00");
+                        string? suplierID = dataRow["SuplierID"].ToString();
+                        string? fixedText = lbl_CO.Text;
 
                         int x = e.MarginBounds.Left + col * labelWidth;
                         int y = e.MarginBounds.Top + row * labelHeight;
@@ -269,11 +271,11 @@ namespace Signee.Views.Forms.Products
 
                         int spacing = 2;
                         int barcodeHeight = 40;
-                        int textLineHeight = (int)g.MeasureString(price, fontSmall).Height;
+                        int textLineHeight = (int)g.MeasureString(price, fontSmall!).Height;
 
                         // تقسيم اسم المنتج إلى سطر أو سطرين حسب العرض
                         float maxTextWidth = labelWidth - 10; // هامش داخلي
-                        List<string> nameLines = SplitTextToFitLines(g, prodName, fontBig, fontSmaller, maxTextWidth, 2);
+                        List<string> nameLines = SplitTextToFitLines(g, prodName ?? string.Empty, fontBig, fontSmaller, maxTextWidth, 2);
 
                         // حساب ارتفاع النص
                         float nameTotalHeight = 0;
@@ -299,7 +301,8 @@ namespace Signee.Views.Forms.Products
 
                         // رسم الباركود
                         currentY += spacing;
-                        Image barcodeImg = GenerateBarcode(productCode);
+                        Image barcodeImg = GenerateBarcode(productCode ?? string.Empty);
+
                         int barcodeX = x + (labelWidth - 130) / 2;
                         g.DrawImage(barcodeImg, barcodeX, (int)currentY, 130, barcodeHeight);
 
@@ -398,13 +401,13 @@ namespace Signee.Views.Forms.Products
 
             DataRow row = tblCode.Rows[currentPrintIndex];
 
-            string productCode = row["ProductCode"].ToString();
-            string prodName = row["ProdName"].ToString();
+            string? productCode = row["ProductCode"].ToString();
+            string? prodName = row["ProdName"].ToString();
             string price = Convert.ToDecimal(row["U_Price"]).ToString("0.00");
-            string suplierID = row["SuplierID"].ToString();
+            string? suplierID = row["SuplierID"].ToString();
             string fixedText = lbl_CO.Text;
 
-            Graphics g = e.Graphics;
+            Graphics? g = e.Graphics;
             int labelWidth = e.PageBounds.Width;
             int labelHeight = e.PageBounds.Height;
 
@@ -416,12 +419,13 @@ namespace Signee.Views.Forms.Products
                 int barcodeHeight = 40;
 
                 // تقسيم الاسم إلى سطر أو سطرين كحد أقصى باستخدام الدالة المخصصة
-                List<string> nameLines = SplitTextToFitLinesRoll(g, prodName, fontBig, labelWidth - 10, 2);
+                List<string> nameLines = SplitTextToFitLinesRoll(g!, prodName ?? string.Empty, fontBig, labelWidth - 10, 2);
+
                 string line1 = nameLines.Count > 0 ? nameLines[0] : "";
                 string line2 = nameLines.Count > 1 ? nameLines[1] : "";
 
                 // قياس ارتفاع السطور
-                SizeF line1Size = g.MeasureString(line1, fontBig);
+                SizeF line1Size = g!.MeasureString(line1, fontBig);
                 SizeF line2Size = string.IsNullOrEmpty(line2) ? SizeF.Empty : g.MeasureString(line2, fontSmaller);
 
                 int nameHeightTotal = (int)line1Size.Height + (int)line2Size.Height + (string.IsNullOrEmpty(line2) ? 0 : 1);
@@ -449,7 +453,10 @@ namespace Signee.Views.Forms.Products
 
                 // رسم الباركود
                 int barcodeY = topMargin + nameHeightTotal + spacing;
-                Image barcodeImg = GenerateBarcode(productCode);
+                
+                Image barcodeImg = GenerateBarcode(productCode ?? string.Empty);
+
+
                 int barcodeX = (labelWidth - 130) / 2;
                 g.DrawImage(barcodeImg, barcodeX, barcodeY, 130, barcodeHeight);
 
@@ -599,7 +606,7 @@ namespace Signee.Views.Forms.Products
                 if (DGV.Columns[e.ColumnIndex].Visible && e.Value != null)
                 {
                     // إزالة المسافات من بداية ونهاية النص
-                    e.Value = e.Value.ToString().Trim();
+                    e.Value = (e.Value?.ToString() ?? string.Empty).Trim();
 
                     // (إضافة اختيارية) معالجة خاصة لعمود السعر
                     if (DGV.Columns[e.ColumnIndex].Name == "U_Price")

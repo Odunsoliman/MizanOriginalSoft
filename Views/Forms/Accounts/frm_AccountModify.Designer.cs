@@ -467,7 +467,6 @@
         private CheckBox chkIsForManger;
         private CheckBox chkIsHasDetails;
         private ComboBox cbxParentTree;
-        private Label lblAccTypeIDlblAccTypeID;
         private Label lblCBX;
         private Label label1;
         private Label lblTreeAccCodeAndText;

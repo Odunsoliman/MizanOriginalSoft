@@ -65,7 +65,6 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         private int Piece_id = 0;
 
         private DataTable? tblAcc = null;
-        private DataTable? tblAccSals = null;
 
         // متغيرات مالية
         private int PieceID;
@@ -142,7 +141,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
             // 🔹 تجهيز الحقول الأساسية
             FillDefaultAccount();
-            
+
             FillSellerComboBox();
             SetupFormByInvoiceType();
 
@@ -246,7 +245,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
                     case 2:
                         currentInvoiceType = InvoiceType.SaleReturn;
-                        UpdateLabelsForReturn(); 
+                        UpdateLabelsForReturn();
                         break;
 
                     case 3:
@@ -256,22 +255,22 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
                     case 4:
                         currentInvoiceType = InvoiceType.PurchaseReturn;
-                        UpdateLabelsForReturn(); 
+                        UpdateLabelsForReturn();
                         break;
 
                     case 5:
-                        currentInvoiceType = InvoiceType.Inventory ;
-                        UpdateLabelsForInventory ();
+                        currentInvoiceType = InvoiceType.Inventory;
+                        UpdateLabelsForInventory();
                         break;
 
                     case 6:
-                        currentInvoiceType = InvoiceType.DeductStock ;
-                        UpdateLabelsForDeduct(); 
+                        currentInvoiceType = InvoiceType.DeductStock;
+                        UpdateLabelsForDeduct();
                         break;
 
                     case 7:
-                        currentInvoiceType = InvoiceType.AddStock ;
-                        UpdateLabelsForAddStock (); 
+                        currentInvoiceType = InvoiceType.AddStock;
+                        UpdateLabelsForAddStock();
                         break;
 
                     default:
@@ -290,7 +289,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
             // ولو عايز صناديق تانية للأرقام الصحيحة فقط
             AttachIntegerValidation(txtSeaarchProd);
-             
+
         }
 
 
@@ -417,7 +416,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // عند دخول المؤشر لحقل اسم الحساب → ضبط اللغة للعربية وتحديد النص
         private void txtAccName_Enter(object sender, EventArgs e)
         {
-            langManager.SetArabicLanguage();//Field 'frm_DynamicInvoice.langManager' is never assigned to, and will always have its default value null
+            langManager.SetArabicLanguage();
             txtAccName.SelectAll();
         }
 
@@ -623,12 +622,12 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             {
                 if (isGardDone) // يعني = true
                 {
-                    DialogResult result = CustomMessageBox .ShowQuestion (
+                    DialogResult result = CustomMessageBox.ShowQuestion(
                         "هذا الصنف تم جرده من قبل فى عملية الجرد المفتوحة.\nهل تريد إعادة جرده مرة أخرى؟",
                         "تنبيه"
                     );
 
-                    if (result == DialogResult.OK )
+                    if (result == DialogResult.OK)
                     {
                         // حذف السطر السابق من جدول الجرد
                         if (int.TryParse(lblPieceID.Text, out int pieceID))
@@ -935,7 +934,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
 
         //// 🔹 تحميل بيانات منتج حسب كوده.
-       private  bool isGardDone = false ;
+        private bool isGardDone = false;
         private bool GetProd(string code)
         {
             txtAmount.Text = "0";
@@ -1972,7 +1971,9 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #endregion
 
         #region Account Data Display
-        private void txtAccName_KeyDown(object sender, KeyEventArgs e)
+        #region  التعديل الذى لا 
+        //frm_DynamicInvoice فى فورم
+        private void txtAccName_KeyDown_(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter && !e.Shift)
             {
@@ -1988,6 +1989,192 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
 
         }
+
+        private void txtAccName_KeyDown(object sender, KeyEventArgs e)
+        {
+            // 1️⃣ Ctrl + F → فتح شاشة البحث
+            if (e.Control && e.KeyCode == Keys.F)
+            {
+                if (currentInvoiceType != InvoiceType.Sale &&
+                    currentInvoiceType != InvoiceType.SaleReturn &&
+                    currentInvoiceType != InvoiceType.Purchase &&
+                    currentInvoiceType != InvoiceType.PurchaseReturn)
+                    return;
+
+                AccountKind accountKind = (currentInvoiceType == InvoiceType.Purchase ||
+                                           currentInvoiceType == InvoiceType.PurchaseReturn)
+                                           ? AccountKind.Suppliers
+                                           : AccountKind.Customers;
+
+                var provider = new GenericSearchProvider(SearchEntityType.Accounts, accountKind);
+                var result = SearchHelper.ShowSearchDialog(provider);
+
+                if (!string.IsNullOrEmpty(result.Code))
+                {
+                    lblAccID.Text = result.Code;
+                    txtAccName.Text = result.Name;
+                }
+
+                e.SuppressKeyPress = true;
+                return;
+            }
+
+            // 2️⃣ Shift + Enter أو سهم ↑ → الانتقال للحقل السابق
+            if ((e.KeyCode == Keys.Enter && e.Shift) || e.KeyCode == Keys.Up)
+            {
+                this.SelectNextControl((Control)sender, false, true, true, true);
+                e.Handled = true;
+                return;
+            }
+
+            // 3️⃣ Enter فقط → تحقق من الحساب ثم انتقل للحقل التالي
+            if (e.KeyCode == Keys.Enter && !e.Shift)
+            {
+                string input = txtAccName.Text.Trim();
+
+                if (string.IsNullOrWhiteSpace(input) || tblAcc == null)
+                {
+                    SetDefaultAccount();
+                }
+                else
+                {
+                    string safeInput = input.Replace("'", "''");
+                    string filter =
+                        $"AccName = '{safeInput}' OR " +
+                        $"FirstPhon = '{safeInput}' OR " +
+                        $"AntherPhon = '{safeInput}'";
+
+                    DataRow[] selectedAccount = tblAcc.Select(filter);
+
+                    if (selectedAccount.Length > 0)
+                    {
+                        LoadAccountData(selectedAccount[0]);
+                        SaveDraftInvoice();
+                    }
+                    else
+                    {
+                        DialogResult result = CustomMessageBox.ShowQuestion(
+                            "الحساب غير موجود، هل تريد إضافة حساب جديد؟",
+                            "حساب جديد"
+                        );
+
+                        if (result == DialogResult.OK)
+                        {
+                            OpenNewAccountForm();
+                            LoadAcc();
+                            InitializeAutoComplete();
+                            txtAccName.Focus();
+                            txtAccName.SelectAll();
+                        }
+                        else
+                        {
+                            SetDefaultAccount();
+                        }
+                    }
+                }
+
+                // بعد كل ذلك، انتقل للحقل التالي
+                cbxSellerID.Focus();
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        // اى الكودين يفى بمعظم الامور وكيف اوفق بين واظائفم
+        /// <summary>
+        /// فتح نموذج إضافة حساب جديد وربطه بالفاتورة
+        /// </summary>
+        private void OpenNewAccountForm()
+        {
+            string enteredName = txtAccName.Text.Trim();
+
+            // فتح الفورم مع تمرير اسم الحساب المدخل والنوع الحالي للفاتورة
+            frm_AddAccount frmNew = new frm_AddAccount(
+                enteredName,
+                (int)currentInvoiceType // ✅ تحويل enum إلى int
+            );
+
+            if (frmNew.ShowDialog() == DialogResult.OK)
+            {
+                // تحديث مصادر البيانات بعد إضافة الحساب
+                LoadAcc();
+                InitializeAutoComplete();
+
+                // ربط الفاتورة بالحساب الجديد
+                txtAccName.Text = frmNew.CreatedAccountName;
+                lblAccID.Text = frmNew.CreatedAccountID.ToString();
+
+                txtAccName.Focus();
+                txtAccName.SelectAll();
+            }
+        }
+
+        /// تعيين الحساب الافتراضي
+        /// </summary>
+        private void SetDefaultAccount()
+        {
+            if (defaultAccounts.TryGetValue(currentInvoiceType, out string? defaultAccID))
+            {
+                lblAccID.Text = defaultAccID;
+
+                if (tblAcc != null)
+                {
+                    var rows = tblAcc.Select($"AccID = {defaultAccID}");
+                    if (rows.Length > 0)
+                        LoadAccountData(rows[0]);
+                }
+            }
+        }
+
+        // حسابات افتراضية لكل نوع
+        private readonly Dictionary<InvoiceType, string> defaultAccounts = new()
+        {
+            [InvoiceType.Inventory] = "72", // جرد حـ اضافة وخصم صنف
+            [InvoiceType.DeductStock] = "72", // صرف حـ اضافة وخصم صنف
+            [InvoiceType.AddStock] = "72", // إضافة حـ اضافة وخصم صنف
+            [InvoiceType.Sale] = "55", // مبيعات حـ عميل نقدى
+            [InvoiceType.SaleReturn] = "55", // مرتجع حـ عميل نقدى
+            [InvoiceType.Purchase] = "56", // مشتريات حـ مورد عام نقدى
+            [InvoiceType.PurchaseReturn] = "56", // مرتجع حـ مورد عام نقدى
+        };
+
+        private void LoadAcc()
+        {
+            // استخدم enum مع الدالة
+            string invoiceTypeKey = InvoiceTypeHelper.ToAccountTypeString(currentInvoiceType);
+
+            if (string.IsNullOrEmpty(invoiceTypeKey))
+                return;
+
+            // استدعاء الإجراء المخزن
+            DataTable result = DBServiecs.NewInvoice_GetAcc(invoiceTypeKey);
+
+            // تصفية الحسابات عميل نقدى =55 مورد عام نقدى=56 تسوية حساب المخزون=72
+            DataRow[] filteredRows = result.Select("AccID > 200 OR AccID IN (55, 56, 72)");
+            // لا افهم عما تعبر كيف اكتشف ذلك
+            tblAcc = filteredRows.Length > 0 ? filteredRows.CopyToDataTable() : result.Clone();
+        }
+
+        private void InitializeAutoComplete()
+        {
+            if (tblAcc == null || tblAcc.Rows.Count == 0)
+                return;
+
+            var accNames = new AutoCompleteStringCollection();
+
+            accNames.AddRange(
+                tblAcc.AsEnumerable()
+                      .Select(r => r["AccName"]?.ToString())
+                      .Where(name => !string.IsNullOrEmpty(name))
+                      .ToArray()!);
+
+            txtAccName.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            txtAccName.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            txtAccName.AutoCompleteCustomSource = accNames;
+        }
+
+        #endregion
+
         private void txtAccName_Leave(object sender, EventArgs e)
         {
             string input = txtAccName.Text.Trim();
@@ -2685,7 +2872,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
 
 
 
- 
+
 
         #region دوال مجمعة لضبط الادخالات 
         // 🔹 منع كتابة أي شيء غير الأرقام + التحكم في الفاصلة العشرية       ***
@@ -2702,7 +2889,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 InputValidationHelper.AllowOnlyNumbersAndDecimal(sender, e);
             }
         }
- 
+
         // دالة تربط صناديق نصوص بالأرقام + فاصلة عشرية
         private void AttachDecimalValidation(params TextBox[] textBoxes)
         {
@@ -2750,8 +2937,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             // أرقام + فاصلة عشرية
             InputValidationHelper.AllowOnlyNumbersAndDecimal(sender, e);
         }
-        #endregion 
 
+        #endregion
     }
 }
 

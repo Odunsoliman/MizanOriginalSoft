@@ -509,7 +509,6 @@
         private TableLayoutPanel tableLayoutPanel1;
         private Label lblTitel;
         private TableLayoutPanel tableLayoutPanel5;
-        private DataGridView dataGridView1;
         private DataGridView DGV;
     }
 }

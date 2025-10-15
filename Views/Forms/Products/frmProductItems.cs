@@ -1454,25 +1454,25 @@ namespace MizanOriginalSoft.Views.Forms.Products
         //القوائم (تقارير الصنف المحدد ▼ و تقارير مجمعة للأصناف المحددة ▼) تصطف من اليمين للشمال بدل العكس.
         private void SetupMenuStrip()
         {
-            this.Controls.Add(menuStrip1);
-            MenuStrip mainMenu = new MenuStrip
+            menuStrip1 = new MenuStrip
             {
                 Dock = DockStyle.Fill,
                 BackColor = Color.LightSteelBlue,
-                Font = new Font("Times New Roman", 14, FontStyle.Regular)
+                Font = new Font("Times New Roman", 14, FontStyle.Regular),
+                RightToLeft = RightToLeft.Yes // ✅ تصحيح الاتجاه
             };
 
             tsmiCategoryReports = new ToolStripMenuItem("تقارير الصنف المحدد ▼");
             tsmiGroupedReports = new ToolStripMenuItem("تقارير مجمعة للأصناف المحددة ▼");
 
-            mainMenu.Items.Add(tsmiCategoryReports);
-            mainMenu.Items.Add(tsmiGroupedReports);
+            menuStrip1.Items.Add(tsmiCategoryReports);
+            menuStrip1.Items.Add(tsmiGroupedReports);
 
-            pnlMenuContainer.Controls.Add(mainMenu);
-            mainMenu.Location = new Point(10, 5);
-
+            pnlMenuContainer.Controls.Add(menuStrip1);
+            menuStrip1.Location = new Point(10, 5);
         }
 
+        
 
         // تحميل القوائم بناءً على الحساب الممرر
         private void LoadReports(int topAcc)

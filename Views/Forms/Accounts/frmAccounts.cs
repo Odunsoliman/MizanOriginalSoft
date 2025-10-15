@@ -682,7 +682,7 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
                     lblCountAndTotals.Text = "لا توجد بيانات";
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 lblCountAndTotals.Text = "خطأ في حساب الإجمالي";
                 // يمكنك تسجيل الخطأ: Console.WriteLine(ex.Message);
@@ -703,25 +703,6 @@ namespace MizanOriginalSoft.Views.Forms.Accounts
             }
         }
 
-        // دالة البحث فى الجريد
-        private void txtSearch_TextChanged_(object sender, EventArgs e)
-        {
-            if (treeViewAccounts.SelectedNode != null)
-            {
-                LoadChildrenInDGV(treeViewAccounts.SelectedNode);
-            }
-        }
-        private bool _isSearchingInChild = false;
-        private void txtSearch_Enter__(object sender, EventArgs e)
-        {
-            _isSearchingInChild = true ;
-
-        }
-
-        private void txtSearch_Leave__(object sender, EventArgs e)
-        {
-            _isSearchingInChild = false;
-        }
 
         //تعميل الابناء فى الجريد
         private void LoadChildrenInDGV(TreeNode selectedNode)
