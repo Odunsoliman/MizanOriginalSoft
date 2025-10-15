@@ -1032,7 +1032,7 @@
             txtPayment_Note.Location = new Point(4, 3);
             txtPayment_Note.Margin = new Padding(4, 3, 4, 3);
             txtPayment_Note.Name = "txtPayment_Note";
-            txtPayment_Note.Size = new Size(492, 29);
+            txtPayment_Note.Size = new Size(483, 29);
             txtPayment_Note.TabIndex = 6;
             txtPayment_Note.Text = "0";
             txtPayment_Note.TextAlign = HorizontalAlignment.Center;
@@ -1043,10 +1043,10 @@
             label14.Dock = DockStyle.Fill;
             label14.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label14.ForeColor = Color.Blue;
-            label14.Location = new Point(504, 0);
+            label14.Location = new Point(495, 0);
             label14.Margin = new Padding(4, 0, 4, 0);
             label14.Name = "label14";
-            label14.Size = new Size(134, 40);
+            label14.Size = new Size(144, 40);
             label14.TabIndex = 5;
             label14.Text = "ملاحظات الدفع";
             label14.TextAlign = ContentAlignment.MiddleRight;
@@ -1088,8 +1088,8 @@
             tlpNotes.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
             tlpNotes.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
             tlpNotes.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
-            tlpNotes.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
-            tlpNotes.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
+            tlpNotes.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10.7443819F));
+            tlpNotes.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 34.41011F));
             tlpNotes.Controls.Add(btnJournal, 0, 0);
             tlpNotes.Controls.Add(txtNoteInvoice, 2, 0);
             tlpNotes.Controls.Add(label22, 1, 0);
@@ -1109,10 +1109,10 @@
             txtNoteInvoice.Dock = DockStyle.Fill;
             txtNoteInvoice.Font = new Font("Times New Roman", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             txtNoteInvoice.ForeColor = Color.Purple;
-            txtNoteInvoice.Location = new Point(646, 3);
+            txtNoteInvoice.Location = new Point(647, 3);
             txtNoteInvoice.Margin = new Padding(4, 3, 4, 3);
             txtNoteInvoice.Name = "txtNoteInvoice";
-            txtNoteInvoice.Size = new Size(490, 29);
+            txtNoteInvoice.Size = new Size(489, 29);
             txtNoteInvoice.TabIndex = 10;
             txtNoteInvoice.Text = "0";
             txtNoteInvoice.TextAlign = HorizontalAlignment.Center;
