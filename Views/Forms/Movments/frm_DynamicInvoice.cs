@@ -1217,6 +1217,52 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                     DGV.CurrentCell = DGV.Rows[rowIndex].Cells[editableCols[nextColIndex]];
                 }
             }
+
+            // 🔹 الحذف عند الضغط على Delete
+            if (e.KeyCode == Keys.Delete)
+            {
+                e.SuppressKeyPress = true;
+
+                if (DGV.CurrentRow == null) return;
+
+                // تأكد من أن العمود موجود
+                if (!DGV.Columns.Contains("serInvDetail"))
+                {
+                    MessageBox.Show("لم يتم العثور على العمود serInvDetail.", "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                int? serInv_detail = DGV.CurrentRow.Cells["serInvDetail"].Value as int?;
+                if (serInv_detail == null)
+                {
+                    MessageBox.Show("لا يمكن تحديد السطر المراد حذفه.", "تنبيه", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // تأكيد من المستخدم
+                DialogResult confirm = MessageBox.Show(
+                    "هل أنت متأكد أنك تريد حذف هذا السطر؟",
+                    "تأكيد الحذف",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (confirm == DialogResult.Yes)
+                {
+                    try
+                    {
+                        string message = DBServiecs.NewInvoice_DeleteDetailsRow(serInv_detail);
+                        MessageBox.Show(message, "نتيجة العملية", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // إعادة تحميل البيانات بعد الحذف
+                        GetInvoiceDetails();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("حدث خطأ أثناء الحذف:\n" + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -1971,25 +2017,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #endregion
 
         #region Account Data Display
-        #region  التعديل الذى لا 
-        //frm_DynamicInvoice فى فورم
-        private void txtAccName_KeyDown_(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter && !e.Shift)
-            {
-                // Enter فقط → التالي
-                cbxSellerID.Focus();
-                e.Handled = true;
-            }
-            else if ((e.KeyCode == Keys.Enter && e.Shift) || e.KeyCode == Keys.Up)
-            {
-                // Shift+Enter أو سهم ↑ → السابق
-                this.SelectNextControl((Control)sender, false, true, true, true);
-                e.Handled = true;
-            }
-
-        }
-
+        
         private void txtAccName_KeyDown(object sender, KeyEventArgs e)
         {
             // 1️⃣ Ctrl + F → فتح شاشة البحث
@@ -2169,7 +2197,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             txtAccName.AutoCompleteCustomSource = accNames;
         }
 
-        #endregion
+        
 
         private void txtAccName_Leave(object sender, EventArgs e)
         {
@@ -2295,8 +2323,8 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         private void DisplayAccountDetails(DataRow accountRow)
         {
             // 🔹 الهاتفين
-            string? firstPhone = accountRow.Field<string?>("FirstPhon");
-            string? anotherPhone = accountRow.Field<string?>("AntherPhon");
+            string? firstPhone = accountRow.Field<string?>("Phone");
+            string? anotherPhone = accountRow.Field<string?>("Mobile");
 
             if (!string.IsNullOrWhiteSpace(firstPhone) && !string.IsNullOrWhiteSpace(anotherPhone))
             {
@@ -2316,13 +2344,13 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             }
 
             // 🔹 البريد الإلكتروني
-            string? email = accountRow.Field<string?>("ClientEmail");
+            string? email = accountRow.Field<string?>("Email");
             lblClientEmail.Text = !string.IsNullOrWhiteSpace(email)
                 ? $"Email: {email}"
                 : string.Empty;
 
             // 🔹 العنوان
-            string? address = accountRow.Field<string?>("ClientAddress");
+            string? address = accountRow.Field<string?>("Address");
             lblClientAddress.Text = !string.IsNullOrWhiteSpace(address)
                 ? $"العنوان: {address}"
                 : string.Empty;

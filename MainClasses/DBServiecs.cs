@@ -1007,6 +1007,15 @@ namespace MizanOriginalSoft.MainClasses
         }
 
 
+        // حذف سطر من الجريد فى الفاتورة  
+        public static string NewInvoice_DeleteDetailsRow(int? serInv_Detail)
+        {
+            return dbHelper.ExecuteStoredProcedureWithOutputMessage("NewInvoice_DeleteDetailsRow", command =>
+            {
+                command.Parameters.Add("@serInv_Detail", SqlDbType.Int).Value = (object?)serInv_Detail ?? DBNull.Value;
+
+            });
+        }
 
         //  الحصول على معرف القطعة (Piece_ID) الجديدة بالتحديد.
         public static int Product_CreateNewPiece(int prodID,int UpPiece_ID)
@@ -1577,7 +1586,7 @@ namespace MizanOriginalSoft.MainClasses
         }
 
 
-        // إضافة حساب شجرى  []@
+        // إضافة حساب شجرى  
         public static string Acc_AddParentAccount(string AccName, int? ParentTree, int? CreateByUserID ,bool IsForManger)
         {
             return dbHelper.ExecuteStoredProcedureWithOutputMessage("Acc_AddParentAccount", command =>
