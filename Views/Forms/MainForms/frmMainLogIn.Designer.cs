@@ -235,7 +235,7 @@
             btnIncreaseStock.Padding = new Padding(0, 0, 22, 0);
             btnIncreaseStock.Size = new Size(128, 29);
             btnIncreaseStock.TabIndex = 10;
-            btnIncreaseStock.Text = "اذن اضافة مخزون";
+            btnIncreaseStock.Text = "اذن اضافة طول";
             btnIncreaseStock.TextAlign = ContentAlignment.MiddleLeft;
             btnIncreaseStock.UseVisualStyleBackColor = true;
             // 
@@ -253,7 +253,7 @@
             btnDecreaseStock.Padding = new Padding(0, 0, 22, 0);
             btnDecreaseStock.Size = new Size(128, 29);
             btnDecreaseStock.TabIndex = 9;
-            btnDecreaseStock.Text = "اذن خصم مخزون";
+            btnDecreaseStock.Text = "اذن هدر طول";
             btnDecreaseStock.TextAlign = ContentAlignment.MiddleLeft;
             btnDecreaseStock.UseVisualStyleBackColor = true;
             // 
@@ -484,7 +484,7 @@
             pnlMovement.MinimumSize = new Size(0, 34);
             pnlMovement.Name = "pnlMovement";
             pnlMovement.Padding = new Padding(3, 2, 3, 2);
-            pnlMovement.Size = new Size(134, 34);
+            pnlMovement.Size = new Size(134, 250);
             pnlMovement.TabIndex = 1;
             // 
             // label1
@@ -582,7 +582,7 @@
             pnlReports.Controls.Add(btnDashBoard);
             pnlReports.Controls.Add(btn_MainReports);
             pnlReports.Dock = DockStyle.Top;
-            pnlReports.Location = new Point(0, 102);
+            pnlReports.Location = new Point(0, 318);
             pnlReports.Margin = new Padding(3, 2, 3, 2);
             pnlReports.MaximumSize = new Size(0, 400);
             pnlReports.MinimumSize = new Size(0, 34);
@@ -692,7 +692,7 @@
             pnlBills.Controls.Add(btnCashOut);
             pnlBills.Controls.Add(btn_MainBill);
             pnlBills.Dock = DockStyle.Top;
-            pnlBills.Location = new Point(0, 68);
+            pnlBills.Location = new Point(0, 284);
             pnlBills.Margin = new Padding(3, 2, 3, 2);
             pnlBills.MaximumSize = new Size(0, 220);
             pnlBills.MinimumSize = new Size(0, 34);
