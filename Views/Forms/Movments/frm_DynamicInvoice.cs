@@ -1479,6 +1479,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
             if (EnsureInvoicesLoaded())
                 NavigateToInvoice(0);
+            EmptyProdData();
         }
 
         // الانتقال إلى الفاتورة التالية
@@ -1488,6 +1489,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 NavigateToInvoice(currentInvoiceIndex + 1);
             else
                 MessageBox.Show("تم الوصول إلى آخر فاتورة.");
+            EmptyProdData();
         }
 
         // الانتقال إلى الفاتورة السابقة
@@ -1497,6 +1499,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
                 NavigateToInvoice(currentInvoiceIndex - 1);
             else
                 MessageBox.Show("تم الوصول إلى أول فاتورة.");
+            EmptyProdData();
         }
 
         // الانتقال إلى آخر فاتورة
@@ -1504,13 +1507,14 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         {
             if (EnsureInvoicesLoaded())
                 NavigateToInvoice(tblInv.Rows.Count - 1);
+            EmptyProdData();
         }
 
         // وظيفة التنقل بين الفواتير
         private void NavigateToInvoice(int targetIndex)
         {
             if (!EnsureInvoicesLoaded()) return;
-   
+
             // 📝 ضبط المؤشر ليكون دائمًا داخل الحدود
             targetIndex = Math.Max(0, Math.Min(targetIndex, tblInv.Rows.Count - 1));
             currentInvoiceIndex = targetIndex;
@@ -1538,7 +1542,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // التأكد من تحميل الفواتير
         private bool EnsureInvoicesLoaded()
         {
-            EmptyProdData();
+
             if (tblInv == null || tblInv.Rows.Count == 0)
                 GetInvoices();
 
@@ -2018,7 +2022,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         #endregion
 
         #region Account Data Display
-        
+
         private void txtAccName_KeyDown(object sender, KeyEventArgs e)
         {
             // 1️⃣ Ctrl + F → فتح شاشة البحث
@@ -2198,7 +2202,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
             txtAccName.AutoCompleteCustomSource = accNames;
         }
 
-        
+
 
         private void txtAccName_Leave(object sender, EventArgs e)
         {
@@ -2964,6 +2968,11 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         }
 
         #endregion
+
+        private void DGV_AllowUserToOrderColumnsChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

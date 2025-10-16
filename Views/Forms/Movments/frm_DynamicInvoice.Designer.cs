@@ -157,6 +157,8 @@
             DGV.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DGV.Size = new Size(1291, 232);
             DGV.TabIndex = 32;
+            DGV.AllowUserToOrderColumnsChanged += DGV_AllowUserToOrderColumnsChanged;
+            DGV.SelectionChanged += DGV_SelectionChanged;
             DGV.KeyDown += DGV_KeyDown;
             // 
             // tableLayoutPanel9
