@@ -1510,7 +1510,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         private void NavigateToInvoice(int targetIndex)
         {
             if (!EnsureInvoicesLoaded()) return;
-     //       EmptyProdData();
+   
             // 📝 ضبط المؤشر ليكون دائمًا داخل الحدود
             targetIndex = Math.Max(0, Math.Min(targetIndex, tblInv.Rows.Count - 1));
             currentInvoiceIndex = targetIndex;
@@ -1538,6 +1538,7 @@ namespace MizanOriginalSoft.Views.Forms.Movments
         // التأكد من تحميل الفواتير
         private bool EnsureInvoicesLoaded()
         {
+            EmptyProdData();
             if (tblInv == null || tblInv.Rows.Count == 0)
                 GetInvoices();
 
