@@ -962,7 +962,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
                 // 1. النسخ الاحتياطي
                 helper.BackupDatabase();
-
+                // الكود يصل الى هنا ولا يكمل اغلاق البرنامج ========================================================
                 // 2. تنظيف النسخ القديمة + نسخ آخر نسخة إلى مجلد مشترك
                 string backupFolder = settings.ContainsKey("BackupsPath") ? settings["BackupsPath"] : "";
                 if (!string.IsNullOrWhiteSpace(backupFolder))
