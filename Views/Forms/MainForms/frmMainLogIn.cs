@@ -892,7 +892,8 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
         {
             try
             {
-                string settingsPath = @"D:\MizanOriginalSoft\bin\Debug\net8.0-windows\serverConnectionSettings.txt";
+                string settingsPath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
+
 
                 var backupHelper = new BackupRestoreDBHelper(settingsPath);
 
