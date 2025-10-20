@@ -483,7 +483,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 // تحميل الإعدادات لمرة واحدة
                 AppSettings.Load(settingsPath);
 
-                string? backupPath = AppSettings.GetString("BackupsPath", null);
+                string? backupPath = AppSettings.GetString("BackupFolder", null);
 
                 if (string.IsNullOrWhiteSpace(backupPath))
                 {
