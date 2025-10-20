@@ -42,6 +42,7 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
 
             string path = backupFolder.EndsWith(@"\") ? backupFolder : backupFolder + @"\";
             cmd.Parameters.AddWithValue("@FolderPath", path);
+            cmd.Parameters.AddWithValue("@DBName", dbName);
 
             try
             {
@@ -49,6 +50,8 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
                 cmd.ExecuteNonQuery();
                 Console.WriteLine("✅ تم إنشاء النسخة الاحتياطية بنجاح.");
             }//Microsoft.Data.SqlClient.SqlException: 'Procedure or function 'Original_BackupDatabase' expects parameter '@DBName', which was not supplied.'
+            //Microsoft.Data.SqlClient.SqlException: 'Procedure or function 'Original_BackupDatabase' expects parameter '@BackupFolder', which was not supplied.'
+
             catch (Exception ex)
             {
                 Console.WriteLine("❌ خطأ أثناء النسخ الاحتياطي: " + ex.Message);
