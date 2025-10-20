@@ -1,5 +1,6 @@
 ﻿using MizanOriginalSoft.MainClasses;
 using MizanOriginalSoft.MainClasses.OriginalClasses;
+using MizanOriginalSoft.MainClasses.OriginalClasses.AppInfomation;
 using MizanOriginalSoft.MainClasses.OriginalClasses.InvoicClasses;
 using MizanOriginalSoft.Views.Forms.Accounts;
 using MizanOriginalSoft.Views.Forms.Movments;
@@ -943,8 +944,25 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             }
         }
 
+        private void btnEnd_Click_ٍ_(object sender, EventArgs e)
+        {
+            try
+            {
+                var backupHelper = new BackupRestoreDBHelper(@"D:\MizanOriginalSoft\bin\Debug\net8.0-windows\serverConnectionSettings.txt");
+                backupHelper.BackupDatabase();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ أثناء إنشاء النسخة الاحتياطية: " + ex.Message);
+            }
+            finally
+            {
+                Application.Exit();
+            }
+        }
 
-        private void btnEnd_Click(object? sender, EventArgs e)
+
+        private void btnEnd_Click__(object? sender, EventArgs e)
         {
             try
             {
@@ -1013,6 +1031,62 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             {
                 // سجل الخطأ بدل ما تسكت عليه
                 File.AppendAllText("error_log.txt", $"{DateTime.Now}: {ex}\n");
+            }
+        }
+
+        private void btnEnd_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string settingsPath = @"D:\MizanOriginalSoft\bin\Debug\net8.0-windows\serverConnectionSettings.txt";
+
+                var backupHelper = new BackupRestoreDBHelper(settingsPath);
+
+                // 1️⃣ النسخ الاحتياطي المحلي
+                backupHelper.BackupDatabase();
+
+                // ✅ تحميل الإعدادات
+                var settings = LoadSettings(settingsPath);
+
+                // 2️⃣ رفع النسخة إلى Google Drive (إذا تم تحديد المسار في ملف الإعدادات)
+                string backupFolder = settings.ContainsKey("BackupsPath") ? settings["BackupsPath"] : "";
+                string dbName = settings.ContainsKey("DBName") ? settings["DBName"] : "";
+                string googleDrivePath = settings.ContainsKey("GoogleDrivePath") ? settings["GoogleDrivePath"] : "";
+
+                if (!string.IsNullOrWhiteSpace(backupFolder) &&
+                    !string.IsNullOrWhiteSpace(dbName) &&
+                    !string.IsNullOrWhiteSpace(googleDrivePath))
+                {
+                    backupHelper.CopyBackupToGoogleDrive(
+                        sourceFolder: backupFolder,
+                        googleDriveFolder: googleDrivePath,
+                        dbName: dbName
+                    );
+                }
+
+                // 3️⃣ رفع التغييرات إلى GitHub
+                string projectPath = settings.ContainsKey("ProjectPath") ? settings["ProjectPath"] : "";
+                if (!string.IsNullOrWhiteSpace(projectPath))
+                {
+                    ExecuteGitPush(projectPath);
+                }
+
+                string backupGitPath = settings.ContainsKey("BackupGitPath") ? settings["BackupGitPath"] : "";
+                if (!string.IsNullOrWhiteSpace(backupGitPath))
+                {
+                    ExecuteGitPush(backupGitPath);
+                }
+
+                MessageBox.Show("✅ تم إنشاء النسخة ورفعها بنجاح.\nسيتم إغلاق البرنامج الآن.", "نجاح", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("حدث خطأ أثناء النسخ أو الرفع:\n" + ex.Message, "خطأ", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                File.AppendAllText("error_log.txt", $"{DateTime.Now}: {ex}\n");
+            }
+            finally
+            {
+                Application.Exit();
             }
         }
 
