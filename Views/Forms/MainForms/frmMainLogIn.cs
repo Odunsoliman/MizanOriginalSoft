@@ -1048,75 +1048,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
             return settings;
         }
 
-        private void btnEnd_Click__(object? sender, EventArgs e)
-        {
-            try
-            {
-                string settingsPath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
-
-                if (!File.Exists(settingsPath))
-                    return;
-
-                // تحميل الإعدادات
-                AppSettings.Load(settingsPath);
-
-                var helper = new DatabaseBackupRestoreHelper(settingsPath);
-
-                // 1. النسخ الاحتياطي
-                helper.BackupDatabase();
-
-                // 2. تنظيف النسخ القديمة + نسخ آخر نسخة إلى مجلد مشترك
-                string? backupFolder = AppSettings.GetString("BackupsPath", null);
-                if (!string.IsNullOrWhiteSpace(backupFolder))
-                {
-                    helper.CleanOldBackups(backupFolder);
-                    helper.CopyLatestBackupToSharedFolder(
-                        sourceBackupFolder: backupFolder,
-                        sharedFolderPath: @"D:\BackupToPush",
-                        outputFileName: "MizanOriginalDB.bak"
-                    );
-                }
-
-                // 3. نسخ النسخة إلى Google Drive
-                string? dbName = AppSettings.GetString("DBName", null);
-                string? googleDrivePath = AppSettings.GetString("GoogleDrivePath", null);
-                if (!string.IsNullOrWhiteSpace(backupFolder) &&
-                    !string.IsNullOrWhiteSpace(dbName) &&
-                    !string.IsNullOrWhiteSpace(googleDrivePath))
-                {
-                    helper.CopyBackupToGoogleDrive(
-                        sourceFolder: backupFolder,
-                        googleDriveFolder: googleDrivePath,
-                        dbName: dbName
-                    );
-                }
-
-                // 4. Git Push لمجلد المشروع
-                string? projectPath = AppSettings.GetString("ProjectPath", null);
-                if (!string.IsNullOrWhiteSpace(projectPath))
-                {
-                    ExecuteGitPush(projectPath);
-                }
-
-                // 5. Git Push لمجلد نسخ القواعد
-                string? backupPushPath = AppSettings.GetString("BackupGitPath", null);
-                if (!string.IsNullOrWhiteSpace(backupPushPath))
-                {
-                    ExecuteGitPush(backupPushPath);
-                }
-
-                // 6. تحديث بيانات القاعدة
-                DBServiecs.A_UpdateAllDataBase();
-
-                // 7. إنهاء البرنامج
-                Application.Exit();
-            }
-            catch
-            {
-                // بدون رسائل أو تنبيه
-            }
-        }
-
+ 
         //
         private void ExecuteGitPush(string workingDirectory)
         {

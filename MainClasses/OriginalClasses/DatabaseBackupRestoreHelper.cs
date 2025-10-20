@@ -48,7 +48,7 @@ namespace MizanOriginalSoft.MainClasses.OriginalClasses
                 conn.Open();
                 cmd.ExecuteNonQuery();
                 Console.WriteLine("✅ تم إنشاء النسخة الاحتياطية بنجاح.");
-            }
+            }//Microsoft.Data.SqlClient.SqlException: 'Procedure or function 'Original_BackupDatabase' expects parameter '@DBName', which was not supplied.'
             catch (Exception ex)
             {
                 Console.WriteLine("❌ خطأ أثناء النسخ الاحتياطي: " + ex.Message);
