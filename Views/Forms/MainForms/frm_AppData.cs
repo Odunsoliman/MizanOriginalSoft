@@ -5,7 +5,8 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using MizanOriginalSoft.MainClasses;
-using MizanOriginalSoft.MainClasses.OriginalClasses; // تأكد من المسار الصحيح لمساحة الأسماء لكلاس AppSettings
+using MizanOriginalSoft.MainClasses.OriginalClasses;
+using MizanOriginalSoft.MainClasses.OriginalClasses.AppInfomation; // تأكد من المسار الصحيح لمساحة الأسماء لكلاس AppSettings
 
 namespace MizanOriginalSoft.Views.Forms.MainForms
 {
@@ -561,16 +562,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
 
                 string settingsPath = Path.Combine(Application.StartupPath, "serverConnectionSettings.txt");
 
-                AppSettings.Load(settingsPath); // تحميل الإعدادات
-
-                var helper = new DatabaseBackupRestoreHelper(settingsPath);
-
-                string? dbName = AppSettings.GetString("DBName", null);
-                if (string.IsNullOrWhiteSpace(dbName))
-                {
-                    MessageBox.Show("❌ لم يتم العثور على اسم قاعدة البيانات في الإعدادات.");
-                    return;
-                }
+                var helper = new BackupRestoreDBHelper(settingsPath);
 
                 string? selectedBackupFile = comboBoxBackups.SelectedValue.ToString();
                 if (string.IsNullOrWhiteSpace(selectedBackupFile))
@@ -586,7 +578,7 @@ namespace MizanOriginalSoft.Views.Forms.MainForms
                 if (confirmResult == DialogResult.No)
                     return;
 
-                // 🟢 الخطوة 1: عمل نسخة احتياطية
+                // 🟢 الخطوة 1: عمل نسخة احتياطية من الوضع الحالي
                 helper.BackupDatabase();
                 MessageBox.Show("✅ تم إنشاء نسخة احتياطية من الوضع الحالي بنجاح.");
 
